@@ -1,6 +1,8 @@
 # my-teaching-site
 
-Personal website for Boaz Hazan — private tutor for Mathematics & Computer Science.
+**Live site: https://boazhazan.github.io/my-teaching-site/**
+
+Personal website for Boaz Hazan — Math & Computer Science coordinator, private tutor. B.Sc. in CS & Math, 6 years hi-tech, 5 years teaching. Hadera area & online.
 
 ## Structure
 

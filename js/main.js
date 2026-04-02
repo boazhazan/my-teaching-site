@@ -377,7 +377,7 @@ if (contactForm) {
     // Send via EmailJS (independent, won't block other channels)
     var emailOk = false;
     var emailPromise = (typeof emailjs !== 'undefined')
-      ? emailjs.send('service_jt0xcd9', 'template_5i40ztj', formData)
+      ? emailjs.send('service_jt0xcd9', 'template_xvjh7jq', formData)
           .then(function() { emailOk = true; })
           .catch(function(err) { console.error('EmailJS error:', err); })
       : Promise.resolve();

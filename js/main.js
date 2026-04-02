@@ -57,6 +57,100 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
   revealObserver.observe(el);
 });
 
+// ===== Dynamic Testimonials from Google Sheets =====
+(function loadTestimonials() {
+  const grid = document.getElementById('testimonialsGrid');
+  if (!grid) return;
+
+  const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRIDsKpFfB9kO38JwZ6MuG678gcdRz5Lvs2MmNy5ckx5vk8VyeJtofb53vVw3fxTD9a1Qd9wTS-AjZ9/pub?output=csv';
+
+  fetch(CSV_URL)
+    .then(res => res.text())
+    .then(csv => {
+      const rows = parseCSV(csv);
+      if (rows.length === 0) {
+        grid.innerHTML = '<p class="testimonials-loading">אין המלצות עדיין</p>';
+        return;
+      }
+      const headers = rows[0];
+      const nameIdx = headers.indexOf('name');
+      const roleIdx = headers.indexOf('role');
+      const textIdx = headers.indexOf('text');
+      const approvedIdx = headers.indexOf('Approved');
+
+      const approved = rows.slice(1).filter(row => row[approvedIdx] && row[approvedIdx].trim().toUpperCase() === 'TRUE');
+
+      if (approved.length === 0) {
+        grid.innerHTML = '<p class="testimonials-loading">אין המלצות עדיין</p>';
+        return;
+      }
+
+      grid.innerHTML = '';
+      approved.forEach(row => {
+        const card = document.createElement('div');
+        card.className = 'testimonial-card reveal';
+        card.innerHTML =
+          '<p class="testimonial-text">' + escapeHTML(row[textIdx] || '') + '</p>' +
+          '<p class="testimonial-author">' + escapeHTML(row[nameIdx] || '') + '</p>' +
+          '<p class="testimonial-role">' + escapeHTML(row[roleIdx] || '') + '</p>';
+        grid.appendChild(card);
+      });
+
+      // Re-observe new cards for scroll animation
+      grid.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    })
+    .catch(() => {
+      grid.innerHTML = '<p class="testimonials-loading">לא ניתן לטעון המלצות כרגע</p>';
+    });
+
+  function parseCSV(text) {
+    const rows = [];
+    let current = [];
+    let field = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      if (inQuotes) {
+        if (ch === '"' && text[i + 1] === '"') {
+          field += '"';
+          i++;
+        } else if (ch === '"') {
+          inQuotes = false;
+        } else {
+          field += ch;
+        }
+      } else {
+        if (ch === '"') {
+          inQuotes = true;
+        } else if (ch === ',') {
+          current.push(field);
+          field = '';
+        } else if (ch === '\n' || (ch === '\r' && text[i + 1] === '\n')) {
+          current.push(field);
+          field = '';
+          rows.push(current);
+          current = [];
+          if (ch === '\r') i++;
+        } else {
+          field += ch;
+        }
+      }
+    }
+    if (field || current.length) {
+      current.push(field);
+      rows.push(current);
+    }
+    return rows;
+  }
+
+  function escapeHTML(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+})();
+
 // ===== Contact Form (basic client-side feedback) =====
 const contactForm = document.getElementById('contactForm');
 

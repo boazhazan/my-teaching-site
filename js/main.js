@@ -11,7 +11,7 @@
   var now = new Date();
   var children = [
     { cls: 'age-gabriel', year: 2019, month: 7 },
-    { cls: 'age-michael', year: 2022, month: 9 },
+    { cls: 'age-michael', year: 2021, month: 9 },
     { cls: 'age-anaelle', year: 2023, month: 6 }
   ];
   children.forEach(function(c) {

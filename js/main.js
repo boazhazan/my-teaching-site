@@ -324,22 +324,40 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
   }
 })();
 
-// ===== Contact Form (basic client-side feedback) =====
+// ===== Contact Form =====
 const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
-  contactForm.addEventListener('submit', (e) => {
+  contactForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
-    const name = document.getElementById('name').value.trim();
-    const phone = document.getElementById('phone').value.trim();
+    var name = document.getElementById('name').value.trim();
+    var phone = document.getElementById('phone').value.trim();
+    var email = document.getElementById('email').value.trim();
+    var level = document.getElementById('level');
+    var levelText = level && level.selectedIndex > 0 ? level.options[level.selectedIndex].text : '';
+    var reason = document.getElementById('reason');
+    var reasonText = reason && reason.selectedIndex > 0 ? reason.options[reason.selectedIndex].text : '';
+    var message = document.getElementById('message').value.trim();
 
     if (!name || !phone) {
       alert('אנא מלאו שם וטלפון.');
       return;
     }
 
-    alert('תודה ' + name + '! ההודעה נשלחה. אחזור אליך בהקדם.');
+    // Build WhatsApp message
+    var waMsg = 'פניה חדשה מהאתר:\n';
+    waMsg += 'שם: ' + name + '\n';
+    waMsg += 'טלפון: ' + phone + '\n';
+    if (email) waMsg += 'אימייל: ' + email + '\n';
+    if (reasonText) waMsg += 'סיבת פניה: ' + reasonText + '\n';
+    if (levelText) waMsg += 'שלב לימודים: ' + levelText + '\n';
+    if (message) waMsg += 'הודעה: ' + message + '\n';
+
+    // Send WhatsApp
+    window.open('https://wa.me/972523616310?text=' + encodeURIComponent(waMsg), '_blank');
+
+    alert('תודה ' + name + '! הפניה נשלחה בוואטסאפ. אחזור אליך בהקדם.');
     contactForm.reset();
   });
 }

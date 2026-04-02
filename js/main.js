@@ -324,6 +324,11 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
   }
 })();
 
+// ===== EmailJS Init =====
+if (typeof emailjs !== 'undefined') {
+  emailjs.init('ssGzJciIrR5ajmx6K');
+}
+
 // ===== Contact Form =====
 const contactForm = document.getElementById('contactForm');
 
@@ -339,11 +344,17 @@ if (contactForm) {
     var reason = document.getElementById('reason');
     var reasonText = reason && reason.selectedIndex > 0 ? reason.options[reason.selectedIndex].text : '';
     var message = document.getElementById('message').value.trim();
+    var statusEl = document.getElementById('contactStatus');
+    var submitBtn = document.getElementById('contactSubmitBtn');
 
     if (!name || !phone) {
-      alert('אנא מלאו שם וטלפון.');
+      showStatus(statusEl, 'error', 'אנא מלאו שם וטלפון.');
       return;
     }
+
+    // Disable button while sending
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'שולח...';
 
     // Build WhatsApp message
     var waMsg = 'פניה חדשה מהאתר:\n';
@@ -354,10 +365,51 @@ if (contactForm) {
     if (levelText) waMsg += 'שלב לימודים: ' + levelText + '\n';
     if (message) waMsg += 'הודעה: ' + message + '\n';
 
-    // Send WhatsApp
-    window.open('https://wa.me/972523616310?text=' + encodeURIComponent(waMsg), '_blank');
+    var formData = {
+      name: name,
+      phone: phone,
+      email: email || 'לא צוין',
+      subject: reasonText || 'לא צוין',
+      level: levelText || 'לא צוין',
+      message: message || 'לא צוינה הודעה'
+    };
 
-    alert('תודה ' + name + '! הפניה נשלחה בוואטסאפ. אחזור אליך בהקדם.');
-    contactForm.reset();
+    // Send via EmailJS
+    var emailPromise = typeof emailjs !== 'undefined'
+      ? emailjs.send('service_jt0xcd9', 'template_5i40ztj', formData)
+      : Promise.resolve();
+
+    // Send to Google Sheets
+    var sheetsPromise = fetch('https://script.google.com/macros/s/AKfycbw0UDUWFYJLnOjbkNFivwsjW-Oxlqyn9ZMf5Fz1NBP7W6_-dy6wYK9GYUVRxdLU7UbO/exec', {
+      method: 'POST',
+      body: JSON.stringify(formData)
+    }).catch(function() {});
+
+    Promise.all([emailPromise, sheetsPromise])
+      .then(function() {
+        // Open WhatsApp
+        window.open('https://wa.me/972523616310?text=' + encodeURIComponent(waMsg), '_blank');
+        showStatus(statusEl, 'success', 'תודה ' + name + '! ההודעה נשלחה בהצלחה. אחזור אליך בהקדם.');
+        contactForm.reset();
+      })
+      .catch(function() {
+        // Even if email/sheets fail, send WhatsApp
+        window.open('https://wa.me/972523616310?text=' + encodeURIComponent(waMsg), '_blank');
+        showStatus(statusEl, 'error', 'שגיאה בשליחה, אבל הפניה נשלחה בוואטסאפ. אפשר גם להתקשר: 052-361-6310');
+      })
+      .finally(function() {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '&#128228; שליחה';
+      });
   });
+}
+
+function showStatus(el, type, msg) {
+  if (!el) return;
+  el.style.display = 'block';
+  el.className = 'contact-status ' + type;
+  el.textContent = msg;
+  if (type === 'success') {
+    setTimeout(function() { el.style.display = 'none'; }, 8000);
+  }
 }

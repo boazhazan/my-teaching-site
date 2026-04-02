@@ -72,11 +72,12 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
         grid.innerHTML = '<p class="testimonials-loading">אין המלצות עדיין</p>';
         return;
       }
-      const headers = rows[0];
-      const nameIdx = headers.indexOf('name');
-      const roleIdx = headers.indexOf('role');
-      const textIdx = headers.indexOf('text');
-      const approvedIdx = headers.indexOf('Approved');
+      const headers = rows[0].map(h => h.trim());
+      const nameIdx = headers.findIndex(h => h.includes('שם מלא'));
+      const roleIdx = headers.findIndex(h => h.includes('תפקיד'));
+      const textIdx = headers.findIndex(h => h.includes('ההמלצה'));
+      const ratingIdx = headers.findIndex(h => h.includes('דירוג'));
+      const approvedIdx = headers.findIndex(h => h.includes('Approved'));
 
       const approved = rows.slice(1).filter(row => row[approvedIdx] && row[approvedIdx].trim().toUpperCase() === 'TRUE');
 
@@ -87,10 +88,12 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
 
       grid.innerHTML = '';
       approved.forEach(row => {
+        const rating = parseInt(row[ratingIdx]) || 5;
+        const stars = '\u2B50'.repeat(Math.min(Math.max(rating, 1), 5));
         const card = document.createElement('div');
         card.className = 'testimonial-card reveal';
         card.innerHTML =
-          '<div class="testimonial-stars">\u2B50\u2B50\u2B50\u2B50\u2B50</div>' +
+          '<div class="testimonial-stars">' + stars + '</div>' +
           '<p class="testimonial-text">' + escapeHTML(row[textIdx] || '') + '</p>' +
           '<p class="testimonial-author">' + escapeHTML(row[nameIdx] || '') + '</p>' +
           '<p class="testimonial-role">' + escapeHTML(row[roleIdx] || '') + '</p>';

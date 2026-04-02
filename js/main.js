@@ -1,3 +1,11 @@
+// ===== Dynamic Teaching Years =====
+(function updateTeachingYears() {
+  const years = new Date().getFullYear() - 2019;
+  document.querySelectorAll('.teaching-years').forEach(el => {
+    el.textContent = years;
+  });
+})();
+
 // ===== Mobile Menu Toggle =====
 const menuToggle = document.getElementById('menuToggle');
 const navLinks = document.getElementById('navLinks');

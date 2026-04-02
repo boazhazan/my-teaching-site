@@ -329,6 +329,20 @@ if (typeof emailjs !== 'undefined') {
   emailjs.init({ publicKey: 'ssGzJciIrR5ajmx6K' });
 }
 
+// ===== Contact Form: Show/hide level based on reason =====
+(function() {
+  var reasonSelect = document.getElementById('reason');
+  var levelGroup = document.getElementById('levelGroup');
+  if (!reasonSelect || !levelGroup) return;
+  var showLevelFor = ['private-lesson', 'duckme', 'content-request'];
+  reasonSelect.addEventListener('change', function() {
+    levelGroup.style.display = showLevelFor.indexOf(this.value) >= 0 ? '' : 'none';
+    if (levelGroup.style.display === 'none') {
+      document.getElementById('level').selectedIndex = 0;
+    }
+  });
+})();
+
 // ===== Contact Form =====
 const contactForm = document.getElementById('contactForm');
 

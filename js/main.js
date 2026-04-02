@@ -170,19 +170,21 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
     var perView = window.innerWidth <= 768 ? 1 : window.innerWidth <= 968 ? 2 : 3;
     var maxIndex = Math.max(0, totalCards - perView);
 
-    // Build dots
-    var totalDots = maxIndex + 1;
-    dotsContainer.innerHTML = '';
-    for (var d = 0; d < totalDots; d++) {
-      var dot = document.createElement('button');
-      dot.className = 'carousel-dot' + (d === 0 ? ' active' : '');
-      dot.setAttribute('aria-label', 'עמוד ' + (d + 1));
-      dot.dataset.index = d;
-      dot.addEventListener('click', function() {
-        goTo(parseInt(this.dataset.index));
-      });
-      dotsContainer.appendChild(dot);
+    function buildDots() {
+      var totalDots = maxIndex + 1;
+      dotsContainer.innerHTML = '';
+      for (var d = 0; d < totalDots; d++) {
+        var dot = document.createElement('button');
+        dot.className = 'carousel-dot' + (d === currentIndex ? ' active' : '');
+        dot.setAttribute('aria-label', 'עמוד ' + (d + 1));
+        dot.dataset.index = d;
+        dot.addEventListener('click', function() {
+          goTo(parseInt(this.dataset.index));
+        });
+        dotsContainer.appendChild(dot);
+      }
     }
+    buildDots();
 
     function goTo(index) {
       currentIndex = Math.max(0, Math.min(index, maxIndex));
@@ -241,7 +243,9 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
     window.addEventListener('resize', function() {
       perView = window.innerWidth <= 768 ? 1 : window.innerWidth <= 968 ? 2 : 3;
       maxIndex = Math.max(0, totalCards - perView);
-      goTo(Math.min(currentIndex, maxIndex));
+      currentIndex = Math.min(currentIndex, maxIndex);
+      buildDots();
+      goTo(currentIndex);
     });
 
     updateUI();

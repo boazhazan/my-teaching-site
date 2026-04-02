@@ -326,7 +326,7 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
 
 // ===== EmailJS Init =====
 if (typeof emailjs !== 'undefined') {
-  emailjs.init('ssGzJciIrR5ajmx6K');
+  emailjs.init({ publicKey: 'ssGzJciIrR5ajmx6K' });
 }
 
 // ===== Contact Form =====

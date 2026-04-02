@@ -65,6 +65,38 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
   revealObserver.observe(el);
 });
 
+// ===== Load Average Rating for About Page =====
+(function loadAvgRating() {
+  var ratingEl = document.querySelector('.avg-rating');
+  if (!ratingEl || document.getElementById('testimonialsGrid')) return;
+
+  var CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRIDsKpFfB9kO38JwZ6MuG678gcdRz5Lvs2MmNy5ckx5vk8VyeJtofb53vVw3fxTD9a1Qd9wTS-AjZ9/pub?output=csv';
+  fetch(CSV_URL)
+    .then(function(res) { return res.text(); })
+    .then(function(csv) {
+      var rows = csv.split('\n').map(function(r) { return r.split(','); });
+      if (rows.length < 2) return;
+      var headers = rows[0].map(function(h) { return h.replace(/[\u200F\u200E\uFEFF]/g, '').trim(); });
+      var rti = headers.findIndex(function(h) { return h.includes('\u05D3\u05D9\u05E8\u05D5\u05D2'); });
+      var ai = headers.findIndex(function(h) { return h.includes('Approved'); });
+      if (rti < 0) rti = 4;
+      if (ai < 0) ai = 5;
+      var sum = 0, count = 0;
+      rows.slice(1).forEach(function(row) {
+        if (row[ai] && row[ai].trim().toUpperCase() === 'TRUE') {
+          sum += parseInt(row[rti]) || 5;
+          count++;
+        }
+      });
+      if (count > 0) {
+        document.querySelectorAll('.avg-rating').forEach(function(el) {
+          el.textContent = (sum / count).toFixed(1);
+        });
+      }
+    })
+    .catch(function() {});
+})();
+
 // ===== Dynamic Testimonials from Google Sheets =====
 (function loadTestimonials() {
   const grid = document.getElementById('testimonialsGrid');
@@ -102,8 +134,10 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
       }
 
       grid.innerHTML = '';
+      let ratingSum = 0;
       approved.forEach(row => {
         const rating = parseInt(row[rti]) || 5;
+        ratingSum += rating;
         const stars = '\u2B50'.repeat(Math.min(Math.max(rating, 1), 5));
         const card = document.createElement('div');
         card.className = 'testimonial-card';
@@ -113,6 +147,12 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
           '<p class="testimonial-author">' + escapeHTML(row[ni] || '') + '</p>' +
           '<p class="testimonial-role">' + escapeHTML(row[ri] || '') + '</p>';
         grid.appendChild(card);
+      });
+
+      // Update average rating on about page sidebar
+      var avgRating = (ratingSum / approved.length).toFixed(1);
+      document.querySelectorAll('.avg-rating').forEach(function(el) {
+        el.textContent = avgRating;
       });
 
       initCarousel(approved.length);

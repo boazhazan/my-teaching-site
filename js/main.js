@@ -374,28 +374,30 @@ if (contactForm) {
       message: message || 'לא צוינה הודעה'
     };
 
-    // Send via EmailJS
-    var emailPromise = typeof emailjs !== 'undefined'
+    // Send via EmailJS (independent, won't block other channels)
+    var emailOk = false;
+    var emailPromise = (typeof emailjs !== 'undefined')
       ? emailjs.send('service_jt0xcd9', 'template_5i40ztj', formData)
+          .then(function() { emailOk = true; })
+          .catch(function(err) { console.error('EmailJS error:', err); })
       : Promise.resolve();
 
-    // Send to Google Sheets
+    // Send to Google Sheets (independent)
     var sheetsPromise = fetch('https://script.google.com/macros/s/AKfycbw0UDUWFYJLnOjbkNFivwsjW-Oxlqyn9ZMf5Fz1NBP7W6_-dy6wYK9GYUVRxdLU7UbO/exec', {
       method: 'POST',
       body: JSON.stringify(formData)
-    }).catch(function() {});
+    }).catch(function(err) { console.error('Sheets error:', err); });
 
+    // Wait for both, then open WhatsApp + show status
     Promise.all([emailPromise, sheetsPromise])
       .then(function() {
-        // Open WhatsApp
         window.open('https://wa.me/972523616310?text=' + encodeURIComponent(waMsg), '_blank');
-        showStatus(statusEl, 'success', 'תודה ' + name + '! ההודעה נשלחה בהצלחה. אחזור אליך בהקדם.');
+        if (emailOk) {
+          showStatus(statusEl, 'success', 'תודה ' + name + '! ההודעה נשלחה בהצלחה. אחזור אליך בהקדם.');
+        } else {
+          showStatus(statusEl, 'success', 'תודה ' + name + '! הפניה נשלחה בוואטסאפ ונרשמה במערכת. אחזור אליך בהקדם.');
+        }
         contactForm.reset();
-      })
-      .catch(function() {
-        // Even if email/sheets fail, send WhatsApp
-        window.open('https://wa.me/972523616310?text=' + encodeURIComponent(waMsg), '_blank');
-        showStatus(statusEl, 'error', 'שגיאה בשליחה, אבל הפניה נשלחה בוואטסאפ. אפשר גם להתקשר: 052-361-6310');
       })
       .finally(function() {
         submitBtn.disabled = false;

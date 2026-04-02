@@ -98,7 +98,7 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
         const rating = parseInt(row[rti]) || 5;
         const stars = '\u2B50'.repeat(Math.min(Math.max(rating, 1), 5));
         const card = document.createElement('div');
-        card.className = 'testimonial-card reveal';
+        card.className = 'testimonial-card';
         card.innerHTML =
           '<div class="testimonial-stars">' + stars + '</div>' +
           '<p class="testimonial-text">' + escapeHTML(row[ti] || '') + '</p>' +
@@ -107,8 +107,7 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
         grid.appendChild(card);
       });
 
-      // Re-observe new cards for scroll animation
-      grid.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+      initCarousel(approved.length);
     })
     .catch(() => {
       grid.innerHTML = '<p class="testimonials-loading">לא ניתן לטעון המלצות כרגע</p>';
@@ -159,6 +158,91 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
+  }
+  function initCarousel(totalCards) {
+    const track = document.getElementById('testimonialsGrid');
+    const prevBtn = document.getElementById('carouselPrev');
+    const nextBtn = document.getElementById('carouselNext');
+    const dotsContainer = document.getElementById('carouselDots');
+    if (!track || !prevBtn || !nextBtn) return;
+
+    let currentIndex = 0;
+    var perView = window.innerWidth <= 768 ? 1 : 3;
+    var maxIndex = Math.max(0, totalCards - perView);
+
+    // Build dots
+    var totalDots = maxIndex + 1;
+    dotsContainer.innerHTML = '';
+    for (var d = 0; d < totalDots; d++) {
+      var dot = document.createElement('button');
+      dot.className = 'carousel-dot' + (d === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'עמוד ' + (d + 1));
+      dot.dataset.index = d;
+      dot.addEventListener('click', function() {
+        goTo(parseInt(this.dataset.index));
+      });
+      dotsContainer.appendChild(dot);
+    }
+
+    function goTo(index) {
+      currentIndex = Math.max(0, Math.min(index, maxIndex));
+      var card = track.children[0];
+      if (!card) return;
+      var cardWidth = card.offsetWidth;
+      var gap = 24;
+      var offset = currentIndex * (cardWidth + gap);
+      track.style.transform = 'translateX(' + offset + 'px)';
+      updateUI();
+    }
+
+    function updateUI() {
+      prevBtn.disabled = currentIndex >= maxIndex;
+      nextBtn.disabled = currentIndex <= 0;
+      var dots = dotsContainer.querySelectorAll('.carousel-dot');
+      dots.forEach(function(dot, i) {
+        dot.classList.toggle('active', i === currentIndex);
+      });
+    }
+
+    prevBtn.addEventListener('click', function() { goTo(currentIndex + 1); });
+    nextBtn.addEventListener('click', function() { goTo(currentIndex - 1); });
+
+    // Swipe support for mobile
+    var startX = 0;
+    var isDragging = false;
+    track.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; isDragging = true; });
+    track.addEventListener('touchend', function(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      var diff = e.changedTouches[0].clientX - startX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) goTo(currentIndex + 1);
+        else goTo(currentIndex - 1);
+      }
+    });
+
+    // Auto-play every 5 seconds
+    var autoPlay = setInterval(function() {
+      if (currentIndex <= 0) currentIndex = maxIndex + 1;
+      goTo(currentIndex - 1);
+    }, 5000);
+
+    track.closest('.testimonials-carousel').addEventListener('mouseenter', function() { clearInterval(autoPlay); });
+    track.closest('.testimonials-carousel').addEventListener('mouseleave', function() {
+      autoPlay = setInterval(function() {
+        if (currentIndex <= 0) currentIndex = maxIndex + 1;
+        goTo(currentIndex - 1);
+      }, 5000);
+    });
+
+    // Recalculate on resize
+    window.addEventListener('resize', function() {
+      perView = window.innerWidth <= 768 ? 1 : 3;
+      maxIndex = Math.max(0, totalCards - perView);
+      goTo(Math.min(currentIndex, maxIndex));
+    });
+
+    updateUI();
   }
 })();
 

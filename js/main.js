@@ -72,14 +72,21 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
         grid.innerHTML = '<p class="testimonials-loading">אין המלצות עדיין</p>';
         return;
       }
-      const headers = rows[0].map(h => h.trim());
-      const nameIdx = headers.findIndex(h => h.includes('שם מלא'));
+      const headers = rows[0].map(h => h.replace(/[\u200F\u200E\uFEFF]/g, '').trim().replace(/:$/g, '').trim());
+      const nameIdx = headers.findIndex(h => h.includes('שם'));
       const roleIdx = headers.findIndex(h => h.includes('תפקיד'));
-      const textIdx = headers.findIndex(h => h.includes('ההמלצה'));
+      const textIdx = headers.findIndex(h => h.includes('המלצה'));
       const ratingIdx = headers.findIndex(h => h.includes('דירוג'));
       const approvedIdx = headers.findIndex(h => h.includes('Approved'));
 
-      const approved = rows.slice(1).filter(row => row[approvedIdx] && row[approvedIdx].trim().toUpperCase() === 'TRUE');
+      // Fallback to known column positions if headers don't match
+      const ni = nameIdx >= 0 ? nameIdx : 1;
+      const ri = roleIdx >= 0 ? roleIdx : 2;
+      const ti = textIdx >= 0 ? textIdx : 3;
+      const rti = ratingIdx >= 0 ? ratingIdx : 4;
+      const ai = approvedIdx >= 0 ? approvedIdx : 5;
+
+      const approved = rows.slice(1).filter(row => row[ai] && row[ai].trim().toUpperCase() === 'TRUE');
 
       if (approved.length === 0) {
         grid.innerHTML = '<p class="testimonials-loading">אין המלצות עדיין</p>';
@@ -88,15 +95,15 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
 
       grid.innerHTML = '';
       approved.forEach(row => {
-        const rating = parseInt(row[ratingIdx]) || 5;
+        const rating = parseInt(row[rti]) || 5;
         const stars = '\u2B50'.repeat(Math.min(Math.max(rating, 1), 5));
         const card = document.createElement('div');
         card.className = 'testimonial-card reveal';
         card.innerHTML =
           '<div class="testimonial-stars">' + stars + '</div>' +
-          '<p class="testimonial-text">' + escapeHTML(row[textIdx] || '') + '</p>' +
-          '<p class="testimonial-author">' + escapeHTML(row[nameIdx] || '') + '</p>' +
-          '<p class="testimonial-role">' + escapeHTML(row[roleIdx] || '') + '</p>';
+          '<p class="testimonial-text">' + escapeHTML(row[ti] || '') + '</p>' +
+          '<p class="testimonial-author">' + escapeHTML(row[ni] || '') + '</p>' +
+          '<p class="testimonial-role">' + escapeHTML(row[ri] || '') + '</p>';
         grid.appendChild(card);
       });
 

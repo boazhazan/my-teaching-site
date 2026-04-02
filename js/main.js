@@ -226,18 +226,25 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
     });
 
     // Auto-play every 5 seconds
-    var autoPlay = setInterval(function() {
+    function autoStep() {
       if (currentIndex <= 0) currentIndex = maxIndex + 1;
       goTo(currentIndex - 1);
-    }, 5000);
+    }
+    var autoPlay = setInterval(autoStep, 5000);
 
-    track.closest('.testimonials-carousel').addEventListener('mouseenter', function() { clearInterval(autoPlay); });
-    track.closest('.testimonials-carousel').addEventListener('mouseleave', function() {
-      autoPlay = setInterval(function() {
-        if (currentIndex <= 0) currentIndex = maxIndex + 1;
-        goTo(currentIndex - 1);
-      }, 5000);
-    });
+    function pauseAuto() { clearInterval(autoPlay); }
+    function resumeAuto() { clearInterval(autoPlay); autoPlay = setInterval(autoStep, 5000); }
+
+    var carouselEl = track.closest('.testimonials-carousel');
+    if (carouselEl) {
+      carouselEl.addEventListener('mouseenter', pauseAuto);
+      carouselEl.addEventListener('mouseleave', resumeAuto);
+      carouselEl.addEventListener('touchstart', pauseAuto);
+      carouselEl.addEventListener('touchend', function() { setTimeout(resumeAuto, 3000); });
+    }
+
+    prevBtn.addEventListener('click', function() { pauseAuto(); setTimeout(resumeAuto, 5000); });
+    nextBtn.addEventListener('click', function() { pauseAuto(); setTimeout(resumeAuto, 5000); });
 
     // Recalculate on resize
     window.addEventListener('resize', function() {

@@ -167,7 +167,7 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
     if (!track || !prevBtn || !nextBtn) return;
 
     let currentIndex = 0;
-    var perView = window.innerWidth <= 768 ? 1 : 3;
+    var perView = window.innerWidth <= 768 ? 1 : window.innerWidth <= 968 ? 2 : 3;
     var maxIndex = Math.max(0, totalCards - perView);
 
     // Build dots
@@ -190,6 +190,8 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
       if (!card) return;
       var cardWidth = card.offsetWidth;
       var gap = window.innerWidth <= 768 ? 16 : 24;
+      var currentPerView = window.innerWidth <= 768 ? 1 : window.innerWidth <= 968 ? 2 : 3;
+      maxIndex = Math.max(0, totalCards - currentPerView);
       var offset = currentIndex * (cardWidth + gap);
       track.style.transform = 'translateX(' + offset + 'px)';
       updateUI();
@@ -237,7 +239,7 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
 
     // Recalculate on resize
     window.addEventListener('resize', function() {
-      perView = window.innerWidth <= 768 ? 1 : 3;
+      perView = window.innerWidth <= 768 ? 1 : window.innerWidth <= 968 ? 2 : 3;
       maxIndex = Math.max(0, totalCards - perView);
       goTo(Math.min(currentIndex, maxIndex));
     });

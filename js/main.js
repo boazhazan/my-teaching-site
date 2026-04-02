@@ -90,6 +90,7 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
         const card = document.createElement('div');
         card.className = 'testimonial-card reveal';
         card.innerHTML =
+          '<div class="testimonial-stars">\u2B50\u2B50\u2B50\u2B50\u2B50</div>' +
           '<p class="testimonial-text">' + escapeHTML(row[textIdx] || '') + '</p>' +
           '<p class="testimonial-author">' + escapeHTML(row[nameIdx] || '') + '</p>' +
           '<p class="testimonial-role">' + escapeHTML(row[roleIdx] || '') + '</p>';

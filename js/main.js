@@ -6,6 +6,23 @@
   });
 })();
 
+// ===== Dynamic Child Ages =====
+(function updateChildAges() {
+  var now = new Date();
+  var children = [
+    { cls: 'age-gabriel', year: 2019, month: 7 },
+    { cls: 'age-michael', year: 2022, month: 9 },
+    { cls: 'age-anaelle', year: 2023, month: 6 }
+  ];
+  children.forEach(function(c) {
+    var age = now.getFullYear() - c.year;
+    if (now.getMonth() + 1 < c.month) age--;
+    document.querySelectorAll('.' + c.cls).forEach(function(el) {
+      el.textContent = age;
+    });
+  });
+})();
+
 // ===== Mobile Menu Toggle =====
 const menuToggle = document.getElementById('menuToggle');
 const navLinks = document.getElementById('navLinks');

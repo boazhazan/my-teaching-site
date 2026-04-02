@@ -189,7 +189,7 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
       var card = track.children[0];
       if (!card) return;
       var cardWidth = card.offsetWidth;
-      var gap = 24;
+      var gap = window.innerWidth <= 768 ? 16 : 24;
       var offset = currentIndex * (cardWidth + gap);
       track.style.transform = 'translateX(' + offset + 'px)';
       updateUI();

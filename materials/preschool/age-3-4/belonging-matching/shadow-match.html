@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>התאמת צלליות — תרגול | בועז חזן</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=Rubik:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0f0f8;--card:#fff;--pri:#6c5ce7;--pri-l:#ede9fe;--ok:#27ae60;--ok-l:#e8f5e9;--no:#e74c3c;--no-l:#ffebee;--txt:#2c3e50;--txt2:#7f8c8d;--brd:#e0e0e0;--sh:0 4px 20px rgba(0,0,0,0.08);--r:16px;--rs:10px}
+*{box-sizing:border-box;margin:0;padding:0}html{-webkit-tap-highlight-color:transparent}
+body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;direction:rtl;overflow-x:hidden}
+.hd{background:linear-gradient(135deg,#2d3436,#636e72);color:#fff;padding:20px 24px;text-align:center;position:relative;overflow:hidden}
+.hd::before{content:'';position:absolute;top:-60px;right:-40px;width:180px;height:180px;background:rgba(255,255,255,0.05);border-radius:50%}
+.hd h1{font-family:'Rubik','Heebo',sans-serif;font-size:2rem;font-weight:800;position:relative;margin-bottom:4px}
+.hd p{font-size:1rem;opacity:0.85;position:relative}
+.mb{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--brd);position:sticky;top:0;z-index:20}
+.mbtn{padding:8px 18px;border-radius:24px;border:2px solid var(--brd);background:var(--card);font-family:inherit;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.25s;white-space:nowrap}
+.mbtn:hover{border-color:var(--pri)}.mbtn.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.ps{padding:12px 16px;background:var(--card);border-bottom:1px solid var(--brd)}
+.pr{display:flex;align-items:center;gap:12px;max-width:800px;margin:0 auto}
+.pl{font-size:0.85rem;font-weight:600;color:var(--txt2);white-space:nowrap}
+.pb{flex:1;height:10px;background:#eee;border-radius:10px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--pri),#a29bfe);border-radius:10px;transition:width 0.5s}
+.pss{display:flex;gap:16px}.ps2{display:flex;align-items:center;gap:4px;font-weight:700;font-size:0.9rem}
+.tw{background:var(--card);border-bottom:1px solid var(--brd);position:sticky;top:52px;z-index:15;padding:0 8px}
+.ts{display:flex;gap:4px;overflow-x:auto;padding:10px 0;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.ts::-webkit-scrollbar{display:none}
+.tb{flex-shrink:0;padding:8px 16px;border-radius:20px;border:2px solid var(--brd);background:var(--card);font-family:inherit;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.25s;white-space:nowrap;position:relative}
+.tb:hover{border-color:var(--pri)}.tb.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tb.dn{border-color:var(--ok)}.tb.dn::after{content:'✓';position:absolute;top:-6px;right:-6px;width:18px;height:18px;background:var(--ok);color:#fff;border-radius:50%;font-size:0.65rem;display:flex;align-items:center;justify-content:center}
+.hb{text-align:center;padding:8px;background:#fff3cd;color:#856404;font-weight:600;font-size:0.9rem;display:none}.hb.show{display:block}
+.ct{max-width:800px;margin:0 auto;padding:20px 16px 80px}
+.mc{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:24px;margin-bottom:20px;border:3px solid transparent;transition:all 0.3s;animation:fi 0.4s ease both;position:relative}
+.mc.ok{border-color:var(--ok);background:var(--ok-l)}.mc.bad{border-color:var(--no);background:var(--no-l)}
+.mc.dw{touch-action:none}.mc .dc{position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;cursor:crosshair;border-radius:var(--r)}
+.mc.done .dc{display:none}
+.mh{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.mn{width:30px;height:30px;border-radius:50%;background:var(--pri);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;color:#fff;flex-shrink:0}
+.mht{font-size:0.85rem;color:var(--txt2);font-weight:500}
+.zone{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;padding:10px 0}
+.zt{width:100%;text-align:center;font-size:0.75rem;font-weight:700;color:var(--txt2);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.llr{display:flex;gap:24px;align-items:flex-start}.llr .zone{flex:1}
+.llr .dv{width:2px;background:var(--brd);align-self:stretch;border-radius:2px;min-height:200px}
+.ltb .zone:first-child{border-bottom:2px dashed var(--brd);padding-bottom:20px;margin-bottom:12px}
+.lsc .zone{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;min-height:auto}.lsc .si{position:relative}
+.si{display:inline-flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all 0.25s;-webkit-user-select:none;user-select:none;padding:8px;border-radius:var(--rs);border:3px solid transparent}
+.si:hover:not(.done):not(.dis){border-color:var(--pri);background:var(--pri-l);transform:scale(1.08)}
+.si:active:not(.done){transform:scale(0.95)}
+.si.pk{border-color:var(--pri);background:var(--pri-l);box-shadow:0 0 0 3px rgba(108,92,231,0.25);transform:scale(1.1)}
+.si.done{opacity:0.45;cursor:default;border-color:var(--ok)}
+.si.wf{border-color:var(--no);background:var(--no-l);animation:shake 0.5s}
+.si .sw{width:72px;height:72px;display:flex;align-items:center;justify-content:center}
+.si .sw svg{width:100%;height:100%}
+.si .sw.sh svg *{fill:#2d3436!important;stroke:#1a1a2e!important}
+.si .lb{font-size:0.7rem;font-weight:600;color:var(--txt2)}
+.ccnt{text-align:center;font-size:0.85rem;color:var(--txt2);margin-top:10px;font-weight:600}
+.cfb{text-align:center;margin-top:8px;font-weight:700;font-size:0.95rem;min-height:22px;opacity:0;transition:opacity 0.3s}
+.cfb.show{opacity:1}.cfb.ok{color:var(--ok)}.cfb.bad{color:var(--no)}
+.ld{background:linear-gradient(135deg,var(--pri),#a29bfe);border-radius:var(--r);padding:32px 20px;text-align:center;color:#fff;box-shadow:var(--sh);display:none;animation:fi 0.4s}
+.ld.show{display:block}.ld .big{font-size:3.5rem;margin-bottom:12px;animation:bounce 1s ease infinite}
+.ld h2{font-size:1.6rem;font-weight:800;margin-bottom:6px}.ld p{opacity:0.9}
+.ld .sc{font-size:2.2rem;font-weight:900;margin:12px 0}
+.acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 24px;border-radius:var(--rs);font-family:inherit;font-size:0.95rem;font-weight:700;cursor:pointer;border:none;transition:all 0.25s}
+.btn:hover{transform:translateY(-1px)}.bw{background:#fff;color:var(--pri)}.bo{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.5)}
+@media print{body{background:#fff}.hd{background:none;color:#000;padding:10px 0;border-bottom:2px solid #000}.hd::before{display:none}
+.mb,.ps,.tw,.acts,.nopr,.ld,.hb,.ccnt,.cfb{display:none!important}.ct{padding:8px 0}
+.mc{box-shadow:none;border:2px solid #999;page-break-inside:avoid}.si{border-color:transparent}.si.done,.si.pk{border-color:transparent;opacity:1;background:transparent}
+.dc{display:none!important}.ph{display:block!important}.plh{display:block!important;text-align:center;color:#666;font-size:0.8rem;margin-top:8px}}
+.ph{display:none;text-align:center;font-size:1.4rem;font-weight:800;margin-bottom:12px;padding:8px 0;border-bottom:2px solid #000}
+.plh{display:none}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes mp{0%{transform:scale(1)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
+@media(max-width:600px){.hd h1{font-size:1.5rem}.si .sw{width:58px;height:58px}.mc{padding:16px 12px}.mbtn{padding:6px 12px;font-size:0.8rem}.tb{padding:6px 12px;font-size:0.75rem}.llr{gap:12px}.zone{gap:14px}}
+@media(max-width:380px){.si .sw{width:46px;height:46px}.zone{gap:10px}}
+</style>
+</head>
+<body>
+<div class="hd"><h1>🌑 התאמת צלליות</h1><p>חברו כל תמונה לצללית המתאימה לה!</p></div>
+<div class="mb nopr">
+<button class="mbtn on" onclick="setM('click')" id="mc1"><span>👆</span> לחיצה</button>
+<button class="mbtn" onclick="setM('draw')" id="mc2"><span>✏️</span> קו חיבור</button>
+<button class="mbtn" onclick="window.print()"><span>🖨️</span> הדפסה</button>
+</div>
+<div class="ps nopr"><div class="pr"><span class="pl">התקדמות:</span><div class="pb"><div class="pf" id="pf" style="width:0%"></div></div><div class="pss"><span class="ps2" style="color:var(--ok)">✅ <span id="g1">0</span></span><span class="ps2" style="color:var(--no)">❌ <span id="g2">0</span></span></div></div></div>
+<div class="tw nopr"><div class="ts" id="tabs"></div></div>
+<div class="hb" id="hb">✏️ ציירו קו מהתמונה אל הצללית המתאימה!</div>
+<div class="ct" id="area"></div>
+<script>
+const SH={
+cat:`<svg viewBox="0 0 64 64"><path d="M16,12L8,2L8,20Q8,28 16,32L16,52Q16,58 22,58L42,58Q48,58 48,52L48,32Q56,28 56,20L56,2L48,12Q44,8 32,8Q20,8 16,12Z" fill="FILL" stroke="STR" stroke-width="2"/><circle cx="24" cy="22" r="3" fill="STR"/><circle cx="40" cy="22" r="3" fill="STR"/><path d="M28,28Q32,32 36,28" fill="none" stroke="STR" stroke-width="2"/></svg>`,
+dog:`<svg viewBox="0 0 64 64"><ellipse cx="32" cy="34" rx="18" ry="20" fill="FILL" stroke="STR" stroke-width="2"/><ellipse cx="14" cy="18" rx="8" ry="14" fill="FILL" stroke="STR" stroke-width="2" transform="rotate(-15,14,18)"/><ellipse cx="50" cy="18" rx="8" ry="14" fill="FILL" stroke="STR" stroke-width="2" transform="rotate(15,50,18)"/><circle cx="26" cy="30" r="3" fill="STR"/><circle cx="38" cy="30" r="3" fill="STR"/><ellipse cx="32" cy="38" rx="5" ry="3" fill="STR"/></svg>`,
+rabbit:`<svg viewBox="0 0 64 64"><ellipse cx="32" cy="42" rx="16" ry="18" fill="FILL" stroke="STR" stroke-width="2"/><ellipse cx="24" cy="14" rx="5" ry="18" fill="FILL" stroke="STR" stroke-width="2"/><ellipse cx="40" cy="14" rx="5" ry="18" fill="FILL" stroke="STR" stroke-width="2"/><circle cx="26" cy="38" r="2.5" fill="STR"/><circle cx="38" cy="38" r="2.5" fill="STR"/></svg>`,
+fish:`<svg viewBox="0 0 64 64"><ellipse cx="28" cy="32" rx="22" ry="14" fill="FILL" stroke="STR" stroke-width="2"/><polygon points="50,32 62,20 62,44" fill="FILL" stroke="STR" stroke-width="2"/><circle cx="18" cy="28" r="3" fill="STR"/></svg>`,
+bird:`<svg viewBox="0 0 64 64"><ellipse cx="32" cy="36" rx="18" ry="14" fill="FILL" stroke="STR" stroke-width="2"/><circle cx="32" cy="22" r="10" fill="FILL" stroke="STR" stroke-width="2"/><polygon points="22,22 12,20 22,26" fill="STR"/><circle cx="29" cy="20" r="2" fill="STR"/><line x1="26" y1="50" x2="26" y2="58" stroke="STR" stroke-width="3"/><line x1="38" y1="50" x2="38" y2="58" stroke="STR" stroke-width="3"/></svg>`,
+star5:`<svg viewBox="0 0 64 64"><polygon points="32,4 40,24 60,24 44,38 50,58 32,46 14,58 20,38 4,24 24,24" fill="FILL" stroke="STR" stroke-width="2"/></svg>`,
+star8:`<svg viewBox="0 0 64 64"><polygon points="32,2 38,22 56,12 44,28 62,32 44,36 56,52 38,42 32,62 26,42 8,52 20,36 2,32 20,28 8,12 26,22" fill="FILL" stroke="STR" stroke-width="2"/></svg>`,
+heart:`<svg viewBox="0 0 64 64"><path d="M32,56C18,44 4,34 4,20C4,10 12,4 20,4C26,4 30,8 32,12C34,8 38,4 44,4C52,4 60,10 60,20C60,34 46,44 32,56Z" fill="FILL" stroke="STR" stroke-width="2"/></svg>`,
+tree:`<svg viewBox="0 0 64 64"><polygon points="32,4 52,36 42,36 56,56 8,56 22,36 12,36" fill="FILL" stroke="STR" stroke-width="2"/><rect x="28" y="56" width="8" height="6" fill="STR"/></svg>`,
+house:`<svg viewBox="0 0 64 64"><polygon points="32,6 56,30 8,30" fill="FILL" stroke="STR" stroke-width="2"/><rect x="14" y="30" width="36" height="28" fill="FILL" stroke="STR" stroke-width="2"/><rect x="26" y="40" width="12" height="18" fill="STR"/></svg>`,
+car:`<svg viewBox="0 0 64 64"><rect x="6" y="28" width="52" height="18" rx="4" fill="FILL" stroke="STR" stroke-width="2"/><path d="M16,28L22,14L42,14L48,28" fill="FILL" stroke="STR" stroke-width="2"/><circle cx="18" cy="46" r="6" fill="FILL" stroke="STR" stroke-width="2"/><circle cx="46" cy="46" r="6" fill="FILL" stroke="STR" stroke-width="2"/></svg>`,
+plane:`<svg viewBox="0 0 64 64"><ellipse cx="32" cy="32" rx="28" ry="6" fill="FILL" stroke="STR" stroke-width="2"/><polygon points="32,26 26,8 38,8" fill="FILL" stroke="STR" stroke-width="2"/><polygon points="6,32 2,22 14,30" fill="FILL" stroke="STR" stroke-width="2"/><polygon points="58,32 62,22 50,30" fill="FILL" stroke="STR" stroke-width="2"/></svg>`,
+boat:`<svg viewBox="0 0 64 64"><path d="M6,42L14,56L50,56L58,42Z" fill="FILL" stroke="STR" stroke-width="2"/><line x1="32" y1="14" x2="32" y2="42" stroke="STR" stroke-width="3"/><polygon points="32,14 32,36 52,28" fill="FILL" stroke="STR" stroke-width="2"/></svg>`,
+apple:`<svg viewBox="0 0 64 64"><path d="M32,16C18,16 8,28 8,42C8,56 18,60 32,60C46,60 56,56 56,42C56,28 46,16 32,16Z" fill="FILL" stroke="STR" stroke-width="2"/><path d="M32,16C32,16 36,6 42,10" fill="none" stroke="STR" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+grape:`<svg viewBox="0 0 64 64"><circle cx="24" cy="24" r="8" fill="FILL" stroke="STR" stroke-width="1.5"/><circle cx="40" cy="24" r="8" fill="FILL" stroke="STR" stroke-width="1.5"/><circle cx="16" cy="38" r="8" fill="FILL" stroke="STR" stroke-width="1.5"/><circle cx="32" cy="38" r="8" fill="FILL" stroke="STR" stroke-width="1.5"/><circle cx="48" cy="38" r="8" fill="FILL" stroke="STR" stroke-width="1.5"/><circle cx="24" cy="52" r="8" fill="FILL" stroke="STR" stroke-width="1.5"/><circle cx="40" cy="52" r="8" fill="FILL" stroke="STR" stroke-width="1.5"/></svg>`,
+flower:`<svg viewBox="0 0 64 64"><circle cx="32" cy="20" r="8" fill="FILL" stroke="STR" stroke-width="1.5"/><circle cx="20" cy="28" r="8" fill="FILL" stroke="STR" stroke-width="1.5"/><circle cx="44" cy="28" r="8" fill="FILL" stroke="STR" stroke-width="1.5"/><circle cx="24" cy="40" r="8" fill="FILL" stroke="STR" stroke-width="1.5"/><circle cx="40" cy="40" r="8" fill="FILL" stroke="STR" stroke-width="1.5"/><circle cx="32" cy="32" r="6" fill="STR"/><line x1="32" y1="44" x2="32" y2="60" stroke="STR" stroke-width="3"/></svg>`,
+moon:`<svg viewBox="0 0 64 64"><path d="M40,8C24,12 16,26 16,40C16,54 28,60 40,56C28,54 22,42 22,32C22,22 28,12 40,8Z" fill="FILL" stroke="STR" stroke-width="2"/></svg>`,
+sun:`<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="14" fill="FILL" stroke="STR" stroke-width="2"/><line x1="32" y1="4" x2="32" y2="14" stroke="STR" stroke-width="3"/><line x1="32" y1="50" x2="32" y2="60" stroke="STR" stroke-width="3"/><line x1="4" y1="32" x2="14" y2="32" stroke="STR" stroke-width="3"/><line x1="50" y1="32" x2="60" y2="32" stroke="STR" stroke-width="3"/><line x1="12" y1="12" x2="20" y2="20" stroke="STR" stroke-width="3"/><line x1="44" y1="44" x2="52" y2="52" stroke="STR" stroke-width="3"/><line x1="52" y1="12" x2="44" y2="20" stroke="STR" stroke-width="3"/><line x1="12" y1="52" x2="20" y2="44" stroke="STR" stroke-width="3"/></svg>`,
+umbrella:`<svg viewBox="0 0 64 64"><path d="M8,32Q8,8 32,8Q56,8 56,32Z" fill="FILL" stroke="STR" stroke-width="2"/><line x1="32" y1="32" x2="32" y2="54" stroke="STR" stroke-width="3"/><path d="M32,54Q32,60 26,58" fill="none" stroke="STR" stroke-width="2.5"/></svg>`,
+key:`<svg viewBox="0 0 64 64"><circle cx="20" cy="24" r="12" fill="FILL" stroke="STR" stroke-width="2"/><circle cx="20" cy="24" r="5" fill="white" opacity="0.5"/><rect x="30" y="20" width="28" height="8" rx="2" fill="FILL" stroke="STR" stroke-width="2"/><rect x="48" y="28" width="4" height="8" rx="1" fill="STR"/><rect x="40" y="28" width="4" height="6" rx="1" fill="STR"/></svg>`,
+balloon:`<svg viewBox="0 0 64 64"><ellipse cx="32" cy="26" rx="16" ry="22" fill="FILL" stroke="STR" stroke-width="2"/><polygon points="28,48 32,52 36,48" fill="FILL" stroke="STR" stroke-width="1.5"/><path d="M32,52Q28,56 32,60" fill="none" stroke="STR" stroke-width="2"/></svg>`,
+crown:`<svg viewBox="0 0 64 64"><polygon points="8,48 8,20 20,32 32,12 44,32 56,20 56,48" fill="FILL" stroke="STR" stroke-width="2"/><rect x="8" y="48" width="48" height="8" rx="2" fill="FILL" stroke="STR" stroke-width="2"/></svg>`,
+diamond:`<svg viewBox="0 0 64 64"><polygon points="32,4 58,24 32,60 6,24" fill="FILL" stroke="STR" stroke-width="2"/><line x1="6" y1="24" x2="58" y2="24" stroke="STR" stroke-width="1.5"/></svg>`,
+};
+function sc(k,f,s){return SH[k].replaceAll('FILL',f).replaceAll('STR',s)}
+function ss(k){return SH[k].replaceAll('FILL','#2d3436').replaceAll('STR','#1a1a2e')}
+const CL=[{f:'#e74c3c',s:'#c0392b'},{f:'#3498db',s:'#2980b9'},{f:'#2ecc71',s:'#27ae60'},{f:'#f39c12',s:'#e67e22'},{f:'#9b59b6',s:'#8e44ad'},{f:'#e84393',s:'#c2185b'},{f:'#1abc9c',s:'#16a085'},{f:'#fd79a8',s:'#e84393'}];
+const LV=[
+{id:1,t:'חיות 1',ly:'lr',it:['cat','dog','rabbit','fish']},
+{id:2,t:'טבע',ly:'tb',it:['tree','flower','apple','sun']},
+{id:3,t:'תחבורה',ly:'lr',it:['car','plane','boat','star5']},
+{id:4,t:'חיות 2',ly:'sc',it:['bird','cat','fish','rabbit']},
+{id:5,t:'צורות',ly:'lr',it:['star5','heart','diamond','moon']},
+{id:6,t:'בית וחצר',ly:'tb',it:['house','tree','flower','key','umbrella']},
+{id:7,t:'ערבוב 1',ly:'sc',it:['dog','apple','car','star8']},
+{id:8,t:'שמיים',ly:'lr',it:['sun','moon','star5','bird','balloon']},
+{id:9,t:'פירות וטבע',ly:'tb',it:['apple','grape','flower','tree','sun']},
+{id:10,t:'ערבוב 2',ly:'sc',it:['heart','key','crown','umbrella','fish']},
+{id:11,t:'תחבורה 2',ly:'lr',it:['car','boat','plane','key','house']},
+{id:12,t:'מלכותי',ly:'tb',it:['crown','diamond','star5','heart','star8']},
+{id:13,t:'ערבוב 3',ly:'sc',it:['balloon','cat','boat','flower','moon','apple']},
+{id:14,t:'אתגר 1',ly:'lr',it:['dog','rabbit','bird','fish','cat','tree']},
+{id:15,t:'אתגר 2',ly:'sc',it:['star5','heart','crown','diamond','sun','moon']},
+];
+let cur=0,md='click',g1=0,g2=0,res={},pk=null;
+function sh(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+const E1=['!מעולה 🎉','!התאמה מושלמת 🎯','!יופי 👏','!מדהים 🌟'];
+const E2=['לא מתאים 💪','כמעט! 🤔','ממשיכים! 😊'];
+function rTabs(){const el=document.getElementById('tabs');el.innerHTML=LV.map((l,i)=>`<button class="tb ${i===cur?'on':''} ${res[l.id]?'dn':''}" onclick="go(${i})">${l.t}</button>`).join('');setTimeout(()=>{const a=el.querySelector('.on');if(a)a.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})},100)}
+function rLv(){
+const lv=LV[cur],ar=document.getElementById('area'),it=lv.it,shd=sh([...it]),cl=sh([...CL]).slice(0,it.length),dw=md==='draw';
+let sL=[],sR=[];
+
+// For ALL layouts, shuffle shadows independently each time
+// For 'lr' and 'tb', items stay in order but shadows are shuffled
+// For 'sc' (mixed), everything is shuffled together in one grid
+
+if(lv.ly==='sc'){
+  // Build mixed array with both colored and shadow items, then shuffle
+  const mixed = [];
+  it.forEach((k,i) => mixed.push({k,side:'l',ci:i}));
+  shd.forEach((k) => mixed.push({k,side:'r'}));
+  // Shuffle mixed array
+  for(let i=mixed.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[mixed[i],mixed[j]]=[mixed[j],mixed[i]]}
+  sL = mixed; // reuse sL for the mixed array
+}
+let h=`<div class="ph">🌑 התאמת צלליות — ${lv.t}</div><div class="mc ${dw?'dw':''}" id="q0" data-total="${it.length}" data-matched="0" data-wrong="0">`;
+if(dw)h+=`<canvas class="dc" id="cv0"></canvas>`;
+h+=`<div class="mh"><div class="mn">1</div><span class="mht">💡 חברו כל תמונה לצללית שלה</span></div>`;
+if(lv.ly==='lr'){
+// Shuffle the colored items order too
+const litems = it.map((k,i)=>({k,ci:i}));
+for(let i=litems.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[litems[i],litems[j]]=[litems[j],litems[i]]}
+h+=`<div class="llr"><div class="zone"><div class="zt">תמונות</div>`;
+litems.forEach(o=>h+=`<div class="si" data-id="${o.k}" data-side="l" ${md==='click'?'onclick="sel(this)"':''}><div class="sw">${sc(o.k,cl[o.ci].f,cl[o.ci].s)}</div></div>`);
+h+=`</div><div class="dv"></div><div class="zone"><div class="zt">צלליות</div>`;
+shd.forEach(k=>h+=`<div class="si" data-id="${k}" data-side="r" ${md==='click'?'onclick="sel(this)"':''}><div class="sw sh">${ss(k)}</div></div>`);
+h+=`</div></div>`}
+else if(lv.ly==='tb'){
+const litems2 = it.map((k,i)=>({k,ci:i}));
+for(let i=litems2.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[litems2[i],litems2[j]]=[litems2[j],litems2[i]]}
+h+=`<div class="ltb"><div class="zone"><div class="zt">תמונות</div>`;
+litems2.forEach(o=>h+=`<div class="si" data-id="${o.k}" data-side="l" ${md==='click'?'onclick="sel(this)"':''}><div class="sw">${sc(o.k,cl[o.ci].f,cl[o.ci].s)}</div></div>`);
+h+=`</div><div class="zone"><div class="zt">צלליות</div>`;
+shd.forEach(k=>h+=`<div class="si" data-id="${k}" data-side="r" ${md==='click'?'onclick="sel(this)"':''}><div class="sw sh">${ss(k)}</div></div>`);
+h+=`</div></div>`}
+else{
+h+=`<div class="lsc"><div class="zone">`;
+sL.forEach(item => {
+  if(item.side==='l'){
+    h+=`<div class="si" data-id="${item.k}" data-side="l" ${md==='click'?'onclick="sel(this)"':''}><div class="sw">${sc(item.k,cl[item.ci].f,cl[item.ci].s)}</div></div>`;
+  } else {
+    h+=`<div class="si" data-id="${item.k}" data-side="r" ${md==='click'?'onclick="sel(this)"':''}><div class="sw sh">${ss(item.k)}</div></div>`;
+  }
+});
+h+=`</div></div>`}
+h+=`<div class="ccnt" id="cnt0">0 / ${it.length} התאמות</div><div class="cfb" id="fb0"></div><div class="plh">מתחו קו בין כל תמונה לצללית שלה</div></div>`;
+h+=`<div class="ld" id="ld"><div class="big">🌟</div><h2 id="lt"></h2><p id="ls"></p><div class="sc" id="lsc"></div><div class="acts"><button class="btn bw" onclick="retry()">🔄 נסה שוב</button>${cur<LV.length-1?'<button class="btn bo" onclick="nxt()">➡️ הבא</button>':''}<button class="btn bo" onclick="window.print()">🖨️ הדפס</button></div></div>`;
+ar.innerHTML=h;if(dw)initDr();rTabs();uPr()}
+function sel(el){if(el.classList.contains('done'))return;if(!pk){el.classList.add('pk');pk=el;return}if(pk===el){el.classList.remove('pk');pk=null;return}
+if(pk.dataset.side===el.dataset.side){pk.classList.remove('pk');el.classList.add('pk');pk=el;return}
+pk.classList.remove('pk');
+if(pk.dataset.id===el.dataset.id){pk.classList.add('done');el.classList.add('done');pk.style.animation='mp 0.4s';el.style.animation='mp 0.4s';g1++;uCnt()}
+else{pk.classList.add('wf');el.classList.add('wf');g2++;const a=pk,b=el;setTimeout(()=>{a.classList.remove('wf');b.classList.remove('wf')},600);
+document.getElementById('q0').dataset.wrong=parseInt(document.getElementById('q0').dataset.wrong)+1}
+pk=null;uPr()}
+function uCnt(){const c=document.getElementById('q0'),t=parseInt(c.dataset.total),m=c.querySelectorAll('.si.done[data-side="l"]').length;
+document.getElementById('cnt0').textContent=m+' / '+t+' התאמות';
+if(m===t){const w=parseInt(c.dataset.wrong),fb=document.getElementById('fb0');
+if(w===0){c.classList.add('ok');fb.textContent=E1[Math.floor(Math.random()*E1.length)];fb.classList.add('ok','show')}
+else{c.classList.add('bad');fb.textContent=`סיימתם עם ${w} טעויות 💪`;fb.classList.add('bad','show')}
+setTimeout(showD,600)}}
+function initDr(){document.getElementById('hb').classList.add('show');const c=document.getElementById('q0'),cv=document.getElementById('cv0');if(!cv)return;
+cv.width=c.offsetWidth;cv.height=c.offsetHeight;const ctx=cv.getContext('2d');let dw=false,sE=null;
+cv.addEventListener('pointerdown',function(e){if(c.dataset.matched==c.dataset.total)return;e.preventDefault();e.stopPropagation();
+const u=gU(e.clientX,e.clientY);if(!u||u.classList.contains('done'))return;dw=true;sE=u;sE.classList.add('pk');
+ctx.clearRect(0,0,cv.width,cv.height);const r=cv.getBoundingClientRect();ctx.beginPath();ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
+ctx.strokeStyle='#6c5ce7';ctx.lineWidth=4;ctx.lineCap='round';ctx.setLineDash([8,6])},{passive:false});
+cv.addEventListener('pointermove',function(e){if(!dw)return;e.preventDefault();e.stopPropagation();const r=cv.getBoundingClientRect();ctx.lineTo(e.clientX-r.left,e.clientY-r.top);ctx.stroke()},{passive:false});
+cv.addEventListener('pointerup',function(e){if(!dw)return;e.preventDefault();dw=false;const end=gU(e.clientX,e.clientY);sE.classList.remove('pk');
+setTimeout(()=>ctx.clearRect(0,0,cv.width,cv.height),300);
+if(!end||end===sE||end.classList.contains('done')){sE=null;return}
+if(sE.dataset.side===end.dataset.side){sE=null;return}
+if(sE.dataset.id===end.dataset.id){sE.classList.add('done');end.classList.add('done');sE.style.animation='mp 0.4s';end.style.animation='mp 0.4s';g1++;uCnt()}
+else{sE.classList.add('wf');end.classList.add('wf');g2++;c.dataset.wrong=parseInt(c.dataset.wrong)+1;const a=sE,b=end;setTimeout(()=>{a.classList.remove('wf');b.classList.remove('wf')},600)}
+sE=null;uPr()},{passive:false});
+cv.addEventListener('pointercancel',function(){dw=false;if(sE)sE.classList.remove('pk');ctx.clearRect(0,0,cv.width,cv.height);sE=null});
+function gU(cx,cy){const all=c.querySelectorAll('.si');for(const i of all){const r=i.getBoundingClientRect();if(cx>=r.left&&cx<=r.right&&cy>=r.top&&cy<=r.bottom)return i}return null}}
+function showD(){res[LV[cur].id]=true;const c=document.getElementById('q0'),w=parseInt(c.dataset.wrong),t=parseInt(c.dataset.total);
+const el=document.getElementById('ld');document.getElementById('lsc').textContent=(t-Math.min(w,t))+' / '+t;
+if(w===0){document.getElementById('lt').textContent='🏆 מושלם!';document.getElementById('ls').textContent='כל ההתאמות נכונות!'}
+else if(w<=2){document.getElementById('lt').textContent='👏 כל הכבוד!';document.getElementById('ls').textContent='כמעט מושלם!'}
+else{document.getElementById('lt').textContent='💪 סיימתם!';document.getElementById('ls').textContent='נסו שוב לשיפור!'}
+el.classList.add('show');el.scrollIntoView({behavior:'smooth',block:'center'});rTabs()}
+function go(i){cur=i;pk=null;rLv();window.scrollTo({top:0,behavior:'smooth'})}
+function nxt(){if(cur<LV.length-1){cur++;pk=null;rLv();window.scrollTo({top:0,behavior:'smooth'})}}
+function retry(){pk=null;rLv();window.scrollTo({top:0,behavior:'smooth'})}
+function setM(m){md=m;pk=null;document.getElementById('mc1').classList.toggle('on',m==='click');document.getElementById('mc2').classList.toggle('on',m==='draw');if(m==='click')document.getElementById('hb').classList.remove('show');rLv()}
+function uPr(){const d=Object.keys(res).length;document.getElementById('pf').style.width=Math.round(d/LV.length*100)+'%';document.getElementById('g1').textContent=g1;document.getElementById('g2').textContent=g2}
+rLv();
+</script>
+</body>
+</html>

@@ -51,22 +51,61 @@ if (header) {
   });
 }
 
-// ===== Materials Tabs =====
-const tabs = document.querySelectorAll('.materials-tab');
-const contents = document.querySelectorAll('.materials-content');
+// ===== Materials Tabs (Two-Level) =====
+(function() {
+  var subjectTabs = document.querySelectorAll('.materials-tab[data-subject]');
+  var subtabGroups = document.querySelectorAll('.materials-subtabs');
+  var contents = document.querySelectorAll('.materials-content');
+  if (subjectTabs.length === 0) return;
 
-tabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    const target = tab.dataset.tab;
+  // Click on subject tab (level 1)
+  subjectTabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      var subject = tab.dataset.subject;
 
-    tabs.forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
+      // Update subject tabs
+      subjectTabs.forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
 
-    contents.forEach(c => c.classList.remove('active'));
-    const targetEl = document.getElementById('tab-' + target);
-    if (targetEl) targetEl.classList.add('active');
+      // Show matching subtabs group
+      subtabGroups.forEach(function(g) { g.classList.remove('active'); });
+      var activeGroup = document.getElementById('subtabs-' + subject);
+      if (activeGroup) {
+        activeGroup.classList.add('active');
+        // Click the first subtab to show its content
+        var firstSub = activeGroup.querySelector('.materials-subtab');
+        if (firstSub) {
+          // Reset all subtabs in this group and activate the first
+          activeGroup.querySelectorAll('.materials-subtab').forEach(function(s) { s.classList.remove('active'); });
+          firstSub.classList.add('active');
+          // Show corresponding content
+          contents.forEach(function(c) { c.classList.remove('active'); });
+          var targetEl = document.getElementById('tab-' + firstSub.dataset.tab);
+          if (targetEl) targetEl.classList.add('active');
+        }
+      }
+    });
   });
-});
+
+  // Click on subtab (level 2)
+  document.querySelectorAll('.materials-subtab').forEach(function(sub) {
+    sub.addEventListener('click', function() {
+      var target = sub.dataset.tab;
+
+      // Update subtabs within same group
+      var group = sub.closest('.materials-subtabs');
+      if (group) {
+        group.querySelectorAll('.materials-subtab').forEach(function(s) { s.classList.remove('active'); });
+      }
+      sub.classList.add('active');
+
+      // Show matching content
+      contents.forEach(function(c) { c.classList.remove('active'); });
+      var targetEl = document.getElementById('tab-' + target);
+      if (targetEl) targetEl.classList.add('active');
+    });
+  });
+})();
 
 // ===== Scroll Reveal Animations =====
 const revealObserver = new IntersectionObserver((entries) => {

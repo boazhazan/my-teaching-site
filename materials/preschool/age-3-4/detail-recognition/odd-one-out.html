@@ -109,12 +109,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);min-h
 .option.selected-wrong .st-icon{background:var(--wrong);opacity:1;transform:scale(1)}
 
 /* ===== Circle Drawing Mode ===== */
-.draw-overlay{position:absolute;top:0;left:0;width:100%;height:100%;z-index:50;display:none;cursor:crosshair;touch-action:none}
-.draw-overlay.active{display:block}
-.draw-overlay canvas{position:absolute;top:0;left:0;width:100%;height:100%}
-.exercise-wrapper{position:relative;max-width:800px;margin:0 auto}
+.question-card.draw-enabled{position:relative;touch-action:none}
+.question-card.draw-enabled .draw-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;cursor:crosshair;border-radius:var(--radius)}
+.question-card.done .draw-canvas{display:none}
 .option.circled{position:relative}
-.option.circled::before{content:'';position:absolute;top:-8px;left:-8px;right:-8px;bottom:-8px;border:4px solid var(--primary);border-radius:50%;z-index:2;animation:circleAppear 0.4s ease forwards}
+.option.circled::before{content:'';position:absolute;top:-8px;left:-8px;right:-8px;bottom:-8px;border:4px solid var(--primary);border-radius:50%;z-index:12;animation:circleAppear 0.4s ease forwards}
 .option.circled.correct-circle{border-color:transparent}
 .option.circled.correct-circle::before{border-color:var(--success);border-width:5px}
 .option.circled.wrong-circle{border-color:transparent}
@@ -228,10 +227,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);min-h
 
 <!-- Exercise Area -->
 <div class="draw-mode-hint" id="drawHint">✏️ ציירו עיגול מסביב לתשובה הנכונה!</div>
-<div class="exercise-wrapper" id="exerciseWrapper">
-  <div class="draw-overlay" id="drawOverlay"><canvas id="drawCanvas"></canvas></div>
-  <div class="exercise-container" id="exerciseArea"></div>
-</div>
+<div class="exercise-container" id="exerciseArea"></div>
 
 <script>
 // ===== DATA =====
@@ -417,7 +413,8 @@ function renderLevel(){
   lv.questions.forEach((q,qi) => {
     const shuffled = lv.noShuffle ? q.opts : shuffle(q.opts);
     const gridClass = lv.cols===6?'grid-6':lv.cols===5?'grid-5':'grid-4';
-    html += `<div class="question-card" id="q${qi}">
+    html += `<div class="question-card ${mode==='draw'?'draw-enabled':''}" id="q${qi}">
+      ${mode==='draw'?`<canvas class="draw-canvas" id="canvas${qi}"></canvas>`:''}
       <div class="q-header">
         <div class="q-num" style="background:${lv.color}">${qi+1}</div>
         ${q.hint?`<span class="q-hint">💡 ${q.hint}</span>`:''}
@@ -488,117 +485,101 @@ function pick(el, qi){
 }
 
 // ===== DRAW MODE =====
-let drawCanvas, drawCtx, isDrawing = false, drawPoints = [];
-
 function initDrawMode(){
-  const overlay = document.getElementById('drawOverlay');
-  const wrapper = document.getElementById('exerciseWrapper');
-  drawCanvas = document.getElementById('drawCanvas');
-
-  function sizeCanvas(){
-    drawCanvas.width = wrapper.offsetWidth;
-    drawCanvas.height = wrapper.offsetHeight;
-  }
-  sizeCanvas();
-  drawCtx = drawCanvas.getContext('2d');
-
   document.getElementById('drawHint').classList.add('show');
+  const cards = document.querySelectorAll('.question-card.draw-enabled');
+  cards.forEach(card => {
+    const qi = parseInt(card.id.replace('q',''));
+    const canvas = document.getElementById('canvas'+qi);
+    if(!canvas) return;
 
-  overlay.onpointerdown = null;
-  overlay.onpointermove = null;
-  overlay.onpointerup = null;
+    // Size canvas to card
+    canvas.width = card.offsetWidth;
+    canvas.height = card.offsetHeight;
 
-  overlay.addEventListener('pointerdown', onDrawStart, {passive:false});
-  overlay.addEventListener('pointermove', onDrawMove, {passive:false});
-  overlay.addEventListener('pointerup', onDrawEnd, {passive:false});
-  overlay.addEventListener('pointercancel', onDrawEnd, {passive:false});
+    let ctx = canvas.getContext('2d');
+    let drawing = false;
+    let points = [];
 
-  overlay.classList.add('active');
-  window._sizeDrawCanvas = sizeCanvas;
+    canvas.addEventListener('pointerdown', function(e){
+      if(card.classList.contains('done')) return;
+      e.preventDefault();
+      e.stopPropagation();
+      drawing = true;
+      points = [];
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const rect = canvas.getBoundingClientRect();
+      const pt = {x: e.clientX - rect.left, y: e.clientY - rect.top, cx: e.clientX, cy: e.clientY};
+      points.push(pt);
+      ctx.beginPath();
+      ctx.moveTo(pt.x, pt.y);
+      ctx.strokeStyle = '#4a90d9';
+      ctx.lineWidth = 4;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+    }, {passive:false});
+
+    canvas.addEventListener('pointermove', function(e){
+      if(!drawing) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const rect = canvas.getBoundingClientRect();
+      const pt = {x: e.clientX - rect.left, y: e.clientY - rect.top, cx: e.clientX, cy: e.clientY};
+      points.push(pt);
+      ctx.lineTo(pt.x, pt.y);
+      ctx.stroke();
+    }, {passive:false});
+
+    canvas.addEventListener('pointerup', function(e){
+      if(!drawing) return;
+      e.preventDefault();
+      drawing = false;
+
+      if(points.length < 10){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        return;
+      }
+
+      // Find center of drawn shape
+      let cx = 0, cy = 0;
+      points.forEach(p => { cx += p.cx; cy += p.cy; });
+      cx /= points.length;
+      cy /= points.length;
+
+      // Find closest option in this card
+      const options = card.querySelectorAll('.option');
+      let bestOption = null;
+      let bestDist = Infinity;
+
+      options.forEach(opt => {
+        const r = opt.getBoundingClientRect();
+        const optCx = r.left + r.width/2;
+        const optCy = r.top + r.height/2;
+        const dist = Math.sqrt((cx-optCx)**2 + (cy-optCy)**2);
+        const maxDist = Math.max(r.width, r.height) * 1.5;
+        if(dist < maxDist && dist < bestDist){
+          bestDist = dist;
+          bestOption = opt;
+        }
+      });
+
+      setTimeout(() => { ctx.clearRect(0, 0, canvas.width, canvas.height); }, 300);
+
+      if(bestOption){
+        bestOption.classList.add('circled');
+        setTimeout(() => confirmCircle(bestOption, qi), 400);
+      }
+    }, {passive:false});
+
+    canvas.addEventListener('pointercancel', function(){
+      drawing = false;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+  });
 }
 
 function disableDrawMode(){
-  const overlay = document.getElementById('drawOverlay');
-  overlay.classList.remove('active');
   document.getElementById('drawHint').classList.remove('show');
-}
-
-function onDrawStart(e){
-  e.preventDefault();
-  isDrawing = true;
-  drawPoints = [];
-  const rect = drawCanvas.getBoundingClientRect();
-  drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-  const pt = {x: e.clientX - rect.left, y: e.clientY - rect.top, cx: e.clientX, cy: e.clientY};
-  drawPoints.push(pt);
-  drawCtx.beginPath();
-  drawCtx.moveTo(pt.x, pt.y);
-  drawCtx.strokeStyle = '#4a90d9';
-  drawCtx.lineWidth = 4;
-  drawCtx.lineCap = 'round';
-  drawCtx.lineJoin = 'round';
-}
-
-function onDrawMove(e){
-  if(!isDrawing) return;
-  e.preventDefault();
-  const rect = drawCanvas.getBoundingClientRect();
-  const pt = {x: e.clientX - rect.left, y: e.clientY - rect.top, cx: e.clientX, cy: e.clientY};
-  drawPoints.push(pt);
-  drawCtx.lineTo(pt.x, pt.y);
-  drawCtx.stroke();
-}
-
-function onDrawEnd(e){
-  if(!isDrawing) return;
-  e.preventDefault();
-  isDrawing = false;
-
-  if(drawPoints.length < 10){
-    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-    return;
-  }
-
-  // Find center of drawn shape using screen coordinates
-  let cx = 0, cy = 0;
-  drawPoints.forEach(p => { cx += p.cx; cy += p.cy; });
-  cx /= drawPoints.length;
-  cy /= drawPoints.length;
-
-  // Find which option the center is closest to
-  const allCards = document.querySelectorAll('.question-card:not(.done)');
-  let bestOption = null;
-  let bestDist = Infinity;
-  let bestQi = -1;
-
-  allCards.forEach(card => {
-    const qi = parseInt(card.id.replace('q',''));
-    const options = card.querySelectorAll('.option');
-    options.forEach(opt => {
-      const rect = opt.getBoundingClientRect();
-      const optCx = rect.left + rect.width/2;
-      const optCy = rect.top + rect.height/2;
-      const dist = Math.sqrt((cx-optCx)**2 + (cy-optCy)**2);
-      // Check if center is within reasonable distance of option
-      const maxDist = Math.max(rect.width, rect.height) * 1.2;
-      if(dist < maxDist && dist < bestDist){
-        bestDist = dist;
-        bestOption = opt;
-        bestQi = qi;
-      }
-    });
-  });
-
-  // Fade out drawing
-  setTimeout(() => {
-    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-  }, 300);
-
-  if(bestOption && bestQi >= 0){
-    // Found a match — confirm the answer
-    bestOption.classList.add('circled');
-    setTimeout(() => confirmCircle(bestOption, bestQi), 400);
-  }
 }
 
 function confirmCircle(el, qi){
@@ -662,10 +643,6 @@ function setMode(m){
   if(m==='click') disableDrawMode();
   renderLevel();
 }
-
-window.addEventListener('resize', ()=>{
-  if(window._sizeDrawCanvas) window._sizeDrawCanvas();
-});
 
 // ===== PROGRESS =====
 function updateProgress(){

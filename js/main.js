@@ -51,58 +51,82 @@ if (header) {
   });
 }
 
-// ===== Materials Tabs (Two-Level) =====
+// ===== Materials Tabs (Three-Level) =====
 (function() {
-  var subjectTabs = document.querySelectorAll('.materials-tab[data-subject]');
+  var stageTabs = document.querySelectorAll('.materials-tab[data-stage]');
   var subtabGroups = document.querySelectorAll('.materials-subtabs');
+  var gradeGroups = document.querySelectorAll('.materials-grades');
   var contents = document.querySelectorAll('.materials-content');
-  if (subjectTabs.length === 0) return;
+  if (stageTabs.length === 0) return;
 
-  // Click on subject tab (level 1)
-  subjectTabs.forEach(function(tab) {
+  function hideAll() {
+    contents.forEach(function(c) { c.classList.remove('active'); });
+    gradeGroups.forEach(function(g) { g.classList.remove('active'); });
+  }
+
+  function showContent(id) {
+    contents.forEach(function(c) { c.classList.remove('active'); });
+    var el = document.getElementById('tab-' + id);
+    if (el) el.classList.add('active');
+  }
+
+  function activateFirst(group, sel) {
+    var btns = group.querySelectorAll(sel);
+    btns.forEach(function(b) { b.classList.remove('active'); });
+    if (btns[0]) { btns[0].classList.add('active'); return btns[0]; }
+    return null;
+  }
+
+  // Trigger subtab logic (shared by stage click and direct subtab activation)
+  function triggerSubtab(sub) {
+    if (sub.dataset.tab) {
+      showContent(sub.dataset.tab);
+    } else if (sub.dataset.subject) {
+      var gradeGroup = document.getElementById('grades-' + sub.dataset.subject);
+      if (gradeGroup) {
+        gradeGroup.classList.add('active');
+        var first = activateFirst(gradeGroup, '.materials-grade');
+        if (first && first.dataset.tab) showContent(first.dataset.tab);
+      }
+    }
+  }
+
+  // Level 1: Stage tab click
+  stageTabs.forEach(function(tab) {
     tab.addEventListener('click', function() {
-      var subject = tab.dataset.subject;
-
-      // Update subject tabs
-      subjectTabs.forEach(function(t) { t.classList.remove('active'); });
+      stageTabs.forEach(function(t) { t.classList.remove('active'); });
       tab.classList.add('active');
 
-      // Show matching subtabs group
       subtabGroups.forEach(function(g) { g.classList.remove('active'); });
-      var activeGroup = document.getElementById('subtabs-' + subject);
-      if (activeGroup) {
-        activeGroup.classList.add('active');
-        // Click the first subtab to show its content
-        var firstSub = activeGroup.querySelector('.materials-subtab');
-        if (firstSub) {
-          // Reset all subtabs in this group and activate the first
-          activeGroup.querySelectorAll('.materials-subtab').forEach(function(s) { s.classList.remove('active'); });
-          firstSub.classList.add('active');
-          // Show corresponding content
-          contents.forEach(function(c) { c.classList.remove('active'); });
-          var targetEl = document.getElementById('tab-' + firstSub.dataset.tab);
-          if (targetEl) targetEl.classList.add('active');
-        }
+      hideAll();
+
+      var group = document.getElementById('subtabs-' + tab.dataset.stage);
+      if (group) {
+        group.classList.add('active');
+        var firstSub = activateFirst(group, '.materials-subtab');
+        if (firstSub) triggerSubtab(firstSub);
       }
     });
   });
 
-  // Click on subtab (level 2)
+  // Level 2: Subtab click
   document.querySelectorAll('.materials-subtab').forEach(function(sub) {
     sub.addEventListener('click', function() {
-      var target = sub.dataset.tab;
-
-      // Update subtabs within same group
       var group = sub.closest('.materials-subtabs');
-      if (group) {
-        group.querySelectorAll('.materials-subtab').forEach(function(s) { s.classList.remove('active'); });
-      }
+      if (group) group.querySelectorAll('.materials-subtab').forEach(function(s) { s.classList.remove('active'); });
       sub.classList.add('active');
+      hideAll();
+      triggerSubtab(sub);
+    });
+  });
 
-      // Show matching content
-      contents.forEach(function(c) { c.classList.remove('active'); });
-      var targetEl = document.getElementById('tab-' + target);
-      if (targetEl) targetEl.classList.add('active');
+  // Level 3: Grade tab click
+  document.querySelectorAll('.materials-grade').forEach(function(grade) {
+    grade.addEventListener('click', function() {
+      var group = grade.closest('.materials-grades');
+      if (group) group.querySelectorAll('.materials-grade').forEach(function(g) { g.classList.remove('active'); });
+      grade.classList.add('active');
+      if (grade.dataset.tab) showContent(grade.dataset.tab);
     });
   });
 })();

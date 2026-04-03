@@ -335,12 +335,28 @@ if (typeof emailjs !== 'undefined') {
   var levelGroup = document.getElementById('levelGroup');
   if (!reasonSelect || !levelGroup) return;
   var showLevelFor = ['private-lesson', 'duckme', 'content-request'];
-  reasonSelect.addEventListener('change', function() {
-    levelGroup.style.display = showLevelFor.indexOf(this.value) >= 0 ? '' : 'none';
+
+  function updateLevelVisibility() {
+    levelGroup.style.display = showLevelFor.indexOf(reasonSelect.value) >= 0 ? '' : 'none';
     if (levelGroup.style.display === 'none') {
       document.getElementById('level').selectedIndex = 0;
     }
-  });
+  }
+
+  reasonSelect.addEventListener('change', updateLevelVisibility);
+
+  // Pre-fill reason from URL parameter
+  var params = new URLSearchParams(window.location.search);
+  var reasonParam = params.get('reason');
+  if (reasonParam) {
+    for (var i = 0; i < reasonSelect.options.length; i++) {
+      if (reasonSelect.options[i].value === reasonParam) {
+        reasonSelect.selectedIndex = i;
+        updateLevelVisibility();
+        break;
+      }
+    }
+  }
 })();
 
 // ===== Contact Form =====

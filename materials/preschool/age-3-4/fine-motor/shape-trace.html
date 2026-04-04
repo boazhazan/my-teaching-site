@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>צורות — עקוב על הקווים | בועז חזן</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=Rubik:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f0fff4;--card:#fff;--pri:#00b894;--pri-l:#d5f5e3;--ok:#27ae60;--ok-l:#e8f5e9;--no:#e74c3c;--txt:#2c3e50;--txt2:#7f8c8d;--brd:#e0e0e0;--sh:0 4px 20px rgba(0,0,0,0.08);--r:16px;--rs:10px}
+*{box-sizing:border-box;margin:0;padding:0}html{-webkit-tap-highlight-color:transparent}
+body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;direction:rtl;overflow-x:hidden}
+.hd{background:linear-gradient(135deg,#00b894,#00cec9);color:#fff;padding:20px 24px;text-align:center;position:relative;overflow:hidden}
+.hd::before{content:'';position:absolute;top:-60px;right:-40px;width:180px;height:180px;background:rgba(255,255,255,0.08);border-radius:50%}
+.hd h1{font-family:'Rubik','Heebo',sans-serif;font-size:2rem;font-weight:800;position:relative;margin-bottom:4px}
+.hd p{font-size:1rem;opacity:0.9;position:relative}
+/* Top bar */
+.topbar{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--brd);position:sticky;top:0;z-index:20;flex-wrap:wrap}
+/* Progress */
+.ps{padding:12px 16px;background:var(--card);border-bottom:1px solid var(--brd)}
+.pr{display:flex;align-items:center;gap:12px;max-width:800px;margin:0 auto}
+.pl{font-size:0.85rem;font-weight:600;color:var(--txt2);white-space:nowrap}
+.ppb{flex:1;height:10px;background:#eee;border-radius:10px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--pri),#55efc4);border-radius:10px;transition:width 0.5s}
+/* Tabs */
+.tw{background:var(--card);border-bottom:1px solid var(--brd);position:sticky;top:52px;z-index:15;padding:0 8px}
+.ts{display:flex;gap:4px;overflow-x:auto;padding:10px 0;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.ts::-webkit-scrollbar{display:none}
+.tb{flex-shrink:0;padding:8px 16px;border-radius:20px;border:2px solid var(--brd);background:var(--card);font-family:inherit;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.25s;white-space:nowrap;position:relative}
+.tb:hover{border-color:var(--pri)}.tb.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tb.dn{border-color:var(--ok)}.tb.dn::after{content:'✓';position:absolute;top:-6px;right:-6px;width:18px;height:18px;background:var(--ok);color:#fff;border-radius:50%;font-size:0.65rem;display:flex;align-items:center;justify-content:center}
+.ct{max-width:800px;margin:0 auto;padding:20px 16px 80px}
+/* Color palette */
+.palette{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;padding:12px;background:var(--card);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:16px;position:sticky;top:96px;z-index:12}
+.pal-color{width:36px;height:36px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:all 0.2s;flex-shrink:0}
+.pal-color:hover{transform:scale(1.15)}.pal-color.on{border-color:#2d3436;transform:scale(1.2);box-shadow:0 0 0 3px rgba(0,0,0,0.15)}
+.pal-label{font-size:0.8rem;font-weight:600;color:var(--txt2);padding:0 8px;display:flex;align-items:center}
+/* Card */
+.mc{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:24px;border:3px solid transparent;transition:all 0.3s;animation:fi 0.4s ease both;position:relative;overflow:hidden}
+.mc.ok{border-color:var(--ok);background:var(--ok-l)}
+.mc-head{display:flex;align-items:center;gap:10px;padding:16px 20px}
+.mc-num{width:30px;height:30px;border-radius:50%;background:var(--pri);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;color:#fff;flex-shrink:0}
+.mc-hint{font-size:0.85rem;color:var(--txt2);font-weight:500}
+/* Canvas area */
+.canvas-wrap{position:relative;width:100%;aspect-ratio:1/1;max-height:500px;background:#fafafa;touch-action:none;cursor:crosshair}
+.canvas-wrap canvas{position:absolute;top:0;left:0;width:100%;height:100%}
+.canvas-wrap .guide-canvas{z-index:1}
+.canvas-wrap .draw-canvas{z-index:2}
+.canvas-wrap .fill-canvas{z-index:3;pointer-events:none}
+.canvas-wrap.fill-mode .draw-canvas{pointer-events:none}
+.canvas-wrap.fill-mode .fill-canvas{pointer-events:auto;cursor:crosshair}
+/* Feedback */
+.mc-status{text-align:center;padding:12px;font-weight:700;font-size:0.95rem}
+.mc-status.ok{color:var(--ok)}.mc-status.info{color:var(--pri)}
+/* Buttons */
+.mc-actions{display:flex;justify-content:center;gap:8px;padding:0 16px 16px;flex-wrap:wrap}
+.abtn{padding:8px 18px;border-radius:20px;border:2px solid var(--brd);background:var(--card);font-family:inherit;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.25s}
+.abtn:hover{border-color:var(--pri);background:var(--pri-l)}
+.abtn.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+/* Level done */
+.ld{background:linear-gradient(135deg,var(--pri),#55efc4);border-radius:var(--r);padding:32px 20px;text-align:center;color:#fff;box-shadow:var(--sh);display:none;animation:fi 0.4s}
+.ld.show{display:block}.ld .big{font-size:3.5rem;margin-bottom:12px;animation:bounce 1s ease infinite}
+.ld h2{font-size:1.6rem;font-weight:800;margin-bottom:6px}.ld p{opacity:0.9}
+.acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 24px;border-radius:var(--rs);font-family:inherit;font-size:0.95rem;font-weight:700;cursor:pointer;border:none;transition:all 0.25s}
+.btn:hover{transform:translateY(-1px)}.bw{background:#fff;color:var(--pri)}.bo{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.5)}
+@media print{body{background:#fff}.hd{background:none;color:#000;padding:10px 0;border-bottom:2px solid #000}.hd::before{display:none}
+.topbar,.ps,.tw,.acts,.ld,.palette,.mc-actions,.mc-status{display:none!important}.ct{padding:8px 0}
+.mc{box-shadow:none;border:2px solid #999;page-break-inside:avoid}
+.canvas-wrap{border:1px solid #ccc}.draw-canvas,.fill-canvas{display:none!important}
+.ph{display:block!important}}
+.ph{display:none;text-align:center;font-size:1.4rem;font-weight:800;margin-bottom:12px;padding:8px 0;border-bottom:2px solid #000}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){.hd h1{font-size:1.5rem}.mc{margin-bottom:16px}.pal-color{width:30px;height:30px}.palette{gap:4px;padding:8px}.tb{padding:6px 12px;font-size:0.75rem}}
+</style>
+</head>
+<body>
+<div class="hd"><h1>✏️ צורות — עקוב על הקווים</h1><p>בחרו צבע ועברו על הקווים המקווקווים!</p></div>
+<div class="topbar">
+<button class="abtn" onclick="window.print()">🖨️ הדפסה</button>
+</div>
+<div class="ps"><div class="pr"><span class="pl">התקדמות:</span><div class="ppb"><div class="pf" id="pf" style="width:0%"></div></div></div></div>
+<div class="tw"><div class="ts" id="tabs"></div></div>
+<div class="ct" id="area"></div>
+<script>
+const COLORS=['#e74c3c','#e67e22','#f1c40f','#2ecc71','#27ae60','#1abc9c','#3498db','#2980b9','#9b59b6','#8e44ad','#e84393','#fd79a8','#d63031','#00cec9','#6c5ce7','#fdcb6e','#55efc4','#74b9ff','#a29bfe','#fab1a0'];
+
+// Shape definitions: array of {type, points/params} for guide drawing
+// Each shape is defined as SVG path data for the dashed guide
+const SHAPES=[
+  // Basic shapes
+  {id:1,t:'עיגול',shapes:[{type:'circle',cx:50,cy:50,r:35}]},
+  {id:2,t:'ריבוע',shapes:[{type:'rect',x:15,y:15,w:70,h:70}]},
+  {id:3,t:'משולש',shapes:[{type:'polygon',pts:[[50,10],[90,85],[10,85]]}]},
+  {id:4,t:'מלבן',shapes:[{type:'rect',x:10,y:25,w:80,h:50}]},
+  // Combined
+  {id:5,t:'עיגול ומשולש',shapes:[{type:'circle',cx:50,cy:35,r:25},{type:'polygon',pts:[[50,15],[75,80],[25,80]]}]},
+  {id:6,t:'ריבועים',shapes:[{type:'rect',x:5,y:5,w:40,h:40},{type:'rect',x:55,y:55,w:40,h:40}]},
+  // Fun shapes
+  {id:7,t:'לב',shapes:[{type:'path',d:'M50,85 C20,65 5,45 5,30 C5,15 15,5 30,5 C40,5 47,12 50,18 C53,12 60,5 70,5 C85,5 95,15 95,30 C95,45 80,65 50,85Z'}]},
+  {id:8,t:'כוכב',shapes:[{type:'polygon',pts:[[50,5],[61,35],[95,35],[68,55],[78,88],[50,68],[22,88],[32,55],[5,35],[39,35]]}]},
+  {id:9,t:'יהלום',shapes:[{type:'polygon',pts:[[50,5],[90,40],[50,95],[10,40]]}]},
+  {id:10,t:'מחומש',shapes:[{type:'polygon',pts:[[50,5],[93,35],[78,85],[22,85],[7,35]]}]},
+  // Multi-shape pages
+  {id:11,t:'עיגול וריבוע',shapes:[{type:'circle',cx:30,cy:35,r:22},{type:'rect',x:55,y:50,w:38,h:38}]},
+  {id:12,t:'3 צורות',shapes:[{type:'circle',cx:50,cy:25,r:18},{type:'rect',x:10,y:55,w:30,h:30},{type:'polygon',pts:[[75,55],[90,90],[60,90]]}]},
+  {id:13,t:'בית',shapes:[{type:'polygon',pts:[[50,10],[85,40],[15,40]]},{type:'rect',x:20,y:40,w:60,h:45},{type:'rect',x:40,y:55,w:20,h:30}]},
+  {id:14,t:'4 צורות',shapes:[{type:'circle',cx:25,cy:25,r:16},{type:'rect',x:58,y:8,w:32,h:32},{type:'polygon',pts:[[25,60],[40,92],[10,92]]},{type:'polygon',pts:[[75,55],[90,55],[90,92],[60,92]]}]},
+  {id:15,t:'פרח',shapes:[{type:'circle',cx:50,cy:50,r:8},{type:'circle',cx:50,cy:22,r:11},{type:'circle',cx:74,cy:36,r:11},{type:'circle',cx:68,cy:68,r:11},{type:'circle',cx:32,cy:68,r:11},{type:'circle',cx:26,cy:36,r:11}]},
+];
+
+let cur=0,selCol=COLORS[0],res={};
+
+function rTabs(){
+  const el=document.getElementById('tabs');
+  el.innerHTML=SHAPES.map((s,i)=>`<button class="tb ${i===cur?'on':''} ${res[s.id]?'dn':''}" onclick="go(${i})">${s.t}</button>`).join('');
+  setTimeout(()=>{const a=el.querySelector('.on');if(a)a.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})},100);
+}
+
+function rLv(){
+  const sh=SHAPES[cur],ar=document.getElementById('area');
+  let h=`<div class="ph">✏️ צורות — ${sh.t}</div>`;
+
+  // Palette
+  h+=`<div class="palette" id="palette">`;
+  h+=`<span class="pal-label">🎨 צבע:</span>`;
+  COLORS.forEach((c,i)=>{
+    h+=`<div class="pal-color ${i===0?'on':''}" style="background:${c}" data-c="${c}" onclick="pickCol(this)"></div>`;
+  });
+  h+=`</div>`;
+
+  // Card with canvases
+  sh.shapes.forEach ? null : null; // just to reference
+  h+=`<div class="mc" id="q0">`;
+  h+=`<div class="mc-head"><div class="mc-num">✏️</div><span class="mc-hint">עברו עם האצבע על הקווים המקווקווים</span></div>`;
+  h+=`<div class="canvas-wrap" id="cw0">`;
+  h+=`<canvas class="guide-canvas" id="guide0"></canvas>`;
+  h+=`<canvas class="draw-canvas" id="draw0"></canvas>`;
+  h+=`<canvas class="fill-canvas" id="fill0"></canvas>`;
+  h+=`</div>`;
+  h+=`<div class="mc-status" id="status0"></div>`;
+  h+=`<div class="mc-actions">`;
+  h+=`<button class="abtn" onclick="clearDraw()">🗑️ מחק ציור</button>`;
+  h+=`<button class="abtn" id="fillBtn" onclick="toggleFill()" style="display:none">🎨 צבעו את הצורות!</button>`;
+  h+=`<button class="abtn" onclick="completeLv()" id="doneBtn" style="display:none">✅ סיימתי!</button>`;
+  h+=`</div>`;
+  h+=`</div>`;
+
+  // Level done
+  h+=`<div class="ld" id="ld"><div class="big">🌟</div><h2>🏆 יופי של ציור!</h2><p>עברתם על כל הקווים!</p><div class="acts"><button class="btn bw" onclick="retry()">🔄 נסה שוב</button>${cur<SHAPES.length-1?'<button class="btn bo" onclick="nxt()">➡️ הבא</button>':''}<button class="btn bo" onclick="window.print()">🖨️ הדפס</button></div></div>`;
+
+  ar.innerHTML=h;
+  initCanvas();
+  rTabs();uPr();
+}
+
+function initCanvas(){
+  const wrap=document.getElementById('cw0');
+  const guide=document.getElementById('guide0');
+  const draw=document.getElementById('draw0');
+  const fill=document.getElementById('fill0');
+
+  // Size canvases
+  const size=Math.min(wrap.offsetWidth, 500);
+  [guide,draw,fill].forEach(c=>{c.width=size;c.height=size;c.style.width=size+'px';c.style.height=size+'px'});
+  wrap.style.height=size+'px';
+  wrap.style.maxWidth=size+'px';
+  wrap.style.margin='0 auto';
+
+  // Draw guide (dashed shapes)
+  const gCtx=guide.getContext('2d');
+  const sh=SHAPES[cur];
+  const s=size/100; // scale factor
+
+  gCtx.setLineDash([8*s/3,6*s/3]);
+  gCtx.lineWidth=3*s/3;
+  gCtx.strokeStyle='#636e72';
+  gCtx.lineCap='round';
+
+  sh.shapes.forEach(shape=>{
+    gCtx.beginPath();
+    if(shape.type==='circle'){
+      gCtx.arc(shape.cx*s,shape.cy*s,shape.r*s,0,Math.PI*2);
+    } else if(shape.type==='rect'){
+      gCtx.rect(shape.x*s,shape.y*s,shape.w*s,shape.h*s);
+    } else if(shape.type==='polygon'){
+      shape.pts.forEach((p,i)=>{
+        if(i===0) gCtx.moveTo(p[0]*s,p[1]*s);
+        else gCtx.lineTo(p[0]*s,p[1]*s);
+      });
+      gCtx.closePath();
+    } else if(shape.type==='path'){
+      const p=new Path2D(shape.d.replace(/(\d+)/g,(m)=>Math.round(parseFloat(m)*s)));
+      gCtx.stroke(p);
+      return;
+    }
+    gCtx.stroke();
+  });
+
+  // Drawing
+  const dCtx=draw.getContext('2d');
+  let drawing=false;
+  let totalLen=0;
+
+  // Calculate total guide perimeter for completion detection
+  let guideLen=0;
+  sh.shapes.forEach(shape=>{
+    if(shape.type==='circle') guideLen+=2*Math.PI*shape.r*s;
+    else if(shape.type==='rect') guideLen+=2*(shape.w+shape.h)*s;
+    else if(shape.type==='polygon'){
+      for(let i=0;i<shape.pts.length;i++){
+        const a=shape.pts[i],b=shape.pts[(i+1)%shape.pts.length];
+        guideLen+=Math.sqrt((b[0]-a[0])**2+(b[1]-a[1])**2)*s;
+      }
+    } else if(shape.type==='path') guideLen+=500*s;
+  });
+
+  draw.addEventListener('pointerdown',function(e){
+    e.preventDefault();
+    drawing=true;
+    const r=draw.getBoundingClientRect();
+    const x=e.clientX-r.left, y=e.clientY-r.top;
+    dCtx.beginPath();
+    dCtx.moveTo(x,y);
+    dCtx.strokeStyle=selCol;
+    dCtx.lineWidth=4*s/3;
+    dCtx.lineCap='round';
+    dCtx.lineJoin='round';
+    dCtx.setLineDash([]);
+  },{passive:false});
+
+  draw.addEventListener('pointermove',function(e){
+    if(!drawing)return;
+    e.preventDefault();
+    const r=draw.getBoundingClientRect();
+    const x=e.clientX-r.left, y=e.clientY-r.top;
+    dCtx.lineTo(x,y);
+    dCtx.stroke();
+    totalLen+=3;
+
+    // Check completion (rough: if drawn enough length)
+    if(totalLen>guideLen*0.5 && !document.getElementById('doneBtn').style.display!=='none'){
+      document.getElementById('doneBtn').style.display='';
+      document.getElementById('fillBtn').style.display='';
+      document.getElementById('status0').textContent='🎉 יופי! אפשר להמשיך לצבוע או ללחוץ סיימתי';
+      document.getElementById('status0').className='mc-status info';
+    }
+  },{passive:false});
+
+  draw.addEventListener('pointerup',function(e){drawing=false},{passive:false});
+  draw.addEventListener('pointercancel',function(){drawing=false});
+
+  // Fill mode
+  const fCtx=fill.getContext('2d');
+  let filling=false;
+
+  fill.addEventListener('pointerdown',function(e){
+    e.preventDefault();filling=true;
+    const r=fill.getBoundingClientRect();
+    fCtx.beginPath();
+    fCtx.moveTo(e.clientX-r.left,e.clientY-r.top);
+    fCtx.strokeStyle=selCol;
+    fCtx.lineWidth=20*s/3;
+    fCtx.lineCap='round';
+    fCtx.lineJoin='round';
+    fCtx.globalAlpha=0.4;
+    fCtx.setLineDash([]);
+  },{passive:false});
+
+  fill.addEventListener('pointermove',function(e){
+    if(!filling)return;e.preventDefault();
+    const r=fill.getBoundingClientRect();
+    fCtx.lineTo(e.clientX-r.left,e.clientY-r.top);
+    fCtx.stroke();
+  },{passive:false});
+
+  fill.addEventListener('pointerup',function(){filling=false},{passive:false});
+  fill.addEventListener('pointercancel',function(){filling=false});
+}
+
+function pickCol(el){
+  document.querySelectorAll('.pal-color').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  selCol=el.dataset.c;
+}
+
+function clearDraw(){
+  const draw=document.getElementById('draw0');
+  const fill=document.getElementById('fill0');
+  draw.getContext('2d').clearRect(0,0,draw.width,draw.height);
+  fill.getContext('2d').clearRect(0,0,fill.width,fill.height);
+  document.getElementById('doneBtn').style.display='none';
+  document.getElementById('fillBtn').style.display='none';
+  document.getElementById('status0').textContent='';
+  document.getElementById('cw0').classList.remove('fill-mode');
+  rLv(); // re-init
+}
+
+function toggleFill(){
+  const cw=document.getElementById('cw0');
+  const btn=document.getElementById('fillBtn');
+  if(cw.classList.contains('fill-mode')){
+    cw.classList.remove('fill-mode');
+    btn.textContent='🎨 צבעו את הצורות!';
+    btn.classList.remove('on');
+  } else {
+    cw.classList.add('fill-mode');
+    btn.textContent='✏️ חזרה לציור';
+    btn.classList.add('on');
+    document.getElementById('status0').textContent='🖌️ צבעו בתוך הצורות! בחרו צבע ושרבטו';
+    document.getElementById('status0').className='mc-status info';
+  }
+}
+
+function completeLv(){
+  res[SHAPES[cur].id]=true;
+  document.getElementById('q0').classList.add('ok');
+  document.getElementById('ld').classList.add('show');
+  document.getElementById('ld').scrollIntoView({behavior:'smooth',block:'center'});
+  rTabs();uPr();
+}
+
+function go(i){cur=i;rLv();window.scrollTo({top:0,behavior:'smooth'})}
+function nxt(){if(cur<SHAPES.length-1){cur++;rLv();window.scrollTo({top:0,behavior:'smooth'})}}
+function retry(){rLv();window.scrollTo({top:0,behavior:'smooth'})}
+function uPr(){document.getElementById('pf').style.width=Math.round(Object.keys(res).length/SHAPES.length*100)+'%'}
+
+rLv();
+</script>
+</body>
+</html>

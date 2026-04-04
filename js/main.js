@@ -77,6 +77,23 @@ if (header) {
     return null;
   }
 
+  // Move content div into grid right after the clicked card's row
+  function moveContentIntoGrid(grade) {
+    var grid = grade.closest('.materials-topic-cards');
+    if (!grid) return;
+
+    var contentEl = document.getElementById('tab-' + grade.dataset.tab);
+    if (!contentEl) return;
+
+    var cols = getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+    var buttons = Array.from(grid.querySelectorAll('.materials-topic-card'));
+    var idx = buttons.indexOf(grade);
+    if (idx === -1) return;
+
+    var rowEnd = Math.min(Math.floor(idx / cols) * cols + cols - 1, buttons.length - 1);
+    buttons[rowEnd].insertAdjacentElement('afterend', contentEl);
+  }
+
   // Trigger subtab logic (shared by stage click and direct subtab activation)
   function triggerSubtab(sub) {
     if (sub.dataset.tab) {
@@ -86,7 +103,10 @@ if (header) {
       if (gradeGroup) {
         gradeGroup.classList.add('active');
         var first = activateFirst(gradeGroup, '.materials-grade');
-        if (first && first.dataset.tab) showContent(first.dataset.tab);
+        if (first && first.dataset.tab) {
+          showContent(first.dataset.tab);
+          moveContentIntoGrid(first);
+        }
       }
     }
   }
@@ -126,9 +146,19 @@ if (header) {
       var group = grade.closest('.materials-grades');
       if (group) group.querySelectorAll('.materials-grade').forEach(function(g) { g.classList.remove('active'); });
       grade.classList.add('active');
-      if (grade.dataset.tab) showContent(grade.dataset.tab);
+      if (grade.dataset.tab) {
+        showContent(grade.dataset.tab);
+        moveContentIntoGrid(grade);
+      }
     });
   });
+
+  // Initial positioning for pre-activated topic cards
+  var activeGrid = document.querySelector('.materials-topic-cards.active');
+  if (activeGrid) {
+    var activeGrade = activeGrid.querySelector('.materials-grade.active');
+    if (activeGrade) moveContentIntoGrid(activeGrade);
+  }
 })();
 
 // ===== Scroll Reveal Animations =====

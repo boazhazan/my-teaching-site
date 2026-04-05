@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>המשך ציור | בועז חזן</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=Rubik:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fffbf0;--card:#fff;--pri:#e17055;--pri-l:#ffeaa7;--ok:#27ae60;--ok-l:#e8f5e9;--txt:#2c3e50;--txt2:#7f8c8d;--brd:#e0e0e0;--sh:0 4px 20px rgba(0,0,0,0.08);--r:16px;--rs:10px}
+*{box-sizing:border-box;margin:0;padding:0}html{-webkit-tap-highlight-color:transparent}
+body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;direction:rtl;overflow-x:hidden}
+.hd{background:linear-gradient(135deg,#e17055,#fab1a0);color:#fff;padding:20px 24px;text-align:center;position:relative;overflow:hidden}
+.hd::before{content:'';position:absolute;top:-60px;right:-40px;width:180px;height:180px;background:rgba(255,255,255,0.08);border-radius:50%}
+.hd h1{font-family:'Rubik','Heebo',sans-serif;font-size:2rem;font-weight:800;position:relative;margin-bottom:4px}
+.hd p{font-size:1rem;opacity:0.9;position:relative}
+.topbar{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--brd);position:sticky;top:0;z-index:20;flex-wrap:wrap}
+.ps{padding:12px 16px;background:var(--card);border-bottom:1px solid var(--brd)}
+.pr{display:flex;align-items:center;gap:12px;max-width:800px;margin:0 auto}
+.pl{font-size:0.85rem;font-weight:600;color:var(--txt2);white-space:nowrap}
+.ppb{flex:1;height:10px;background:#eee;border-radius:10px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--pri),#fab1a0);border-radius:10px;transition:width 0.5s}
+.tw{background:var(--card);border-bottom:1px solid var(--brd);position:sticky;top:52px;z-index:15;padding:0 8px}
+.ts{display:flex;gap:4px;overflow-x:auto;padding:10px 0;scrollbar-width:none;-webkit-overflow-scrolling:touch}.ts::-webkit-scrollbar{display:none}
+.tb{flex-shrink:0;padding:8px 16px;border-radius:20px;border:2px solid var(--brd);background:var(--card);font-family:inherit;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.25s;white-space:nowrap;position:relative}
+.tb:hover{border-color:var(--pri)}.tb.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tb.dn{border-color:var(--ok)}.tb.dn::after{content:'✓';position:absolute;top:-6px;right:-6px;width:18px;height:18px;background:var(--ok);color:#fff;border-radius:50%;font-size:0.65rem;display:flex;align-items:center;justify-content:center}
+.ct{max-width:800px;margin:0 auto;padding:20px 16px 80px}
+/* Tools bar */
+.tools{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:12px;background:var(--card);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:16px;position:sticky;top:96px;z-index:12;align-items:center}
+.tools-section{display:flex;align-items:center;gap:6px}
+.tools-label{font-size:0.75rem;font-weight:700;color:var(--txt2)}
+.pc{width:28px;height:28px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:all 0.2s;flex-shrink:0}
+.pc:hover{transform:scale(1.15)}.pc.on{border-color:#2d3436;transform:scale(1.2);box-shadow:0 0 0 2px rgba(0,0,0,0.15)}
+.sz-btn{width:32px;height:32px;border-radius:50%;border:2px solid var(--brd);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;font-size:0;flex-shrink:0}
+.sz-btn:hover{border-color:var(--pri)}.sz-btn.on{border-color:var(--pri);background:var(--pri-l)}
+.sz-btn .dot{border-radius:50%;background:#2d3436}
+.divider{width:1px;height:28px;background:var(--brd);margin:0 4px}
+/* Card */
+.mc{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:24px;border:3px solid transparent;transition:all 0.3s;animation:fi 0.4s ease both;position:relative;overflow:hidden}
+.mc.ok{border-color:var(--ok);background:var(--ok-l)}
+.mc-head{display:flex;align-items:center;gap:10px;padding:16px 20px}
+.mc-num{width:30px;height:30px;border-radius:50%;background:var(--pri);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;color:#fff;flex-shrink:0}
+.mc-hint{font-size:0.85rem;color:var(--txt2);font-weight:500}
+.cw{position:relative;width:100%;max-width:500px;margin:0 auto;aspect-ratio:1/1;touch-action:none;cursor:crosshair;background:#fefefe;border-radius:var(--rs)}
+.cw canvas{position:absolute;top:0;left:0;width:100%;height:100%}
+.cw .cbg{z-index:1}.cw .cdw{z-index:2}
+.mc-acts{display:flex;justify-content:center;gap:8px;padding:12px 16px;flex-wrap:wrap}
+.ab{padding:8px 18px;border-radius:20px;border:2px solid var(--brd);background:var(--card);font-family:inherit;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.25s}
+.ab:hover{border-color:var(--pri);background:var(--pri-l)}
+.ab.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.ld{background:linear-gradient(135deg,var(--pri),#fab1a0);border-radius:var(--r);padding:32px 20px;text-align:center;color:#fff;box-shadow:var(--sh);display:none;animation:fi 0.4s}
+.ld.show{display:block}.ld .big{font-size:3.5rem;margin-bottom:12px;animation:bounce 1s ease infinite}
+.ld h2{font-size:1.6rem;font-weight:800;margin-bottom:6px}.ld p{opacity:0.9}
+.acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 24px;border-radius:var(--rs);font-family:inherit;font-size:0.95rem;font-weight:700;cursor:pointer;border:none;transition:all 0.25s}
+.btn:hover{transform:translateY(-1px)}.bw{background:#fff;color:var(--pri)}.bo{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.5)}
+@media print{body{background:#fff}.hd{background:none;color:#000;padding:10px 0;border-bottom:2px solid #000}.hd::before{display:none}.topbar,.ps,.tw,.acts,.ld,.tools,.mc-acts{display:none!important}.ct{padding:8px 0}.mc{box-shadow:none;border:2px solid #999;page-break-inside:avoid}.cdw{display:none!important}.ph{display:block!important}}
+.ph{display:none;text-align:center;font-size:1.4rem;font-weight:800;margin-bottom:12px;padding:8px 0;border-bottom:2px solid #000}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){.hd h1{font-size:1.5rem}.pc{width:24px;height:24px}.tools{gap:4px;padding:8px}.tb{padding:6px 12px;font-size:0.75rem}.sz-btn{width:28px;height:28px}}
+</style>
+</head>
+<body>
+<div class="hd"><h1>✏️ המשך ציור</h1><p>עברו על הקווים והמשיכו את הציור!</p></div>
+<div class="topbar"><button class="ab" onclick="window.print()">🖨️ הדפסה</button></div>
+<div class="ps"><div class="pr"><span class="pl">התקדמות:</span><div class="ppb"><div class="pf" id="pf" style="width:0%"></div></div></div></div>
+<div class="tw"><div class="ts" id="tabs"></div></div>
+<div class="ct" id="area"></div>
+<script>
+const COLORS=['#2d3436','#e74c3c','#e67e22','#f1c40f','#2ecc71','#27ae60','#1abc9c','#3498db','#2980b9','#9b59b6','#8e44ad','#e84393','#fd79a8','#00cec9','#6c5ce7','#fdcb6e','#55efc4','#74b9ff','#a29bfe','#fab1a0'];
+const SIZES=[3,6,10,16];
+
+// Guide drawings: each is a function(ctx, s) where s=canvas size
+// They draw dashed/light guide lines for the child to trace and continue
+const DRAWINGS=[
+{id:1,t:'עיגולים בשורה',draw:function(ctx,s){
+  ctx.setLineDash([8,6]);ctx.lineWidth=2;ctx.strokeStyle='#b2bec3';
+  const r=s*0.08,y=s*0.5,gap=s*0.22;
+  for(let i=0;i<4;i++){ctx.beginPath();ctx.arc(s*0.15+i*gap,y,r,0,Math.PI*2);ctx.stroke()}
+  // Arrow suggesting continue
+  ctx.setLineDash([]);ctx.fillStyle='#dfe6e9';ctx.font=`${s*0.06}px serif`;ctx.textAlign='right';
+  ctx.fillText('← המשיכו',s*0.95,y+r+s*0.06);
+}},
+{id:2,t:'גלים',draw:function(ctx,s){
+  ctx.setLineDash([8,6]);ctx.lineWidth=3;ctx.strokeStyle='#b2bec3';
+  ctx.beginPath();
+  for(let x=0;x<s*0.55;x+=2){ctx.lineTo(s*0.05+x, s*0.5+Math.sin(x/(s*0.08))*s*0.1)}
+  ctx.stroke();
+  ctx.setLineDash([]);ctx.fillStyle='#dfe6e9';ctx.font=`${s*0.05}px serif`;ctx.textAlign='right';
+  ctx.fillText('← המשיכו את הגלים',s*0.95,s*0.4);
+}},
+{id:3,t:'זיגזג',draw:function(ctx,s){
+  ctx.setLineDash([8,6]);ctx.lineWidth=3;ctx.strokeStyle='#b2bec3';
+  ctx.beginPath();ctx.moveTo(s*0.05,s*0.6);
+  const pts=[[0.15,0.35],[0.25,0.6],[0.35,0.35],[0.45,0.6]];
+  pts.forEach(p=>ctx.lineTo(s*p[0],s*p[1]));ctx.stroke();
+  ctx.setLineDash([]);ctx.fillStyle='#dfe6e9';ctx.font=`${s*0.05}px serif`;ctx.textAlign='right';
+  ctx.fillText('← המשיכו את הזיגזג',s*0.95,s*0.3);
+}},
+{id:4,t:'ספירלה',draw:function(ctx,s){
+  ctx.setLineDash([8,6]);ctx.lineWidth=2;ctx.strokeStyle='#b2bec3';
+  ctx.beginPath();
+  const cx=s*0.35,cy=s*0.5;
+  for(let a=0;a<Math.PI*4;a+=0.05){const r=s*0.02+a*s*0.02;ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r)}
+  ctx.stroke();
+  ctx.setLineDash([]);ctx.fillStyle='#dfe6e9';ctx.font=`${s*0.05}px serif`;ctx.textAlign='right';
+  ctx.fillText('← המשיכו את הספירלה',s*0.95,s*0.25);
+}},
+{id:5,t:'מדרגות',draw:function(ctx,s){
+  ctx.setLineDash([8,6]);ctx.lineWidth=3;ctx.strokeStyle='#b2bec3';
+  ctx.beginPath();ctx.moveTo(s*0.05,s*0.8);
+  const steps=[[0.05,0.8],[0.15,0.8],[0.15,0.65],[0.25,0.65],[0.25,0.5],[0.35,0.5],[0.35,0.35]];
+  steps.forEach(p=>ctx.lineTo(s*p[0],s*p[1]));ctx.stroke();
+  ctx.setLineDash([]);ctx.fillStyle='#dfe6e9';ctx.font=`${s*0.05}px serif`;ctx.textAlign='right';
+  ctx.fillText('← המשיכו את המדרגות',s*0.95,s*0.25);
+}},
+{id:6,t:'קווים אנכיים',draw:function(ctx,s){
+  ctx.setLineDash([8,6]);ctx.lineWidth=2;ctx.strokeStyle='#b2bec3';
+  for(let i=0;i<4;i++){const x=s*0.1+i*s*0.12;ctx.beginPath();ctx.moveTo(x,s*0.25);ctx.lineTo(x,s*0.75);ctx.stroke()}
+  ctx.setLineDash([]);ctx.fillStyle='#dfe6e9';ctx.font=`${s*0.05}px serif`;ctx.textAlign='right';
+  ctx.fillText('← המשיכו עוד קווים',s*0.95,s*0.2);
+}},
+{id:7,t:'משולשים',draw:function(ctx,s){
+  ctx.setLineDash([8,6]);ctx.lineWidth=2;ctx.strokeStyle='#b2bec3';
+  for(let i=0;i<3;i++){const cx=s*0.15+i*s*0.18,by=s*0.65,ty=s*0.35,hw=s*0.07;
+    ctx.beginPath();ctx.moveTo(cx,ty);ctx.lineTo(cx+hw,by);ctx.lineTo(cx-hw,by);ctx.closePath();ctx.stroke()}
+  ctx.setLineDash([]);ctx.fillStyle='#dfe6e9';ctx.font=`${s*0.05}px serif`;ctx.textAlign='right';
+  ctx.fillText('← ציירו עוד משולשים',s*0.95,s*0.25);
+}},
+{id:8,t:'קשתות',draw:function(ctx,s){
+  ctx.setLineDash([8,6]);ctx.lineWidth=3;ctx.strokeStyle='#b2bec3';
+  for(let i=0;i<3;i++){ctx.beginPath();ctx.arc(s*0.15+i*s*0.18,s*0.6,s*0.08,Math.PI,0);ctx.stroke()}
+  ctx.setLineDash([]);ctx.fillStyle='#dfe6e9';ctx.font=`${s*0.05}px serif`;ctx.textAlign='right';
+  ctx.fillText('← המשיכו את הקשתות',s*0.95,s*0.4);
+}},
+{id:9,t:'ריבועים',draw:function(ctx,s){
+  ctx.setLineDash([8,6]);ctx.lineWidth=2;ctx.strokeStyle='#b2bec3';
+  for(let i=0;i<3;i++){const x=s*0.08+i*s*0.17,sz2=s*0.12;ctx.strokeRect(x,s*0.4,sz2,sz2)}
+  ctx.setLineDash([]);ctx.fillStyle='#dfe6e9';ctx.font=`${s*0.05}px serif`;ctx.textAlign='right';
+  ctx.fillText('← ציירו עוד ריבועים',s*0.95,s*0.35);
+}},
+{id:10,t:'לולאות',draw:function(ctx,s){
+  ctx.setLineDash([8,6]);ctx.lineWidth=3;ctx.strokeStyle='#b2bec3';
+  ctx.beginPath();
+  for(let i=0;i<3;i++){const cx=s*0.12+i*s*0.16,cy=s*0.5;
+    ctx.arc(cx,cy,s*0.06,Math.PI*0.5,-Math.PI*1.5,true)}
+  ctx.stroke();
+  ctx.setLineDash([]);ctx.fillStyle='#dfe6e9';ctx.font=`${s*0.05}px serif`;ctx.textAlign='right';
+  ctx.fillText('← המשיכו את הלולאות',s*0.95,s*0.35);
+}},
+{id:11,t:'כוכבים',draw:function(ctx,s){
+  ctx.setLineDash([8,6]);ctx.lineWidth=2;ctx.strokeStyle='#b2bec3';
+  function star(cx,cy,r){ctx.beginPath();for(let i=0;i<5;i++){const a=(i*4*Math.PI/5)-Math.PI/2;ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r)}ctx.closePath();ctx.stroke()}
+  star(s*0.15,s*0.4,s*0.08);star(s*0.35,s*0.4,s*0.08);
+  ctx.setLineDash([]);ctx.fillStyle='#dfe6e9';ctx.font=`${s*0.05}px serif`;ctx.textAlign='right';
+  ctx.fillText('← ציירו עוד כוכבים',s*0.95,s*0.25);
+}},
+{id:12,t:'שמש',draw:function(ctx,s){
+  ctx.setLineDash([8,6]);ctx.lineWidth=2;ctx.strokeStyle='#b2bec3';
+  const cx=s*0.3,cy=s*0.45,r=s*0.1;
+  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();
+  for(let i=0;i<8;i++){const a=i*Math.PI/4;ctx.beginPath();ctx.moveTo(cx+Math.cos(a)*(r+s*0.02),cy+Math.sin(a)*(r+s*0.02));ctx.lineTo(cx+Math.cos(a)*(r+s*0.07),cy+Math.sin(a)*(r+s*0.07));ctx.stroke()}
+  ctx.setLineDash([]);ctx.fillStyle='#dfe6e9';ctx.font=`${s*0.05}px serif`;ctx.textAlign='right';
+  ctx.fillText('← ציירו עוד שמש',s*0.95,s*0.25);
+}},
+{id:13,t:'פרח',draw:function(ctx,s){
+  ctx.setLineDash([8,6]);ctx.lineWidth=2;ctx.strokeStyle='#b2bec3';
+  const cx=s*0.3,cy=s*0.4,r=s*0.05;
+  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();
+  for(let i=0;i<6;i++){const a=i*Math.PI/3;const px=cx+Math.cos(a)*r*2,py=cy+Math.sin(a)*r*2;ctx.beginPath();ctx.arc(px,py,r*0.8,0,Math.PI*2);ctx.stroke()}
+  // Stem
+  ctx.beginPath();ctx.moveTo(cx,cy+r);ctx.lineTo(cx,s*0.75);ctx.stroke();
+  ctx.setLineDash([]);ctx.fillStyle='#dfe6e9';ctx.font=`${s*0.05}px serif`;ctx.textAlign='right';
+  ctx.fillText('← ציירו עוד פרח',s*0.95,s*0.2);
+}},
+{id:14,t:'בית',draw:function(ctx,s){
+  ctx.setLineDash([8,6]);ctx.lineWidth=2;ctx.strokeStyle='#b2bec3';
+  // House
+  const x=s*0.15,y=s*0.45,w=s*0.25,h=s*0.2;
+  ctx.strokeRect(x,y,w,h);
+  // Roof
+  ctx.beginPath();ctx.moveTo(x-s*0.02,y);ctx.lineTo(x+w/2,y-s*0.15);ctx.lineTo(x+w+s*0.02,y);ctx.stroke();
+  // Door
+  ctx.strokeRect(x+w*0.35,y+h*0.4,w*0.3,h*0.6);
+  ctx.setLineDash([]);ctx.fillStyle='#dfe6e9';ctx.font=`${s*0.05}px serif`;ctx.textAlign='right';
+  ctx.fillText('← ציירו עוד בית',s*0.95,s*0.2);
+}},
+{id:15,t:'ציור חופשי',draw:function(ctx,s){
+  ctx.setLineDash([]);ctx.fillStyle='#dfe6e9';ctx.font=`${s*0.08}px Heebo,serif`;ctx.textAlign='center';
+  ctx.fillText('🎨 ציירו מה שבא לכם!',s*0.5,s*0.15);
+  // Light doodle suggestions
+  ctx.setLineDash([6,8]);ctx.lineWidth=1.5;ctx.strokeStyle='#dfe6e9';
+  ctx.beginPath();ctx.arc(s*0.3,s*0.5,s*0.12,0,Math.PI*2);ctx.stroke();
+  ctx.strokeRect(s*0.55,s*0.38,s*0.2,s*0.2);
+  ctx.beginPath();ctx.moveTo(s*0.3,s*0.75);ctx.lineTo(s*0.4,s*0.65);ctx.lineTo(s*0.5,s*0.75);ctx.closePath();ctx.stroke();
+}}
+];
+
+let cur=0,selC=COLORS[0],selSz=SIZES[1],reso={};
+
+function rTabs(){const el=document.getElementById('tabs');el.innerHTML=DRAWINGS.map((d,i)=>`<button class="tb ${i===cur?'on':''} ${reso[d.id]?'dn':''}" onclick="go(${i})">${d.t}</button>`).join('');setTimeout(()=>{const a=el.querySelector('.on');if(a)a.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})},100)}
+
+function rLv(){
+const dr=DRAWINGS[cur],ar=document.getElementById('area');
+let h=`<div class="ph">✏️ המשך ציור — ${dr.t}</div>`;
+// Tools
+h+=`<div class="tools">`;
+h+=`<div class="tools-section"><span class="tools-label">🎨</span>`;
+COLORS.forEach((c,i)=>h+=`<div class="pc ${i===0?'on':''}" style="background:${c}" data-c="${c}" onclick="pickC(this)"></div>`);
+h+=`</div><div class="divider"></div>`;
+h+=`<div class="tools-section"><span class="tools-label">גודל:</span>`;
+SIZES.forEach((sz,i)=>{
+  const dotSz=Math.max(4,sz*0.8);
+  h+=`<div class="sz-btn ${i===1?'on':''}" data-sz="${sz}" onclick="pickSz(this)"><div class="dot" style="width:${dotSz}px;height:${dotSz}px"></div></div>`;
+});
+h+=`</div></div>`;
+// Card
+h+=`<div class="mc" id="q0">`;
+h+=`<div class="mc-head"><div class="mc-num">✏️</div><span class="mc-hint">💡 עברו על הקווים והמשיכו לצייר!</span></div>`;
+h+=`<div class="cw" id="cw0"><canvas class="cbg" id="bg0"></canvas><canvas class="cdw" id="dw0"></canvas></div>`;
+h+=`<div class="mc-acts"><button class="ab" onclick="clrDraw()">🗑️ מחק ציור</button><button class="ab" onclick="done()">✅ סיימתי!</button></div>`;
+h+=`</div>`;
+h+=`<div class="ld" id="ld"><div class="big">🎨</div><h2>יופי של ציור!</h2><p>עבודה יפה!</p><div class="acts"><button class="btn bw" onclick="retry()">🔄 נסה שוב</button>${cur<DRAWINGS.length-1?'<button class="btn bo" onclick="nxt()">➡️ הבא</button>':''}<button class="btn bo" onclick="window.print()">🖨️ הדפס</button></div></div>`;
+ar.innerHTML=h;
+initCanvas();rTabs();uPr();
+}
+
+function initCanvas(){
+const wrap=document.getElementById('cw0');
+const bg=document.getElementById('bg0');
+const dw=document.getElementById('dw0');
+const sz=Math.min(wrap.offsetWidth,500);
+[bg,dw].forEach(c=>{c.width=sz;c.height=sz;c.style.width=sz+'px';c.style.height=sz+'px'});
+wrap.style.height=sz+'px';wrap.style.maxWidth=sz+'px';
+
+// Draw guide
+const bgCtx=bg.getContext('2d');
+DRAWINGS[cur].draw(bgCtx,sz);
+
+// Drawing canvas
+const dwCtx=dw.getContext('2d');
+let drawing=false;
+
+dw.addEventListener('pointerdown',function(e){
+  e.preventDefault();drawing=true;
+  const r=dw.getBoundingClientRect();
+  dwCtx.beginPath();dwCtx.moveTo(e.clientX-r.left,e.clientY-r.top);
+  dwCtx.strokeStyle=selC;dwCtx.lineWidth=selSz;dwCtx.lineCap='round';dwCtx.lineJoin='round';dwCtx.setLineDash([]);
+},{passive:false});
+dw.addEventListener('pointermove',function(e){
+  if(!drawing)return;e.preventDefault();
+  const r=dw.getBoundingClientRect();dwCtx.lineTo(e.clientX-r.left,e.clientY-r.top);dwCtx.stroke();
+},{passive:false});
+dw.addEventListener('pointerup',function(){drawing=false},{passive:false});
+dw.addEventListener('pointercancel',function(){drawing=false});
+}
+
+function pickC(el){document.querySelectorAll('.pc').forEach(c=>c.classList.remove('on'));el.classList.add('on');selC=el.dataset.c}
+function pickSz(el){document.querySelectorAll('.sz-btn').forEach(c=>c.classList.remove('on'));el.classList.add('on');selSz=parseInt(el.dataset.sz)}
+function clrDraw(){const dw=document.getElementById('dw0');dw.getContext('2d').clearRect(0,0,dw.width,dw.height)}
+function done(){reso[DRAWINGS[cur].id]=true;document.getElementById('q0').classList.add('ok');document.getElementById('ld').classList.add('show');document.getElementById('ld').scrollIntoView({behavior:'smooth',block:'center'});rTabs();uPr()}
+
+function go(i){cur=i;rLv();window.scrollTo({top:0,behavior:'smooth'})}
+function nxt(){if(cur<DRAWINGS.length-1){cur++;rLv();window.scrollTo({top:0,behavior:'smooth'})}}
+function retry(){rLv();window.scrollTo({top:0,behavior:'smooth'})}
+function uPr(){document.getElementById('pf').style.width=Math.round(Object.keys(reso).length/DRAWINGS.length*100)+'%'}
+rLv();
+</script>
+</body>
+</html>

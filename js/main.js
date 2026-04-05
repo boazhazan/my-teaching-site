@@ -77,23 +77,6 @@ if (header) {
     return null;
   }
 
-  // Move content div into grid right after the clicked card's row
-  function moveContentIntoGrid(grade) {
-    var grid = grade.closest('.materials-topic-cards');
-    if (!grid) return;
-
-    var contentEl = document.getElementById('tab-' + grade.dataset.tab);
-    if (!contentEl) return;
-
-    var cols = getComputedStyle(grid).gridTemplateColumns.split(' ').length;
-    var buttons = Array.from(grid.querySelectorAll('.materials-topic-card'));
-    var idx = buttons.indexOf(grade);
-    if (idx === -1) return;
-
-    var rowEnd = Math.min(Math.floor(idx / cols) * cols + cols - 1, buttons.length - 1);
-    buttons[rowEnd].insertAdjacentElement('afterend', contentEl);
-  }
-
   // Trigger subtab logic (shared by stage click and direct subtab activation)
   function triggerSubtab(sub) {
     if (sub.dataset.tab) {
@@ -105,7 +88,6 @@ if (header) {
         var first = activateFirst(gradeGroup, '.materials-grade');
         if (first && first.dataset.tab) {
           showContent(first.dataset.tab);
-          moveContentIntoGrid(first);
         }
       }
     }
@@ -148,17 +130,10 @@ if (header) {
       grade.classList.add('active');
       if (grade.dataset.tab) {
         showContent(grade.dataset.tab);
-        moveContentIntoGrid(grade);
       }
     });
   });
 
-  // Initial positioning for pre-activated topic cards
-  var activeGrid = document.querySelector('.materials-topic-cards.active');
-  if (activeGrid) {
-    var activeGrade = activeGrid.querySelector('.materials-grade.active');
-    if (activeGrade) moveContentIntoGrid(activeGrade);
-  }
 })();
 
 // ===== Scroll Reveal Animations =====
@@ -538,3 +513,34 @@ function showStatus(el, type, msg) {
     setTimeout(function() { el.style.display = 'none'; }, 8000);
   }
 }
+
+// ===== Materials Filter =====
+(function() {
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.materials-filter');
+    if (!btn) return;
+    var contentBlock = btn.closest('.materials-content');
+    if (!contentBlock) return;
+    btn.closest('.materials-filter-bar').querySelectorAll('.materials-filter').forEach(function(f) { f.classList.remove('active'); });
+    btn.classList.add('active');
+    var filter = btn.dataset.filter;
+    contentBlock.querySelectorAll('.material-item').forEach(function(item) {
+      if (filter === 'all') { item.classList.remove('filtered-out'); }
+      else {
+        var tags = (item.dataset.tags || '').split(',');
+        item.classList.toggle('filtered-out', tags.indexOf(filter) === -1);
+      }
+    });
+  });
+})();
+
+// ===== Elementary Banner Navigation =====
+(function() {
+  document.addEventListener('click', function(e) {
+    var link = e.target.closest('.materials-banner-link[data-goto-stage]');
+    if (!link) return;
+    e.preventDefault();
+    var stageTab = document.querySelector('.materials-tab[data-stage="' + link.dataset.gotoStage + '"]');
+    if (stageTab) stageTab.click();
+  });
+})();

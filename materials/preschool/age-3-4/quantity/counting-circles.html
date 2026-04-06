@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ספירה — הקיפו בעיגול | בועז חזן</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=Rubik:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff8f0;--card:#fff;--pri:#e17055;--pri-l:#ffeaa7;--ok:#27ae60;--ok-l:#e8f5e9;--no:#e74c3c;--no-l:#ffebee;--txt:#2c3e50;--txt2:#7f8c8d;--brd:#e0e0e0;--sh:0 4px 20px rgba(0,0,0,0.08);--r:16px;--rs:10px}
+*{box-sizing:border-box;margin:0;padding:0}html{-webkit-tap-highlight-color:transparent}
+body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;direction:rtl;overflow-x:hidden}
+.hd{background:linear-gradient(135deg,#e17055,#fab1a0);color:#fff;padding:20px 24px;text-align:center;position:relative;overflow:hidden}
+.hd::before{content:'';position:absolute;top:-60px;right:-40px;width:180px;height:180px;background:rgba(255,255,255,0.08);border-radius:50%}
+.hd h1{font-family:'Rubik','Heebo',sans-serif;font-size:2rem;font-weight:800;position:relative;margin-bottom:4px}
+.hd p{font-size:1rem;opacity:0.9;position:relative}
+.mb{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--brd);position:sticky;top:0;z-index:20}
+.mbtn{padding:8px 18px;border-radius:24px;border:2px solid var(--brd);background:var(--card);font-family:inherit;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.25s;white-space:nowrap}
+.mbtn:hover{border-color:var(--pri)}.mbtn.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.ps{padding:12px 16px;background:var(--card);border-bottom:1px solid var(--brd)}
+.pr{display:flex;align-items:center;gap:12px;max-width:800px;margin:0 auto}
+.pl{font-size:0.85rem;font-weight:600;color:var(--txt2);white-space:nowrap}
+.ppb{flex:1;height:10px;background:#eee;border-radius:10px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--pri),#fab1a0);border-radius:10px;transition:width 0.5s}
+.tw{background:var(--card);border-bottom:1px solid var(--brd);position:sticky;top:52px;z-index:15;padding:0 8px}
+.ts{display:flex;gap:4px;overflow-x:auto;padding:10px 0;scrollbar-width:none;-webkit-overflow-scrolling:touch}.ts::-webkit-scrollbar{display:none}
+.tb{flex-shrink:0;padding:8px 16px;border-radius:20px;border:2px solid var(--brd);background:var(--card);font-family:inherit;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.25s;white-space:nowrap;position:relative}
+.tb:hover{border-color:var(--pri)}.tb.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tb.dn{border-color:var(--ok)}.tb.dn::after{content:'✓';position:absolute;top:-6px;right:-6px;width:18px;height:18px;background:var(--ok);color:#fff;border-radius:50%;font-size:0.65rem;display:flex;align-items:center;justify-content:center}
+.hb{text-align:center;padding:8px;background:#fff3cd;color:#856404;font-weight:600;font-size:0.9rem;display:none}.hb.show{display:block}
+.ct{max-width:800px;margin:0 auto;padding:20px 16px 80px}
+.mc{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:24px;margin-bottom:24px;border:3px solid transparent;transition:all 0.3s;animation:fi 0.4s ease both;position:relative}
+.mc.ok{border-color:var(--ok);background:var(--ok-l)}
+.mh{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.mn{width:30px;height:30px;border-radius:50%;background:var(--pri);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;color:#fff;flex-shrink:0}
+.mht{font-size:0.9rem;color:var(--txt);font-weight:700}
+.task-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--pri);color:#fff;font-family:'Rubik',sans-serif;font-size:1.3rem;font-weight:900;margin:0 4px}
+/* Grid of items */
+.items-area{position:relative;min-height:300px;border:2px solid var(--brd);border-radius:var(--rs);padding:12px;display:flex;flex-wrap:wrap;justify-content:center;align-content:start;gap:4px}
+.items-area.dw{touch-action:none;cursor:crosshair}
+.items-area canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;pointer-events:auto;border-radius:var(--rs)}
+.item{width:52px;height:52px;display:flex;align-items:center;justify-content:center;font-size:2rem;line-height:1;cursor:pointer;transition:all 0.2s;border-radius:8px;-webkit-user-select:none;user-select:none;position:relative;z-index:5}
+.item:hover:not(.done){background:rgba(225,112,85,0.1)}
+.item.selected{background:rgba(225,112,85,0.25);border-radius:50%;box-shadow:0 0 0 2px var(--pri)}
+.item.done{opacity:0.4;cursor:default}
+.item.grouped{opacity:1}
+.item.wrong-pick{background:rgba(231,76,60,0.15);border-radius:50%}
+.item .grp-ring{position:absolute;inset:-4px;border:3px solid;border-radius:50%;pointer-events:none;animation:rpop 0.3s ease}
+@keyframes rpop{from{transform:scale(0.5);opacity:0}to{transform:scale(1);opacity:1}}
+.cnt{text-align:center;font-size:0.9rem;color:var(--txt2);margin-top:12px;font-weight:600}
+.mc-acts{display:flex;justify-content:center;gap:8px;padding:12px 0 0;flex-wrap:wrap}
+.ab{padding:8px 18px;border-radius:20px;border:2px solid var(--brd);background:var(--card);font-family:inherit;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.25s}
+.ab:hover{border-color:var(--pri);background:var(--pri-l)}
+.ld{background:linear-gradient(135deg,var(--pri),#fab1a0);border-radius:var(--r);padding:32px 20px;text-align:center;color:#fff;box-shadow:var(--sh);display:none;animation:fi 0.4s}
+.ld.show{display:block}.ld .big{font-size:3.5rem;margin-bottom:12px;animation:bounce 1s ease infinite}
+.ld h2{font-size:1.6rem;font-weight:800;margin-bottom:6px}.ld p{opacity:0.9}
+.acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 24px;border-radius:var(--rs);font-family:inherit;font-size:0.95rem;font-weight:700;cursor:pointer;border:none;transition:all 0.25s}
+.btn:hover{transform:translateY(-1px)}.bw{background:#fff;color:var(--pri)}.bo{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.5)}
+@media print{body{background:#fff}.hd{background:none;color:#000;padding:10px 0;border-bottom:2px solid #000}.hd::before{display:none}.mb,.ps,.tw,.acts,.ld,.hb,.mc-acts,.cnt{display:none!important}.ct{padding:8px 0}.mc{box-shadow:none;border:2px solid #999;page-break-inside:avoid}.ph{display:block!important}}
+.ph{display:none;text-align:center;font-size:1.4rem;font-weight:800;margin-bottom:12px;padding:8px 0;border-bottom:2px solid #000}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){.hd h1{font-size:1.5rem}.mc{padding:16px 12px}.mbtn{padding:6px 12px;font-size:0.8rem}.tb{padding:6px 12px;font-size:0.75rem}.item{width:44px;height:44px;font-size:1.7rem}}
+</style>
+</head>
+<body>
+<div class="hd"><h1>🔢 ספירה</h1><p>הקיפו בעיגול את הכמות הנכונה!</p></div>
+<div class="mb">
+<button class="mbtn on" onclick="setM('click')" id="mc1"><span>👆</span> לחיצה</button>
+<button class="mbtn" onclick="setM('draw')" id="mc2"><span>✏️</span> ציור עיגול</button>
+<button class="mbtn" onclick="window.print()"><span>🖨️</span> הדפסה</button>
+</div>
+<div class="ps"><div class="pr"><span class="pl">התקדמות:</span><div class="ppb"><div class="pf" id="pf" style="width:0%"></div></div></div></div>
+<div class="tw"><div class="ts" id="tabs"></div></div>
+<div class="hb" id="hb">✏️ ציירו עיגול סביב המספר הנכון של פריטים!</div>
+<div class="ct" id="area"></div>
+<script>
+const GRP_COLORS=['#e74c3c','#3498db','#2ecc71','#9b59b6','#e67e22','#1abc9c','#e84393','#00cec9','#6c5ce7','#fdcb6e','#f39c12','#d35400','#2980b9','#27ae60','#8e44ad'];
+
+const LV=[
+{id:1,t:'2 סנאים 🐿️',e:'🐿️',groupSize:2,total:20},
+{id:2,t:'3 ברווזים 🐥',e:'🐥',groupSize:3,total:21},
+{id:3,t:'2 פרפרים 🦋',e:'🦋',groupSize:2,total:16},
+{id:4,t:'4 כוכבים ⭐',e:'⭐',groupSize:4,total:20},
+{id:5,t:'3 פרחים 🌸',e:'🌸',groupSize:3,total:18},
+{id:6,t:'2 דגים 🐟',e:'🐟',groupSize:2,total:18},
+{id:7,t:'5 לבבות ❤️',e:'❤️',groupSize:5,total:25},
+{id:8,t:'3 חתולים 🐱',e:'🐱',groupSize:3,total:15},
+{id:9,t:'4 תפוחים 🍎',e:'🍎',groupSize:4,total:24},
+{id:10,t:'2 כדורים ⚽',e:'⚽',groupSize:2,total:22},
+{id:11,t:'3 פטריות 🍄',e:'🍄',groupSize:3,total:18},
+{id:12,t:'4 ציפורים 🐦',e:'🐦',groupSize:4,total:16},
+{id:13,t:'5 שמשות ☀️',e:'☀️',groupSize:5,total:20},
+{id:14,t:'3 דבורים 🐝',e:'🐝',groupSize:3,total:24},
+{id:15,t:'6 פרחים 🌻',e:'🌻',groupSize:6,total:24}
+];
+
+let cur=0,md='click',reso={},selItems=[],grpCount=0,grpColorIdx=0;
+
+function rTabs(){const el=document.getElementById('tabs');el.innerHTML=LV.map((l,i)=>`<button class="tb ${i===cur?'on':''} ${reso[l.id]?'dn':''}" onclick="go(${i})">${l.t}</button>`).join('');setTimeout(()=>{const a=el.querySelector('.on');if(a)a.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})},100)}
+
+function rLv(){
+const lv=LV[cur],ar=document.getElementById('area'),isDw=md==='draw';
+selItems=[];grpCount=0;grpColorIdx=0;
+const totalGroups=Math.floor(lv.total/lv.groupSize);
+
+let h=`<div class="ph">🔢 ספירה — ${lv.t}</div>`;
+h+=`<div class="mc" id="q0">`;
+h+=`<div class="mh"><div class="mn">🔢</div><span class="mht">הקיפו כל <span class="task-num">${lv.groupSize}</span> ${lv.e} בעיגול</span></div>`;
+h+=`<div class="items-area ${isDw?'dw':''}" id="grid0">`;
+if(isDw) h+=`<canvas id="cv0"></canvas>`;
+for(let i=0;i<lv.total;i++){
+  h+=`<div class="item" data-idx="${i}" ${!isDw?'onclick="selItem(this)"':''}>${lv.e}</div>`;
+}
+h+=`</div>`;
+h+=`<div class="cnt" id="cnt0">0 / ${totalGroups} קבוצות</div>`;
+h+=`<div class="mc-acts">`;
+if(!isDw) h+=`<button class="ab" onclick="clearSel()">🗑️ בטל בחירה</button>`;
+if(isDw) h+=`<button class="ab" onclick="clearDraw()">🗑️ מחק עיגולים</button>`;
+h+=`<button class="ab" onclick="done()">✅ סיימתי!</button>`;
+h+=`</div></div>`;
+
+h+=`<div class="ld" id="ld"><div class="big">🔢</div><h2>כל הכבוד!</h2><p>מצאתם את כל הקבוצות!</p><div class="acts"><button class="btn bw" onclick="retry()">🔄 נסה שוב</button>${cur<LV.length-1?'<button class="btn bo" onclick="nxt()">➡️ הבא</button>':''}<button class="btn bo" onclick="window.print()">🖨️ הדפס</button></div></div>`;
+
+ar.innerHTML=h;
+if(isDw) initDraw();
+rTabs();uPr();
+}
+
+// === CLICK MODE ===
+function selItem(el){
+  if(el.classList.contains('done'))return;
+  if(el.classList.contains('selected')){
+    el.classList.remove('selected');
+    selItems=selItems.filter(e=>e!==el);
+    return;
+  }
+  el.classList.add('selected');
+  selItems.push(el);
+
+  const lv=LV[cur];
+  if(selItems.length===lv.groupSize){
+    // Group complete! Circle them
+    const color=GRP_COLORS[grpColorIdx%GRP_COLORS.length];
+    grpColorIdx++;
+    selItems.forEach(item=>{
+      item.classList.remove('selected');
+      item.classList.add('done','grouped');
+      const ring=document.createElement('div');
+      ring.className='grp-ring';ring.style.borderColor=color;
+      item.appendChild(ring);
+    });
+    grpCount++;
+    selItems=[];
+    updateCnt();
+  }
+}
+
+function clearSel(){
+  selItems.forEach(el=>el.classList.remove('selected'));
+  selItems=[];
+}
+
+function updateCnt(){
+  const lv=LV[cur];
+  const totalGroups=Math.floor(lv.total/lv.groupSize);
+  document.getElementById('cnt0').textContent=grpCount+' / '+totalGroups+' קבוצות';
+  if(grpCount>=totalGroups){
+    document.getElementById('q0').classList.add('ok');
+    setTimeout(()=>{
+      document.getElementById('ld').classList.add('show');
+      document.getElementById('ld').scrollIntoView({behavior:'smooth',block:'center'});
+    },500);
+    reso[LV[cur].id]=true;rTabs();uPr();
+  }
+}
+
+// === DRAW MODE ===
+function initDraw(){
+  document.getElementById('hb').classList.add('show');
+  const grid=document.getElementById('grid0');
+  const cv=document.getElementById('cv0');
+  if(!cv)return;
+  cv.width=grid.offsetWidth;cv.height=grid.offsetHeight;
+  const ctx=cv.getContext('2d');
+  let dw=false,pts=[];
+
+  cv.addEventListener('pointerdown',function(e){
+    e.preventDefault();e.stopPropagation();dw=true;pts=[];
+    const r=cv.getBoundingClientRect();
+    ctx.beginPath();
+    const color=GRP_COLORS[grpColorIdx%GRP_COLORS.length];
+    ctx.strokeStyle=color;ctx.lineWidth=3;ctx.lineCap='round';ctx.lineJoin='round';
+    ctx.moveTo(e.clientX-r.left,e.clientY-r.top);
+    pts.push({cx:e.clientX,cy:e.clientY});
+  },{passive:false});
+
+  cv.addEventListener('pointermove',function(e){
+    if(!dw)return;e.preventDefault();e.stopPropagation();
+    const r=cv.getBoundingClientRect();
+    ctx.lineTo(e.clientX-r.left,e.clientY-r.top);ctx.stroke();
+    pts.push({cx:e.clientX,cy:e.clientY});
+  },{passive:false});
+
+  cv.addEventListener('pointerup',function(e){
+    if(!dw)return;e.preventDefault();dw=false;
+    if(pts.length<10){ctx.clearRect(0,0,cv.width,cv.height);return}
+
+    // Build bounding box of drawn shape
+    let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+    pts.forEach(p=>{if(p.cx<minX)minX=p.cx;if(p.cy<minY)minY=p.cy;if(p.cx>maxX)maxX=p.cx;if(p.cy>maxY)maxY=p.cy});
+    // Center of drawn shape
+    const ccx=(minX+maxX)/2, ccy=(minY+maxY)/2;
+    const radX=(maxX-minX)/2, radY=(maxY-minY)/2;
+
+    // Find all non-done items whose center is inside the bounding ellipse
+    const items=grid.querySelectorAll('.item:not(.done)');
+    const inside=[];
+    items.forEach(item=>{
+      const r=item.getBoundingClientRect();
+      const ix=r.left+r.width/2, iy=r.top+r.height/2;
+      // Check if inside the ellipse defined by bounding box
+      const dx=(ix-ccx)/(radX||1), dy=(iy-ccy)/(radY||1);
+      if(dx*dx+dy*dy<=1.15) inside.push(item);
+    });
+
+    const lv=LV[cur];
+    if(inside.length===lv.groupSize){
+      // Correct! Mark the group
+      const color=GRP_COLORS[grpColorIdx%GRP_COLORS.length];
+      grpColorIdx++;
+      inside.forEach(item=>{
+        item.classList.add('done','grouped');
+        const ring=document.createElement('div');
+        ring.className='grp-ring';ring.style.borderColor=color;
+        item.appendChild(ring);
+      });
+      grpCount++;
+      ctx.clearRect(0,0,cv.width,cv.height);
+      updateCnt();
+    } else if(inside.length>0){
+      // Wrong count — mark them in red temporarily
+      const color='#e74c3c';
+      inside.forEach(item=>{
+        item.classList.add('wrong-pick');
+        const ring=document.createElement('div');
+        ring.className='grp-ring';ring.style.borderColor=color;
+        item.appendChild(ring);
+      });
+      // Show error message
+      const cvR=cv.getBoundingClientRect();
+      ctx.clearRect(0,0,cv.width,cv.height);
+      ctx.fillStyle='rgba(231,76,60,0.12)';
+      ctx.fillRect(0,0,cv.width,cv.height);
+      ctx.fillStyle='#e74c3c';ctx.font=`bold ${Math.max(16,cv.width*0.04)}px Rubik,Heebo,sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(`סימנת ${inside.length} — צריך ${lv.groupSize}! נסו שוב`,cv.width/2,cv.height/2);
+      // Remove after delay
+      setTimeout(()=>{
+        ctx.clearRect(0,0,cv.width,cv.height);
+        inside.forEach(item=>{
+          item.classList.remove('wrong-pick');
+          const r=item.querySelector('.grp-ring');
+          if(r&&r.style.borderColor==='rgb(231, 76, 60)')r.remove();
+        });
+      },1500);
+    } else {
+      ctx.clearRect(0,0,cv.width,cv.height);
+    }
+  },{passive:false});
+
+  cv.addEventListener('pointercancel',function(){dw=false});
+}
+
+function clearDraw(){
+  const cv=document.getElementById('cv0');
+  if(cv) cv.getContext('2d').clearRect(0,0,cv.width,cv.height);
+}
+
+function done(){
+  reso[LV[cur].id]=true;
+  document.getElementById('q0').classList.add('ok');
+  document.getElementById('ld').classList.add('show');
+  document.getElementById('ld').scrollIntoView({behavior:'smooth',block:'center'});
+  rTabs();uPr();
+}
+
+function go(i){cur=i;rLv();window.scrollTo({top:0,behavior:'smooth'})}
+function nxt(){if(cur<LV.length-1){cur++;rLv();window.scrollTo({top:0,behavior:'smooth'})}}
+function retry(){rLv();window.scrollTo({top:0,behavior:'smooth'})}
+function setM(m){md=m;document.getElementById('mc1').classList.toggle('on',m==='click');document.getElementById('mc2').classList.toggle('on',m==='draw');if(m==='click')document.getElementById('hb').classList.remove('show');rLv()}
+function uPr(){document.getElementById('pf').style.width=Math.round(Object.keys(reso).length/LV.length*100)+'%'}
+rLv();
+</script>
+</body>
+</html>

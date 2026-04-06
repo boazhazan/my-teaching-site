@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>סדר פעולות חשבון</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFF8F0;
+    --orange: #FF6B35;
+    --yellow: #FFD166;
+    --teal: #06D6A0;
+    --blue: #118AB2;
+    --dark: #073B4C;
+    --card: #ffffff;
+    --correct: #06D6A0;
+    --wrong: #EF476F;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Rubik', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    padding-bottom: 40px;
+    background-image:
+      radial-gradient(ellipse at 0% 0%, rgba(255,107,53,0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 100% 100%, rgba(6,214,160,0.1) 0%, transparent 50%);
+  }
+
+  /* ===== STICKY REMINDER ===== */
+  .sticky-top {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--dark); color: white;
+    padding: 10px 16px;
+    box-shadow: 0 4px 16px rgba(7,59,76,0.3);
+  }
+  .reminder-row {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .reminder-label { font-family:'Fredoka One',cursive; font-size:1rem; color:var(--yellow); white-space:nowrap; }
+  .pyramid-wrap { display:flex; flex-direction:column; align-items:center; gap:2px; }
+  .pyr-row {
+    display:flex; align-items:center; justify-content:center;
+    border:2px solid rgba(255,255,255,0.35); border-radius:6px;
+    font-family:'Fredoka One',cursive; font-size:0.85rem; color:white;
+    padding:3px 10px; direction:ltr;
+  }
+  .pyr-row.p1 { background:rgba(255,107,53,0.85); width:110px; }
+  .pyr-row.p2 { background:rgba(17,138,178,0.85); width:160px; }
+  .pyr-row.p3 { background:rgba(6,214,160,0.6); color:var(--dark); width:210px; }
+  .reminder-text { font-size:0.78rem; color:rgba(255,255,255,0.85); max-width:260px; line-height:1.5; text-align:right; }
+
+  /* ===== TITLE ===== */
+  .page-header { text-align:center; padding:18px 16px 8px; }
+  h1 { font-family:'Fredoka One',cursive; font-size:clamp(1.6rem,5vw,2.4rem); color:var(--dark); }
+  h1 span { color:var(--orange); }
+
+  /* ===== DOTS ===== */
+  .dots-wrap {
+    max-width:520px; margin:0 auto 14px; padding:0 16px;
+    display:flex; flex-wrap:wrap; gap:6px; justify-content:center;
+  }
+  .dot {
+    width:28px; height:28px; border-radius:50%;
+    border:2px solid #DDD; background:#EFEFEF;
+    font-family:'Fredoka One',cursive; font-size:0.7rem; color:#999;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:all 0.2s; flex-shrink:0;
+  }
+  .dot:hover { border-color:var(--blue); transform:scale(1.1); }
+  .dot.active { border-color:var(--orange); background:var(--orange); color:white; transform:scale(1.15); box-shadow:0 0 0 3px rgba(255,107,53,0.3); }
+  .dot.solved  { background:var(--correct); border-color:#04A57C; color:white; }
+  .dot.wrong   { background:var(--wrong);   border-color:#C73459; color:white; }
+  .dot.skipped { background:#CFD8DC; border-color:#90A4AE; color:#546E7A; }
+
+  /* ===== CARD ===== */
+  .card-wrap { max-width:500px; margin:0 auto; padding:0 16px; }
+  .card {
+    background:var(--card); border-radius:24px;
+    padding:24px 24px 20px;
+    box-shadow:0 8px 32px rgba(7,59,76,0.12);
+    position:relative; overflow:hidden;
+  }
+  .card::after {
+    content:''; position:absolute; bottom:0; left:0; right:0; height:4px;
+    background:linear-gradient(90deg,var(--orange),var(--yellow),var(--teal),var(--blue));
+  }
+  .q-badge { display:inline-block; font-size:0.72rem; font-weight:700; padding:3px 10px; border-radius:50px; background:#FFF3E0; color:var(--orange); margin-bottom:8px; }
+  .q-num   { font-size:0.8rem; color:#AAA; margin-bottom:4px; }
+
+  .question {
+    font-family:'Fredoka One',cursive;
+    font-size:clamp(1.8rem,7vw,2.6rem);
+    color:var(--dark); text-align:center;
+    margin:8px 0 20px; direction:ltr; line-height:1.2;
+  }
+
+  /* ===== INPUT ===== */
+  .input-row {
+    display:flex; align-items:center; justify-content:center;
+    gap:10px; margin-bottom:14px; direction:ltr;
+  }
+  .ans-label { font-family:'Fredoka One',cursive; font-size:1.4rem; color:#AAA; }
+  .ans-input {
+    font-family:'Fredoka One',cursive; font-size:1.8rem;
+    width:120px; text-align:center;
+    border:3px solid #E0E0E0; border-radius:16px;
+    padding:8px 12px; color:var(--dark); background:#FAFAFA;
+    outline:none; transition:border-color 0.2s, box-shadow 0.2s;
+    -moz-appearance:textfield;
+  }
+  .ans-input::-webkit-outer-spin-button,
+  .ans-input::-webkit-inner-spin-button { -webkit-appearance:none; }
+  .ans-input:focus  { border-color:var(--blue); box-shadow:0 0 0 3px rgba(17,138,178,0.15); background:#fff; }
+  .ans-input.correct{ border-color:var(--correct); background:#E8FFF5; }
+  .ans-input.wrong  { border-color:var(--wrong);   background:#FFF0F3; }
+  .check-btn {
+    font-family:'Fredoka One',cursive; font-size:1rem;
+    padding:10px 20px; border:none; border-radius:50px;
+    background:var(--blue); color:white; cursor:pointer;
+    box-shadow:0 3px 0 #0A5F7A; transition:all 0.15s;
+  }
+  .check-btn:hover   { transform:translateY(-1px); box-shadow:0 5px 0 #0A5F7A; }
+  .check-btn:active  { transform:translateY(2px);  box-shadow:0 1px 0 #0A5F7A; }
+  .check-btn:disabled{ opacity:0.4; cursor:default; transform:none; }
+
+  /* ===== FEEDBACK ===== */
+  .feedback { font-family:'Fredoka One',cursive; font-size:1.1rem; text-align:center; min-height:1.6rem; margin-bottom:8px; }
+  .feedback.c { color:var(--correct); }
+  .feedback.w { color:var(--wrong); }
+
+  .steps-box {
+    background:#F0FFF8; border:1.5px solid #B2EDD8; border-radius:12px;
+    padding:10px 14px; font-size:0.82rem; color:#065F46;
+    direction:ltr; text-align:left; white-space:pre-line; line-height:1.7;
+    display:none; margin-bottom:10px;
+  }
+  .steps-box.show { display:block; }
+
+  /* ===== NAV ===== */
+  .nav-row { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:12px; }
+  .nav-btn {
+    font-family:'Fredoka One',cursive; font-size:0.95rem;
+    padding:10px 18px; border:none; border-radius:50px;
+    cursor:pointer; transition:all 0.15s; box-shadow:0 3px 0 rgba(0,0,0,0.15);
+  }
+  .nav-btn:hover   { transform:translateY(-2px); }
+  .nav-btn:active  { transform:translateY(1px); box-shadow:0 1px 0 rgba(0,0,0,0.15); }
+  .nav-btn:disabled{ opacity:0.35; cursor:default; transform:none; }
+  .btn-prev   { background:#ECEFF1; color:#546E7A; box-shadow:0 3px 0 #B0BEC5; }
+  .btn-skip   { background:#F5F5F5; color:#9E9E9E; box-shadow:0 3px 0 #BDBDBD; }
+  .btn-next   { background:var(--orange); color:white; box-shadow:0 3px 0 #CC4D1E; }
+  .btn-finish { background:var(--teal);   color:white; box-shadow:0 3px 0 #038C6A; }
+
+  /* ===== SUMMARY ===== */
+  .overlay {
+    display:none; position:fixed; inset:0;
+    background:rgba(7,59,76,0.65); z-index:200;
+    align-items:flex-start; justify-content:center;
+    overflow-y:auto; padding:20px 12px;
+  }
+  .overlay.show { display:flex; }
+  .sum-card {
+    background:white; border-radius:24px; padding:28px 24px;
+    max-width:480px; width:100%; margin:auto;
+    animation:popIn 0.35s ease;
+  }
+  @keyframes popIn { from{transform:scale(0.85);opacity:0;} to{transform:scale(1);opacity:1;} }
+  .sum-title { font-family:'Fredoka One',cursive; font-size:1.8rem; color:var(--dark); text-align:center; margin-bottom:6px; }
+  .sum-sub   { text-align:center; color:#777; font-size:0.9rem; margin-bottom:20px; }
+  .sum-section { margin-bottom:18px; }
+  .sum-section-title {
+    font-family:'Fredoka One',cursive; font-size:1rem;
+    padding:4px 12px; border-radius:50px; display:inline-block; margin-bottom:8px;
+  }
+  .sum-section-title.c { background:#E8FFF5; color:#04A57C; }
+  .sum-section-title.w { background:#FFF0F3; color:var(--wrong); }
+  .sum-section-title.s { background:#ECEFF1; color:#546E7A; }
+  .sum-list { list-style:none; display:flex; flex-direction:column; gap:6px; }
+  .sum-item {
+    display:flex; align-items:center; gap:10px;
+    padding:8px 12px; border-radius:12px; font-size:0.88rem; direction:ltr;
+  }
+  .sum-item.c { background:#F0FFF8; border:1px solid #B2EDD8; }
+  .sum-item.w { background:#FFF5F7; border:1px solid #FBBCCA; }
+  .sum-item.s { background:#FAFAFA; border:1px solid #E0E0E0; }
+  .sum-expr { font-family:'Fredoka One',cursive; font-size:1rem; flex:1; }
+  .sum-ans  { font-size:0.8rem; color:#777; }
+  .sum-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:18px; }
+  .restart-btn {
+    font-family:'Fredoka One',cursive; font-size:1rem;
+    padding:12px 24px; border:none; border-radius:50px;
+    cursor:pointer; transition:all 0.15s; box-shadow:0 3px 0 rgba(0,0,0,0.2);
+  }
+  .restart-btn:hover { transform:translateY(-2px); }
+  .btn-redo-wrong { background:var(--wrong);   color:white; }
+  .btn-redo-skip  { background:#78909C; color:white; }
+  .btn-redo-all   { background:var(--orange);  color:white; }
+
+  /* confetti */
+  .cf-host { position:fixed; inset:0; pointer-events:none; z-index:300; display:none; }
+  .cf-host.show { display:block; }
+  .cdot { position:absolute; width:9px; height:9px; border-radius:2px; animation:cfall linear forwards; }
+  @keyframes cfall { 0%{transform:translateY(-10px) rotate(0deg);opacity:1;} 100%{transform:translateY(100vh) rotate(540deg);opacity:0;} }
+</style>
+</head>
+<body>
+
+<!-- STICKY REMINDER -->
+<div class="sticky-top">
+  <div class="reminder-row">
+    <div class="reminder-label">📐 תזכורת:</div>
+    <div class="pyramid-wrap">
+      <div class="pyr-row p1">( )</div>
+      <div class="pyr-row p2">× &nbsp; ÷</div>
+      <div class="pyr-row p3">+ &nbsp; −</div>
+    </div>
+    <div class="reminder-text">
+      1️⃣ סוגריים קודם<br>
+      2️⃣ כפל וחילוק (משמאל לימין)<br>
+      3️⃣ חיבור וחיסור (משמאל לימין)
+    </div>
+  </div>
+</div>
+
+<!-- TITLE -->
+<div class="page-header">
+  <h1>🧮 <span>סדר פעולות</span> חשבון</h1>
+</div>
+
+<!-- DOTS -->
+<div class="dots-wrap" id="dotsWrap"></div>
+
+<!-- CARD -->
+<div class="card-wrap">
+  <div class="card">
+    <div class="q-badge" id="qBadge">כפל וחיבור</div>
+    <div class="q-num"   id="qNum">שאלה 1 מתוך 30</div>
+    <div class="question" id="question"></div>
+
+    <div class="input-row">
+      <span class="ans-label">=</span>
+      <input class="ans-input" id="ansInput" type="number" placeholder="?" autocomplete="off"/>
+      <button class="check-btn" id="checkBtn" onclick="checkAnswer()">בדוק ✓</button>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+    <div class="steps-box" id="stepsBox"></div>
+
+    <div class="nav-row">
+      <button class="nav-btn btn-prev"   id="prevBtn"   onclick="goTo(currentIdx-1)">◀ הקודם</button>
+      <button class="nav-btn btn-skip"   id="skipBtn"   onclick="skip()">דלג ⟫</button>
+      <button class="nav-btn btn-next"   id="nextBtn"   onclick="goNext()">הבא ▶</button>
+      <button class="nav-btn btn-finish" id="finishBtn" onclick="showSummary()">סיכום 📋</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div class="overlay" id="overlay">
+  <div class="sum-card">
+    <div class="sum-title" id="sumTitle"></div>
+    <div class="sum-sub"   id="sumSub"></div>
+    <div id="sumBody"></div>
+    <div class="sum-actions">
+      <button class="restart-btn btn-redo-wrong" id="redoWrongBtn" onclick="redoSubset('wrong')">🔄 חזור על הטעויות</button>
+      <button class="restart-btn btn-redo-skip"  id="redoSkipBtn"  onclick="redoSubset('skip')">❓ תרגל את הדילוגים</button>
+      <button class="restart-btn btn-redo-all"                     onclick="restart()">🔄 הכל מחדש</button>
+    </div>
+  </div>
+</div>
+
+<div class="cf-host" id="cfHost"></div>
+
+<script>
+const TOTAL = 30;
+let pool = [], status = [], userAns = [], currentIdx = 0;
+
+function randInt(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+
+const generators = [
+  ()=>{ const a=randInt(2,9),b=randInt(2,9),c=randInt(5,50),ans=a*b+c; return {expr:`${a} × ${b} + ${c}`,ans,badge:'כפל וחיבור',steps:`כפל קודם: ${a} × ${b} = ${a*b}\nאז: ${a*b} + ${c} = ${ans}`}; },
+  ()=>{ const a=randInt(2,9),b=randInt(2,9),p=a*b,c=randInt(1,p-1),ans=p-c; return {expr:`${a} × ${b} − ${c}`,ans,badge:'כפל וחיסור',steps:`כפל קודם: ${a} × ${b} = ${p}\nאז: ${p} − ${c} = ${ans}`}; },
+  ()=>{ const a=randInt(2,9),b=randInt(2,9),c=randInt(5,40),ans=c+a*b; return {expr:`${c} + ${a} × ${b}`,ans,badge:'כפל וחיבור',steps:`כפל קודם: ${a} × ${b} = ${a*b}\nאז: ${c} + ${a*b} = ${ans}`}; },
+  ()=>{ const a=randInt(2,5),b=randInt(2,5),c=randInt(a*b+2,80),ans=c-a*b; return {expr:`${c} − ${a} × ${b}`,ans,badge:'כפל וחיסור',steps:`כפל קודם: ${a} × ${b} = ${a*b}\nאז: ${c} − ${a*b} = ${ans}`}; },
+  ()=>{ const b=randInt(2,9),q=randInt(2,10),a=b*q,c=randInt(5,40),ans=q+c; return {expr:`${a} ÷ ${b} + ${c}`,ans,badge:'חילוק וחיבור',steps:`חילוק קודם: ${a} ÷ ${b} = ${q}\nאז: ${q} + ${c} = ${ans}`}; },
+  ()=>{ const b=randInt(2,9),q=randInt(5,12),a=b*q,c=randInt(1,q-1),ans=q-c; return {expr:`${a} ÷ ${b} − ${c}`,ans,badge:'חילוק וחיסור',steps:`חילוק קודם: ${a} ÷ ${b} = ${q}\nאז: ${q} − ${c} = ${ans}`}; },
+  ()=>{ const c=randInt(2,9),q=randInt(2,9),a=randInt(2,9),b=c*q,ans=a*q; return {expr:`${a} × ${b} ÷ ${c}`,ans,badge:'כפל וחילוק',steps:`משמאל לימין:\n${a} × ${b} = ${a*b}\n${a*b} ÷ ${c} = ${ans}`}; },
+  ()=>{ const a=randInt(3,15),b=randInt(3,15),c=randInt(2,8),ans=(a+b)*c; return {expr:`(${a} + ${b}) × ${c}`,ans,badge:'סוגריים וכפל',steps:`סוגריים קודם: ${a} + ${b} = ${a+b}\nאז: ${a+b} × ${c} = ${ans}`}; },
+  ()=>{ const b=randInt(2,10),a=randInt(b+2,b+15),c=randInt(2,8),ans=(a-b)*c; return {expr:`(${a} − ${b}) × ${c}`,ans,badge:'סוגריים וכפל',steps:`סוגריים קודם: ${a} − ${b} = ${a-b}\nאז: ${a-b} × ${c} = ${ans}`}; },
+  ()=>{ const c=randInt(2,9),q=randInt(2,8),b=randInt(2,10),a=c*q-b; if(a<=0) return generators[7](); return {expr:`(${a} + ${b}) ÷ ${c}`,ans:q,badge:'סוגריים וחילוק',steps:`סוגריים קודם: ${a}+${b}=${a+b}\nאז: ${a+b}÷${c}=${q}`}; },
+  ()=>{ const a=randInt(2,6),b=randInt(2,6),c=randInt(2,6),d=randInt(2,6),ans=a*b+c*d; return {expr:`${a} × ${b} + ${c} × ${d}`,ans,badge:'שני כפלים',steps:`כפלים קודם:\n${a}×${b}=${a*b}\n${c}×${d}=${c*d}\nאז: ${a*b}+${c*d}=${ans}`}; },
+  ()=>{ const b=randInt(2,7),c=randInt(2,7),a=randInt(5,30),d=randInt(1,10),ans=a+b*c-d; if(ans<=0) return generators[0](); return {expr:`${a} + ${b} × ${c} − ${d}`,ans,badge:'שלוש פעולות',steps:`כפל קודם: ${b}×${c}=${b*c}\nאז: ${a}+${b*c}−${d}=${ans}`}; },
+  ()=>{ const a=randInt(2,10),b=randInt(2,10),c=randInt(2,6),d=randInt(5,30),ans=(a+b)*c+d; return {expr:`(${a}+${b})×${c}+${d}`,ans,badge:'סוגריים+כפל+חיבור',steps:`סוגריים: ${a}+${b}=${a+b}\nכפל: ${a+b}×${c}=${(a+b)*c}\nחיבור: ${(a+b)*c}+${d}=${ans}`}; },
+  ()=>{ const c=randInt(2,6),q=randInt(2,8),a=randInt(2,6),d=randInt(5,20),b=c*q,ans=a*q+d; return {expr:`${a}×${b}÷${c}+${d}`,ans,badge:'כפל, חילוק, חיבור',steps:`משמאל לימין:\n${a}×${b}=${a*b} → ÷${c}=${a*q}\nאז: ${a*q}+${d}=${ans}`}; },
+];
+
+function buildPool(items) {
+  if (items) { pool = items; }
+  else {
+    pool = [];
+    for(let i=0;i<TOTAL;i++) pool.push(generators[i%generators.length]());
+    for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  }
+  status  = pool.map(()=>'pending');
+  userAns = pool.map(()=>null);
+  currentIdx = 0;
+}
+
+// ── DOTS ──
+function renderDots() {
+  const wrap = document.getElementById('dotsWrap');
+  wrap.innerHTML = '';
+  pool.forEach((_,i) => {
+    const d = document.createElement('div');
+    const s = status[i];
+    d.className = 'dot' +
+      (s==='solved'  ? ' solved'  :
+       s==='wrong'   ? ' wrong'   :
+       s==='skipped' ? ' skipped' : '') +
+      (i===currentIdx ? ' active' : '');
+    d.textContent = i+1;
+    d.title = pool[i].expr;
+    d.onclick = () => goTo(i);
+    wrap.appendChild(d);
+  });
+}
+
+// ── RENDER ──
+function render() {
+  const q = pool[currentIdx];
+  const s = status[currentIdx];
+  document.getElementById('qBadge').textContent = q.badge;
+  document.getElementById('qNum').textContent = `שאלה ${currentIdx+1} מתוך ${pool.length}`;
+  document.getElementById('question').textContent = q.expr + ' = ?';
+
+  const inp = document.getElementById('ansInput');
+  const btn = document.getElementById('checkBtn');
+  const fb  = document.getElementById('feedback');
+  const sb  = document.getElementById('stepsBox');
+
+  inp.className = 'ans-input';
+  sb.className  = 'steps-box';
+  sb.textContent = '';
+  fb.textContent = '';
+  fb.className = 'feedback';
+
+  if (s === 'solved') {
+    inp.value = userAns[currentIdx]; inp.disabled = true; btn.disabled = true;
+    inp.className = 'ans-input correct';
+    fb.textContent = '✅ נכון!'; fb.className = 'feedback c';
+  } else if (s === 'wrong') {
+    inp.value = userAns[currentIdx]; inp.disabled = true; btn.disabled = true;
+    inp.className = 'ans-input wrong';
+    fb.textContent = `❌ ענית ${userAns[currentIdx]} — הנכון: ${q.ans}`; fb.className = 'feedback w';
+    sb.textContent = '📋 פתרון:\n' + q.steps; sb.className = 'steps-box show';
+  } else if (s === 'skipped') {
+    inp.value = ''; inp.disabled = false; btn.disabled = false;
+    fb.textContent = '⟫ דילגת — אפשר לחזור ולפתור!';
+  } else {
+    inp.value = ''; inp.disabled = false; btn.disabled = false;
+  }
+
+  document.getElementById('prevBtn').disabled = currentIdx === 0;
+  document.getElementById('nextBtn').disabled = currentIdx >= pool.length - 1;
+  document.getElementById('skipBtn').disabled = s === 'solved' || s === 'wrong';
+
+  renderDots();
+  if (s === 'pending' || s === 'skipped') setTimeout(()=>inp.focus(), 50);
+}
+
+// ── CHECK ──
+function checkAnswer() {
+  const inp = document.getElementById('ansInput');
+  const num = parseInt(inp.value.trim(), 10);
+  if (isNaN(num)) { inp.focus(); return; }
+  const q = pool[currentIdx];
+  userAns[currentIdx] = num;
+  status[currentIdx] = (num === q.ans) ? 'solved' : 'wrong';
+  render();
+}
+
+// ── SKIP ──
+function skip() {
+  if (status[currentIdx] === 'pending') status[currentIdx] = 'skipped';
+  goNext();
+}
+
+// ── NAV ──
+function goTo(i) { if(i>=0 && i<pool.length){ currentIdx=i; render(); } }
+
+function goNext() {
+  // find next pending or skipped after current
+  for(let i=currentIdx+1;i<pool.length;i++){
+    if(status[i]==='pending'||status[i]==='skipped'){goTo(i);return;}
+  }
+  // else just go +1
+  if(currentIdx<pool.length-1) goTo(currentIdx+1);
+  else showSummary();
+}
+
+document.addEventListener('keydown', e => {
+  if(e.key==='Enter' && document.activeElement===document.getElementById('ansInput')) checkAnswer();
+});
+
+// ── SUMMARY ──
+function showSummary() {
+  const solvedIdx  = pool.map((_,i)=>i).filter(i=>status[i]==='solved');
+  const wrongIdx   = pool.map((_,i)=>i).filter(i=>status[i]==='wrong');
+  const skippedIdx = pool.map((_,i)=>i).filter(i=>status[i]==='skipped'||status[i]==='pending');
+  const pct = Math.round(solvedIdx.length/pool.length*100);
+
+  let emoji='', title='';
+  if(pct===100){emoji='🏆';title='מושלם לגמרי!';}
+  else if(pct>=80){emoji='🌟';title='כל הכבוד!';}
+  else if(pct>=60){emoji='💪';title='יפה מאוד!';}
+  else{emoji='📚';title='ממשיכים להתאמן!';}
+
+  document.getElementById('sumTitle').textContent = emoji+' '+title;
+  document.getElementById('sumSub').textContent =
+    `פתרת נכון ${solvedIdx.length} מתוך ${pool.length}  ·  טעויות: ${wrongIdx.length}  ·  לשאול מורה: ${skippedIdx.length}`;
+
+  let html = '';
+
+  if(solvedIdx.length){
+    html += `<div class="sum-section"><div class="sum-section-title c">✅ פתרת נכון (${solvedIdx.length})</div><ul class="sum-list">`;
+    solvedIdx.forEach(i=>{ html+=`<li class="sum-item c"><span class="sum-icon">✅</span><span class="sum-expr">${pool[i].expr} = ${pool[i].ans}</span></li>`; });
+    html += `</ul></div>`;
+  }
+  if(wrongIdx.length){
+    html += `<div class="sum-section"><div class="sum-section-title w">❌ טעויות (${wrongIdx.length})</div><ul class="sum-list">`;
+    wrongIdx.forEach(i=>{ html+=`<li class="sum-item w"><span class="sum-icon">❌</span><span class="sum-expr">${pool[i].expr} = ${pool[i].ans}</span><span class="sum-ans">(ענית: ${userAns[i]})</span></li>`; });
+    html += `</ul></div>`;
+  }
+  if(skippedIdx.length){
+    html += `<div class="sum-section"><div class="sum-section-title s">❓ לשאול את המורה (${skippedIdx.length})</div><ul class="sum-list">`;
+    skippedIdx.forEach(i=>{ html+=`<li class="sum-item s"><span class="sum-icon">❓</span><span class="sum-expr">${pool[i].expr}</span></li>`; });
+    html += `</ul></div>`;
+  }
+
+  document.getElementById('sumBody').innerHTML = html;
+  document.getElementById('redoWrongBtn').style.display = wrongIdx.length  ? 'inline-block' : 'none';
+  document.getElementById('redoSkipBtn').style.display  = skippedIdx.length? 'inline-block' : 'none';
+  document.getElementById('overlay').classList.add('show');
+  if(pct>=60) launchConfetti();
+}
+
+function redoSubset(type) {
+  const items = type==='wrong'
+    ? pool.filter((_,i)=>status[i]==='wrong')
+    : pool.filter((_,i)=>status[i]==='skipped'||status[i]==='pending');
+  if(!items.length) return;
+  document.getElementById('overlay').classList.remove('show');
+  buildPool(items);
+  render();
+}
+
+function restart() {
+  document.getElementById('overlay').classList.remove('show');
+  buildPool();
+  render();
+}
+
+function launchConfetti() {
+  const host=document.getElementById('cfHost');
+  host.innerHTML=''; host.classList.add('show');
+  const colors=['#FF6B35','#FFD166','#06D6A0','#118AB2','#EF476F','#7B2FBE'];
+  for(let i=0;i<60;i++){
+    const d=document.createElement('div'); d.className='cdot';
+    d.style.left=Math.random()*100+'vw';
+    d.style.background=colors[Math.floor(Math.random()*colors.length)];
+    d.style.animationDuration=(1.4+Math.random()*2)+'s';
+    d.style.animationDelay=(Math.random()*0.8)+'s';
+    host.appendChild(d);
+  }
+  setTimeout(()=>host.classList.remove('show'),3500);
+}
+
+buildPool();
+render();
+</script>
+</body>
+</html>

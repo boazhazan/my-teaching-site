@@ -81,13 +81,12 @@ body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);
 
 /* Items row */
 .items-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;padding:8px 0}
-.item-cell{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid var(--border);background:#fff;cursor:pointer;transition:all 0.25s ease;position:relative;user-select:none}
-.item-cell svg{width:44px;height:44px;color:var(--text);transition:all 0.25s ease}
+.item-cell{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid var(--border);background:#fff;cursor:pointer;transition:all 0.25s ease;position:relative;user-select:none;font-size:3rem;line-height:1}
 .item-cell:hover{border-color:var(--pri);transform:scale(1.08)}
-.item-cell.marked-red{border-color:var(--no);background:rgba(239,68,68,0.12)}.item-cell.marked-red svg{color:var(--no)}
-.item-cell.marked-green{border-color:var(--ok);background:rgba(16,185,129,0.12)}.item-cell.marked-green svg{color:var(--ok)}
-.item-cell.marked-blue{border-color:var(--pri);background:rgba(37,99,235,0.12)}.item-cell.marked-blue svg{color:var(--pri)}
-.item-cell.marked-purple{border-color:var(--purple);background:rgba(139,92,246,0.12)}.item-cell.marked-purple svg{color:var(--purple)}
+.item-cell.marked-red{border-color:var(--no);background:rgba(239,68,68,0.15)}
+.item-cell.marked-green{border-color:var(--ok);background:rgba(16,185,129,0.15)}
+.item-cell.marked-blue{border-color:var(--pri);background:rgba(37,99,235,0.15)}
+.item-cell.marked-purple{border-color:var(--purple);background:rgba(139,92,246,0.15)}
 .item-cell.correct{animation:glow 0.6s ease}
 .item-cell.wrong{animation:shake 0.4s ease}
 
@@ -151,7 +150,6 @@ body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);
   .mc{box-shadow:none;border:2px solid #999;page-break-inside:avoid}
   .mc:hover{border-color:#999}
   .item-cell{border:2px solid #999!important;background:#fff!important}
-  .item-cell svg{color:#000!important}
   .item-cell.marked-red,.item-cell.marked-green,.item-cell.marked-blue,.item-cell.marked-purple{background:#fff!important;border-color:#999!important;box-shadow:none!important}
   .draw-canvas{display:none!important}
   .ph{display:block!important}
@@ -164,8 +162,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);
   .mc{padding:12px 10px}
   .mbtn{padding:6px 14px;font-size:0.82rem}
   .tb{padding:5px 10px;font-size:0.75rem;min-height:38px}
-  .item-cell{width:52px;height:52px}
-  .item-cell svg{width:36px;height:36px}
+  .item-cell{width:60px;height:60px;font-size:2.5rem}
   .items-row{gap:6px}
   .color-sel{padding:8px 14px;font-size:0.85rem}
   .color-legend{font-size:.78rem;gap:10px}
@@ -233,38 +230,19 @@ body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);
 
 <script>
 (function(){
-/* ===== SVG DEFINITIONS ===== */
-/* Animals: viewBox 0 0 80 60, face RIGHT by default */
+/* ===== EMOJI DEFINITIONS ===== */
+/* Animals: face RIGHT by default, scaleX(-1) for LEFT */
 var ANIMALS = {
-  fish: '<svg viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="42" cy="30" rx="22" ry="16"/><path d="M20 30L6 16v28Z" fill="currentColor"/><circle cx="54" cy="25" r="3" fill="currentColor" stroke="none"/><circle cx="55" cy="24" r="1" fill="white" stroke="none"/><path d="M42 18c4-2 8-1 10 0"/><path d="M42 42c4 2 8 1 10 0"/></svg>',
-  bird: '<svg viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="38" cy="32" rx="20" ry="14"/><circle cx="55" cy="24" r="10"/><circle cx="59" cy="22" r="3" fill="currentColor" stroke="none"/><circle cx="60" cy="21" r="1" fill="white" stroke="none"/><path d="M65 26l10-2-8 6" fill="currentColor"/><path d="M22 38l-6 14"/><path d="M30 40l-4 12"/><path d="M36 18c-4-8 2-14 8-10" fill="currentColor"/></svg>',
-  cat: '<svg viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="36" cy="36" rx="18" ry="16"/><circle cx="52" cy="22" r="14"/><path d="M44 10l-2 12" /><path d="M64 8l-4 12"/><circle cx="56" cy="20" r="3" fill="currentColor" stroke="none"/><circle cx="57" cy="19" r="1" fill="white" stroke="none"/><circle cx="48" cy="20" r="2" fill="currentColor" stroke="none"/><path d="M52 27l2-2 2 2"/><path d="M62 24l72 22"/><path d="M62 26l72 28"/><path d="M20 42l6 14"/></svg>',
-  dog: '<svg viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="34" cy="36" rx="18" ry="16"/><ellipse cx="56" cy="26" rx="14" ry="12"/><path d="M66 16c6-6 12-4 10 2"/><circle cx="60" cy="23" r="3" fill="currentColor" stroke="none"/><circle cx="61" cy="22" r="1" fill="white" stroke="none"/><ellipse cx="66" cy="30" rx="6" ry="4" fill="currentColor"/><path d="M18 40c-8 2-10 8-4 10" fill="currentColor"/><path d="M24 48l-2 8"/><path d="M34 50l0 6"/></svg>',
-  duck: '<svg viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="34" cy="36" rx="20" ry="15"/><circle cx="56" cy="22" r="12"/><circle cx="61" cy="19" r="3" fill="currentColor" stroke="none"/><circle cx="62" cy="18" r="1" fill="white" stroke="none"/><path d="M64 25l12-1-10 6Z" fill="currentColor"/><path d="M34 18c-2-6 3-10 8-6"/><path d="M28 48l-4 8 6 0"/><path d="M38 48l-2 8 6 0"/></svg>',
-  rabbit: '<svg viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="38" cy="38" rx="16" ry="14"/><circle cx="52" cy="30" r="12"/><path d="M48 20c-2-16 4-20 6-18s2 14 0 18" fill="currentColor" opacity="0.2"/><path d="M56 18c0-16 6-20 8-18s2 14-2 18" fill="currentColor" opacity="0.2"/><path d="M48 20c-2-16 4-20 6-18s2 14 0 18"/><path d="M56 18c0-16 6-20 8-18s2 14-2 18"/><circle cx="57" cy="27" r="3" fill="currentColor" stroke="none"/><circle cx="58" cy="26" r="1" fill="white" stroke="none"/><path d="M60 34l4-1-3 3"/><circle cx="22" cy="40" r="5" fill="currentColor" opacity="0.15"/><path d="M30 48l-2 8"/><path d="M40 50l0 6"/></svg>',
-  horse: '<svg viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="32" cy="36" rx="18" ry="14"/><path d="M48 30c4-8 10-18 16-20s8 2 6 8c-2 6-6 10-8 14" fill="currentColor" opacity="0.1"/><path d="M48 30c4-8 10-18 16-20s8 2 6 8c-2 6-6 10-8 14"/><circle cx="66" cy="18" r="3" fill="currentColor" stroke="none"/><circle cx="67" cy="17" r="1" fill="white" stroke="none"/><path d="M70 10c3-4 6-2 4 2"/><path d="M24 48l-2 8"/><path d="M36 48l0 8"/><path d="M16 38c-6 0-8 4-4 6" fill="currentColor" opacity="0.3"/></svg>',
-  cow: '<svg viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="34" cy="34" rx="20" ry="16"/><ellipse cx="58" cy="26" rx="12" ry="10"/><circle cx="63" cy="23" r="3" fill="currentColor" stroke="none"/><circle cx="64" cy="22" r="1" fill="white" stroke="none"/><path d="M44 18l-4-10 4 2"/><path d="M68 16l6-8 -2 6"/><ellipse cx="64" cy="30" rx="5" ry="3"/><path d="M26 48l-2 8"/><path d="M38 48l0 8"/><ellipse cx="30" cy="30" rx="6" ry="4" fill="currentColor" opacity="0.15"/></svg>',
-  mouse: '<svg viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="36" cy="34" rx="18" ry="12"/><path d="M54 34l18-4" stroke-linecap="round"/><circle cx="60" cy="26" r="10"/><circle cx="64" cy="24" r="3" fill="currentColor" stroke="none"/><circle cx="65" cy="23" r="1" fill="white" stroke="none"/><path d="M56 16c-2-8 4-12 8-8s2 8-2 10"/><path d="M66 18c2-8 8-10 10-6s0 8-4 10"/><path d="M70 28l6-1"/><path d="M70 30l6 1"/><path d="M18 34l-12 4"/></svg>',
-  elephant: '<svg viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="34" cy="34" rx="22" ry="18"/><circle cx="58" cy="22" r="14"/><circle cx="64" cy="18" r="3" fill="currentColor" stroke="none"/><circle cx="65" cy="17" r="1" fill="white" stroke="none"/><path d="M68 28c4 6 2 16-2 20 -2 2-4 0-3-2l2-8" /><path d="M50 10c-6-6-14-4-16 0" /><path d="M26 50l-2 6"/><path d="M38 50l0 6"/></svg>',
-  turtle: '<svg viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="38" cy="34" rx="24" ry="16"/><path d="M20 28c4-10 16-16 28-14s16 10 12 18" fill="currentColor" opacity="0.1"/><path d="M20 28c4-10 16-16 28-14s16 10 12 18"/><path d="M30 22l4 12M40 20l2 14M50 22l-2 12"/><circle cx="64" cy="32" r="6"/><circle cx="67" cy="30" r="2" fill="currentColor" stroke="none"/><circle cx="68" cy="29" r="0.8" fill="white" stroke="none"/><path d="M22 42l-4 8"/><path d="M34 44l-2 8"/><path d="M46 44l0 8"/><path d="M54 42l2 8"/><path d="M14 36l-6 2"/></svg>',
-  chicken: '<svg viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="34" cy="36" rx="18" ry="16"/><circle cx="54" cy="22" r="11"/><circle cx="59" cy="19" r="3" fill="currentColor" stroke="none"/><circle cx="60" cy="18" r="1" fill="white" stroke="none"/><path d="M62 25l10-2-8 5Z" fill="currentColor"/><path d="M54 12c0-6 4-8 6-4s0 6-2 8" fill="currentColor" opacity="0.3"/><path d="M54 12c0-6 4-8 6-4s0 6-2 8"/><path d="M30 50l-4 6 6 0"/><path d="M38 50l-2 6 6 0"/><path d="M18 30c-4-2-2-8 2-6"/></svg>',
-  pig: '<svg viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="36" cy="34" rx="20" ry="16"/><circle cx="58" cy="28" r="12"/><circle cx="63" cy="24" r="3" fill="currentColor" stroke="none"/><circle cx="64" cy="23" r="1" fill="white" stroke="none"/><ellipse cx="64" cy="32" rx="6" ry="4"/><circle cx="62" cy="32" r="1.5" fill="currentColor" stroke="none"/><circle cx="66" cy="32" r="1.5" fill="currentColor" stroke="none"/><path d="M52 18c2-6 6-8 8-4"/><path d="M62 16c0-6 4-8 6-4"/><path d="M18 38c-4 2-6 8-2 8" fill="currentColor" opacity="0.2"/><path d="M26 48l-2 8"/><path d="M38 48l0 8"/></svg>',
-  lion: '<svg viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="32" cy="36" rx="16" ry="14"/><circle cx="52" cy="26" r="14"/><circle cx="52" cy="26" r="20" fill="currentColor" opacity="0.08"/><circle cx="52" cy="26" r="20" stroke-dasharray="4 3"/><circle cx="57" cy="23" r="3" fill="currentColor" stroke="none"/><circle cx="58" cy="22" r="1" fill="white" stroke="none"/><path d="M56 30l3-2 3 2"/><path d="M24 48l-2 8"/><path d="M36 48l0 8"/><path d="M18 38c-6 0-6 6-2 6" fill="currentColor" opacity="0.2"/></svg>',
-  donkey: '<svg viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="32" cy="36" rx="18" ry="14"/><path d="M48 30c4-6 8-16 14-18s8 2 6 8c-2 4-6 8-8 12"/><circle cx="64" cy="18" r="3" fill="currentColor" stroke="none"/><circle cx="65" cy="17" r="1" fill="white" stroke="none"/><path d="M44 14l-4-12 4 4"/><path d="M52 12l2-12 2 4"/><path d="M24 48l-2 8"/><path d="M36 48l0 8"/><path d="M16 38c-8 2-6 8-2 8"/></svg>'
+  fish:'🐟', bird:'🐦', cat:'🐈', dog:'🐕', duck:'🦆',
+  rabbit:'🐇', horse:'🐴', cow:'🐄', mouse:'🐭', elephant:'🐘',
+  turtle:'🐢', chicken:'🐔', pig:'🐷', lion:'🦁', donkey:'🐿️'
 };
 
-/* Objects: viewBox 0 0 60 80, point UP by default */
+/* Objects: point UP by default, rotate(180deg) for DOWN */
 var OBJECTS = {
-  key: '<svg viewBox="0 0 60 80" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="30" cy="20" r="12"/><circle cx="30" cy="20" r="6"/><path d="M30 32v36"/><path d="M30 52h10"/><path d="M30 62h8"/></svg>',
-  hammer: '<svg viewBox="0 0 60 80" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="24" y="36" width="12" height="38" rx="3"/><rect x="10" y="10" width="40" height="20" rx="5" fill="currentColor" opacity="0.15"/><rect x="10" y="10" width="40" height="20" rx="5"/></svg>',
-  pencil: '<svg viewBox="0 0 60 80" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16h16v48l-8 12-8-12Z"/><path d="M22 16l8-10 8 10"/><path d="M22 56h16"/><path d="M28 16v48"/><path d="M32 16v48"/></svg>',
-  partyHat: '<svg viewBox="0 0 60 80" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M30 6L12 68h36Z"/><path d="M12 68c0 4 8 8 18 8s18-4 18-8"/><circle cx="30" cy="6" r="4" fill="currentColor"/><path d="M22 40h16"/><path d="M18 54h24"/></svg>',
-  screwdriver: '<svg viewBox="0 0 60 80" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="26" y="6" width="8" height="36" rx="2"/><path d="M30 6l-4-0c0-0 2-4 4-4s4 4 4 4Z" fill="currentColor"/><rect x="22" y="42" width="16" height="6" rx="2" fill="currentColor" opacity="0.15"/><rect x="22" y="42" width="16" height="6" rx="2"/><rect x="24" y="48" width="12" height="26" rx="3" fill="currentColor" opacity="0.1"/><rect x="24" y="48" width="12" height="26" rx="3"/></svg>',
-  paintbrush: '<svg viewBox="0 0 60 80" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M26 34h8v34c0 4-2 8-4 8s-4-4-4-8Z"/><path d="M24 34h12v6h-12Z" fill="currentColor" opacity="0.2"/><path d="M24 34h12v6h-12Z"/><path d="M26 34V10c0-2 2-4 4-4s4 2 4 4v24" fill="currentColor" opacity="0.1"/><path d="M26 34V10c0-2 2-4 4-4s4 2 4 4v24"/></svg>',
-  spoon: '<svg viewBox="0 0 60 80" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="30" cy="20" rx="12" ry="16"/><ellipse cx="30" cy="20" rx="6" ry="10" fill="currentColor" opacity="0.08"/><path d="M27 36c0 0-1 6 0 12s2 18 3 26"/><path d="M33 36c0 0 1 6 0 12s-2 18-3 26"/></svg>',
-  umbrella: '<svg viewBox="0 0 60 80" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M30 10C14 10 4 24 4 30h52c0-6-10-20-26-20Z" fill="currentColor" opacity="0.1"/><path d="M30 10C14 10 4 24 4 30h52c0-6-10-20-26-20Z"/><path d="M30 6v4"/><path d="M30 30v38"/><path d="M30 68c0 4-4 8-8 6"/><path d="M16 30c2-8 8-14 14-14"/><path d="M30 16c6 0 12 6 14 14"/></svg>',
-  scissors: '<svg viewBox="0 0 60 80" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="66" r="8"/><circle cx="40" cy="66" r="8"/><path d="M24 59l10-38"/><path d="M36 59l-10-38"/><path d="M26 42l8 0"/><circle cx="30" cy="18" r="3" fill="currentColor" stroke="none"/></svg>',
-  saw: '<svg viewBox="0 0 60 80" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="26" y="6" width="8" height="44" rx="1"/><path d="M34 10l6-4-4 8 6-4-4 8 6-4-4 8 6-4-4 8 6-4-4 8"/><path d="M20 50h20v6a10 10 0 01-20 0Z" fill="currentColor" opacity="0.1"/><path d="M20 50h20v6a10 10 0 01-20 0Z"/><path d="M26 56h8"/></svg>'
+  key:'🔑', hammer:'🔨', pencil:'✏️', partyHat:'🎉',
+  screwdriver:'🪛', paintbrush:'🖌️', spoon:'🥄', umbrella:'☂️',
+  scissors:'✂️', saw:'🪚'
 };
 
 var ANIMAL_NAMES = ['fish','bird','cat','dog','duck','rabbit','horse','cow','mouse','elephant','turtle','chicken','pig','lion','donkey'];
@@ -473,18 +451,17 @@ function renderLevel(){
     html+='<div class="items-row">';
     for(var c=0;c<row.items.length;c++){
       var it=row.items[c];
-      var svg, transform='';
+      var emoji, transform='';
       if(row.kind==='animal'){
-        svg=ANIMALS[row.animal];
-        if(it.dir===1) transform='transform:scaleX(-1)'; /* left = flip */
+        emoji=ANIMALS[row.animal];
+        if(it.dir===1) transform='style="transform:scaleX(-1)"'; /* left = flip */
       } else {
-        svg=OBJECTS[row.object];
-        if(it.dir===1) transform='transform:rotate(180deg)'; /* down = rotate */
+        emoji=OBJECTS[row.object];
+        if(it.dir===1) transform='style="transform:rotate(180deg)"'; /* down = rotate */
       }
       html+='<div class="item-cell" data-row="'+r+'" data-col="'+c+'" data-kind="'+row.kind+'" data-dir="'+it.dir+'">';
-      html+='<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;'+transform+'">';
-      html+=svg;
-      html+='</div></div>';
+      html+='<span '+transform+'>'+emoji+'</span>';
+      html+='</div>';
     }
     html+='</div></div>';
   }

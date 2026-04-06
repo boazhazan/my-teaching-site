@@ -269,6 +269,7 @@
     <div class="sum-actions">
       <button class="restart-btn btn-redo-wrong" id="redoWrongBtn" onclick="redoSubset('wrong')">🔄 חזור על הטעויות</button>
       <button class="restart-btn btn-redo-skip"  id="redoSkipBtn"  onclick="redoSubset('skip')">❓ תרגל את הדילוגים</button>
+      <button class="restart-btn btn-redo-both"  id="redoBothBtn"  onclick="redoSubset('both')" style="background:#7B2FBE">🔄 טעויות + דילוגים</button>
       <button class="restart-btn btn-redo-all"                     onclick="restart()">🔄 הכל מחדש</button>
     </div>
   </div>
@@ -445,14 +446,19 @@ function showSummary() {
   document.getElementById('sumBody').innerHTML = html;
   document.getElementById('redoWrongBtn').style.display = wrongIdx.length  ? 'inline-block' : 'none';
   document.getElementById('redoSkipBtn').style.display  = skippedIdx.length? 'inline-block' : 'none';
+  document.getElementById('redoBothBtn').style.display  = (wrongIdx.length && skippedIdx.length) ? 'inline-block' : 'none';
   document.getElementById('overlay').classList.add('show');
   if(pct>=60) launchConfetti();
 }
 
 function redoSubset(type) {
-  const items = type==='wrong'
-    ? pool.filter((_,i)=>status[i]==='wrong')
-    : pool.filter((_,i)=>status[i]==='skipped'||status[i]==='pending');
+  const items = pool.filter((_,i)=>{
+    const s=status[i];
+    if(type==='wrong') return s==='wrong';
+    if(type==='skip') return s==='skipped'||s==='pending';
+    if(type==='both') return s==='wrong'||s==='skipped'||s==='pending';
+    return false;
+  });
   if(!items.length) return;
   document.getElementById('overlay').classList.remove('show');
   buildPool(items);

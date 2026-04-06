@@ -81,7 +81,9 @@ body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);
 
 /* Scene grid */
 .scene-grid{display:grid;gap:0;width:100%}
-.scene-cell{display:flex;align-items:center;justify-content:center;font-size:2rem;min-height:48px;position:relative;cursor:default;user-select:none;transition:background 0.3s}
+.scene-cell{display:inline-flex;align-items:center;justify-content:center;font-size:2rem;min-width:44px;min-height:48px;position:relative;cursor:default;user-select:none;transition:background 0.3s}
+.changed .scene-cell[data-diff]{cursor:pointer}
+.changed .scene-cell{cursor:pointer}
 @media(max-width:600px){
   .scene-cell{font-size:1.8rem;min-height:40px}
   .scene-card{max-width:100%}
@@ -583,11 +585,11 @@ function renderScene() {
     </div>
   `;
 
-  // Attach click handler to changed scene
-  const changedCard = wrap.querySelector(".changed");
+  // Attach click handlers to individual cells in changed grid
   if (mode === "click") {
-    const changedGrid = document.getElementById("changedGrid");
-    changedGrid.addEventListener("click", handleClick);
+    document.querySelectorAll("#changedGrid .scene-cell").forEach(cell => {
+      cell.onclick = () => handleCellClick(cell);
+    });
   } else {
     setupDrawCanvas();
   }
@@ -598,49 +600,43 @@ function buildGridHTML(lv, isChanged) {
   for (let r = 0; r < lv.rows; r++) {
     for (let c = 0; c < lv.cols; c++) {
       let emoji = lv.grid[r][c];
+      let isDiff = false;
       if (isChanged) {
         const diff = lv.diffs.find(d => d.row === r && d.col === c);
-        if (diff) emoji = diff.changed;
+        if (diff) { emoji = diff.changed; isDiff = true; }
       }
       const foundIdx = found.findIndex(f => f.row === r && f.col === c);
       const foundMarker = foundIdx >= 0 ? '<div class="found-marker"></div>' : '';
       const cellId = isChanged ? `changed-${r}-${c}` : `orig-${r}-${c}`;
-      html += `<div class="scene-cell" id="${cellId}" data-row="${r}" data-col="${c}">${emoji}${foundMarker}</div>`;
+      const diffAttr = (isChanged && isDiff) ? ' data-diff="true"' : '';
+      html += `<div class="scene-cell" id="${cellId}" data-row="${r}" data-col="${c}"${diffAttr}>${emoji}${foundMarker}</div>`;
     }
   }
   return html;
 }
 
-function handleClick(e) {
+function handleCellClick(cell) {
   const lv = levels[curLevel];
   if (found.length >= lv.diffs.length) return;
 
-  const grid = document.getElementById("changedGrid");
-  const rect = grid.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
+  const r = parseInt(cell.dataset.row);
+  const c = parseInt(cell.dataset.col);
 
-  const cellW = rect.width / lv.cols;
-  const cellH = rect.height / lv.rows;
+  // Already found
+  if (found.some(f => f.row === r && f.col === c)) return;
 
-  let closestDiff = null;
-  let closestDist = Infinity;
-
-  for (const diff of lv.diffs) {
-    if (found.some(f => f.row === diff.row && f.col === diff.col)) continue;
-    const cx = (diff.col + 0.5) * cellW;
-    const cy = (diff.row + 0.5) * cellH;
-    const dist = Math.sqrt((x - cx) ** 2 + (y - cy) ** 2);
-    if (dist < closestDist) {
-      closestDist = dist;
-      closestDiff = diff;
-    }
-  }
-
-  if (closestDiff && closestDist < 45) {
-    markFound(closestDiff);
+  if (cell.dataset.diff === "true") {
+    const diff = lv.diffs.find(d => d.row === r && d.col === c);
+    if (diff) markFound(diff);
   } else {
-    showWrongRipple(e.clientX, e.clientY, grid);
+    // Wrong — show ripple on the cell itself
+    const rip = document.createElement("div");
+    rip.className = "wrong-ripple";
+    rip.style.left = "50%";
+    rip.style.top = "50%";
+    rip.style.transform = "translate(-50%,-50%) scale(0)";
+    cell.appendChild(rip);
+    setTimeout(() => rip.remove(), 500);
   }
 }
 
@@ -674,16 +670,6 @@ function markFound(diff) {
   }
 }
 
-function showWrongRipple(clientX, clientY, container) {
-  const rect = container.getBoundingClientRect();
-  const rip = document.createElement("div");
-  rip.className = "wrong-ripple";
-  rip.style.left = (clientX - rect.left - 15) + "px";
-  rip.style.top = (clientY - rect.top - 15) + "px";
-  container.style.position = "relative";
-  container.appendChild(rip);
-  setTimeout(() => rip.remove(), 500);
-}
 
 function updateProgress() {
   const lv = levels[curLevel];
@@ -769,52 +755,39 @@ function endDraw(e) {
   if (!isDrawing) return;
   isDrawing = false;
 
-  if (drawPoints.length < 3) {
-    fadeOutDraw();
-    return;
-  }
+  if (drawPoints.length < 3) { fadeOutDraw(); return; }
 
-  // Compute centroid
+  // Compute centroid in page coordinates
   let cx = 0, cy = 0;
   for (const p of drawPoints) { cx += p.x; cy += p.y; }
   cx /= drawPoints.length;
   cy /= drawPoints.length;
+  const canvasRect = drawCanvas.getBoundingClientRect();
+  const pageX = canvasRect.left + cx;
+  const pageY = canvasRect.top + cy;
 
-  // Find nearest unfound diff
-  const lv = levels[curLevel];
-  const grid = document.getElementById("changedGrid");
-  if (!grid) { fadeOutDraw(); return; }
+  // Find closest cell to centroid using bounding rects
+  const cells = document.querySelectorAll("#changedGrid .scene-cell");
+  let bestCell = null;
+  let bestDist = Infinity;
 
-  const gridRect = grid.getBoundingClientRect();
-  const cardRect = drawCanvas.parentElement.getBoundingClientRect();
+  cells.forEach(cell => {
+    const rect = cell.getBoundingClientRect();
+    const cellCX = rect.left + rect.width / 2;
+    const cellCY = rect.top + rect.height / 2;
+    const dist = Math.sqrt((pageX - cellCX) ** 2 + (pageY - cellCY) ** 2);
+    if (dist < bestDist) { bestDist = dist; bestCell = cell; }
+  });
 
-  // Adjust centroid: canvas is relative to card, grid is inside card
-  const gridOffX = gridRect.left - cardRect.left;
-  const gridOffY = gridRect.top - cardRect.top;
-
-  const cellW = gridRect.width / lv.cols;
-  const cellH = gridRect.height / lv.rows;
-
-  let closestDiff = null;
-  let closestDist = Infinity;
-
-  for (const diff of lv.diffs) {
-    if (found.some(f => f.row === diff.row && f.col === diff.col)) continue;
-    const dx = gridOffX + (diff.col + 0.5) * cellW;
-    const dy = gridOffY + (diff.row + 0.5) * cellH;
-    const dist = Math.sqrt((cx - dx) ** 2 + (cy - dy) ** 2);
-    if (dist < closestDist) {
-      closestDist = dist;
-      closestDiff = diff;
+  if (bestCell && bestDist < 60 && bestCell.dataset.diff === "true") {
+    const r = parseInt(bestCell.dataset.row);
+    const c = parseInt(bestCell.dataset.col);
+    if (!found.some(f => f.row === r && f.col === c)) {
+      const diff = levels[curLevel].diffs.find(d => d.row === r && d.col === c);
+      if (diff) { fadeOutDraw(); markFound(diff); return; }
     }
   }
-
-  if (closestDiff && closestDist < 60) {
-    fadeOutDraw();
-    markFound(closestDiff);
-  } else {
-    fadeOutDraw();
-  }
+  fadeOutDraw();
 }
 
 function getDrawPos(e) {

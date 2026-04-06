@@ -91,7 +91,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);
 .item-cell.wrong{animation:shake 0.4s ease}
 
 /* Draw canvas overlay */
-.mc .draw-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:5;border-radius:var(--radius);cursor:crosshair;display:none}
+.mc .draw-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:5;border-radius:var(--radius);cursor:crosshair;display:none;touch-action:none}
 .mc.draw-active .draw-canvas{display:block}
 .mc.draw-active .item-cell{pointer-events:none}
 
@@ -454,7 +454,7 @@ function renderLevel(){
       var emoji, transform='';
       if(row.kind==='animal'){
         emoji=ANIMALS[row.animal];
-        if(it.dir===1) transform='style="transform:scaleX(-1)"'; /* left = flip */
+        if(it.dir===0) transform='style="transform:scaleX(-1)"'; /* right = flip to face right */
       } else {
         emoji=OBJECTS[row.object];
         if(it.dir===1) transform='style="transform:rotate(180deg)"'; /* down = rotate */
@@ -604,109 +604,97 @@ function setupDrawMode(){
     card.classList.add('draw-active');
     var canvas=card.querySelector('.draw-canvas');
     if(!canvas) return;
-    var rect=card.getBoundingClientRect();
-    canvas.width=card.offsetWidth;
-    canvas.height=card.offsetHeight;
+    var dpr=window.devicePixelRatio||1;
+    var w=card.offsetWidth, h=card.offsetHeight;
+    canvas.width=w*dpr; canvas.height=h*dpr;
+    canvas.style.width=w+'px'; canvas.style.height=h+'px';
     var ctx=canvas.getContext('2d');
-    var drawing=false;
+    ctx.scale(dpr,dpr);
+    var drawing=false, pts=[];
 
-    function getColor(){
+    function getStrokeColor(){
       if(selectedColor==='red') return '#ef4444';
       if(selectedColor==='green') return '#10b981';
       if(selectedColor==='blue') return '#2563eb';
       if(selectedColor==='purple') return '#8b5cf6';
-      return '#1e293b';
-    }
-
-    function getPos(e){
-      var r=canvas.getBoundingClientRect();
-      var x=(e.clientX||e.touches&&e.touches[0]&&e.touches[0].clientX||0)-r.left;
-      var y=(e.clientY||e.touches&&e.touches[0]&&e.touches[0].clientY||0)-r.top;
-      return {x:x,y:y};
+      return '#94a3b8';
     }
 
     canvas.addEventListener('pointerdown',function(e){
-      if(!selectedColor) return;
       e.preventDefault();
-      drawing=true;
+      if(!selectedColor) return;
+      drawing=true; pts=[];
+      ctx.clearRect(0,0,w,h);
       ctx.beginPath();
-      ctx.strokeStyle=getColor();
-      ctx.lineWidth=4;
-      ctx.lineCap='round';
-      ctx.lineJoin='round';
-      var p=getPos(e);
-      ctx.moveTo(p.x,p.y);
+      ctx.strokeStyle=getStrokeColor();
+      ctx.lineWidth=3; ctx.lineCap='round'; ctx.lineJoin='round';
+      var r=canvas.getBoundingClientRect();
+      var x=e.clientX-r.left, y=e.clientY-r.top;
+      pts.push({x:x,y:y}); ctx.moveTo(x,y);
     },{passive:false});
 
     canvas.addEventListener('pointermove',function(e){
       if(!drawing) return;
       e.preventDefault();
-      var p=getPos(e);
-      ctx.lineTo(p.x,p.y);
-      ctx.stroke();
+      var r=canvas.getBoundingClientRect();
+      var x=e.clientX-r.left, y=e.clientY-r.top;
+      pts.push({x:x,y:y}); ctx.lineTo(x,y); ctx.stroke();
     },{passive:false});
 
-    canvas.addEventListener('pointerup',function(e){
+    function finishDraw(){
       if(!drawing) return;
-      drawing=false;
-      ctx.closePath();
-      /* In draw mode, also check item clicks underneath */
-      checkDrawHits(+card.dataset.row, canvas);
-    },{passive:false});
-
-    canvas.addEventListener('pointerleave',function(){
-      drawing=false;
-    });
+      drawing=false; ctx.closePath();
+      handleDrawResult(+card.dataset.row, canvas, pts, ctx, w, h);
+    }
+    canvas.addEventListener('pointerup',function(e){e.preventDefault();finishDraw();},{passive:false});
+    canvas.addEventListener('pointerleave',finishDraw);
   });
 }
 
-function checkDrawHits(rowIdx, canvas){
-  /* After drawing, check if circles overlap items and auto-mark them */
+function handleDrawResult(rowIdx, canvas, pts, ctx, w, h){
+  if(pts.length<5||!selectedColor){ctx.clearRect(0,0,w,h);return;}
+  /* centroid of drawn path */
+  var cx=0,cy=0;
+  for(var i=0;i<pts.length;i++){cx+=pts[i].x;cy+=pts[i].y;}
+  cx/=pts.length; cy/=pts.length;
+  /* convert to page coords */
+  var cr=canvas.getBoundingClientRect();
+  var px=cr.left+cx, py=cr.top+cy;
+  /* find closest item */
   var card=canvas.parentElement;
   var items=card.querySelectorAll('.item-cell');
-  var ctx=canvas.getContext('2d');
-
+  var best=null, bestD=Infinity;
   items.forEach(function(cell){
-    var r=+cell.dataset.row, c=+cell.dataset.col;
-    var it=levelData[r].items[c];
-    if(it.marked) return;
-
-    /* Check if there are drawn pixels over this item */
-    var cellRect=cell.getBoundingClientRect();
-    var canvasRect=canvas.getBoundingClientRect();
-    var cx=cellRect.left - canvasRect.left + cellRect.width/2;
-    var cy=cellRect.top - canvasRect.top + cellRect.height/2;
-    var sampleSize=10;
-
-    try{
-      var imgData=ctx.getImageData(
-        Math.max(0,Math.floor(cx-sampleSize/2)),
-        Math.max(0,Math.floor(cy-sampleSize/2)),
-        sampleSize, sampleSize
-      );
-      var hasPixels=false;
-      for(var i=3;i<imgData.data.length;i+=4){
-        if(imgData.data[i]>50){hasPixels=true;break}
-      }
-      if(hasPixels && selectedColor){
-        var row=levelData[r];
-        var correct=isCorrectColor(selectedColor, row.kind, it.dir);
-        if(correct){
-          it.marked=selectedColor;
-          cell.className='item-cell marked-'+selectedColor;
-          cell.classList.add('correct','glow');
-          okCount++;
-          updateProgress();
-          checkRowDone(r);
-          checkLevelDone();
-        } else {
-          errCount++;
-          updateProgress();
-          levelErrors[curLevel]=(levelErrors[curLevel]||0)+1;
-        }
-      }
-    }catch(e){}
+    var br=cell.getBoundingClientRect();
+    var ix=br.left+br.width/2, iy=br.top+br.height/2;
+    var d=Math.sqrt((px-ix)*(px-ix)+(py-iy)*(py-iy));
+    if(d<bestD){bestD=d;best=cell;}
   });
+  if(!best||bestD>80){ctx.clearRect(0,0,w,h);return;}
+  var r=+best.dataset.row, c=+best.dataset.col;
+  var row=levelData[r], it=row.items[c];
+  if(it.marked){ctx.clearRect(0,0,w,h);return;}
+  var correct=isCorrectColor(selectedColor, row.kind, it.dir);
+  /* fade out drawing */
+  canvas.style.transition='opacity 0.3s';canvas.style.opacity='0';
+  setTimeout(function(){ctx.clearRect(0,0,w,h);canvas.style.transition='';canvas.style.opacity='1';},300);
+  if(correct){
+    it.marked=selectedColor;
+    best.className='item-cell marked-'+selectedColor;
+    best.classList.add('correct','glow');
+    okCount++; updateProgress();
+    checkRowDone(r); checkLevelDone();
+  } else {
+    errCount++; updateProgress();
+    levelErrors[curLevel]=(levelErrors[curLevel]||0)+1;
+    best.classList.add('shake');
+    best.style.borderColor='var(--no)';
+    best.style.background='rgba(239,68,68,0.1)';
+    setTimeout(function(){
+      best.classList.remove('shake');
+      best.style.borderColor='';best.style.background='';
+    },500);
+  }
 }
 
 /* Summary screen */

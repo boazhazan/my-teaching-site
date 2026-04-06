@@ -59,6 +59,15 @@ body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);
 /* Columns area */
 .cols-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
 
+/* Instruction card */
+.inst-card{background:var(--pri-light);border:2px solid var(--pri);border-radius:var(--radius);padding:16px 20px;margin-bottom:20px;text-align:center}
+.inst-card h3{font-size:1.2rem;font-weight:800;color:var(--pri-dark);margin-bottom:8px}
+.inst-card .inst-example{display:flex;justify-content:center;gap:8px;align-items:center;font-size:2rem;margin-top:8px}
+.inst-card .inst-odd{display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border:3px solid var(--ok);border-radius:50%;background:rgba(16,185,129,0.12)}
+.inst-card .inst-normal{display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;opacity:0.6}
+.inst-card .inst-arrow{font-size:1.5rem;color:var(--ok);font-weight:800}
+@media(max-width:600px){.inst-card h3{font-size:1.05rem}.inst-card .inst-example{font-size:1.6rem}.inst-card .inst-odd,.inst-card .inst-normal{width:40px;height:40px}}
+
 /* Column cards */
 .col-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;border:2px solid var(--border);transition:all 0.25s ease;animation:fi 0.4s ease both;position:relative;min-width:80px;flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:8px}
 .col-card:hover{border-color:var(--pri)}
@@ -79,7 +88,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);
 .col-label{font-size:0.8rem;font-weight:700;color:var(--text-light);margin-bottom:4px}
 
 /* Draw canvas on column card */
-.col-card .draw-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:5;border-radius:var(--radius);cursor:crosshair;display:none}
+.col-card .draw-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:5;border-radius:var(--radius);cursor:crosshair;display:none;touch-action:none}
 .col-card.draw-active .draw-canvas{display:block}
 .col-card.draw-active .item{pointer-events:none}
 
@@ -351,7 +360,18 @@ function renderLevel(){
   // Generate new data for this level
   levelState = generateLevel(curLevel);
 
-  var html = '<div class="cols-row">';
+  /* Instruction card */
+  var exEmoji = levelState[0] ? levelState[0].emoji : '🐟';
+  var html = '<div class="inst-card">';
+  html += '<h3>🔍 מצאו בכל עמודה מי פונה לכיוון אחר!</h3>';
+  html += '<div class="inst-example">';
+  html += '<span class="inst-normal">' + exEmoji + '</span>';
+  html += '<span class="inst-normal">' + exEmoji + '</span>';
+  html += '<span class="inst-odd"><span style="display:inline-block;transform:scaleX(-1)">' + exEmoji + '</span></span>';
+  html += '<span class="inst-normal">' + exEmoji + '</span>';
+  html += '</div></div>';
+
+  html += '<div class="cols-row">';
   for(var c = 0; c < levelState.length; c++){
     var col = levelState[c];
     html += '<div class="col-card" data-col="' + c + '" style="animation-delay:' + (c * 0.08) + 's">';
@@ -466,102 +486,94 @@ function goLevel(lv){
 
 /* ===== Draw mode ===== */
 function setupDrawMode(){
-  var cards = document.querySelectorAll('.col-card');
+  var cards=document.querySelectorAll('.col-card');
   cards.forEach(function(card){
     card.classList.add('draw-active');
-    var canvas = card.querySelector('.draw-canvas');
+    var canvas=card.querySelector('.draw-canvas');
     if(!canvas) return;
+    var dpr=window.devicePixelRatio||1;
+    var w=card.offsetWidth, h=card.offsetHeight;
+    canvas.width=w*dpr; canvas.height=h*dpr;
+    canvas.style.width=w+'px'; canvas.style.height=h+'px';
+    var ctx=canvas.getContext('2d');
+    ctx.scale(dpr,dpr);
+    var drawing=false, pts=[];
 
-    // Size canvas to card
-    canvas.width = card.offsetWidth;
-    canvas.height = card.offsetHeight;
-    var ctx = canvas.getContext('2d');
-    var drawing = false;
-
-    canvas.style.touchAction = 'none';
-
-    canvas.addEventListener('pointerdown', function(e){
+    canvas.addEventListener('pointerdown',function(e){
       e.preventDefault();
-      drawing = true;
+      drawing=true; pts=[];
+      ctx.clearRect(0,0,w,h);
       ctx.beginPath();
-      ctx.strokeStyle = drawColor;
-      ctx.lineWidth = 4;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      var r = canvas.getBoundingClientRect();
-      ctx.moveTo(e.clientX - r.left, e.clientY - r.top);
-    }, {passive: false});
+      ctx.strokeStyle=drawColor;
+      ctx.lineWidth=3; ctx.lineCap='round'; ctx.lineJoin='round';
+      var r=canvas.getBoundingClientRect();
+      var x=e.clientX-r.left, y=e.clientY-r.top;
+      pts.push({x:x,y:y}); ctx.moveTo(x,y);
+    },{passive:false});
 
-    canvas.addEventListener('pointermove', function(e){
+    canvas.addEventListener('pointermove',function(e){
       if(!drawing) return;
       e.preventDefault();
-      var r = canvas.getBoundingClientRect();
-      ctx.lineTo(e.clientX - r.left, e.clientY - r.top);
-      ctx.stroke();
-    }, {passive: false});
+      var r=canvas.getBoundingClientRect();
+      var x=e.clientX-r.left, y=e.clientY-r.top;
+      pts.push({x:x,y:y}); ctx.lineTo(x,y); ctx.stroke();
+    },{passive:false});
 
-    canvas.addEventListener('pointerup', function(e){
+    function finishDraw(){
       if(!drawing) return;
-      drawing = false;
-      ctx.closePath();
-      checkDrawHits(+card.dataset.col, canvas);
-    }, {passive: false});
-
-    canvas.addEventListener('pointerleave', function(){
-      if(drawing){
-        drawing = false;
-        ctx.closePath();
-        checkDrawHits(+card.dataset.col, canvas);
-      }
-    });
+      drawing=false; ctx.closePath();
+      handleDrawResult(+card.dataset.col, canvas, pts, ctx, w, h);
+    }
+    canvas.addEventListener('pointerup',function(e){e.preventDefault();finishDraw();},{passive:false});
+    canvas.addEventListener('pointerleave',finishDraw);
   });
 }
 
-function checkDrawHits(colIdx, canvas){
-  var col = levelState[colIdx];
-  if(col.solved) return;
-  var card = canvas.parentElement;
-  var items = card.querySelectorAll('.item');
-  var ctx = canvas.getContext('2d');
-
+function handleDrawResult(colIdx, canvas, pts, ctx, w, h){
+  var col=levelState[colIdx];
+  if(col.solved){ctx.clearRect(0,0,w,h);return;}
+  if(pts.length<5){ctx.clearRect(0,0,w,h);return;}
+  /* centroid of drawn path */
+  var cx=0,cy=0;
+  for(var i=0;i<pts.length;i++){cx+=pts[i].x;cy+=pts[i].y;}
+  cx/=pts.length; cy/=pts.length;
+  /* convert to page coords */
+  var cr=canvas.getBoundingClientRect();
+  var px=cr.left+cx, py=cr.top+cy;
+  /* find closest item */
+  var card=canvas.parentElement;
+  var items=card.querySelectorAll('.item');
+  var best=null, bestD=Infinity;
   items.forEach(function(el){
-    var idx = +el.dataset.idx;
-    var it = col.items[idx];
-    if(it.found) return;
-
-    var cellRect = el.getBoundingClientRect();
-    var canvasRect = canvas.getBoundingClientRect();
-    var cx = cellRect.left - canvasRect.left + cellRect.width / 2;
-    var cy = cellRect.top - canvasRect.top + cellRect.height / 2;
-    var sampleSize = 14;
-
-    try {
-      var imgData = ctx.getImageData(
-        Math.max(0, Math.floor(cx - sampleSize / 2)),
-        Math.max(0, Math.floor(cy - sampleSize / 2)),
-        sampleSize, sampleSize
-      );
-      var hasPixels = false;
-      for(var p = 3; p < imgData.data.length; p += 4){
-        if(imgData.data[p] > 50){ hasPixels = true; break; }
-      }
-      if(hasPixels){
-        if(it.isOdd){
-          it.found = true;
-          col.solved = true;
-          el.classList.add('correct');
-          okCount++;
-          updateProgress();
-          markColumnSolved(colIdx);
-          checkLevelDone();
-        } else {
-          errCount++;
-          levelErrors[curLevel] = (levelErrors[curLevel] || 0) + 1;
-          updateProgress();
-        }
-      }
-    } catch(e){}
+    var br=el.getBoundingClientRect();
+    var ix=br.left+br.width/2, iy=br.top+br.height/2;
+    var d=Math.sqrt((px-ix)*(px-ix)+(py-iy)*(py-iy));
+    if(d<bestD){bestD=d;best=el;}
   });
+  if(!best||bestD>60){ctx.clearRect(0,0,w,h);return;}
+  var idx=+best.dataset.idx;
+  var it=col.items[idx];
+  if(it.found){ctx.clearRect(0,0,w,h);return;}
+  /* fade out drawing */
+  canvas.style.transition='opacity 0.3s';canvas.style.opacity='0';
+  setTimeout(function(){ctx.clearRect(0,0,w,h);canvas.style.transition='';canvas.style.opacity='1';},300);
+  if(it.isOdd){
+    it.found=true;
+    col.solved=true;
+    best.classList.add('correct');
+    okCount++;
+    updateProgress();
+    markColumnSolved(colIdx);
+    checkLevelDone();
+  } else {
+    errCount++;
+    levelErrors[curLevel]=(levelErrors[curLevel]||0)+1;
+    updateProgress();
+    best.classList.add('wrong','wrong-flash');
+    setTimeout(function(){
+      best.classList.remove('wrong','wrong-flash');
+    },500);
+  }
 }
 
 /* ===== Draw color selector ===== */

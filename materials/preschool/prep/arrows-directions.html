@@ -80,7 +80,12 @@ body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);
 .cell.empty-cell:hover{border-color:var(--accent-dark);background:#fef3c7}
 .cell.empty-cell.selected{border-color:var(--pri);background:var(--pri-light);box-shadow:0 0 0 3px rgba(37,99,235,0.2)}
 .cell.empty-cell.selected .q-mark{color:var(--pri);animation:none}
-.cell.empty-cell.draw-mode{touch-action:none}
+.cell.empty-cell.draw-mode{cursor:pointer}
+.cell.drawing{border-color:var(--pri);background:var(--pri-light);box-shadow:0 0 0 3px rgba(37,99,235,0.2);z-index:5}
+.cell-canvas{position:absolute;inset:0;border-radius:var(--radius-sm);z-index:2;touch-action:none;cursor:crosshair}
+.draw-done-wrap{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:6px;z-index:10;white-space:nowrap}
+.draw-done-btn{padding:4px 14px;border-radius:16px;border:2px solid var(--ok);background:#ecfdf5;color:#065f46;font-family:'Heebo',sans-serif;font-weight:700;font-size:0.78rem;cursor:pointer;transition:all 0.2s;min-height:32px}
+.draw-done-btn:hover{background:var(--ok);color:#fff}
 
 /* Correct / Wrong states */
 .cell.filled-correct{border-color:var(--ok);background:#ecfdf5;box-shadow:0 0 0 3px rgba(16,185,129,0.2)}
@@ -491,6 +496,7 @@ document.querySelector('.mb').addEventListener('click',function(e){
   var m=b.dataset.mode;
   if(m==='print'){window.print();return}
   mode=m;sel=null;
+  clearDrawUI();
   document.querySelectorAll('.mbtn').forEach(function(x){x.classList.remove('on')});
   b.classList.add('on');
   render();
@@ -510,23 +516,113 @@ document.getElementById('dirButtons').addEventListener('click',function(e){
   tryAns(parseInt(b.dataset.dir));
 });
 
-var dw={active:false,sx:0,sy:0,ci:-1};
-document.getElementById('arrowGrid').addEventListener('pointerdown',function(e){
+// Draw mode: freehand canvas inside cell
+var drawCell=null,drawCanvas=null,drawCtx=null,drawPts=[],drawActive=false;
+
+function clearDrawUI(){
+  if(drawCanvas&&drawCanvas.parentNode)drawCanvas.parentNode.removeChild(drawCanvas);
+  var old=document.querySelector('.draw-done-wrap');if(old)old.parentNode.removeChild(old);
+  var dc=document.querySelector('.cell.drawing');if(dc)dc.classList.remove('drawing');
+  drawCanvas=null;drawCtx=null;drawCell=null;drawPts=[];drawActive=false;
+}
+
+document.getElementById('arrowGrid').addEventListener('click',function(e){
   if(mode!=='draw')return;
-  var c=e.target.closest('.cell.empty-cell');if(!c)return;
-  e.preventDefault();
-  dw.active=true;dw.sx=e.clientX;dw.sy=e.clientY;
-  dw.ci=parseInt(c.dataset.emptyIdx);
-  c.classList.add('selected');sel=dw.ci;
-},{passive:false});
-document.addEventListener('pointermove',function(e){if(!dw.active)return;e.preventDefault()},{passive:false});
-document.addEventListener('pointerup',function(e){
-  if(!dw.active)return;dw.active=false;
-  var dx=e.clientX-dw.sx,dy=e.clientY-dw.sy;
-  if(Math.sqrt(dx*dx+dy*dy)<15){document.querySelectorAll('.cell.selected').forEach(function(x){x.classList.remove('selected')});sel=null;return}
-  var dir;if(Math.abs(dx)>Math.abs(dy)){dir=dx>0?1:3}else{dir=dy>0?2:0}
-  sel=dw.ci;tryAns(dir);
+  var c=e.target.closest('.cell.empty-cell');if(!c||c===drawCell)return;
+  clearDrawUI();
+  drawCell=c;
+  var ei=parseInt(c.dataset.emptyIdx);
+  sel=ei;
+  c.classList.add('drawing');
+  // create canvas inside cell
+  var cv=document.createElement('canvas');
+  cv.className='cell-canvas';
+  cv.width=c.offsetWidth*2;cv.height=c.offsetHeight*2;
+  cv.style.width='100%';cv.style.height='100%';
+  c.appendChild(cv);
+  drawCanvas=cv;drawCtx=cv.getContext('2d');
+  drawCtx.scale(2,2);
+  drawCtx.strokeStyle=var_pri||'#2563eb';
+  drawCtx.lineWidth=3;drawCtx.lineCap='round';drawCtx.lineJoin='round';
+  drawPts=[];
+  // done button
+  var wrap=document.createElement('div');wrap.className='draw-done-wrap';
+  var btn=document.createElement('button');btn.className='draw-done-btn';btn.textContent='✅ סיימתי';
+  btn.onclick=function(ev){ev.stopPropagation();submitDrawing(ei)};
+  wrap.appendChild(btn);c.appendChild(wrap);
+  // pointer events on canvas
+  cv.addEventListener('pointerdown',function(ev){
+    ev.preventDefault();ev.stopPropagation();
+    drawActive=true;drawPts=[];
+    var r=cv.getBoundingClientRect();
+    var x=ev.clientX-r.left,y=ev.clientY-r.top;
+    drawPts.push({x:x,y:y});
+    drawCtx.clearRect(0,0,c.offsetWidth,c.offsetHeight);
+    drawCtx.beginPath();drawCtx.moveTo(x,y);
+  },{passive:false});
+  cv.addEventListener('pointermove',function(ev){
+    if(!drawActive)return;ev.preventDefault();ev.stopPropagation();
+    var r=cv.getBoundingClientRect();
+    var x=ev.clientX-r.left,y=ev.clientY-r.top;
+    drawPts.push({x:x,y:y});
+    drawCtx.lineTo(x,y);drawCtx.stroke();
+  },{passive:false});
+  cv.addEventListener('pointerup',function(ev){
+    ev.stopPropagation();drawActive=false;
+  },{passive:false});
 });
+
+var var_pri='#2563eb';
+
+function submitDrawing(ei){
+  if(drawPts.length<3){clearDrawUI();return}
+  var sx=drawPts[0].x,sy=drawPts[0].y;
+  var ex=drawPts[drawPts.length-1].x,ey=drawPts[drawPts.length-1].y;
+  var dx=ex-sx,dy=ey-sy;
+  if(Math.sqrt(dx*dx+dy*dy)<5){clearDrawUI();return}
+  var dir;
+  if(Math.abs(dx)>Math.abs(dy)){dir=dx>0?1:3}else{dir=dy>0?2:0}
+  sel=ei;
+  var ans=answers[cur],a=ans[sel];
+  if(!a.answered){
+    a.answered=true;a.userDir=dir;a.ok=(dir===a.correct);
+    if(a.ok){
+      okT++;updScore();
+      clearDrawUI();
+      // show correct arrow
+      var cells=document.getElementById('arrowGrid').querySelectorAll('.cell');
+      for(var i=0;i<cells.length;i++){
+        if(parseInt(cells[i].dataset.r)===a.r&&parseInt(cells[i].dataset.c)===a.c){
+          cells[i].innerHTML=ARROW_SVGS[dir];
+          cells[i].classList.remove('empty-cell','draw-mode','drawing');
+          cells[i].classList.add('filled-correct','glow');
+          break;
+        }
+      }
+      sel=null;
+      if(ans.every(function(x){return x.answered})){
+        done[cur]=true;
+        var hasErr=ans.some(function(x){return!x.ok});
+        document.getElementById('mainCard').classList.add(hasErr?'bad':'ok');
+        buildTabs();updProg();setTimeout(showComp,600);
+      }
+    } else {
+      errT++;updScore();
+      a.answered=false;a.userDir=-1;a.ok=false;
+      // shake + clear canvas for retry
+      if(drawCell){
+        drawCell.classList.add('shake');
+        drawCell.style.borderColor='var(--no)';
+        drawCell.style.background='#fef2f2';
+        setTimeout(function(){
+          if(drawCell){drawCell.classList.remove('shake');drawCell.style.borderColor='';drawCell.style.background=''}
+          if(drawCtx&&drawCanvas){drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height)}
+          drawPts=[];
+        },500);
+      }
+    }
+  }
+}
 
 document.getElementById('compOverlay').addEventListener('click',function(e){
   if(e.target===this)this.classList.remove('show');

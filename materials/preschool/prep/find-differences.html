@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>מצאו את ההבדלים | הכנה לכיתה א | בועז חזן</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pri:#2563eb;--pri-dark:#1d4ed8;--pri-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --ok:#10b981;--no:#ef4444;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,0.07),0 2px 4px rgba(0,0,0,0.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,0.1),0 4px 6px rgba(0,0,0,0.05);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-tap-highlight-color:transparent}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;direction:rtl;text-align:right;overflow-x:hidden;line-height:1.5}
+
+/* Animations */
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(0)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0.6)}50%{box-shadow:0 0 0 12px rgba(245,158,11,0)}}
+@keyframes popIn{0%{opacity:0;transform:scale(0.85)}100%{opacity:1;transform:scale(1)}}
+@keyframes glow{0%{box-shadow:0 0 0 0 rgba(16,185,129,0.4)}70%{box-shadow:0 0 0 10px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
+@keyframes ripple{0%{transform:scale(0);opacity:0.6}100%{transform:scale(2.5);opacity:0}}
+@keyframes hintPulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0.7)}50%{box-shadow:0 0 0 10px rgba(245,158,11,0)}}
+
+/* Header */
+.hd{background:linear-gradient(135deg,var(--pri-light) 0%,#fff 100%);padding:24px;text-align:center;border-bottom:3px solid var(--pri)}
+.hd h1{font-size:1.8rem;font-weight:800;color:var(--text);margin-bottom:4px}
+.hd .sub{font-size:1rem;color:var(--text-light);margin-bottom:2px}
+
+/* Mode buttons */
+.mb{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20}
+.mbtn{padding:8px 18px;border-radius:20px;border:2px solid var(--border);background:#fff;font-family:'Heebo',sans-serif;font-weight:600;font-size:0.9rem;cursor:pointer;transition:all 0.2s;white-space:nowrap;min-height:44px}
+.mbtn:hover{border-color:var(--pri)}
+.mbtn.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+
+/* Progress section */
+.ps{padding:12px 16px;background:#fff;border-bottom:1px solid var(--border)}
+.pr{display:flex;align-items:center;gap:12px;max-width:900px;margin:0 auto;flex-wrap:wrap}
+.pl{font-size:0.9rem;font-weight:700;color:var(--text);white-space:nowrap}
+.ppb{flex:1;height:10px;background:var(--border);border-radius:8px;overflow:hidden;min-width:100px}
+.pf{height:100%;background:var(--ok);border-radius:8px;transition:width 0.5s ease}
+.hint-btn{padding:8px 16px;border-radius:20px;border:2px solid var(--accent);background:#fff;font-family:'Heebo',sans-serif;font-weight:600;font-size:0.85rem;cursor:pointer;transition:all 0.2s;white-space:nowrap;min-height:40px;color:var(--accent-dark)}
+.hint-btn:hover:not(:disabled){background:var(--accent);color:#fff}
+.hint-btn:disabled{opacity:0.4;cursor:not-allowed;border-color:var(--border);color:var(--text-light)}
+
+/* Level tabs */
+.tw{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:56px;z-index:15;padding:0 8px}
+.ts{display:flex;gap:5px;overflow-x:auto;padding:10px 0;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.ts::-webkit-scrollbar{display:none}
+.tb{flex-shrink:0;padding:6px 14px;border-radius:16px;border:2px solid var(--border);background:#fff;font-family:'Heebo',sans-serif;font-weight:600;font-size:0.8rem;cursor:pointer;transition:all 0.25s ease;white-space:nowrap;position:relative;min-height:44px;display:flex;align-items:center;justify-content:center}
+.tb:hover{border-color:var(--pri)}
+.tb.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tb.dn{background:var(--ok);color:#fff;border-color:var(--ok)}
+
+/* Container */
+.ct{max-width:900px;margin:0 auto;padding:20px 16px 80px;position:relative}
+
+/* Scenes wrapper */
+.scenes-wrap{display:flex;gap:16px;justify-content:center;align-items:flex-start;flex-direction:row-reverse}
+@media(max-width:600px){
+  .scenes-wrap{flex-direction:column;align-items:center}
+}
+
+/* Scene card */
+.scene-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow-md);padding:12px;max-width:400px;width:100%;animation:fi 0.4s ease both;position:relative}
+.scene-card.original{border:3px solid var(--border)}
+.scene-card.changed{border:3px dashed var(--accent)}
+.scene-label{text-align:center;font-weight:700;font-size:0.9rem;margin-bottom:8px;color:var(--text)}
+.scene-label.dark-label{color:#fff}
+
+/* Scene grid */
+.scene-grid{display:grid;gap:0;width:100%}
+.scene-cell{display:flex;align-items:center;justify-content:center;font-size:2rem;min-height:48px;position:relative;cursor:default;user-select:none;transition:background 0.3s}
+@media(max-width:600px){
+  .scene-cell{font-size:1.8rem;min-height:40px}
+  .scene-card{max-width:100%}
+  .hd h1{font-size:1.4rem}
+  .mbtn{padding:6px 14px;font-size:0.82rem}
+  .tb{padding:5px 10px;font-size:0.75rem;min-height:38px}
+  .pill-btn{padding:8px 18px;font-size:0.85rem}
+}
+
+/* Found marker */
+.found-marker{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border:3px solid var(--ok);border-radius:50%;background:rgba(16,185,129,0.15);animation:pop 0.35s ease,glow 0.6s ease;pointer-events:none;z-index:5}
+
+/* Wrong ripple */
+.wrong-ripple{position:absolute;width:30px;height:30px;border-radius:50%;background:var(--no);opacity:0;pointer-events:none;z-index:5;animation:ripple 0.5s ease forwards}
+
+/* Hint glow */
+.hint-glow{animation:hintPulse 0.5s ease 4;background:rgba(245,158,11,0.15);border-radius:8px}
+
+/* Flash highlight on original */
+.flash-highlight{background:rgba(16,185,129,0.25)!important;transition:background 0.2s}
+
+/* Draw canvas */
+.draw-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;border-radius:var(--radius);cursor:crosshair;display:none}
+.draw-mode .changed .draw-canvas{display:block}
+.draw-mode .changed .scene-grid{pointer-events:none}
+
+/* Completion overlay */
+.completion-overlay{display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:50;border-radius:var(--radius);justify-content:center;align-items:center}
+.completion-overlay.show{display:flex}
+.completion-card{background:#fff;border-radius:var(--radius);padding:32px 28px;text-align:center;box-shadow:var(--shadow-lg);animation:popIn 0.4s ease;max-width:320px;width:90%}
+.completion-card .big-emoji{font-size:3.5rem;margin-bottom:12px}
+.completion-card h2{font-size:1.3rem;font-weight:800;color:var(--text);margin-bottom:8px}
+.completion-card p{font-size:0.95rem;color:var(--text-light);margin-bottom:16px}
+.completion-card .btn-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.pill-btn{padding:10px 22px;border-radius:20px;border:none;font-family:'Heebo',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s;min-height:44px}
+.pill-btn.primary{background:var(--pri);color:#fff}
+.pill-btn.primary:hover{background:var(--pri-dark)}
+.pill-btn.secondary{background:var(--bg-soft);color:var(--text);border:2px solid var(--border)}
+.pill-btn.secondary:hover{border-color:var(--pri)}
+
+/* Summary screen */
+.summary-screen{display:none;text-align:center;padding:24px}
+.summary-screen.show{display:block}
+.summary-screen h2{font-size:1.5rem;font-weight:800;margin-bottom:16px;color:var(--text)}
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:24px}
+.summary-item{background:#fff;border-radius:var(--radius-sm);padding:12px;box-shadow:var(--shadow);text-align:center}
+.summary-item .s-emoji{font-size:1.5rem;margin-bottom:4px}
+.summary-item .s-name{font-size:0.85rem;font-weight:700;color:var(--text)}
+.summary-item .s-status{font-size:0.8rem;font-weight:600;margin-top:4px}
+.summary-item .s-status.done{color:var(--ok)}
+.summary-item .s-status.not-done{color:var(--text-light)}
+
+/* Print */
+@media print{
+  .mb,.ps,.tw,.completion-overlay,.draw-canvas,.hint-btn{display:none!important}
+  .scenes-wrap{flex-direction:row-reverse!important;gap:8px}
+  .scene-card{max-width:48%!important;break-inside:avoid}
+  body{background:#fff}
+  .ct{padding:10px}
+  .hd{border-bottom:2px solid #000}
+}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <h1>מצאו את ההבדלים</h1>
+  <div class="sub">השוו בין שני הציורים ומצאו את כל ההבדלים</div>
+</div>
+
+<div class="mb">
+  <button class="mbtn on" onclick="setMode('click')">👆 לחיצה</button>
+  <button class="mbtn" onclick="setMode('draw')">✏️ ציור</button>
+</div>
+
+<div class="ps">
+  <div class="pr">
+    <span class="pl" id="progLabel">מצאתם 0 מתוך 0</span>
+    <div class="ppb"><div class="pf" id="progFill" style="width:0%"></div></div>
+    <button class="hint-btn" id="hintBtn" onclick="useHint()">💡 רמז (<span id="hintCount">2</span>)</button>
+  </div>
+</div>
+
+<div class="tw"><div class="ts" id="levelTabs"></div></div>
+
+<div class="ct" id="container">
+  <div class="scenes-wrap" id="scenesWrap"></div>
+  <div class="completion-overlay" id="compOverlay">
+    <div class="completion-card">
+      <div class="big-emoji">🎉</div>
+      <h2 id="compTitle">כל הכבוד!</h2>
+      <p id="compMsg">מצאתם את כל ההבדלים!</p>
+      <div class="btn-row">
+        <button class="pill-btn primary" onclick="nextLevel()">הבא ←</button>
+        <button class="pill-btn secondary" onclick="replayLevel()">שחקו שוב</button>
+      </div>
+    </div>
+  </div>
+  <div class="summary-screen" id="summaryScreen">
+    <h2>סיכום</h2>
+    <div class="summary-grid" id="summaryGrid"></div>
+    <button class="pill-btn primary" onclick="goToLevel(0)">התחילו מחדש</button>
+  </div>
+</div>
+
+<script>
+const levels = [
+  {
+    name: "איש שלג", bg: "#e8f4fd", cols: 6, rows: 5, dark: false,
+    grid: [
+      ["☁️","","☀️","","☁️","🐦"],
+      ["","","🎩","","",""],
+      ["🌲","","⛄","","","🏠"],
+      ["🌲","","","","🌲",""],
+      ["❄️","❄️","❄️","❄️","❄️","❄️"]
+    ],
+    diffs: [
+      {row:0,col:5,original:"🐦",changed:"🦅"},
+      {row:1,col:2,original:"🎩",changed:"🧢"},
+      {row:2,col:0,original:"🌲",changed:"🎄"},
+      {row:4,col:3,original:"❄️",changed:"⭐"},
+      {row:2,col:5,original:"🏠",changed:"🏡"}
+    ]
+  },
+  {
+    name: "גינה", bg: "#f0fdf4", cols: 6, rows: 5, dark: false,
+    grid: [
+      ["☀️","","","☁️","","🦋"],
+      ["","🌻","","🌷","",""],
+      ["🌳","","🌹","","🌳","🐝"],
+      ["","🌸","","🌼","",""],
+      ["🪨","","🐛","","🌿","🪴"]
+    ],
+    diffs: [
+      {row:0,col:5,original:"🦋",changed:"🐝"},
+      {row:1,col:1,original:"🌻",changed:"🌼"},
+      {row:2,col:5,original:"🐝",changed:""},
+      {row:3,col:1,original:"🌸",changed:"🌺"},
+      {row:4,col:2,original:"🐛",changed:"🐜"}
+    ]
+  },
+  {
+    name: "חדר ילדים", bg: "#fef9ee", cols: 6, rows: 5, dark: false,
+    grid: [
+      ["🖼️","","💡","","","🕐"],
+      ["","🧸","","📚","",""],
+      ["🛏️","","","","🪑",""],
+      ["","🎨","","🧩","","🎮"],
+      ["👟","","⚽","","🎒",""]
+    ],
+    diffs: [
+      {row:0,col:0,original:"🖼️",changed:"🪟"},
+      {row:1,col:1,original:"🧸",changed:"🐻"},
+      {row:2,col:0,original:"🛏️",changed:"🛋️"},
+      {row:3,col:3,original:"🧩",changed:"🎲"},
+      {row:4,col:2,original:"⚽",changed:"🏀"},
+      {row:4,col:4,original:"🎒",changed:"👜"}
+    ]
+  },
+  {
+    name: "חווה", bg: "#fefce8", cols: 6, rows: 5, dark: false,
+    grid: [
+      ["☀️","","☁️","","","🐦"],
+      ["","🏚️","","","🌾","🌾"],
+      ["🐄","","🐔","","🐑",""],
+      ["","🐷","","🐴","","🐕"],
+      ["🌻","","🚜","","🌻",""]
+    ],
+    diffs: [
+      {row:0,col:5,original:"🐦",changed:"🦅"},
+      {row:1,col:1,original:"🏚️",changed:"🏠"},
+      {row:2,col:0,original:"🐄",changed:"🐂"},
+      {row:2,col:4,original:"🐑",changed:"🐐"},
+      {row:3,col:1,original:"🐷",changed:"🐖"},
+      {row:4,col:2,original:"🚜",changed:"🚗"}
+    ]
+  },
+  {
+    name: "חוף ים", bg: "#ecfeff", cols: 7, rows: 5, dark: false,
+    grid: [
+      ["☀️","","","☁️","","","🦅"],
+      ["","","","","","",""],
+      ["🏖️","","⛱️","","🦀","","🐚"],
+      ["","🐢","","🏄","","⛵",""],
+      ["🌊","🌊","🌊","🌊","🌊","🌊","🌊"]
+    ],
+    diffs: [
+      {row:0,col:6,original:"🦅",changed:"🐦"},
+      {row:2,col:0,original:"🏖️",changed:"🏝️"},
+      {row:2,col:4,original:"🦀",changed:"🦞"},
+      {row:3,col:1,original:"🐢",changed:"🐍"},
+      {row:3,col:5,original:"⛵",changed:"🚤"},
+      {row:4,col:3,original:"🌊",changed:"🐟"}
+    ]
+  },
+  {
+    name: "עיר", bg: "#f1f5f9", cols: 7, rows: 5, dark: false,
+    grid: [
+      ["","🏢","","🏬","","🏥",""],
+      ["","","🚦","","","",""],
+      ["🚗","","🚌","","🚕","","🚲"],
+      ["🌳","","👫","","🐕","","🌳"],
+      ["","🏪","","⛲","","🏫",""]
+    ],
+    diffs: [
+      {row:0,col:1,original:"🏢",changed:"🏨"},
+      {row:0,col:5,original:"🏥",changed:"🏦"},
+      {row:2,col:0,original:"🚗",changed:"🚙"},
+      {row:2,col:4,original:"🚕",changed:"🛺"},
+      {row:2,col:6,original:"🚲",changed:"🛴"},
+      {row:3,col:4,original:"🐕",changed:"🐈"},
+      {row:4,col:3,original:"⛲",changed:"🗑️"}
+    ]
+  },
+  {
+    name: "גן חיות", bg: "#f0fdf4", cols: 7, rows: 5, dark: false,
+    grid: [
+      ["","🦁","","","🐘","",""],
+      ["🦒","","","🐵","","","🦓"],
+      ["","","🐧","","🦜","",""],
+      ["🐊","","","🦩","","","🐍"],
+      ["","🎋","","🎫","","🎋",""]
+    ],
+    diffs: [
+      {row:0,col:1,original:"🦁",changed:"🐯"},
+      {row:0,col:4,original:"🐘",changed:"🦏"},
+      {row:1,col:0,original:"🦒",changed:"🦘"},
+      {row:1,col:3,original:"🐵",changed:"🐒"},
+      {row:2,col:4,original:"🦜",changed:"🐦"},
+      {row:3,col:0,original:"🐊",changed:"🦎"},
+      {row:4,col:3,original:"🎫",changed:"🎟️"}
+    ]
+  },
+  {
+    name: "מטבח", bg: "#fefce8", cols: 7, rows: 5, dark: false,
+    grid: [
+      ["","","💡","","🕐","",""],
+      ["🍳","","🥘","","☕","","🧃"],
+      ["","🍎","","🍌","","🥕",""],
+      ["🔪","","🥄","","🍴","","🍽️"],
+      ["","🧊","","🫖","","🧂",""]
+    ],
+    diffs: [
+      {row:0,col:4,original:"🕐",changed:"🕑"},
+      {row:1,col:0,original:"🍳",changed:"🥞"},
+      {row:1,col:4,original:"☕",changed:"🍵"},
+      {row:2,col:1,original:"🍎",changed:"🍊"},
+      {row:2,col:5,original:"🥕",changed:"🥒"},
+      {row:3,col:0,original:"🔪",changed:"🥢"},
+      {row:4,col:3,original:"🫖",changed:"🍶"}
+    ]
+  },
+  {
+    name: "חלל", bg: "#1e1b4b", cols: 7, rows: 5, dark: true,
+    grid: [
+      ["⭐","","🌙","","⭐","","💫"],
+      ["","🪐","","","","🛸",""],
+      ["⭐","","🚀","","⭐","","⭐"],
+      ["","","","🌍","","",""],
+      ["💫","","⭐","","🌟","","☄️"]
+    ],
+    diffs: [
+      {row:0,col:2,original:"🌙",changed:"🌛"},
+      {row:1,col:1,original:"🪐",changed:"🌕"},
+      {row:1,col:5,original:"🛸",changed:"👽"},
+      {row:2,col:2,original:"🚀",changed:"🛰️"},
+      {row:3,col:3,original:"🌍",changed:"🌎"},
+      {row:4,col:4,original:"🌟",changed:"💫"},
+      {row:4,col:6,original:"☄️",changed:"🌠"}
+    ]
+  },
+  {
+    name: "ים", bg: "#0c4a6e", cols: 7, rows: 6, dark: true,
+    grid: [
+      ["🫧","","🐙","","🫧","","🪸"],
+      ["","🐠","","🐡","","🐟",""],
+      ["🐚","","🦈","","","","🐚"],
+      ["","🪼","","🐢","","🦑",""],
+      ["🌿","","🐠","","🌿","","🌿"],
+      ["🪨","🪨","","🪨","","🪨","🪨"]
+    ],
+    diffs: [
+      {row:0,col:2,original:"🐙",changed:"🦑"},
+      {row:0,col:6,original:"🪸",changed:"🌺"},
+      {row:1,col:1,original:"🐠",changed:"🐡"},
+      {row:1,col:5,original:"🐟",changed:"🐠"},
+      {row:2,col:2,original:"🦈",changed:"🐋"},
+      {row:3,col:1,original:"🪼",changed:"🫧"},
+      {row:3,col:5,original:"🦑",changed:"🐙"},
+      {row:4,col:2,original:"🐠",changed:"🐟"}
+    ]
+  },
+  {
+    name: "יער", bg: "#14532d", cols: 7, rows: 6, dark: true,
+    grid: [
+      ["🌳","","🌲","","🌳","","🌲"],
+      ["","🍄","","🐿️","","🦊",""],
+      ["🌿","","🦌","","🐇","","🌿"],
+      ["","🍃","","🦉","","🍃",""],
+      ["🌲","","🐛","","🪵","","🌲"],
+      ["🍂","🍂","","🍄","","🍂","🍂"]
+    ],
+    diffs: [
+      {row:0,col:4,original:"🌳",changed:"🌴"},
+      {row:1,col:1,original:"🍄",changed:"🌰"},
+      {row:1,col:5,original:"🦊",changed:"🐺"},
+      {row:2,col:2,original:"🦌",changed:"🐐"},
+      {row:2,col:4,original:"🐇",changed:"🐁"},
+      {row:3,col:3,original:"🦉",changed:"🦅"},
+      {row:4,col:2,original:"🐛",changed:"🐜"},
+      {row:5,col:3,original:"🍄",changed:"🌸"}
+    ]
+  },
+  {
+    name: "גשם", bg: "#94a3b8", cols: 7, rows: 5, dark: false,
+    grid: [
+      ["☁️","🌧️","☁️","⛈️","☁️","🌧️","☁️"],
+      ["","","","","","",""],
+      ["☂️","","🌂","","☂️","","🌂"],
+      ["","💧","","🐸","","💧",""],
+      ["","🌈","","","⚡","",""]
+    ],
+    diffs: [
+      {row:0,col:3,original:"⛈️",changed:"🌧️"},
+      {row:2,col:0,original:"☂️",changed:"🌂"},
+      {row:2,col:2,original:"🌂",changed:"☂️"},
+      {row:2,col:4,original:"☂️",changed:"🏖️"},
+      {row:3,col:3,original:"🐸",changed:"🐢"},
+      {row:3,col:5,original:"💧",changed:"💦"},
+      {row:4,col:1,original:"🌈",changed:""},
+      {row:4,col:4,original:"⚡",changed:"💫"}
+    ]
+  },
+  {
+    name: "יום הולדת", bg: "#fef2f2", cols: 7, rows: 6, dark: false,
+    grid: [
+      ["🎈","","🎊","","🎉","","🎈"],
+      ["","🎂","","","","🎁",""],
+      ["🎈","","🧁","","🍰","","🎈"],
+      ["","🎵","","💃","","🎵",""],
+      ["🎁","","🎀","","🎁","","🎀"],
+      ["","🍕","","🍿","","🧃",""]
+    ],
+    diffs: [
+      {row:0,col:0,original:"🎈",changed:"🎆"},
+      {row:0,col:4,original:"🎉",changed:"🎊"},
+      {row:1,col:1,original:"🎂",changed:"🧁"},
+      {row:1,col:5,original:"🎁",changed:"🎀"},
+      {row:2,col:2,original:"🧁",changed:"🍩"},
+      {row:3,col:3,original:"💃",changed:"🕺"},
+      {row:4,col:0,original:"🎁",changed:""},
+      {row:5,col:1,original:"🍕",changed:"🍔"},
+      {row:5,col:5,original:"🧃",changed:"🥤"}
+    ]
+  },
+  {
+    name: "פארק שעשועים", bg: "#faf5ff", cols: 8, rows: 6, dark: false,
+    grid: [
+      ["🎡","","","🎢","","","🎠",""],
+      ["","🎪","","","","🎭","",""],
+      ["🍦","","🌭","","🍿","","🍩",""],
+      ["","🎯","","🎳","","🎰","",""],
+      ["🎈","","🤡","","🎈","","🤡",""],
+      ["","🎵","","🎶","","🎵","","🎶"]
+    ],
+    diffs: [
+      {row:0,col:0,original:"🎡",changed:"🎢"},
+      {row:0,col:3,original:"🎢",changed:"🎡"},
+      {row:1,col:1,original:"🎪",changed:"🏕️"},
+      {row:2,col:0,original:"🍦",changed:"🍧"},
+      {row:2,col:6,original:"🍩",changed:"🥯"},
+      {row:3,col:1,original:"🎯",changed:"🏹"},
+      {row:3,col:5,original:"🎰",changed:"🎲"},
+      {row:4,col:2,original:"🤡",changed:"🎃"},
+      {row:5,col:3,original:"🎶",changed:"🎵"}
+    ]
+  },
+  {
+    name: "אתגר סופי", bg: "#fff7ed", cols: 8, rows: 6, dark: false,
+    grid: [
+      ["☀️","","☁️","","🌈","","☁️","🐦"],
+      ["🏠","","🏢","","🌳","","🏫",""],
+      ["","🚗","","🚌","","🚲","","🚕"],
+      ["🌳","","👫","","🐕","","🌳",""],
+      ["","🌷","","⛲","","🌹","","🏪"],
+      ["🛝","","⚽","","🎈","","🧸",""]
+    ],
+    diffs: [
+      {row:0,col:7,original:"🐦",changed:"🦅"},
+      {row:1,col:0,original:"🏠",changed:"🏡"},
+      {row:1,col:6,original:"🏫",changed:"🏥"},
+      {row:2,col:1,original:"🚗",changed:"🚙"},
+      {row:2,col:5,original:"🚲",changed:"🛴"},
+      {row:3,col:4,original:"🐕",changed:"🐈"},
+      {row:4,col:1,original:"🌷",changed:"🌻"},
+      {row:4,col:5,original:"🌹",changed:"🌸"},
+      {row:5,col:2,original:"⚽",changed:"🏀"},
+      {row:5,col:6,original:"🧸",changed:"🐻"}
+    ]
+  }
+];
+
+let curLevel = 0;
+let mode = "click";
+let found = [];
+let hintsLeft = 2;
+let levelComplete = [];
+let drawPoints = [];
+let isDrawing = false;
+let drawCanvas = null;
+let drawCtx = null;
+
+function init() {
+  levelComplete = new Array(levels.length).fill(false);
+  buildTabs();
+  goToLevel(0);
+}
+
+function buildTabs() {
+  const tabs = document.getElementById("levelTabs");
+  tabs.innerHTML = "";
+  levels.forEach((lv, i) => {
+    const btn = document.createElement("button");
+    btn.className = "tb" + (i === curLevel ? " on" : "") + (levelComplete[i] ? " dn" : "");
+    btn.textContent = (i + 1) + ". " + lv.name;
+    btn.onclick = () => goToLevel(i);
+    tabs.appendChild(btn);
+  });
+}
+
+function updateTabs() {
+  const btns = document.querySelectorAll(".tb");
+  btns.forEach((btn, i) => {
+    btn.className = "tb" + (i === curLevel ? " on" : "") + (levelComplete[i] ? " dn" : "");
+  });
+  // Scroll active tab into view
+  if (btns[curLevel]) {
+    btns[curLevel].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  }
+}
+
+function goToLevel(idx) {
+  if (idx < 0 || idx >= levels.length) {
+    showSummary();
+    return;
+  }
+  curLevel = idx;
+  found = [];
+  hintsLeft = 2;
+  document.getElementById("summaryScreen").classList.remove("show");
+  document.getElementById("compOverlay").classList.remove("show");
+  updateTabs();
+  renderScene();
+  updateProgress();
+  updateHintBtn();
+}
+
+function setMode(m) {
+  mode = m;
+  document.querySelectorAll(".mbtn").forEach(b => b.classList.remove("on"));
+  if (m === "click") document.querySelectorAll(".mbtn")[0].classList.add("on");
+  else document.querySelectorAll(".mbtn")[1].classList.add("on");
+
+  const wrap = document.getElementById("scenesWrap");
+  if (m === "draw") {
+    wrap.classList.add("draw-mode");
+    setupDrawCanvas();
+  } else {
+    wrap.classList.remove("draw-mode");
+  }
+}
+
+function renderScene() {
+  const lv = levels[curLevel];
+  const wrap = document.getElementById("scenesWrap");
+  wrap.className = "scenes-wrap" + (mode === "draw" ? " draw-mode" : "");
+
+  // Build original grid
+  const origHTML = buildGridHTML(lv, false);
+  // Build changed grid
+  const changedHTML = buildGridHTML(lv, true);
+
+  const darkClass = lv.dark ? " dark-label" : "";
+  const cardStyle = `background:${lv.bg}`;
+
+  wrap.innerHTML = `
+    <div class="scene-card original" style="${cardStyle}">
+      <div class="scene-label${darkClass}">ציור מקורי</div>
+      <div class="scene-grid" id="origGrid" style="grid-template-columns:repeat(${lv.cols},1fr);grid-template-rows:repeat(${lv.rows},1fr)">
+        ${origHTML}
+      </div>
+    </div>
+    <div class="scene-card changed" style="${cardStyle}">
+      <div class="scene-label${darkClass}">מצאו את ההבדלים</div>
+      <div class="scene-grid" id="changedGrid" style="grid-template-columns:repeat(${lv.cols},1fr);grid-template-rows:repeat(${lv.rows},1fr)">
+        ${changedHTML}
+      </div>
+      <canvas class="draw-canvas" id="drawCanvas"></canvas>
+    </div>
+  `;
+
+  // Attach click handler to changed scene
+  const changedCard = wrap.querySelector(".changed");
+  if (mode === "click") {
+    const changedGrid = document.getElementById("changedGrid");
+    changedGrid.addEventListener("click", handleClick);
+  } else {
+    setupDrawCanvas();
+  }
+}
+
+function buildGridHTML(lv, isChanged) {
+  let html = "";
+  for (let r = 0; r < lv.rows; r++) {
+    for (let c = 0; c < lv.cols; c++) {
+      let emoji = lv.grid[r][c];
+      if (isChanged) {
+        const diff = lv.diffs.find(d => d.row === r && d.col === c);
+        if (diff) emoji = diff.changed;
+      }
+      const foundIdx = found.findIndex(f => f.row === r && f.col === c);
+      const foundMarker = foundIdx >= 0 ? '<div class="found-marker"></div>' : '';
+      const cellId = isChanged ? `changed-${r}-${c}` : `orig-${r}-${c}`;
+      html += `<div class="scene-cell" id="${cellId}" data-row="${r}" data-col="${c}">${emoji}${foundMarker}</div>`;
+    }
+  }
+  return html;
+}
+
+function handleClick(e) {
+  const lv = levels[curLevel];
+  if (found.length >= lv.diffs.length) return;
+
+  const grid = document.getElementById("changedGrid");
+  const rect = grid.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  const cellW = rect.width / lv.cols;
+  const cellH = rect.height / lv.rows;
+
+  let closestDiff = null;
+  let closestDist = Infinity;
+
+  for (const diff of lv.diffs) {
+    if (found.some(f => f.row === diff.row && f.col === diff.col)) continue;
+    const cx = (diff.col + 0.5) * cellW;
+    const cy = (diff.row + 0.5) * cellH;
+    const dist = Math.sqrt((x - cx) ** 2 + (y - cy) ** 2);
+    if (dist < closestDist) {
+      closestDist = dist;
+      closestDiff = diff;
+    }
+  }
+
+  if (closestDiff && closestDist < 45) {
+    markFound(closestDiff);
+  } else {
+    showWrongRipple(e.clientX, e.clientY, grid);
+  }
+}
+
+function markFound(diff) {
+  found.push({ row: diff.row, col: diff.col });
+
+  // Add found marker on changed grid
+  const changedCell = document.getElementById(`changed-${diff.row}-${diff.col}`);
+  if (changedCell && !changedCell.querySelector(".found-marker")) {
+    const marker = document.createElement("div");
+    marker.className = "found-marker";
+    changedCell.appendChild(marker);
+  }
+
+  // Add found marker on original grid
+  const origCell = document.getElementById(`orig-${diff.row}-${diff.col}`);
+  if (origCell && !origCell.querySelector(".found-marker")) {
+    const marker = document.createElement("div");
+    marker.className = "found-marker";
+    origCell.appendChild(marker);
+    // Flash highlight
+    origCell.classList.add("flash-highlight");
+    setTimeout(() => origCell.classList.remove("flash-highlight"), 600);
+  }
+
+  updateProgress();
+
+  const lv = levels[curLevel];
+  if (found.length >= lv.diffs.length) {
+    setTimeout(() => showCompletion(), 500);
+  }
+}
+
+function showWrongRipple(clientX, clientY, container) {
+  const rect = container.getBoundingClientRect();
+  const rip = document.createElement("div");
+  rip.className = "wrong-ripple";
+  rip.style.left = (clientX - rect.left - 15) + "px";
+  rip.style.top = (clientY - rect.top - 15) + "px";
+  container.style.position = "relative";
+  container.appendChild(rip);
+  setTimeout(() => rip.remove(), 500);
+}
+
+function updateProgress() {
+  const lv = levels[curLevel];
+  const total = lv.diffs.length;
+  const f = found.length;
+  document.getElementById("progLabel").textContent = `מצאתם ${f} מתוך ${total}`;
+  document.getElementById("progFill").style.width = (total > 0 ? (f / total * 100) : 0) + "%";
+}
+
+function updateHintBtn() {
+  const btn = document.getElementById("hintBtn");
+  document.getElementById("hintCount").textContent = hintsLeft;
+  btn.disabled = hintsLeft <= 0;
+}
+
+function useHint() {
+  if (hintsLeft <= 0) return;
+  const lv = levels[curLevel];
+  const unfound = lv.diffs.filter(d => !found.some(f => f.row === d.row && f.col === d.col));
+  if (unfound.length === 0) return;
+
+  hintsLeft--;
+  updateHintBtn();
+
+  const diff = unfound[0];
+  const changedCell = document.getElementById(`changed-${diff.row}-${diff.col}`);
+  if (changedCell) {
+    changedCell.classList.add("hint-glow");
+    setTimeout(() => changedCell.classList.remove("hint-glow"), 2000);
+  }
+}
+
+// Draw mode
+function setupDrawCanvas() {
+  drawCanvas = document.getElementById("drawCanvas");
+  if (!drawCanvas) return;
+
+  const card = drawCanvas.parentElement;
+  const rect = card.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+
+  drawCanvas.style.width = card.clientWidth + "px";
+  drawCanvas.style.height = card.clientHeight + "px";
+  drawCanvas.width = card.clientWidth * dpr;
+  drawCanvas.height = card.clientHeight * dpr;
+
+  drawCtx = drawCanvas.getContext("2d");
+  drawCtx.scale(dpr, dpr);
+  drawCtx.strokeStyle = "#ef4444";
+  drawCtx.lineWidth = 3;
+  drawCtx.lineCap = "round";
+  drawCtx.lineJoin = "round";
+
+  drawCanvas.style.touchAction = "none";
+
+  drawCanvas.onpointerdown = startDraw;
+  drawCanvas.onpointermove = moveDraw;
+  drawCanvas.onpointerup = endDraw;
+  drawCanvas.onpointercancel = endDraw;
+}
+
+function startDraw(e) {
+  e.preventDefault();
+  isDrawing = true;
+  drawPoints = [];
+  const pos = getDrawPos(e);
+  drawPoints.push(pos);
+  drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+  drawCtx.beginPath();
+  drawCtx.moveTo(pos.x, pos.y);
+}
+
+function moveDraw(e) {
+  if (!isDrawing) return;
+  e.preventDefault();
+  const pos = getDrawPos(e);
+  drawPoints.push(pos);
+  drawCtx.lineTo(pos.x, pos.y);
+  drawCtx.stroke();
+}
+
+function endDraw(e) {
+  if (!isDrawing) return;
+  isDrawing = false;
+
+  if (drawPoints.length < 3) {
+    fadeOutDraw();
+    return;
+  }
+
+  // Compute centroid
+  let cx = 0, cy = 0;
+  for (const p of drawPoints) { cx += p.x; cy += p.y; }
+  cx /= drawPoints.length;
+  cy /= drawPoints.length;
+
+  // Find nearest unfound diff
+  const lv = levels[curLevel];
+  const grid = document.getElementById("changedGrid");
+  if (!grid) { fadeOutDraw(); return; }
+
+  const gridRect = grid.getBoundingClientRect();
+  const cardRect = drawCanvas.parentElement.getBoundingClientRect();
+
+  // Adjust centroid: canvas is relative to card, grid is inside card
+  const gridOffX = gridRect.left - cardRect.left;
+  const gridOffY = gridRect.top - cardRect.top;
+
+  const cellW = gridRect.width / lv.cols;
+  const cellH = gridRect.height / lv.rows;
+
+  let closestDiff = null;
+  let closestDist = Infinity;
+
+  for (const diff of lv.diffs) {
+    if (found.some(f => f.row === diff.row && f.col === diff.col)) continue;
+    const dx = gridOffX + (diff.col + 0.5) * cellW;
+    const dy = gridOffY + (diff.row + 0.5) * cellH;
+    const dist = Math.sqrt((cx - dx) ** 2 + (cy - dy) ** 2);
+    if (dist < closestDist) {
+      closestDist = dist;
+      closestDiff = diff;
+    }
+  }
+
+  if (closestDiff && closestDist < 60) {
+    fadeOutDraw();
+    markFound(closestDiff);
+  } else {
+    fadeOutDraw();
+  }
+}
+
+function getDrawPos(e) {
+  const rect = drawCanvas.getBoundingClientRect();
+  return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+}
+
+function fadeOutDraw() {
+  if (!drawCtx || !drawCanvas) return;
+  let opacity = 1;
+  const fade = setInterval(() => {
+    opacity -= 0.1;
+    if (opacity <= 0) {
+      clearInterval(fade);
+      drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+    } else {
+      drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+      drawCtx.globalAlpha = opacity;
+      drawCtx.beginPath();
+      if (drawPoints.length > 0) {
+        drawCtx.moveTo(drawPoints[0].x, drawPoints[0].y);
+        for (let i = 1; i < drawPoints.length; i++) {
+          drawCtx.lineTo(drawPoints[i].x, drawPoints[i].y);
+        }
+        drawCtx.stroke();
+      }
+      drawCtx.globalAlpha = 1;
+    }
+  }, 30);
+}
+
+function showCompletion() {
+  levelComplete[curLevel] = true;
+  updateTabs();
+  const overlay = document.getElementById("compOverlay");
+  overlay.classList.add("show");
+
+  const isLast = curLevel >= levels.length - 1;
+  document.getElementById("compTitle").textContent = isLast ? "סיימתם הכל!" : "כל הכבוד!";
+  document.getElementById("compMsg").textContent = isLast
+    ? "מצאתם את כל ההבדלים בכל השלבים!"
+    : "מצאתם את כל ההבדלים!";
+}
+
+function nextLevel() {
+  document.getElementById("compOverlay").classList.remove("show");
+  if (curLevel < levels.length - 1) {
+    goToLevel(curLevel + 1);
+  } else {
+    showSummary();
+  }
+}
+
+function replayLevel() {
+  document.getElementById("compOverlay").classList.remove("show");
+  levelComplete[curLevel] = false;
+  goToLevel(curLevel);
+}
+
+function showSummary() {
+  document.getElementById("scenesWrap").innerHTML = "";
+  document.getElementById("compOverlay").classList.remove("show");
+  const screen = document.getElementById("summaryScreen");
+  screen.classList.add("show");
+
+  const grid = document.getElementById("summaryGrid");
+  grid.innerHTML = "";
+
+  const emojis = ["⛄","🌸","🧸","🐄","🏖️","🏢","🦁","🍳","🚀","🐙","🌲","🌧️","🎂","🎡","🌈"];
+
+  levels.forEach((lv, i) => {
+    const done = levelComplete[i];
+    const item = document.createElement("div");
+    item.className = "summary-item";
+    item.style.cursor = "pointer";
+    item.onclick = () => { screen.classList.remove("show"); goToLevel(i); };
+    item.innerHTML = `
+      <div class="s-emoji">${emojis[i] || "🎯"}</div>
+      <div class="s-name">${lv.name}</div>
+      <div class="s-status ${done ? 'done' : 'not-done'}">${done ? '✔ הושלם' : 'לא הושלם'}</div>
+    `;
+    grid.appendChild(item);
+  });
+}
+
+// Resize handler for draw canvas
+window.addEventListener("resize", () => {
+  if (mode === "draw") setupDrawCanvas();
+});
+
+init();
+</script>
+</body>
+</html>

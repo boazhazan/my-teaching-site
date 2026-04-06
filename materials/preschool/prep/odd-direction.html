@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>סדרות — מי פונה לכיוון אחר? | הכנה לכיתה א | בועז חזן</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pri:#2563eb;--pri-dark:#1d4ed8;--pri-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --ok:#10b981;--no:#ef4444;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,0.07),0 2px 4px rgba(0,0,0,0.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,0.1),0 4px 6px rgba(0,0,0,0.05);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-tap-highlight-color:transparent}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;direction:rtl;text-align:right;overflow-x:hidden;line-height:1.5}
+
+/* Header */
+.hd{background:linear-gradient(135deg,var(--pri-light) 0%,#fff 100%);padding:24px;text-align:center;border-bottom:3px solid var(--pri)}
+.hd h1{font-size:1.8rem;font-weight:800;color:var(--text);margin-bottom:4px}
+.hd .sub{font-size:1rem;color:var(--text-light);margin-bottom:2px}
+.hd .inst{font-size:0.95rem;color:var(--pri-dark);font-weight:600}
+
+/* Mode buttons */
+.mb{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20}
+.mbtn{padding:8px 18px;border-radius:20px;border:2px solid var(--border);background:#fff;font-family:'Heebo',sans-serif;font-weight:600;font-size:0.9rem;cursor:pointer;transition:all 0.2s;white-space:nowrap;min-height:44px}
+.mbtn:hover{border-color:var(--pri)}
+.mbtn.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+
+/* Progress section */
+.ps{padding:12px 16px;background:#fff;border-bottom:1px solid var(--border)}
+.pr{display:flex;align-items:center;gap:12px;max-width:900px;margin:0 auto}
+.pl{font-size:0.85rem;font-weight:600;color:var(--text-light);white-space:nowrap}
+.ppb{flex:1;height:8px;background:var(--border);border-radius:8px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--pri),var(--pri-light));border-radius:8px;transition:width 0.5s ease}
+.score-info{display:flex;gap:14px;font-size:.88rem;font-weight:700;white-space:nowrap}
+.s-ok{color:var(--ok)}.s-no{color:var(--no)}
+
+/* Level tabs */
+.tw{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:52px;z-index:15;padding:0 8px}
+.ts{display:flex;gap:5px;overflow-x:auto;padding:10px 0;scrollbar-width:none;-webkit-overflow-scrolling:touch}.ts::-webkit-scrollbar{display:none}
+.tb{flex-shrink:0;padding:6px 14px;border-radius:16px;border:2px solid var(--border);background:#fff;font-family:'Heebo',sans-serif;font-weight:600;font-size:0.8rem;cursor:pointer;transition:all 0.25s ease;white-space:nowrap;position:relative;min-height:44px;display:flex;align-items:center;justify-content:center}
+.tb:hover{border-color:var(--pri)}
+.tb.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tb.dn{background:var(--ok);color:#fff;border-color:var(--ok)}
+.tb.err{background:#fff;border-color:var(--no)}
+.tb.err::after{content:'✗';position:absolute;top:-6px;right:-6px;width:18px;height:18px;background:var(--no);color:#fff;border-radius:50%;font-size:0.6rem;display:flex;align-items:center;justify-content:center}
+
+/* Container */
+.ct{max-width:900px;margin:0 auto;padding:20px 16px 80px}
+
+/* Columns area */
+.cols-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+
+/* Column cards */
+.col-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;border:2px solid var(--border);transition:all 0.25s ease;animation:fi 0.4s ease both;position:relative;min-width:80px;flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:8px}
+.col-card:hover{border-color:var(--pri)}
+.col-card.col-solved{border-color:var(--ok);background:#ecfdf5;opacity:0.85}
+.col-card.col-solved::after{content:'✔';position:absolute;top:-8px;right:-8px;width:24px;height:24px;background:var(--ok);color:#fff;border-radius:50%;font-size:0.75rem;display:flex;align-items:center;justify-content:center;font-weight:700;animation:pop 0.3s ease}
+
+/* Items in column */
+.item{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid var(--border);background:#fff;cursor:pointer;transition:all 0.25s ease;position:relative;user-select:none;font-size:2.8rem;line-height:1}
+.item:hover{border-color:var(--pri);transform:scale(1.08)}
+.item.correct{border-color:var(--ok);background:rgba(16,185,129,0.12);box-shadow:0 0 0 3px var(--ok);animation:pop 0.35s ease,glow 0.6s ease}
+.item.wrong{animation:shake 0.4s ease}
+.item.wrong-flash{border-color:var(--no);background:rgba(239,68,68,0.1)}
+.item.disabled{pointer-events:none;opacity:0.6}
+.item .emoji{display:inline-block;transition:transform 0.1s}
+.item .emoji.flipped{transform:scaleX(-1)}
+
+/* Column label */
+.col-label{font-size:0.8rem;font-weight:700;color:var(--text-light);margin-bottom:4px}
+
+/* Draw canvas on column card */
+.col-card .draw-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:5;border-radius:var(--radius);cursor:crosshair;display:none}
+.col-card.draw-active .draw-canvas{display:block}
+.col-card.draw-active .item{pointer-events:none}
+
+/* Draw color bar */
+.draw-colors{display:none;justify-content:center;gap:10px;margin-bottom:14px}
+.draw-colors.show{display:flex}
+.dc-btn{width:36px;height:36px;border-radius:50%;border:3px solid var(--border);cursor:pointer;transition:all 0.2s}
+.dc-btn:hover{transform:scale(1.15)}
+.dc-btn.active{border-color:var(--text);box-shadow:0 0 0 3px rgba(0,0,0,0.15)}
+
+/* Completion overlay */
+.comp-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:100;align-items:center;justify-content:center;padding:20px}
+.comp-overlay.show{display:flex}
+.comp-card{background:#fff;border-radius:16px;padding:32px 28px;text-align:center;max-width:380px;width:100%;box-shadow:var(--shadow-lg);animation:popIn 0.35s ease}
+.comp-card .big{font-size:3.5rem;margin-bottom:8px}
+.comp-card h2{font-size:1.5rem;font-weight:800;color:var(--text);margin-bottom:4px}
+.comp-card .msg{font-size:1rem;color:var(--text-light);margin-bottom:16px}
+.comp-card .stats{display:flex;justify-content:center;gap:24px;margin-bottom:20px;font-size:1.1rem;font-weight:700}
+.comp-card .stats .s-ok{color:var(--ok)}.comp-card .stats .s-no{color:var(--no)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 24px;border-radius:20px;font-family:'Heebo',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;border:none;transition:all 0.25s ease;min-height:44px}
+.btn:hover{transform:translateY(-1px)}
+.btn-pri{background:var(--pri);color:#fff;box-shadow:var(--shadow)}.btn-pri:hover{background:var(--pri-dark);box-shadow:var(--shadow-md)}
+.btn-accent{background:var(--accent);color:#fff;box-shadow:var(--shadow)}.btn-accent:hover{background:var(--accent-dark)}
+.btn-no{background:var(--no);color:#fff;box-shadow:var(--shadow)}.btn-no:hover{background:#dc2626}
+.btn-ok{background:var(--ok);color:#fff;box-shadow:var(--shadow)}.btn-ok:hover{background:#059669}
+.btn-outline{background:#fff;color:var(--text);border:2px solid var(--border);box-shadow:var(--shadow)}.btn-outline:hover{border-color:var(--pri);color:var(--pri)}
+.acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+
+/* Summary */
+.summary-screen{display:none;background:#fff;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);text-align:center;animation:fi 0.4s}
+.summary-screen.show{display:block}
+.summary-screen h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;color:var(--text)}
+.summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px}
+.summary-cell{width:100%;aspect-ratio:1;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;cursor:pointer;border:2px solid var(--border);transition:all 0.25s ease;background:#fff}
+.summary-cell:hover{transform:scale(1.08);box-shadow:var(--shadow-md)}
+.summary-cell.s-ok{background:#ecfdf5;border-color:var(--ok);color:#065f46}
+.summary-cell.s-err{background:#fef2f2;border-color:var(--no);color:#991b1b}
+.summary-cell.s-skip{background:var(--bg-soft);color:var(--text-light)}
+
+/* Print header */
+.ph{display:none;text-align:center;font-size:1.4rem;font-weight:800;margin-bottom:12px;padding:8px 0;border-bottom:2px solid #000}
+
+/* Animations */
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(0)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+@keyframes popIn{0%{opacity:0;transform:scale(0.85)}100%{opacity:1;transform:scale(1)}}
+@keyframes glow{0%{box-shadow:0 0 0 0 rgba(16,185,129,0.4)}70%{box-shadow:0 0 0 10px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
+
+/* Print */
+@media print{
+  body{background:#fff!important}
+  .hd{background:none!important;border-bottom:2px solid #000;padding:12px 0}
+  .hd h1{color:#000}.hd .sub,.hd .inst{display:none}
+  .mb,.ps,.tw,.draw-colors,.score-info,.comp-overlay,.summary-screen,.acts{display:none!important}
+  .ct{padding:8px 0}
+  .col-card{box-shadow:none;border:2px solid #999;page-break-inside:avoid}
+  .col-card:hover{border-color:#999}
+  .col-card.col-solved{opacity:1;background:#fff}
+  .col-card.col-solved::after{display:none}
+  .item{border:2px solid #999!important;background:#fff!important;box-shadow:none!important}
+  .item.correct{background:#fff!important;border-color:#999!important;box-shadow:none!important}
+  .draw-canvas{display:none!important}
+  .ph{display:block!important}
+}
+
+/* Responsive */
+@media(max-width:600px){
+  .hd h1{font-size:1.4rem}
+  .hd .sub{font-size:0.88rem}
+  .hd .inst{font-size:0.85rem}
+  .mbtn{padding:6px 14px;font-size:0.82rem}
+  .tb{padding:5px 10px;font-size:0.75rem;min-height:38px}
+  .item{width:48px;height:48px;font-size:2rem}
+  .col-card{padding:10px 8px;min-width:60px}
+  .cols-row{gap:8px}
+  .summary-grid{grid-template-columns:repeat(5,1fr)}
+  .comp-card{padding:24px 20px}
+  .comp-card .big{font-size:2.8rem}
+  .comp-card h2{font-size:1.2rem}
+  .btn{padding:8px 18px;font-size:0.88rem}
+}
+</style>
+</head>
+<body>
+
+<div class="hd">
+  <h1>🔍 סדרות — מי פונה לכיוון אחר?</h1>
+  <p class="sub">תרגול זיהוי כיוונים והבדלים</p>
+  <p class="inst">מצאו בכל עמודה מי פונה לכיוון אחר!</p>
+</div>
+
+<div class="mb">
+  <button class="mbtn on" data-mode="click">👆 לחיצה</button>
+  <button class="mbtn" data-mode="draw">✏️ ציור</button>
+  <button class="mbtn" data-mode="print">🖨️ הדפסה</button>
+</div>
+
+<div class="ps">
+  <div class="pr">
+    <span class="pl">התקדמות:</span>
+    <div class="ppb"><div class="pf" id="pf" style="width:0%"></div></div>
+    <div class="score-info">
+      <span class="s-ok">✅ <span id="okCount">0</span></span>
+      <span class="s-no">❌ <span id="errCount">0</span></span>
+    </div>
+  </div>
+</div>
+
+<div class="tw"><div class="ts" id="levelTabs"></div></div>
+
+<div class="ct">
+  <div class="ph">🔍 סדרות — מי פונה לכיוון אחר?</div>
+
+  <div class="draw-colors" id="drawColors">
+    <div class="dc-btn active" data-color="#ef4444" style="background:#ef4444" title="אדום"></div>
+    <div class="dc-btn" data-color="#2563eb" style="background:#2563eb" title="כחול"></div>
+    <div class="dc-btn" data-color="#10b981" style="background:#10b981" title="ירוק"></div>
+    <div class="dc-btn" data-color="#f59e0b" style="background:#f59e0b" title="כתום"></div>
+  </div>
+
+  <div id="levelArea"></div>
+
+  <div class="comp-overlay" id="compOverlay">
+    <div class="comp-card">
+      <div class="big" id="compEmoji">🌟</div>
+      <h2 id="compTitle">מושלם!</h2>
+      <div class="msg" id="compMsg">מצאתם את כולם!</div>
+      <div class="stats">
+        <span class="s-ok">✅ <span id="compOk">0</span></span>
+        <span class="s-no">❌ <span id="compErr">0</span></span>
+      </div>
+      <div class="acts">
+        <button class="btn btn-pri" id="compNext">⬅️ לשלב הבא</button>
+        <button class="btn btn-outline" onclick="window.print()">🖨️ הדפס</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary-screen" id="summaryScreen">
+    <h2>🏆 סיכום</h2>
+    <div class="summary-grid" id="summaryGrid"></div>
+    <div class="acts" id="redoButtons"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+
+/* ===== LEVEL DEFINITIONS ===== */
+var LEVELS = [
+  {cols:4, rows:4, emojis:['✈️','🐴','🚗','🐘']},
+  {cols:4, rows:4, emojis:['🦆','🐕','🚌','🐿️']},
+  {cols:4, rows:4, emojis:['🐊','🐦','🏍️','🐄']},
+  {cols:4, rows:5, emojis:['🦅','🐇','🐟','🐈']},
+  {cols:4, rows:5, emojis:['🐴','🦎','🚂','🐭']},
+  {cols:4, rows:5, emojis:['🐘','🐝','🐕','🚗']},
+  {cols:5, rows:5, emojis:['✈️','🐿️','🦆','🐊','🐔']},
+  {cols:5, rows:5, emojis:['🐄','🐦','🦅','🐷','🚌']},
+  {cols:5, rows:5, emojis:['🐴','🐇','🐟','🐢','🦁']},
+  {cols:5, rows:6, emojis:['🐘','🐈','🏍️','🐭','🐝']},
+  {cols:5, rows:6, emojis:['✈️','🦎','🐕','🐊','🐔']},
+  {cols:5, rows:6, emojis:['🚗','🐿️','🦆','🐄','🐷']},
+  {cols:6, rows:6, emojis:['🐴','🐦','🐟','🐇','🚂','🐢']},
+  {cols:6, rows:6, emojis:['🐘','🦅','🐈','🐝','🚌','🦁']},
+  {cols:6, rows:7, emojis:['✈️','🐴','🐕','🦆','🐊','🚗']}
+];
+
+var TOTAL = LEVELS.length;
+var mode = 'click';
+var drawColor = '#ef4444';
+var curLevel = 0;
+var okCount = 0, errCount = 0;
+var levelResults = [];
+var levelErrors = [];
+var levelState = []; // per-level column data: [{emoji, items:[{flipped:bool, isOdd:bool}], solved:bool}]
+
+/* DOM refs */
+var $tabs = document.getElementById('levelTabs');
+var $area = document.getElementById('levelArea');
+var $pf = document.getElementById('pf');
+var $okC = document.getElementById('okCount');
+var $errC = document.getElementById('errCount');
+var $comp = document.getElementById('compOverlay');
+var $compEmoji = document.getElementById('compEmoji');
+var $compTitle = document.getElementById('compTitle');
+var $compMsg = document.getElementById('compMsg');
+var $compOk = document.getElementById('compOk');
+var $compErr = document.getElementById('compErr');
+var $compNext = document.getElementById('compNext');
+var $summary = document.getElementById('summaryScreen');
+var $summaryGrid = document.getElementById('summaryGrid');
+var $redoButtons = document.getElementById('redoButtons');
+var $drawColors = document.getElementById('drawColors');
+
+function rand(n){return Math.floor(Math.random()*n)}
+
+/* ===== Generate column data for a level ===== */
+function generateLevel(lv){
+  var def = LEVELS[lv];
+  var columns = [];
+  for(var c = 0; c < def.cols; c++){
+    var emoji = def.emojis[c];
+    var numItems = def.rows;
+    var majorityDir = rand(2); // 0=normal, 1=flipped
+    var oddIndex = rand(numItems);
+    var items = [];
+    for(var i = 0; i < numItems; i++){
+      var isOdd = (i === oddIndex);
+      var flipped = isOdd ? (1 - majorityDir) : majorityDir;
+      items.push({flipped: flipped === 1, isOdd: isOdd, found: false});
+    }
+    columns.push({emoji: emoji, items: items, solved: false});
+  }
+  return columns;
+}
+
+/* ===== Init tabs ===== */
+function initTabs(){
+  $tabs.innerHTML = '';
+  for(var i = 0; i < TOTAL; i++){
+    var b = document.createElement('button');
+    b.className = 'tb' + (i === curLevel ? ' on' : '');
+    b.textContent = 'שלב ' + (i + 1);
+    b.dataset.lv = i;
+    b.onclick = function(){ goLevel(+this.dataset.lv); };
+    $tabs.appendChild(b);
+  }
+}
+
+function updateTabs(){
+  var tabs = $tabs.querySelectorAll('.tb');
+  tabs.forEach(function(t, i){
+    t.className = 'tb';
+    if(i === curLevel) t.classList.add('on');
+    else if(levelResults[i] === 'ok') t.classList.add('dn');
+    else if(levelResults[i] === 'err') t.classList.add('err');
+  });
+  var active = $tabs.querySelector('.tb.on');
+  if(active) active.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+}
+
+function updateProgress(){
+  var done = 0;
+  for(var i = 0; i < TOTAL; i++){
+    if(levelResults[i] === 'ok' || levelResults[i] === 'err') done++;
+  }
+  $pf.style.width = (done / TOTAL * 100) + '%';
+  $okC.textContent = okCount;
+  $errC.textContent = errCount;
+}
+
+/* ===== Render level ===== */
+function renderLevel(){
+  $summary.classList.remove('show');
+  $comp.classList.remove('show');
+
+  // Show/hide draw color selector
+  if(mode === 'draw'){
+    $drawColors.classList.add('show');
+  } else {
+    $drawColors.classList.remove('show');
+  }
+
+  // Generate new data for this level
+  levelState = generateLevel(curLevel);
+
+  var html = '<div class="cols-row">';
+  for(var c = 0; c < levelState.length; c++){
+    var col = levelState[c];
+    html += '<div class="col-card" data-col="' + c + '" style="animation-delay:' + (c * 0.08) + 's">';
+    if(mode === 'draw'){
+      html += '<canvas class="draw-canvas" data-col="' + c + '"></canvas>';
+    }
+    html += '<div class="col-label">' + col.emoji + '</div>';
+    for(var i = 0; i < col.items.length; i++){
+      var it = col.items[i];
+      html += '<div class="item" data-col="' + c + '" data-idx="' + i + '">';
+      html += '<span class="emoji' + (it.flipped ? ' flipped' : '') + '">' + col.emoji + '</span>';
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+
+  $area.innerHTML = html;
+
+  /* Bind item clicks (click mode) */
+  if(mode === 'click'){
+    var items = document.querySelectorAll('.item');
+    items.forEach(function(el){
+      el.onclick = function(){ handleItemClick(el); };
+    });
+  }
+
+  /* Draw mode setup */
+  if(mode === 'draw'){
+    setupDrawMode();
+  }
+}
+
+/* ===== Click handling ===== */
+function handleItemClick(el){
+  var c = +el.dataset.col;
+  var idx = +el.dataset.idx;
+  var col = levelState[c];
+  if(col.solved) return;
+  var it = col.items[idx];
+  if(it.found) return;
+
+  if(it.isOdd){
+    // Correct!
+    it.found = true;
+    col.solved = true;
+    el.classList.add('correct');
+    el.onclick = null;
+    okCount++;
+    updateProgress();
+    markColumnSolved(c);
+    checkLevelDone();
+  } else {
+    // Wrong
+    errCount++;
+    levelErrors[curLevel] = (levelErrors[curLevel] || 0) + 1;
+    updateProgress();
+    el.classList.add('wrong', 'wrong-flash');
+    setTimeout(function(){
+      el.classList.remove('wrong', 'wrong-flash');
+    }, 500);
+  }
+}
+
+function markColumnSolved(c){
+  var card = document.querySelector('.col-card[data-col="' + c + '"]');
+  if(card) card.classList.add('col-solved');
+}
+
+function checkLevelDone(){
+  var allSolved = levelState.every(function(col){ return col.solved; });
+  if(allSolved){
+    var lvErr = levelErrors[curLevel] || 0;
+    levelResults[curLevel] = lvErr > 0 ? 'err' : 'ok';
+    setTimeout(function(){ showCompletion(lvErr); }, 350);
+  }
+}
+
+/* ===== Completion overlay ===== */
+function showCompletion(lvErr){
+  var perfect = lvErr === 0;
+  $compEmoji.textContent = perfect ? '🌟' : '👏';
+  $compTitle.textContent = perfect ? 'מושלם!' : 'כל הכבוד!';
+  $compMsg.textContent = perfect ? 'מצאתם את כולם בלי טעויות!' : 'סיימתם את השלב עם ' + lvErr + ' טעויות';
+  $compOk.textContent = okCount;
+  $compErr.textContent = errCount;
+  $compNext.textContent = curLevel < TOTAL - 1 ? '⬅️ לשלב הבא' : '🏆 סיכום';
+  $comp.classList.add('show');
+  updateTabs();
+  updateProgress();
+}
+
+$compNext.onclick = function(){
+  $comp.classList.remove('show');
+  if(curLevel < TOTAL - 1){
+    goLevel(curLevel + 1);
+  } else {
+    showSummary();
+  }
+};
+
+$comp.onclick = function(e){
+  if(e.target === $comp) $comp.classList.remove('show');
+};
+
+function goLevel(lv){
+  curLevel = lv;
+  updateTabs();
+  renderLevel();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+/* ===== Draw mode ===== */
+function setupDrawMode(){
+  var cards = document.querySelectorAll('.col-card');
+  cards.forEach(function(card){
+    card.classList.add('draw-active');
+    var canvas = card.querySelector('.draw-canvas');
+    if(!canvas) return;
+
+    // Size canvas to card
+    canvas.width = card.offsetWidth;
+    canvas.height = card.offsetHeight;
+    var ctx = canvas.getContext('2d');
+    var drawing = false;
+
+    canvas.style.touchAction = 'none';
+
+    canvas.addEventListener('pointerdown', function(e){
+      e.preventDefault();
+      drawing = true;
+      ctx.beginPath();
+      ctx.strokeStyle = drawColor;
+      ctx.lineWidth = 4;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      var r = canvas.getBoundingClientRect();
+      ctx.moveTo(e.clientX - r.left, e.clientY - r.top);
+    }, {passive: false});
+
+    canvas.addEventListener('pointermove', function(e){
+      if(!drawing) return;
+      e.preventDefault();
+      var r = canvas.getBoundingClientRect();
+      ctx.lineTo(e.clientX - r.left, e.clientY - r.top);
+      ctx.stroke();
+    }, {passive: false});
+
+    canvas.addEventListener('pointerup', function(e){
+      if(!drawing) return;
+      drawing = false;
+      ctx.closePath();
+      checkDrawHits(+card.dataset.col, canvas);
+    }, {passive: false});
+
+    canvas.addEventListener('pointerleave', function(){
+      if(drawing){
+        drawing = false;
+        ctx.closePath();
+        checkDrawHits(+card.dataset.col, canvas);
+      }
+    });
+  });
+}
+
+function checkDrawHits(colIdx, canvas){
+  var col = levelState[colIdx];
+  if(col.solved) return;
+  var card = canvas.parentElement;
+  var items = card.querySelectorAll('.item');
+  var ctx = canvas.getContext('2d');
+
+  items.forEach(function(el){
+    var idx = +el.dataset.idx;
+    var it = col.items[idx];
+    if(it.found) return;
+
+    var cellRect = el.getBoundingClientRect();
+    var canvasRect = canvas.getBoundingClientRect();
+    var cx = cellRect.left - canvasRect.left + cellRect.width / 2;
+    var cy = cellRect.top - canvasRect.top + cellRect.height / 2;
+    var sampleSize = 14;
+
+    try {
+      var imgData = ctx.getImageData(
+        Math.max(0, Math.floor(cx - sampleSize / 2)),
+        Math.max(0, Math.floor(cy - sampleSize / 2)),
+        sampleSize, sampleSize
+      );
+      var hasPixels = false;
+      for(var p = 3; p < imgData.data.length; p += 4){
+        if(imgData.data[p] > 50){ hasPixels = true; break; }
+      }
+      if(hasPixels){
+        if(it.isOdd){
+          it.found = true;
+          col.solved = true;
+          el.classList.add('correct');
+          okCount++;
+          updateProgress();
+          markColumnSolved(colIdx);
+          checkLevelDone();
+        } else {
+          errCount++;
+          levelErrors[curLevel] = (levelErrors[curLevel] || 0) + 1;
+          updateProgress();
+        }
+      }
+    } catch(e){}
+  });
+}
+
+/* ===== Draw color selector ===== */
+document.querySelectorAll('.dc-btn').forEach(function(b){
+  b.onclick = function(){
+    document.querySelectorAll('.dc-btn').forEach(function(x){ x.classList.remove('active'); });
+    b.classList.add('active');
+    drawColor = b.dataset.color;
+  };
+});
+
+/* ===== Summary screen ===== */
+function showSummary(){
+  $area.innerHTML = '';
+  $drawColors.classList.remove('show');
+  var html = '';
+  var errLevels = [], skipLevels = [];
+  for(var i = 0; i < TOTAL; i++){
+    var cls = 's-skip';
+    var res = levelResults[i];
+    if(res === 'ok') cls = 's-ok';
+    else if(res === 'err') cls = 's-err';
+    if(res === 'err') errLevels.push(i);
+    if(!res) skipLevels.push(i);
+    html += '<div class="summary-cell ' + cls + '" data-lv="' + i + '">' + (i + 1) + '</div>';
+  }
+  $summaryGrid.innerHTML = html;
+  $summaryGrid.querySelectorAll('.summary-cell').forEach(function(c){
+    c.onclick = function(){ goLevel(+c.dataset.lv); };
+  });
+
+  /* Redo buttons */
+  var btns = '';
+  if(errLevels.length > 0){
+    btns += '<button class="btn btn-no" id="redoErr">🔄 חזרו על שלבים עם טעויות (' + errLevels.length + ')</button>';
+  }
+  if(skipLevels.length > 0){
+    btns += '<button class="btn btn-accent" id="redoSkip">⏭️ שלבים שדילגתם (' + skipLevels.length + ')</button>';
+  }
+  if(errLevels.length > 0 && skipLevels.length > 0){
+    btns += '<button class="btn btn-pri" id="redoBoth">🔄 חזרו על הכל</button>';
+  }
+  btns += '<button class="btn btn-outline" id="redoAll">🔄 התחלה מחדש</button>';
+  $redoButtons.innerHTML = btns;
+
+  if(document.getElementById('redoErr')){
+    document.getElementById('redoErr').onclick = function(){
+      for(var i = 0; i < TOTAL; i++){
+        if(levelResults[i] === 'err'){ levelResults[i] = null; levelErrors[i] = 0; }
+      }
+      goLevel(errLevels[0]);
+    };
+  }
+  if(document.getElementById('redoSkip')){
+    document.getElementById('redoSkip').onclick = function(){
+      goLevel(skipLevels[0]);
+    };
+  }
+  if(document.getElementById('redoBoth')){
+    document.getElementById('redoBoth').onclick = function(){
+      var both = errLevels.concat(skipLevels).sort(function(a, b){ return a - b; });
+      for(var i = 0; i < TOTAL; i++){
+        if(levelResults[i] === 'err'){ levelResults[i] = null; levelErrors[i] = 0; }
+      }
+      goLevel(both[0]);
+    };
+  }
+  if(document.getElementById('redoAll')){
+    document.getElementById('redoAll').onclick = function(){
+      okCount = 0; errCount = 0; levelResults = []; levelErrors = [];
+      for(var i = 0; i < TOTAL; i++){ levelResults.push(null); levelErrors.push(0); }
+      updateProgress();
+      goLevel(0);
+    };
+  }
+
+  $summary.classList.add('show');
+  updateTabs();
+}
+
+/* ===== Mode buttons ===== */
+document.querySelectorAll('.mbtn').forEach(function(b){
+  b.onclick = function(){
+    var m = b.dataset.mode;
+    if(m === 'print'){ window.print(); return; }
+    mode = m;
+    document.querySelectorAll('.mbtn').forEach(function(x){ x.classList.remove('on'); });
+    b.classList.add('on');
+    renderLevel();
+  };
+});
+
+/* ===== Init ===== */
+for(var i = 0; i < TOTAL; i++){ levelResults.push(null); levelErrors.push(0); }
+initTabs();
+renderLevel();
+updateProgress();
+
+})();
+</script>
+</body>
+</html>

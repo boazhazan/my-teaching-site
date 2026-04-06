@@ -243,8 +243,8 @@ function skip(){if(status[curIdx]==='pending'){status[curIdx]='skipped'}if(curId
 function showSummary(){
   const solved=status.filter(s=>s==='solved').length;
   const wrongs=status.filter(s=>s==='wrong').length;
-  const skipped=status.filter(s=>s==='skipped').length;
-  const pct=Math.round(solved/pool.length*100);
+  const notDone=status.filter(s=>s==='skipped'||s==='pending').length;
+  const pct=pool.length?Math.round(solved/pool.length*100):0;
 
   let emoji,title;
   if(pct===100){emoji='🏆';title='מושלם!'}
@@ -253,16 +253,17 @@ function showSummary(){
   else{emoji='📚';title='ממשיכים להתאמן!'}
 
   document.getElementById('sumTitle').textContent=emoji+' '+title;
-  document.getElementById('sumSub').textContent=`${solved} נכון, ${wrongs} טעויות, ${skipped} דילוגים (${pct}%)`;
+  document.getElementById('sumSub').textContent=`${solved} נכון, ${wrongs} טעויות, ${notDone} לא בוצע (${pct}%)`;
 
   let h='<div class="sum-grid">';
   pool.forEach((q,i)=>{
-    const s=status[i];const cls=s==='solved'?'s':s==='wrong'?'w':'sk';
-    const icon=s==='solved'?'✅':s==='wrong'?'❌':'⟫';
+    const s=status[i];
+    const cls=s==='solved'?'s':s==='wrong'?'w':'sk';
+    const icon=s==='solved'?'✅':s==='wrong'?'❌':'❓';
     let ansStr='';
     if(s==='solved')ansStr=`= ${q.answer}`;
     else if(s==='wrong')ansStr=`ענית ${userAns[i]} | נכון: ${q.answer}`;
-    else ansStr='דילוג';
+    else ansStr='לא בוצע';
     h+=`<div class="sum-item ${cls}" onclick="document.getElementById('overlay').classList.remove('show');goTo(${i})">
       <div class="sum-expr">${icon} ${q.expr}</div><div class="sum-ans">${ansStr}</div></div>`;
   });
@@ -270,8 +271,8 @@ function showSummary(){
   document.getElementById('sumBody').innerHTML=h;
 
   document.getElementById('redoWrongBtn').style.display=wrongs?'':'none';
-  document.getElementById('redoSkipBtn').style.display=skipped?'':'none';
-  document.getElementById('redoBothBtn').style.display=(wrongs&&skipped)?'':'none';
+  document.getElementById('redoSkipBtn').style.display=notDone?'':'none';
+  document.getElementById('redoBothBtn').style.display=(wrongs||notDone)?'':'none';
 
   document.getElementById('overlay').classList.add('show');
   if(pct>=60)launchConfetti();
@@ -281,8 +282,10 @@ function redoSubset(type){
   const items=[];
   pool.forEach((q,i)=>{
     const s=status[i];
-    if((type==='wrong'&&s==='wrong')||(type==='skip'&&s==='skipped')||
-       (type==='both'&&(s==='wrong'||s==='skipped'))){
+    const isWrong=s==='wrong';
+    const isNotDone=s==='skipped'||s==='pending';
+    if((type==='wrong'&&isWrong)||(type==='skip'&&isNotDone)||
+       (type==='both'&&(isWrong||isNotDone))){
       const copy=JSON.parse(JSON.stringify(q));
       copy.options=shuffle(copy.options);
       items.push(copy);

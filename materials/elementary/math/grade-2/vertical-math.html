@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>חיבור וחיסור במאונך — כיתה ב' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --primary-light: #dbeafe;
+  --accent: #f59e0b;
+  --accent-dark: #d97706;
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --error: #ef4444;
+  --error-light: #fee2e2;
+  --text: #1e293b;
+  --text-light: #64748b;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Heebo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  direction: rtl;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== HEADER ===== */
+.app-header {
+  background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #a78bfa 100%);
+  color: #fff;
+  padding: 20px 24px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.3);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.header-title h1 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.header-title .subtitle {
+  font-size: 0.8rem;
+  opacity: 0.85;
+  font-weight: 400;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.header-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: #fff;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.header-btn:hover { background: rgba(255,255,255,0.3); }
+
+.progress-bar {
+  background: rgba(255,255,255,0.2);
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+.progress-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+/* ===== TABS ===== */
+.tabs-container {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.tabs-container::-webkit-scrollbar { display: none; }
+
+.tabs-row {
+  display: flex;
+  gap: 6px;
+  min-width: max-content;
+}
+
+.tab {
+  min-width: 40px;
+  height: 36px;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab:hover { border-color: #7c3aed; color: #7c3aed; }
+.tab.active { background: #7c3aed; color: #fff; border-color: #7c3aed; }
+.tab.done { background: var(--success-light); color: var(--success); border-color: var(--success); }
+.tab.done.perfect::after { content: '⭐'; font-size: 0.6rem; margin-right: 2px; }
+
+/* ===== MAIN ===== */
+.main-content {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px 16px 100px;
+}
+
+/* Level info */
+.level-info {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.level-badge {
+  display: inline-block;
+  background: #ede9fe;
+  color: #7c3aed;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.level-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.level-instruction {
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+/* ===== TIP BOX ===== */
+.level-tip {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 2px solid #fcd34d;
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.level-tip.collapsed .tip-body { display: none; }
+
+.tip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+}
+
+.tip-toggle {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.tip-body { margin-top: 8px; }
+
+.tip-text {
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+
+.tip-example {
+  background: rgba(255,255,255,0.7);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  direction: ltr;
+  text-align: center;
+  font-weight: 500;
+  line-height: 1.8;
+}
+
+/* ===== QUESTION CARD ===== */
+.questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.question-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  transition: all 0.3s;
+  position: relative;
+}
+
+.question-card.correct {
+  border-color: var(--success);
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.question-card.wrong {
+  border-color: var(--error);
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.question-number {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 28px;
+  height: 28px;
+  background: #ede9fe;
+  color: #7c3aed;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.question-card.correct .question-number {
+  background: var(--success);
+  color: #fff;
+}
+
+/* ===== VERTICAL MATH DISPLAY ===== */
+.vertical-math {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+  direction: ltr;
+}
+
+.vertical-container {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: relative;
+  min-width: 140px;
+}
+
+.v-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0;
+  position: relative;
+}
+
+.v-op {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #7c3aed;
+  position: absolute;
+  left: -32px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.v-digit {
+  width: 44px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.v-line {
+  width: 100%;
+  height: 3px;
+  background: var(--text);
+  margin: 4px 0;
+  border-radius: 2px;
+}
+
+/* Answer digit input */
+.v-digit-input {
+  width: 44px;
+  height: 52px;
+  border: 3px dashed #7c3aed;
+  border-radius: 10px;
+  background: #ede9fe;
+  font-family: inherit;
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-align: center;
+  color: #7c3aed;
+  outline: none;
+  transition: all 0.2s;
+  -moz-appearance: textfield;
+  caret-color: #7c3aed;
+}
+
+.v-digit-input::-webkit-outer-spin-button,
+.v-digit-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.v-digit-input:focus {
+  border-style: solid;
+  background: #ddd6fe;
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.2);
+}
+
+.v-digit-input.correct-digit {
+  background: var(--success-light);
+  border-color: var(--success);
+  color: var(--success);
+  border-style: solid;
+}
+
+.v-digit-input.wrong-digit {
+  background: var(--error-light);
+  border-color: var(--error);
+  color: var(--error);
+  border-style: solid;
+}
+
+/* Carry/borrow input cells */
+.carry-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0;
+  min-height: 28px;
+}
+
+.carry-input {
+  width: 32px;
+  height: 26px;
+  margin: 0 6px;
+  border: 2px dashed #d4d4d8;
+  border-radius: 6px;
+  background: #fafafa;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-align: center;
+  color: #7c3aed;
+  outline: none;
+  transition: all 0.2s;
+  -moz-appearance: textfield;
+}
+
+.carry-input::-webkit-outer-spin-button,
+.carry-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.carry-input:focus {
+  border-color: #7c3aed;
+  border-style: solid;
+  background: #ede9fe;
+}
+
+.carry-input.correct-carry {
+  border-color: var(--success);
+  background: var(--success-light);
+  color: var(--success);
+  border-style: solid;
+}
+
+.carry-spacer {
+  width: 44px;
+  height: 24px;
+}
+
+/* Check button */
+.check-btn {
+  display: block;
+  margin: 16px auto 0;
+  padding: 10px 32px;
+  border-radius: 10px;
+  border: none;
+  background: #7c3aed;
+  color: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.check-btn:hover { background: #6d28d9; transform: translateY(-1px); }
+.check-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+
+/* Feedback */
+.feedback {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.feedback.show { opacity: 1; }
+.feedback.correct-fb { color: var(--success); }
+.feedback.wrong-fb { color: var(--error); }
+
+/* ===== LEVEL COMPLETE ===== */
+.level-complete {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 2px solid var(--success);
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  display: none;
+}
+
+.level-complete.show { display: block; animation: popIn 0.4s ease; }
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.lc-emoji { font-size: 3.5rem; margin-bottom: 12px; }
+.lc-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 4px; }
+.lc-sub { color: var(--text-light); margin-bottom: 8px; }
+
+.lc-score {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 16px 0;
+}
+
+.lc-score-item { text-align: center; }
+.lc-score-num { font-size: 2rem; font-weight: 900; }
+.lc-score-label { font-size: 0.8rem; color: var(--text-light); }
+
+.lc-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.lc-btn {
+  padding: 12px 28px;
+  border-radius: 10px;
+  border: none;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lc-btn-primary { background: #7c3aed; color: #fff; }
+.lc-btn-primary:hover { background: #6d28d9; }
+.lc-btn-outline { background: transparent; color: #7c3aed; border: 2px solid #7c3aed; }
+.lc-btn-outline:hover { background: #ede9fe; }
+
+/* ===== HELP MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.show { display: flex; }
+
+.modal {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  max-width: 420px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: popIn 0.3s ease;
+}
+
+.modal h2 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal p {
+  color: var(--text-light);
+  margin-bottom: 12px;
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.modal-close {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #7c3aed;
+  color: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+/* ===== PRINT ===== */
+.print-overlay { display: none; }
+
+@media print {
+  .app-header, .tabs-container, .level-tip, .level-complete, .modal-overlay { display: none !important; }
+  .main-content { padding: 0; max-width: 100%; }
+  .print-overlay { display: block !important; text-align: center; padding: 20px 0; font-size: 1.3rem; font-weight: 800; border-bottom: 2px solid #000; margin-bottom: 20px; }
+  .question-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; margin-bottom: 12px; }
+  .check-btn { display: none; }
+  .feedback { display: none; }
+  body { background: #fff; }
+  .v-digit-input { border-style: solid; background: #f0f0f0; }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+  .v-digit, .v-digit-input { width: 38px; height: 46px; font-size: 1.5rem; }
+  .v-op { font-size: 1.3rem; left: -26px; }
+  .carry-cell { width: 38px; font-size: 0.7rem; }
+  .question-card { padding: 18px 14px; }
+  .header-title h1 { font-size: 1.1rem; }
+  .vertical-container { min-width: 110px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="app-header">
+  <div class="header-top">
+    <div class="header-title">
+      <div class="header-icon">📐</div>
+      <div>
+        <h1>חיבור וחיסור במאונך</h1>
+        <div class="subtitle">כיתה ב' — תרגול מדורג</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="header-btn" onclick="showHelp()" title="עזרה">❓</button>
+      <button class="header-btn" onclick="window.print()" title="הדפסה">🖨️</button>
+    </div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-stats">
+    <span>✅ <span id="totalCorrect">0</span> נכון</span>
+    <span>❌ <span id="totalWrong">0</span> שגוי</span>
+    <span id="progressText">רמה 1 מתוך 15</span>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-container">
+  <div class="tabs-row" id="tabsRow"></div>
+</div>
+
+<!-- MAIN -->
+<div class="main-content">
+  <div class="print-overlay">חיבור וחיסור במאונך — כיתה ב' | בועז חזן</div>
+
+  <div class="level-info">
+    <span class="level-badge" id="levelBadge">רמה 1</span>
+    <h2 class="level-title" id="levelTitle"></h2>
+    <p class="level-instruction" id="levelInstruction"></p>
+  </div>
+
+  <div class="level-tip" id="levelTip" onclick="toggleTip()">
+    <div class="tip-header">
+      <span>💡 טיפ</span>
+      <span class="tip-toggle" id="tipToggle">▲ הסתר</span>
+    </div>
+    <div class="tip-body">
+      <p class="tip-text" id="tipText"></p>
+      <div class="tip-example" id="tipExample"></div>
+    </div>
+  </div>
+
+  <div class="questions-list" id="questionsList"></div>
+
+  <div class="level-complete" id="levelComplete">
+    <div class="lc-emoji" id="lcEmoji">🎉</div>
+    <div class="lc-title" id="lcTitle">כל הכבוד!</div>
+    <div class="lc-sub" id="lcSub"></div>
+    <div class="lc-score">
+      <div class="lc-score-item">
+        <div class="lc-score-num" id="lcCorrect" style="color: var(--success);">0</div>
+        <div class="lc-score-label">נכון</div>
+      </div>
+      <div class="lc-score-item">
+        <div class="lc-score-num" id="lcWrong" style="color: var(--error);">0</div>
+        <div class="lc-score-label">שגוי</div>
+      </div>
+    </div>
+    <div class="lc-buttons">
+      <button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button>
+      <button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button>
+    </div>
+  </div>
+</div>
+
+<!-- HELP MODAL -->
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2>❓ איך משחקים?</h2>
+    <p>בכל רמה מופיעים <strong>תרגילי חיבור וחיסור במאונך</strong> — בדיוק כמו במחברת!</p>
+    <p>כתבו את התוצאה <strong>ספרה אחרי ספרה</strong> — קודם יחידות, אחר כך עשרות. אם יש המרה, היא תופיע אוטומטית.</p>
+    <p>אחרי שמילאתם את כל הספרות — לחצו <strong>"בדיקה ✓"</strong> כדי לבדוק.</p>
+    <p>15 רמות מדורגות — מתרגילים פשוטים ועד תלת-ספרתיים! בהצלחה! 💪</p>
+    <button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button>
+  </div>
+</div>
+
+<script>
+// ===== LEVELS =====
+const levels = [
+  {
+    title: 'חיבור פשוט — בלי המרה',
+    instruction: 'חברו במאונך — היחידות לא עוברות את 9',
+    tip: '💡 טיפ: מתחילים מימין — מחברים יחידות, ואז עשרות. פשוט!',
+    example: '  23\n+ 14\n----\n  37\nיחידות: 3+4=7, עשרות: 2+1=3',
+    gen: () => { const a = randRange(11,49); const unitsMax = 9-(a%10); const b = randRange(11, Math.min(49, 10*Math.floor((99-a)/10) + Math.min(unitsMax, 9))); const b2 = 10*randRange(1,Math.floor((99-a)/10)) + randRange(1,Math.min(9-a%10,8)); return mkAdd(a, Math.max(11, Math.min(b2, 88))); }
+  },
+  {
+    title: 'חיסור פשוט — בלי פריטה',
+    instruction: 'חסרו במאונך — בלי לפרוט',
+    tip: '💡 טיפ: מתחילים מימין — מחסרים יחידות, ואז עשרות.',
+    example: '  47\n- 23\n----\n  24\nיחידות: 7-3=4, עשרות: 4-2=2',
+    gen: () => { const a = randRange(22,69); const b = 10*randRange(1,Math.floor(a/10)-1) + randRange(1,a%10); return mkSub(a, Math.max(11,b)); }
+  },
+  {
+    title: 'חיבור וחיסור — בלי המרה',
+    instruction: 'תרגילים מעורבבים בלי המרה',
+    tip: '💡 טיפ: שימו לב לסימן! + או − ופעלו בהתאם.',
+    example: 'קודם יחידות, אחר כך עשרות — תמיד מימין לשמאל!',
+    gen: () => Math.random()<0.5 ? levels[0].gen() : levels[1].gen()
+  },
+  {
+    title: 'חיבור עם המרה',
+    instruction: 'כשהיחידות עוברות 9 — מעבירים 1 לעשרות!',
+    tip: '💡 טיפ: אם סכום היחידות ≥ 10, כותבים את ספרת היחידות ומעבירים 1 לעשרות.',
+    example: '  27\n+ 15\n----\n  42\nיחידות: 7+5=12 → כותבים 2, מעבירים 1\nעשרות: 2+1+1=4',
+    gen: () => { const a = randRange(15,59); const aU = a%10; const b = 10*randRange(0,Math.floor((99-a)/10)) + randRange(10-aU, 9); return mkAdd(a, Math.max(5, Math.min(b, 99-a))); }
+  },
+  {
+    title: 'חיסור עם פריטה',
+    instruction: 'כשאי אפשר לחסר את היחידות — פורטים מהעשרות!',
+    tip: '💡 טיפ: אם ספרת היחידות למעלה קטנה מלמטה — לווים 10 מהעשרות.',
+    example: '  43\n- 17\n----\n  26\nיחידות: 3<7 → לווים: 13-7=6\nעשרות: 4-1-1=2',
+    gen: () => { const a = randRange(21,69); const aU = a%10; const bU = randRange(aU+1, 9); const bT = randRange(0, Math.floor(a/10)-2); return mkSub(a, bT*10+bU); }
+  },
+  {
+    title: 'חיבור עם המרה — תרגול',
+    instruction: 'עוד תרגול חיבור עם המרה',
+    tip: '💡 טיפ: זכרו — כשהיחידות ≥ 10, ה-1 עולה למעלה!',
+    example: '  38\n+ 24\n----\n  62\nיחידות: 8+4=12 → 2 למטה, 1 למעלה\nעשרות: 3+2+1=6',
+    gen: () => levels[3].gen()
+  },
+  {
+    title: 'חיסור עם פריטה — תרגול',
+    instruction: 'עוד תרגול חיסור עם פריטה',
+    tip: '💡 טיפ: כשפורטים, העשרות למעלה קטנות ב-1 והיחידות מקבלות +10.',
+    example: '  52\n- 28\n----\n  24\nיחידות: 2<8 → 12-8=4\nעשרות: 5-1-2=2',
+    gen: () => levels[4].gen()
+  },
+  {
+    title: 'מעורבב — עם המרה ובלי',
+    instruction: 'תרגילים מכל הסוגים',
+    tip: '💡 טיפ: תסתכלו על היחידות — אם צריך המרה, תעשו אותה!',
+    example: 'כל תרגיל הוא הפתעה — תהיו מוכנים לכל דבר!',
+    gen: () => [levels[0],levels[1],levels[3],levels[4]][randRange(0,3)].gen()
+  },
+  {
+    title: 'חיבור — מספרים גדולים יותר',
+    instruction: 'מספרים עד 99',
+    tip: '💡 טיפ: אותו דבר בדיוק — יחידות, המרה אם צריך, עשרות!',
+    example: '  67\n+ 28\n----\n  95\nיחידות: 7+8=15 → 5 למטה, 1 למעלה\nעשרות: 6+2+1=9',
+    gen: () => { const a = randRange(30,70); const b = randRange(15, 99-a); return mkAdd(a,b); }
+  },
+  {
+    title: 'חיסור — מספרים גדולים יותר',
+    instruction: 'חיסור עם מספרים עד 99',
+    tip: '💡 טיפ: אותו דבר — בדקו אם צריך לפרוט ופעלו בהתאם.',
+    example: '  81\n- 35\n----\n  46\nיחידות: 1<5 → 11-5=6\nעשרות: 8-1-3=4',
+    gen: () => { const a = randRange(40,89); const b = randRange(11, a-5); return mkSub(a,b); }
+  },
+  {
+    title: 'תלת-ספרתי + דו-ספרתי',
+    instruction: 'חיבור עם מספר תלת-ספרתי',
+    tip: '💡 טיפ: עכשיו יש 3 עמודות! יחידות → עשרות → מאות. אותו עיקרון.',
+    example: ' 245\n+  32\n-----\n 277\nיחידות: 5+2=7, עשרות: 4+3=7, מאות: 2',
+    gen: () => { const a = randRange(100,699); const b = randRange(11, Math.min(99, 999-a)); return mkAdd(a,b); }
+  },
+  {
+    title: 'תלת-ספרתי − דו-ספרתי',
+    instruction: 'חיסור עם מספר תלת-ספרתי',
+    tip: '💡 טיפ: 3 עמודות — אותו עיקרון של פריטה אם צריך.',
+    example: ' 354\n-  28\n-----\n 326\nיחידות: 4<8 → 14-8=6\nעשרות: 5-1-2=2, מאות: 3',
+    gen: () => { const a = randRange(120,599); const b = randRange(11, Math.min(99, a-10)); return mkSub(a,b); }
+  },
+  {
+    title: 'תלת-ספרתיים — מעורבב',
+    instruction: 'חיבור וחיסור עם תלת-ספרתיים',
+    tip: '💡 טיפ: שימו לב לסימן ולכל שלוש העמודות!',
+    example: 'זכרו: תמיד מימין לשמאל — יחידות, עשרות, מאות!',
+    gen: () => Math.random()<0.5 ? levels[10].gen() : levels[11].gen()
+  },
+  {
+    title: 'תלת-ספרתי + תלת-ספרתי',
+    instruction: 'חיבור שני מספרים תלת-ספרתיים',
+    tip: '💡 טיפ: אותו דבר — עמודה אחרי עמודה, עם המרה אם צריך!',
+    example: ' 347\n+251\n-----\n 598\nיחידות: 7+1=8, עשרות: 4+5=9, מאות: 3+2=5',
+    gen: () => { const a = randRange(100,499); const b = randRange(100, Math.min(499, 999-a)); return mkAdd(a,b); }
+  },
+  {
+    title: 'אתגר! — מעורבב',
+    instruction: 'כל מה שלמדתם — בואו נראה!',
+    tip: '🏆 טיפ: השתמשו בכל מה שלמדתם — קחו רגע, חשבו, ופתרו!',
+    example: 'נשמו עמוק ובדקו: סימן? כמה עמודות? צריך המרה?',
+    gen: () => levels[randRange(0,13)].gen()
+  }
+];
+
+// ===== HELPERS =====
+function randRange(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+
+function mkAdd(a,b){ return { a, b, op:'+', answer:a+b }; }
+function mkSub(a,b){ if(b>=a){b=a-randRange(1,Math.min(a-1,20));} return { a, b:Math.max(1,b), op:'-', answer:a-Math.max(1,b) }; }
+
+function getDigits(n, len) {
+  const s = String(n);
+  const arr = [];
+  for(let i=0;i<len;i++) arr.push(i<s.length ? parseInt(s[s.length-1-i]) : 0);
+  return arr; // [units, tens, hundreds...]
+}
+
+// ===== STATE =====
+let currentLevel = 0;
+let totalCorrect = 0;
+let totalWrong = 0;
+let levelResults = {};
+let currentQuestions = [];
+let answeredCount = 0;
+let levelCorrect = 0;
+let levelWrong = 0;
+const QPL = 5;
+
+// ===== RENDER =====
+function renderTabs() {
+  const row = document.getElementById('tabsRow');
+  row.innerHTML = '';
+  levels.forEach((_,i) => {
+    const t = document.createElement('button');
+    t.className = 'tab';
+    t.textContent = i+1;
+    if(i===currentLevel) t.classList.add('active');
+    if(levelResults[i]!==undefined){ t.classList.add('done'); if(levelResults[i]===0) t.classList.add('perfect'); }
+    t.onclick = () => goLevel(i);
+    row.appendChild(t);
+  });
+  const at = row.querySelector('.active');
+  if(at) at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel() {
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent = `רמה ${currentLevel+1}`;
+  document.getElementById('levelTitle').textContent = levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent = levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent = `רמה ${currentLevel+1} מתוך ${levels.length}`;
+
+  const lvl = levels[currentLevel];
+  document.getElementById('tipText').textContent = lvl.tip;
+  document.getElementById('tipExample').textContent = lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent = '▲ הסתר';
+
+  currentQuestions = [];
+  answeredCount = 0;
+  levelCorrect = 0;
+  levelWrong = 0;
+
+  for(let i=0;i<QPL;i++){
+    let q;
+    let attempts = 0;
+    do { q = lvl.gen(); attempts++; } while(attempts<20 && (q.answer<0 || q.b<1));
+    currentQuestions.push(q);
+  }
+
+  renderQuestions();
+  updateProgress();
+  renderTabs();
+}
+
+function renderQuestions() {
+  const list = document.getElementById('questionsList');
+  list.innerHTML = '';
+
+  currentQuestions.forEach((q,idx) => {
+    const maxNum = Math.max(q.a, q.b, q.answer);
+    const numDigits = String(maxNum).length;
+    const aDigits = getDigits(q.a, numDigits);
+    const bDigits = getDigits(q.b, numDigits);
+    const ansDigits = getDigits(q.answer, numDigits);
+
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `q-${idx}`;
+
+    // Determine if carry/borrow is needed at each position
+    const needsCarry = [];
+    if(q.op === '+') {
+      let carry = 0;
+      for(let d=0;d<numDigits;d++){
+        const sum = aDigits[d] + bDigits[d] + carry;
+        carry = Math.floor(sum/10);
+        needsCarry.push(carry > 0 && d < numDigits-1);
+      }
+    } else {
+      let borrow = 0;
+      for(let d=0;d<numDigits;d++){
+        let top = aDigits[d] - borrow;
+        needsCarry.push(top < bDigits[d] && d < numDigits-1);
+        borrow = top < bDigits[d] ? 1 : 0;
+      }
+    }
+
+    // Build vertical layout
+    let html = `<div class="question-number">${idx+1}</div>`;
+    html += `<div class="vertical-math"><div class="vertical-container">`;
+
+    // Carry/borrow row — small inputs above the first number
+    html += `<div class="carry-row">`;
+    for(let d=numDigits-1;d>=0;d--){
+      let showInput = false;
+      if(q.op === '+' && d > 0 && needsCarry[d-1]) showInput = true;
+      if(q.op === '-' && needsCarry[d]) showInput = true; // tens/hundreds that lose 1
+      if(q.op === '-' && d > 0 && needsCarry[d-1] && !needsCarry[d]) showInput = true; // units that gain 10
+      // Also for units column in subtraction when it needs borrow
+      if(q.op === '-' && needsCarry[d] === false && d === 0 && false) {} // skip
+      
+      if(showInput) {
+        const placeholder = q.op === '+' ? '?' : '?';
+        html += `<input type="number" class="carry-input" id="ci-${idx}-${d}" placeholder="${placeholder}" title="${q.op==='+' ? 'נשא' : 'פריטה'}" data-idx="${idx}" data-digit="${d}">`;
+      } else {
+        html += `<div class="carry-spacer"></div>`;
+      }
+    }
+    html += `</div>`;
+
+    // First number row
+    html += `<div class="v-row">`;
+    const aStr = String(q.a);
+    for(let d=numDigits-1;d>=0;d--){
+      if(d >= aStr.length) {
+        html += `<div class="v-digit"></div>`;
+      } else {
+        html += `<div class="v-digit">${aDigits[d]}</div>`;
+      }
+    }
+    html += `</div>`;
+
+    // Second number row with operator
+    html += `<div class="v-row"><span class="v-op">${q.op}</span>`;
+    const bStr = String(q.b);
+    for(let d=numDigits-1;d>=0;d--){
+      const val = bDigits[d];
+      if(d >= bStr.length) html += `<div class="v-digit"></div>`;
+      else html += `<div class="v-digit">${val}</div>`;
+    }
+    html += `</div>`;
+
+    // Line
+    html += `<div class="v-line"></div>`;
+
+    // Answer row — inputs
+    html += `<div class="v-row">`;
+    for(let d=numDigits-1;d>=0;d--){
+      html += `<input type="number" class="v-digit-input" id="ans-${idx}-${d}" min="0" max="9" maxlength="1" data-idx="${idx}" data-digit="${d}" 
+        oninput="handleDigitInput(this)" onkeydown="handleDigitNav(event,${idx},${d},${numDigits})">`;
+    }
+    html += `</div>`;
+
+    html += `</div></div>`; // close vertical-container and vertical-math
+
+    // Check button
+    html += `<button class="check-btn" id="btn-${idx}" onclick="checkAnswer(${idx})">בדיקה ✓</button>`;
+    html += `<div class="feedback" id="fb-${idx}"></div>`;
+
+    card.innerHTML = html;
+    list.appendChild(card);
+  });
+
+  // Focus first input of first question
+  setTimeout(() => {
+    const first = document.getElementById(`ans-0-0`);
+    if(first) first.focus();
+  }, 300);
+}
+
+// ===== INPUT HANDLING =====
+function handleDigitInput(el) {
+  let val = el.value;
+  if(val.length > 1) val = val.slice(-1);
+  if(val && (parseInt(val)<0 || parseInt(val)>9)) val = '';
+  el.value = val;
+  
+  if(val !== '') {
+    // Move to next input
+    const idx = parseInt(el.dataset.idx);
+    const d = parseInt(el.dataset.digit);
+    const numDigits = String(Math.max(currentQuestions[idx].a, currentQuestions[idx].b, currentQuestions[idx].answer)).length;
+    
+    // Try next digit in same question
+    for(let next = d+1; next < numDigits; next++) {
+      const nextEl = document.getElementById(`ans-${idx}-${next}`);
+      if(nextEl && !nextEl.disabled) { nextEl.focus(); nextEl.select(); return; }
+    }
+  }
+}
+
+function handleDigitNav(e, idx, d, numDigits) {
+  if(e.key === 'Backspace' && e.target.value === '') {
+    // Move to previous digit
+    for(let prev = d-1; prev >= 0; prev--) {
+      const prevEl = document.getElementById(`ans-${idx}-${prev}`);
+      if(prevEl && !prevEl.disabled) { prevEl.focus(); prevEl.select(); break; }
+    }
+  }
+  if(e.key === 'Enter') {
+    checkAnswer(idx);
+  }
+}
+
+// ===== CHECK =====
+function checkAnswer(idx) {
+  const q = currentQuestions[idx];
+  const card = document.getElementById(`q-${idx}`);
+  const fb = document.getElementById(`fb-${idx}`);
+  const btn = document.getElementById(`btn-${idx}`);
+  
+  if(card.classList.contains('correct')) return;
+
+  const maxNum = Math.max(q.a, q.b, q.answer);
+  const numDigits = String(maxNum).length;
+  const ansDigits = getDigits(q.answer, numDigits);
+  const aD = getDigits(q.a, numDigits);
+  const bD = getDigits(q.b, numDigits);
+
+  let allFilled = true;
+  let allCorrect = true;
+
+  for(let d=0; d<numDigits; d++) {
+    const el = document.getElementById(`ans-${idx}-${d}`);
+    const val = el.value.trim();
+    if(val === '') { allFilled = false; continue; }
+    if(parseInt(val) !== ansDigits[d]) allCorrect = false;
+  }
+
+  if(!allFilled) {
+    fb.textContent = 'מלאו את כל הספרות!';
+    fb.className = 'feedback show wrong-fb';
+    setTimeout(() => fb.classList.remove('show'), 1500);
+    return;
+  }
+
+  // Show carry/borrow visuals on correct answer
+  if(allCorrect) {
+    // For addition: fill carry inputs with correct values
+    if(q.op === '+') {
+      let carry = 0;
+      for(let d=0;d<numDigits;d++){
+        const sum = aD[d] + bD[d] + carry;
+        carry = Math.floor(sum/10);
+        if(carry > 0 && d < numDigits-1) {
+          const ci = document.getElementById(`ci-${idx}-${d+1}`);
+          if(ci) { ci.value = carry; ci.classList.add('correct-carry'); ci.disabled = true; }
+        }
+      }
+    }
+    // For subtraction: fill borrow inputs with correct values
+    if(q.op === '-') {
+      let borrow = 0;
+      for(let d=0;d<numDigits;d++){
+        let top = aD[d] - borrow;
+        if(top < bD[d] && d < numDigits-1) {
+          // The column that loses (d+1 in needsCarry): show the reduced digit
+          // But needsCarry[d] = true means position d needs borrow FROM d+1
+          // So d gets +10 and d+1 loses 1
+          const ciLose = document.getElementById(`ci-${idx}-${d+1}`);
+          if(ciLose) { ciLose.value = aD[d+1] - (borrow ? 1 : 0) - 1; ciLose.classList.add('correct-carry'); ciLose.disabled = true; }
+          const ciGain = document.getElementById(`ci-${idx}-${d}`);
+          if(ciGain) { ciGain.value = top + 10; ciGain.classList.add('correct-carry'); ciGain.disabled = true; }
+          borrow = 1;
+        } else {
+          borrow = 0;
+        }
+      }
+    }
+  } // end carry/borrow visuals
+
+  if(allCorrect) {
+    card.classList.add('correct');
+    for(let d=0;d<numDigits;d++){
+      const el = document.getElementById(`ans-${idx}-${d}`);
+      el.classList.add('correct-digit');
+      el.disabled = true;
+    }
+    fb.textContent = ['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][randRange(0,3)];
+    fb.className = 'feedback show correct-fb';
+    btn.disabled = true;
+    levelCorrect++;
+    totalCorrect++;
+    answeredCount++;
+  } else {
+    card.classList.add('wrong');
+    for(let d=0;d<numDigits;d++){
+      const el = document.getElementById(`ans-${idx}-${d}`);
+      const val = parseInt(el.value);
+      if(val !== ansDigits[d]) el.classList.add('wrong-digit');
+      else el.classList.add('correct-digit');
+    }
+    fb.textContent = 'לא נכון, נסו שוב! 💪';
+    fb.className = 'feedback show wrong-fb';
+    levelWrong++;
+    totalWrong++;
+    
+    setTimeout(() => {
+      card.classList.remove('wrong');
+      for(let d=0;d<numDigits;d++){
+        const el = document.getElementById(`ans-${idx}-${d}`);
+        if(el.classList.contains('wrong-digit')){
+          el.classList.remove('wrong-digit');
+          el.value = '';
+        }
+      }
+      fb.classList.remove('show');
+      // Focus first empty
+      for(let d=0;d<numDigits;d++){
+        const el = document.getElementById(`ans-${idx}-${d}`);
+        if(el.value==='') { el.focus(); break; }
+      }
+    }, 1200);
+  }
+
+  updateProgress();
+  if(answeredCount === QPL) setTimeout(showLevelComplete, 800);
+}
+
+// ===== LEVEL COMPLETE =====
+function showLevelComplete() {
+  levelResults[currentLevel] = levelWrong;
+  const card = document.getElementById('levelComplete');
+  document.getElementById('lcCorrect').textContent = levelCorrect;
+  document.getElementById('lcWrong').textContent = levelWrong;
+
+  if(levelWrong === 0) {
+    document.getElementById('lcEmoji').textContent = '🏆';
+    document.getElementById('lcTitle').textContent = 'מושלם!';
+    document.getElementById('lcSub').textContent = 'כל התשובות נכונות!';
+  } else if(levelWrong <= 2) {
+    document.getElementById('lcEmoji').textContent = '🎉';
+    document.getElementById('lcTitle').textContent = 'כל הכבוד!';
+    document.getElementById('lcSub').textContent = 'כמעט מושלם!';
+  } else {
+    document.getElementById('lcEmoji').textContent = '💪';
+    document.getElementById('lcTitle').textContent = 'סיימתם!';
+    document.getElementById('lcSub').textContent = 'כדאי לנסות שוב לשיפור';
+  }
+
+  card.classList.add('show');
+  card.scrollIntoView({behavior:'smooth',block:'center'});
+  renderTabs();
+}
+
+// ===== NAV =====
+function goLevel(i){ currentLevel=i; renderLevel(); window.scrollTo({top:0,behavior:'smooth'}); }
+function nextLevel(){ if(currentLevel<levels.length-1){ currentLevel++; renderLevel(); window.scrollTo({top:0,behavior:'smooth'}); } }
+function retry(){ renderLevel(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+function updateProgress() {
+  const done = Object.keys(levelResults).length;
+  document.getElementById('progressFill').style.width = Math.round((done/levels.length)*100)+'%';
+  document.getElementById('totalCorrect').textContent = totalCorrect;
+  document.getElementById('totalWrong').textContent = totalWrong;
+}
+
+function showHelp(){ document.getElementById('helpModal').classList.add('show'); }
+function closeHelp(e){ if(e.target===document.getElementById('helpModal')) document.getElementById('helpModal').classList.remove('show'); }
+function toggleTip(){ const t=document.getElementById('levelTip'); t.classList.toggle('collapsed'); document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'; }
+
+// INIT
+renderLevel();
+</script>
+</body>
+</html>

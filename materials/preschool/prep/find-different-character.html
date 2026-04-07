@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>מצא את השונה — דמויות | הכנה לכיתה א | בועז חזן</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--pri:#2563eb;--pri-dark:#1d4ed8;--pri-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--ok:#10b981;--no:#ef4444;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06);--shadow-md:0 4px 6px rgba(0,0,0,0.07),0 2px 4px rgba(0,0,0,0.06);--shadow-lg:0 10px 15px rgba(0,0,0,0.1),0 4px 6px rgba(0,0,0,0.05)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-tap-highlight-color:transparent}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;direction:rtl;text-align:right;overflow-x:hidden;line-height:1.5}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(0)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+@keyframes popIn{0%{opacity:0;transform:scale(0.85)}100%{opacity:1;transform:scale(1)}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 4px var(--ok),0 0 15px rgba(16,185,129,0.3)}50%{box-shadow:0 0 0 4px var(--ok),0 0 30px rgba(16,185,129,0.5)}}
+.hd{background:linear-gradient(135deg,var(--pri-light) 0%,#fff 100%);padding:24px;text-align:center;border-bottom:3px solid var(--pri)}
+.hd h1{font-size:1.8rem;font-weight:800;color:var(--text);margin-bottom:4px}
+.hd .sub{font-size:1rem;color:var(--text-light)}
+.mb{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20;flex-wrap:wrap;align-items:center}
+.mbtn{padding:8px 18px;border-radius:20px;border:2px solid var(--border);background:#fff;font-family:'Heebo',sans-serif;font-weight:600;font-size:0.9rem;cursor:pointer;transition:all 0.2s;white-space:nowrap;min-height:44px}
+.mbtn:hover{border-color:var(--pri)}.mbtn.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tw{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:56px;z-index:15;padding:0 8px}
+.ts{display:flex;gap:5px;overflow-x:auto;padding:10px 0;scrollbar-width:none;-webkit-overflow-scrolling:touch}.ts::-webkit-scrollbar{display:none}
+.tb{flex-shrink:0;padding:6px 14px;border-radius:16px;border:2px solid var(--border);background:#fff;font-family:'Heebo',sans-serif;font-weight:600;font-size:0.8rem;cursor:pointer;transition:all 0.25s;white-space:nowrap;min-height:44px;display:flex;align-items:center;justify-content:center}
+.tb:hover{border-color:var(--pri)}.tb.on{background:var(--pri);color:#fff;border-color:var(--pri)}.tb.dn{background:var(--ok);color:#fff;border-color:var(--ok)}
+.ct{max-width:900px;margin:0 auto;padding:20px 16px 80px;position:relative}
+.instruction{text-align:center;font-size:1.1rem;font-weight:700;color:var(--text);padding:12px;margin-bottom:16px;background:#fff;border-radius:var(--radius);border:2px solid var(--border);box-shadow:var(--shadow)}
+.chars-wrap{position:relative;margin-bottom:16px}
+.chars-grid{display:grid;gap:16px}
+.cols-3{grid-template-columns:repeat(3,1fr)}
+.cols-4{grid-template-columns:repeat(4,1fr)}
+.char-card{background:#fff;border-radius:var(--radius);border:2px solid var(--border);box-shadow:var(--shadow);padding:16px 8px;text-align:center;cursor:pointer;transition:all 0.25s;user-select:none}
+.char-card:hover{border-color:var(--pri);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.char-card.correct{border-color:var(--ok);box-shadow:0 0 0 4px var(--ok),0 0 20px rgba(16,185,129,0.3);animation:bounce 0.5s ease;cursor:default}
+.char-card.correct:hover{transform:none}
+.char-card.wrong{border-color:var(--no);animation:shake 0.4s}
+.char-card.dimmed{opacity:0.4;pointer-events:none}
+.char-stack{display:flex;flex-direction:column;align-items:center;gap:4px}
+.char-emoji{font-size:2rem;line-height:1.2}
+.char-emoji.empty{visibility:hidden}
+.draw-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;display:none;touch-action:none;cursor:crosshair}
+.dm .draw-canvas{display:block}
+.dm .char-card{pointer-events:none;cursor:default}
+.dm .char-card:hover{transform:none;border-color:var(--border);box-shadow:var(--shadow)}
+.progress-wrap{text-align:center;margin-bottom:16px}
+.progress-text{font-size:0.9rem;font-weight:600;color:var(--text-light)}
+.wrong-msg{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--no);color:#fff;padding:8px 20px;border-radius:20px;font-weight:700;font-size:0.9rem;z-index:30;animation:popIn 0.3s ease;pointer-events:none}
+.comp{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:50;justify-content:center;align-items:center}.comp.show{display:flex}
+.comp-card{background:#fff;border-radius:16px;padding:32px 28px;text-align:center;box-shadow:var(--shadow-lg);animation:popIn 0.4s ease;max-width:360px;width:90%}
+.comp-card .big{font-size:3.5rem;margin-bottom:12px}
+.comp-card h2{font-size:1.3rem;font-weight:800;margin-bottom:8px}
+.comp-card p{font-size:0.95rem;color:var(--text-light);margin-bottom:16px}
+.brow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.pill{padding:10px 22px;border-radius:20px;border:none;font-family:'Heebo',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s;min-height:44px}
+.pill.primary{background:var(--pri);color:#fff}.pill.primary:hover{background:var(--pri-dark)}
+.pill.secondary{background:var(--bg-soft);color:var(--text);border:2px solid var(--border)}.pill.secondary:hover{border-color:var(--pri)}
+.summ{display:none;text-align:center;padding:24px}.summ.show{display:block}
+.summ h2{font-size:1.5rem;font-weight:800;margin-bottom:16px}
+.summ-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:12px;margin-bottom:24px}
+.summ-item{background:#fff;border-radius:var(--radius-sm);padding:12px;box-shadow:var(--shadow);text-align:center;cursor:pointer;transition:all 0.2s}
+.summ-item:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.summ-item .sn{font-size:1.2rem;font-weight:800;color:var(--pri);margin-bottom:4px}
+.summ-item .ss-txt{font-size:0.8rem;font-weight:600}
+.summ-item .ss-txt.done{color:var(--ok)}.summ-item .ss-txt.pend{color:var(--text-light)}
+@media(max-width:600px){
+.hd h1{font-size:1.4rem}.mbtn{padding:6px 14px;font-size:0.82rem}
+.tb{padding:5px 10px;font-size:0.75rem;min-height:38px}
+.cols-3,.cols-4{grid-template-columns:repeat(2,1fr)}
+.chars-grid{gap:10px}
+.char-card{padding:12px 6px}
+.char-emoji{font-size:1.7rem}
+.char-stack{gap:2px}
+.pill{padding:8px 18px;font-size:0.85rem}
+.instruction{font-size:0.95rem;padding:10px}
+}
+@media print{
+.mb,.tw,.comp,.summ,.progress-wrap,.draw-canvas,.wrong-msg{display:none!important}
+body{background:#fff}.ct{padding:10px;max-width:100%}.hd{border-bottom:2px solid #000}
+.char-card{break-inside:avoid;border:2px solid #000;box-shadow:none}
+.instruction{border:2px solid #000;box-shadow:none}
+}
+</style>
+</head>
+<body>
+<div class="hd"><h1>🕵️ מצא את השונה — דמויות</h1><div class="sub">מצאו את הדמות שנראית אחרת!</div></div>
+<div class="mb">
+<button class="mbtn on" onclick="setMode('click')">👆 לחיצה</button>
+<button class="mbtn" onclick="setMode('draw')">✏️ ציור</button>
+<button class="mbtn" onclick="window.print()">🖨️ הדפסה</button>
+</div>
+<div class="tw"><div class="ts" id="tabs"></div></div>
+<div class="ct" id="ct">
+<div id="gameArea">
+<div class="instruction" id="instr">🕵️ מצאו את הדמות השונה מכל האחרות!</div>
+<div class="chars-wrap" id="charsWrap">
+<div class="chars-grid" id="charsGrid"></div>
+<canvas id="drawCvs" class="draw-canvas"></canvas>
+</div>
+<div class="progress-wrap" id="prog">
+<div class="progress-text" id="progText"></div>
+</div>
+</div>
+<div class="comp" id="comp">
+<div class="comp-card">
+<div class="big" id="cEmoji">🕵️</div>
+<h2 id="cTitle">מצאתם!</h2>
+<p id="cMsg"></p>
+<div class="brow">
+<button class="pill primary" onclick="nextLevel()">הבא ←</button>
+<button class="pill secondary" onclick="replay()">שחקו שוב</button>
+</div>
+</div>
+</div>
+<div class="summ" id="summ">
+<h2>🏆 סיכום</h2>
+<div class="summ-grid" id="sgrid"></div>
+<div class="brow" id="sbrow"></div>
+</div>
+</div>
+<script>
+var LEVELS=[
+{count:6,normal:['🎩','👦','👕','👖','👟'],diff:['🧢','👦','👕','👖','👟'],hint:'לדמות הזו יש כובע שונה!'},
+{count:6,normal:['🎩','😊','👕','👖','👟'],diff:['🎩','😐','👕','👖','👟'],hint:'לדמות הזו יש הבעת פנים שונה!'},
+{count:6,normal:['🧢','👦','👕','👖','👟','🎒'],diff:['🧢','👦','👔','👖','👟','🎒'],hint:'לדמות הזו יש חולצה שונה!'},
+{count:6,normal:['👒','😊','👗','👖','👟','🌂'],diff:['👒','😊','👗','👖','👟',''],hint:'לדמות הזו חסרה מטרייה!'},
+{count:8,normal:['🎩','👦','👕','👖','👟','🎒'],diff:['🎩','👦','👕','👖','👠','🎒'],hint:'לדמות הזו יש נעליים שונות!'},
+{count:8,normal:['🧢','😄','👕','👖','👟'],diff:['🧢','😄','👕','👗','👟'],hint:'לדמות הזו יש בגד תחתון שונה!'},
+{count:8,normal:['👒','👦','👔','👖','👟','🏀'],diff:['👒','👦','👔','👖','👟','⚽'],hint:'הדמות הזו מחזיקה כדור שונה!'},
+{count:8,normal:['🎩','😊','👕','⭐','👖','👟'],diff:['🎩','😊','👕','❤️','👖','👟'],hint:'לדמות הזו יש עיטור שונה על החולצה!'},
+{count:8,normal:['🧢','🤓','👕','👖','👟','🎒'],diff:['🧢','😊','👕','👖','👟','🎒'],hint:'הדמות הזו לא מרכיבה משקפיים!'},
+{count:8,normal:['🎩','👦','👕','👖','👟','🎒'],diff:['🧢','👦','👕','👖','👟','💼'],hint:'לדמות הזו יש כובע ותיק שונים!'},
+{count:8,normal:['🎩','👦','👕','👖','👟','🌂'],diff:['🎩','👦','👕','👖','👟','🌂'],diffMirror:true,hint:'הדמות הזו הפוכה מכל האחרות!'},
+{count:8,normal:['🎀','👧','👗','👖','👟','🎒'],diff:['','👧','👗','👖','👟','🎒'],hint:'לדמות הזו חסרה סרט לשיער!'},
+{count:8,normal:['🎩','👦','👕','👖','👟','🎒','⌚'],diff:['🎩','👦','👕','👖','👟','🎒',''],hint:'לדמות הזו חסר שעון!'},
+{count:8,normal:['🎩','👦','👕','👖','👟'],diff:['🎩','👦','👕','👖','👟'],diffMirror:true,hint:'הדמות הזו פונה לכיוון ההפוך!'},
+{count:8,normal:['🎩','😊','👕','👖','👟','🎒'],diff:['🎩','🙂','👕','👖','👟','🎒'],hint:'לדמות הזו יש חיוך קצת שונה!'}
+];
+
+var cur=0,mode='click',res=[],wrongCount=0,levelDone=false;
+var currentChars=null,currentDiffIdx=-1;
+var dCtx=null,dCvs=null,drawing=false,drawBBox={};
+
+function init(){
+res=[];for(var i=0;i<LEVELS.length;i++)res.push('pending');
+buildTabs();goTo(0);
+}
+
+function buildTabs(){
+var el=document.getElementById('tabs');el.innerHTML='';
+for(var i=0;i<LEVELS.length;i++){
+var b=document.createElement('button');
+b.className='tb'+(i===cur?' on':'')+(res[i]==='correct'?' dn':'');
+b.textContent=i+1;
+b.onclick=(function(idx){return function(){goTo(idx)}})(i);
+el.appendChild(b);
+}
+}
+
+function updateTabs(){
+var bs=document.querySelectorAll('.tb');
+for(var i=0;i<bs.length;i++){bs[i].className='tb'+(i===cur?' on':'')+(res[i]==='correct'?' dn':'')}
+if(bs[cur])bs[cur].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+
+function goTo(idx){
+if(idx<0||idx>=LEVELS.length){showSumm();return}
+cur=idx;wrongCount=0;levelDone=false;
+document.getElementById('gameArea').style.display='';
+document.getElementById('summ').classList.remove('show');
+document.getElementById('comp').classList.remove('show');
+updateTabs();generateLevel();renderLevel();updateProgress();
+}
+
+function generateLevel(){
+var level=LEVELS[cur];
+currentDiffIdx=Math.floor(Math.random()*level.count);
+currentChars=[];
+for(var i=0;i<level.count;i++){
+if(i===currentDiffIdx){
+currentChars.push({emojis:level.diff,isDiff:true,mirror:level.diffMirror||false});
+}else{
+currentChars.push({emojis:level.normal,isDiff:false,mirror:false});
+}
+}
+}
+
+function renderLevel(){
+var grid=document.getElementById('charsGrid');grid.innerHTML='';
+var level=LEVELS[cur];
+grid.className='chars-grid '+(level.count<=6?'cols-3':'cols-4');
+var maxLen=Math.max(level.normal.length,level.diff.length);
+for(var i=0;i<currentChars.length;i++){
+var ch=currentChars[i];
+var card=document.createElement('div');
+card.className='char-card';
+card.setAttribute('data-idx',i);
+var stack=document.createElement('div');
+stack.className='char-stack';
+if(ch.mirror)stack.style.transform='scaleX(-1)';
+var emojis=ch.emojis;
+for(var j=0;j<maxLen;j++){
+var span=document.createElement('span');
+span.className='char-emoji';
+if(j<emojis.length&&emojis[j]!==''){
+span.textContent=emojis[j];
+}else{
+span.textContent='\u2B1C';
+span.classList.add('empty');
+}
+stack.appendChild(span);
+}
+card.appendChild(stack);
+if(mode==='click'){
+(function(c){c.addEventListener('click',function(){handleCardClick(c)})})(card);
+}
+grid.appendChild(card);
+}
+if(mode==='draw')requestAnimationFrame(setupDraw);
+}
+
+function handleCardClick(card){
+if(levelDone)return;
+var idx=parseInt(card.getAttribute('data-idx'));
+if(idx===currentDiffIdx){
+levelDone=true;
+res[cur]='correct';
+card.classList.add('correct');
+var cards=document.querySelectorAll('.char-card');
+for(var i=0;i<cards.length;i++){if(i!==idx)cards[i].classList.add('dimmed')}
+updateTabs();
+setTimeout(showComp,1000);
+}else{
+wrongCount++;
+card.classList.add('wrong');
+setTimeout(function(){card.classList.remove('wrong')},400);
+showMsg('לא זו... נסו שוב!');
+updateProgress();
+}
+}
+
+function updateProgress(){
+var el=document.getElementById('progText');
+if(wrongCount>0){
+el.textContent='טעויות: '+wrongCount;
+}else{
+el.textContent='';
+}
+}
+
+function showComp(){
+var ov=document.getElementById('comp');ov.classList.add('show');
+var last=cur>=LEVELS.length-1;
+document.getElementById('cEmoji').textContent=last?'🏆':'🕵️';
+document.getElementById('cTitle').textContent=last?'סיימתם הכל!':'מצאתם!';
+var msg=LEVELS[cur].hint;
+if(wrongCount>0)msg+=' ('+wrongCount+' טעויות)';
+document.getElementById('cMsg').textContent=msg;
+}
+
+function nextLevel(){
+document.getElementById('comp').classList.remove('show');
+for(var i=cur+1;i<LEVELS.length;i++){if(res[i]!=='correct'){goTo(i);return}}
+showSumm();
+}
+
+function replay(){document.getElementById('comp').classList.remove('show');res[cur]='pending';goTo(cur)}
+
+function showSumm(){
+document.getElementById('gameArea').style.display='none';
+document.getElementById('comp').classList.remove('show');
+var s=document.getElementById('summ');s.classList.add('show');
+var g=document.getElementById('sgrid');g.innerHTML='';
+var hasP=false;
+for(var i=0;i<LEVELS.length;i++){
+var item=document.createElement('div');item.className='summ-item';
+var st=res[i],sc=st==='correct'?'done':'pend';
+var tx=st==='correct'?'✅':'⬜';
+if(st!=='correct')hasP=true;
+item.innerHTML='<div class="sn">'+(i+1)+'</div><div class="ss-txt '+sc+'">'+tx+'</div>';
+item.onclick=(function(idx){return function(){goTo(idx)}})(i);
+g.appendChild(item);
+}
+var br=document.getElementById('sbrow');br.innerHTML='';
+if(hasP)br.innerHTML+='<button class="pill secondary" onclick="retryPending()">❓ שלבים שלא הושלמו</button>';
+br.innerHTML+='<button class="pill primary" onclick="retryAll()">🔄 הכל מחדש</button>';
+updateTabs();
+}
+
+function retryFiltered(fn){var first=-1;for(var i=0;i<res.length;i++){if(fn(res[i])){res[i]='pending';if(first===-1)first=i}}buildTabs();if(first>=0)goTo(first)}
+function retryPending(){retryFiltered(function(s){return s!=='correct'})}
+function retryAll(){retryFiltered(function(){return true})}
+
+function setMode(m){
+mode=m;var bs=document.querySelectorAll('.mbtn');
+for(var i=0;i<bs.length;i++)bs[i].classList.remove('on');
+if(m==='click')bs[0].classList.add('on');else if(m==='draw')bs[1].classList.add('on');
+var ct=document.getElementById('ct');
+if(m==='draw'){ct.classList.add('dm')}else{ct.classList.remove('dm')}
+if(currentChars&&!levelDone)renderLevel();
+}
+
+function setupDraw(){
+dCvs=document.getElementById('drawCvs');if(!dCvs)return;
+var wrap=document.getElementById('charsWrap');
+var dpr=window.devicePixelRatio||1;
+var w=wrap.offsetWidth,h=wrap.offsetHeight;
+dCvs.style.width=w+'px';dCvs.style.height=h+'px';
+dCvs.width=w*dpr;dCvs.height=h*dpr;
+dCtx=dCvs.getContext('2d');dCtx.scale(dpr,dpr);
+dCtx.lineCap='round';dCtx.lineJoin='round';dCtx.lineWidth=3;dCtx.strokeStyle='#2563eb';
+dCvs.onpointerdown=startDr;dCvs.onpointermove=moveDr;dCvs.onpointerup=endDr;dCvs.onpointercancel=endDr;
+}
+
+function startDr(e){
+if(levelDone)return;
+e.preventDefault();drawing=true;
+drawBBox={minX:1e9,minY:1e9,maxX:-1e9,maxY:-1e9};
+var p=drPos(e);updateBB(p);
+dCtx.strokeStyle='#2563eb';dCtx.beginPath();dCtx.moveTo(p.x,p.y);
+}
+function moveDr(e){
+if(!drawing)return;e.preventDefault();
+var p=drPos(e);updateBB(p);
+dCtx.lineTo(p.x,p.y);dCtx.stroke();dCtx.beginPath();dCtx.moveTo(p.x,p.y);
+}
+function endDr(){
+if(!drawing)return;drawing=false;
+var rect=dCvs.getBoundingClientRect();
+var cx=rect.left+(drawBBox.minX+drawBBox.maxX)/2;
+var cy=rect.top+(drawBBox.minY+drawBBox.maxY)/2;
+dCvs.style.pointerEvents='none';
+var el=document.elementFromPoint(cx,cy);
+dCvs.style.pointerEvents='';
+while(el&&!el.classList.contains('char-card'))el=el.parentElement;
+setTimeout(function(){if(dCtx&&dCvs)dCtx.clearRect(0,0,dCvs.width,dCvs.height)},250);
+if(el&&el.getAttribute('data-idx')!==null){handleCardClick(el)}
+}
+function drPos(e){var r=dCvs.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
+function updateBB(p){if(p.x<drawBBox.minX)drawBBox.minX=p.x;if(p.x>drawBBox.maxX)drawBBox.maxX=p.x;if(p.y<drawBBox.minY)drawBBox.minY=p.y;if(p.y>drawBBox.maxY)drawBBox.maxY=p.y}
+
+function showMsg(text){
+var existing=document.querySelector('.wrong-msg');
+if(existing)existing.remove();
+var msg=document.createElement('div');msg.className='wrong-msg';msg.textContent=text;
+document.body.appendChild(msg);setTimeout(function(){msg.remove()},1500);
+}
+
+window.addEventListener('resize',function(){if(mode==='draw'&&!levelDone)setupDraw()});
+init();
+</script>
+</body>
+</html>

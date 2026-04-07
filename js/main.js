@@ -534,6 +534,27 @@ function showStatus(el, type, msg) {
   });
 })();
 
+// ===== Material Badges (Time-Based) =====
+(function() {
+  var now = new Date(); now.setHours(0,0,0,0);
+  document.querySelectorAll('.material-item[data-created]').forEach(function(item) {
+    var created = new Date(item.dataset.created); created.setHours(0,0,0,0);
+    var daysSinceCreate = Math.floor((now - created) / 86400000);
+    if (daysSinceCreate <= 3) { addBadge(item, 'חדש!', 'new'); return; }
+    var updated = item.dataset.updated;
+    if (updated) {
+      var upd = new Date(updated); upd.setHours(0,0,0,0);
+      if (Math.floor((now - upd) / 86400000) <= 1) addBadge(item, 'עודכן', 'updated');
+    }
+  });
+  function addBadge(item, text, cls) {
+    var s = document.createElement('span');
+    s.className = 'material-badge ' + cls;
+    s.textContent = text;
+    item.appendChild(s);
+  }
+})();
+
 // ===== Elementary Banner Navigation =====
 (function() {
   document.addEventListener('click', function(e) {

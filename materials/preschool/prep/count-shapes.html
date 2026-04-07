@@ -31,7 +31,8 @@ body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);
 .tb:hover{border-color:var(--pri)}.tb.on{background:var(--pri);color:#fff;border-color:var(--pri)}.tb.dn{background:var(--ok);color:#fff;border-color:var(--ok)}.tb.fail{border-color:var(--no);color:var(--no)}
 .ct{max-width:700px;margin:0 auto;padding:20px 16px 80px;position:relative}
 .legend{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;justify-content:center}
-.leg-item{display:flex;align-items:center;gap:6px;padding:6px 12px;background:#fff;border-radius:var(--radius-sm);border:1px solid var(--border);border-right-width:4px;font-size:0.85rem;font-weight:600}
+.leg-item{display:flex;align-items:center;gap:6px;padding:6px 12px;background:#fff;border-radius:var(--radius-sm);border:1px solid var(--border);border-right-width:4px;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.2s;user-select:none}
+.leg-item:hover{box-shadow:var(--shadow)}.leg-item.active{background:var(--pri-light);box-shadow:0 0 0 2px var(--pri),var(--shadow-md);transform:scale(1.08)}
 .shapes-card{position:relative;min-height:300px;background:radial-gradient(circle,#e2e8f0 1px,transparent 1px),#fff;background-size:20px 20px;border-radius:var(--radius);border:2px solid var(--border);box-shadow:var(--shadow-md);overflow:hidden;margin-bottom:20px}
 .ss{position:absolute;cursor:pointer;overflow:visible;transition:filter 0.2s}
 .ss:hover .sp{stroke-width:3.5px}
@@ -46,7 +47,8 @@ body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);
 .color-btn.clr{background:#fff;border:2px solid var(--border);font-size:1.1rem;display:flex;align-items:center;justify-content:center}
 .counts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:20px}
 .count-card{background:#fff;border-radius:var(--radius-sm);border:2px solid var(--border);border-right-width:4px;padding:12px;transition:all 0.3s}
-.cc-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.cc-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer}
+.count-card.selecting{box-shadow:0 0 0 2px var(--pri),var(--shadow-md)}
 .cc-name{font-weight:700;font-size:0.9rem;color:var(--text)}
 .cc-nums{display:flex;flex-wrap:wrap;gap:4px;justify-content:center}
 .num-btn{width:40px;height:40px;border-radius:50%;border:2px solid var(--border);background:#fff;font-family:'Heebo',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center}
@@ -173,7 +175,7 @@ var LD=[
 {t:['circle','square','triangle','rectangle','diamond','pentagon'],mn:14,mx:18,ov:4},
 {t:['circle','square','triangle','rectangle','diamond','pentagon'],mn:15,mx:20,ov:5}
 ];
-var cur=0,mode='click',ld=null,ans={},locked={},colored={},attempted=false,res=[];
+var cur=0,mode='click',ld=null,ans={},locked={},colored={},attempted=false,res=[],activeType=null;
 var dCtx=null,dCvs=null,drawing=false,dColor='#2563eb',drawBBox={};
 function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 function shuf(a){for(var i=a.length-1;i>0;i--){var j=ri(0,i);var t=a[i];a[i]=a[j];a[j]=t}return a}
@@ -184,7 +186,7 @@ function updateTabs(){var bs=document.querySelectorAll('.tb');for(var i=0;i<bs.l
 function goTo(idx){
 if(ld&&attempted&&res[cur]!=='correct'){res[cur]='wrong';updateTabs()}
 if(idx<0||idx>=LD.length){showSumm();return}
-cur=idx;attempted=false;locked={};colored={};ans={};
+cur=idx;attempted=false;locked={};colored={};ans={};activeType=null;
 document.getElementById('scard').style.display='';
 document.getElementById('cgrid').style.display='';
 document.getElementById('cbtn').style.display='';
@@ -217,7 +219,15 @@ if(!placed){shapes[i].x=12+Math.random()*76;shapes[i].y=12+Math.random()*76}}
 function renderLegend(){
 var el=document.getElementById('legend');el.innerHTML='';
 for(var i=0;i<ld.types.length;i++){var t=ld.types[i];
-el.innerHTML+='<div class="leg-item" style="border-right-color:'+SC[t].color+'">'+iconSVG(t,22)+'<span>'+SC[t].name+'</span></div>'}
+el.innerHTML+='<div class="leg-item" data-type="'+t+'" style="border-right-color:'+SC[t].color+'" onclick="selectType(\''+t+'\')">'+iconSVG(t,22)+'<span>'+SC[t].name+'</span></div>'}
+}
+function selectType(type){
+activeType=(activeType===type)?null:type;
+var items=document.querySelectorAll('.leg-item');
+for(var i=0;i<items.length;i++)items[i].classList.toggle('active',items[i].getAttribute('data-type')===activeType);
+var cards=document.querySelectorAll('.count-card');
+for(var i=0;i<cards.length;i++)cards[i].classList.remove('selecting');
+if(activeType){var c=document.getElementById('cc-'+activeType);if(c)c.classList.add('selecting')}
 }
 function shapeSVG(s){
 var sz=s.size,w,h,inner,pad=3;
@@ -242,6 +252,10 @@ if(mode==='click'){var els=area.querySelectorAll('.ss');for(var i=0;i<els.length
 function toggleShape(el){
 var id=parseInt(el.getAttribute('data-id')),type=el.getAttribute('data-type');
 var path=el.querySelector('.sp'),c=SC[type].color;
+if(!activeType){
+el.style.animation='shake 0.3s ease';setTimeout(function(){el.style.animation=''},300);return}
+if(type!==activeType){
+el.style.animation='shake 0.4s ease';setTimeout(function(){el.style.animation=''},400);return}
 if(colored[id]){delete colored[id];path.style.stroke='';path.style.fill='';path.style.fillOpacity=''}
 else{colored[id]=true;path.style.stroke=c;path.style.fill=c;path.style.fillOpacity='0.5'}
 el.style.animation='none';void el.offsetWidth;el.style.animation='shapeBounce 0.3s ease';
@@ -253,7 +267,7 @@ for(var ti=0;ti<ld.types.length;ti++){var type=ld.types[ti],c=SC[type].color;
 var card=document.createElement('div');card.className='count-card';card.id='cc-'+type;
 card.style.borderRightColor=c;
 var nums='';for(var n=0;n<=15;n++){nums+='<button class="num-btn" data-n="'+n+'" onclick="selNum(\''+type+'\','+n+')">'+n+'</button>'}
-card.innerHTML='<div class="cc-head">'+iconSVG(type,28)+'<span class="cc-name">'+SC[type].name+'</span></div><div class="cc-nums">'+nums+'</div><div class="cc-result" id="cr-'+type+'"></div>';
+card.innerHTML='<div class="cc-head" onclick="selectType(\''+type+'\')">'+iconSVG(type,28)+'<span class="cc-name">'+SC[type].name+'</span></div><div class="cc-nums">'+nums+'</div><div class="cc-result" id="cr-'+type+'"></div>';
 grid.appendChild(card)}
 }
 function selNum(type,num){

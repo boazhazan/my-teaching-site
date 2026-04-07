@@ -22,7 +22,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);
 .hd{background:linear-gradient(135deg,var(--pri-light) 0%,#fff 100%);padding:24px;text-align:center;border-bottom:3px solid var(--pri)}
 .hd h1{font-size:1.8rem;font-weight:800;color:var(--text);margin-bottom:4px}
 .hd .sub{font-size:1rem;color:var(--text-light)}
-.mb{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20}
+.mb{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20;flex-wrap:wrap;align-items:center}
 .mbtn{padding:8px 18px;border-radius:20px;border:2px solid var(--border);background:#fff;font-family:'Heebo',sans-serif;font-weight:600;font-size:0.9rem;cursor:pointer;transition:all 0.2s;white-space:nowrap;min-height:44px}
 .mbtn:hover{border-color:var(--pri)}.mbtn.on{background:var(--pri);color:#fff;border-color:var(--pri)}
 .tw{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:56px;z-index:15;padding:0 8px}
@@ -33,7 +33,24 @@ body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);
 .legend-card{background:#fff;border-radius:var(--radius);border:2px solid var(--border);box-shadow:var(--shadow);padding:12px;margin-bottom:16px}
 .legend-title{font-size:0.85rem;font-weight:700;color:var(--text-light);text-align:center;margin-bottom:8px}
 .legend{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-.leg-item{display:flex;align-items:center;gap:6px;padding:6px 12px;background:#fff;border-radius:var(--radius-sm);border:1px solid var(--border);border-right-width:4px;font-size:0.85rem;font-weight:600;user-select:none}
+.leg-item{display:flex;align-items:center;gap:6px;padding:6px 12px;background:#fff;border-radius:var(--radius-sm);border:1px solid var(--border);border-right-width:4px;font-size:0.85rem;font-weight:600;user-select:none;cursor:pointer;transition:all 0.2s}
+.leg-item:hover{transform:translateY(-1px);box-shadow:var(--shadow)}
+.leg-item.active{background:var(--pri-light);box-shadow:0 0 0 2px var(--pri);transform:translateY(-1px)}
+.sel-indicator{text-align:center;font-size:0.9rem;font-weight:600;color:var(--text-light);padding:8px;margin-bottom:12px}
+.free-wrap{margin-right:auto}
+.free-toggle{display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:'Heebo',sans-serif;font-weight:700;font-size:0.82rem;padding:6px 10px;color:var(--text-light);transition:color 0.3s;border-radius:20px}
+.free-toggle:hover{background:var(--bg-soft)}
+.free-toggle.on{color:var(--text)}
+.ft-track{width:40px;height:22px;border-radius:11px;background:#cbd5e1;position:relative;transition:background 0.3s;flex-shrink:0}
+.ft-thumb{width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:2px;right:2px;transition:right 0.3s;box-shadow:0 1px 2px rgba(0,0,0,0.2)}
+.free-toggle.on .ft-track{background:linear-gradient(135deg,#f97316,#ec4899,#8b5cf6,#2563eb,#10b981)}
+.free-toggle.on .ft-thumb{right:20px}
+.free-banner{display:none;text-align:center;padding:10px 16px;margin-bottom:12px;background:linear-gradient(135deg,#fef3c7,#fce7f3,#ede9fe);border-radius:var(--radius);font-weight:700;font-size:0.95rem;color:var(--text);animation:popIn 0.3s ease}
+.free-palette{display:none;flex-wrap:wrap;justify-content:center;gap:8px;padding:12px;margin-bottom:16px;background:#fff;border-radius:var(--radius);border:2px solid var(--border);box-shadow:var(--shadow)}
+.fpc{width:40px;height:40px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:all 0.2s}
+.fpc:hover{transform:scale(1.1)}.fpc.active{border-color:var(--text);transform:scale(1.15);box-shadow:0 0 0 3px rgba(0,0,0,0.1)}
+.clear-all-btn{display:none;margin:0 auto 16px;padding:8px 20px;border-radius:20px;border:2px solid var(--no);background:#fff;color:var(--no);font-family:'Heebo',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s}
+.clear-all-btn:hover{background:var(--no);color:#fff}
 .mandala-card{position:relative;width:100%;max-width:500px;margin:0 auto 16px;aspect-ratio:1/1;background:radial-gradient(circle,#f1f5f9 0%,#fff 70%);border-radius:var(--radius);border:2px solid var(--border);box-shadow:var(--shadow-md);overflow:hidden}
 .mandala-card.glow{animation:glow 1s ease 3}
 .ss{position:absolute;cursor:pointer;overflow:visible;transition:filter 0.2s}
@@ -75,9 +92,11 @@ body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);
 .mandala-card{max-width:100%}
 .leg-item{padding:4px 8px;font-size:0.78rem;gap:4px}
 .pill{padding:8px 18px;font-size:0.85rem}
+.fpc{width:34px;height:34px}
+.free-palette{gap:6px;padding:10px}
 }
 @media print{
-.mb,.tw,.color-bar,.draw-canvas,.comp,.summ,.progress-wrap{display:none!important}
+.mb,.tw,.color-bar,.draw-canvas,.comp,.summ,.progress-wrap,.sel-indicator,.free-palette,.free-banner,.clear-all-btn,.wrong-msg{display:none!important}
 body{background:#fff}.ct{padding:10px;max-width:100%}.hd{border-bottom:2px solid #000}
 .mandala-card{break-inside:avoid;border:2px solid #000;box-shadow:none;background:#fff!important;max-width:400px}
 .sp{stroke:#000!important;stroke-width:2px!important;fill:none!important}
@@ -91,20 +110,30 @@ body{background:#fff}.ct{padding:10px;max-width:100%}.hd{border-bottom:2px solid
 <button class="mbtn on" onclick="setMode('click')">👆 לחיצה</button>
 <button class="mbtn" onclick="setMode('draw')">✏️ ציור</button>
 <button class="mbtn" onclick="window.print()">🖨️ הדפסה</button>
+<div class="free-wrap">
+<button class="free-toggle" id="freeToggle" onclick="toggleFreeMode()">
+<span class="ft-track"><span class="ft-thumb"></span></span>
+<span id="ftLabel">תרגול</span>
+</button>
+</div>
 </div>
 <div class="tw"><div class="ts" id="tabs"></div></div>
 <div class="ct" id="ct">
 <div class="legend-card" id="legendCard">
-<div class="legend-title">מקרא צבעים</div>
+<div class="legend-title">מקרא צבעים — לחצו לבחור צבע</div>
 <div class="legend" id="legend"></div>
 </div>
+<div class="sel-indicator" id="selColor" style="display:none">🎨 צבע נבחר: <span style="color:var(--text-light)">לא נבחר</span></div>
+<div class="free-banner" id="freeBanner">🎨 מצב חופשי — צבעו איך שבא לכם!</div>
+<div class="free-palette" id="freePal"></div>
 <div class="mandala-card" id="mcard">
 <div id="sarea"></div>
 <canvas id="cvs" class="draw-canvas"></canvas>
 </div>
 <div class="color-bar" id="cbar"></div>
+<button class="clear-all-btn" id="clearBtn" onclick="clearAllShapes()">🗑️ נקה הכל</button>
 <div class="progress-wrap" id="prog">
-<div class="progress-text" id="progText">צבעתם 0 מתוך 0 צורות</div>
+<div class="progress-text" id="progText">צבעתם 0 מתוך 0</div>
 <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
 </div>
 <div class="comp" id="comp">
@@ -268,23 +297,36 @@ var LEVELS=[
 {r:48,count:4,type:'circle',size:12,startAngle:45}
 ]}
 ];
+var FREE_COLORS=[
+{name:'אדום',hex:'#ef4444'},{name:'כחול',hex:'#2563eb'},{name:'ירוק',hex:'#10b981'},
+{name:'צהוב',hex:'#facc15'},{name:'כתום',hex:'#f97316'},{name:'סגול',hex:'#8b5cf6'},
+{name:'ורוד',hex:'#ec4899'},{name:'חום',hex:'#92400e'},{name:'שחור',hex:'#1e293b'},
+{name:'לבן',hex:'#ffffff'},{name:'תכלת',hex:'#38bdf8'},{name:'ירוק בהיר',hex:'#4ade80'},
+{name:'זהב',hex:'#eab308'},{name:'כסף',hex:'#94a3b8'},{name:'טורקיז',hex:'#14b8a6'}
+];
 var cur=0,mode='click',ld=null,colored={},totalShapes=0,res=[];
 var dCtx=null,dCvs=null,drawing=false,dColor='',drawBBox={};
+var selectedColor='',selectedType='',wrongCount=0,freeMode=false;
+
 function iconSVG(type,color,sz){sz=sz||24;return'<svg viewBox="0 0 40 40" width="'+sz+'" height="'+sz+'" style="stroke:'+color+';stroke-width:2.5;fill:'+color+';fill-opacity:0.15;vertical-align:middle">'+ICONS[type]+'</svg>'}
+
 function init(){res=[];for(var i=0;i<LEVELS.length;i++)res.push('pending');buildTabs();goTo(0)}
+
 function buildTabs(){var el=document.getElementById('tabs');el.innerHTML='';for(var i=0;i<LEVELS.length;i++){var b=document.createElement('button');b.className='tb'+(i===cur?' on':'')+(res[i]==='correct'?' dn':'');b.textContent=i+1;b.onclick=(function(idx){return function(){goTo(idx)}})(i);el.appendChild(b)}}
+
 function updateTabs(){var bs=document.querySelectorAll('.tb');for(var i=0;i<bs.length;i++){bs[i].className='tb'+(i===cur?' on':'')+(res[i]==='correct'?' dn':'')}if(bs[cur])bs[cur].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})}
+
 function goTo(idx){
 if(idx<0||idx>=LEVELS.length){showSumm();return}
-cur=idx;colored={};totalShapes=0;
+cur=idx;colored={};totalShapes=0;wrongCount=0;
+if(!freeMode){selectedColor='';selectedType=''}
 document.getElementById('mcard').style.display='';
 document.getElementById('mcard').classList.remove('glow');
-document.getElementById('legendCard').style.display='';
-document.getElementById('prog').style.display='';
 document.getElementById('summ').classList.remove('show');
 document.getElementById('comp').classList.remove('show');
-updateTabs();gen();
+updateTabs();gen();updateUI();
 }
+
 function gen(){
 var def=LEVELS[cur];
 var pal=PALETTES[def.palette];
@@ -306,11 +348,116 @@ ld={shapes:shapes,types:def.types,palette:pal};
 renderLegend();renderShapes();updateProgress();
 if(mode==='draw')setupDraw();
 }
+
 function renderLegend(){
 var el=document.getElementById('legend');el.innerHTML='';
-for(var i=0;i<ld.types.length;i++){var t=ld.types[i],c=ld.palette[t];
-el.innerHTML+='<div class="leg-item" style="border-right-color:'+c+'">'+iconSVG(t,c,22)+'<span>'+NAMES[t]+'</span><span style="display:inline-block;width:16px;height:16px;background:'+c+';border-radius:3px;margin-right:2px"></span></div>'}
+for(var i=0;i<ld.types.length;i++){
+var t=ld.types[i],c=ld.palette[t];
+var item=document.createElement('div');
+item.className='leg-item';
+if(selectedType===t)item.classList.add('active');
+item.style.borderRightColor=c;
+item.setAttribute('data-type',t);
+item.innerHTML=iconSVG(t,c,22)+'<span>'+NAMES[t]+'</span><span style="display:inline-block;width:16px;height:16px;background:'+c+';border-radius:3px;margin-right:2px"></span>';
+(function(type){item.onclick=function(){selectLegendColor(type)}})(t);
+el.appendChild(item);
 }
+updateSelectedIndicator();
+}
+
+function selectLegendColor(type){
+if(freeMode)return;
+selectedType=type;
+selectedColor=ld.palette[type];
+var items=document.querySelectorAll('.leg-item');
+for(var i=0;i<items.length;i++){
+items[i].classList.toggle('active',items[i].getAttribute('data-type')===type);
+}
+updateSelectedIndicator();
+}
+
+function updateSelectedIndicator(){
+var el=document.getElementById('selColor');
+if(!el)return;
+if(!selectedColor||freeMode){
+el.innerHTML='🎨 צבע נבחר: <span style="color:var(--text-light)">לא נבחר</span>';
+}else{
+el.innerHTML='🎨 צבע נבחר: <span style="display:inline-block;width:18px;height:18px;background:'+selectedColor+';border-radius:4px;vertical-align:middle;border:1px solid rgba(0,0,0,0.15);margin:0 4px"></span><strong>'+NAMES[selectedType]+'</strong>';
+}
+}
+
+function updateUI(){
+var isClick=mode==='click',isDraw=mode==='draw';
+document.getElementById('legendCard').style.display=freeMode?'none':'';
+document.getElementById('selColor').style.display=(!freeMode&&isClick)?'':'none';
+document.getElementById('freeBanner').style.display=freeMode?'':'none';
+document.getElementById('freePal').style.display=freeMode?'flex':'none';
+document.getElementById('cbar').style.display=(!freeMode&&isDraw)?'flex':'none';
+document.getElementById('clearBtn').style.display=freeMode?'':'none';
+document.getElementById('prog').style.display=freeMode?'none':'';
+}
+
+function toggleFreeMode(){
+freeMode=!freeMode;
+var btn=document.getElementById('freeToggle');
+var label=document.getElementById('ftLabel');
+btn.classList.toggle('on',freeMode);
+label.textContent=freeMode?'חופשי!':'תרגול';
+colored={};wrongCount=0;selectedColor='';selectedType='';
+if(freeMode){
+renderFreePalette();
+}else if(ld){
+renderLegend();
+}
+if(ld){
+renderShapes();
+updateProgress();
+}
+if(mode==='draw'){
+if(freeMode){
+dColor='';if(dCtx)dCtx.strokeStyle=dColor;
+}else if(ld){
+buildColorBar();
+}
+}
+updateUI();
+}
+
+function renderFreePalette(){
+var el=document.getElementById('freePal');el.innerHTML='';
+for(var i=0;i<FREE_COLORS.length;i++){
+var c=FREE_COLORS[i];
+var btn=document.createElement('button');
+btn.className='fpc';
+btn.dataset.color=c.hex;
+btn.title=c.name;
+btn.style.background=c.hex;
+if(c.hex==='#ffffff')btn.style.border='3px solid #cbd5e1';
+(function(b){btn.onclick=function(){selectFreeColor(b)}})(btn);
+el.appendChild(btn);
+}
+}
+
+function selectFreeColor(btn){
+selectedColor=btn.dataset.color;
+var bs=document.querySelectorAll('.fpc');
+for(var i=0;i<bs.length;i++)bs[i].classList.remove('active');
+btn.classList.add('active');
+if(mode==='draw'){
+dColor=selectedColor;
+if(dCtx)dCtx.strokeStyle=dColor;
+}
+}
+
+function clearAllShapes(){
+colored={};
+var paths=document.querySelectorAll('.sp');
+for(var i=0;i<paths.length;i++){
+paths[i].style.stroke='';paths[i].style.fill='';paths[i].style.fillOpacity='';
+}
+if(dCtx&&dCvs)dCtx.clearRect(0,0,dCvs.width,dCvs.height);
+}
+
 function shapeSVG(s){
 var sz=s.size,w,h,inner,pad=3;
 switch(s.type){
@@ -325,29 +472,96 @@ inner='<polygon class="sp" points="'+pts.join(' ')+'"/>';break;
 }
 return'<svg class="ss" data-id="'+s.id+'" data-type="'+s.type+'" viewBox="0 0 '+w+' '+h+'" style="left:'+s.x+'%;top:'+s.y+'%;width:'+w+'px;height:'+h+'px;transform:translate(-50%,-50%);z-index:'+(200-sz)+'" xmlns="http://www.w3.org/2000/svg">'+inner+'</svg>';
 }
+
 function renderShapes(){
 var area=document.getElementById('sarea');area.innerHTML='';
 for(var i=0;i<ld.shapes.length;i++)area.insertAdjacentHTML('beforeend',shapeSVG(ld.shapes[i]));
-if(mode==='click'){var els=area.querySelectorAll('.ss');for(var i=0;i<els.length;i++){(function(el){el.addEventListener('click',function(){toggleShape(el)})})(els[i])}}
+for(var id in colored){
+if(colored.hasOwnProperty(id)){
+var svg=area.querySelector('.ss[data-id="'+id+'"]');
+if(svg){
+var path=svg.querySelector('.sp');
+var c;
+if(freeMode){c=colored[id]}else{var type=svg.getAttribute('data-type');c=ld.palette[type]}
+path.style.stroke=c;path.style.fill=c;path.style.fillOpacity='0.5';
 }
-function toggleShape(el){
+}
+}
+if(mode==='click'){var els=area.querySelectorAll('.ss');for(var i=0;i<els.length;i++){(function(el){el.addEventListener('click',function(){handleShapeClick(el)})})(els[i])}}
+}
+
+function handleShapeClick(el){
+if(freeMode){handleFreeClick(el)}else{handleExerciseClick(el)}
+}
+
+function handleExerciseClick(el){
 var id=parseInt(el.getAttribute('data-id')),type=el.getAttribute('data-type');
-var path=el.querySelector('.sp'),c=ld.palette[type];
-if(colored[id]){
-delete colored[id];path.style.stroke='';path.style.fill='';path.style.fillOpacity='';
-}else{
-colored[id]=true;path.style.stroke=c;path.style.fill=c;path.style.fillOpacity='0.5';
+var path=el.querySelector('.sp');
+if(!selectedColor){
+el.style.animation='shake 0.4s';
+setTimeout(function(){el.style.animation=''},400);
+showMsg('בחרו צבע קודם!');
+return;
 }
+if(colored[id]){
+delete colored[id];
+path.style.stroke='';path.style.fill='';path.style.fillOpacity='';
+el.style.animation='none';void el.offsetWidth;el.style.animation='shapeBounce 0.3s ease';
+setTimeout(function(){el.style.animation=''},300);
+updateProgress();
+return;
+}
+var correctColor=ld.palette[type];
+if(selectedColor===correctColor){
+colored[id]=true;
+path.style.stroke=correctColor;path.style.fill=correctColor;path.style.fillOpacity='0.5';
 el.style.animation='none';void el.offsetWidth;el.style.animation='shapeBounce 0.3s ease';
 setTimeout(function(){el.style.animation=''},300);
 updateProgress();checkComplete();
+}else{
+wrongCount++;
+el.style.animation='shake 0.4s';
+path.style.fill='#ef4444';path.style.fillOpacity='0.3';
+(function(p,eid){setTimeout(function(){
+el.style.animation='';
+if(!colored[eid]){p.style.fill='';p.style.fillOpacity=''}
+},400)})(path,id);
+showMsg('הצבע לא מתאים!');
+updateProgress();
 }
+}
+
+function handleFreeClick(el){
+var id=parseInt(el.getAttribute('data-id'));
+var path=el.querySelector('.sp');
+if(!selectedColor){
+el.style.animation='shake 0.4s';
+setTimeout(function(){el.style.animation=''},400);
+showMsg('בחרו צבע קודם!');
+return;
+}
+if(colored[id]===selectedColor){
+delete colored[id];
+path.style.stroke='';path.style.fill='';path.style.fillOpacity='';
+}else{
+colored[id]=selectedColor;
+path.style.stroke=selectedColor;path.style.fill=selectedColor;path.style.fillOpacity='0.5';
+}
+el.style.animation='none';void el.offsetWidth;el.style.animation='shapeBounce 0.3s ease';
+setTimeout(function(){el.style.animation=''},300);
+}
+
 function updateProgress(){
+if(freeMode)return;
 var count=Object.keys(colored).length;
-document.getElementById('progText').textContent='צבעתם '+count+' מתוך '+totalShapes+' צורות';
+var text='צבעתם '+count+' מתוך '+totalShapes;
+if(wrongCount>0)text+=' | טעויות: '+wrongCount;
+document.getElementById('progText').textContent=text;
 document.getElementById('progFill').style.width=Math.round(count/totalShapes*100)+'%';
 }
+
 function checkComplete(){
+if(freeMode)return;
 if(Object.keys(colored).length>=totalShapes){
 res[cur]='correct';updateTabs();
 document.getElementById('mcard').classList.add('glow');
@@ -356,23 +570,33 @@ for(var i=0;i<els.length;i++){var p=els[i].querySelector('.sp');p.style.animatio
 setTimeout(showComp,900);
 }
 }
+
 function showComp(){
 var ov=document.getElementById('comp');ov.classList.add('show');
 var last=cur>=LEVELS.length-1;
 document.getElementById('cEmoji').textContent=last?'🏆':'🎉';
 document.getElementById('cTitle').textContent=last?'סיימתם הכל!':'כל הכבוד!';
-document.getElementById('cMsg').textContent=last?'צבעתם את כל המנדלות!':'צבעתם נכון את כל הצורות!';
+var msg=last?'צבעתם את כל המנדלות!':'צבעתם נכון את כל הצורות!';
+if(wrongCount>0)msg+=' ('+wrongCount+' טעויות)';
+document.getElementById('cMsg').textContent=msg;
 }
+
 function nextLevel(){
 document.getElementById('comp').classList.remove('show');
 for(var i=cur+1;i<LEVELS.length;i++){if(res[i]!=='correct'){goTo(i);return}}
 showSumm();
 }
+
 function replay(){document.getElementById('comp').classList.remove('show');res[cur]='pending';goTo(cur)}
+
 function showSumm(){
 document.getElementById('mcard').style.display='none';
 document.getElementById('legendCard').style.display='none';
 document.getElementById('prog').style.display='none';
+document.getElementById('selColor').style.display='none';
+document.getElementById('freeBanner').style.display='none';
+document.getElementById('freePal').style.display='none';
+document.getElementById('clearBtn').style.display='none';
 document.getElementById('comp').classList.remove('show');
 var s=document.getElementById('summ');s.classList.add('show');
 var g=document.getElementById('sgrid');g.innerHTML='';
@@ -388,17 +612,25 @@ if(hasP)br.innerHTML+='<button class="pill secondary" onclick="retryPending()">�
 br.innerHTML+='<button class="pill primary" onclick="retryAll()">🔄 הכל מחדש</button>';
 updateTabs();
 }
+
 function retryFiltered(fn){var first=-1;for(var i=0;i<res.length;i++){if(fn(res[i])){res[i]='pending';if(first===-1)first=i}}buildTabs();if(first>=0)goTo(first)}
 function retryPending(){retryFiltered(function(s){return s!=='correct'})}
 function retryAll(){retryFiltered(function(){return true})}
+
 function setMode(m){
 mode=m;var bs=document.querySelectorAll('.mbtn');
 for(var i=0;i<bs.length;i++)bs[i].classList.remove('on');
 if(m==='click')bs[0].classList.add('on');else if(m==='draw')bs[1].classList.add('on');
 var ct=document.getElementById('ct');
-if(m==='draw'){ct.classList.add('dm');setupDraw();buildColorBar()}else{ct.classList.remove('dm')}
+if(m==='draw'){
+ct.classList.add('dm');setupDraw();
+if(!freeMode){buildColorBar()}
+else{dColor=selectedColor||'';if(dCtx)dCtx.strokeStyle=dColor}
+}else{ct.classList.remove('dm')}
 if(ld)renderShapes();
+updateUI();
 }
+
 function buildColorBar(){
 var bar=document.getElementById('cbar');bar.innerHTML='';
 var colors={},first='';
@@ -406,6 +638,7 @@ for(var i=0;i<ld.types.length;i++){var t=ld.types[i],c=ld.palette[t];if(!colors[
 bar.innerHTML+='<button class="color-btn clr" onclick="clearDraw()">🗑️</button>';
 dColor=first;
 }
+
 function setupDraw(){
 dCvs=document.getElementById('cvs');if(!dCvs)return;
 var card=document.getElementById('mcard');var dpr=window.devicePixelRatio||1;
@@ -415,36 +648,48 @@ dCtx=dCvs.getContext('2d');dCtx.scale(dpr,dpr);
 dCtx.lineCap='round';dCtx.lineJoin='round';dCtx.lineWidth=4;dCtx.strokeStyle=dColor;
 dCvs.onpointerdown=startDr;dCvs.onpointermove=moveDr;dCvs.onpointerup=endDr;dCvs.onpointercancel=endDr;
 }
+
 function startDr(e){e.preventDefault();drawing=true;drawBBox={minX:1e9,minY:1e9,maxX:-1e9,maxY:-1e9};var p=drPos(e);updateBB(p);dCtx.strokeStyle=dColor;dCtx.beginPath();dCtx.moveTo(p.x,p.y)}
 function moveDr(e){if(!drawing)return;e.preventDefault();var p=drPos(e);updateBB(p);dCtx.lineTo(p.x,p.y);dCtx.stroke();dCtx.beginPath();dCtx.moveTo(p.x,p.y)}
 function endDr(){if(!drawing)return;drawing=false;detectShapes()}
 function drPos(e){var r=dCvs.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
 function updateBB(p){if(p.x<drawBBox.minX)drawBBox.minX=p.x;if(p.x>drawBBox.maxX)drawBBox.maxX=p.x;if(p.y<drawBBox.minY)drawBBox.minY=p.y;if(p.y>drawBBox.maxY)drawBBox.maxY=p.y}
+
 function detectShapes(){
 var card=document.getElementById('mcard'),w=card.clientWidth,h=card.clientHeight;
 var bx1=drawBBox.minX/w*100,by1=drawBBox.minY/h*100,bx2=drawBBox.maxX/w*100,by2=drawBBox.maxY/h*100;
 var wrongShown=false;
 for(var i=0;i<ld.shapes.length;i++){var s=ld.shapes[i];
-if(colored[s.id])continue;
+if(!freeMode&&colored[s.id])continue;
 if(s.x>=bx1-5&&s.x<=bx2+5&&s.y>=by1-5&&s.y<=by2+5){
 var svg=document.querySelector('.ss[data-id="'+s.id+'"]');if(!svg)continue;
-if(dColor===ld.palette[s.type]){
+if(freeMode){
+if(!dColor)continue;
+colored[s.id]=dColor;
+var p=svg.querySelector('.sp');p.style.stroke=dColor;p.style.fill=dColor;p.style.fillOpacity='0.5';
+svg.style.animation='shapeBounce 0.3s ease';(function(el){setTimeout(function(){el.style.animation=''},300)})(svg);
+}else if(dColor===ld.palette[s.type]){
 colored[s.id]=true;var p=svg.querySelector('.sp');p.style.stroke=ld.palette[s.type];p.style.fill=ld.palette[s.type];p.style.fillOpacity='0.5';
 svg.style.animation='shapeBounce 0.3s ease';(function(el){setTimeout(function(){el.style.animation=''},300)})(svg);
 }else{
 svg.style.animation='shake 0.4s';(function(el){setTimeout(function(){el.style.animation=''},400)})(svg);
-if(!wrongShown){wrongShown=true;showWrongMsg()}
+if(!wrongShown){wrongShown=true;showMsg('הצבע לא מתאים לצורה הזו!')}
 }
 }}
 if(dCtx&&dCvs)dCtx.clearRect(0,0,dCvs.width,dCvs.height);
-updateProgress();checkComplete();
+if(!freeMode){updateProgress();checkComplete()}
 }
-function showWrongMsg(){
-var msg=document.createElement('div');msg.className='wrong-msg';msg.textContent='צבע לא נכון לצורה הזו!';
+
+function showMsg(text){
+var existing=document.querySelector('.wrong-msg');
+if(existing)existing.remove();
+var msg=document.createElement('div');msg.className='wrong-msg';msg.textContent=text;
 document.body.appendChild(msg);setTimeout(function(){msg.remove()},1500);
 }
+
 function pickColor(btn){dColor=btn.dataset.color;var bs=document.querySelectorAll('.color-btn');for(var i=0;i<bs.length;i++)bs[i].classList.remove('active');btn.classList.add('active');if(dCtx)dCtx.strokeStyle=dColor}
 function clearDraw(){if(dCtx&&dCvs)dCtx.clearRect(0,0,dCvs.width,dCvs.height)}
+
 window.addEventListener('resize',function(){if(mode==='draw')setupDraw()});
 init();
 </script>

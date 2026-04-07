@@ -95,6 +95,8 @@ body{background:#fff}.ct{padding:10px;max-width:100%}.hd{border-bottom:2px solid
 .ghost{display:inline}
 .ghost rect,.ghost circle,.ghost ellipse,.ghost line,.ghost polygon,.ghost path{stroke:#b0b0b0!important;stroke-dasharray:5 3!important;fill:none!important}
 }
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:#fff;padding:10px 20px;border-radius:20px;font-weight:600;font-size:0.9rem;opacity:0;transition:all 0.3s;z-index:100;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
@@ -373,6 +375,40 @@ var LEVELS=[
 ]}
 ];
 
+// Validation zones — bounding boxes in SVG viewBox coords {x,y,w,h} per item per level
+var ZONES=[
+// 1 דלת
+[{x:65,y:65,w:36,h:34},{x:30,y:10,w:60,h:52},{x:5,y:126,w:110,h:24}],
+// 2 שעון מעורר
+[{x:48,y:52,w:44,h:36},{x:62,y:14,w:44,h:40},{x:14,y:108,w:90,h:42}],
+// 3 בית
+[{x:28,y:95,w:38,h:48},{x:62,y:66,w:40,h:38},{x:72,y:0,w:36,h:60}],
+// 4 פרח בעציץ
+[{x:22,y:68,w:72,h:44},{x:24,y:20,w:38,h:60},{x:30,y:98,w:60,h:52}],
+// 5 פנים
+[{x:44,y:60,w:32,h:30},{x:28,y:34,w:64,h:20},{x:92,y:46,w:28,h:48}],
+// 6 חתול
+[{x:0,y:54,w:120,h:32},{x:16,y:0,w:88,h:46},{x:42,y:66,w:36,h:32}],
+// 7 מכונית
+[{x:66,y:74,w:44,h:44},{x:36,y:26,w:48,h:32},{x:0,y:52,w:20,h:30}],
+// 8 סירת מפרש
+[{x:54,y:14,w:54,h:84},{x:52,y:10,w:34,h:32},{x:0,y:112,w:120,h:36}],
+// 9 עץ פירות
+[{x:28,y:24,w:58,h:56},{x:64,y:36,w:56,h:44},{x:4,y:58,w:40,h:76}],
+// 10 איש מקלות
+[{x:30,y:2,w:60,h:26},{x:52,y:50,w:42,h:36},{x:78,y:0,w:40,h:84}],
+// 11 גלידה
+[{x:44,y:0,w:32,h:28},{x:38,y:74,w:46,h:64},{x:34,y:6,w:52,h:48}],
+// 12 מגדלור
+[{x:20,y:8,w:80,h:40},{x:42,y:110,w:36,h:36},{x:28,y:62,w:60,h:52}],
+// 13 רקטה
+[{x:20,y:98,w:80,h:46},{x:42,y:44,w:36,h:36},{x:40,y:98,w:40,h:36}],
+// 14 איש שלג ⭐
+[{x:2,y:32,w:116,h:44},{x:38,y:0,w:38,h:88},{x:36,y:22,w:48,h:48}],
+// 15 סצנה ⭐⭐
+[{x:6,y:34,w:98,h:88},{x:84,y:0,w:36,h:94},{x:16,y:2,w:46,h:136}]
+];
+
 var cur=0,res=[],curColor='#1e293b',curWidth=4;
 var activeKey=null,drawingOn=null,itemDrawn={},itemDone={},cvsMap={};
 
@@ -447,8 +483,44 @@ function pos(e,c){var r=c.getBoundingClientRect();return{x:e.clientX-r.left,y:e.
 
 function eraseActive(){if(!activeKey||itemDone[activeKey])return;var en=cvsMap[activeKey];if(!en)return;var dpr=window.devicePixelRatio||1;en.ctx.clearRect(0,0,en.canvas.width/dpr,en.canvas.height/dpr);en.canvas._saved=null;itemDrawn[activeKey]=false;var bs=document.querySelectorAll('.done-btn[data-key="'+activeKey+'"]');for(var i=0;i<bs.length;i++)bs[i].classList.remove('visible')}
 
+function validateDrawing(key){
+var en=cvsMap[key];if(!en)return{ok:false,reason:'min'};
+var zone=ZONES[cur]&&ZONES[cur][parseInt(key)];if(!zone)return{ok:true};
+var canvas=en.canvas,dpr=window.devicePixelRatio||1;
+var box=canvas.parentElement,svg=box.querySelector('svg');
+if(!svg)return{ok:true};
+var svgR=svg.getBoundingClientRect(),boxR=box.getBoundingClientRect();
+var svgOffX=svgR.left-boxR.left,svgOffY=svgR.top-boxR.top;
+var vb=(LEVELS[cur].vb||'0 0 120 150').split(' ');
+var scX=svgR.width/parseFloat(vb[2]),scY=svgR.height/parseFloat(vb[3]);
+var zx=zone.x*scX+svgOffX,zy=zone.y*scY+svgOffY,zw=zone.w*scX,zh=zone.h*scY;
+var imgData=en.ctx.getImageData(0,0,canvas.width,canvas.height),d=imgData.data;
+var total=0,inZone=0;
+for(var py=0;py<canvas.height;py+=2){for(var px=0;px<canvas.width;px+=2){
+var idx=(py*canvas.width+px)*4;
+if(d[idx+3]>30){total++;var cx=px/dpr,cy=py/dpr;if(cx>=zx&&cx<=zx+zw&&cy>=zy&&cy<=zy+zh)inZone++}
+}}
+if(total<15)return{ok:false,reason:'min'};
+if(inZone/total<0.2)return{ok:false,reason:'zone'};
+return{ok:true};
+}
+function showToast(msg){
+var t=document.getElementById('toast');
+if(!t){t=document.createElement('div');t.id='toast';t.className='toast';document.body.appendChild(t)}
+t.textContent=msg;t.classList.remove('show');
+void t.offsetWidth;t.classList.add('show');
+clearTimeout(t._tm);t._tm=setTimeout(function(){t.classList.remove('show')},2000);
+}
 function markDone(key){
-if(itemDone[key])return;itemDone[key]=true;
+if(itemDone[key])return;
+var v=validateDrawing(key);
+if(!v.ok){
+var bx=document.querySelector('.item-box[data-key="'+key+'"]');
+if(bx){bx.style.animation='none';void bx.offsetWidth;bx.style.animation='shake 0.5s ease'}
+showToast(v.reason==='min'?'✏️ ציירו עוד קצת!':'🎯 ציירו ליד החלק החסר!');
+return;
+}
+itemDone[key]=true;
 var en=cvsMap[key];if(en)en.canvas._saved=en.ctx.getImageData(0,0,en.canvas.width,en.canvas.height);
 var bxs=document.querySelectorAll('.item-box[data-key="'+key+'"]');for(var i=0;i<bxs.length;i++){bxs[i].classList.remove('incomplete');bxs[i].classList.add('done')}
 var bs=document.querySelectorAll('.done-btn[data-key="'+key+'"]');for(var i=0;i<bs.length;i++)bs[i].style.display='none';

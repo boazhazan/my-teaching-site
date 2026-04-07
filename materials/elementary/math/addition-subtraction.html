@@ -208,6 +208,56 @@ body {
   color: var(--text-light);
 }
 
+/* ===== LEVEL TIP BOX ===== */
+.level-tip {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 2px solid #fcd34d;
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.level-tip.collapsed .tip-body { display: none; }
+
+.tip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+}
+
+.tip-toggle {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.tip-body {
+  margin-top: 8px;
+}
+
+.tip-text {
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+
+.tip-example {
+  background: rgba(255,255,255,0.7);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  direction: ltr;
+  text-align: left;
+  font-weight: 500;
+}
+
 /* ===== QUESTION CARD ===== */
 .questions-list {
   display: flex;
@@ -699,6 +749,17 @@ body {
     <p class="level-instruction" id="levelInstruction"></p>
   </div>
 
+  <div class="level-tip" id="levelTip" onclick="toggleTip()">
+    <div class="tip-header">
+      <span id="tipTitle">💡 טיפ</span>
+      <span class="tip-toggle" id="tipToggle">▲ הסתר</span>
+    </div>
+    <div class="tip-body" id="tipBody">
+      <p class="tip-text" id="tipText"></p>
+      <div class="tip-example" id="tipExample"></div>
+    </div>
+  </div>
+
   <div class="questions-list" id="questionsList"></div>
 
   <div class="level-complete" id="levelComplete">
@@ -741,76 +802,106 @@ const levels = [
   {
     title: 'חיבור עד 20',
     instruction: 'חברו שני מספרים — התוצאה עד 20',
+    tip: '💡 טיפ: אפשר לספור על האצבעות! מתחילים מהמספר הגדול וסופרים קדימה.',
+    example: '5 + 3 → מתחילים מ-5 וסופרים: 6, 7, 8 ✓',
     generate: () => genAdd(1, 9, 1, 9, 20)
   },
   {
     title: 'חיסור עד 20',
     instruction: 'חסרו — התוצאה חיובית',
+    tip: '💡 טיפ: בחיסור סופרים אחורה! מתחילים מהמספר הגדול וסופרים לאחור.',
+    example: '8 − 3 → מתחילים מ-8 וסופרים: 7, 6, 5 ✓',
     generate: () => genSub(10, 20, 1, 9)
   },
   {
     title: 'חיבור וחיסור עד 20',
     instruction: 'תרגילי חיבור וחיסור מעורבבים',
+    tip: '💡 טיפ: שימו לב לסימן! + זה חיבור (קדימה), − זה חיסור (אחורה).',
+    example: 'סימן + → סופרים קדימה | סימן − → סופרים אחורה',
     generate: () => Math.random() < 0.5 ? genAdd(1, 9, 1, 9, 20) : genSub(10, 20, 1, 9)
   },
   {
     title: 'חיבור דו-ספרתי + חד-ספרתי',
     instruction: 'חיבור בלי המרה',
+    tip: '💡 טיפ: מחברים רק את ספרת היחידות! העשרות נשארות.',
+    example: '23 + 4 → העשרות: 2, היחידות: 3+4=7 → התשובה: 27 ✓',
     generate: () => { let a = randRange(21,49); let b = randRange(1, Math.min(9, 9 - (a%10))); if(b<1) b=1; return makeQ(a, '+', b); }
   },
   {
     title: 'חיסור דו-ספרתי − חד-ספרתי',
     instruction: 'חיסור בלי המרה',
+    tip: '💡 טיפ: מחסרים רק את ספרת היחידות! העשרות נשארות.',
+    example: '37 − 5 → העשרות: 3, היחידות: 7−5=2 → התשובה: 32 ✓',
     generate: () => { let a = randRange(21,59); let b = randRange(1, Math.min(a%10, 9)); if(b<1) b=1; return makeQ(a, '-', b); }
   },
   {
     title: 'חיבור עם המרה',
     instruction: 'חיבור עם המרת עשרות',
+    tip: '💡 טיפ: כשהיחידות עוברות את 10 — נותנים 1 לעשרות!',
+    example: '45 + 9 → היחידות: 5+9=14 → כותבים 4, מעבירים 1 → 4+1=5 עשרות → 54 ✓',
     generate: () => { let a = randRange(15,55); let unitsA = a%10; let b = randRange(10-unitsA, Math.min(9, 99-a)); if(b<1) b=1; return makeQ(a, '+', b); }
   },
   {
     title: 'חיסור עם המרה',
     instruction: 'חיסור עם המרת עשרות',
+    tip: '💡 טיפ: כשאי אפשר לחסר את היחידות — "לווים" 10 מהעשרות!',
+    example: '30 − 7 → אי אפשר 0−7, אז לווים: 10−7=3, ונשארות 2 עשרות → 23 ✓',
     generate: () => { let a = randRange(20,60); let b = randRange((a%10)+1, Math.min(9, a-1)); if(b<1) b=1; return makeQ(a, '-', b); }
   },
   {
     title: 'חיבור שני דו-ספרתיים',
     instruction: 'חברו שני מספרים דו-ספרתיים',
+    tip: '💡 טיפ: פרקו למספרים קלים! חברו קודם עשרות ואז יחידות.',
+    example: '17 + 12 → עשרות: 10+10=20, יחידות: 7+2=9 → 29 ✓',
     generate: () => { let a = randRange(11,49); let b = randRange(11, Math.min(49, 99-a)); return makeQ(a, '+', b); }
   },
   {
     title: 'חיסור שני דו-ספרתיים',
     instruction: 'חסרו שני מספרים דו-ספרתיים',
+    tip: '💡 טיפ: חסרו קודם עשרות ואז יחידות — או חשבו כמה צריך להוסיף!',
+    example: '45 − 18 → כמה צריך להוסיף ל-18 כדי להגיע ל-45? 18+2=20, 20+25=45 → 27 ✓',
     generate: () => { let a = randRange(30,85); let b = randRange(11, Math.min(a-1, 49)); return makeQ(a, '-', b); }
   },
   {
     title: 'חיבור וחיסור דו-ספרתיים',
     instruction: 'תרגילים מעורבבים עם דו-ספרתיים',
+    tip: '💡 טיפ: זכרו — שימו לב לסימן ופרקו את המספרים לעשרות ויחידות!',
+    example: 'קודם עשרות, אחר כך יחידות — ואל תשכחו המרה אם צריך!',
     generate: () => Math.random()<0.5 ? levels[7].generate() : levels[8].generate()
   },
   {
     title: 'חיבור עשרות שלמות',
     instruction: 'חיבור עשרות שלמות',
+    tip: '💡 טיפ: תחשבו בלי האפסים! 30+50 זה כמו 3+5 עם אפס בסוף.',
+    example: '30 + 50 → 3+5=8 → שמים אפס → 80 ✓',
     generate: () => { let a = randRange(1,8)*10; let b = randRange(1, Math.min(9,10-a/10))*10; return makeQ(a, '+', b); }
   },
   {
     title: 'השלמה — מצאו את החסר',
     instruction: 'איזה מספר חסר בתרגיל?',
+    tip: '💡 טיפ: השתמשו בפעולה ההפוכה! אם חסר מחובר — חסרו. אם חסר מחוסר — חברו.',
+    example: '☐ + 3 = 25 → פעולה הפוכה: 25 − 3 = 22 ✓',
     generate: () => genMissing()
   },
   {
     title: 'חיבור תלת-ספרתי + עשרות',
     instruction: 'חיבור מספר תלת-ספרתי עם עשרות',
+    tip: '💡 טיפ: רק ספרת העשרות משתנה! המאות והיחידות נשארות.',
+    example: '240 + 30 → המאות: 2, העשרות: 4+3=7, היחידות: 0 → 270 ✓',
     generate: () => { let a = randRange(1,7)*100 + randRange(1,6)*10; let b = randRange(1,5)*10; return makeQ(a, '+', b); }
   },
   {
     title: 'אומדן — גדול או קטן מ-100?',
     instruction: 'חשבו ורשמו את התוצאה',
+    tip: '💡 טיפ: לפני שמחשבים — נסו לאמוד! עגלו כל מספר לעשרת הקרובה.',
+    example: '57 + 38 → בערך 60+40=100, אז התשובה קרובה ל-100. נבדוק: 95 ✓',
     generate: () => { if(Math.random()<0.5){ let a=randRange(40,70); let b=randRange(30,70); return makeQ(a,'+',b); } else { let a=randRange(50,99); let b=randRange(10,a-10); return makeQ(a,'-',b); }}
   },
   {
     title: 'אתגר! — תרגילים מעורבבים',
     instruction: 'כל מה שלמדתם — בואו נראה מה אתם יודעים!',
+    tip: '🏆 טיפ: השתמשו בכל השיטות שלמדתם! קחו רגע לחשוב לפני שעונים.',
+    example: 'נשמו עמוק, קראו את התרגיל, בחרו שיטה — ופתרו!',
     generate: () => levels[randRange(0,13)].generate()
   }
 ];
@@ -916,6 +1007,14 @@ function renderLevel() {
   document.getElementById('levelTitle').textContent = levels[currentLevel].title;
   document.getElementById('levelInstruction').textContent = levels[currentLevel].instruction;
   document.getElementById('progressText').textContent = `רמה ${currentLevel + 1} מתוך ${levels.length}`;
+
+  // Show tip
+  const lvl = levels[currentLevel];
+  document.getElementById('tipText').textContent = lvl.tip;
+  document.getElementById('tipExample').textContent = lvl.example;
+  const tipEl = document.getElementById('levelTip');
+  tipEl.classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent = '▲ הסתר';
 
   currentQuestions = [];
   answeredCount = 0;
@@ -1130,6 +1229,13 @@ function updateProgress() {
 
 function showHelp() { document.getElementById('helpModal').classList.add('show'); }
 function closeHelp(e) { if (e.target === document.getElementById('helpModal')) document.getElementById('helpModal').classList.remove('show'); }
+
+function toggleTip() {
+  const tip = document.getElementById('levelTip');
+  const toggle = document.getElementById('tipToggle');
+  tip.classList.toggle('collapsed');
+  toggle.textContent = tip.classList.contains('collapsed') ? '▼ הצג טיפ' : '▲ הסתר';
+}
 
 // ===== INIT =====
 renderLevel();

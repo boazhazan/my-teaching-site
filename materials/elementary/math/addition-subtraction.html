@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>חיבור וחיסור — כיתה ב' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --primary-light: #dbeafe;
+  --accent: #f59e0b;
+  --accent-dark: #d97706;
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --error: #ef4444;
+  --error-light: #fee2e2;
+  --text: #1e293b;
+  --text-light: #64748b;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Heebo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  direction: rtl;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== HEADER ===== */
+.app-header {
+  background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 50%, #60a5fa 100%);
+  color: #fff;
+  padding: 20px 24px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 16px rgba(37,99,235,0.3);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.header-title h1 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.header-title .subtitle {
+  font-size: 0.8rem;
+  opacity: 0.85;
+  font-weight: 400;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.header-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: #fff;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.header-btn:hover { background: rgba(255,255,255,0.3); }
+.header-btn.active { background: rgba(255,255,255,0.35); }
+
+/* Progress bar */
+.progress-bar {
+  background: rgba(255,255,255,0.2);
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+.progress-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+/* ===== LEVEL TABS ===== */
+.tabs-container {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.tabs-container::-webkit-scrollbar { display: none; }
+
+.tabs-row {
+  display: flex;
+  gap: 6px;
+  min-width: max-content;
+}
+
+.tab {
+  min-width: 40px;
+  height: 36px;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab:hover { border-color: var(--primary); color: var(--primary); }
+.tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.tab.done { background: var(--success-light); color: var(--success); border-color: var(--success); }
+.tab.done.perfect::after { content: '⭐'; font-size: 0.6rem; margin-right: 2px; }
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px 16px 100px;
+}
+
+/* Level info */
+.level-info {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.level-badge {
+  display: inline-block;
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.level-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.level-instruction {
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+/* ===== QUESTION CARD ===== */
+.questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.question-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.question-card.correct {
+  border-color: var(--success);
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.question-card.wrong {
+  border-color: var(--error);
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.question-number {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 28px;
+  height: 28px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.question-card.correct .question-number {
+  background: var(--success);
+  color: #fff;
+}
+
+/* Exercise display */
+.exercise-display {
+  text-align: center;
+  margin: 12px 0 20px;
+}
+
+.exercise-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  direction: ltr;
+}
+
+.exercise-num {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--text);
+  min-width: 50px;
+  text-align: center;
+}
+
+.exercise-op {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  min-width: 30px;
+  text-align: center;
+}
+
+.exercise-equals {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-light);
+  min-width: 30px;
+  text-align: center;
+}
+
+.exercise-answer-box {
+  min-width: 70px;
+  height: 56px;
+  border: 3px dashed var(--primary);
+  border-radius: 12px;
+  background: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--primary);
+  transition: all 0.3s;
+}
+
+.exercise-answer-box.filled {
+  border-style: solid;
+  background: var(--primary);
+  color: #fff;
+}
+
+.exercise-answer-box.correct-answer {
+  background: var(--success);
+  border-color: var(--success);
+  color: #fff;
+}
+
+.exercise-answer-box.wrong-answer {
+  background: var(--error);
+  border-color: var(--error);
+  color: #fff;
+}
+
+/* Answer options */
+.answer-options {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.answer-btn {
+  height: 54px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  font-family: inherit;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.answer-btn:hover:not(.disabled) {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  transform: scale(1.04);
+}
+
+.answer-btn:active:not(.disabled) {
+  transform: scale(0.96);
+}
+
+.answer-btn.selected {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.answer-btn.correct-choice {
+  background: var(--success);
+  color: #fff;
+  border-color: var(--success);
+}
+
+.answer-btn.wrong-choice {
+  background: var(--error-light);
+  color: var(--error);
+  border-color: var(--error);
+}
+
+.answer-btn.disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Input mode */
+.answer-input-wrap {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.answer-input {
+  width: 100px;
+  height: 56px;
+  border: 3px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  font-family: inherit;
+  font-size: 1.6rem;
+  font-weight: 800;
+  text-align: center;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+  -moz-appearance: textfield;
+}
+
+.answer-input::-webkit-outer-spin-button,
+.answer-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.answer-input:focus { border-color: var(--primary); }
+
+.submit-btn {
+  height: 56px;
+  padding: 0 24px;
+  border-radius: 12px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.submit-btn:hover { background: var(--primary-dark); }
+
+/* Feedback */
+.feedback {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.feedback.show { opacity: 1; }
+.feedback.correct-fb { color: var(--success); }
+.feedback.wrong-fb { color: var(--error); }
+
+/* ===== LEVEL COMPLETE CARD ===== */
+.level-complete {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 2px solid var(--success);
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  display: none;
+}
+
+.level-complete.show { display: block; animation: popIn 0.4s ease; }
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.lc-emoji { font-size: 3.5rem; margin-bottom: 12px; }
+.lc-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 4px; }
+.lc-sub { color: var(--text-light); margin-bottom: 8px; }
+
+.lc-score {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 16px 0;
+}
+
+.lc-score-item {
+  text-align: center;
+}
+
+.lc-score-num {
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.lc-score-label {
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
+.lc-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.lc-btn {
+  padding: 12px 28px;
+  border-radius: 10px;
+  border: none;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lc-btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.lc-btn-primary:hover { background: var(--primary-dark); }
+
+.lc-btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+
+.lc-btn-outline:hover { background: var(--primary-light); }
+
+/* ===== MODE TOGGLE ===== */
+.mode-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.mode-btn {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mode-btn.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* ===== HELP MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.show { display: flex; }
+
+.modal {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  max-width: 420px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: popIn 0.3s ease;
+}
+
+.modal h2 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal p {
+  color: var(--text-light);
+  margin-bottom: 12px;
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.modal-close {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+/* ===== PRINT ===== */
+.print-overlay {
+  display: none;
+}
+
+@media print {
+  .app-header, .tabs-container, .mode-toggle, .level-complete, .modal-overlay { display: none !important; }
+  
+  .main-content { padding: 0; max-width: 100%; }
+  
+  .print-overlay {
+    display: block !important;
+    text-align: center;
+    padding: 20px 0;
+    font-size: 1.3rem;
+    font-weight: 800;
+    border-bottom: 2px solid #000;
+    margin-bottom: 20px;
+  }
+  
+  .question-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ccc;
+    margin-bottom: 12px;
+  }
+  
+  .answer-btn, .submit-btn { border: 1px solid #ccc; }
+  .exercise-answer-box { border-style: solid; }
+  .feedback { display: none; }
+  body { background: #fff; }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+  .exercise-num { font-size: 1.8rem; }
+  .exercise-op, .exercise-equals { font-size: 1.6rem; }
+  .exercise-answer-box { min-width: 56px; height: 48px; font-size: 1.8rem; }
+  .answer-options { grid-template-columns: repeat(2, 1fr); }
+  .answer-btn { height: 48px; font-size: 1.1rem; }
+  .question-card { padding: 18px 16px; }
+  .header-title h1 { font-size: 1.1rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="app-header">
+  <div class="header-top">
+    <div class="header-title">
+      <div class="header-icon">➕</div>
+      <div>
+        <h1>חיבור וחיסור</h1>
+        <div class="subtitle">כיתה ב' — תרגול מדורג</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="header-btn" onclick="showHelp()" title="עזרה">❓</button>
+      <button class="header-btn" onclick="window.print()" title="הדפסה">🖨️</button>
+    </div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-stats">
+    <span>✅ <span id="totalCorrect">0</span> נכון</span>
+    <span>❌ <span id="totalWrong">0</span> שגוי</span>
+    <span id="progressText">רמה 1 מתוך 15</span>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-container">
+  <div class="tabs-row" id="tabsRow"></div>
+</div>
+
+<!-- MAIN -->
+<div class="main-content">
+  <div class="print-overlay">חיבור וחיסור — כיתה ב' | בועז חזן</div>
+  
+  <div class="mode-toggle">
+    <button class="mode-btn active" id="modeChoice" onclick="setMode('choice')">🖱️ בחירת תשובה</button>
+    <button class="mode-btn" id="modeInput" onclick="setMode('input')">⌨️ כתיבת תשובה</button>
+  </div>
+
+  <div class="level-info" id="levelInfo">
+    <span class="level-badge" id="levelBadge">רמה 1</span>
+    <h2 class="level-title" id="levelTitle"></h2>
+    <p class="level-instruction" id="levelInstruction"></p>
+  </div>
+
+  <div class="questions-list" id="questionsList"></div>
+
+  <div class="level-complete" id="levelComplete">
+    <div class="lc-emoji" id="lcEmoji">🎉</div>
+    <div class="lc-title" id="lcTitle">כל הכבוד!</div>
+    <div class="lc-sub" id="lcSub"></div>
+    <div class="lc-score">
+      <div class="lc-score-item">
+        <div class="lc-score-num" id="lcCorrect" style="color: var(--success);">0</div>
+        <div class="lc-score-label">נכון</div>
+      </div>
+      <div class="lc-score-item">
+        <div class="lc-score-num" id="lcWrong" style="color: var(--error);">0</div>
+        <div class="lc-score-label">שגוי</div>
+      </div>
+    </div>
+    <div class="lc-buttons">
+      <button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button>
+      <button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button>
+    </div>
+  </div>
+</div>
+
+<!-- HELP MODAL -->
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2>❓ איך משחקים?</h2>
+    <p>בכל רמה מופיעים <strong>תרגילי חיבור וחיסור</strong> מדורגים — מקל לקשה, בדיוק לפי תוכנית הלימודים של כיתה ב'.</p>
+    <p><strong>מצב בחירה 🖱️:</strong> בוחרים את התשובה הנכונה מתוך 4 אפשרויות.</p>
+    <p><strong>מצב כתיבה ⌨️:</strong> כותבים את התשובה בעצמכם — יותר מאתגר!</p>
+    <p>15 רמות שמתחילות מחיבור וחיסור פשוט ומגיעות עד תרגילים עם מספרים תלת-ספרתיים.</p>
+    <p>בכל רמה 6 תרגילים. בהצלחה! 💪</p>
+    <button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button>
+  </div>
+</div>
+
+<script>
+// ===== LEVEL DEFINITIONS =====
+const levels = [
+  {
+    title: 'חיבור עד 20',
+    instruction: 'חברו שני מספרים — התוצאה עד 20',
+    generate: () => genAdd(1, 9, 1, 9, 20)
+  },
+  {
+    title: 'חיסור עד 20',
+    instruction: 'חסרו — התוצאה חיובית',
+    generate: () => genSub(10, 20, 1, 9)
+  },
+  {
+    title: 'חיבור וחיסור עד 20',
+    instruction: 'תרגילי חיבור וחיסור מעורבבים',
+    generate: () => Math.random() < 0.5 ? genAdd(1, 9, 1, 9, 20) : genSub(10, 20, 1, 9)
+  },
+  {
+    title: 'חיבור דו-ספרתי + חד-ספרתי',
+    instruction: 'חיבור בלי המרה',
+    generate: () => { let a = randRange(21,49); let b = randRange(1, Math.min(9, 9 - (a%10))); if(b<1) b=1; return makeQ(a, '+', b); }
+  },
+  {
+    title: 'חיסור דו-ספרתי − חד-ספרתי',
+    instruction: 'חיסור בלי המרה',
+    generate: () => { let a = randRange(21,59); let b = randRange(1, Math.min(a%10, 9)); if(b<1) b=1; return makeQ(a, '-', b); }
+  },
+  {
+    title: 'חיבור עם המרה',
+    instruction: 'חיבור עם המרת עשרות',
+    generate: () => { let a = randRange(15,55); let unitsA = a%10; let b = randRange(10-unitsA, Math.min(9, 99-a)); if(b<1) b=1; return makeQ(a, '+', b); }
+  },
+  {
+    title: 'חיסור עם המרה',
+    instruction: 'חיסור עם המרת עשרות',
+    generate: () => { let a = randRange(20,60); let b = randRange((a%10)+1, Math.min(9, a-1)); if(b<1) b=1; return makeQ(a, '-', b); }
+  },
+  {
+    title: 'חיבור שני דו-ספרתיים',
+    instruction: 'חברו שני מספרים דו-ספרתיים',
+    generate: () => { let a = randRange(11,49); let b = randRange(11, Math.min(49, 99-a)); return makeQ(a, '+', b); }
+  },
+  {
+    title: 'חיסור שני דו-ספרתיים',
+    instruction: 'חסרו שני מספרים דו-ספרתיים',
+    generate: () => { let a = randRange(30,85); let b = randRange(11, Math.min(a-1, 49)); return makeQ(a, '-', b); }
+  },
+  {
+    title: 'חיבור וחיסור דו-ספרתיים',
+    instruction: 'תרגילים מעורבבים עם דו-ספרתיים',
+    generate: () => Math.random()<0.5 ? levels[7].generate() : levels[8].generate()
+  },
+  {
+    title: 'חיבור עשרות שלמות',
+    instruction: 'חיבור עשרות שלמות',
+    generate: () => { let a = randRange(1,8)*10; let b = randRange(1, Math.min(9,10-a/10))*10; return makeQ(a, '+', b); }
+  },
+  {
+    title: 'השלמה — מצאו את החסר',
+    instruction: 'איזה מספר חסר בתרגיל?',
+    generate: () => genMissing()
+  },
+  {
+    title: 'חיבור תלת-ספרתי + עשרות',
+    instruction: 'חיבור מספר תלת-ספרתי עם עשרות',
+    generate: () => { let a = randRange(1,7)*100 + randRange(1,6)*10; let b = randRange(1,5)*10; return makeQ(a, '+', b); }
+  },
+  {
+    title: 'אומדן — גדול או קטן מ-100?',
+    instruction: 'חשבו ורשמו את התוצאה',
+    generate: () => { if(Math.random()<0.5){ let a=randRange(40,70); let b=randRange(30,70); return makeQ(a,'+',b); } else { let a=randRange(50,99); let b=randRange(10,a-10); return makeQ(a,'-',b); }}
+  },
+  {
+    title: 'אתגר! — תרגילים מעורבבים',
+    instruction: 'כל מה שלמדתם — בואו נראה מה אתם יודעים!',
+    generate: () => levels[randRange(0,13)].generate()
+  }
+];
+
+// ===== HELPERS =====
+function randRange(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+function makeQ(a, op, b) {
+  const answer = op === '+' ? a + b : a - b;
+  return { a, b, op, answer, type: 'normal' };
+}
+
+function genAdd(minA, maxA, minB, maxB, maxResult) {
+  let a = randRange(minA, maxA);
+  let b = randRange(minB, Math.min(maxB, maxResult - a));
+  if (b < minB) b = minB;
+  return makeQ(a, '+', b);
+}
+
+function genSub(minA, maxA, minB, maxB) {
+  let a = randRange(minA, maxA);
+  let b = randRange(minB, Math.min(maxB, a - 1));
+  if (b < minB) b = minB;
+  return makeQ(a, '-', b);
+}
+
+function genMissing() {
+  const op = Math.random() < 0.5 ? '+' : '-';
+  let a, b, answer;
+  if (op === '+') {
+    answer = randRange(10, 50);
+    a = randRange(1, answer - 1);
+    b = answer - a;
+  } else {
+    a = randRange(20, 60);
+    b = randRange(1, a - 1);
+    answer = a - b;
+  }
+  // Randomly choose which number is missing
+  const missingPos = Math.random() < 0.5 ? 'first' : 'second';
+  if (missingPos === 'first') {
+    return { a: '☐', b, op, answer: a, displayResult: op === '+' ? a + b : a - b, type: 'missing', missingPos };
+  } else {
+    return { a, b: '☐', op, answer: b, displayResult: op === '+' ? a + b : a - b, type: 'missing', missingPos };
+  }
+}
+
+function generateDistractors(correct) {
+  const set = new Set([correct]);
+  const offsets = [-2, -1, 1, 2, -10, 10, -5, 5, 3, -3];
+  while (set.size < 4) {
+    const offset = offsets[Math.floor(Math.random() * offsets.length)];
+    const d = correct + offset;
+    if (d >= 0 && d !== correct) set.add(d);
+  }
+  return shuffle([...set]);
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ===== STATE =====
+let currentLevel = 0;
+let mode = 'choice'; // 'choice' or 'input'
+let totalCorrect = 0;
+let totalWrong = 0;
+let levelResults = {};
+let currentQuestions = [];
+let answeredCount = 0;
+let levelCorrect = 0;
+let levelWrong = 0;
+const QUESTIONS_PER_LEVEL = 6;
+
+// ===== RENDER =====
+function renderTabs() {
+  const row = document.getElementById('tabsRow');
+  row.innerHTML = '';
+  levels.forEach((_, i) => {
+    const tab = document.createElement('button');
+    tab.className = 'tab';
+    tab.textContent = i + 1;
+    if (i === currentLevel) tab.classList.add('active');
+    if (levelResults[i] !== undefined) {
+      tab.classList.add('done');
+      if (levelResults[i] === 0) tab.classList.add('perfect');
+    }
+    tab.onclick = () => goLevel(i);
+    row.appendChild(tab);
+  });
+  // Scroll active tab into view
+  const activeTab = row.querySelector('.active');
+  if (activeTab) activeTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+}
+
+function renderLevel() {
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent = `רמה ${currentLevel + 1}`;
+  document.getElementById('levelTitle').textContent = levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent = levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent = `רמה ${currentLevel + 1} מתוך ${levels.length}`;
+
+  currentQuestions = [];
+  answeredCount = 0;
+  levelCorrect = 0;
+  levelWrong = 0;
+
+  for (let i = 0; i < QUESTIONS_PER_LEVEL; i++) {
+    currentQuestions.push(levels[currentLevel].generate());
+  }
+
+  renderQuestions();
+  updateProgress();
+  renderTabs();
+}
+
+function renderQuestions() {
+  const list = document.getElementById('questionsList');
+  list.innerHTML = '';
+
+  currentQuestions.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `q-${idx}`;
+
+    const numBadge = `<div class="question-number">${idx + 1}</div>`;
+
+    let exerciseHTML;
+    if (q.type === 'missing') {
+      const firstDisplay = q.missingPos === 'first' ? '?' : q.a;
+      const secondDisplay = q.missingPos === 'second' ? '?' : q.b;
+      exerciseHTML = `
+        <div class="exercise-display">
+          <div class="exercise-row">
+            <span class="exercise-num">${firstDisplay}</span>
+            <span class="exercise-op">${q.op}</span>
+            <span class="exercise-num">${secondDisplay}</span>
+            <span class="exercise-equals">=</span>
+            <span class="exercise-num">${q.displayResult}</span>
+          </div>
+        </div>`;
+    } else {
+      exerciseHTML = `
+        <div class="exercise-display">
+          <div class="exercise-row">
+            <span class="exercise-num">${q.a}</span>
+            <span class="exercise-op">${q.op}</span>
+            <span class="exercise-num">${q.b}</span>
+            <span class="exercise-equals">=</span>
+            <div class="exercise-answer-box" id="ansBox-${idx}">?</div>
+          </div>
+        </div>`;
+    }
+
+    let answersHTML;
+    if (mode === 'choice') {
+      const options = generateDistractors(q.answer);
+      answersHTML = `<div class="answer-options" id="opts-${idx}">
+        ${options.map(opt => `<button class="answer-btn" onclick="checkAnswer(${idx}, ${opt}, this)">${opt}</button>`).join('')}
+      </div>`;
+    } else {
+      answersHTML = `<div class="answer-input-wrap" id="opts-${idx}">
+        <input type="number" class="answer-input" id="input-${idx}" placeholder="?" onkeydown="if(event.key==='Enter')submitInput(${idx})">
+        <button class="submit-btn" onclick="submitInput(${idx})">✓</button>
+      </div>`;
+    }
+
+    card.innerHTML = numBadge + exerciseHTML + answersHTML + `<div class="feedback" id="fb-${idx}"></div>`;
+    list.appendChild(card);
+  });
+}
+
+// ===== INTERACTION =====
+function checkAnswer(idx, chosen, btnEl) {
+  const q = currentQuestions[idx];
+  const card = document.getElementById(`q-${idx}`);
+  const opts = document.getElementById(`opts-${idx}`);
+  const fb = document.getElementById(`fb-${idx}`);
+  const ansBox = document.getElementById(`ansBox-${idx}`);
+
+  if (card.classList.contains('correct')) return;
+
+  const isCorrect = chosen === q.answer;
+
+  if (isCorrect) {
+    card.classList.add('correct');
+    btnEl.classList.add('correct-choice');
+    if (ansBox) {
+      ansBox.textContent = q.answer;
+      ansBox.classList.add('filled', 'correct-answer');
+    }
+    fb.textContent = ['מצוין! ⭐', 'נכון! 🎯', 'יופי! ✨', 'מדהים! 🌟'][Math.floor(Math.random()*4)];
+    fb.className = 'feedback show correct-fb';
+    opts.querySelectorAll('.answer-btn').forEach(b => b.classList.add('disabled'));
+    levelCorrect++;
+    totalCorrect++;
+    answeredCount++;
+  } else {
+    btnEl.classList.add('wrong-choice');
+    if (ansBox) {
+      ansBox.textContent = chosen;
+      ansBox.classList.add('filled', 'wrong-answer');
+      setTimeout(() => { ansBox.textContent = '?'; ansBox.classList.remove('filled', 'wrong-answer'); }, 600);
+    }
+    fb.textContent = 'לא נכון, נסו שוב! 💪';
+    fb.className = 'feedback show wrong-fb';
+    levelWrong++;
+    totalWrong++;
+    setTimeout(() => { btnEl.classList.remove('wrong-choice'); fb.classList.remove('show'); }, 1000);
+  }
+
+  updateProgress();
+  if (answeredCount === QUESTIONS_PER_LEVEL) setTimeout(showLevelComplete, 800);
+}
+
+function submitInput(idx) {
+  const q = currentQuestions[idx];
+  const card = document.getElementById(`q-${idx}`);
+  const input = document.getElementById(`input-${idx}`);
+  const fb = document.getElementById(`fb-${idx}`);
+  const ansBox = document.getElementById(`ansBox-${idx}`);
+
+  if (card.classList.contains('correct')) return;
+
+  const val = parseInt(input.value);
+  if (isNaN(val)) { input.focus(); return; }
+
+  const isCorrect = val === q.answer;
+
+  if (isCorrect) {
+    card.classList.add('correct');
+    if (ansBox) {
+      ansBox.textContent = q.answer;
+      ansBox.classList.add('filled', 'correct-answer');
+    }
+    input.style.borderColor = 'var(--success)';
+    input.style.background = 'var(--success-light)';
+    fb.textContent = ['מצוין! ⭐', 'נכון! 🎯', 'יופי! ✨', 'מדהים! 🌟'][Math.floor(Math.random()*4)];
+    fb.className = 'feedback show correct-fb';
+    input.disabled = true;
+    levelCorrect++;
+    totalCorrect++;
+    answeredCount++;
+  } else {
+    card.classList.add('wrong');
+    if (ansBox) {
+      ansBox.textContent = val;
+      ansBox.classList.add('filled', 'wrong-answer');
+      setTimeout(() => { ansBox.textContent = '?'; ansBox.classList.remove('filled', 'wrong-answer'); }, 600);
+    }
+    input.style.borderColor = 'var(--error)';
+    fb.textContent = `לא נכון, נסו שוב! 💪`;
+    fb.className = 'feedback show wrong-fb';
+    levelWrong++;
+    totalWrong++;
+    setTimeout(() => {
+      card.classList.remove('wrong');
+      input.value = '';
+      input.style.borderColor = '';
+      fb.classList.remove('show');
+      input.focus();
+    }, 1200);
+  }
+
+  updateProgress();
+  if (answeredCount === QUESTIONS_PER_LEVEL) setTimeout(showLevelComplete, 800);
+}
+
+function showLevelComplete() {
+  levelResults[currentLevel] = levelWrong;
+  const card = document.getElementById('levelComplete');
+  
+  document.getElementById('lcCorrect').textContent = levelCorrect;
+  document.getElementById('lcWrong').textContent = levelWrong;
+
+  if (levelWrong === 0) {
+    document.getElementById('lcEmoji').textContent = '🏆';
+    document.getElementById('lcTitle').textContent = 'מושלם!';
+    document.getElementById('lcSub').textContent = 'כל התשובות נכונות!';
+  } else if (levelWrong <= 2) {
+    document.getElementById('lcEmoji').textContent = '🎉';
+    document.getElementById('lcTitle').textContent = 'כל הכבוד!';
+    document.getElementById('lcSub').textContent = 'כמעט מושלם!';
+  } else {
+    document.getElementById('lcEmoji').textContent = '💪';
+    document.getElementById('lcTitle').textContent = 'סיימתם!';
+    document.getElementById('lcSub').textContent = 'כדאי לנסות שוב לשיפור';
+  }
+
+  card.classList.add('show');
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  renderTabs();
+}
+
+// ===== NAVIGATION =====
+function goLevel(i) { currentLevel = i; renderLevel(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+function nextLevel() { if (currentLevel < levels.length - 1) { currentLevel++; renderLevel(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }
+function retry() { renderLevel(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+function setMode(m) {
+  mode = m;
+  document.getElementById('modeChoice').classList.toggle('active', m === 'choice');
+  document.getElementById('modeInput').classList.toggle('active', m === 'input');
+  renderLevel();
+}
+
+function updateProgress() {
+  const done = Object.keys(levelResults).length;
+  document.getElementById('progressFill').style.width = Math.round((done / levels.length) * 100) + '%';
+  document.getElementById('totalCorrect').textContent = totalCorrect;
+  document.getElementById('totalWrong').textContent = totalWrong;
+}
+
+function showHelp() { document.getElementById('helpModal').classList.add('show'); }
+function closeHelp(e) { if (e.target === document.getElementById('helpModal')) document.getElementById('helpModal').classList.remove('show'); }
+
+// ===== INIT =====
+renderLevel();
+</script>
+
+</body>
+</html>

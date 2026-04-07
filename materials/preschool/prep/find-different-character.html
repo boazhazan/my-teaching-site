@@ -329,15 +329,17 @@ dCtx.lineTo(p.x,p.y);dCtx.stroke();dCtx.beginPath();dCtx.moveTo(p.x,p.y);
 }
 function endDr(){
 if(!drawing)return;drawing=false;
-var rect=dCvs.getBoundingClientRect();
-var cx=rect.left+(drawBBox.minX+drawBBox.maxX)/2;
-var cy=rect.top+(drawBBox.minY+drawBBox.maxY)/2;
-dCvs.style.pointerEvents='none';
-var el=document.elementFromPoint(cx,cy);
-dCvs.style.pointerEvents='';
-while(el&&!el.classList.contains('char-card'))el=el.parentElement;
+var cvsRect=dCvs.getBoundingClientRect();
+var absCx=cvsRect.left+(drawBBox.minX+drawBBox.maxX)/2;
+var absCy=cvsRect.top+(drawBBox.minY+drawBBox.maxY)/2;
+var cards=document.querySelectorAll('.char-card');
+var found=null;
+for(var i=0;i<cards.length;i++){
+var r=cards[i].getBoundingClientRect();
+if(absCx>=r.left&&absCx<=r.right&&absCy>=r.top&&absCy<=r.bottom){found=cards[i];break}
+}
 setTimeout(function(){if(dCtx&&dCvs)dCtx.clearRect(0,0,dCvs.width,dCvs.height)},250);
-if(el&&el.getAttribute('data-idx')!==null){handleCardClick(el)}
+if(found){handleCardClick(found)}
 }
 function drPos(e){var r=dCvs.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
 function updateBB(p){if(p.x<drawBBox.minX)drawBBox.minX=p.x;if(p.x>drawBBox.maxX)drawBBox.maxX=p.x;if(p.y<drawBBox.minY)drawBBox.minY=p.y;if(p.y>drawBBox.maxY)drawBBox.maxY=p.y}

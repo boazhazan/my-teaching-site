@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>שאלות מילוליות — חיבור וחיסור | כיתה ב' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --primary: #0891b2;
+  --primary-dark: #0e7490;
+  --primary-light: #cffafe;
+  --accent: #f59e0b;
+  --accent-dark: #d97706;
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --error: #ef4444;
+  --error-light: #fee2e2;
+  --text: #1e293b;
+  --text-light: #64748b;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Heebo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  direction: rtl;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-header {
+  background: linear-gradient(135deg, #0891b2 0%, #06b6d4 50%, #22d3ee 100%);
+  color: #fff;
+  padding: 20px 24px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 16px rgba(8,145,178,0.3);
+}
+
+.header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.header-title { display: flex; align-items: center; gap: 10px; }
+.header-icon { width: 44px; height: 44px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+.header-title h1 { font-size: 1.2rem; font-weight: 800; }
+.header-title .subtitle { font-size: 0.8rem; opacity: 0.85; }
+.header-actions { display: flex; gap: 8px; }
+.header-btn { background: rgba(255,255,255,0.2); border: none; color: #fff; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.header-btn:hover { background: rgba(255,255,255,0.3); }
+
+.progress-bar { background: rgba(255,255,255,0.2); height: 6px; border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.5s ease; width: 0%; }
+.progress-stats { display: flex; justify-content: space-between; margin-top: 6px; font-size: 0.75rem; opacity: 0.85; }
+
+.tabs-container { background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 16px; overflow-x: auto; scrollbar-width: none; }
+.tabs-container::-webkit-scrollbar { display: none; }
+.tabs-row { display: flex; gap: 6px; min-width: max-content; }
+.tab { min-width: 40px; height: 36px; border-radius: 8px; border: 2px solid var(--border); background: var(--card); font-family: inherit; font-size: 0.85rem; font-weight: 700; color: var(--text-light); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+.tab:hover { border-color: var(--primary); color: var(--primary); }
+.tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.tab.done { background: var(--success-light); color: var(--success); border-color: var(--success); }
+.tab.done.perfect::after { content: '⭐'; font-size: 0.6rem; margin-right: 2px; }
+
+.main-content { max-width: 700px; margin: 0 auto; padding: 20px 16px 100px; }
+
+.level-info { text-align: center; margin-bottom: 16px; }
+.level-badge { display: inline-block; background: var(--primary-light); color: var(--primary); padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; }
+.level-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 4px; }
+.level-instruction { font-size: 0.9rem; color: var(--text-light); }
+
+.level-tip { background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border: 2px solid #fcd34d; border-radius: var(--radius-sm); padding: 14px 18px; margin-bottom: 20px; cursor: pointer; }
+.level-tip.collapsed .tip-body { display: none; }
+.tip-header { display: flex; align-items: center; justify-content: space-between; font-size: 0.9rem; font-weight: 700; color: var(--accent-dark); }
+.tip-toggle { font-size: 0.75rem; color: var(--text-light); font-weight: 500; }
+.tip-body { margin-top: 8px; }
+.tip-text { font-size: 0.88rem; color: var(--text); line-height: 1.7; margin-bottom: 6px; }
+.tip-example {
+  background: rgba(255,255,255,0.7);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+  color: var(--text-light);
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+.tip-example .math {
+  direction: ltr;
+  display: inline-block;
+  unicode-bidi: embed;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ===== QUESTION CARD ===== */
+.questions-list { display: flex; flex-direction: column; gap: 20px; }
+
+.question-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  transition: all 0.3s;
+  position: relative;
+}
+
+.question-card.correct { border-color: var(--success); background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); }
+.question-card.wrong { border-color: var(--error); animation: shake 0.4s ease; }
+
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+.question-number { position: absolute; top: 12px; left: 12px; width: 28px; height: 28px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; }
+.question-card.correct .question-number { background: var(--success); color: #fff; }
+
+/* Story */
+.story-section { margin-bottom: 20px; }
+
+.story-emoji {
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+  letter-spacing: 4px;
+}
+
+.story-text {
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: var(--text);
+  background: #f0f9ff;
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  border-right: 4px solid var(--primary);
+}
+
+.story-question {
+  font-weight: 800;
+  color: var(--primary);
+  margin-top: 8px;
+  font-size: 1.1rem;
+}
+
+/* Answer options */
+.answer-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.answer-btn {
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  direction: ltr;
+}
+
+.answer-btn:hover:not(.disabled) { border-color: var(--primary); background: var(--primary-light); transform: scale(1.02); }
+.answer-btn:active:not(.disabled) { transform: scale(0.97); }
+.answer-btn.correct-choice { background: var(--success); color: #fff; border-color: var(--success); }
+.answer-btn.wrong-choice { background: var(--error-light); color: var(--error); border-color: var(--error); }
+.answer-btn.disabled { opacity: 0.5; cursor: default; }
+
+.feedback { text-align: center; margin-top: 10px; font-size: 1rem; font-weight: 700; opacity: 0; transition: opacity 0.3s; }
+.feedback.show { opacity: 1; }
+.feedback.correct-fb { color: var(--success); }
+.feedback.wrong-fb { color: var(--error); }
+
+/* Solution reveal */
+.solution-reveal {
+  margin-top: 12px;
+  background: var(--success-light);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--success);
+  direction: ltr;
+  display: none;
+}
+
+.solution-reveal.show { display: block; animation: popIn 0.3s ease; }
+
+@keyframes popIn { 0%{transform:scale(0.8);opacity:0} 100%{transform:scale(1);opacity:1} }
+
+/* Level complete */
+.level-complete { background: var(--card); border-radius: var(--radius); border: 2px solid var(--success); padding: 32px 24px; text-align: center; box-shadow: var(--shadow-lg); display: none; }
+.level-complete.show { display: block; animation: popIn 0.4s ease; }
+.lc-emoji { font-size: 3.5rem; margin-bottom: 12px; }
+.lc-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 4px; }
+.lc-sub { color: var(--text-light); margin-bottom: 8px; }
+.lc-score { display: flex; justify-content: center; gap: 24px; margin: 16px 0; }
+.lc-score-item { text-align: center; }
+.lc-score-num { font-size: 2rem; font-weight: 900; }
+.lc-score-label { font-size: 0.8rem; color: var(--text-light); }
+.lc-buttons { display: flex; gap: 12px; justify-content: center; margin-top: 20px; }
+.lc-btn { padding: 12px 28px; border-radius: 10px; border: none; font-family: inherit; font-size: 1rem; font-weight: 700; cursor: pointer; }
+.lc-btn-primary { background: var(--primary); color: #fff; }
+.lc-btn-primary:hover { background: var(--primary-dark); }
+.lc-btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+
+/* Help modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.show { display: flex; }
+.modal { background: var(--card); border-radius: var(--radius); padding: 28px 24px; max-width: 420px; width: 100%; max-height: 80vh; overflow-y: auto; animation: popIn 0.3s ease; }
+.modal h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: 16px; }
+.modal p { color: var(--text-light); margin-bottom: 12px; line-height: 1.7; font-size: 0.95rem; }
+.modal-close { width: 100%; padding: 12px; border-radius: 10px; border: none; background: var(--primary); color: #fff; font-family: inherit; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 12px; }
+
+/* Print */
+.print-overlay { display: none; }
+@media print {
+  .app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay { display: none !important; }
+  .main-content { padding: 0; max-width: 100%; }
+  .print-overlay { display: block !important; text-align: center; padding: 20px 0; font-size: 1.3rem; font-weight: 800; border-bottom: 2px solid #000; margin-bottom: 20px; }
+  .question-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+  .answer-btn { border: 1px solid #ccc; }
+  body { background: #fff; }
+}
+
+@media (max-width: 480px) {
+  .story-text { font-size: 0.95rem; padding: 12px 14px; }
+  .story-question { font-size: 1rem; }
+  .answer-options { grid-template-columns: 1fr; }
+  .answer-btn { font-size: 1rem; padding: 12px; }
+  .question-card { padding: 18px 16px; }
+  .header-title h1 { font-size: 1.05rem; }
+  .story-emoji { font-size: 1.8rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="header-top">
+    <div class="header-title">
+      <div class="header-icon">📖</div>
+      <div>
+        <h1>שאלות מילוליות — חיבור וחיסור</h1>
+        <div class="subtitle">כיתה ב' — קראו, חשבו ופתרו!</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="header-btn" onclick="showHelp()">❓</button>
+      <button class="header-btn" onclick="window.print()">🖨️</button>
+    </div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-stats">
+    <span>✅ <span id="totalCorrect">0</span></span>
+    <span>❌ <span id="totalWrong">0</span></span>
+    <span id="progressText">רמה 1 מתוך 15</span>
+  </div>
+</div>
+
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+
+<div class="main-content">
+  <div class="print-overlay">שאלות מילוליות — חיבור וחיסור | כיתה ב' | בועז חזן</div>
+
+  <div class="level-info">
+    <span class="level-badge" id="levelBadge">רמה 1</span>
+    <h2 class="level-title" id="levelTitle"></h2>
+    <p class="level-instruction" id="levelInstruction"></p>
+  </div>
+
+  <div class="level-tip" id="levelTip" onclick="toggleTip()">
+    <div class="tip-header">
+      <span>💡 טיפ</span>
+      <span class="tip-toggle" id="tipToggle">▲ הסתר</span>
+    </div>
+    <div class="tip-body">
+      <p class="tip-text" id="tipText"></p>
+      <div class="tip-example" id="tipExample"></div>
+    </div>
+  </div>
+
+  <div class="questions-list" id="questionsList"></div>
+
+  <div class="level-complete" id="levelComplete">
+    <div class="lc-emoji" id="lcEmoji">🎉</div>
+    <div class="lc-title" id="lcTitle"></div>
+    <div class="lc-sub" id="lcSub"></div>
+    <div class="lc-score">
+      <div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div>
+      <div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div>
+    </div>
+    <div class="lc-buttons">
+      <button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button>
+      <button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2>❓ איך פותרים?</h2>
+    <p>קראו את הסיפור בעיון, הבינו <strong>מה שואלים</strong>, ובחרו את התשובה הנכונה.</p>
+    <p><strong>טיפ חשוב:</strong> המילים "כמה ביחד" ו"כמה סה"כ" = חיבור. המילים "כמה נשאר" ו"כמה יותר" = חיסור.</p>
+    <p>15 רמות — מתחילים בשאלות פשוטות ומגיעים לשאלות עם שני שלבים!</p>
+    <button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button>
+  </div>
+</div>
+
+<script>
+// ===== QUESTION TEMPLATES =====
+const templates = {
+  addSimple: [
+    {story:(a,b)=>`לדני יש ${a} גולות. הוא קיבל מחברו עוד ${b} גולות.`, q:'כמה גולות יש לדני עכשיו?', emoji:'🔵🔴🟢', op:'+'},
+    {story:(a,b)=>`בחנות היו ${a} תפוחים. הביאו עוד ${b} תפוחים.`, q:'כמה תפוחים יש בחנות עכשיו?', emoji:'🍎🍎🍎', op:'+'},
+    {story:(a,b)=>`בכיתה יש ${a} בנות ו-${b} בנים.`, q:'כמה ילדים יש בכיתה?', emoji:'👧👦👧', op:'+'},
+    {story:(a,b)=>`אמא קנתה ${a} בננות ו-${b} תפוזים.`, q:'כמה פירות קנתה אמא?', emoji:'🍌🍊🍌', op:'+'},
+    {story:(a,b)=>`בגינה יש ${a} פרחים אדומים ו-${b} פרחים צהובים.`, q:'כמה פרחים יש בגינה?', emoji:'🌹🌻🌹', op:'+'},
+    {story:(a,b)=>`בחניון עמדו ${a} מכוניות. הגיעו עוד ${b} מכוניות.`, q:'כמה מכוניות יש בחניון עכשיו?', emoji:'🚗🚙🚗', op:'+'},
+    {story:(a,b)=>`דנה אספה ${a} צדפות בבוקר ו-${b} צדפות אחר הצהריים.`, q:'כמה צדפות אספה דנה?', emoji:'🐚🐚🐚', op:'+'},
+    {story:(a,b)=>`על העץ ישבו ${a} ציפורים. הגיעו עוד ${b} ציפורים.`, q:'כמה ציפורים יש על העץ עכשיו?', emoji:'🐦🐦🐦', op:'+'},
+  ],
+  subSimple: [
+    {story:(a,b)=>`לרונית היו ${a} ממתקים. היא נתנה ${b} ממתקים לחברתה.`, q:'כמה ממתקים נשארו לרונית?', emoji:'🍬🍬🍬', op:'-'},
+    {story:(a,b)=>`בחנות היו ${a} עוגות. נמכרו ${b} עוגות.`, q:'כמה עוגות נשארו?', emoji:'🎂🎂🎂', op:'-'},
+    {story:(a,b)=>`באוטובוס נסעו ${a} אנשים. ירדו ${b} אנשים.`, q:'כמה אנשים נשארו באוטובוס?', emoji:'🚌👥👤', op:'-'},
+    {story:(a,b)=>`לאבא היו ${a} שקלים. הוא שילם ${b} שקלים.`, q:'כמה שקלים נשארו לאבא?', emoji:'💰💸💰', op:'-'},
+    {story:(a,b)=>`בצלחת היו ${a} עוגיות. אכלו ${b} עוגיות.`, q:'כמה עוגיות נשארו?', emoji:'🍪🍪🍪', op:'-'},
+    {story:(a,b)=>`על השולחן היו ${a} ספרים. הילדים לקחו ${b} ספרים.`, q:'כמה ספרים נשארו על השולחן?', emoji:'📚📖📚', op:'-'},
+  ],
+  compare: [
+    {story:(a,b)=>`לדני יש ${a} מדבקות. ליוסי יש ${b} מדבקות.`, q:(a,b)=>`בכמה מדבקות יש ל${a>b?'דני':'יוסי'} יותר?`, emoji:'⭐⭐⭐', op:'-', calcCompare:true},
+    {story:(a,b)=>`בכיתה א׳ יש ${a} ילדים. בכיתה ב׳ יש ${b} ילדים.`, q:(a,b)=>`בכמה ילדים יש יותר בכיתה ${a>b?'א׳':'ב׳'}?`, emoji:'👧👦👧', op:'-', calcCompare:true},
+    {story:(a,b)=>`דנה קפצה ${a} פעמים בקפיצה בחבל. מיכל קפצה ${b} פעמים.`, q:(a,b)=>`בכמה פעמים קפצה ${a>b?'דנה':'מיכל'} יותר?`, emoji:'🤸‍♀️🤸‍♀️', op:'-', calcCompare:true},
+  ],
+  twoStep: [
+    {story:(a,b,c)=>`לדני היו ${a} שקלים. הוא קיבל מסבתא עוד ${b} שקלים וקנה ממתקים ב-${c} שקלים.`, q:'כמה שקלים נשארו לדני?', emoji:'💰🍬💸', op:'two', calc:(a,b,c)=>a+b-c},
+    {story:(a,b,c)=>`אמא קנתה ${a} ק"ג תפוחים, ${b} ק"ג אגסים ו-${c} ק"ג בננות.`, q:'כמה ק"ג פירות קנתה אמא?', emoji:'🍎🍐🍌', op:'two', calc:(a,b,c)=>a+b+c},
+    {story:(a,b,c)=>`בכיתה היו ${a} ילדים. יצאו ${b} ילדים להפסקה ואז חזרו ${c} ילדים.`, q:'כמה ילדים יש בכיתה עכשיו?', emoji:'👧👦🏫', op:'two', calc:(a,b,c)=>a-b+c},
+    {story:(a,b,c)=>`על העץ ישבו ${a} ציפורים. עפו ${b} ציפורים, ואז הגיעו עוד ${c} ציפורים.`, q:'כמה ציפורים יש על העץ עכשיו?', emoji:'🐦🌳🐦', op:'two', calc:(a,b,c)=>a-b+c},
+  ],
+  compareMore: [
+    {story:(a,b)=>`לדני ${a} שקלים. ליוסי ${b} שקלים יותר מדני.`, q:'כמה שקלים יש ליוסי?', emoji:'💰👦💰', op:'+'},
+    {story:(a,b)=>`לדנה ${a} מדבקות. לרונית ${b} מדבקות פחות מדנה.`, q:'כמה מדבקות יש לרונית?', emoji:'⭐👧⭐', op:'-'},
+  ],
+};
+
+function rr(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function genDistractors(ans) {
+  const s = new Set([ans]);
+  const off = [-3,-2,-1,1,2,3,5,-5,10,-10];
+  while(s.size<4){ const d=ans+off[Math.floor(Math.random()*off.length)]; if(d>=0 && d!==ans) s.add(d); }
+  return shuffle([...s]);
+}
+
+function makeQuestion(type) {
+  if(type === 'addSimple') {
+    const t = pick(templates.addSimple);
+    const a = rr(3,15), b = rr(2,15);
+    const ans = a+b;
+    return { story: t.story(a,b), question: t.q, emoji: t.emoji, answer: ans, equation: `${a} + ${b} = ${ans}`, options: genDistractors(ans) };
+  }
+  if(type === 'addMedium') {
+    const t = pick(templates.addSimple);
+    const a = rr(15,45), b = rr(10,40);
+    const ans = a+b;
+    return { story: t.story(a,b), question: t.q, emoji: t.emoji, answer: ans, equation: `${a} + ${b} = ${ans}`, options: genDistractors(ans) };
+  }
+  if(type === 'subSimple') {
+    const t = pick(templates.subSimple);
+    const a = rr(10,20), b = rr(2,a-2);
+    const ans = a-b;
+    return { story: t.story(a,b), question: t.q, emoji: t.emoji, answer: ans, equation: `${a} - ${b} = ${ans}`, options: genDistractors(ans) };
+  }
+  if(type === 'subMedium') {
+    const t = pick(templates.subSimple);
+    const a = rr(30,70), b = rr(10,a-5);
+    const ans = a-b;
+    return { story: t.story(a,b), question: t.q, emoji: t.emoji, answer: ans, equation: `${a} - ${b} = ${ans}`, options: genDistractors(ans) };
+  }
+  if(type === 'compare') {
+    const t = pick(templates.compare);
+    const big = rr(15,40), small = rr(5,big-3);
+    const a = big, b = small;
+    const ans = big-small;
+    const qText = typeof t.q === 'function' ? t.q(a,b) : t.q;
+    return { story: t.story(a,b), question: qText, emoji: t.emoji, answer: ans, equation: `${big} - ${small} = ${ans}`, options: genDistractors(ans) };
+  }
+  if(type === 'compareMore') {
+    const t = pick(templates.compareMore);
+    const a = rr(10,30), b = rr(5,20);
+    const ans = t.op === '+' ? a+b : a-b;
+    return { story: t.story(a,b), question: t.q, emoji: t.emoji, answer: ans, equation: t.op==='+'?`${a} + ${b} = ${ans}`:`${a} - ${b} = ${ans}`, options: genDistractors(ans) };
+  }
+  if(type === 'twoStep') {
+    const t = pick(templates.twoStep);
+    let a,b,c,ans;
+    if(t.calc.length === 3) {
+      a = rr(15,40); b = rr(5,20); c = rr(3,15);
+      ans = t.calc(a,b,c);
+      if(ans < 0) { c = rr(1, Math.min(5,a+b-1)); ans = t.calc(a,b,c); }
+    }
+    return { story: t.story(a,b,c), question: t.q, emoji: t.emoji, answer: ans, equation: `התשובה: ${ans}`, options: genDistractors(ans) };
+  }
+  if(type === 'mixed') {
+    return makeQuestion(pick(['addSimple','subSimple','compare','addMedium','subMedium']));
+  }
+  if(type === 'mixedHard') {
+    return makeQuestion(pick(['addMedium','subMedium','compare','compareMore','twoStep']));
+  }
+  return makeQuestion('addSimple');
+}
+
+// ===== LEVELS =====
+const levels = [
+  { title:'חיבור פשוט', instruction:'שאלות חיבור קלות', tip:'💡 טיפ: חפשו מילים כמו "ביחד", "סה"כ", "עוד" — הן רמז לחיבור!', example:'לדני 5 גולות. קיבל עוד 3. כמה ביחד?\n→ "ביחד" = חיבור → <span class="math">5 + 3 = 8</span>', type:'addSimple' },
+  { title:'חיסור פשוט', instruction:'שאלות חיסור קלות', tip:'💡 טיפ: חפשו מילים כמו "נשאר", "נתן", "אכל", "ירד" — הן רמז לחיסור!', example:'היו 10 עוגיות. אכלו 4. כמה נשאר?\n→ "נשאר" = חיסור → <span class="math">10 - 4 = 6</span>', type:'subSimple' },
+  { title:'מעורבב — חיבור וחיסור', instruction:'שאלות מעורבבות — שימו לב לסימן!', tip:'💡 טיפ: קראו את השאלה בסוף — מה שואלים? "כמה ביחד" = +, "כמה נשאר" = −', example:'קראו בעיון והחליטו — חיבור או חיסור?', type:'mixed' },
+  { title:'חיבור — מספרים גדולים', instruction:'חיבור עם מספרים דו-ספרתיים', tip:'💡 טיפ: אותו דבר בדיוק — רק עם מספרים גדולים יותר!', example:'בחנות 25 תפוחים. הביאו עוד 18.\n→ חיבור → <span class="math">25 + 18 = 43</span>', type:'addMedium' },
+  { title:'חיסור — מספרים גדולים', instruction:'חיסור עם מספרים דו-ספרתיים', tip:'💡 טיפ: אותו עיקרון — מה היה ומה לקחו/הלך.', example:'באוטובוס 45 אנשים. ירדו 18.\n→ חיסור → <span class="math">45 - 18 = 27</span>', type:'subMedium' },
+  { title:'מעורבב — דו-ספרתיים', instruction:'שאלות עם מספרים גדולים', tip:'💡 טיפ: זכרו — שימו לב למילות המפתח!', example:'קראו בעיון, מצאו את הפעולה, ופתרו!', type:'mixed' },
+  { title:'שאלות השוואה', instruction:'בכמה יותר? בכמה פחות?', tip:'💡 טיפ: "בכמה יותר" או "בכמה פחות" = תמיד חיסור! מחסרים את הקטן מהגדול.', example:'לדני 15 מדבקות. ליוסי 8.\nבכמה יותר לדני?\n→ <span class="math">15 - 8 = 7</span>', type:'compare' },
+  { title:'השוואה — יותר ופחות', instruction:'יש ל... יותר/פחות מ...', tip:'💡 טיפ: "יותר מ..." = חיבור. "פחות מ..." = חיסור.', example:'לדני 12 שקלים. ליוסי 5 שקלים יותר.\nכמה ליוסי?\n→ <span class="math">12 + 5 = 17</span>', type:'compareMore' },
+  { title:'שאלות דו-שלביות', instruction:'שאלות עם שני חישובים', tip:'💡 טיפ: פתרו צעד-צעד! קודם החישוב הראשון, ואז השני עם התוצאה.', example:'לדני 20 ש"ח. קיבל 15 ש"ח. קנה ב-8 ש"ח.\nצעד 1: <span class="math">20 + 15 = 35</span>\nצעד 2: <span class="math">35 - 8 = 27</span>', type:'twoStep' },
+  { title:'דו-שלביות — תרגול', instruction:'עוד שאלות עם שני שלבים', tip:'💡 טיפ: כתבו לעצמכם את שני השלבים לפני שעונים!', example:'חלקו את הבעיה לשני חלקים ופתרו כל חלק.', type:'twoStep' },
+  { title:'מעורבב — כל הסוגים', instruction:'שאלות מכל הסוגים שלמדנו', tip:'💡 טיפ: קראו בעיון, זהו את הסוג, ובחרו שיטה!', example:'כל שאלה היא הפתעה — תהיו מוכנים!', type:'mixedHard' },
+  { title:'קניות ועודף', instruction:'שאלות קנייה, מכירה ועודף', tip:'💡 טיפ: עודף = כמה שילמתי − כמה עולה.', example:'קניתי ממתקים ב-7 ש"ח. שילמתי 20 ש"ח.\nעודף: <span class="math">20 - 7 = 13</span> ש"ח', type:'subMedium' },
+  { title:'משקל וזמן', instruction:'שאלות עם ק"ג ושעות', tip:'💡 טיפ: אותם כללים — רק עם יחידות שונות.', example:'אמא קנתה 3 ק"ג תפוחים ו-5 ק"ג אגסים.\nסה"כ: <span class="math">3 + 5 = 8</span> ק"ג', type:'addMedium' },
+  { title:'אתגר — שאלות קשות', instruction:'שאלות מאתגרות!', tip:'🏆 טיפ: קראו לאט, חשבו היטב, ואל תמהרו!', example:'קחו רגע לחשוב לפני שעונים.', type:'mixedHard' },
+  { title:'סופר-אתגר!', instruction:'הרמה הכי קשה — מוכנים?', tip:'🏆 טיפ: השתמשו בכל מה שלמדתם!', example:'בהצלחה! 💪', type:'mixedHard' },
+];
+
+// ===== STATE =====
+let currentLevel = 0;
+let totalCorrect = 0, totalWrong = 0;
+let levelResults = {};
+let currentQuestions = [];
+let answeredCount = 0, levelCorrect = 0, levelWrong = 0;
+const QPL = 4;
+
+// ===== RENDER =====
+function renderTabs() {
+  const row = document.getElementById('tabsRow');
+  row.innerHTML = '';
+  levels.forEach((_,i) => {
+    const t = document.createElement('button');
+    t.className = 'tab';
+    t.textContent = i+1;
+    if(i===currentLevel) t.classList.add('active');
+    if(levelResults[i]!==undefined){ t.classList.add('done'); if(levelResults[i]===0) t.classList.add('perfect'); }
+    t.onclick = () => goLevel(i);
+    row.appendChild(t);
+  });
+  const at = row.querySelector('.active');
+  if(at) at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel() {
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent = `רמה ${currentLevel+1}`;
+  document.getElementById('levelTitle').textContent = levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent = levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent = `רמה ${currentLevel+1} מתוך ${levels.length}`;
+
+  const lvl = levels[currentLevel];
+  document.getElementById('tipText').textContent = lvl.tip;
+  document.getElementById('tipExample').innerHTML = lvl.example.replace(/\n/g, '<br>');
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent = '▲ הסתר';
+
+  currentQuestions = [];
+  answeredCount = 0; levelCorrect = 0; levelWrong = 0;
+
+  for(let i=0;i<QPL;i++){
+    let q;
+    let attempts = 0;
+    do { q = makeQuestion(lvl.type); attempts++; } while(attempts<30 && (q.answer<0 || q.answer===undefined));
+    currentQuestions.push(q);
+  }
+
+  renderQuestions();
+  updateProgress();
+  renderTabs();
+}
+
+function renderQuestions() {
+  const list = document.getElementById('questionsList');
+  list.innerHTML = '';
+
+  currentQuestions.forEach((q,idx) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `q-${idx}`;
+
+    let html = `<div class="question-number">${idx+1}</div>`;
+    html += `<div class="story-section">`;
+    html += `<div class="story-emoji">${q.emoji}</div>`;
+    html += `<div class="story-text">${q.story}<div class="story-question">${q.question}</div></div>`;
+    html += `</div>`;
+
+    html += `<div class="answer-options" id="opts-${idx}">`;
+    q.options.forEach(opt => {
+      html += `<button class="answer-btn" onclick="checkAnswer(${idx},${opt},this)">${opt}</button>`;
+    });
+    html += `</div>`;
+
+    html += `<div class="solution-reveal" id="sol-${idx}">${q.equation}</div>`;
+    html += `<div class="feedback" id="fb-${idx}"></div>`;
+
+    card.innerHTML = html;
+    list.appendChild(card);
+  });
+}
+
+// ===== CHECK =====
+function checkAnswer(idx, chosen, btn) {
+  const q = currentQuestions[idx];
+  const card = document.getElementById(`q-${idx}`);
+  const fb = document.getElementById(`fb-${idx}`);
+  const sol = document.getElementById(`sol-${idx}`);
+
+  if(card.classList.contains('correct')) return;
+
+  if(chosen === q.answer) {
+    card.classList.add('correct');
+    btn.classList.add('correct-choice');
+    document.getElementById(`opts-${idx}`).querySelectorAll('.answer-btn').forEach(b => b.classList.add('disabled'));
+    sol.classList.add('show');
+    fb.textContent = ['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    fb.className = 'feedback show correct-fb';
+    levelCorrect++; totalCorrect++; answeredCount++;
+  } else {
+    btn.classList.add('wrong-choice');
+    fb.textContent = 'לא נכון, נסו שוב! 💪';
+    fb.className = 'feedback show wrong-fb';
+    levelWrong++; totalWrong++;
+    setTimeout(() => { btn.classList.remove('wrong-choice'); fb.classList.remove('show'); }, 1000);
+  }
+
+  updateProgress();
+  if(answeredCount === QPL) setTimeout(showLevelComplete, 800);
+}
+
+function showLevelComplete() {
+  levelResults[currentLevel] = levelWrong;
+  const card = document.getElementById('levelComplete');
+  document.getElementById('lcCorrect').textContent = levelCorrect;
+  document.getElementById('lcWrong').textContent = levelWrong;
+
+  if(levelWrong === 0) { document.getElementById('lcEmoji').textContent='🏆'; document.getElementById('lcTitle').textContent='מושלם!'; document.getElementById('lcSub').textContent='כל התשובות נכונות!'; }
+  else if(levelWrong <= 2) { document.getElementById('lcEmoji').textContent='🎉'; document.getElementById('lcTitle').textContent='כל הכבוד!'; document.getElementById('lcSub').textContent='כמעט מושלם!'; }
+  else { document.getElementById('lcEmoji').textContent='💪'; document.getElementById('lcTitle').textContent='סיימתם!'; document.getElementById('lcSub').textContent='כדאי לנסות שוב'; }
+
+  card.classList.add('show');
+  card.scrollIntoView({behavior:'smooth',block:'center'});
+  renderTabs();
+}
+
+// ===== NAV =====
+function goLevel(i){ currentLevel=i; renderLevel(); window.scrollTo({top:0,behavior:'smooth'}); }
+function nextLevel(){ if(currentLevel<levels.length-1){ currentLevel++; renderLevel(); window.scrollTo({top:0,behavior:'smooth'}); } }
+function retry(){ renderLevel(); window.scrollTo({top:0,behavior:'smooth'}); }
+
+function updateProgress() {
+  document.getElementById('progressFill').style.width = Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';
+  document.getElementById('totalCorrect').textContent = totalCorrect;
+  document.getElementById('totalWrong').textContent = totalWrong;
+}
+
+function showHelp(){ document.getElementById('helpModal').classList.add('show'); }
+function closeHelp(e){ if(e.target===document.getElementById('helpModal')) document.getElementById('helpModal').classList.remove('show'); }
+function toggleTip(){ const t=document.getElementById('levelTip'); t.classList.toggle('collapsed'); document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'; }
+
+renderLevel();
+</script>
+</body>
+</html>

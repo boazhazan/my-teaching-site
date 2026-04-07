@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>השלמת פרטים — ציירו את החסר | הכנה לכיתה א | בועז חזן</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--pri:#2563eb;--pri-dark:#1d4ed8;--pri-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--ok:#10b981;--no:#ef4444;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06);--shadow-md:0 4px 6px rgba(0,0,0,0.07),0 2px 4px rgba(0,0,0,0.06);--shadow-lg:0 10px 15px rgba(0,0,0,0.1),0 4px 6px rgba(0,0,0,0.05)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-tap-highlight-color:transparent}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;direction:rtl;text-align:right;overflow-x:hidden;line-height:1.5}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{0%{opacity:0;transform:scale(0.85)}100%{opacity:1;transform:scale(1)}}
+.hd{background:linear-gradient(135deg,var(--pri-light) 0%,#fff 100%);padding:24px;text-align:center;border-bottom:3px solid var(--pri)}
+.hd h1{font-size:1.8rem;font-weight:800;color:var(--text);margin-bottom:4px}
+.hd .sub{font-size:1rem;color:var(--text-light)}
+.mb{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20;flex-wrap:wrap;align-items:center}
+.mbtn{padding:8px 18px;border-radius:20px;border:2px solid var(--border);background:#fff;font-family:'Heebo',sans-serif;font-weight:600;font-size:0.9rem;cursor:pointer;transition:all 0.2s;white-space:nowrap;min-height:44px}
+.mbtn:hover{border-color:var(--pri)}.mbtn.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tw{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:56px;z-index:15;padding:0 8px}
+.ts{display:flex;gap:5px;overflow-x:auto;padding:10px 0;scrollbar-width:none;-webkit-overflow-scrolling:touch}.ts::-webkit-scrollbar{display:none}
+.tb{flex-shrink:0;padding:6px 14px;border-radius:16px;border:2px solid var(--border);background:#fff;font-family:'Heebo',sans-serif;font-weight:600;font-size:0.8rem;cursor:pointer;transition:all 0.25s;white-space:nowrap;min-height:44px;display:flex;align-items:center;justify-content:center}
+.tb:hover{border-color:var(--pri)}.tb.on{background:var(--pri);color:#fff;border-color:var(--pri)}.tb.dn{background:var(--ok);color:#fff;border-color:var(--ok)}
+.ct{max-width:900px;margin:0 auto;padding:20px 16px 80px;position:relative}
+.progress-wrap{margin-bottom:16px;text-align:center}
+.progress-text{font-size:0.9rem;font-weight:600;color:var(--text-light);margin-bottom:6px}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--ok);border-radius:3px;transition:width 0.4s ease}
+
+/* Color picker */
+.tools-bar{background:#fff;border-bottom:1px solid var(--border);padding:10px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;position:sticky;top:112px;z-index:14}
+.colors-row{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;align-items:center}
+.clr-btn{width:30px;height:30px;border-radius:50%;border:2px solid var(--border);cursor:pointer;transition:all 0.2s;flex-shrink:0}
+.clr-btn:hover{transform:scale(1.1)}.clr-btn.on{border:3px solid var(--text);transform:scale(1.2);box-shadow:var(--shadow-md)}
+.width-row{display:flex;gap:8px;align-items:center;justify-content:center}
+.w-btn{border-radius:50%;background:var(--text);border:2px solid var(--border);cursor:pointer;transition:all 0.2s}
+.w-btn:hover{border-color:var(--pri)}.w-btn.on{border-color:var(--pri);box-shadow:0 0 0 2px var(--pri-light)}
+.eraser-btn{padding:6px 14px;border-radius:16px;border:2px solid var(--border);background:#fff;font-family:'Heebo',sans-serif;font-weight:600;font-size:0.8rem;cursor:pointer;transition:all 0.2s;min-height:36px}
+.eraser-btn:hover{border-color:var(--no);color:var(--no)}
+
+/* Row card */
+.row-card{background:#fff;border-radius:var(--radius);border:2px solid var(--border);box-shadow:var(--shadow);padding:12px 16px;margin-bottom:12px;transition:all 0.3s;animation:fi 0.3s ease}
+.row-card.solved{border-color:var(--ok);background:#f0fdf4}
+.row-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.row-label{font-size:0.78rem;font-weight:700;color:var(--text-light)}
+.row-items{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:flex-start}
+
+/* Items */
+.item-wrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px}
+.item-box{position:relative;width:100px;height:120px;border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;transition:all 0.3s;user-select:none}
+.item-box.ref{border:3px solid var(--accent);background:#fffbeb}
+.item-box.incomplete{border:2px dashed var(--border);background:#fff}
+.item-box.done{border:2px solid var(--ok);background:#f0fdf4}
+.ref-label{font-size:0.65rem;font-weight:700;color:var(--accent-dark);text-align:center;white-space:nowrap}
+.emoji-stack{display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1.6rem;line-height:1.1;pointer-events:none;position:relative;z-index:1}
+.emoji-stack .part{display:inline-block}
+
+/* Per-item canvas */
+.item-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:5;touch-action:none;cursor:crosshair}
+.item-box.ref .item-canvas{display:none}
+.item-box.done .item-canvas{pointer-events:none}
+
+/* Done button */
+.done-btn{padding:3px 10px;border-radius:12px;border:2px solid var(--ok);background:#f0fdf4;font-family:'Heebo',sans-serif;font-weight:700;font-size:0.7rem;cursor:pointer;transition:all 0.2s;color:var(--ok);min-height:28px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.3s}
+.done-btn.visible{opacity:1;pointer-events:auto}
+.done-btn:hover{background:var(--ok);color:#fff}
+
+/* Completion overlay */
+.comp{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:50;justify-content:center;align-items:center}.comp.show{display:flex}
+.comp-card{background:#fff;border-radius:16px;padding:32px 28px;text-align:center;box-shadow:var(--shadow-lg);animation:popIn 0.4s ease;max-width:360px;width:90%}
+.comp-card .big{font-size:3.5rem;margin-bottom:12px}
+.comp-card h2{font-size:1.3rem;font-weight:800;margin-bottom:8px}
+.comp-card p{font-size:0.95rem;color:var(--text-light);margin-bottom:16px}
+.brow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.pill{padding:10px 22px;border-radius:20px;border:none;font-family:'Heebo',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s;min-height:44px}
+.pill.primary{background:var(--pri);color:#fff}.pill.primary:hover{background:var(--pri-dark)}
+.pill.secondary{background:var(--bg-soft);color:var(--text);border:2px solid var(--border)}.pill.secondary:hover{border-color:var(--pri)}
+
+/* Summary */
+.summ{display:none;text-align:center;padding:24px}.summ.show{display:block}
+.summ h2{font-size:1.5rem;font-weight:800;margin-bottom:16px}
+.summ-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:12px;margin-bottom:24px}
+.summ-item{background:#fff;border-radius:var(--radius-sm);padding:12px;box-shadow:var(--shadow);text-align:center;cursor:pointer;transition:all 0.2s}
+.summ-item:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.summ-item .sn{font-size:1.2rem;font-weight:800;color:var(--pri);margin-bottom:4px}
+.summ-item .ss-txt{font-size:0.8rem;font-weight:600}
+.summ-item .ss-txt.done{color:var(--ok)}.summ-item .ss-txt.pend{color:var(--text-light)}
+
+@media(max-width:600px){
+.hd h1{font-size:1.4rem}.mbtn{padding:6px 14px;font-size:0.82rem}
+.tb{padding:5px 10px;font-size:0.75rem;min-height:38px}
+.item-box{width:70px;height:90px}
+.emoji-stack{font-size:1.2rem}
+.row-items{gap:8px}
+.row-card{padding:10px 12px}
+.pill{padding:8px 18px;font-size:0.85rem}
+.clr-btn{width:26px;height:26px}
+.tools-bar{padding:8px 10px;gap:6px;top:100px}
+.ref-label{font-size:0.6rem}
+.done-btn{font-size:0.65rem;padding:2px 8px}
+}
+@media print{
+.mb,.tw,.comp,.summ,.progress-wrap,.tools-bar,.done-btn{display:none!important}
+body{background:#fff}.ct{padding:10px;max-width:100%}.hd{border-bottom:2px solid #000}
+.row-card{break-inside:avoid;border:2px solid #000;box-shadow:none;page-break-inside:avoid}
+.item-box.ref{border:3px solid #000}.item-box.incomplete{border:2px dashed #999}
+.item-canvas{display:none!important}
+.item-box.done{border:2px solid #000;background:#fff}
+.ref-label{color:#000}
+}
+</style>
+</head>
+<body>
+<div class="hd"><h1>✏️ השלמת פרטים — ציירו את החסר</h1><div class="sub">השלימו את הפרטים החסרים לפי הדוגמה!</div></div>
+<div class="mb">
+<button class="mbtn on" onclick="return false">✏️ ציור</button>
+<button class="mbtn" onclick="window.print()">🖨️ הדפסה</button>
+</div>
+<div class="tools-bar" id="toolsBar">
+<div class="colors-row" id="colorsRow"></div>
+<div class="width-row" id="widthRow"></div>
+<button class="eraser-btn" onclick="eraseCurrentItem()">🧹 מחק ציור</button>
+</div>
+<div class="tw"><div class="ts" id="tabs"></div></div>
+<div class="ct" id="ct">
+<div id="gameArea">
+<div class="progress-wrap" id="prog">
+<div class="progress-text" id="progText">השלמתם 0 מתוך 0 פריטים</div>
+<div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+</div>
+<div id="rowsList"></div>
+</div>
+<div class="comp" id="comp">
+<div class="comp-card">
+<div class="big" id="cEmoji">✏️</div>
+<h2 id="cTitle">כל הכבוד!</h2>
+<p id="cMsg"></p>
+<div class="brow">
+<button class="pill primary" onclick="nextLevel()">הבא ←</button>
+<button class="pill secondary" onclick="replay()">שחקו שוב</button>
+</div>
+</div>
+</div>
+<div class="summ" id="summ">
+<h2>🏆 סיכום</h2>
+<div class="summ-grid" id="sgrid"></div>
+<div class="brow" id="sbrow"></div>
+</div>
+</div>
+<script>
+var COLORS=['#ef4444','#2563eb','#22c55e','#eab308','#f97316','#8b5cf6','#ec4899','#92400e','#000000','#ffffff','#38bdf8','#86efac','#fbbf24','#6b7280','#06b6d4'];
+var COLOR_NAMES=['אדום','כחול','ירוק','צהוב','כתום','סגול','ורוד','חום','שחור','לבן','תכלת','ירוק בהיר','זהב','אפור','טורקיז'];
+var WIDTHS=[2,4,6,8];
+var WIDTH_LABELS=['דק','בינוני','עבה','עבה מאוד'];
+
+var LEVELS=[
+{name:'דלתות',rows:[
+{items:4,complete:[['🚪','⚫']],missing:[['🚪']],missingLabel:'ידית'},
+{items:4,complete:[['🏠','🔥']],missing:[['🏠']],missingLabel:'עשן'},
+{items:4,complete:[['⏰','🔸']],missing:[['⏰']],missingLabel:'מחוג'}
+]},
+{name:'חיות',rows:[
+{items:4,complete:[['🐱','🎀']],missing:[['🐱']],missingLabel:'פפיון'},
+{items:4,complete:[['🐶','🦴']],missing:[['🐶']],missingLabel:'עצם'},
+{items:4,complete:[['🐰','🥕']],missing:[['🐰']],missingLabel:'גזר'}
+]},
+{name:'פנים',rows:[
+{items:4,complete:[['🎩','😊']],missing:[['😊']],missingLabel:'כובע'},
+{items:4,complete:[['👦','👓']],missing:[['👦']],missingLabel:'משקפיים'},
+{items:4,complete:[['🎀','👧']],missing:[['👧']],missingLabel:'פפיון'}
+]},
+{name:'אוכל',rows:[
+{items:5,complete:[['🍒','🍦']],missing:[['🍦']],missingLabel:'דובדבן'},
+{items:5,complete:[['🕯️','🎂']],missing:[['🎂']],missingLabel:'נר'},
+{items:5,complete:[['💨','☕']],missing:[['☕']],missingLabel:'קיטור'}
+]},
+{name:'טבע',rows:[
+{items:5,complete:[['🌸','🌿']],missing:[['🌸']],missingLabel:'גבעול'},
+{items:5,complete:[['🐦','🌳']],missing:[['🌳']],missingLabel:'ציפור'},
+{items:5,complete:[['☀️','😊']],missing:[['☀️']],missingLabel:'פנים'}
+]},
+{name:'תחבורה',rows:[
+{items:5,complete:[['🚗','💨']],missing:[['🚗']],missingLabel:'עשן'},
+{items:5,complete:[['🚢','🏴']],missing:[['🚢']],missingLabel:'דגל'},
+{items:5,complete:[['✈️','☁️']],missing:[['✈️']],missingLabel:'ענן'},
+{items:5,complete:[['🚲','🔔']],missing:[['🚲']],missingLabel:'פעמון'}
+]},
+{name:'בית',rows:[
+{items:5,complete:[['🪟','🌸']],missing:[['🪟']],missingLabel:'עציץ'},
+{items:5,complete:[['🧸','🛏️']],missing:[['🛏️']],missingLabel:'דובי'},
+{items:5,complete:[['🪑','🛋️']],missing:[['🪑']],missingLabel:'כרית'},
+{items:5,complete:[['📺','📡']],missing:[['📺']],missingLabel:'אנטנה'}
+]},
+{name:'אנשים',rows:[
+{items:5,complete:[['👨‍🍳','🍳']],missing:[['👨‍🍳']],missingLabel:'מחבת'},
+{items:5,complete:[['👮','🔵']],missing:[['👮']],missingLabel:'תג'},
+{items:5,complete:[['🧑‍🚀','⭐']],missing:[['🧑‍🚀']],missingLabel:'כוכב'},
+{items:5,complete:[['👑','🤴']],missing:[['🤴']],missingLabel:'כתר'}
+]},
+{name:'מזג אוויר',rows:[
+{items:5,complete:[['🌧️','🌈']],missing:[['🌧️']],missingLabel:'קשת'},
+{items:5,complete:[['⛄','🧣']],missing:[['⛄']],missingLabel:'צעיף'},
+{items:5,complete:[['🌂','💧']],missing:[['🌂']],missingLabel:'טיפות'},
+{items:5,complete:[['🌙','⭐']],missing:[['🌙']],missingLabel:'כוכבים'}
+]},
+{name:'ספורט',rows:[
+{items:5,complete:[['🏀','🥅']],missing:[['🏀']],missingLabel:'סל'},
+{items:5,complete:[['⚽','🥅']],missing:[['⚽']],missingLabel:'שער'},
+{items:5,complete:[['🏊','🌊']],missing:[['🏊']],missingLabel:'גלים'},
+{items:5,complete:[['🎯','🏹']],missing:[['🎯']],missingLabel:'חץ'}
+]},
+{name:'חגים',rows:[
+{items:5,complete:[['⭐','🎄']],missing:[['🎄']],missingLabel:'כוכב'},
+{items:5,complete:[['🎃','👻']],missing:[['🎃']],missingLabel:'רוח'},
+{items:5,complete:[['🎀','🎁']],missing:[['🎁']],missingLabel:'סרט'},
+{items:5,complete:[['🎈','🧵']],missing:[['🎈']],missingLabel:'חוט'}
+]},
+{name:'מוזיקה',rows:[
+{items:5,complete:[['🎸','🎵']],missing:[['🎸']],missingLabel:'תווים'},
+{items:5,complete:[['🎹','🎶']],missing:[['🎹']],missingLabel:'תווים'},
+{items:5,complete:[['🎤','🔊']],missing:[['🎤']],missingLabel:'קול'},
+{items:5,complete:[['🥁','🥢']],missing:[['🥁']],missingLabel:'מקלות'}
+]},
+{name:'חלל',rows:[
+{items:5,complete:[['🚀','🔥']],missing:[['🚀']],missingLabel:'להבות'},
+{items:5,complete:[['🌍','🛰️']],missing:[['🌍']],missingLabel:'לוויין'},
+{items:5,complete:[['👨‍🚀','🚩']],missing:[['👨‍🚀']],missingLabel:'דגל'},
+{items:5,complete:[['🌙','🏳️']],missing:[['🌙']],missingLabel:'דגל'}
+]},
+{name:'מורכב',rows:[
+{items:5,complete:[['🔥','🏠','🌸']],missing:[['🏠']],missingLabel:'עשן + פרח'},
+{items:5,complete:[['🎀','👧','👜']],missing:[['👧']],missingLabel:'פפיון + תיק'},
+{items:5,complete:[['📻','🚗','💨']],missing:[['🚗']],missingLabel:'אנטנה + עשן'},
+{items:5,complete:[['🎩','⛄','🧣']],missing:[['⛄']],missingLabel:'כובע + צעיף'}
+]},
+{name:'אתגר סופי',rows:[
+{items:5,complete:[['☀️','🏠','🌳','🌸']],missing:[['🏠','🌳']],missingLabel:'שמש + פרח'},
+{items:5,complete:[['🎩','👓','👦','🎒']],missing:[['👦']],missingLabel:'כובע + משקפיים + תיק'},
+{items:5,complete:[['📡','🚗','💨','🔔']],missing:[['🚗']],missingLabel:'אנטנה + עשן + פעמון'},
+{items:5,complete:[['🐦','🌳','🌸','🐛']],missing:[['🌳','🌸']],missingLabel:'ציפור + חרק'}
+]}
+];
+
+var cur=0,res=[],curColor=COLORS[8],curWidth=4;
+var activeCanvas=null;
+var itemDrawn={};// key: "row-col" -> bool (has drawn on it)
+var itemDone={};// key: "row-col" -> bool (marked done)
+var canvasCtxMap={};// key: "row-col" -> {canvas, ctx}
+
+function init(){
+res=[];for(var i=0;i<LEVELS.length;i++)res.push('pending');
+buildTabs();buildColors();buildWidths();goTo(0);
+}
+
+function buildColors(){
+var row=document.getElementById('colorsRow');row.innerHTML='';
+for(var i=0;i<COLORS.length;i++){
+var b=document.createElement('button');
+b.className='clr-btn'+(COLORS[i]===curColor?' on':'');
+b.style.background=COLORS[i];
+if(COLORS[i]==='#ffffff')b.style.border='2px solid #ccc';
+b.title=COLOR_NAMES[i];
+b.setAttribute('data-c',COLORS[i]);
+b.onclick=function(){selectColor(this.getAttribute('data-c'))};
+row.appendChild(b);
+}
+}
+
+function selectColor(c){
+curColor=c;
+var bs=document.querySelectorAll('.clr-btn');
+for(var i=0;i<bs.length;i++){bs[i].className='clr-btn'+(bs[i].getAttribute('data-c')===c?' on':'')}
+}
+
+function buildWidths(){
+var row=document.getElementById('widthRow');row.innerHTML='';
+for(var i=0;i<WIDTHS.length;i++){
+var b=document.createElement('button');
+var sz=WIDTHS[i]*3+8;
+b.className='w-btn'+(WIDTHS[i]===curWidth?' on':'');
+b.style.width=sz+'px';b.style.height=sz+'px';
+b.title=WIDTH_LABELS[i];
+b.setAttribute('data-w',WIDTHS[i]);
+b.onclick=function(){selectWidth(parseInt(this.getAttribute('data-w')))};
+row.appendChild(b);
+}
+}
+
+function selectWidth(w){
+curWidth=w;
+var bs=document.querySelectorAll('.w-btn');
+for(var i=0;i<bs.length;i++){bs[i].className='w-btn'+(parseInt(bs[i].getAttribute('data-w'))===w?' on':'')}
+}
+
+function buildTabs(){
+var el=document.getElementById('tabs');el.innerHTML='';
+for(var i=0;i<LEVELS.length;i++){
+var b=document.createElement('button');
+b.className='tb'+(i===cur?' on':'')+(res[i]==='correct'?' dn':'');
+b.textContent=(i+1)+' '+LEVELS[i].name;
+b.onclick=(function(idx){return function(){goTo(idx)}})(i);
+el.appendChild(b);
+}
+}
+
+function updateTabs(){
+var bs=document.querySelectorAll('.tb');
+for(var i=0;i<bs.length;i++){bs[i].className='tb'+(i===cur?' on':'')+(res[i]==='correct'?' dn':'')}
+if(bs[cur])bs[cur].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+
+function goTo(idx){
+if(idx<0||idx>=LEVELS.length){showSumm();return}
+cur=idx;
+itemDrawn={};itemDone={};canvasCtxMap={};activeCanvas=null;
+document.getElementById('gameArea').style.display='';
+document.getElementById('summ').classList.remove('show');
+document.getElementById('comp').classList.remove('show');
+updateTabs();renderLevel();updateProgress();
+}
+
+function renderLevel(){
+var list=document.getElementById('rowsList');list.innerHTML='';
+var level=LEVELS[cur];
+for(var ri=0;ri<level.rows.length;ri++){
+var rd=level.rows[ri];
+var card=document.createElement('div');
+card.className='row-card';card.setAttribute('data-row',ri);
+var label=document.createElement('div');
+label.className='row-label';
+label.textContent='שורה '+(ri+1)+' — ציירו: '+rd.missingLabel;
+card.appendChild(label);
+var itemsDiv=document.createElement('div');
+itemsDiv.className='row-items';
+
+// Reference item (rightmost = first in RTL)
+var refWrap=document.createElement('div');
+refWrap.className='item-wrap';
+var refLabel=document.createElement('div');
+refLabel.className='ref-label';refLabel.textContent='דוגמה';
+refWrap.appendChild(refLabel);
+var refBox=document.createElement('div');
+refBox.className='item-box ref';
+var refStack=document.createElement('div');
+refStack.className='emoji-stack';
+for(var p=0;p<rd.complete.length;p++){
+for(var q=0;q<rd.complete[p].length;q++){
+var sp=document.createElement('span');sp.className='part';sp.textContent=rd.complete[p][q];
+refStack.appendChild(sp);
+}
+}
+refBox.appendChild(refStack);
+refWrap.appendChild(refBox);
+itemsDiv.appendChild(refWrap);
+
+// Incomplete items
+for(var ci=0;ci<rd.items-1;ci++){
+var wrap=document.createElement('div');
+wrap.className='item-wrap';
+var box=document.createElement('div');
+var key=ri+'-'+ci;
+box.className='item-box incomplete'+(itemDone[key]?' done':'');
+box.setAttribute('data-row',ri);
+box.setAttribute('data-col',ci);
+var stack=document.createElement('div');
+stack.className='emoji-stack';
+for(var p=0;p<rd.missing.length;p++){
+for(var q=0;q<rd.missing[p].length;q++){
+var sp=document.createElement('span');sp.className='part';sp.textContent=rd.missing[p][q];
+stack.appendChild(sp);
+}
+}
+box.appendChild(stack);
+
+// Canvas overlay
+var cvs=document.createElement('canvas');
+cvs.className='item-canvas';
+cvs.setAttribute('data-row',ri);
+cvs.setAttribute('data-col',ci);
+box.appendChild(cvs);
+wrap.appendChild(box);
+
+// Done button
+var doneBtn=document.createElement('button');
+doneBtn.className='done-btn'+(itemDrawn[key]?' visible':'');
+doneBtn.textContent='✅ סיימתי';
+doneBtn.setAttribute('data-row',ri);
+doneBtn.setAttribute('data-col',ci);
+doneBtn.onclick=(function(r,c){return function(){markDone(r,c)}})(ri,ci);
+wrap.appendChild(doneBtn);
+
+itemsDiv.appendChild(wrap);
+}
+
+card.appendChild(itemsDiv);
+list.appendChild(card);
+}
+requestAnimationFrame(setupCanvases);
+}
+
+function setupCanvases(){
+canvasCtxMap={};
+var canvases=document.querySelectorAll('.item-canvas');
+for(var i=0;i<canvases.length;i++){
+var cvs=canvases[i];
+var box=cvs.parentElement;
+var dpr=window.devicePixelRatio||1;
+var w=box.offsetWidth,h=box.offsetHeight;
+cvs.style.width=w+'px';cvs.style.height=h+'px';
+cvs.width=w*dpr;cvs.height=h*dpr;
+var ctx=cvs.getContext('2d');
+ctx.scale(dpr,dpr);
+ctx.lineCap='round';ctx.lineJoin='round';
+var key=cvs.getAttribute('data-row')+'-'+cvs.getAttribute('data-col');
+canvasCtxMap[key]={canvas:cvs,ctx:ctx};
+
+// Restore drawing state from saved data
+if(cvs._savedImageData){
+ctx.putImageData(cvs._savedImageData,0,0);
+}
+
+cvs.onpointerdown=startDraw;
+cvs.onpointermove=moveDraw;
+cvs.onpointerup=endDraw;
+cvs.onpointercancel=endDraw;
+}
+}
+
+var drawingOn=null;// which canvas key is being drawn on
+
+function startDraw(e){
+e.preventDefault();
+var cvs=e.target;
+if(!cvs.classList.contains('item-canvas'))return;
+var key=cvs.getAttribute('data-row')+'-'+cvs.getAttribute('data-col');
+if(itemDone[key])return;
+drawingOn=key;
+var entry=canvasCtxMap[key];if(!entry)return;
+activeCanvas=key;
+var ctx=entry.ctx;
+ctx.strokeStyle=curColor;
+ctx.lineWidth=curWidth;
+ctx.beginPath();
+var p=cvsPos(e,entry.canvas);
+ctx.moveTo(p.x,p.y);
+}
+
+function moveDraw(e){
+if(!drawingOn)return;
+e.preventDefault();
+var entry=canvasCtxMap[drawingOn];if(!entry)return;
+var ctx=entry.ctx;
+var p=cvsPos(e,entry.canvas);
+ctx.lineTo(p.x,p.y);
+ctx.stroke();
+ctx.beginPath();
+ctx.moveTo(p.x,p.y);
+}
+
+function endDraw(e){
+if(!drawingOn)return;
+var key=drawingOn;
+drawingOn=null;
+if(!itemDrawn[key]){
+itemDrawn[key]=true;
+// Show done button
+var btns=document.querySelectorAll('.done-btn[data-row="'+key.split('-')[0]+'"][data-col="'+key.split('-')[1]+'"]');
+for(var i=0;i<btns.length;i++)btns[i].classList.add('visible');
+}
+}
+
+function cvsPos(e,cvs){
+var r=cvs.getBoundingClientRect();
+return{x:e.clientX-r.left,y:e.clientY-r.top};
+}
+
+function eraseCurrentItem(){
+if(!activeCanvas)return;
+var entry=canvasCtxMap[activeCanvas];if(!entry)return;
+if(itemDone[activeCanvas])return;
+var dpr=window.devicePixelRatio||1;
+entry.ctx.clearRect(0,0,entry.canvas.width/dpr,entry.canvas.height/dpr);
+entry.canvas._savedImageData=null;
+itemDrawn[activeCanvas]=false;
+var parts=activeCanvas.split('-');
+var btns=document.querySelectorAll('.done-btn[data-row="'+parts[0]+'"][data-col="'+parts[1]+'"]');
+for(var i=0;i<btns.length;i++)btns[i].classList.remove('visible');
+}
+
+function markDone(row,col){
+var key=row+'-'+col;
+if(itemDone[key])return;
+itemDone[key]=true;
+// Save canvas image data before re-render
+var entry=canvasCtxMap[key];
+if(entry){
+var dpr=window.devicePixelRatio||1;
+entry.canvas._savedImageData=entry.ctx.getImageData(0,0,entry.canvas.width,entry.canvas.height);
+}
+// Update visuals
+var boxes=document.querySelectorAll('.item-box[data-row="'+row+'"][data-col="'+col+'"]');
+for(var i=0;i<boxes.length;i++){boxes[i].classList.remove('incomplete');boxes[i].classList.add('done')}
+var btns=document.querySelectorAll('.done-btn[data-row="'+row+'"][data-col="'+col+'"]');
+for(var i=0;i<btns.length;i++){btns[i].style.display='none'}
+// Check row complete
+checkRowDone(row);
+updateProgress();
+checkLevelComplete();
+}
+
+function checkRowDone(row){
+var level=LEVELS[cur];
+var rd=level.rows[row];
+var allDone=true;
+for(var c=0;c<rd.items-1;c++){
+if(!itemDone[row+'-'+c]){allDone=false;break}
+}
+if(allDone){
+var cards=document.querySelectorAll('.row-card[data-row="'+row+'"]');
+for(var i=0;i<cards.length;i++)cards[i].classList.add('solved');
+}
+}
+
+function getTotalItems(){
+var level=LEVELS[cur];
+var total=0;
+for(var r=0;r<level.rows.length;r++){total+=level.rows[r].items-1}
+return total;
+}
+
+function getDoneCount(){
+var level=LEVELS[cur];
+var count=0;
+for(var r=0;r<level.rows.length;r++){
+for(var c=0;c<level.rows[r].items-1;c++){
+if(itemDone[r+'-'+c])count++;
+}
+}
+return count;
+}
+
+function updateProgress(){
+var total=getTotalItems();
+var done=getDoneCount();
+document.getElementById('progText').textContent='השלמתם '+done+' מתוך '+total+' פריטים';
+document.getElementById('progFill').style.width=Math.round(done/total*100)+'%';
+}
+
+function checkLevelComplete(){
+var total=getTotalItems();
+var done=getDoneCount();
+if(done>=total){
+res[cur]='correct';updateTabs();
+setTimeout(showComp,600);
+}
+}
+
+function showComp(){
+var ov=document.getElementById('comp');ov.classList.add('show');
+var last=cur>=LEVELS.length-1;
+document.getElementById('cEmoji').textContent=last?'🏆':'✏️🎨';
+document.getElementById('cTitle').textContent=last?'סיימתם הכל!':'כל הכבוד!';
+document.getElementById('cMsg').textContent='השלמתם את כל הפרטים החסרים!';
+}
+
+function nextLevel(){
+document.getElementById('comp').classList.remove('show');
+for(var i=cur+1;i<LEVELS.length;i++){if(res[i]!=='correct'){goTo(i);return}}
+showSumm();
+}
+
+function replay(){document.getElementById('comp').classList.remove('show');res[cur]='pending';goTo(cur)}
+
+function showSumm(){
+document.getElementById('gameArea').style.display='none';
+document.getElementById('comp').classList.remove('show');
+var s=document.getElementById('summ');s.classList.add('show');
+var g=document.getElementById('sgrid');g.innerHTML='';
+var hasP=false;
+for(var i=0;i<LEVELS.length;i++){
+var item=document.createElement('div');item.className='summ-item';
+var st=res[i],sc=st==='correct'?'done':'pend';
+var tx=st==='correct'?'✅':'⬜';
+if(st!=='correct')hasP=true;
+item.innerHTML='<div class="sn">'+(i+1)+'</div><div class="ss-txt '+sc+'">'+tx+'</div>';
+item.onclick=(function(idx){return function(){goTo(idx)}})(i);
+g.appendChild(item);
+}
+var br=document.getElementById('sbrow');br.innerHTML='';
+if(hasP)br.innerHTML+='<button class="pill secondary" onclick="retryPending()">❓ שלבים שלא הושלמו</button>';
+br.innerHTML+='<button class="pill primary" onclick="retryAll()">🔄 הכל מחדש</button>';
+updateTabs();
+}
+
+function retryFiltered(fn){var first=-1;for(var i=0;i<res.length;i++){if(fn(res[i])){res[i]='pending';if(first===-1)first=i}}buildTabs();if(first>=0)goTo(first)}
+function retryPending(){retryFiltered(function(s){return s!=='correct'})}
+function retryAll(){retryFiltered(function(){return true})}
+
+window.addEventListener('resize',function(){
+// Save canvas data, then re-setup
+var canvases=document.querySelectorAll('.item-canvas');
+for(var i=0;i<canvases.length;i++){
+var key=canvases[i].getAttribute('data-row')+'-'+canvases[i].getAttribute('data-col');
+var entry=canvasCtxMap[key];
+if(entry){
+canvases[i]._savedImageData=entry.ctx.getImageData(0,0,entry.canvas.width,entry.canvas.height);
+}
+}
+setupCanvases();
+});
+
+init();
+</script>
+</body>
+</html>

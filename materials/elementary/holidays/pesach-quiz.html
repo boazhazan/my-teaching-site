@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>חידון פסח 🐸</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FFF8E7;
+    --gold: #F4A300;
+    --gold2: #FFD166;
+    --red: #E63946;
+    --blue: #457B9D;
+    --blue2: #A8DADC;
+    --green: #2D9E6B;
+    --green2: #6FCF97;
+    --purple: #7B2D8B;
+    --purple2: #BB6BD9;
+    --bg: #FFF3CC;
+    --dark: #2D1B00;
+    --easy-col: #2D9E6B;
+    --med-col: #457B9D;
+    --hard-col: #E63946;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; }
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: var(--bg);
+    color: var(--dark);
+    min-height: 100vh;
+    overflow-x: hidden;
+    direction: rtl;
+    position: relative;
+  }
+
+  /* floating emojis bg */
+  #floaters { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+  .floater {
+    position:absolute; font-size:var(--fs,28px);
+    animation: floatUp var(--dur,14s) linear infinite;
+    animation-delay: var(--del,0s); opacity:0.18;
+  }
+  @keyframes floatUp {
+    from { transform: translateY(110vh) rotate(0deg); }
+    to   { transform: translateY(-10vh) rotate(360deg); }
+  }
+
+  /* screens */
+  .screen { display:none; flex-direction:column; align-items:center;
+    min-height:100vh; padding: 20px 16px 40px; position:relative; z-index:1; }
+  .screen.active { display:flex; }
+
+  /* ===== SPLASH ===== */
+  #splash { justify-content:center; text-align:center; }
+  .splash-frog {
+    font-size: clamp(80px,20vw,120px);
+    animation: bounce 1.4s ease-in-out infinite;
+    display: block; margin-bottom: 8px;
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.18));
+  }
+  @keyframes bounce { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-18px) scale(1.05)} }
+  .game-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(42px,12vw,80px);
+    color: var(--red);
+    text-shadow: 4px 4px 0 #F4A300, 7px 7px 0 rgba(0,0,0,0.1);
+    margin-bottom: 6px;
+    line-height: 1;
+  }
+  .game-sub {
+    font-size: clamp(18px,5vw,26px);
+    color: var(--blue);
+    font-weight: 900;
+    margin-bottom: 32px;
+  }
+
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    width: 100%; max-width: 480px;
+    margin-bottom: 28px;
+  }
+  .cat-btn {
+    background: white;
+    border: 4px solid transparent;
+    border-radius: 24px;
+    padding: 18px 10px 14px;
+    cursor: pointer;
+    font-family: 'Heebo', sans-serif;
+    font-weight: 900;
+    font-size: clamp(15px,4vw,19px);
+    transition: all 0.22s cubic-bezier(0.34,1.56,0.64,1);
+    box-shadow: 0 6px 0 rgba(0,0,0,0.12);
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .cat-btn:active { transform: scale(0.94) translateY(3px); box-shadow: 0 2px 0 rgba(0,0,0,0.12); }
+  .cat-btn.selected { border-color: var(--gold); background: var(--gold2); transform:scale(1.05); }
+  .cat-btn .cat-emoji { font-size: clamp(32px,8vw,44px); }
+  .cat-btn.cat-egypt { border-color: #ccc; }
+  .cat-btn.cat-egypt:hover { border-color: var(--red); }
+  .cat-btn.cat-makot { border-color: #ccc; }
+  .cat-btn.cat-makot:hover { border-color: var(--purple); }
+  .cat-btn.cat-seder { border-color: #ccc; }
+  .cat-btn.cat-seder:hover { border-color: var(--blue); }
+  .cat-btn.cat-songs { border-color: #ccc; }
+  .cat-btn.cat-songs:hover { border-color: var(--green); }
+  .cat-label { font-size: clamp(13px,3.5vw,16px); }
+
+  .diff-row {
+    display: flex; gap: 12px; margin-bottom: 24px;
+    flex-wrap:wrap; justify-content:center;
+  }
+  .diff-btn {
+    padding: 10px 22px; border-radius: 50px; border: 3px solid;
+    font-family: 'Fredoka One', cursive; font-size: clamp(16px,4.5vw,20px);
+    cursor: pointer; transition: all 0.2s; touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+    background:white;
+  }
+  .diff-btn.easy { border-color: var(--easy-col); color: var(--easy-col); }
+  .diff-btn.medium { border-color: var(--med-col); color: var(--med-col); }
+  .diff-btn.hard { border-color: var(--hard-col); color: var(--hard-col); }
+  .diff-btn.selected.easy { background:var(--easy-col); color:white; transform:scale(1.08); }
+  .diff-btn.selected.medium { background:var(--med-col); color:white; transform:scale(1.08); }
+  .diff-btn.selected.hard { background:var(--hard-col); color:white; transform:scale(1.08); }
+
+  .start-btn {
+    background: var(--red);
+    color: white; border: none; border-radius: 50px;
+    padding: 16px 48px; font-family: 'Fredoka One', cursive;
+    font-size: clamp(22px,6vw,30px); cursor: pointer;
+    box-shadow: 0 8px 0 #9e1a24, 0 12px 20px rgba(230,57,70,0.35);
+    transition: all 0.18s; touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .start-btn:hover { transform:translateY(-3px); box-shadow:0 11px 0 #9e1a24, 0 16px 24px rgba(230,57,70,0.4); }
+  .start-btn:active { transform:translateY(4px); box-shadow:0 4px 0 #9e1a24; }
+  .start-btn:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
+
+  /* selection labels */
+  .section-label {
+    font-family:'Fredoka One',cursive;
+    font-size: clamp(18px,5vw,22px);
+    color: var(--dark); margin-bottom:12px; width:100%; max-width:480px;
+    text-align:right;
+  }
+
+  /* ===== QUESTION SCREEN ===== */
+  #quiz { justify-content:flex-start; padding-top:16px; }
+
+  .top-bar {
+    width:100%; max-width:560px;
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:16px;
+    background:white; border-radius:20px; padding:10px 18px;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.08);
+  }
+  .score-box {
+    font-family:'Fredoka One',cursive; font-size:22px; color:var(--gold);
+    display:flex; align-items:center; gap:5px;
+  }
+  .q-counter {
+    font-weight:900; font-size:16px; color:var(--blue);
+  }
+  .diff-badge {
+    font-family:'Fredoka One',cursive; font-size:14px;
+    padding: 3px 12px; border-radius:20px; color:white;
+  }
+  .diff-badge.easy { background:var(--easy-col); }
+  .diff-badge.medium { background:var(--med-col); }
+  .diff-badge.hard { background:var(--hard-col); }
+
+  /* progress dots */
+  .dots-row { display:flex; gap:8px; margin-bottom:14px; }
+  .dot {
+    width:14px; height:14px; border-radius:50%;
+    background:rgba(0,0,0,0.1);
+    transition: all 0.3s;
+  }
+  .dot.done { background: var(--green); }
+  .dot.wrong-dot { background: var(--red); }
+  .dot.current { background: var(--gold); transform:scale(1.3); }
+
+  /* question card */
+  .q-card {
+    background: white;
+    border-radius: 28px;
+    padding: clamp(20px,5vw,32px) clamp(18px,5vw,28px);
+    width:100%; max-width:560px;
+    box-shadow: 0 8px 0 rgba(0,0,0,0.1), 0 16px 30px rgba(0,0,0,0.08);
+    margin-bottom: 16px;
+    animation: cardIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes cardIn { from{transform:scale(0.85) translateY(20px);opacity:0} to{transform:scale(1) translateY(0);opacity:1} }
+  .q-cat-tag {
+    display:inline-flex; align-items:center; gap:5px;
+    font-size:13px; font-weight:700; padding:4px 12px; border-radius:20px;
+    color:white; margin-bottom:14px;
+  }
+  .q-text {
+    font-family:'Fredoka One',cursive;
+    font-size: clamp(22px,6vw,30px);
+    line-height:1.4; text-align:center;
+    color: var(--dark); margin-bottom:20px;
+  }
+
+  /* answers */
+  .answers { display:flex; flex-direction:column; gap:11px; }
+  .ans-btn {
+    background: var(--cream);
+    border: 3px solid #E8D5A0;
+    border-radius: 18px;
+    padding: 14px 20px;
+    font-size: clamp(17px,5vw,21px);
+    font-weight:700;
+    color: var(--dark); cursor:pointer;
+    text-align:right; direction:rtl;
+    transition: all 0.18s;
+    font-family: 'Heebo', sans-serif;
+    box-shadow: 0 4px 0 #D4B872;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+    position:relative; overflow:hidden;
+  }
+  .ans-btn:hover:not(:disabled) {
+    background: var(--gold2); border-color: var(--gold);
+    transform: translateX(-4px);
+    box-shadow: 4px 4px 0 #D4B872;
+  }
+  .ans-btn.correct {
+    background: #D4EDDA !important; border-color: var(--green) !important;
+    color: var(--green) !important;
+    box-shadow: 0 4px 0 #1a7a4d !important;
+    animation: correctBounce 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes correctBounce { 0%{transform:scale(1)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+  .ans-btn.wrong {
+    background: #FFE0E0 !important; border-color: var(--red) !important;
+    color: var(--red) !important;
+    box-shadow: 0 4px 0 #9e1a24 !important;
+    animation: shake 0.4s;
+  }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 60%{transform:translateX(8px)} 80%{transform:translateX(-4px)} }
+  .ans-btn:disabled { cursor:not-allowed; }
+  .ans-btn .ans-letter {
+    display:inline-block; width:28px; height:28px; border-radius:50%;
+    background:rgba(0,0,0,0.08); font-size:13px; font-weight:900;
+    text-align:center; line-height:28px; margin-left:10px;
+    font-family:'Fredoka One',cursive;
+  }
+
+  /* hint */
+  .hint-row { text-align:center; margin-top:4px; }
+  .hint-btn {
+    background:none; border:2px dashed var(--gold);
+    color:var(--gold); padding:7px 20px; border-radius:30px;
+    font-size:15px; font-weight:700; cursor:pointer;
+    font-family:'Heebo',sans-serif; transition:all 0.2s;
+    touch-action:manipulation;
+  }
+  .hint-btn:hover { background:var(--gold2); }
+  .hint-box {
+    margin-top:10px; padding:10px 16px;
+    background:var(--gold2); border-radius:14px;
+    font-size:16px; font-weight:700; color:var(--dark);
+    display:none;
+  }
+  .hint-box.show { display:block; animation:cardIn 0.3s ease; }
+
+  /* ===== RESULT SCREEN ===== */
+  #result { justify-content:flex-start; padding-top:30px; align-items:center; }
+  .result-card {
+    background:white; border-radius:32px;
+    padding: clamp(28px,7vw,44px) clamp(20px,5vw,36px);
+    text-align:center; max-width:460px; width:100%;
+    box-shadow:0 10px 0 rgba(0,0,0,0.12), 0 20px 40px rgba(0,0,0,0.1);
+    animation: cardIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .result-big-emoji { font-size:clamp(70px,18vw,100px); margin-bottom:10px; animation:bounce 1.2s ease-in-out infinite; }
+  .result-title {
+    font-family:'Fredoka One',cursive;
+    font-size:clamp(32px,9vw,52px); color:var(--red);
+    margin-bottom:6px; line-height:1;
+  }
+  .result-score {
+    font-family:'Fredoka One',cursive;
+    font-size:clamp(48px,12vw,72px); color:var(--gold);
+    line-height:1; margin:14px 0 4px;
+    text-shadow:3px 3px 0 #D4B872;
+  }
+  .result-out-of { font-size:16px; color:rgba(0,0,0,0.45); margin-bottom:18px; }
+  .stars-row { font-size:clamp(36px,10vw,52px); letter-spacing:4px; margin-bottom:20px; }
+
+  /* medals */
+  .medals-row { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:24px; }
+  .medal {
+    background: var(--cream); border-radius:16px; padding:10px 16px;
+    font-size:13px; font-weight:700; border:2px solid #E8D5A0;
+  }
+  .medal strong { display:block; font-family:'Fredoka One',cursive; font-size:22px; color:var(--blue); }
+
+  .res-btn {
+    width:100%; border:none; border-radius:50px;
+    font-family:'Fredoka One',cursive; font-size:clamp(20px,5vw,26px);
+    cursor:pointer; transition:all 0.2s; margin-bottom:12px;
+    touch-action:manipulation; -webkit-tap-highlight-color:transparent;
+  }
+  .res-btn.primary {
+    background:var(--red); color:white; padding:15px;
+    box-shadow:0 7px 0 #9e1a24;
+  }
+  .res-btn.primary:active { transform:translateY(5px); box-shadow:0 2px 0 #9e1a24; }
+  .res-btn.secondary {
+    background:white; color:var(--blue); padding:13px;
+    border:3px solid var(--blue);
+    box-shadow:0 5px 0 var(--blue);
+  }
+  .res-btn.secondary:active { transform:translateY(3px); box-shadow:0 2px 0 var(--blue); }
+
+  /* feedback message */
+  .feedback-msg {
+    position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(0);
+    z-index:200; font-family:'Fredoka One',cursive;
+    font-size:clamp(28px,8vw,52px); pointer-events:none;
+    transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+  }
+  .feedback-msg.show { transform:translate(-50%,-50%) scale(1); }
+  .feedback-msg.hide { transform:translate(-50%,-100vh) scale(0.5); }
+
+  /* particles */
+  .particle { position:fixed; pointer-events:none; z-index:100; font-size:22px;
+    animation: pFly 1.2s ease-out forwards; }
+  @keyframes pFly { from{transform:translate(-50%,-50%) scale(1);opacity:1} to{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy)));opacity:0;scale:0.2} }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:380px) {
+    .category-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+    .cat-btn { padding:14px 6px 10px; font-size:14px; }
+    .cat-btn .cat-emoji { font-size:28px; }
+    .diff-btn { font-size:16px; padding:8px 16px; }
+    .ans-btn { font-size:16px; padding:12px 14px; }
+    .q-text { font-size:20px; }
+  }
+  @media (max-width:768px) and (orientation:landscape) {
+    .q-card { padding:14px 18px; }
+    .q-text { font-size:18px; margin-bottom:12px; }
+    .ans-btn { padding:10px 14px; font-size:15px; }
+    .top-bar { margin-bottom:10px; }
+    .dots-row { margin-bottom:8px; }
+  }
+
+  /* hover highlight ring on cat btn */
+  .cat-btn.cat-halacha { border-color: #ccc; background: linear-gradient(135deg, #fff8e7, #fff3cc); }
+  .cat-btn.cat-halacha:hover { border-color: #8B5E00; }
+  .cat-btn.cat-halacha.selected { border-color: #8B5E00; background: linear-gradient(135deg, #f5c842, #f4a300); }
+  .cat-btn span { pointer-events: none; }
+  .cat-btn:focus { outline:none; }
+
+  button:focus { outline:none; }
+
+  /* section divider */
+  .divider { width:100%; max-width:480px; height:2px; background:linear-gradient(90deg,transparent,#E8D5A0,transparent); margin:8px 0 20px; }
+
+  /* ===== PROGRESS / LEVELS SYSTEM ===== */
+  .progress-bar-wrap {
+    width:100%; max-width:480px;
+    background:rgba(0,0,0,0.08); border-radius:30px;
+    height:14px; margin-bottom:6px; overflow:hidden;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .progress-bar-fill {
+    height:100%;
+    background: linear-gradient(90deg, var(--green), var(--gold));
+    border-radius:30px;
+    transition: width 0.8s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .xp-row {
+    display:flex; justify-content:space-between; align-items:center;
+    width:100%; max-width:480px; margin-bottom:16px;
+    font-size:12px; color:rgba(0,0,0,0.45); font-weight:700;
+  }
+  .level-pill {
+    display:inline-flex; align-items:center; gap:6px;
+    background:white; border-radius:30px;
+    padding:6px 16px; font-family:'Fredoka One',cursive;
+    font-size:clamp(15px,4vw,18px); color:var(--dark);
+    box-shadow:0 4px 0 rgba(0,0,0,0.1);
+    border:2px solid var(--gold2);
+    margin-bottom:10px;
+  }
+  /* levelup overlay */
+  #levelup-overlay {
+    position:fixed; inset:0; z-index:300;
+    background:rgba(0,0,0,0.6);
+    display:none; align-items:center; justify-content:center;
+    flex-direction:column;
+  }
+  #levelup-overlay.show { display:flex; }
+  .levelup-box {
+    background:white; border-radius:32px;
+    padding:36px 28px; text-align:center;
+    max-width:320px; width:90%;
+    box-shadow:0 20px 60px rgba(0,0,0,0.3);
+    animation: levelupPop 0.6s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes levelupPop { from{transform:scale(0.3) rotate(-8deg);opacity:0} to{transform:scale(1) rotate(0);opacity:1} }
+  .levelup-emoji { font-size:72px; margin-bottom:8px; animation:bounce 1s ease-in-out infinite; }
+  .levelup-title { font-family:'Fredoka One',cursive; font-size:36px; color:var(--red); margin-bottom:4px; }
+  .levelup-name { font-family:'Fredoka One',cursive; font-size:22px; color:var(--blue); margin-bottom:20px; }
+
+  /* achievements strip on splash */
+  .achievements-row {
+    display:flex; flex-wrap:wrap; gap:8px;
+    justify-content:center; width:100%; max-width:480px;
+    margin-top:16px;
+  }
+  .ach-badge {
+    display:flex; align-items:center; gap:5px;
+    padding:5px 12px; border-radius:20px; font-size:12px; font-weight:700;
+    border:2px solid; transition:all 0.3s;
+  }
+  .ach-badge.earned { background:rgba(244,163,0,0.15); border-color:var(--gold); color:#7a5000; }
+  .ach-badge.locked { background:rgba(0,0,0,0.05); border-color:rgba(0,0,0,0.1); color:rgba(0,0,0,0.3); filter:grayscale(1); }
+
+  #mute-btn {
+    position:fixed; bottom:16px; left:16px; z-index:50;
+    background:white; border:2px solid #E8D5A0; border-radius:50%;
+    width:44px; height:44px; font-size:20px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 3px 0 #E8D5A0; touch-action:manipulation;
+  }
+</style>
+</head>
+<body>
+<div id="floaters"></div>
+<button id="mute-btn" onclick="toggleMute()">🔊</button>
+
+<div id="feedback-msg" class="feedback-msg">✅</div>
+
+<!-- ========== SPLASH ========== -->
+<div id="splash" class="screen active">
+  <span class="splash-frog">🐸</span>
+  <div class="game-title">חידון פסח!</div>
+  <div class="game-sub">לילדי כיתה א׳ 🎉</div>
+
+  <!-- level + XP -->
+  <div class="level-pill" id="splash-level">🌱 מתחיל</div>
+  <div style="width:100%;max-width:480px;">
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="splash-xp-fill" style="width:0%"></div></div>
+    <div class="xp-row"><span id="splash-xp-label">0 נקודות</span><span id="splash-xp-next">לרמה הבאה: 50 נק׳</span></div>
+  </div>
+
+  <div class="section-label">📚 בחר נושא:</div>
+  <div class="category-grid">
+    <button class="cat-btn cat-egypt" data-cat="egypt" onclick="toggleCat('egypt')">
+      <span class="cat-emoji">🌴</span>
+      <span class="cat-label">סיפור יציאת מצרים</span>
+    </button>
+    <button class="cat-btn cat-makot" data-cat="makot" onclick="toggleCat('makot')">
+      <span class="cat-emoji">🐸</span>
+      <span class="cat-label">עשר המכות</span>
+    </button>
+    <button class="cat-btn cat-seder" data-cat="seder" onclick="toggleCat('seder')">
+      <span class="cat-emoji">🍷</span>
+      <span class="cat-label">ליל הסדר</span>
+    </button>
+    <button class="cat-btn cat-songs" data-cat="songs" onclick="toggleCat('songs')">
+      <span class="cat-emoji">🎵</span>
+      <span class="cat-label">שירים ופסוקים</span>
+    </button>
+    <button class="cat-btn cat-halacha" data-cat="halacha" onclick="toggleCat('halacha')" style="grid-column:1/-1;">
+      <span class="cat-emoji">📖</span>
+      <span class="cat-label">פינת ההלכה — ילקוט יוסף</span>
+    </button>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-label">⭐ רמת קושי:</div>
+  <div class="diff-row">
+    <button class="diff-btn easy" data-diff="easy" onclick="selectDiff('easy')">🌱 קל</button>
+    <button class="diff-btn medium" data-diff="medium" onclick="selectDiff('medium')">📖 בינוני</button>
+    <button class="diff-btn hard" data-diff="hard" onclick="selectDiff('hard')">🔥 קשה</button>
+  </div>
+
+  <button class="start-btn" id="start-btn" onclick="startQuiz()" disabled>
+    🎮 שחק עכשיו!
+  </button>
+
+  <!-- achievements -->
+  <div class="achievements-row" id="achievements-row"></div>
+</div>
+
+<!-- ========== LEVELUP OVERLAY ========== -->
+<div id="levelup-overlay">
+  <div class="levelup-box">
+    <div class="levelup-emoji" id="lu-emoji">🌟</div>
+    <div class="levelup-title">עלית רמה!</div>
+    <div class="levelup-name" id="lu-name">רמה 2</div>
+    <button onclick="closeLevelUp()" style="background:var(--red);color:white;border:none;border-radius:30px;padding:12px 32px;font-family:'Fredoka One',cursive;font-size:20px;cursor:pointer;box-shadow:0 6px 0 #9e1a24;touch-action:manipulation;">המשך! ✨</button>
+  </div>
+</div>
+
+<!-- ========== QUIZ ========== -->
+<div id="quiz" class="screen">
+  <div class="top-bar">
+    <div class="score-box">⭐ <span id="score-display">0</span></div>
+    <div class="q-counter">שאלה <span id="q-num">1</span> / <span id="q-total">10</span></div>
+    <div class="diff-badge" id="diff-badge">קל</div>
+  </div>
+  <div style="width:100%;max-width:560px;margin-bottom:6px;display:flex;justify-content:flex-end;">
+    <button onclick="confirmHome()" style="background:white;border:2px solid #E8D5A0;border-radius:30px;padding:6px 16px;font-size:14px;font-weight:700;color:#888;cursor:pointer;font-family:'Heebo',sans-serif;touch-action:manipulation;-webkit-tap-highlight-color:transparent;box-shadow:0 2px 0 #E8D5A0;">🏠 תפריט ראשי</button>
+  </div>
+  <div id="confirm-home" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;">
+    <div style="background:white;border-radius:24px;padding:28px 24px;max-width:300px;width:90%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,0.2);">
+      <div style="font-size:48px;margin-bottom:10px;">🏠</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:22px;color:var(--red);margin-bottom:8px;">לצאת מהמשחק?</div>
+      <div style="font-size:14px;color:#888;margin-bottom:20px;">ההתקדמות לא תישמר</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button onclick="goHome()" style="background:var(--red);color:white;border:none;border-radius:30px;padding:12px;font-family:'Fredoka One',cursive;font-size:18px;cursor:pointer;touch-action:manipulation;">כן, יציאה</button>
+        <button onclick="document.getElementById('confirm-home').style.display='none'" style="background:white;border:2px solid #E8D5A0;border-radius:30px;padding:11px;font-family:'Heebo',sans-serif;font-size:16px;font-weight:700;color:#555;cursor:pointer;touch-action:manipulation;">המשך לשחק</button>
+      </div>
+    </div>
+  </div>
+  <div class="dots-row" id="dots-row"></div>
+  <div class="q-card" id="q-card">
+    <div class="q-cat-tag" id="q-cat-tag">🌴 מצרים</div>
+    <div class="q-text" id="q-text">...</div>
+    <div class="answers" id="answers"></div>
+    <div class="hint-row">
+      <button class="hint-btn" id="hint-btn" onclick="showHint()">💡 רמז</button>
+      <div class="hint-box" id="hint-box"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== RESULT ========== -->
+<div id="result" class="screen">
+  <div class="result-card">
+    <div class="result-big-emoji" id="res-emoji">🎉</div>
+    <div class="result-title" id="res-title">כל הכבוד!</div>
+    <div class="stars-row" id="res-stars">⭐⭐⭐</div>
+    <div class="result-score" id="res-score">10/10</div>
+    <div class="result-out-of">נקודות</div>
+    <div class="medals-row">
+      <div class="medal"><strong id="res-correct">10/10</strong>נכון</div>
+      <div class="medal"><strong id="res-time">🔥0</strong>רצף</div>
+      <div class="medal"><strong id="res-hints">💡0</strong>רמזים</div>
+    </div>
+    <button class="res-btn primary" onclick="retryQuiz()">🔄 שחק שוב!</button>
+    <button class="res-btn secondary" onclick="goHome()">🏠 תפריט ראשי</button>
+    <div id="res-achievement" style="display:none;margin-top:12px;background:linear-gradient(135deg,#f4a300,#ffd166);border-radius:14px;padding:10px 16px;font-weight:900;font-size:14px;color:#5a3500;text-align:center;animation:cardIn 0.4s ease;"></div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:16px 12px;font-size:0.82rem;color:rgba(0,0,0,0.35);direction:rtl;">
+  החידון הוכן ע״י <strong style="color:rgba(0,0,0,0.5);">רן בוסידון</strong>
+</div>
+
+<script>
+// ==================== DATA ====================
+const QUESTIONS = {
+  egypt: {
+    easy: [
+      {q:'מי הוביל את בני ישראל ממצרים?', a:['משה','פרעה','יוסף'], correct:0, hint:'ה\' שלח אותו'},
+      {q:'מה שמו של מלך מצרים שהיה אכזרי לבני ישראל?', a:['פרעה','קיסר','נבוכדנצר'], correct:0, hint:'שמו מתחיל באות פ׳'},
+      {q:'מה שם הים שנקרע לשניים?', a:['ים סוף','ים תיכון','הירדן'], correct:0, hint:'סוף = קנה — ים הקנים'},
+      {q:'כמה שנים היו בני ישראל עבדים במצרים?', a:['400 שנה','100 שנה','200 שנה'], correct:0, hint:'ארבע מאות שנה'},
+      {q:'מה שם הסל שבו שמו את משה בנהר?', a:['תיבה','כלוב','שק'], correct:0, hint:'עשוי גומא — שם אותו במים'},
+      {q:'מי שמרה על משה כשהיה בנהר?', a:['מרים אחותו','אמו','בת פרעה'], correct:0, hint:'אחותו הגדולה עמדה מרחוק'},
+      {q:'מי מצאה את משה בנהר?', a:['בת פרעה','מרים','יוכבד'], correct:0, hint:'בת המלך'},
+      {q:'מה שם אחיו הגדול של משה?', a:['אהרן','יוסף','לוי'], correct:0, hint:'הוא עזר למשה לדבר'},
+      {q:'מה ה\' הראה למשה בהר חורב?', a:['סנה בוער','עמוד אש','קשת'], correct:0, hint:'עץ שבוער ואינו נשרף'},
+      {q:'מה שרו בני ישראל אחרי שעברו את הים?', a:['שירת הים','הלל','מה נשתנה'], correct:0, hint:'אז ישיר משה ובני ישראל...'},
+    ],
+    medium: [
+      {q:'מה שם אמא של משה?', a:['יוכבד','מרים','שרה'], correct:0, hint:'גם היא בת לוי'},
+      {q:'מה שם אבא של משה?', a:['עמרם','אהרן','לוי'], correct:0, hint:'אבא של משה, מרים ואהרן'},
+      {q:'איפה גדל משה?', a:['בארמון פרעה','בבית יוכבד','במדבר'], correct:0, hint:'גדל כמו נסיך'},
+      {q:'לאן ברח משה אחרי שהכה את המצרי?', a:['מדיין','כנען','מצרים'], correct:0, hint:'שם פגש את יתרו'},
+      {q:'מי היה חותנו של משה?', a:['יתרו','בלעם','יוסף'], correct:0, hint:'כהן מדיין'},
+      {q:'כמה פעמים הלך משה אל פרעה לבקש לשחרר את העם?', a:['הרבה פעמים','פעם אחת','שלוש פעמים'], correct:0, hint:'כל מכה — ביקשו שוב ושוב'},
+      {q:'מה ציווה פרעה לעשות לבנים הזכרים של ישראל?', a:['לזרוק לנהר','לעבוד קשה','להגלות'], correct:0, hint:'הוא פחד מהם'},
+      {q:'מה שמה של אחות משה?', a:['מרים','דינה','רחל'], correct:0, hint:'היא ניגנה בתוף אחרי קריעת ים סוף'},
+      {q:'מה עשו בני ישראל בים סוף לאחר שנקרע?', a:['עברו על יבשה','שחו','נסעו בסירה'], correct:0, hint:'הים נחלק לשניים'},
+      {q:'מה עשו המצרים כשרדפו אחרי ישראל בים?', a:['טבעו בים','ברחו','נכנעו'], correct:0, hint:'המים חזרו...'},
+    ],
+    hard: [
+      {q:'מה ציווה ה\' את משה לפני שדיבר אליו מהסנה?', a:['לשלוף את נעליו','לעצום עיניים','להשתחוות'], correct:0, hint:'כי האדמה שם קדושה'},
+      {q:'מה אמר ה\' למשה כשסירב לצאת לגאול את ישראל?', a:['שאהרן אחיו ידבר במקומו','שישלח מישהו אחר','שיחכה עוד שנה'], correct:0, hint:'ה\' נתן לו עזרה — אחיו הגדול'},
+      {q:'מה לקחו בני ישראל מהמצרים לפני היציאה?', a:['כלי זהב וכסף','לחם ומים','בהמות'], correct:0, hint:'שאלו משכניהם'},
+      {q:'מה שם המנהיג שעזר למשה בקרב עמלק?', a:['יהושע','כלב','אלדד'], correct:0, hint:'בן נון'},
+      {q:'מה הלך לפני בני ישראל ביום במדבר?', a:['עמוד ענן','עמוד אש','מלאך'], correct:0, hint:'בלילה היה עמוד אש — ביום...'},
+      {q:'במה ניגנה מרים כשיצאה עם הנשים לשיר?', a:['תוף','כינור','חצוצרה'], correct:0, hint:'כלי נגינה שמחבטים עליו'},
+      {q:'ממה עשוי התוף שניגנה בו מרים לפי הפשט?', a:['עור מתוח על מסגרת','עץ חלול','מתכת'], correct:0, hint:'כלי הקשה עתיק'},
+      {q:'כמה שנה לאחר יציאת מצרים קיבלו את התורה בהר סיני?', a:['שלושה חודשים','שנה שלמה','שבועות ספורים'], correct:0, hint:'בחג השבועות — חמישים יום לאחר הפסח'},
+      {q:'מה שם הנס שקרה לבני ישראל כשהיו צמאים במדבר?', a:['הכאת הסלע ויצאו מים','ירידת גשמים','מציאת באר'], correct:0, hint:'משה הכה בסלע'},
+      {q:'מה ציווה ה\' את בני ישראל לחגוג כל שנה לזכר היציאה?', a:['חג הפסח','חג הסוכות','חג השבועות'], correct:0, hint:'חג האביב — זכר ליציאת מצרים'},
+    ]
+  },
+  makot: {
+    easy: [
+      {q:'כמה מכות שלח ה\' על מצרים?', a:['עשר','שבע','שתים עשרה'], correct:0, hint:'זוכרים "דצ"ך עד"ש באח"ב"?'},
+      {q:'מה הייתה המכה הראשונה?', a:['דם','צפרדע','כינים'], correct:0, hint:'כל המים הפכו...'},
+      {q:'מה הייתה המכה השנייה?', a:['צפרדע','ארבה','ברד'], correct:0, hint:'קופצות בכל מקום 🐸'},
+      {q:'מה הייתה מכת חושך?', a:['חושך גמור','סערה','עשן'], correct:0, hint:'המצרים לא זזו — לישראל היה אור!'},
+      {q:'מה הייתה המכה האחרונה?', a:['מכת בכורות','מכת ברד','מכת ארבה'], correct:0, hint:'מכה עשירית ואחרונה'},
+      {q:'מאיפה יצאו הצפרדעים במכת צפרדע?', a:['מהיאור והנהרות','מהאדמה','מהשמים'], correct:0, hint:'מהנהר הגדול של מצרים'},
+      {q:'מה אכל הארבה בשדות מצרים?', a:['כל הצמחים','בעלי חיים','לחם'], correct:0, hint:'אכל את כל הירק'},
+      {q:'מה בא מהשמים במכת ברד?', a:['ברד ואש','רק גשם','שלג'], correct:0, hint:'ברד עם אש בתוכו!'},
+      {q:'מי לא נפגע ממכת הדם?', a:['בני ישראל','המצרים','כולם'], correct:0, hint:'המים שלהם נשארו נקיים'},
+      {q:'מה הייתה מכה שמינית?', a:['ארבה','שחין','דבר'], correct:0, hint:'חרקים שאכלו הכל 🦟'},
+    ],
+    medium: [
+      {q:'מה שם מכה שלישית?', a:['כינים','דבר','שחין'], correct:0, hint:'כ.י.נ.י.ם — חרקים קטנים'},
+      {q:'מה מכה רביעית?', a:['ערוב','כינים','ברד'], correct:0, hint:'חיות רעות בכל הארץ'},
+      {q:'מה קרה לבהמות מצרים במכה החמישית?', a:['מתו — מכת דבר','חלו','ברחו'], correct:0, hint:'בהמות מצרים — לא של ישראל'},
+      {q:'מה מכה שישית?', a:['שחין','דם','ערוב'], correct:0, hint:'פצעים על עור הגוף'},
+      {q:'מה מכה שביעית?', a:['ברד','ארבה','חושך'], correct:0, hint:'גושי קרח ואש יחד ירדו מהשמים'},
+      {q:'מה מכה תשיעית?', a:['חושך','ברד','ארבה'], correct:0, hint:'אפלה שלושה ימים'},
+      {q:'מה הייתה השעה של מכת בכורות?', a:['חצות הלילה','בבוקר','בשקיעה'], correct:0, hint:'חצות — אמצע הלילה'},
+      {q:'מה הגן על בני ישראל ממכת בכורות?', a:['דם הפסח על המשקוף','מזוזה','תפילה'], correct:0, hint:'מרחו אותו על הדלת'},
+      {q:'מה עשה ה\' כדי להבדיל בין בני ישראל למצרים במכות?', a:['הגן על בני ישראל ממרבית המכות','הגן על המצרים','לא הבדיל'], correct:0, hint:'ה\' שם פדות בין עמו לבין מצרים'},
+      {q:'מה עשה פרעה אחרי מכת בכורות?', a:['שלח את ישראל','המשיך לסרב','בכה בלבד'], correct:0, hint:'לבסוף הסכים לשחרר'},
+    ],
+    hard: [
+      {q:'מה הסדר הנכון של עשר המכות — מה מכה שלישית?', a:['כינים','ערוב','דבר'], correct:0, hint:'ד.צ.ך — דם צפרדע כינים'},
+      {q:'מה אמרו חרטומי מצרים אחרי מכת כינים?', a:['אצבע אלוהים היא','הם גדולים מאיתנו','לא ידעו להסביר'], correct:0, hint:'הם הכירו בכוח אלוקי'},
+      {q:'מה פירוש המילה "ערוב"?', a:['תערובת של חיות רעות','שחיטה','שמירה'], correct:0, hint:'ערוב = תערובת — חיות רבות שונות'},
+      {q:'מה עשה ה\' ללב פרעה כדי שלא ישחרר את ישראל?', a:['חיזק את לבו','ריכך את לבו','שינה את דעתו'], correct:0, hint:'ויחזק ה\' את לב פרעה'},
+      {q:'מה הבדיל בין ברד של מצרים לברד רגיל?', a:['אש בתוך הברד','ברד ענק בלבד','ברד שחור'], correct:0, hint:'אש ומים יחד — נס!'},
+      {q:'כמה ימים ארכה מכת חושך?', a:['שלושה ימים','יום אחד','שבוע'], correct:0, hint:'שלושת ימי חושך — לישראל היה אור'},
+      {q:'מה ביקש פרעה אחרי מכת ברד — ומה עשה אחר כך?', a:['ביקש להפסיק וחזר בו כשנפסק','שלח את ישראל מיד','נשאר בדעתו'], correct:0, hint:'לב פרעה התחזק שוב'},
+      {q:'מה עשו המצרים שירדה מכת ברד כאזהרה?', a:['מי שירא את ה\' הכניס עבדיו ובהמותיו הביתה','כולם ברחו','כולם נשארו בשדה'], correct:0, hint:'הייתה בחירה — ומי שהאמין ניצל'},
+      {q:'מה פירוש "שחין"?', a:['פצעים ממוגלה על העור','שריפה','כאב ראש'], correct:0, hint:'עור הגוף מכוסה בשלפוחיות'},
+      {q:'כנגד מה תיקנו לשפוך טיפות יין בעשר המכות?', a:['כי שמחתנו חסרה בצרת מצרים','לכבוד ה\'','מנהג עתיק בלבד'], correct:0, hint:'לא שמחים לגמרי על צרת אחרים'},
+    ]
+  },
+  seder: {
+    easy: [
+      {q:'כמה כוסות יין שותים בליל הסדר?', a:['ארבע','שתיים','שלוש'], correct:0, hint:'ד-ר-ב-ע'},
+      {q:'מה שם הלחם שאוכלים בפסח?', a:['מצה','פיתה','לחם'], correct:0, hint:'שטוחה ויבשה'},
+      {q:'מה הירק המר שאוכלים בסדר לזכר השעבוד?', a:['מרור','גזר','מלפפון'], correct:0, hint:'מר כמו השעבוד במצרים'},
+      {q:'מה שמה של הצלחת שעליה כל מאכלי הסדר?', a:['קערת הסדר','מגש פסח','צלחת מיוחדת'], correct:0, hint:'שולחן הסדר'},
+      {q:'מה מחפשים הילדים בסוף הסדר?', a:['האפיקומן','הכוס של אליהו','הביצה'], correct:0, hint:'חצי מצה שהמבוגרים מסתירים'},
+      {q:'כמה שאלות שואל הילד בליל הסדר?', a:['ארבע','שתיים','עשר'], correct:0, hint:'מה נשתנה — ארבע שאלות'},
+      {q:'מה פותחים כדי שאליהו הנביא יכנס?', a:['הדלת','החלון','הכוס'], correct:0, hint:'פותחים ב"שפוך חמתך"'},
+      {q:'מה שמו של הספר שקוראים בליל הסדר?', a:['הגדה','סידור','תנ"ך'], correct:0, hint:'מספרים בו את הסיפור'},
+      {q:'מה מטבילים במי מלח בסדר?', a:['כרפס','מרור','מצה'], correct:0, hint:'ירק ירוק — זכר לדמעות העבדים'},
+      {q:'מה חרוסת מסמלת בסדר?', a:['חומר הלבנים שעבדו בו העבדים','ממרח מתוק לאכילה','צבע חום'], correct:0, hint:'דומה בצבע לטיט ולבנים'},
+    ],
+    medium: [
+      {q:'מה מסמלת המצה?', a:['שלא היה זמן לתפוח','לחם העניים','ברכה'], correct:0, hint:'יצאנו בחיפזון'},
+      {q:'מה מסמל המרור?', a:['מרירות השעבוד','ממרח טעים','ירק מיוחד'], correct:0, hint:'מר כמו חיי העבדים'},
+      {q:'כמה סימנים יש בסדר הפסח?', a:['חמישה עשר','עשרה','שמונה'], correct:0, hint:'קדש ורחץ כרפס יחץ — שמונה... ממשיכים עוד!'},
+      {q:'מה אומרים בהגדה כשמגיעים לעשר המכות?', a:['שופכים מהיין','פותחים הדלת','שרים'], correct:0, hint:'כל מכה — טיפה יין'},
+      {q:'מה זה "חד גדיא"?', a:['שיר בסוף הסדר על גדי','פסוק תפילה','שם מאכל'], correct:0, hint:'שיר מצחיק ומסובך'},
+      {q:'אילו שירים שרים בחלק האחרון של הסדר?', a:['חד גדיא ואחד מי יודע','הלל בלבד','שמע ישראל'], correct:0, hint:'שירים כיפיים בסוף הסדר'},
+      {q:'מה "אחד מי יודע"?', a:['שיר ספירה של מושגים יהודיים','שאלה בהגדה','תפילה'], correct:0, hint:'אחד אני יודע... שניים...'},
+      {q:'כמה ימים חג פסח?', a:['שבעה','שלושה','עשרה'], correct:0, hint:'בארץ ישראל שבעה'},
+      {q:'למה אוכלים אפיקומן בסוף הסדר?', a:['לזכר קרבן הפסח שאכלו במצרים','כי הוא טעים','כי הוא הפרס של הילדים'], correct:0, hint:'קרבן הפסח אכלו לאחרונה — האפיקומן הוא במקומו'},
+      {q:'למה שופכים יין כשאומרים המכות?', a:['שמחתנו חסרה כי מצרים סבלו','לשמחה','מנהג בלבד'], correct:0, hint:'לא שמחים לגמרי על צרת אחרים'},
+    ],
+    hard: [
+      {q:'מדוע אין מברכים על אכילת מצה בשאר ימי הפסח חוץ מהלילה הראשון? (ילקוט יוסף)', a:['כי אכילתה רשות — אינה חובה','כי ברכה נאמרת רק פעם אחת','כי הברכה נשמרת מהלילה הראשון'], correct:0, hint:'מרן פסק שאכילת מצה בשאר הפסח היא רשות ולא חובה'},
+      {q:'מה ההלכה לגבי הקפדה על זמן אכילת אפיקומן? (ילקוט יוסף)', a:['יש לסיים אכילת האפיקומן לפני חצות הלילה','מותר לאכול עד עלות השחר','אין הגבלת זמן'], correct:0, hint:'כמו אכילת קרבן הפסח שהיה עד חצות'},
+      {q:'כנגד מה נתקנו ארבע כוסות יין לפי הילקוט יוסף?', a:['ארבע לשונות גאולה בתורה','ארבעה אבות','ארבעה חלקי ההגדה'], correct:0, hint:'והוצאתי, והצלתי, וגאלתי, ולקחתי'},
+      {q:'מה הדין לפי הילקוט יוסף אם שכח "יעלה ויבא" בברכת המזון ביום טוב ראשון של פסח?', a:['חוזר לראש ברכת המזון','אינו חוזר','אומר יעלה ויבא בלי לחזור'], correct:0, hint:'ליל הסדר — כמו יום טוב לכל דבר'},
+      {q:'מה "מגיד" בסדר הפסח?', a:['סיפור יציאת מצרים','ברכת המזון','קריאת ההגדה'], correct:0, hint:'חלק שבו מספרים את הסיפור'},
+      {q:'מה "כורך"?', a:['מצה עם מרור — כמו הלל הזקן','שלב בניקוי','שם ההגדה'], correct:0, hint:'הלל הזקן אכל מצה ומרור יחד'},
+      {q:'מה פירוש "זמן חירותנו"?', a:['זמן החירות שלנו — פסח','חג הקציר','שמחת החגיגה'], correct:0, hint:'שם נוסף לחג פסח'},
+      {q:'לפי הילקוט יוסף — האם נשים חייבות בארבע כוסות?', a:['כן — גם הן היו באותו הנס','לא — פטורות ממצוות זמן','רק כוס אחת'], correct:0, hint:'אף הן היו באותו הנס'},
+      {q:'מה "שולחן עורך"?', a:['אכילת הסעודה','הכנת השולחן','שם המשורר'], correct:0, hint:'כבר אוכלים!'},
+      {q:'מה דין מי שאכל מצה בלי כוונה בליל הסדר — האם יצא?', a:['לפי הסברא יצא — אך לכתחילה צריך כוונה','לא יצא ויחזור לאכול','יצא לגמרי בלי שאלה'], correct:0, hint:'מצות צריכות כוונה — אך יש מחלוקת'},
+    ]
+  },
+  songs: {
+    easy: [
+      {q:'איך מתחיל השיר "אחד מי יודע"?', a:['אחד אני יודע','אחד הוא אלוקינו','ברוך אתה ה\''], correct:0, hint:'שיר ספירה עד שלוש עשרה'},
+      {q:'מה שרים בסיום הסדר?', a:['חד גדיא ואחד מי יודע','מה נשתנה','שמע ישראל'], correct:0, hint:'שני שירים כיפיים לפני השינה'},
+      {q:'מה שרים הילדים בתחילת חלק "מגיד" בסדר?', a:['מה נשתנה','חד גדיא','הלל'], correct:0, hint:'ארבע שאלות שהילד שואל'},
+      {q:'מה שם השיר שאומרים כשמגיעים לעשר המכות בהגדה?', a:['אין שיר — שופכים יין בשקט','דיינו','הלל'], correct:0, hint:'לא שרים — שופכים טיפת יין על כל מכה'},
+      {q:'מה משמעות "דיינו"?', a:['היה מספיק לנו','תודה','יפה מאוד'], correct:0, hint:'גם על כל נס לבד — דיינו!'},
+      {q:'כמה נסים מוזכרים בשיר "דיינו"?', a:['חמישה עשר','עשרה','שבעה'], correct:0, hint:'בכל בית מוזכר נס אחר'},
+      {q:'כמה שאלות שואלים בשיר "מה נשתנה"?', a:['ארבע שאלות','שתי שאלות','שש שאלות'], correct:0, hint:'מה נשתנה הלילה הזה...'},
+      {q:'מי שואל את "מה נשתנה"?', a:['ילד שיכול לשאול','אבא','כולם יחד'], correct:0, hint:'בדרך כלל הילד הצעיר שיכול לדבר'},
+      {q:'מה שם השיר שסופר מאחד עד שלוש עשרה?', a:['אחד מי יודע','חד גדיא','דיינו'], correct:0, hint:'שיר ספירה עם שאלות ותשובות'},
+      {q:'מה שרים אחרי כל נס בשיר הארוך מיציאת מצרים?', a:['דיינו','הללויה','אמן'], correct:0, hint:'גם אם ה\' היה עושה רק את הנס הזה — היה מספיק'},
+    ],
+    medium: [
+      {q:'מה אומרים אחרי כל בית בשיר "דיינו"?', a:['דיינו — היה מספיק לנו','הלל','אמן'], correct:0, hint:'המילה שחוזרת כל הזמן בשיר'},
+      {q:'מה ההבדל בין "מה נשתנה" ל"דיינו"?', a:['מה נשתנה — שאלות, דיינו — תודה על הנסים','שניהם שאלות','שניהם שירי שבח'], correct:0, hint:'אחד שואל, השני אומר תודה'},
+      {q:'כיצד נקרא ההלל שבפרקים קיג-קיח בתהילים?', a:['הלל — ואומרים אותו בפסח','הלל הגדול','הלל הקטן'], correct:0, hint:'הלל סתם — אומרים בכל רגל'},
+      {q:'מה שרים כשפותחים הדלת לאליהו?', a:['שפוך חמתך','חד גדיא','הלל'], correct:0, hint:'פסוק מתהילים'},
+      {q:'מה ה"הלל" שאומרים בסוף ליל הסדר?', a:['תהילים קטו-קיח — חלק שני של ההלל','פרק אחד בלבד','כל ספר תהילים'], correct:0, hint:'מחלקים את ההלל — חלק לפני הסעודה וחלק אחריה'},
+      {q:'מה מסמל הגדי הקטן בשיר "חד גדיא" לפי הפרשנות?', a:['עם ישראל','הגדי עצמו','יוסף הצדיק'], correct:0, hint:'אבא קנה בשני זוזי = ה\' בחר בישראל'},
+      {q:'מה מספר "שניים מי יודע"?', a:['לוחות הברית','שני בתי המקדש','שניים עשר שבטים'], correct:0, hint:'שני לוחות שמשה קיבל'},
+      {q:'מה "שלושה מי יודע"?', a:['שלושה אבות','שלוש הרגלים','שלוש מצוות'], correct:0, hint:'אברהם יצחק ויעקב'},
+      {q:'מה "שבעה מי יודע" בשיר?', a:['שבעה ימי השבוע','שבעה ימי פסח','שבעה ימי אבל'], correct:0, hint:'שבתא בארמית = שבוע'},
+      {q:'מה "שנים עשר מי יודע"?', a:['שנים עשר שבטי ישראל','שנים עשר חודשי השנה','שניהם'], correct:0, hint:'שנים עשר בני יעקב'},
+    ],
+    hard: [
+      {q:'כמה לשונות גאולה יש בתורה שכנגדן שותים ארבע כוסות?', a:['ארבע','שלוש','חמש'], correct:0, hint:'והוצאתי והצלתי וגאלתי ולקחתי'},
+      {q:'מה ההלל הגדול ואיזה תהילים הוא?', a:['תהילים קלו — כי לעולם חסדו','תהילים קיג-קיח','תהילים קמה'], correct:0, hint:'כל פסוק מסתיים בפזמון אחד'},
+      {q:'כמה פעמים מופיע הפזמון "כי לעולם חסדו" בתהילים קלו?', a:['עשרים ושש פעמים — כמספר כל פסוק','עשר פעמים','שלוש עשרה פעמים'], correct:0, hint:'כמספר פסוקי הפרק'},
+      {q:'עד כמה מגיע השיר "אחד מי יודע"?', a:['שלושה עשר','עשרה','עשרים'], correct:0, hint:'שלוש עשרה — מידות הרחמים'},
+      {q:'לפי הילקוט יוסף — מתי גומרים ההלל בברכות בפסח?', a:['רק בלילה הראשון וביום טוב הראשון','כל שבעת ימי הפסח','רק בליל הסדר'], correct:0, hint:'בחול המועד — הלל בדילוג ובלי ברכה'},
+      {q:'מה "ונאמר לפניו שירה חדשה"?', a:['חלק מהלל בהגדה','הבטחה לעתיד','שיר מהתנ"ך'], correct:0, hint:'אומרים בסוף ההלל'},
+      {q:'לפי הילקוט יוסף — האם נשים חייבות בהלל בליל הסדר?', a:['כן — גם הן היו באותו הנס','לא — פטורות ממצוות זמן','רק שומעות'], correct:0, hint:'אף הן היו באותו הנס — לכן חייבות'},
+      {q:'מה "בצאת ישראל ממצרים"?', a:['תהילים קיד — נאמר בהלל','שיר עממי','שם ספר'], correct:0, hint:'ים ראה וינוס...'},
+      {q:'מה קורה בסוף שיר "חד גדיא" — מי מנצח?', a:['הקב"ה — הוא שוחט את מלאך המות','החתול','המים'], correct:0, hint:'בסוף הכל — ה\' הוא השולט'},
+      {q:'מה "לפיכך" בהגדה — ולמה אומרים אותו?', a:['מעבר מהסיפור לשיר ההלל — "לכן אנו חייבים לשבח"','ברכה','שם פסוק'], correct:0, hint:'לכן — כי ה\' עשה לנו את כל הנסים האלה'},
+    ]
+  }
+};
+
+// ==================== HALACHA QUESTIONS (Yalkut Yosef) ====================
+QUESTIONS.halacha = {
+  easy: [
+    {q:'האם מברכים "על אכילת מצה" בשאר ימי הפסח?', a:['לא — רק בלילה הראשון','כן — כל שבעה','כן — רק בשבת'], correct:0, hint:'מצות אכילת מצה היא חובה רק בלילה הראשון'},
+    {q:'כמה כוסות יין שותים בסדר הפסח לפי ההלכה?', a:['ארבע','שתיים','שלוש'], correct:0, hint:'כנגד ארבע לשונות גאולה'},
+    {q:'האם נשים חייבות בארבע כוסות?', a:['כן — גם הן היו באותו הנס','לא — פטורות','רק כוס אחת'], correct:0, hint:'אף הן היו באותו הנס'},
+    {q:'האם מותר לאכול מצה בערב פסח?', a:['אסור — כדי שתהיה התאבות בלילה','מותר','מחלוקת'], correct:0, hint:'שמרים את המצה לסדר'},
+    {q:'מה ברכת הנטילה לפני אכילת מצה בסדר?', a:['על נטילת ידים','על אכילת מצה','שתיהן'], correct:0, hint:'כמו כל נטילת ידים לאכילת לחם'},
+    {q:'כמה זיתים של מצה צריך לאכול לכתחילה בליל הסדר? (ילקוט יוסף סי׳ תעה)', a:['שני זיתים — אחד מהשלמה ואחד מהפרוסה','כזית אחד בלבד','כביצה שלמה'], correct:0, hint:'בדיעבד ובמקום צער — יוצאים בכזית אחד'},
+    {q:'האם מותר לשתות יין בין כוס שלישית לרביעית?', a:['לא — אסור','כן — מותר','רק מים'], correct:0, hint:'יין בין הכוסות — אסור'},
+    {q:'מה עושים עם שאריות חמץ לפני פסח?', a:['שורפים אותו — ביעור חמץ','זורקים לפח','נותנים לשכן'], correct:0, hint:'מצוות ביעור חמץ'},
+    {q:'עד מתי מותר לאכול חמץ בערב פסח?', a:['עד סוף שעה רביעית של היום','עד חצות','עד הערב'], correct:0, hint:'ארבע שעות מהנץ החמה'},
+    {q:'האם קטנים חייבים בסיפור יציאת מצרים?', a:['כן — מצוה לחנכם','לא — פטורים לגמרי','רק מגיל בר מצוה'], correct:0, hint:'ומצות חינוך חלה עליהם'},
+  ],
+  medium: [
+    {q:'מה הדין אם שכח "יעלה ויבוא" בברכת המזון בלילה הראשון של פסח?', a:['חוזר לראש ברכת המזון','אינו חוזר','אומר יעלה ויבא בפני עצמו'], correct:0, hint:'ליל הסדר — חובה גמורה לאכול בסוכה'},
+    {q:'האם צריך היסבה בשתיית ארבע הכוסות?', a:['כן — לכתחילה','לא — רשות','רק בכוס ראשונה'], correct:0, hint:'זכר לחירות'},
+    {q:'אם שתה ארבע כוסות ולא היסב — מה דינו?', a:['יחזור וישתה בהיסבה','יצא ידי חובה','שאלת מחלוקת'], correct:0, hint:'לדעת מרן חוזר ושותה'},
+    {q:'מה נוסח הספירה הנכון — "לעומר" או "בעומר"?', a:['לעומר — זה הנוסח הנכון','בעומר','שניהם כשרים'], correct:0, hint:'ילקוט יוסף פוסק: לעומר'},
+    {q:'עד מתי צריך לאכול את האפיקומן?', a:['לפני חצות הלילה','עד עלות השחר','כל הלילה'], correct:0, hint:'כמו קרבן הפסח שהיה עד חצות'},
+    {q:'האם נשים חייבות בהלל בליל הסדר?', a:['כן — גם הן היו באותו הנס','לא — פטורות','מחלוקת'], correct:0, hint:'אף הן היו באותו הנס'},
+    {q:'מה הדין לגבי מי ששכח לספור ספירת העומר לילה שלם?', a:['ממשיך לספור ללא ברכה','ממשיך עם ברכה','אינו יכול להמשיך'], correct:0, hint:'ספק ברכות — להקל'},
+    {q:'האם ספירת העומר בזמן הזה מדאורייתא או מדרבנן?', a:['מדרבנן — זכר למקדש','מדאורייתא','מחלוקת ואין פסיקה'], correct:0, hint:'ילקוט יוסף פוסק: מדרבנן בזמן הזה'},
+    {q:'מה מברכים על ספירת העומר?', a:['וצונו על ספירת העומר','וצונו לספור את העומר','וצונו לזכור את העומר'], correct:0, hint:'הנוסח הקבוע בסידורים'},
+    {q:'מתי זמן ספירת העומר לכתחילה?', a:['אחר צאת הכוכבים','אחר שקיעת החמה','בכל שעה שרוצה'], correct:0, hint:'לילה — וספרתם לכם'},
+  ],
+  hard: [
+    {q:'מה הדין לפי הילקוט יוסף אם שכח "יעלה ויבא" בתפילת ערבית של חול המועד?', a:['חוזר לראש התפילה','אינו חוזר','אומר בין הברכות'], correct:0, hint:'חול המועד — כמו יום טוב לעניין חזרה'},
+    {q:'מה פסיקת הילקוט יוסף לגבי גמר ההלל בברכות בפסח?', a:['רק בלילה הראשון וביום טוב הראשון','כל שבעה בברכות','רק בסדר'], correct:0, hint:'בחול המועד — הלל בדילוג ובלי ברכה'},
+    {q:'מה עושה מי שנזכר שלא ספר ביום (לא בלילה)?', a:['סופר ביום בלי ברכה ומשך ממשיך בברכה','אינו יכול להמשיך','סופר ביום עם ברכה'], correct:0, hint:'ספירה ביום מצילה אותו להמשיך'},
+    {q:'מה הדין לגבי ברכת "שהחיינו" בספירת העומר?', a:['אין מברכים — ספירה מדרבנן ואין שהחיינו על מצוות שבדיבור','מברכים בלילה הראשון','מחלוקת'], correct:0, hint:'שתי סיבות לפטור משהחיינו'},
+    {q:'אם שאל חבירו "כמה לעומר?" אחרי שקיעה — מה יענה?', a:['אתמול היה כך וכך — לא יאמר היום','יאמר כרגיל','לא יענה בכלל'], correct:0, hint:'אם יאמר "היום" — יצא ידי חובה ולא יוכל לברך'},
+    {q:'מה ההלכה לגבי האוכל חמץ אחרי שעה שישית בערב פסח?', a:['עובר על איסור תורה','עובר על איסור דרבנן','מותר לגמרי'], correct:0, hint:'שעה שישית — כבר אסור מהתורה'},
+    {q:'מה הדין אם בדק חמץ ולא מצא — ומה אומר?', a:['אומר "כל חמירא" — ביטול חמץ','אינו צריך לעשות כלום','שורף ריק'], correct:0, hint:'ביטול חמץ בלב ובפה'},
+    {q:'האם מותר לאכול מצה ביום שלפני פסח — ערב פסח?', a:['אסור — כדי שיאכל בתיאבון בלילה','מותר','אסור מהתורה'], correct:0, hint:'כדי שיאכל מצה לשם מצוה בלילה'},
+    {q:'לפי הילקוט יוסף — האם מסובים חייבים בהיסבה?', a:['כן — כולם חייבים','רק בעל הבית','בזמן הזה פטורים'], correct:0, hint:'זכר לחירות — כולם חייבים'},
+    {q:'מה דין מי שספר ספירת העומר בהרהור לב בלבד?', a:['לא יצא — חוזר וסופר בפה','יצא בדיעבד','מחלוקת'], correct:0, hint:'הרהור לאו כדיבור דמי'},
+  ]
+};
+let selectedCats = [];
+let selectedDiff = '';
+let quizQuestions = [];
+let qIndex = 0;
+let score = 0;
+let correctCount = 0;
+let maxStreak = 0;
+let curStreak = 0;
+let hintsUsed = 0;
+let hintUsedThisQ = false;
+let answered = false;
+let muted = false;
+let audioCtx = null;
+let dotResults = []; // 'correct' | 'wrong' | 'pending'
+
+const CAT_COLORS = { egypt:'#E63946', makot:'#7B2D8B', seder:'#457B9D', songs:'#2D9E6B', halacha:'#8B5E00' };
+const CAT_NAMES = { egypt:'יציאת מצרים 🌴', makot:'עשר המכות 🐸', seder:'ליל הסדר 🍷', songs:'שירים 🎵', halacha:'הלכה 📖' };
+const DIFF_NAMES = { easy:'🌱 קל', medium:'📖 בינוני', hard:'🔥 קשה' };
+const FLOATER_EMOJIS = ['🐸','🌴','✡️','🍷','🎵','⭐','🌙','🕍','📜','🍯'];
+
+// ==================== LEVELS & PROGRESS ====================
+const LEVELS = [
+  { min:0,   name:'מתחיל 🌱',      emoji:'🌱' },
+  { min:50,  name:'לומד 📖',        emoji:'📖' },
+  { min:150, name:'חכם קטן 🌟',     emoji:'🌟' },
+  { min:300, name:'יודע תורה ✡️',   emoji:'✡️' },
+  { min:500, name:'חכם פסח 🍷',     emoji:'🍷' },
+  { min:750, name:'מכיר המכות 🐸',  emoji:'🐸' },
+  { min:1000,name:'בן חורין 🗺️',   emoji:'🗺️' },
+  { min:1400,name:'גאון פסח 👑',    emoji:'👑' },
+  { min:2000,name:'חידון אלוף 🏆',  emoji:'🏆' },
+];
+
+const ACHIEVEMENTS = [
+  { id:'first',    emoji:'👣', name:'צעד ראשון',    desc:'ענית על שאלה ראשונה',          check: s => s.totalCorrect >= 1 },
+  { id:'streak5',  emoji:'🔥', name:'רצף לוהט',     desc:'5 נכון ברצף',                  check: s => s.maxStreak >= 5 },
+  { id:'perfect',  emoji:'💎', name:'מושלם!',        desc:'10/10 ללא רמזים',              check: s => s.perfectRounds >= 1 },
+  { id:'p100',     emoji:'⭐', name:'100 נקודות',    desc:'הגעת ל-100 נקודות',            check: s => s.totalPoints >= 100 },
+  { id:'p500',     emoji:'🌟', name:'500 נקודות',    desc:'הגעת ל-500 נקודות',            check: s => s.totalPoints >= 500 },
+  { id:'p1000',    emoji:'👑', name:'אלף נקודות!',   desc:'הגעת ל-1000 נקודות',           check: s => s.totalPoints >= 1000 },
+  { id:'egypt',    emoji:'🌴', name:'מומחה מצרים',   desc:'סיימת נושא יציאת מצרים',       check: s => s.completedCats.includes('egypt') },
+  { id:'makot',    emoji:'🐸', name:'יודע המכות',    desc:'סיימת נושא עשר המכות',         check: s => s.completedCats.includes('makot') },
+  { id:'seder',    emoji:'🍷', name:'בקי בסדר',      desc:'סיימת נושא ליל הסדר',          check: s => s.completedCats.includes('seder') },
+  { id:'songs',    emoji:'🎵', name:'זמר פסח',       desc:'סיימת נושא שירים',             check: s => s.completedCats.includes('songs') },
+  { id:'allcats',  emoji:'🏆', name:'כל הנושאים!',   desc:'סיימת את כל 4 הנושאים',       check: s => s.completedCats.length >= 4 },
+  { id:'rounds10', emoji:'🎓', name:'10 סבבים',      desc:'שיחקת 10 סבבים',               check: s => s.totalRounds >= 10 },
+];
+
+// Persistent state via localStorage
+let gstate = JSON.parse(localStorage.getItem('pesachQuiz_v2') || 'null') || {
+  totalPoints: 0, maxStreak: 0, totalCorrect: 0,
+  perfectRounds: 0, completedCats: [], totalRounds: 0,
+  earnedAchievements: []
+};
+
+function saveGstate() {
+  try { localStorage.setItem('pesachQuiz_v2', JSON.stringify(gstate)); } catch(e) {}
+}
+
+function getLevel(pts) {
+  let lv = LEVELS[0];
+  for (const l of LEVELS) { if (pts >= l.min) lv = l; else break; }
+  return lv;
+}
+function getNextLevel(pts) {
+  for (const l of LEVELS) { if (pts < l.min) return l; }
+  return null;
+}
+
+function renderSplashProgress() {
+  const lv = getLevel(gstate.totalPoints);
+  const next = getNextLevel(gstate.totalPoints);
+  document.getElementById('splash-level').textContent = lv.emoji + ' ' + lv.name;
+  document.getElementById('splash-xp-label').textContent = gstate.totalPoints + ' נקודות';
+  if (next) {
+    const pct = ((gstate.totalPoints - lv.min) / (next.min - lv.min)) * 100;
+    document.getElementById('splash-xp-fill').style.width = Math.min(pct, 100) + '%';
+    document.getElementById('splash-xp-next').textContent = 'לרמה הבאה: ' + next.min + ' נק׳';
+  } else {
+    document.getElementById('splash-xp-fill').style.width = '100%';
+    document.getElementById('splash-xp-next').textContent = '🏆 רמה מקסימלית!';
+  }
+  // achievements
+  const row = document.getElementById('achievements-row');
+  row.innerHTML = '';
+  ACHIEVEMENTS.forEach(a => {
+    const earned = gstate.earnedAchievements.includes(a.id);
+    const div = document.createElement('div');
+    div.className = 'ach-badge ' + (earned ? 'earned' : 'locked');
+    div.title = a.desc;
+    div.textContent = a.emoji + ' ' + a.name;
+    row.appendChild(div);
+  });
+}
+
+function checkAchievements() {
+  let newOnes = [];
+  ACHIEVEMENTS.forEach(a => {
+    if (!gstate.earnedAchievements.includes(a.id) && a.check(gstate)) {
+      gstate.earnedAchievements.push(a.id);
+      newOnes.push(a);
+    }
+  });
+  return newOnes;
+}
+
+function showLevelUp(lv) {
+  document.getElementById('lu-emoji').textContent = lv.emoji;
+  document.getElementById('lu-name').textContent = lv.name;
+  document.getElementById('levelup-overlay').classList.add('show');
+  playLevelUp();
+  spawnParticles(window.innerWidth/2, window.innerHeight/2, ['⭐','🎉','✨','👑','🌟'], 22);
+}
+function closeLevelUp() {
+  document.getElementById('levelup-overlay').classList.remove('show');
+}
+function playLevelUp() {
+  [440,554,659,880,1108].forEach((f,i) => tone(f, 0.28, 'triangle', 0.22, i*0.13));
+}
+
+
+function initFloaters() {
+  const c = document.getElementById('floaters');
+  FLOATER_EMOJIS.forEach((e, i) => {
+    const d = document.createElement('div');
+    d.className = 'floater';
+    d.textContent = e;
+    d.style.cssText = `left:${Math.random()*95}%;--fs:${Math.floor(Math.random()*22+18)}px;--dur:${Math.floor(Math.random()*10+12)}s;--del:${Math.floor(Math.random()*14)}s`;
+    c.appendChild(d);
+  });
+}
+initFloaters();
+
+// ==================== AUDIO ====================
+function getAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+function tone(freq, dur, type='sine', vol=0.18, delay=0) {
+  if (muted) return;
+  try {
+    const ctx = getAudio();
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = type; o.frequency.value = freq;
+    const t = ctx.currentTime + delay;
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(vol, t+0.025);
+    g.gain.exponentialRampToValueAtTime(0.001, t+dur);
+    o.start(t); o.stop(t+dur+0.05);
+  } catch(e){}
+}
+function playCorrect() {
+  [523,659,784,1047].forEach((f,i)=>tone(f,0.22,'triangle',0.2,i*0.09));
+}
+function playWrong() {
+  tone(220,0.35,'sawtooth',0.12);
+  setTimeout(()=>tone(185,0.3,'sawtooth',0.1),160);
+}
+function playStart() {
+  [440,550,660].forEach((f,i)=>tone(f,0.2,'triangle',0.18,i*0.1));
+}
+function playFinish() {
+  [523,587,659,784,1047].forEach((f,i)=>tone(f,0.3,'triangle',0.22,i*0.12));
+}
+function toggleMute() {
+  muted = !muted;
+  document.getElementById('mute-btn').textContent = muted ? '🔇' : '🔊';
+}
+
+// ==================== PARTICLES ====================
+function spawnParticles(x,y,emojis,n=8) {
+  for(let i=0;i<n;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    const a=Math.random()*360, d=50+Math.random()*100;
+    const dx=Math.cos(a*Math.PI/180)*d, dy=Math.sin(a*Math.PI/180)*d;
+    p.style.cssText=`left:${x}px;top:${y}px;transform:translate(-50%,-50%);animation-duration:${0.9+Math.random()*0.6}s;--dx:${dx}px;--dy:${dy}px`;
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),1600);
+  }
+}
+
+// ==================== FEEDBACK ====================
+function showFeedbackMsg(text, color) {
+  const el = document.getElementById('feedback-msg');
+  el.textContent = text;
+  el.style.color = color;
+  el.className = 'feedback-msg show';
+  setTimeout(()=>{ el.className='feedback-msg hide'; setTimeout(()=>{ el.className='feedback-msg'; },400); },800);
+}
+
+// ==================== SPLASH INTERACTIONS ====================
+function toggleCat(cat) {
+  getAudio();
+  const btn = document.querySelector(`.cat-btn[data-cat="${cat}"]`);
+  const idx = selectedCats.indexOf(cat);
+  if (idx >= 0) { selectedCats.splice(idx,1); btn.classList.remove('selected'); }
+  else { selectedCats.push(cat); btn.classList.add('selected'); }
+  updateStartBtn();
+}
+function selectDiff(diff) {
+  getAudio();
+  document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelector(`.diff-btn[data-diff="${diff}"]`).classList.add('selected');
+  selectedDiff = diff;
+  updateStartBtn();
+}
+function updateStartBtn() {
+  document.getElementById('start-btn').disabled = !(selectedCats.length > 0 && selectedDiff !== '');
+}
+
+// ==================== BUILD QUIZ ====================
+function buildQuiz() {
+  let pool = [];
+  selectedCats.forEach(cat => {
+    const qs = QUESTIONS[cat][selectedDiff];
+    qs.forEach(q => pool.push({...q, cat}));
+  });
+  // shuffle
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  // take up to 10
+  quizQuestions = pool.slice(0, Math.min(10, pool.length));
+}
+
+// ==================== START ====================
+function startQuiz() {
+  buildQuiz();
+  if (quizQuestions.length === 0) return;
+  qIndex = 0; score = 0; correctCount = 0; maxStreak = 0; curStreak = 0; hintsUsed = 0;
+  dotResults = quizQuestions.map(()=>'pending');
+  showScreen('quiz');
+  playStart();
+  updateTopBar();
+  renderQuestion();
+}
+
+// ==================== RENDER Q ====================
+function renderQuestion() {
+  const q = quizQuestions[qIndex];
+  hintUsedThisQ = false; answered = false;
+
+  // dots
+  const dr = document.getElementById('dots-row');
+  dr.innerHTML = '';
+  dotResults.forEach((r,i) => {
+    const d = document.createElement('div');
+    const cls = i < qIndex ? (r==='correct'?'done':'wrong-dot') : i===qIndex?'current':'';
+    d.className = 'dot ' + cls;
+    dr.appendChild(d);
+  });
+
+  // q num
+  document.getElementById('q-num').textContent = qIndex+1;
+  document.getElementById('q-total').textContent = quizQuestions.length;
+
+  // cat tag
+  const tag = document.getElementById('q-cat-tag');
+  tag.style.background = CAT_COLORS[q.cat];
+  tag.textContent = CAT_NAMES[q.cat];
+
+  // question text
+  document.getElementById('q-text').textContent = q.q;
+
+  // hint
+  document.getElementById('hint-box').className = 'hint-box';
+  document.getElementById('hint-box').textContent = '';
+  const hb = document.getElementById('hint-btn');
+  hb.disabled = false;
+  hb.textContent = '💡 רמז';
+
+  // answers — shuffle
+  const indices = [0,1,2];
+  for(let i=2;i>0;i--){const j=Math.floor(Math.random()*(i+1));[indices[i],indices[j]]=[indices[j],indices[i]];}
+  const letters = ['א','ב','ג'];
+  const ag = document.getElementById('answers');
+  ag.innerHTML = '';
+  indices.forEach((idx, pos) => {
+    const btn = document.createElement('button');
+    btn.className = 'ans-btn';
+    btn.innerHTML = `<span class="ans-letter">${letters[pos]}</span> ${q.a[idx]}`;
+    btn.onclick = () => handleAnswer(idx === q.correct, btn, q);
+    ag.appendChild(btn);
+  });
+
+  // card animation
+  const card = document.getElementById('q-card');
+  card.style.animation = 'none'; void card.offsetWidth; card.style.animation = 'cardIn 0.4s cubic-bezier(0.34,1.56,0.64,1)';
+}
+
+// ==================== ANSWER ====================
+function handleAnswer(isCorrect, btn, q) {
+  if (answered) return;
+  answered = true;
+  getAudio();
+
+  document.querySelectorAll('.ans-btn').forEach(b=>b.disabled=true);
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    const pts = hintUsedThisQ ? 5 : 10;
+    score += pts; correctCount++;
+    curStreak++; if(curStreak>maxStreak) maxStreak=curStreak;
+    dotResults[qIndex] = 'correct';
+    playCorrect();
+    const r = btn.getBoundingClientRect();
+    spawnParticles(r.left+r.width/2, r.top+r.height/2, ['⭐','✨','🌟','💫','🎉'], 10);
+    showFeedbackMsg('כל הכבוד! 🎉', var_easy());
+    setTimeout(nextQ, 900);
+  } else {
+    btn.classList.add('wrong');
+    // show correct
+    document.querySelectorAll('.ans-btn').forEach(b => {
+      const txt = b.textContent.trim().slice(2); // remove letter
+      if (q.a[q.correct] === txt) b.classList.add('correct');
+    });
+    curStreak = 0;
+    dotResults[qIndex] = 'wrong';
+    playWrong();
+    showFeedbackMsg('נסה שוב! 💪', '#E63946');
+    setTimeout(nextQ, 1400);
+  }
+  updateTopBar();
+}
+
+function var_easy() { return selectedDiff==='easy'?'#2D9E6B':selectedDiff==='medium'?'#457B9D':'#E63946'; }
+
+function showHint() {
+  const q = quizQuestions[qIndex];
+  document.getElementById('hint-box').textContent = '💡 ' + q.hint;
+  document.getElementById('hint-box').className = 'hint-box show';
+  hintUsedThisQ = true; hintsUsed++;
+  const hb = document.getElementById('hint-btn');
+  hb.disabled = true; hb.textContent = '💡 הרמז הוצג';
+}
+
+function nextQ() {
+  qIndex++;
+  if (qIndex < quizQuestions.length) {
+    updateTopBar();
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function updateTopBar() {
+  document.getElementById('score-display').textContent = score;
+  const db = document.getElementById('diff-badge');
+  db.className = 'diff-badge ' + selectedDiff;
+  db.textContent = DIFF_NAMES[selectedDiff];
+}
+
+// ==================== RESULT ====================
+function showResult() {
+  showScreen('result');
+  playFinish();
+  const total = quizQuestions.length;
+  const pct = correctCount / total;
+  let emoji, title;
+  if (pct === 1) { emoji='🏆'; title='מושלם לגמרי!'; }
+  else if (pct >= 0.8) { emoji='🌟'; title='כל הכבוד!'; }
+  else if (pct >= 0.6) { emoji='👍'; title='יפה מאוד!'; }
+  else if (pct >= 0.4) { emoji='💪'; title='ממשיכים לנסות!'; }
+  else { emoji='🐸'; title='תנסה שוב!'; }
+
+  const stars = pct===1?3:pct>=0.6?2:1;
+  document.getElementById('res-emoji').textContent = emoji;
+  document.getElementById('res-title').textContent = title;
+  document.getElementById('res-stars').textContent = '⭐'.repeat(stars)+'☆'.repeat(3-stars);
+  document.getElementById('res-score').textContent = `${correctCount}/${total}`;
+  document.getElementById('res-correct').textContent = `${correctCount}/${total}`;
+  document.getElementById('res-time').textContent = `🔥${maxStreak}`;
+  document.getElementById('res-hints').textContent = `💡${hintsUsed}`;
+
+  // update global state
+  const prevLevel = getLevel(gstate.totalPoints);
+  gstate.totalPoints += score;
+  gstate.totalCorrect += correctCount;
+  gstate.totalRounds++;
+  if (maxStreak > gstate.maxStreak) gstate.maxStreak = maxStreak;
+  if (pct === 1 && hintsUsed === 0) gstate.perfectRounds++;
+  // mark categories completed (if scored >=60%)
+  if (pct >= 0.6) {
+    selectedCats.forEach(cat => {
+      if (!gstate.completedCats.includes(cat)) gstate.completedCats.push(cat);
+    });
+  }
+  const newLevel = getLevel(gstate.totalPoints);
+  saveGstate();
+
+  // check achievements
+  const newAchs = checkAchievements();
+  saveGstate();
+
+  // show achievement banner if earned
+  const resBanner = document.getElementById('res-achievement');
+  if (newAchs.length > 0) {
+    resBanner.textContent = '🏆 הישג חדש: ' + newAchs.map(a => a.emoji + ' ' + a.name).join(' | ');
+    resBanner.style.display = 'block';
+  } else {
+    resBanner.style.display = 'none';
+  }
+
+  spawnParticles(window.innerWidth/2, window.innerHeight*.3, ['⭐','🎉','✨','🌟','🏆','🐸'], 18);
+
+  // show levelup after short delay
+  if (newLevel.min !== prevLevel.min) {
+    setTimeout(() => showLevelUp(newLevel), 700);
+  }
+}
+
+// ==================== NAVIGATION ====================
+function confirmHome() {
+  const el = document.getElementById('confirm-home');
+  el.style.display = 'flex';
+}
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function retryQuiz() { document.getElementById('confirm-home').style.display='none'; startQuiz(); }
+function goHome() {
+  document.getElementById('confirm-home').style.display='none';
+  renderSplashProgress();
+  showScreen('splash');
+}
+
+// init on load
+renderSplashProgress();
+</script>
+</body>
+</html>

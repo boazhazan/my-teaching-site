@@ -33,6 +33,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);
 .legend{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;justify-content:center}
 .leg-item{display:flex;align-items:center;gap:6px;padding:6px 12px;background:#fff;border-radius:var(--radius-sm);border:1px solid var(--border);border-right-width:4px;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.2s;user-select:none}
 .leg-item:hover{box-shadow:var(--shadow)}.leg-item.active{background:var(--pri-light);box-shadow:0 0 0 2px var(--pri),var(--shadow-md);transform:scale(1.08)}
+.dm .leg-item{cursor:default;pointer-events:none}.dm .cc-head{cursor:default;pointer-events:none}
 .shapes-card{position:relative;min-height:300px;background:radial-gradient(circle,#e2e8f0 1px,transparent 1px),#fff;background-size:20px 20px;border-radius:var(--radius);border:2px solid var(--border);box-shadow:var(--shadow-md);overflow:hidden;margin-bottom:20px}
 .ss{position:absolute;cursor:pointer;overflow:visible;transition:filter 0.2s}
 .ss:hover .sp{stroke-width:3.5px}
@@ -222,6 +223,7 @@ for(var i=0;i<ld.types.length;i++){var t=ld.types[i];
 el.innerHTML+='<div class="leg-item" data-type="'+t+'" style="border-right-color:'+SC[t].color+'" onclick="selectType(\''+t+'\')">'+iconSVG(t,22)+'<span>'+SC[t].name+'</span></div>'}
 }
 function selectType(type){
+if(mode==='draw')return;
 activeType=(activeType===type)?null:type;
 var items=document.querySelectorAll('.leg-item');
 for(var i=0;i<items.length;i++)items[i].classList.toggle('active',items[i].getAttribute('data-type')===activeType);
@@ -374,7 +376,7 @@ mode=m;var bs=document.querySelectorAll('.mbtn');
 for(var i=0;i<bs.length;i++)bs[i].classList.remove('on');
 if(m==='click')bs[0].classList.add('on');else if(m==='draw')bs[1].classList.add('on');
 var ct=document.getElementById('ct');
-if(m==='draw'){ct.classList.add('dm');setupDraw()}else{ct.classList.remove('dm')}
+if(m==='draw'){ct.classList.add('dm');activeType=null;var li=document.querySelectorAll('.leg-item');for(var j=0;j<li.length;j++)li[j].classList.remove('active');var cc=document.querySelectorAll('.count-card');for(var j=0;j<cc.length;j++)cc[j].classList.remove('selecting');setupDraw()}else{ct.classList.remove('dm')}
 if(ld)renderShapes();
 }
 function setupDraw(){

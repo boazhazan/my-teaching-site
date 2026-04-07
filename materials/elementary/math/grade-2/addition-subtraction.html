@@ -907,6 +907,9 @@ const levels = [
 ];
 
 // ===== HELPERS =====
+function mathDir(s){
+  return s.replace(/([\d☐]+\s*[+\-−×÷=]\s*[\d]+(?:\s*[+\-−×÷=→]\s*[\d]+)*)/g,'<bdi dir="ltr">$1</bdi>');
+}
 function randRange(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
 function makeQ(a, op, b) {
@@ -1010,8 +1013,8 @@ function renderLevel() {
 
   // Show tip
   const lvl = levels[currentLevel];
-  document.getElementById('tipText').textContent = lvl.tip;
-  document.getElementById('tipExample').textContent = lvl.example;
+  document.getElementById('tipText').innerHTML = mathDir(lvl.tip);
+  document.getElementById('tipExample').innerHTML = mathDir(lvl.example);
   const tipEl = document.getElementById('levelTip');
   tipEl.classList.remove('collapsed');
   document.getElementById('tipToggle').textContent = '▲ הסתר';

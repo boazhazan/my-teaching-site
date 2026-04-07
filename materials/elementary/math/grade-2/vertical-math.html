@@ -252,6 +252,8 @@ body {
   text-align: center;
   font-weight: 500;
   line-height: 1.8;
+  font-family: 'Courier New', monospace;
+  white-space: pre-wrap;
 }
 
 /* ===== QUESTION CARD ===== */
@@ -814,6 +816,9 @@ const levels = [
 ];
 
 // ===== HELPERS =====
+function mathDir(s){
+  return s.replace(/([\d☐]+\s*[+\-−×÷=]\s*[\d]+(?:\s*[+\-−×÷=→]\s*[\d]+)*)/g,'<bdi dir="ltr">$1</bdi>');
+}
 function randRange(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
 
 function mkAdd(a,b){ return { a, b, op:'+', answer:a+b }; }
@@ -862,8 +867,8 @@ function renderLevel() {
   document.getElementById('progressText').textContent = `רמה ${currentLevel+1} מתוך ${levels.length}`;
 
   const lvl = levels[currentLevel];
-  document.getElementById('tipText').textContent = lvl.tip;
-  document.getElementById('tipExample').textContent = lvl.example;
+  document.getElementById('tipText').innerHTML = mathDir(lvl.tip);
+  document.getElementById('tipExample').innerHTML = mathDir(lvl.example).replace(/\n/g,'<br>');
   document.getElementById('levelTip').classList.remove('collapsed');
   document.getElementById('tipToggle').textContent = '▲ הסתר';
 

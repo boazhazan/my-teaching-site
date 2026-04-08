@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>מצא לפי תיאור — מצאו את הדמות הנכונה | הכנה לכיתה א | בועז חזן</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--pri:#2563eb;--pri-dark:#1d4ed8;--pri-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--ok:#10b981;--no:#ef4444;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06);--shadow-md:0 4px 6px rgba(0,0,0,0.07),0 2px 4px rgba(0,0,0,0.06);--shadow-lg:0 10px 15px rgba(0,0,0,0.1),0 4px 6px rgba(0,0,0,0.05)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-tap-highlight-color:transparent}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);min-height:100vh;direction:rtl;text-align:right;overflow-x:hidden;line-height:1.5}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(0)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0.6)}50%{box-shadow:0 0 0 12px rgba(245,158,11,0)}}
+@keyframes popIn{0%{opacity:0;transform:scale(0.85)}100%{opacity:1;transform:scale(1)}}
+.hd{background:linear-gradient(135deg,var(--pri-light) 0%,#fff 100%);padding:24px;text-align:center;border-bottom:3px solid var(--pri)}
+.hd h1{font-size:1.8rem;font-weight:800;color:var(--text);margin-bottom:4px}
+.hd .sub{font-size:1rem;color:var(--text-light)}
+.mb{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:20;flex-wrap:wrap}
+.mbtn{padding:8px 18px;border-radius:20px;border:2px solid var(--border);background:#fff;font-family:'Heebo',sans-serif;font-weight:600;font-size:0.9rem;cursor:pointer;transition:all 0.2s;white-space:nowrap;min-height:44px}
+.mbtn:hover{border-color:var(--pri)}.mbtn.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tw{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:56px;z-index:15;padding:0 8px}
+.ts{display:flex;gap:5px;overflow-x:auto;padding:10px 0;scrollbar-width:none;-webkit-overflow-scrolling:touch}.ts::-webkit-scrollbar{display:none}
+.tb{flex-shrink:0;padding:6px 14px;border-radius:16px;border:2px solid var(--border);background:#fff;font-family:'Heebo',sans-serif;font-weight:600;font-size:0.8rem;cursor:pointer;transition:all 0.25s;white-space:nowrap;min-height:44px;display:flex;align-items:center;justify-content:center}
+.tb:hover{border-color:var(--pri)}.tb.on{background:var(--pri);color:#fff;border-color:var(--pri)}.tb.dn{background:var(--ok);color:#fff;border-color:var(--ok)}
+.ct{max-width:900px;margin:0 auto;padding:20px 16px 80px}
+.progress-wrap{margin-bottom:16px;text-align:center}
+.progress-text{font-size:0.9rem;font-weight:600;color:var(--text-light);margin-bottom:6px}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--ok);border-radius:3px;transition:width 0.4s ease}
+.desc-box{background:#fffbeb;border:2px solid var(--accent);border-radius:var(--radius);padding:20px;margin-bottom:16px;text-align:center;animation:fi 0.3s ease}
+.desc-title{font-size:0.95rem;font-weight:700;color:var(--accent-dark);margin-bottom:10px}
+.desc-text{font-size:1.1rem;line-height:1.8;color:var(--text);font-weight:500}
+.desc-text b{color:var(--pri);font-weight:700}
+.hint-box{display:none;background:#fef2f2;border:2px solid var(--no);border-radius:var(--radius-sm);padding:10px 16px;margin-bottom:12px;text-align:center;font-size:0.9rem;font-weight:600;color:var(--no);animation:fi 0.2s ease}
+.hint-box.show{display:block}
+.chars-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;animation:fi 0.3s ease;position:relative}
+.chars-grid.cols4{grid-template-columns:repeat(4,1fr)}
+.char-card{background:#fff;border:2px solid var(--border);border-radius:var(--radius);padding:14px 8px;text-align:center;cursor:pointer;transition:all 0.25s;box-shadow:var(--shadow);user-select:none;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:120px;justify-content:center}
+.char-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:var(--pri)}
+.char-card .emoji-line{font-size:2rem;line-height:1.2;display:block}
+.char-card.correct{border-color:var(--ok);box-shadow:0 0 0 4px var(--ok);animation:bounce 0.5s ease}
+.char-card.wrong{animation:shake 0.5s ease;border-color:var(--no)}
+.char-card.dimmed{opacity:0.35;pointer-events:none;transform:none}
+.char-card.hint-pulse{animation:pulse 1s ease infinite;border-color:var(--accent)}
+.char-card.locked{pointer-events:none}
+.draw-overlay{position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;touch-action:none;cursor:crosshair;display:none}
+.draw-overlay.active{display:block}
+.comp{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:50;justify-content:center;align-items:center}.comp.show{display:flex}
+.comp-card{background:#fff;border-radius:16px;padding:32px 28px;text-align:center;box-shadow:var(--shadow-lg);animation:popIn 0.4s ease;max-width:360px;width:90%}
+.comp-card .big{font-size:3.5rem;margin-bottom:12px}
+.comp-card h2{font-size:1.3rem;font-weight:800;margin-bottom:8px}
+.comp-card p{font-size:0.95rem;color:var(--text-light);margin-bottom:16px}
+.brow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.pill{padding:10px 22px;border-radius:20px;border:none;font-family:'Heebo',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.2s;min-height:44px}
+.pill.primary{background:var(--pri);color:#fff}.pill.primary:hover{background:var(--pri-dark)}
+.pill.secondary{background:var(--bg-soft);color:var(--text);border:2px solid var(--border)}.pill.secondary:hover{border-color:var(--pri)}
+.summ{display:none;text-align:center;padding:24px}.summ.show{display:block}
+.summ h2{font-size:1.5rem;font-weight:800;margin-bottom:16px}
+.summ-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:12px;margin-bottom:24px}
+.summ-item{background:#fff;border-radius:var(--radius-sm);padding:12px;box-shadow:var(--shadow);text-align:center;cursor:pointer;transition:all 0.2s}
+.summ-item:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.summ-item .sn{font-size:1.2rem;font-weight:800;color:var(--pri);margin-bottom:4px}
+.summ-item .ss{font-size:0.8rem;font-weight:600}
+.summ-item .ss.done{color:var(--ok)}.summ-item .ss.pend{color:var(--text-light)}
+.score-line{font-size:0.85rem;font-weight:600;color:var(--text-light);margin-bottom:12px}
+@media(max-width:600px){
+.hd h1{font-size:1.4rem}.mbtn{padding:6px 14px;font-size:0.82rem}
+.tb{padding:5px 10px;font-size:0.75rem;min-height:38px}
+.desc-text{font-size:1rem;line-height:1.6}
+.chars-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+.chars-grid.cols4{grid-template-columns:repeat(2,1fr)}
+.char-card{padding:10px 6px;min-height:100px}
+.char-card .emoji-line{font-size:1.7rem}
+.pill{padding:8px 18px;font-size:0.85rem}
+.ct{padding:14px 10px 60px}
+}
+@media print{
+.mb,.tw,.comp,.summ,.progress-wrap,.hint-box,.draw-overlay{display:none!important}
+body{background:#fff}.ct{padding:10px;max-width:100%}.hd{border-bottom:2px solid #000;padding:12px}
+.desc-box{border:2px solid #333;background:#fff}.desc-text b{color:#000}
+.char-card{border:2px solid #999;box-shadow:none;break-inside:avoid}
+.chars-grid{gap:8px}
+}
+</style>
+</head>
+<body>
+<div class="hd"><h1>📝 מצא לפי תיאור</h1><div class="sub">קראו את התיאור ומצאו את הדמות המתאימה!</div></div>
+<div class="mb">
+<button class="mbtn on" id="btnClick" onclick="setMode('click')">👆 לחיצה</button>
+<button class="mbtn" id="btnDraw" onclick="setMode('draw')">✏️ ציור</button>
+<button class="mbtn" onclick="window.print()">🖨️ הדפסה</button>
+</div>
+<div class="tw"><div class="ts" id="tabs"></div></div>
+<div class="ct" id="ct">
+<div id="gameArea">
+<div class="progress-wrap"><div class="progress-text" id="progText"></div><div class="progress-bar"><div class="progress-fill" id="progFill" style="width:0%"></div></div></div>
+<div class="score-line" id="scoreLine"></div>
+<div class="desc-box"><div class="desc-title">🔍 קראו את התיאור ומצאו את הדמות:</div><div class="desc-text" id="descText"></div></div>
+<div class="hint-box" id="hintBox"></div>
+<div id="gridWrap" style="position:relative">
+<div class="chars-grid" id="charsGrid"></div>
+<canvas class="draw-overlay" id="drawCvs"></canvas>
+</div>
+</div>
+<div class="comp" id="comp"><div class="comp-card"><div class="big" id="cEmoji">📝🎉</div><h2 id="cTitle">כל הכבוד!</h2><p id="cMsg"></p><div class="brow"><button class="pill primary" onclick="nextLevel()">הבא ←</button><button class="pill secondary" onclick="replay()">שחקו שוב</button></div></div></div>
+<div class="summ" id="summ"><h2>🏆 סיכום</h2><div class="summ-grid" id="sgrid"></div><div class="brow" id="sbrow"></div></div>
+</div>
+<script>
+var LEVELS=[
+{n:'סרט או פרח?',
+d:'לדמות יש <b>סרט ורוד</b> בשיער, <b>חולצה רגילה</b> ו<b>נעלי ספורט</b>.',
+h:'שימו לב לכיסוי הראש — מה יש על הראש?',cor:0,
+ch:[['🎀','👧','👕','👖','👟'],['🌸','👧','👕','👖','👟'],['🎀','👧','👕','👖','👢'],['👑','👧','👕','👖','👟'],['🎀','👧','👔','👖','👟'],['🎗️','👧','👕','👖','👟']]},
+
+{n:'ילד ספורטיבי',
+d:'לילד יש <b>כובע מצחייה</b>, <b>מכנסיים קצרים</b> ו<b>כדור</b>.',
+h:'שימו לב למה שביד ולסוג המכנסיים!',cor:0,
+ch:[['🧢','👦','👕','🩳','👟','⚽'],['🧢','👦','👕','👖','👟','⚽'],['🧢','👦','👕','🩳','👟','🎒'],['🎩','👦','👕','🩳','👟','⚽'],['🧢','👦','👕','🩳','👢','⚽'],['🧢','👦','👔','🩳','👟','⚽']]},
+
+{n:'כוכב על החולצה',
+d:'לדמות יש <b>פרח</b> בשיער, <b>כוכב</b> על החולצה, <b>מכנסיים ארוכים</b> ו<b>מגפיים</b>.',
+h:'בדקו מה מצויר על החולצה!',cor:0,
+ch:[['🌸','👧','👕','⭐','👖','👢'],['🌸','👧','👕','❤️','👖','👢'],['🌸','👧','👕','⭐','👖','👟'],['🌸','👧','👕','⭐','🩳','👢'],['🎀','👧','👕','⭐','👖','👢'],['🌸','👧','👕','🔵','👖','👢']]},
+
+{n:'מוכן לטיול',
+d:'לילד יש <b>כובע מצחייה</b>, <b>לב</b> על החולצה, <b>מכנסיים ארוכים</b>, <b>נעלי ספורט</b> ו<b>תיק גב</b>.',
+h:'שימו לב לסוג הנעליים ולמה שביד!',cor:0,
+ch:[['🧢','👦','👕','❤️','👖','👟','🎒'],['🧢','👦','👕','⭐','👖','👟','🎒'],['🧢','👦','👕','❤️','🩳','👟','🎒'],['🧢','👦','👕','❤️','👖','👢','🎒'],['🎩','👦','👕','❤️','👖','👟','🎒'],['🧢','👦','👕','❤️','👖','👟','⚽']]},
+
+{n:'הנסיכה',
+d:'לדמות יש <b>כתר</b>, <b>שמלה</b>, <b>נעלי עקב</b> ו<b>תיק יד</b>.',
+h:'בדקו את הנעליים ואת מה שביד!',cor:0,
+ch:[['👑','👧','👗','👠','👜'],['👑','👧','👗','👟','👜'],['👑','👧','👗','👠','🎒'],['🎀','👧','👗','👠','👜'],['👑','👧','👗','👠','🧸'],['👑','👧','👗','👢','👜']]},
+
+{n:'בלי כובע',
+d:'לילד <b>אין כובע</b>, יש <b>חולצה מכופתרת</b>, <b>מכנסיים ארוכים</b>, <b>נעליים שטוחות</b>, <b>תיק גב</b> ו<b>שעון</b>.',
+h:'שימו לב — האם יש כובע? ואיזה סוג חולצה?',cor:0,
+ch:[['👦','👔','👖','🥿','🎒','⌚'],['🧢','👦','👔','👖','🥿','🎒','⌚'],['👦','👕','👖','🥿','🎒','⌚'],['👦','👔','👖','👟','🎒','⌚'],['👦','👔','🩳','🥿','🎒','⌚'],['👦','👔','👖','🥿','📚','⌚']]},
+
+{n:'ילדה בטיול',
+d:'לדמות יש <b>כובע מצחייה</b>, <b>קשת</b> על החולצה, <b>מכנסיים קצרים</b>, <b>גרביים</b> ו<b>מגפיים</b>.',
+h:'בדקו אם יש גרביים ומה על החולצה!',cor:0,
+ch:[['🧢','👧','👕','🌈','🩳','🧦','👢'],['🧢','👧','👕','🌈','👖','🧦','👢'],['🧢','👧','👕','⭐','🩳','🧦','👢'],['🧢','👧','👕','🌈','🩳','🧦','👟'],['🌸','👧','👕','🌈','🩳','🧦','👢'],['🧢','👧','👔','🌈','🩳','🧦','👢']]},
+
+{n:'ילדה מיוחדת',
+d:'לדמות יש <b>סרט ורוד</b>, <b>שמלה</b> עם <b>לב</b>, <b>נעלי עקב</b> ו<b>שעון</b>.',
+h:'בדקו את הכיסוי על הראש ואם יש שעון!',cor:0,
+ch:[['🎀','👧','👗','❤️','👠','⌚'],['🎀','👧','👗','⭐','👠','⌚'],['🎀','👧','👗','❤️','👟','⌚'],['🌸','👧','👗','❤️','👠','⌚'],['🎀','👧','👗','❤️','👢','⌚'],['🎀','👧','👗','🔵','👠','⌚'],['👑','👧','👗','❤️','👠','⌚'],['🎀','👧','👗','❤️','👠']]},
+
+{n:'דמות מסתורית',
+d:'לדמות יש <b>פרח</b> בשיער, <b>כוכב</b> על החולצה, <b>מכנסיים ארוכים</b>, <b>גרביים</b>, <b>מגפיים</b> ו<b>תיק גב</b>.',
+h:'ספרו כמה פרטים יש — ובדקו כל אחד!',cor:0,
+ch:[['🌸','👧','👕','⭐','👖','🧦','👢','🎒'],['🌸','👧','👕','❤️','👖','🧦','👢','🎒'],['🌸','👧','👕','⭐','🩳','🧦','👢','🎒'],['🌸','👧','👕','⭐','👖','🧦','👟','🎒'],['🎀','👧','👕','⭐','👖','🧦','👢','🎒'],['🌸','👧','👕','⭐','👖','🧦','👢','⚽'],['🌸','👧','👔','⭐','👖','🧦','👢','🎒'],['🌸','👧','👕','🌈','👖','🧦','👢','🎒']]},
+
+{n:'ילד בחופש',
+d:'לילד יש <b>כובע מצחייה</b>, <b>חולצה רגילה</b>, <b>מכנסיים קצרים</b>, <b>נעלי ספורט</b> ו<b>כדור</b>.',
+h:'שימו לב לסוג החולצה ולנעליים!',cor:0,
+ch:[['🧢','👦','👕','🩳','👟','⚽'],['🧢','👦','👕','👖','👟','⚽'],['🧢','👦','👕','🩳','👢','⚽'],['🎩','👦','👕','🩳','👟','⚽'],['🧢','👦','👔','🩳','👟','⚽'],['🧢','👦','👕','🩳','👟','🎒'],['🧢','👦','👕','🩳','🥿','⚽'],['🧢','👦','👕','🩳','👟','🧸']]},
+
+{n:'ילדה בבית ספר',
+d:'לדמות יש <b>סרט</b> בשיער, <b>חולצה מכופתרת</b> עם <b>עיגול כחול</b>, <b>מכנסיים ארוכים</b>, <b>גרביים</b>, <b>נעליים שטוחות</b> ו<b>ספר</b>.',
+h:'שימו לב לצורה על החולצה ולסוג הנעליים!',cor:0,
+ch:[['🎀','👧','👔','🔵','👖','🧦','🥿','📚'],['🎀','👧','👔','⭐','👖','🧦','🥿','📚'],['🎀','👧','👕','🔵','👖','🧦','🥿','📚'],['🎀','👧','👔','🔵','🩳','🧦','🥿','📚'],['🌸','👧','👔','🔵','👖','🧦','🥿','📚'],['🎀','👧','👔','🔵','👖','🧦','👟','📚'],['🎀','👧','👔','🔵','👖','🧦','🥿','🎒'],['🎀','👧','👔','❤️','👖','🧦','🥿','📚']]},
+
+{n:'ילד בפארק',
+d:'לילד יש <b>כובע מצחייה</b>, <b>קשת</b> על החולצה, <b>מכנסיים קצרים</b>, <b>נעלי ספורט</b>, <b>כדור</b> ו<b>שעון</b>.',
+h:'בדקו כל פרט — כולל השעון!',cor:0,
+ch:[['🧢','👦','👕','🌈','🩳','👟','⚽','⌚'],['🧢','👦','👕','🌈','👖','👟','⚽','⌚'],['🧢','👦','👕','⭐','🩳','👟','⚽','⌚'],['🧢','👦','👕','🌈','🩳','👢','⚽','⌚'],['🎩','👦','👕','🌈','🩳','👟','⚽','⌚'],['🧢','👦','👕','🌈','🩳','👟','🎒','⌚'],['🧢','👦','👔','🌈','🩳','👟','⚽','⌚'],['🧢','👦','👕','🌈','🩳','👟','⚽']]},
+
+{n:'⭐ שבעה פרטים',
+d:'לדמות יש <b>סרט ורוד</b>, <b>חולצה רגילה</b> עם <b>כוכב</b>, <b>מכנסיים ארוכים</b>, <b>גרביים</b>, <b>מגפיים</b>, <b>תיק גב</b> ו<b>שעון</b>.',
+h:'שבעה פרטים! בדקו כל אחד בזהירות!',cor:0,
+ch:[['🎀','👧','👕','⭐','👖','🧦','👢','🎒','⌚'],['🎀','👧','👕','❤️','👖','🧦','👢','🎒','⌚'],['🎀','👧','👕','⭐','🩳','🧦','👢','🎒','⌚'],['🎀','👧','👕','⭐','👖','🧦','👟','🎒','⌚'],['🌸','👧','👕','⭐','👖','🧦','👢','🎒','⌚'],['🎀','👧','👕','⭐','👖','🧦','👢','⚽','⌚'],['🎀','👧','👔','⭐','👖','🧦','👢','🎒','⌚'],['🎀','👧','👕','⭐','👖','🧦','👢','🎒']]},
+
+{n:'⭐ דמות מיוחדת',
+d:'לדמות יש <b>פרח</b> בשיער, <b>שמלה</b> עם <b>לב</b>, <b>גרביים</b>, <b>נעלי עקב</b>, <b>תיק יד</b>, <b>שעון</b> ו<b>בלי משקפיים</b>.',
+h:'השוו כל פרט — גם הנעליים, גם הגרביים!',cor:0,
+ch:[['🌸','👧','👗','❤️','🧦','👠','👜','⌚'],['🌸','👧','👗','⭐','🧦','👠','👜','⌚'],['🌸','👧','👗','❤️','🧦','👟','👜','⌚'],['🎀','👧','👗','❤️','🧦','👠','👜','⌚'],['🌸','👧','👗','❤️','🧦','👠','🎒','⌚'],['🌸','👧','👗','🔵','🧦','👠','👜','⌚'],['🌸','👧','👗','❤️','🧦','👢','👜','⌚'],['🌸','👧','👗','❤️','🧦','👠','👜']]},
+
+{n:'⭐⭐ אתגר סופי',
+d:'לדמות יש <b>כתר</b>, <b>חולצה מכופתרת</b> עם <b>כוכב</b>, <b>מכנסיים ארוכים</b>, <b>גרביים</b>, <b>נעליים שטוחות</b>, <b>תיק גב</b> ו<b>שעון</b>.',
+h:'שמונה פרטים! קראו שוב ובדקו אחד אחד!',cor:0,
+ch:[['👑','👧','👔','⭐','👖','🧦','🥿','🎒','⌚'],['🎀','👧','👔','⭐','👖','🧦','🥿','🎒','⌚'],['👑','👧','👕','⭐','👖','🧦','🥿','🎒','⌚'],['👑','👧','👔','❤️','👖','🧦','🥿','🎒','⌚'],['👑','👧','👔','⭐','🩳','🧦','🥿','🎒','⌚'],['👑','👧','👔','⭐','👖','🧦','👟','🎒','⌚'],['👑','👧','👔','⭐','👖','🧦','🥿','⚽','⌚'],['👑','👧','👔','⭐','👖','🧦','🥿','🎒']]}
+];
+
+var cur=0,res=[],mode='click',wrongCount=0,correctIdx=-1,solved=false,totalWrong=0;
+var drawPts=[],drawing=false;
+
+function init(){res=[];for(var i=0;i<LEVELS.length;i++)res.push('pending');buildTabs();goTo(0)}
+
+function buildTabs(){var el=document.getElementById('tabs');el.innerHTML='';for(var i=0;i<LEVELS.length;i++){var b=document.createElement('button');b.className='tb'+(i===cur?' on':'')+(res[i]==='correct'?' dn':'');b.textContent=(i+1)+' '+LEVELS[i].n;b.onclick=(function(x){return function(){goTo(x)}})(i);el.appendChild(b)}}
+function updateTabs(){var bs=document.querySelectorAll('.tb');for(var i=0;i<bs.length;i++)bs[i].className='tb'+(i===cur?' on':'')+(res[i]==='correct'?' dn':'');if(bs[cur])bs[cur].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})}
+
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+
+function goTo(idx){
+if(idx<0||idx>=LEVELS.length){showSumm();return}
+cur=idx;wrongCount=0;totalWrong=0;solved=false;
+document.getElementById('gameArea').style.display='';
+document.getElementById('summ').classList.remove('show');
+document.getElementById('comp').classList.remove('show');
+document.getElementById('hintBox').classList.remove('show');
+updateTabs();renderLevel();updateProg()
+}
+
+function renderLevel(){
+var L=LEVELS[cur];
+document.getElementById('descText').innerHTML=L.d;
+document.getElementById('hintBox').classList.remove('show');
+var grid=document.getElementById('charsGrid');grid.innerHTML='';
+var n=L.ch.length;
+grid.classList.toggle('cols4',n>6);
+var indices=[];for(var i=0;i<n;i++)indices.push(i);
+indices=shuffle(indices);
+correctIdx=-1;
+for(var i=0;i<indices.length;i++){
+if(indices[i]===L.cor)correctIdx=i;
+var card=document.createElement('div');
+card.className='char-card';
+card.setAttribute('data-idx',i);
+card.setAttribute('data-orig',indices[i]);
+var ch=L.ch[indices[i]];
+for(var j=0;j<ch.length;j++){
+if(!ch[j])continue;
+var sp=document.createElement('span');
+sp.className='emoji-line';sp.textContent=ch[j];
+card.appendChild(sp)
+}
+card.onclick=function(){if(mode==='click')handlePick(this)};
+grid.appendChild(card)
+}
+updateScore();
+setupDraw()
+}
+
+function handlePick(card){
+if(solved)return;
+var idx=parseInt(card.getAttribute('data-idx'));
+if(idx===correctIdx){markCorrect(card)}
+else{markWrong(card)}
+}
+
+function markCorrect(card){
+solved=true;
+var cards=document.querySelectorAll('.char-card');
+for(var i=0;i<cards.length;i++){
+if(parseInt(cards[i].getAttribute('data-idx'))===correctIdx){
+cards[i].classList.add('correct');cards[i].classList.remove('hint-pulse');
+}else{cards[i].classList.add('dimmed')}
+cards[i].classList.add('locked')
+}
+res[cur]='correct';updateTabs();updateProg();
+setTimeout(showComp,1200)
+}
+
+function markWrong(card){
+wrongCount++;totalWrong++;
+card.classList.add('wrong');
+card.style.pointerEvents='none';
+setTimeout(function(){card.classList.remove('wrong');card.classList.add('dimmed')},600);
+var hb=document.getElementById('hintBox');
+hb.textContent='💡 '+LEVELS[cur].h;hb.classList.add('show');
+updateScore();
+if(wrongCount>=3){
+var cards=document.querySelectorAll('.char-card');
+for(var i=0;i<cards.length;i++){
+if(parseInt(cards[i].getAttribute('data-idx'))===correctIdx){
+cards[i].classList.add('hint-pulse')
+}}
+}
+}
+
+function updateScore(){
+document.getElementById('scoreLine').textContent='✅ נכון: '+(res[cur]==='correct'?1:0)+' | ❌ טעויות: '+totalWrong
+}
+
+function updateProg(){
+var d=0;for(var i=0;i<res.length;i++){if(res[i]==='correct')d++}
+document.getElementById('progText').textContent='השלמתם '+d+' מתוך '+LEVELS.length+' שלבים';
+document.getElementById('progFill').style.width=Math.round(d/LEVELS.length*100)+'%'
+}
+
+function showComp(){
+var o=document.getElementById('comp');o.classList.add('show');
+var last=true;for(var i=0;i<res.length;i++){if(res[i]!=='correct'){last=false;break}}
+document.getElementById('cEmoji').textContent=last?'🏆':'📝🎉';
+document.getElementById('cTitle').textContent=last?'סיימתם הכל!':'כל הכבוד!';
+var msg='מצאתם את הדמות הנכונה!';
+if(totalWrong===0)msg+=' בלי אף טעות! 🌟';
+else msg+=' ('+totalWrong+' טעויות)';
+document.getElementById('cMsg').textContent=msg
+}
+
+function nextLevel(){document.getElementById('comp').classList.remove('show');for(var i=cur+1;i<LEVELS.length;i++){if(res[i]!=='correct'){goTo(i);return}}showSumm()}
+function replay(){document.getElementById('comp').classList.remove('show');res[cur]='pending';goTo(cur)}
+
+function showSumm(){
+document.getElementById('gameArea').style.display='none';
+document.getElementById('comp').classList.remove('show');
+var s=document.getElementById('summ');s.classList.add('show');
+var g=document.getElementById('sgrid');g.innerHTML='';var hasP=false;
+for(var i=0;i<LEVELS.length;i++){
+var it=document.createElement('div');it.className='summ-item';
+var st=res[i],sc=st==='correct'?'done':'pend',tx=st==='correct'?'✅':'⬜';
+if(st!=='correct')hasP=true;
+it.innerHTML='<div class="sn">'+(i+1)+'</div><div class="ss '+sc+'">'+tx+'</div>';
+it.onclick=(function(x){return function(){goTo(x)}})(i);g.appendChild(it)
+}
+var br=document.getElementById('sbrow');br.innerHTML='';
+if(hasP)br.innerHTML+='<button class="pill secondary" onclick="retryPending()">❓ שלבים שלא הושלמו</button>';
+br.innerHTML+='<button class="pill primary" onclick="retryAll()">🔄 הכל מחדש</button>';
+updateTabs()
+}
+function retryFiltered(fn){var f=-1;for(var i=0;i<res.length;i++){if(fn(res[i])){res[i]='pending';if(f===-1)f=i}}buildTabs();if(f>=0)goTo(f)}
+function retryPending(){retryFiltered(function(s){return s!=='correct'})}
+function retryAll(){retryFiltered(function(){return true})}
+
+function setMode(m){
+mode=m;
+document.getElementById('btnClick').className='mbtn'+(m==='click'?' on':'');
+document.getElementById('btnDraw').className='mbtn'+(m==='draw'?' on':'');
+var cvs=document.getElementById('drawCvs');
+cvs.classList.toggle('active',m==='draw');
+if(m==='draw')setupDraw()
+}
+
+function setupDraw(){
+var cvs=document.getElementById('drawCvs');
+var wrap=document.getElementById('gridWrap');
+var w=wrap.offsetWidth,h=wrap.offsetHeight;
+var dpr=window.devicePixelRatio||1;
+cvs.style.width=w+'px';cvs.style.height=h+'px';
+cvs.width=w*dpr;cvs.height=h*dpr;
+var ctx=cvs.getContext('2d');ctx.scale(dpr,dpr);
+ctx.lineCap='round';ctx.lineJoin='round';
+cvs.onpointerdown=drawStart;
+cvs.onpointermove=drawMove;
+cvs.onpointerup=drawEnd;
+cvs.onpointercancel=drawEnd
+}
+
+function drawStart(e){
+if(solved||mode!=='draw')return;
+e.preventDefault();drawing=true;drawPts=[];
+var r=e.target.getBoundingClientRect();
+var p={x:e.clientX-r.left,y:e.clientY-r.top};
+drawPts.push(p);
+var ctx=e.target.getContext('2d');
+var dpr=window.devicePixelRatio||1;
+ctx.resetTransform();ctx.scale(dpr,dpr);
+ctx.strokeStyle='#2563eb';ctx.lineWidth=3;ctx.globalAlpha=0.5;
+ctx.beginPath();ctx.moveTo(p.x,p.y)
+}
+function drawMove(e){
+if(!drawing)return;e.preventDefault();
+var r=e.target.getBoundingClientRect();
+var p={x:e.clientX-r.left,y:e.clientY-r.top};
+drawPts.push(p);
+var ctx=e.target.getContext('2d');
+ctx.lineTo(p.x,p.y);ctx.stroke();ctx.beginPath();ctx.moveTo(p.x,p.y)
+}
+function drawEnd(e){
+if(!drawing)return;drawing=false;
+var cvs=document.getElementById('drawCvs');
+var dpr=window.devicePixelRatio||1;
+var ctx=cvs.getContext('2d');
+ctx.resetTransform();ctx.scale(dpr,dpr);
+ctx.clearRect(0,0,cvs.width/dpr,cvs.height/dpr);
+if(drawPts.length<5)return;
+var sx=0,sy=0;
+for(var i=0;i<drawPts.length;i++){sx+=drawPts[i].x;sy+=drawPts[i].y}
+sx/=drawPts.length;sy/=drawPts.length;
+var wrap=document.getElementById('gridWrap');
+var wr=wrap.getBoundingClientRect();
+var cx=wr.left+sx,cy=wr.top+sy;
+cvs.style.pointerEvents='none';
+var el=document.elementFromPoint(cx,cy);
+cvs.style.pointerEvents='';
+if(!el)return;
+var card=el.closest('.char-card');
+if(!card||card.classList.contains('dimmed')||card.classList.contains('locked'))return;
+handlePick(card)
+}
+
+window.addEventListener('resize',function(){if(mode==='draw')setupDraw()});
+init();
+</script>
+</body>
+</html>

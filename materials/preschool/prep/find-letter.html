@@ -183,22 +183,35 @@ const SOFIT='ךםןףץ'.split('');
 
 const LEVELS=[
   {letter:'כ',count:4,dist:['ב','ך','מ'],size:24},
-  {letter:'ב',count:4,dist:['כ','ך','נ'],size:24},
-  {letter:'ד',count:5,dist:['ר','ך'],size:24},
   {letter:'ר',count:4,dist:['ד','ך','ו'],size:24},
   {letter:'ה',count:5,dist:['ח','ת','מ'],size:24},
-  {letter:'ח',count:4,dist:['ה','ת','כ'],size:24},
-  {letter:'ו',count:5,dist:['ז','ן','י'],size:24},
-  {letter:'ז',count:4,dist:['ו','ן','י'],size:24},
-  {letter:'ע',count:4,dist:['צ','ש','ס'],size:24},
-  {letter:'ש',count:5,dist:['ע','צ','מ'],size:24},
+  {letter:'ז',count:4,dist:['ו','ן','י','ג'],size:24},
+  {letter:'מ',count:4,dist:['ם','נ','כ','ט'],size:24},
   {letter:'ת',count:5,dist:['ח','ה','ם'],size:24},
-  {letter:'מ',count:4,dist:['ם','נ','כ'],size:24},
-  {letter:'נ',count:5,dist:['ן','ג','כ'],size:24},
-  {letter:'פ',count:4,dist:['ף','כ','ב'],size:24}
+  {letter:'א',count:4,dist:['ע','ד','ר'],size:24},
+  {letter:'ן',count:4,dist:['נ','ו','ז','י'],size:24},
+  {letter:'פ',count:4,dist:['ף','כ','ב'],size:24},
+  {letter:'ד',count:5,dist:['ר','ך','ה'],size:24},
+  {letter:'ש',count:5,dist:['ע','צ','מ'],size:24},
+  {letter:'ם',count:4,dist:['מ','ס','ט'],size:24},
+  {letter:'ו',count:5,dist:['ז','ן','י'],size:24},
+  {letter:'ס',count:4,dist:['ם','מ','ע'],size:24},
+  {letter:'ב',count:4,dist:['כ','ך','נ'],size:24},
+  {letter:'ע',count:4,dist:['א','צ','ש'],size:24},
+  {letter:'ט',count:4,dist:['מ','ם','כ'],size:24},
+  {letter:'ך',count:4,dist:['כ','ד','ר','ן'],size:24},
+  {letter:'נ',count:5,dist:['ן','ג','כ','ב'],size:24},
+  {letter:'ח',count:4,dist:['ה','ת','כ'],size:24},
+  {letter:'ף',count:4,dist:['פ','ך','ל'],size:24},
+  {letter:'ג',count:4,dist:['נ','ז','כ'],size:24},
+  {letter:'צ',count:4,dist:['ץ','ע','ש'],size:24},
+  {letter:'י',count:5,dist:['ו','ז','ן'],size:24},
+  {letter:'ל',count:4,dist:['ך','ן','כ'],size:24},
+  {letter:'ץ',count:4,dist:['צ','ע','ז'],size:24},
+  {letter:'ק',count:4,dist:['ר','ה','מ'],size:24}
 ];
 
-const LEVEL15={
+const CHALLENGE={
   sections:[
     {letter:'כ',count:4,dist:['ב','ך','מ']},
     {letter:'ר',count:4,dist:['ד','ך','ו']},
@@ -207,7 +220,7 @@ const LEVEL15={
   cols:10,rows:3
 };
 
-const TAB_LABELS=['כ','ב','ד','ר','ה','ח','ו','ז','ע','ש','ת','מ','נ','פ','אתגר'];
+const TAB_LABELS=LEVELS.map(l=>l.letter).concat(['אתגר']);
 
 let cur=0, mode='click', cells=[], levelDone=[], checking=false;
 let drawCanvas=null, drawCtx=null, drawPts=[], isDrawing=false;
@@ -249,7 +262,7 @@ function loadLevel(idx){
   document.getElementById('checkBtn').disabled=false;
   removeDrawCanvas();
 
-  if(idx<14){
+  if(idx<LEVELS.length){
     // Normal level
     const lv=LEVELS[idx];
     document.getElementById('targetFrame').style.display='';
@@ -257,7 +270,7 @@ function loadLevel(idx){
     cells=genGrid(lv.letter,lv.count,lv.dist,lv.size);
     renderNormalGrid();
   } else {
-    // Level 15 challenge
+    // Challenge level
     document.getElementById('targetFrame').style.display='none';
     cells=[];
     renderChallengeGrid();
@@ -292,7 +305,7 @@ function renderChallengeGrid(){
   cells=[];
   let globalIdx=0;
 
-  LEVEL15.sections.forEach((sec,si)=>{
+  CHALLENGE.sections.forEach((sec,si)=>{
     const secDiv=document.createElement('div');
     secDiv.className='challenge-section';
 
@@ -301,7 +314,7 @@ function renderChallengeGrid(){
     badge.innerHTML='<div class="s-label">מצאו</div><div class="s-letter">'+sec.letter+'</div>';
     secDiv.appendChild(badge);
 
-    const gridSize=LEVEL15.cols*LEVEL15.rows;
+    const gridSize=CHALLENGE.cols*CHALLENGE.rows;
     const secCells=genGrid(sec.letter,sec.count,sec.dist,gridSize);
     // tag each cell with section target
     secCells.forEach(c=>{c.sectionTarget=sec.letter; c.sectionIdx=si;});
@@ -347,7 +360,7 @@ function checkAnswers(){
   cells.forEach((c,i)=>{
     const el=document.querySelector('[data-idx="'+i+'"]');
     if(!el) return;
-    const target = cur<14 ? c.isTarget : (c.letter===c.sectionTarget);
+    const target = cur<LEVELS.length ? c.isTarget : (c.letter===c.sectionTarget);
 
     if(target) totalTargets++;
 
@@ -475,7 +488,7 @@ function closeOverlay(){document.getElementById('overlay').classList.remove('sho
 
 function nextLevel(){
   closeOverlay();
-  if(cur<14) loadLevel(cur+1); else showSummary();
+  if(cur<TAB_LABELS.length-1) loadLevel(cur+1); else showSummary();
 }
 
 function replayLevel(){closeOverlay();loadLevel(cur);}
@@ -494,16 +507,16 @@ function showSummary(){
     rows.appendChild(r);
   });
   const t=document.createElement('div');t.className='summary-row';
-  t.innerHTML='<span class="summary-label" style="font-weight:700">סה״כ</span><span class="summary-value perfect">'+done+' / 15</span>';
+  t.innerHTML='<span class="summary-label" style="font-weight:700">סה״כ</span><span class="summary-value perfect">'+done+' / '+TAB_LABELS.length+'</span>';
   rows.appendChild(t);
 }
 
-function redoAll(){closeOverlay();levelDone=new Array(15).fill(false);loadLevel(0);}
+function redoAll(){closeOverlay();levelDone=new Array(TAB_LABELS.length).fill(false);loadLevel(0);}
 
 window.addEventListener('resize',()=>{if(mode==='draw'&&drawCanvas) setupDrawCanvas();});
 
 // Init
-levelDone=new Array(15).fill(false);
+levelDone=new Array(TAB_LABELS.length).fill(false);
 buildTabs();
 loadLevel(0);
 </script>

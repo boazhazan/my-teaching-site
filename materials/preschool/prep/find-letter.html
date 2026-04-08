@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>זיהוי אותיות — מצאו את האות</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap');
+:root{
+  --pri:#2563eb;--pri-dark:#1d4ed8;--pri-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --ok:#10b981;--no:#ef4444;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);direction:rtl;min-height:100vh}
+
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(0)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.6)}50%{box-shadow:0 0 0 8px rgba(245,158,11,0)}}
+
+.header{background:linear-gradient(135deg,var(--pri-light),#fff);padding:20px;text-align:center;border-bottom:3px solid var(--pri)}
+.header h1{font-size:1.8rem;font-weight:800;color:var(--pri-dark);margin-bottom:4px}
+.header p{color:var(--text-light);font-size:.95rem}
+
+.mode-bar{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.mode-btn{padding:8px 20px;border:2px solid var(--border);border-radius:999px;background:var(--bg);cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:600;color:var(--text-light);transition:.25s ease}
+.mode-btn.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+.mode-btn:hover:not(.active){border-color:var(--pri);color:var(--pri)}
+
+.tabs-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.tabs{display:flex;gap:6px;min-width:max-content}
+.tab{padding:6px 14px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text-light);white-space:nowrap;transition:.25s ease}
+.tab.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tab.done{background:var(--ok);color:#fff;border-color:var(--ok)}
+.tab:hover:not(.active):not(.done){border-color:var(--pri);color:var(--pri)}
+
+.main{max-width:700px;margin:0 auto;padding:16px;animation:fi .4s ease}
+
+/* Target frame */
+.target-frame{text-align:center;margin-bottom:16px;padding:16px 20px;border:3px solid var(--accent);background:#fffbeb;border-radius:var(--radius);box-shadow:var(--shadow)}
+.target-frame .label{font-size:1.05rem;font-weight:700;color:var(--accent-dark);margin-bottom:4px}
+.target-frame .letter{font-size:4rem;font-weight:800;color:var(--text);line-height:1.1}
+
+/* Grid card */
+.grid-card{background:var(--bg);border:2px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:20px;margin-bottom:16px;position:relative}
+.grid{display:grid;grid-template-columns:repeat(6,50px);gap:8px;justify-content:center}
+.cell{width:50px;height:50px;display:flex;align-items:center;justify-content:center;font-size:2.2rem;font-weight:700;border-radius:8px;border:2px solid transparent;cursor:pointer;transition:.2s ease;user-select:none;-webkit-user-select:none;color:var(--text);background:var(--bg)}
+.cell:hover{background:#f1f5f9;border-color:var(--border)}
+.cell.selected{background:var(--pri-light);border-color:var(--pri);color:var(--pri)}
+.cell.correct{background:#d1fae5;border-color:var(--ok);color:var(--ok);pointer-events:none}
+.cell.wrong{background:#fee2e2;border-color:var(--no);color:var(--no);animation:shake .5s ease}
+.cell.missed{animation:pulse 1s ease 3}
+.cell.locked{pointer-events:none}
+
+/* Draw canvas */
+.draw-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:8;touch-action:none;cursor:crosshair}
+
+/* Check button */
+.check-row{text-align:center;margin-bottom:16px}
+.check-btn{padding:12px 36px;border:none;border-radius:20px;background:var(--accent);color:#fff;font-family:inherit;font-size:1.1rem;font-weight:700;cursor:pointer;transition:.25s ease;box-shadow:var(--shadow)}
+.check-btn:hover{background:var(--accent-dark)}
+.check-btn:disabled{opacity:.5;cursor:not-allowed}
+.score-text{margin-top:10px;font-size:1rem;font-weight:700;color:var(--text)}
+.score-text .ok{color:var(--ok)}
+.score-text .bad{color:var(--no)}
+
+/* Level 15 challenge sections */
+.challenge-section{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;padding-bottom:12px;border-bottom:2px dashed var(--border)}
+.challenge-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.section-badge{width:56px;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:3px solid var(--accent);background:#fffbeb;border-radius:var(--radius);flex-shrink:0;padding:6px}
+.section-badge .s-label{font-size:.6rem;font-weight:600;color:var(--accent-dark)}
+.section-badge .s-letter{font-size:2rem;font-weight:800;color:var(--text);line-height:1}
+.section-grid{display:grid;grid-template-columns:repeat(10,44px);gap:6px;flex:1}
+.section-grid .cell{width:44px;height:44px;font-size:1.8rem}
+
+/* Overlay */
+.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.45);z-index:100;align-items:center;justify-content:center}
+.overlay.show{display:flex}
+.complete-card{background:var(--bg);border-radius:16px;padding:32px;text-align:center;max-width:380px;width:90%;box-shadow:var(--shadow-lg);animation:pop .5s ease}
+.complete-card .emoji{font-size:3.5rem;margin-bottom:12px}
+.complete-card h2{font-size:1.4rem;font-weight:800;color:var(--pri-dark);margin-bottom:8px}
+.complete-card p{color:var(--text-light);margin-bottom:20px;font-size:.95rem}
+.pill-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.pill-btn{padding:10px 22px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s ease}
+.pill-btn.primary{background:var(--pri);color:#fff}
+.pill-btn.primary:hover{background:var(--pri-dark)}
+.pill-btn.secondary{background:var(--bg-soft);color:var(--text);border:2px solid var(--border)}
+.pill-btn.secondary:hover{border-color:var(--pri);color:var(--pri)}
+
+.summary-card{background:var(--bg);border-radius:16px;padding:32px;text-align:center;max-width:420px;width:90%;box-shadow:var(--shadow-lg);animation:fi .4s ease}
+.summary-card h2{font-size:1.3rem;font-weight:800;color:var(--pri-dark);margin-bottom:16px}
+.summary-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:.95rem}
+.summary-row:last-of-type{border:none}
+.summary-label{color:var(--text-light)}
+.summary-value{font-weight:700}
+.summary-value.perfect{color:var(--ok)}
+
+@media print{
+  .mode-bar,.tabs-wrap,.overlay,.check-row,.header p,.score-text{display:none!important}
+  .header{border:none;padding:10px}
+  .cell{border:2px solid var(--border)!important;background:#fff!important;color:var(--text)!important}
+  .cell.selected,.cell.correct,.cell.wrong,.cell.missed{background:#fff!important;border-color:var(--border)!important;color:var(--text)!important}
+  .draw-canvas{display:none!important}
+  body{background:#fff}
+  .grid-card{box-shadow:none;border:1px solid #ccc}
+}
+
+@media(max-width:600px){
+  .grid{grid-template-columns:repeat(5,44px);gap:6px}
+  .cell{width:44px;height:44px;font-size:1.8rem}
+  .target-frame .letter{font-size:3rem}
+  .header h1{font-size:1.4rem}
+  .mode-btn{padding:6px 14px;font-size:.85rem}
+  .tab{padding:5px 10px;font-size:.8rem}
+  .section-grid{grid-template-columns:repeat(7,40px);gap:4px}
+  .section-grid .cell{width:40px;height:40px;font-size:1.5rem}
+  .section-badge{width:46px;min-height:46px}
+  .section-badge .s-letter{font-size:1.6rem}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🔤 זיהוי אותיות — מצאו את האות</h1>
+  <p>מצאו את כל האותיות הדומות לאות שבמסגרת!</p>
+</div>
+
+<div class="mode-bar">
+  <button class="mode-btn active" data-mode="click">👆 לחיצה</button>
+  <button class="mode-btn" data-mode="draw">✏️ ציור</button>
+  <button class="mode-btn" data-mode="print">🖨️ הדפסה</button>
+</div>
+
+<div class="tabs-wrap"><div class="tabs" id="tabs"></div></div>
+
+<div class="main" id="main">
+  <div class="target-frame" id="targetFrame">
+    <div class="label">🔍 מצאו את האות:</div>
+    <div class="letter" id="targetLetter"></div>
+  </div>
+  <div class="grid-card" id="gridCard">
+    <div id="gridArea"></div>
+  </div>
+  <div class="check-row">
+    <button class="check-btn" id="checkBtn" onclick="checkAnswers()">✅ בדקו!</button>
+    <div class="score-text" id="scoreText"></div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="complete-card" id="completeCard">
+    <div class="emoji">🔤🎉</div>
+    <h2>כל הכבוד!</h2>
+    <p id="completeMsg">מצאתם את כל האותיות!</p>
+    <div class="pill-btns">
+      <button class="pill-btn primary" onclick="nextLevel()">▶ שלב הבא</button>
+      <button class="pill-btn secondary" onclick="replayLevel()">🔄 שחקו שוב</button>
+    </div>
+  </div>
+  <div class="summary-card" id="summaryCard" style="display:none">
+    <h2>🏆 סיכום</h2>
+    <div id="summaryRows"></div>
+    <div class="pill-btns" style="margin-top:16px">
+      <button class="pill-btn primary" onclick="redoAll()">🔄 מההתחלה</button>
+      <button class="pill-btn secondary" onclick="closeOverlay()">✖ סגירה</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const ALL_LETTERS='אבגדהוזחטיכלמנסעפצקרשת'.split('');
+const SOFIT='ךםןףץ'.split('');
+
+const LEVELS=[
+  {letter:'כ',count:4,dist:['ב','ך','מ'],size:24},
+  {letter:'ב',count:4,dist:['כ','ך','נ'],size:24},
+  {letter:'ד',count:5,dist:['ר','ך'],size:24},
+  {letter:'ר',count:4,dist:['ד','ך','ו'],size:24},
+  {letter:'ה',count:5,dist:['ח','ת','מ'],size:24},
+  {letter:'ח',count:4,dist:['ה','ת','כ'],size:24},
+  {letter:'ו',count:5,dist:['ז','ן','י'],size:24},
+  {letter:'ז',count:4,dist:['ו','ן','י'],size:24},
+  {letter:'ע',count:4,dist:['צ','ש','ס'],size:24},
+  {letter:'ש',count:5,dist:['ע','צ','מ'],size:24},
+  {letter:'ת',count:5,dist:['ח','ה','ם'],size:24},
+  {letter:'מ',count:4,dist:['ם','נ','כ'],size:24},
+  {letter:'נ',count:5,dist:['ן','ג','כ'],size:24},
+  {letter:'פ',count:4,dist:['ף','כ','ב'],size:24}
+];
+
+const LEVEL15={
+  sections:[
+    {letter:'כ',count:4,dist:['ב','ך','מ']},
+    {letter:'ר',count:4,dist:['ד','ך','ו']},
+    {letter:'ש',count:5,dist:['ע','צ','מ']}
+  ],
+  cols:10,rows:3
+};
+
+const TAB_LABELS=['כ','ב','ד','ר','ה','ח','ו','ז','ע','ש','ת','מ','נ','פ','אתגר'];
+
+let cur=0, mode='click', cells=[], levelDone=[], checking=false;
+let drawCanvas=null, drawCtx=null, drawPts=[], isDrawing=false;
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function genGrid(letter,count,dist,size){
+  const g=[];
+  for(let i=0;i<count;i++) g.push({letter,isTarget:true,selected:false});
+  const allDist=[...dist];
+  for(const d of allDist){
+    const n=2+Math.floor(Math.random()*2);
+    for(let i=0;i<n;i++) g.push({letter:d,isTarget:false,selected:false});
+  }
+  const pool=ALL_LETTERS.concat(SOFIT).filter(l=>l!==letter&&!dist.includes(l));
+  while(g.length<size) g.push({letter:pool[Math.floor(Math.random()*pool.length)],isTarget:false,selected:false});
+  // trim if over
+  while(g.length>size) g.pop();
+  shuffle(g);
+  return g;
+}
+
+function buildTabs(){
+  const wrap=document.getElementById('tabs');
+  wrap.innerHTML='';
+  TAB_LABELS.forEach((l,i)=>{
+    const t=document.createElement('button');
+    t.className='tab'+(i===cur?' active':'')+(levelDone[i]?' done':'');
+    t.textContent=(i+1)+' · '+l;
+    t.onclick=()=>loadLevel(i);
+    wrap.appendChild(t);
+  });
+}
+
+function loadLevel(idx){
+  cur=idx;
+  checking=false;
+  document.getElementById('scoreText').textContent='';
+  document.getElementById('checkBtn').disabled=false;
+  removeDrawCanvas();
+
+  if(idx<14){
+    // Normal level
+    const lv=LEVELS[idx];
+    document.getElementById('targetFrame').style.display='';
+    document.getElementById('targetLetter').textContent=lv.letter;
+    cells=genGrid(lv.letter,lv.count,lv.dist,lv.size);
+    renderNormalGrid();
+  } else {
+    // Level 15 challenge
+    document.getElementById('targetFrame').style.display='none';
+    cells=[];
+    renderChallengeGrid();
+  }
+
+  buildTabs();
+  if(mode==='draw') setupDrawCanvas();
+
+  const tabs=document.querySelectorAll('.tab');
+  if(tabs[idx]) tabs[idx].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+
+function renderNormalGrid(){
+  const area=document.getElementById('gridArea');
+  const grid=document.createElement('div');
+  grid.className='grid';
+  cells.forEach((c,i)=>{
+    const el=document.createElement('div');
+    el.className='cell';
+    el.textContent=c.letter;
+    el.dataset.idx=i;
+    el.onclick=()=>{if(mode==='click'&&!checking) toggleCell(i);};
+    grid.appendChild(el);
+  });
+  area.innerHTML='';
+  area.appendChild(grid);
+}
+
+function renderChallengeGrid(){
+  const area=document.getElementById('gridArea');
+  area.innerHTML='';
+  cells=[];
+  let globalIdx=0;
+
+  LEVEL15.sections.forEach((sec,si)=>{
+    const secDiv=document.createElement('div');
+    secDiv.className='challenge-section';
+
+    const badge=document.createElement('div');
+    badge.className='section-badge';
+    badge.innerHTML='<div class="s-label">מצאו</div><div class="s-letter">'+sec.letter+'</div>';
+    secDiv.appendChild(badge);
+
+    const gridSize=LEVEL15.cols*LEVEL15.rows;
+    const secCells=genGrid(sec.letter,sec.count,sec.dist,gridSize);
+    // tag each cell with section target
+    secCells.forEach(c=>{c.sectionTarget=sec.letter; c.sectionIdx=si;});
+
+    const grid=document.createElement('div');
+    grid.className='section-grid';
+    secCells.forEach((c)=>{
+      const idx=cells.length;
+      cells.push(c);
+      const el=document.createElement('div');
+      el.className='cell';
+      el.textContent=c.letter;
+      el.dataset.idx=idx;
+      el.onclick=()=>{if(mode==='click'&&!checking) toggleCell(idx);};
+      grid.appendChild(el);
+    });
+    secDiv.appendChild(grid);
+    area.appendChild(secDiv);
+  });
+}
+
+function toggleCell(idx){
+  const c=cells[idx];
+  if(c.locked) return;
+  c.selected=!c.selected;
+  const el=document.querySelector('[data-idx="'+idx+'"]');
+  if(el) el.classList.toggle('selected',c.selected);
+}
+
+function checkAnswers(){
+  if(checking) return;
+  // must have at least one selection
+  if(!cells.some(c=>c.selected)){
+    document.getElementById('scoreText').textContent='!בחרו אותיות קודם';
+    return;
+  }
+
+  checking=true;
+  document.getElementById('checkBtn').disabled=true;
+
+  let correct=0, wrong=0, missed=0, totalTargets=0;
+
+  cells.forEach((c,i)=>{
+    const el=document.querySelector('[data-idx="'+i+'"]');
+    if(!el) return;
+    const target = cur<14 ? c.isTarget : (c.letter===c.sectionTarget);
+
+    if(target) totalTargets++;
+
+    if(c.selected && target){
+      el.classList.add('correct');
+      el.classList.remove('selected');
+      c.locked=true;
+      correct++;
+    } else if(c.selected && !target){
+      el.classList.add('wrong');
+      wrong++;
+    } else if(!c.selected && target && !c.locked){
+      el.classList.add('missed');
+      missed++;
+    }
+  });
+
+  const alreadyLocked=cells.filter(c=>c.locked).length;
+
+  document.getElementById('scoreText').innerHTML=
+    'מצאתם <span class="ok">'+alreadyLocked+'</span> מתוך '+totalTargets+
+    (wrong?' | <span class="bad">'+wrong+' טעויות</span>':'');
+
+  if(missed===0 && wrong===0){
+    // Perfect!
+    levelDone[cur]=true;
+    buildTabs();
+    setTimeout(showCompletion,600);
+    return;
+  }
+
+  // Reset wrong & missed after delay
+  setTimeout(()=>{
+    cells.forEach((c,i)=>{
+      const el=document.querySelector('[data-idx="'+i+'"]');
+      if(!el) return;
+      if(el.classList.contains('wrong')){
+        el.classList.remove('wrong','selected');
+        c.selected=false;
+      }
+      if(el.classList.contains('missed')){
+        el.classList.remove('missed');
+      }
+    });
+    checking=false;
+    document.getElementById('checkBtn').disabled=false;
+  },1800);
+}
+
+// Draw mode
+function setupDrawCanvas(){
+  removeDrawCanvas();
+  const card=document.getElementById('gridCard');
+  const canvas=document.createElement('canvas');
+  canvas.className='draw-canvas';
+  canvas.width=card.offsetWidth;
+  canvas.height=card.offsetHeight;
+  card.appendChild(canvas);
+  drawCanvas=canvas;
+  drawCtx=canvas.getContext('2d');
+  canvas.addEventListener('pointerdown',drawStart,{passive:false});
+  canvas.addEventListener('pointermove',drawMove,{passive:false});
+  canvas.addEventListener('pointerup',drawEnd,{passive:false});
+  canvas.addEventListener('pointercancel',drawEnd,{passive:false});
+}
+
+function removeDrawCanvas(){
+  if(drawCanvas){drawCanvas.remove();drawCanvas=null;drawCtx=null;}
+  drawPts=[];isDrawing=false;
+}
+
+function drawStart(e){
+  e.preventDefault();isDrawing=true;drawPts=[];
+  const r=drawCanvas.getBoundingClientRect();
+  drawPts.push({x:e.clientX-r.left,y:e.clientY-r.top});
+}
+function drawMove(e){
+  if(!isDrawing) return;
+  e.preventDefault();
+  const r=drawCanvas.getBoundingClientRect();
+  drawPts.push({x:e.clientX-r.left,y:e.clientY-r.top});
+  drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
+  drawCtx.beginPath();
+  drawCtx.strokeStyle='rgba(37,99,235,.5)';
+  drawCtx.lineWidth=3;drawCtx.lineCap='round';drawCtx.lineJoin='round';
+  drawPts.forEach((p,i)=>{i===0?drawCtx.moveTo(p.x,p.y):drawCtx.lineTo(p.x,p.y);});
+  drawCtx.stroke();
+}
+function drawEnd(){
+  if(!isDrawing) return;
+  isDrawing=false;
+  if(drawPts.length<3){drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);return;}
+  let sx=0,sy=0;
+  drawPts.forEach(p=>{sx+=p.x;sy+=p.y;});
+  const cx=sx/drawPts.length,cy=drawPts.length?sy/drawPts.length:0;
+  drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
+  const r=drawCanvas.getBoundingClientRect();
+  const el=document.elementFromPoint(r.left+cx,r.top+cy);
+  if(el&&el.classList.contains('cell')&&!checking){
+    const idx=parseInt(el.dataset.idx);
+    if(!isNaN(idx)) toggleCell(idx);
+  }
+}
+
+// Mode switching
+document.querySelectorAll('.mode-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    mode=this.dataset.mode;
+    if(mode==='print'){window.print();setTimeout(()=>document.querySelector('[data-mode="click"]').click(),500);return;}
+    if(mode==='draw') setupDrawCanvas(); else removeDrawCanvas();
+  });
+});
+
+function showCompletion(){
+  document.getElementById('completeCard').style.display='';
+  document.getElementById('summaryCard').style.display='none';
+  document.getElementById('overlay').classList.add('show');
+  const total=cells.filter(c=>c.locked).length;
+  document.getElementById('completeMsg').textContent='מצאתם את כל '+total+' האותיות! 🌟';
+}
+
+function closeOverlay(){document.getElementById('overlay').classList.remove('show');}
+
+function nextLevel(){
+  closeOverlay();
+  if(cur<14) loadLevel(cur+1); else showSummary();
+}
+
+function replayLevel(){closeOverlay();loadLevel(cur);}
+
+function showSummary(){
+  document.getElementById('completeCard').style.display='none';
+  document.getElementById('summaryCard').style.display='';
+  document.getElementById('overlay').classList.add('show');
+  const rows=document.getElementById('summaryRows');
+  rows.innerHTML='';
+  let done=0;
+  TAB_LABELS.forEach((l,i)=>{
+    const ok=levelDone[i];if(ok) done++;
+    const r=document.createElement('div');r.className='summary-row';
+    r.innerHTML='<span class="summary-label">'+(i+1)+' · '+l+'</span><span class="summary-value '+(ok?'perfect':'')+'">'+(ok?'✅':'—')+'</span>';
+    rows.appendChild(r);
+  });
+  const t=document.createElement('div');t.className='summary-row';
+  t.innerHTML='<span class="summary-label" style="font-weight:700">סה״כ</span><span class="summary-value perfect">'+done+' / 15</span>';
+  rows.appendChild(t);
+}
+
+function redoAll(){closeOverlay();levelDone=new Array(15).fill(false);loadLevel(0);}
+
+window.addEventListener('resize',()=>{if(mode==='draw'&&drawCanvas) setupDrawCanvas();});
+
+// Init
+levelDone=new Array(15).fill(false);
+buildTabs();
+loadLevel(0);
+</script>
+</body>
+</html>

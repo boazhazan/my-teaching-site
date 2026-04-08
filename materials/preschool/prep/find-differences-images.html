@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מצאו את ההבדלים — תמונות</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap');
+:root{
+  --pri:#2563eb;--pri-dark:#1d4ed8;--pri-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --ok:#10b981;--no:#ef4444;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,0.1),0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,0.07),0 2px 4px rgba(0,0,0,0.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,0.1),0 4px 6px rgba(0,0,0,0.05);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);direction:rtl;min-height:100vh}
+
+/* Animations */
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(0)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0.6)}50%{box-shadow:0 0 0 15px rgba(245,158,11,0)}}
+@keyframes ripple{0%{transform:scale(0);opacity:0.6}100%{transform:scale(2);opacity:0}}
+@keyframes progressFill{from{width:0}to{width:var(--pct)}}
+
+/* Header */
+.header{background:linear-gradient(135deg,var(--pri-light),#fff);padding:20px;text-align:center;border-bottom:3px solid var(--pri)}
+.header h1{font-size:1.8rem;font-weight:800;color:var(--pri-dark);margin-bottom:4px}
+.header p{color:var(--text-light);font-size:0.95rem;font-weight:400}
+
+/* Mode bar */
+.mode-bar{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.mode-btn{padding:8px 20px;border:2px solid var(--border);border-radius:999px;background:var(--bg);cursor:pointer;font-family:inherit;font-size:0.95rem;font-weight:600;color:var(--text-light);transition:all .25s ease}
+.mode-btn.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+.mode-btn:hover:not(.active){border-color:var(--pri);color:var(--pri)}
+
+/* Level tabs */
+.tabs-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.tabs{display:flex;gap:6px;min-width:max-content}
+.tab{padding:6px 14px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:0.82rem;font-weight:600;color:var(--text-light);white-space:nowrap;transition:all .25s ease}
+.tab.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tab.done{background:var(--ok);color:#fff;border-color:var(--ok)}
+.tab:hover:not(.active):not(.done){border-color:var(--pri);color:var(--pri)}
+
+/* Counter & progress */
+.counter-bar{padding:12px 16px;background:var(--bg);border-bottom:1px solid var(--border);text-align:center}
+.counter-card{display:inline-flex;align-items:center;gap:12px;background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:10px 20px;box-shadow:var(--shadow)}
+.counter-text{font-size:1.05rem;font-weight:700;color:var(--text)}
+.counter-text .found{color:var(--ok)}
+.progress-wrap{width:120px;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;background:var(--ok);border-radius:999px;transition:width .4s ease}
+.hint-btn{padding:6px 16px;border-radius:999px;border:2px solid var(--accent);background:var(--bg);cursor:pointer;font-family:inherit;font-size:0.9rem;font-weight:600;color:var(--accent-dark);transition:all .25s ease}
+.hint-btn:hover:not(:disabled){background:var(--accent);color:#fff}
+.hint-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Images area */
+.images-area{display:flex;gap:16px;padding:16px;max-width:1200px;margin:0 auto;direction:rtl}
+.img-card{flex:1;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-md);background:var(--bg);animation:fi .4s ease}
+.img-card.original{border:3px solid var(--border)}
+.img-card.changed{border:3px dashed var(--accent)}
+.img-label{padding:8px 12px;text-align:center;font-weight:700;font-size:0.95rem;background:var(--bg-soft);border-bottom:1px solid var(--border)}
+.img-container{position:relative;width:100%;overflow:hidden;cursor:crosshair}
+.img-container img{display:block;width:100%;height:auto}
+.img-placeholder{display:flex;align-items:center;justify-content:center;min-height:250px;border:3px dashed var(--border);border-radius:var(--radius-sm);color:var(--text-light);font-size:1rem;font-weight:500;margin:8px;background:var(--bg-soft)}
+
+/* Found markers */
+.diff-marker{position:absolute;width:44px;height:44px;border:3px solid var(--ok);border-radius:50%;background:rgba(16,185,129,0.2);transform:translate(-50%,-50%);animation:pop .4s ease;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;color:var(--ok);pointer-events:none;z-index:10}
+.diff-marker.on-original{border-color:var(--pri);background:rgba(37,99,235,0.15);color:var(--pri)}
+
+/* Hint glow */
+.hint-glow{position:absolute;width:50px;height:50px;border-radius:50%;transform:translate(-50%,-50%);animation:pulse 1s ease infinite;pointer-events:none;z-index:5;border:3px solid var(--accent);background:rgba(245,158,11,0.15)}
+
+/* Miss ripple */
+.miss-ripple{position:absolute;width:30px;height:30px;border-radius:50%;background:rgba(239,68,68,0.4);transform:translate(-50%,-50%);animation:ripple .6s ease forwards;pointer-events:none;z-index:10}
+
+/* Draw canvas */
+.draw-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:8;touch-action:none}
+
+/* Completion card */
+.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.45);z-index:100;align-items:center;justify-content:center}
+.overlay.show{display:flex}
+.complete-card{background:var(--bg);border-radius:16px;padding:32px;text-align:center;max-width:380px;width:90%;box-shadow:var(--shadow-lg);animation:pop .5s ease}
+.complete-card .emoji{font-size:3.5rem;margin-bottom:12px}
+.complete-card h2{font-size:1.4rem;font-weight:800;color:var(--pri-dark);margin-bottom:8px}
+.complete-card p{color:var(--text-light);margin-bottom:20px;font-size:0.95rem}
+.pill-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.pill-btn{padding:10px 22px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:0.95rem;font-weight:700;transition:all .25s ease}
+.pill-btn.primary{background:var(--pri);color:#fff}
+.pill-btn.primary:hover{background:var(--pri-dark)}
+.pill-btn.secondary{background:var(--bg-soft);color:var(--text);border:2px solid var(--border)}
+.pill-btn.secondary:hover{border-color:var(--pri);color:var(--pri)}
+
+/* Summary */
+.summary-card{background:var(--bg);border-radius:16px;padding:32px;text-align:center;max-width:420px;width:90%;box-shadow:var(--shadow-lg);animation:fi .4s ease}
+.summary-card h2{font-size:1.3rem;font-weight:800;color:var(--pri-dark);margin-bottom:16px}
+.summary-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:0.95rem}
+.summary-row:last-of-type{border:none}
+.summary-label{color:var(--text-light)}
+.summary-value{font-weight:700}
+.summary-value.perfect{color:var(--ok)}
+
+/* Print */
+@media print{
+  .mode-bar,.tabs-wrap,.counter-bar,.overlay,.hint-btn,.header p{display:none!important}
+  .header{border:none;padding:10px}
+  .images-area{flex-direction:row!important;gap:8px;padding:8px}
+  .img-card{border:1px solid #ccc!important;break-inside:avoid}
+  .img-card.changed{border-style:dashed!important}
+  .diff-marker,.hint-glow,.miss-ripple,.draw-canvas{display:none!important}
+  body{background:#fff}
+}
+
+/* Responsive */
+@media(max-width:768px){
+  .images-area{flex-direction:column;gap:12px;padding:12px}
+  .img-card{flex:none;width:100%}
+  .header h1{font-size:1.4rem}
+  .counter-card{flex-wrap:wrap;justify-content:center}
+  .mode-btn{padding:6px 14px;font-size:0.85rem}
+  .tab{padding:5px 10px;font-size:0.78rem}
+  .diff-marker{width:36px;height:36px;font-size:0.65rem}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🔍 מצאו את ההבדלים</h1>
+  <p>לחצו על ההבדלים בתמונה השמאלית</p>
+</div>
+
+<div class="mode-bar">
+  <button class="mode-btn active" data-mode="click">👆 לחיצה</button>
+  <button class="mode-btn" data-mode="draw">✏️ ציור</button>
+  <button class="mode-btn" data-mode="print">🖨️ הדפסה</button>
+</div>
+
+<div class="tabs-wrap"><div class="tabs" id="tabs"></div></div>
+
+<div class="counter-bar">
+  <div class="counter-card">
+    <span class="counter-text">מצאתם <span class="found" id="foundCount">0</span> מתוך <span id="totalCount">0</span> הבדלים</span>
+    <div class="progress-wrap"><div class="progress-fill" id="progressBar"></div></div>
+    <button class="hint-btn" id="hintBtn" onclick="giveHint()">💡 רמז</button>
+  </div>
+</div>
+
+<div class="images-area" id="imagesArea">
+  <div class="img-card original">
+    <div class="img-label">🖼️ ציור מקורי</div>
+    <div class="img-container" id="originalContainer">
+      <img id="originalImg" src="" alt="ציור מקורי" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="img-placeholder" style="display:none">טענו תמונה</div>
+    </div>
+  </div>
+  <div class="img-card changed">
+    <div class="img-label">🔍 מצאו את ההבדלים!</div>
+    <div class="img-container" id="changedContainer">
+      <img id="changedImg" src="" alt="מצאו את ההבדלים" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="img-placeholder" style="display:none">טענו תמונה</div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="complete-card" id="completeCard">
+    <div class="emoji">🎉🔍</div>
+    <h2 id="completeTitle">כל הכבוד!</h2>
+    <p id="completeMsg">מצאתם את כל ההבדלים!</p>
+    <div class="pill-btns">
+      <button class="pill-btn primary" onclick="nextLevel()">▶ שלב הבא</button>
+      <button class="pill-btn secondary" onclick="replayLevel()">🔄 שחקו שוב</button>
+    </div>
+  </div>
+  <div class="summary-card" id="summaryCard" style="display:none">
+    <h2>🏆 סיכום</h2>
+    <div id="summaryRows"></div>
+    <div class="pill-btns" style="margin-top:16px">
+      <button class="pill-btn primary" onclick="redoAll()">🔄 מההתחלה</button>
+      <button class="pill-btn secondary" onclick="closeOverlay()">✖ סגירה</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const LEVELS_DATA = [
+  {level:1,totalDiffs:9,differences:[{id:1,x:50.7,y:27.1},{id:2,x:88.7,y:29.3},{id:3,x:25,y:39.5},{id:4,x:5.6,y:8.5},{id:5,x:69,y:88.8},{id:6,x:65.6,y:69.7},{id:7,x:96.1,y:9.6},{id:8,x:22.1,y:30.5},{id:9,x:53.3,y:53.6}]},
+  {level:2,totalDiffs:8,differences:[{id:1,x:62.7,y:26.2},{id:2,x:78.5,y:82.1},{id:3,x:34.4,y:90},{id:4,x:12.1,y:18.1},{id:5,x:50.1,y:29.1},{id:6,x:77.2,y:32.4},{id:7,x:90.1,y:13},{id:8,x:98.5,y:35.3}]},
+  {level:3,totalDiffs:9,differences:[{id:1,x:87,y:20.3},{id:2,x:62.7,y:21.4},{id:3,x:83.6,y:62.1},{id:4,x:55.6,y:52.2},{id:5,x:20.8,y:22},{id:6,x:30.8,y:21.7},{id:7,x:21.6,y:34.1},{id:8,x:44.1,y:62.6},{id:9,x:28.5,y:86.3}]},
+  {level:4,totalDiffs:10,differences:[{id:1,x:21.5,y:32.7},{id:2,x:22.4,y:64.9},{id:3,x:10.5,y:77.3},{id:4,x:24.8,y:88},{id:5,x:42.7,y:53.9},{id:6,x:85,y:37.5},{id:7,x:85.5,y:85.5},{id:8,x:50.2,y:94.8},{id:9,x:6.2,y:95.3},{id:10,x:70.5,y:82.1}]},
+  {level:5,totalDiffs:6,differences:[{id:1,x:25.3,y:84.6},{id:2,x:14.7,y:62.3},{id:3,x:88.1,y:21.4},{id:4,x:79,y:36.7},{id:5,x:50.4,y:60.4},{id:6,x:62.8,y:83.2}]},
+  {level:6,totalDiffs:7,differences:[{id:1,x:29.6,y:31.9},{id:2,x:18.7,y:66},{id:3,x:36.8,y:73.3},{id:4,x:62.8,y:44},{id:5,x:50.2,y:45.7},{id:6,x:88.5,y:44.6},{id:7,x:82.1,y:70.5}]},
+  {level:7,totalDiffs:8,differences:[{id:1,x:78.2,y:75.9},{id:2,x:90.8,y:70.8},{id:3,x:90.1,y:42.9},{id:4,x:45.8,y:68},{id:5,x:29.9,y:62.9},{id:6,x:11.9,y:62.6},{id:7,x:58.4,y:69.7},{id:8,x:13.5,y:40.1}]},
+  {level:8,totalDiffs:9,differences:[{id:1,x:15.8,y:58.7},{id:2,x:38.5,y:41.5},{id:3,x:69,y:20.3},{id:4,x:87.2,y:43.4},{id:5,x:83.6,y:67.4},{id:6,x:74.8,y:60.1},{id:7,x:74.8,y:91.4},{id:8,x:91.6,y:63.7},{id:9,x:50.1,y:52.5}]},
+  {level:9,totalDiffs:7,differences:[{id:1,x:66.4,y:55},{id:2,x:84.2,y:72.5},{id:3,x:68.4,y:76.7},{id:4,x:38.7,y:62.3},{id:5,x:24.5,y:57.5},{id:6,x:16.1,y:28.2},{id:7,x:16.4,y:51.6}]},
+  {level:10,totalDiffs:7,differences:[{id:1,x:64.5,y:23.1},{id:2,x:49.9,y:49.9},{id:3,x:39,y:79},{id:4,x:62.2,y:90.8},{id:5,x:42.1,y:93.6},{id:6,x:24.1,y:89.4},{id:7,x:49.5,y:12.7}]},
+  {level:11,totalDiffs:10,differences:[{id:1,x:18.8,y:88.3},{id:2,x:28.4,y:84.3},{id:3,x:29,y:20.3},{id:4,x:13,y:44.8},{id:5,x:20.4,y:60.9},{id:6,x:39.6,y:80.4},{id:7,x:67,y:58.4},{id:8,x:59.3,y:66.3},{id:9,x:75.5,y:45.4},{id:10,x:93.6,y:81.2}]},
+  {level:12,totalDiffs:9,differences:[{id:1,x:65.3,y:71.4},{id:2,x:83.8,y:88.8},{id:3,x:93.2,y:42.9},{id:4,x:98.5,y:7.3},{id:5,x:37.8,y:27.6},{id:6,x:49.2,y:63.7},{id:7,x:21.5,y:75.9},{id:8,x:7,y:81},{id:9,x:9.2,y:93.6}]},
+  {level:13,totalDiffs:15,differences:[{id:1,x:69.5,y:81.5},{id:2,x:89.2,y:71.4},{id:3,x:97.8,y:12.4},{id:4,x:85.3,y:24.5},{id:5,x:77.2,y:8.5},{id:6,x:42.2,y:9},{id:7,x:58.1,y:22.3},{id:8,x:47.8,y:26.5},{id:9,x:48.4,y:78.4},{id:10,x:42.5,y:51.1},{id:11,x:35.8,y:78.1},{id:12,x:17.3,y:50.2},{id:13,x:7,y:29.9},{id:14,x:15.6,y:6.2},{id:15,x:16.7,y:77.8}]},
+  {level:14,totalDiffs:6,differences:[{id:1,x:85.2,y:81.5},{id:2,x:65.8,y:50.5},{id:3,x:61.6,y:60.1},{id:4,x:41.2,y:90.3},{id:5,x:50.2,y:14.9},{id:6,x:49.8,y:29.3}]},
+  {level:15,totalDiffs:9,differences:[{id:1,x:32.5,y:27.9},{id:2,x:57.2,y:32.2},{id:3,x:93.5,y:34.7},{id:4,x:77.9,y:46.3},{id:5,x:18.7,y:48.8},{id:6,x:33.6,y:53.9},{id:7,x:46.2,y:70.5},{id:8,x:52.2,y:81.2},{id:9,x:95.8,y:88.8}]}
+];
+
+const LEVEL_NAMES = ['איש שלג','גינה','חדר ילדים','חווה','חוף ים','עיר','גן חיות','מטבח','חלל','תת המים','יער','יום גשום','יום הולדת','פארק שעשועים','כיתה'];
+const HIT_RADIUS = 4; // percentage of image width
+const HINTS_PER_LEVEL = 2;
+const IMG_BASE = 'assets/images/find-diff/';
+
+let currentLevel = 0;
+let mode = 'click';
+let foundDiffs = new Set();
+let hintsUsed = 0;
+let levelComplete = [];
+let drawPoints = [];
+let isDrawing = false;
+let drawCanvas, drawCtx;
+
+// Build tabs
+function buildTabs(){
+  const wrap = document.getElementById('tabs');
+  wrap.innerHTML = '';
+  LEVELS_DATA.forEach((l,i) => {
+    const t = document.createElement('button');
+    t.className = 'tab' + (i === currentLevel ? ' active' : '') + (levelComplete[i] ? ' done' : '');
+    t.textContent = (i+1) + ' · ' + LEVEL_NAMES[i];
+    t.onclick = () => loadLevel(i);
+    wrap.appendChild(t);
+  });
+}
+
+function loadLevel(idx){
+  currentLevel = idx;
+  foundDiffs = new Set();
+  hintsUsed = 0;
+  const data = LEVELS_DATA[idx];
+
+  // Update images
+  const origImg = document.getElementById('originalImg');
+  const changedImg = document.getElementById('changedImg');
+  origImg.src = IMG_BASE + 'level-' + (idx+1) + '-original.png';
+  changedImg.src = IMG_BASE + 'level-' + (idx+1) + '-changed.png';
+  origImg.style.display = '';
+  changedImg.style.display = '';
+  origImg.nextElementSibling.style.display = 'none';
+  changedImg.nextElementSibling.style.display = 'none';
+
+  // Clear markers
+  document.querySelectorAll('.diff-marker,.hint-glow,.miss-ripple').forEach(e => e.remove());
+  removeDrawCanvas();
+
+  updateCounter();
+  updateHintBtn();
+  buildTabs();
+
+  if(mode === 'draw') setupDrawCanvas();
+
+  // Scroll tab into view
+  const tabs = document.querySelectorAll('.tab');
+  if(tabs[idx]) tabs[idx].scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+}
+
+function updateCounter(){
+  const data = LEVELS_DATA[currentLevel];
+  const found = foundDiffs.size;
+  const total = data.totalDiffs;
+  document.getElementById('foundCount').textContent = found;
+  document.getElementById('totalCount').textContent = total;
+  const pct = total > 0 ? (found / total * 100) : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function updateHintBtn(){
+  const btn = document.getElementById('hintBtn');
+  btn.disabled = hintsUsed >= HINTS_PER_LEVEL;
+  btn.textContent = '💡 רמז (' + (HINTS_PER_LEVEL - hintsUsed) + ')';
+}
+
+// Click handling on changed image
+document.getElementById('changedContainer').addEventListener('click', function(e){
+  if(mode !== 'click') return;
+  handleInteraction(e, this);
+});
+
+function handleInteraction(e, container){
+  const img = container.querySelector('img');
+  if(!img || img.style.display === 'none') return;
+  const rect = img.getBoundingClientRect();
+  const clickX = ((e.clientX - rect.left) / rect.width) * 100;
+  const clickY = ((e.clientY - rect.top) / rect.height) * 100;
+  checkDiff(clickX, clickY, container);
+}
+
+function checkDiff(clickX, clickY, container){
+  const data = LEVELS_DATA[currentLevel];
+  let found = null;
+  for(const diff of data.differences){
+    if(foundDiffs.has(diff.id)) continue;
+    const dist = Math.sqrt((clickX - diff.x)**2 + (clickY - diff.y)**2);
+    if(dist <= HIT_RADIUS){
+      found = diff;
+      break;
+    }
+  }
+  if(found){
+    markFound(found, container);
+  } else {
+    showMiss(clickX, clickY, container);
+  }
+}
+
+function markFound(diff, container){
+  foundDiffs.add(diff.id);
+
+  // Green marker on changed image
+  const marker = document.createElement('div');
+  marker.className = 'diff-marker';
+  marker.style.left = diff.x + '%';
+  marker.style.top = diff.y + '%';
+  marker.textContent = foundDiffs.size;
+  container.appendChild(marker);
+
+  // Blue marker on original image
+  const origContainer = document.getElementById('originalContainer');
+  const origMarker = document.createElement('div');
+  origMarker.className = 'diff-marker on-original';
+  origMarker.style.left = diff.x + '%';
+  origMarker.style.top = diff.y + '%';
+  origMarker.textContent = foundDiffs.size;
+  origContainer.appendChild(origMarker);
+  // Brief glow on original
+  origMarker.style.animation = 'pop .4s ease, bounce .6s ease .4s';
+
+  updateCounter();
+
+  // Check completion
+  const data = LEVELS_DATA[currentLevel];
+  if(foundDiffs.size >= data.totalDiffs){
+    levelComplete[currentLevel] = true;
+    buildTabs();
+    setTimeout(showCompletion, 600);
+  }
+}
+
+function showMiss(x, y, container){
+  const ripple = document.createElement('div');
+  ripple.className = 'miss-ripple';
+  ripple.style.left = x + '%';
+  ripple.style.top = y + '%';
+  container.appendChild(ripple);
+  setTimeout(() => ripple.remove(), 600);
+}
+
+// Hint
+function giveHint(){
+  if(hintsUsed >= HINTS_PER_LEVEL) return;
+  const data = LEVELS_DATA[currentLevel];
+  const unfound = data.differences.filter(d => !foundDiffs.has(d.id));
+  if(unfound.length === 0) return;
+
+  hintsUsed++;
+  updateHintBtn();
+
+  const target = unfound[Math.floor(Math.random() * unfound.length)];
+  const container = document.getElementById('changedContainer');
+  const glow = document.createElement('div');
+  glow.className = 'hint-glow';
+  glow.style.left = target.x + '%';
+  glow.style.top = target.y + '%';
+  container.appendChild(glow);
+  setTimeout(() => glow.remove(), 3000);
+}
+
+// Draw mode
+function setupDrawCanvas(){
+  removeDrawCanvas();
+  const container = document.getElementById('changedContainer');
+  const canvas = document.createElement('canvas');
+  canvas.className = 'draw-canvas';
+  const img = container.querySelector('img');
+  canvas.width = container.offsetWidth;
+  canvas.height = container.offsetHeight;
+  container.appendChild(canvas);
+  drawCanvas = canvas;
+  drawCtx = canvas.getContext('2d');
+
+  canvas.addEventListener('pointerdown', drawStart, {passive:false});
+  canvas.addEventListener('pointermove', drawMove, {passive:false});
+  canvas.addEventListener('pointerup', drawEnd, {passive:false});
+  canvas.addEventListener('pointercancel', drawEnd, {passive:false});
+}
+
+function removeDrawCanvas(){
+  if(drawCanvas){
+    drawCanvas.remove();
+    drawCanvas = null;
+    drawCtx = null;
+  }
+  drawPoints = [];
+  isDrawing = false;
+}
+
+function drawStart(e){
+  e.preventDefault();
+  isDrawing = true;
+  drawPoints = [];
+  const rect = drawCanvas.getBoundingClientRect();
+  drawPoints.push({x: e.clientX - rect.left, y: e.clientY - rect.top});
+}
+
+function drawMove(e){
+  if(!isDrawing) return;
+  e.preventDefault();
+  const rect = drawCanvas.getBoundingClientRect();
+  drawPoints.push({x: e.clientX - rect.left, y: e.clientY - rect.top});
+
+  drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+  drawCtx.beginPath();
+  drawCtx.strokeStyle = 'rgba(37,99,235,0.6)';
+  drawCtx.lineWidth = 3;
+  drawCtx.lineCap = 'round';
+  drawCtx.lineJoin = 'round';
+  for(let i = 0; i < drawPoints.length; i++){
+    if(i === 0) drawCtx.moveTo(drawPoints[i].x, drawPoints[i].y);
+    else drawCtx.lineTo(drawPoints[i].x, drawPoints[i].y);
+  }
+  drawCtx.stroke();
+}
+
+function drawEnd(e){
+  if(!isDrawing) return;
+  isDrawing = false;
+  if(drawPoints.length < 3){
+    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+    return;
+  }
+
+  // Calculate center of drawn stroke
+  let sumX = 0, sumY = 0;
+  for(const p of drawPoints){ sumX += p.x; sumY += p.y; }
+  const centerX = (sumX / drawPoints.length / drawCanvas.width) * 100;
+  const centerY = (sumY / drawPoints.length / drawCanvas.height) * 100;
+
+  // Fade out drawing
+  drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+
+  const container = document.getElementById('changedContainer');
+  checkDiff(centerX, centerY, container);
+}
+
+// Mode switching
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    mode = this.dataset.mode;
+
+    if(mode === 'print'){
+      window.print();
+      // Revert to click after print
+      setTimeout(() => {
+        document.querySelector('[data-mode="click"]').click();
+      }, 500);
+      return;
+    }
+
+    if(mode === 'draw'){
+      setupDrawCanvas();
+    } else {
+      removeDrawCanvas();
+    }
+  });
+});
+
+// Completion
+function showCompletion(){
+  document.getElementById('completeCard').style.display = '';
+  document.getElementById('summaryCard').style.display = 'none';
+  document.getElementById('overlay').classList.add('show');
+  const data = LEVELS_DATA[currentLevel];
+  document.getElementById('completeMsg').textContent = 'מצאתם את כל ' + data.totalDiffs + ' ההבדלים! 🌟';
+}
+
+function closeOverlay(){
+  document.getElementById('overlay').classList.remove('show');
+}
+
+function nextLevel(){
+  closeOverlay();
+  if(currentLevel < LEVELS_DATA.length - 1){
+    loadLevel(currentLevel + 1);
+  } else {
+    showSummary();
+  }
+}
+
+function replayLevel(){
+  closeOverlay();
+  loadLevel(currentLevel);
+}
+
+function showSummary(){
+  document.getElementById('completeCard').style.display = 'none';
+  document.getElementById('summaryCard').style.display = '';
+  document.getElementById('overlay').classList.add('show');
+
+  const rows = document.getElementById('summaryRows');
+  rows.innerHTML = '';
+  let completed = 0;
+  LEVELS_DATA.forEach((l,i) => {
+    const row = document.createElement('div');
+    row.className = 'summary-row';
+    const done = levelComplete[i];
+    if(done) completed++;
+    row.innerHTML = '<span class="summary-label">' + (i+1) + ' · ' + LEVEL_NAMES[i] + '</span><span class="summary-value ' + (done ? 'perfect' : '') + '">' + (done ? '✅' : '—') + '</span>';
+    rows.appendChild(row);
+  });
+
+  const totalRow = document.createElement('div');
+  totalRow.className = 'summary-row';
+  totalRow.innerHTML = '<span class="summary-label" style="font-weight:700">סה״כ</span><span class="summary-value perfect">' + completed + ' / ' + LEVELS_DATA.length + '</span>';
+  rows.appendChild(totalRow);
+}
+
+function redoAll(){
+  closeOverlay();
+  levelComplete = new Array(LEVELS_DATA.length).fill(false);
+  loadLevel(0);
+}
+
+// Handle window resize for draw canvas
+window.addEventListener('resize', () => {
+  if(mode === 'draw' && drawCanvas){
+    setupDrawCanvas();
+  }
+});
+
+// Init
+levelComplete = new Array(LEVELS_DATA.length).fill(false);
+buildTabs();
+loadLevel(0);
+</script>
+</body>
+</html>

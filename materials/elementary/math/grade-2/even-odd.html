@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>זוגי ואי-זוגי — כיתה ב' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#0d9488;--primary-dark:#0f766e;--primary-light:#ccfbf1;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#0d9488 0%,#14b8a6 50%,#2dd4bf 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(13,148,136,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.tip-example .math{direction:ltr;display:inline-block;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:3rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary)}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.answer-btn.even-btn{border-color:#6ee7b7;background:#ecfdf5}.answer-btn.odd-btn{border-color:#fca5a5;background:#fef2f2}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+/* Number grid for sorting */
+.num-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:16px 0}
+.num-cell{width:52px;height:52px;border-radius:12px;border:2px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:800;cursor:pointer;transition:all .2s}.num-cell:hover{transform:scale(1.08)}.num-cell.selected-even{background:#6ee7b7;color:#065f46;border-color:#059669}.num-cell.selected-odd{background:#fca5a5;color:#991b1b;border-color:#ef4444}.num-cell.disabled{opacity:.6;cursor:default}
+.sort-legend{display:flex;justify-content:center;gap:20px;margin-bottom:12px;font-size:.85rem;font-weight:600}
+.legend-item{display:flex;align-items:center;gap:6px}
+.legend-dot{width:16px;height:16px;border-radius:50%}
+.legend-even{background:#6ee7b7}.legend-odd{background:#fca5a5}
+
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:2.2rem;padding:6px 20px}.num-cell{width:44px;height:44px;font-size:1.1rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🔢</div><div><h1>זוגי ואי-זוגי</h1><div class="subtitle">כיתה ב' — מספרים זוגיים ואי-זוגיים</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">זוגי ואי-זוגי — כיתה ב' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>❓ איך משחקים?</h2><p><strong>מספר זוגי</strong> מתחלק ב-2 בלי שארית. הוא נגמר ב: 0, 2, 4, 6, 8.</p><p><strong>מספר אי-זוגי</strong> לא מתחלק ב-2. הוא נגמר ב: 1, 3, 5, 7, 9.</p><p>15 רמות — מזיהוי פשוט ועד חקירות מתמטיות!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function isEven(n){return n%2===0}
+
+// Q type: identify - is number even or odd?
+function genIdentify(max){
+  const n=rr(1,max);
+  const ans=isEven(n)?'זוגי':'אי-זוגי';
+  return{type:'choice',qText:'האם המספר זוגי או אי-זוגי?',display:'<div class="num-display"><span class="big-num">'+n+'</span></div>',answer:ans,options:['זוגי','אי-זוגי'],colClass:'cols-2'};
+}
+
+// Q type: pick all even/odd from a set
+function genPickType(max,pickEven){
+  const count=8;
+  const nums=[];
+  const used=new Set();
+  while(nums.length<count){const n=rr(1,max);if(!used.has(n)){used.add(n);nums.push(n)}}
+  const target=pickEven?'זוגי':'אי-זוגי';
+  const correctNums=nums.filter(n=>pickEven?isEven(n):!isEven(n));
+  // Make sure at least 2 correct
+  if(correctNums.length<2){
+    const need=pickEven?[2,4]:([1,3]);
+    nums[0]=need[0];nums[1]=need[1];
+  }
+  return{type:'sort',qText:'לחצו על כל המספרים ה'+target+'ים!',nums:shuffle(nums),pickEven,answer:target};
+}
+
+// Q type: what's the next even/odd?
+function genNextEvenOdd(max){
+  const n=rr(2,max-2);
+  const wantEven=rr(0,1)===0;
+  let next;
+  if(wantEven){next=isEven(n)?n+2:n+1}else{next=isEven(n)?n+1:n+2}
+  const label=wantEven?'זוגי':'אי-זוגי';
+  return{type:'choice',qText:'מהו המספר ה'+label+' הבא אחרי '+n+'?',display:'<div class="num-display"><span class="big-num">'+n+'</span></div>',answer:String(next),options:shuffle([String(next),String(next+2),String(next-1),String(n)]),colClass:'cols-4'};
+}
+
+// Q type: build even number from digits
+function genBuildEven(){
+  const digits=shuffle([rr(1,9),rr(0,9),rr(0,9)]);
+  // Find all possible 2-digit even numbers from these digits
+  const possibles=[];
+  for(let i=0;i<digits.length;i++){
+    for(let j=0;j<digits.length;j++){
+      if(i!==j){
+        const num=digits[i]*10+digits[j];
+        if(num>=10&&isEven(num))possibles.push(num);
+      }
+    }
+  }
+  if(possibles.length===0){digits[1]=2;possibles.push(digits[0]*10+2)}
+  const ans=possibles[rr(0,possibles.length-1)];
+  // Generate wrong options that are odd
+  const wrongs=[];
+  for(let i=0;i<digits.length;i++){for(let j=0;j<digits.length;j++){if(i!==j){const n=digits[i]*10+digits[j];if(n>=10&&!isEven(n)&&wrongs.length<3)wrongs.push(n)}}}
+  while(wrongs.length<3)wrongs.push(ans+1);
+  return{type:'choice',qText:'בנו מספר זוגי דו-ספרתי מהספרות: '+digits.join(', '),display:'<div class="num-grid">'+digits.map(d=>'<div class="num-cell" style="cursor:default;background:var(--primary-light);border-color:var(--primary)">'+d+'</div>').join('')+'</div>',answer:String(ans),options:shuffle([String(ans),...wrongs.slice(0,3).map(String)]),colClass:'cols-4'};
+}
+
+// Q type: sum investigation
+function genSumInvestigation(){
+  const types=[
+    {q:'מה קורה כשמחברים שני מספרים זוגיים?',a:'זוגי',nums:()=>{const a=rr(1,10)*2,b=rr(1,10)*2;return{a,b,sum:a+b}}},
+    {q:'מה קורה כשמחברים שני מספרים אי-זוגיים?',a:'זוגי',nums:()=>{const a=rr(0,9)*2+1,b=rr(0,9)*2+1;return{a,b,sum:a+b}}},
+    {q:'מה קורה כשמחברים זוגי ואי-זוגי?',a:'אי-זוגי',nums:()=>{const a=rr(1,10)*2,b=rr(0,9)*2+1;return{a,b,sum:a+b}}},
+  ];
+  const t=types[rr(0,2)];
+  const ex=t.nums();
+  return{type:'choice',qText:t.q,display:'<div class="num-display" style="font-size:1rem;direction:ltr"><span class="math">'+ex.a+' + '+ex.b+' = '+ex.sum+'</span> → התוצאה '+( isEven(ex.sum)?'זוגית':'אי-זוגית')+'</div><div style="text-align:center;margin-top:8px;font-weight:700;color:var(--primary)">האם זה תמיד ככה?</div>',answer:t.a,options:['זוגי','אי-זוגי'],colClass:'cols-2'};
+}
+
+// Q type: how many even/odd in range
+function genCountInRange(){
+  const start=rr(1,5)*10;
+  const end=start+10;
+  const wantEven=rr(0,1)===0;
+  let count=0;
+  for(let i=start;i<=end;i++){if(wantEven?isEven(i):!isEven(i))count++}
+  const label=wantEven?'זוגיים':'אי-זוגיים';
+  return{type:'choice',qText:'כמה מספרים '+label+' יש בין '+start+' ל-'+end+'?',display:'',answer:String(count),options:shuffle([String(count),String(count+1),String(count-1),String(count+2)]),colClass:'cols-4'};
+}
+
+const levels=[
+  {title:'זוגי או אי-זוגי?',instruction:'זהו — האם המספר זוגי או אי-זוגי?',tip:'💡 טיפ: מספר זוגי נגמר ב: 0, 2, 4, 6, 8. מספר אי-זוגי נגמר ב: 1, 3, 5, 7, 9.',example:'<span class="math">4</span> → נגמר ב-4 → זוגי!\n<span class="math">7</span> → נגמר ב-7 → אי-זוגי!',gen:()=>genIdentify(20)},
+  {title:'זוגי או אי-זוגי — עד 50',instruction:'מספרים גדולים יותר!',tip:'💡 טיפ: תסתכלו רק על ספרת היחידות (הספרה האחרונה)!',example:'<span class="math">34</span> → נגמר ב-4 → זוגי!\n<span class="math">47</span> → נגמר ב-7 → אי-זוגי!',gen:()=>genIdentify(50)},
+  {title:'זוגי או אי-זוגי — עד 100',instruction:'מספרים דו-ספרתיים!',tip:'💡 טיפ: לא משנה מה ספרת העשרות — רק היחידות קובעות!',example:'<span class="math">86</span> → נגמר ב-6 → זוגי!\n<span class="math">93</span> → נגמר ב-3 → אי-זוגי!',gen:()=>genIdentify(100)},
+  {title:'מצאו את הזוגיים',instruction:'לחצו על כל המספרים הזוגיים!',tip:'💡 טיפ: חפשו מספרים שנגמרים ב-0, 2, 4, 6 או 8!',example:'מתוך 3, 8, 11, 14, 7 → הזוגיים: 8, 14',gen:()=>genPickType(30,true)},
+  {title:'מצאו את האי-זוגיים',instruction:'לחצו על כל המספרים האי-זוגיים!',tip:'💡 טיפ: חפשו מספרים שנגמרים ב-1, 3, 5, 7 או 9!',example:'מתוך 3, 8, 11, 14, 7 → האי-זוגיים: 3, 11, 7',gen:()=>genPickType(30,false)},
+  {title:'מצאו זוגיים — מספרים גדולים',instruction:'לחצו על הזוגיים מתוך מספרים עד 100',tip:'💡 טיפ: זכרו — רק ספרת היחידות קובעת!',example:'<span class="math">52</span> → זוגי, <span class="math">67</span> → אי-זוגי',gen:()=>genPickType(99,true)},
+  {title:'המספר הזוגי/אי-זוגי הבא',instruction:'מצאו את המספר הזוגי או האי-זוגי הבא!',tip:'💡 טיפ: מספרים זוגיים: 2, 4, 6, 8... אי-זוגיים: 1, 3, 5, 7...',example:'הזוגי הבא אחרי <span class="math">5</span> → <span class="math">6</span>!\nהאי-זוגי הבא אחרי <span class="math">8</span> → <span class="math">9</span>!',gen:()=>genNextEvenOdd(50)},
+  {title:'המספר הבא — מספרים גדולים',instruction:'מספרים גדולים יותר!',tip:'💡 טיפ: הזוגי הבא = הזוגי הכי קרוב שגדול מהמספר.',example:'הזוגי הבא אחרי <span class="math">33</span> → <span class="math">34</span>!',gen:()=>genNextEvenOdd(99)},
+  {title:'כמה זוגיים/אי-זוגיים?',instruction:'ספרו כמה זוגיים או אי-זוגיים יש בטווח',tip:'💡 טיפ: בכל 10 מספרים רצופים יש 5 זוגיים ו-5 אי-זוגיים!',example:'בין 10 ל-20: זוגיים = 10, 12, 14, 16, 18, 20 = 6!',gen:()=>genCountInRange()},
+  {title:'בנו מספר זוגי!',instruction:'בנו מספר זוגי דו-ספרתי מהספרות',tip:'💡 טיפ: כדי שמספר יהיה זוגי — שימו ספרה זוגית (0,2,4,6,8) במקום היחידות!',example:'מהספרות 3, 7, 4 → <span class="math">34</span> (זוגי!) או <span class="math">74</span> (זוגי!)',gen:()=>genBuildEven()},
+  {title:'בנו מספר זוגי — תרגול',instruction:'עוד תרגול בניית מספרים זוגיים',tip:'💡 טיפ: ספרת היחידות חייבת להיות זוגית!',example:'נסו ספרות שונות — תמיד שימו ספרה זוגית בסוף!',gen:()=>genBuildEven()},
+  {title:'חקירה — סכום זוגיים',instruction:'מה קורה כשמחברים שני זוגיים?',tip:'💡 טיפ: נסו כמה דוגמאות ותראו מה קורה! <span class="math">2+4=6</span>, <span class="math">6+8=14</span>...',example:'סכום של שני זוגיים הוא תמיד... ?',gen:()=>genSumInvestigation()},
+  {title:'חקירה — סכום אי-זוגיים',instruction:'מה קורה כשמחברים שני אי-זוגיים?',tip:'💡 טיפ: נסו: <span class="math">3+5=8</span>, <span class="math">7+9=16</span>... מה מיוחד?',example:'סכום של שני אי-זוגיים הוא תמיד... ?',gen:()=>genSumInvestigation()},
+  {title:'אתגר — מעורבב',instruction:'שאלות מכל הסוגים!',tip:'🏆 טיפ: השתמשו בכל מה שלמדתם!',example:'כל שאלה היא הפתעה!',gen:()=>[()=>genIdentify(100),()=>genNextEvenOdd(99),()=>genBuildEven(),()=>genCountInRange()][rr(0,3)]()},
+  {title:'סופר-אתגר!',instruction:'הרמה הכי קשה!',tip:'🏆 טיפ: בהצלחה! 💪',example:'💪',gen:()=>[()=>genIdentify(100),()=>genNextEvenOdd(99),()=>genBuildEven(),()=>genSumInvestigation()][rr(0,3)]()},
+];
+
+let currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+const QPL=6;
+
+function renderTabs(){const row=document.getElementById('tabsRow');row.innerHTML='';levels.forEach((_,i)=>{const t=document.createElement('button');t.className='tab';t.textContent=i+1;if(i===currentLevel)t.classList.add('active');if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}t.onclick=()=>goLevel(i);row.appendChild(t)});const at=row.querySelector('.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  const lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  const seen=new Set();
+  for(let i=0;i<QPL;i++){let q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  const list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach((q,idx)=>{
+    const card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    let h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(opt=>{
+        const cls=opt==='זוגי'?'even-btn':opt==='אי-זוגי'?'odd-btn':'';
+        h+='<button class="answer-btn '+cls+'" onclick="checkChoice('+idx+',\''+opt+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    } else if(q.type==='sort'){
+      h+='<div class="sort-legend"><div class="legend-item"><div class="legend-dot legend-even"></div>זוגי</div><div class="legend-item"><div class="legend-dot legend-odd"></div>אי-זוגי</div></div>';
+      h+='<div class="num-grid" id="grid-'+idx+'">';
+      q.nums.forEach((n,ni)=>{h+='<div class="num-cell" id="cell-'+idx+'-'+ni+'" data-num="'+n+'" data-idx="'+idx+'" onclick="toggleCell(this)">'+n+'</div>'});
+      h+='</div>';
+      h+='<button class="answer-btn" style="margin:12px auto;display:block;padding:10px 28px;background:var(--primary);color:#fff;border-color:var(--primary)" onclick="checkSort('+idx+')">בדיקה ✓</button>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function toggleCell(el){
+  const idx=parseInt(el.dataset.idx);
+  const card=document.getElementById('q-'+idx);
+  if(card.classList.contains('correct'))return;
+  const n=parseInt(el.dataset.num);
+  if(el.classList.contains('selected-even')){el.classList.remove('selected-even');el.classList.add('selected-odd')}
+  else if(el.classList.contains('selected-odd')){el.classList.remove('selected-odd')}
+  else{el.classList.add('selected-even')}
+}
+
+function checkChoice(idx,chosen,btn){
+  const q=currentQuestions[idx];const card=document.getElementById('q-'+idx);const fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(b=>b.classList.add('disabled'));
+    fb.textContent=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(()=>{btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function checkSort(idx){
+  const q=currentQuestions[idx];const card=document.getElementById('q-'+idx);const fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  let allCorrect=true;
+  q.nums.forEach((n,ni)=>{
+    const cell=document.getElementById('cell-'+idx+'-'+ni);
+    const isE=isEven(n);
+    const markedEven=cell.classList.contains('selected-even');
+    const markedOdd=cell.classList.contains('selected-odd');
+    if(q.pickEven){
+      if(isE&&!markedEven)allCorrect=false;
+      if(!isE&&markedEven)allCorrect=false;
+    }else{
+      // For picking odd: selected-even means they marked as even (wrong if odd), we want them to click odd numbers
+      // Actually simpler: in pick mode, just check if correct numbers are selected-even (green)
+      if(!isE&&!markedEven)allCorrect=false; // odd number should be green
+      if(isE&&markedEven)allCorrect=false; // even number shouldn't be green
+    }
+  });
+  // Simpler approach: just mark correct ones
+  if(allCorrect){
+    card.classList.add('correct');
+    q.nums.forEach((n,ni)=>{const cell=document.getElementById('cell-'+idx+'-'+ni);cell.classList.add('disabled');if(isEven(n))cell.classList.add('selected-even');else cell.classList.add('selected-odd')});
+    fb.textContent=['מצוין! ⭐','נכון! 🎯'][rr(0,1)];fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    card.classList.add('wrong');
+    fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(()=>{card.classList.remove('wrong');fb.classList.remove('show')},1200);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  const lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function nextLevel(){if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+renderLevel();
+</script>
+</body>
+</html>

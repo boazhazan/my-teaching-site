@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>סימטריה ושיקוף — כיתה ב' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#be185d;--primary-dark:#9d174d;--primary-light:#fce7f3;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#be185d 0%,#db2777 50%,#ec4899 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(190,24,93,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.tip-example .math{direction:ltr;display:inline-block;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:20px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+/* Grid display for symmetry */
+.sym-grid-wrap{display:flex;justify-content:center;gap:0;margin:16px 0;direction:ltr}
+.sym-half{display:inline-grid;gap:1px;background:var(--border)}
+.sym-cell{width:32px;height:32px}
+.sym-cell.filled{background:#f9a8d4}
+.sym-cell.empty{background:#fff}
+.sym-cell.mirror-filled{background:#c4b5fd}
+.sym-cell.mystery{background:#fef3c7;border:2px dashed var(--accent)}
+.sym-line{width:3px;background:var(--primary);align-self:stretch;margin:0 2px;border-radius:2px}
+/* Emoji display */
+.emoji-display{text-align:center;font-size:4rem;margin:16px 0;line-height:1}
+.emoji-row{display:flex;justify-content:center;gap:24px;margin:16px 0;font-size:3rem}
+.emoji-option{cursor:pointer;transition:transform .2s;padding:8px;border-radius:12px;border:3px solid transparent}
+.emoji-option:hover{transform:scale(1.15);border-color:var(--primary-light)}
+/* Shape pairs */
+.pairs-row{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin:16px 0}
+.pair-card{background:var(--primary-light);border-radius:12px;padding:16px;text-align:center;min-width:100px}
+.pair-card .pair-emoji{font-size:2.5rem}
+.pair-card .pair-label{font-size:.8rem;font-weight:700;margin-top:4px;color:var(--primary)}
+
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-btn{padding:14px 12px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.05rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:440px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.question-card{padding:18px 14px}.header-title h1{font-size:1.1rem}.sym-cell{width:26px;height:26px}.emoji-display{font-size:3rem}.emoji-row{font-size:2.2rem;gap:12px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🔄</div><div><h1>סימטריה ושיקוף</h1><div class="subtitle">כיתה ב' — צורות סימטריות ושיקוף</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">סימטריה ושיקוף — כיתה ב' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>❓ מה זו סימטריה?</h2><p>צורה <strong>סימטרית</strong> = אם מקפלים אותה על קו האמצע, שני הצדדים חופפים בדיוק!</p><p><strong>שיקוף</strong> = כמו מראה — התמונה מתהפכת לצד השני.</p><p><strong>הזזה</strong> = אותה צורה זוזה למקום אחר, בלי להתהפך.</p><p>15 רמות — מזיהוי סימטריה ועד השלמת חצי חסר!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+// Symmetric emoji (have vertical line of symmetry)
+const symEmojis=['🦋','❤️','🌲','⭐','🏠','🎄','👑','💎','🔔','⬆️','🏔️','☂️','🎯','⚽','🌸'];
+// Non-symmetric emoji
+const nonSymEmojis=['🎵','✂️','🔑','🏃','👋','🎸','🦜','🐕','✏️','📐','🔧','🎣','🏄','🚗','👟'];
+// Letters
+const symLetters=['A','H','I','M','O','T','U','V','W','X','Y'];
+const nonSymLetters=['B','C','D','F','G','J','K','L','N','P','Q','R','S','Z'];
+
+function genIsSymmetric(){
+  const isSym=rr(0,1)===1;
+  const emoji=isSym?symEmojis[rr(0,symEmojis.length-1)]:nonSymEmojis[rr(0,nonSymEmojis.length-1)];
+  return{qText:'האם הצורה סימטרית?',display:'<div class="emoji-display">'+emoji+'</div>',answer:isSym?'כן — סימטרית':'לא — לא סימטרית',options:['כן — סימטרית','לא — לא סימטרית']};
+}
+
+function genFindSymmetric(){
+  const symIdx=rr(0,3);
+  const items=[];
+  for(let i=0;i<4;i++){
+    if(i===symIdx) items.push(symEmojis[rr(0,symEmojis.length-1)]);
+    else items.push(nonSymEmojis[rr(0,nonSymEmojis.length-1)]);
+  }
+  return{qText:'מצאו את הצורה הסימטרית!',display:'',answer:items[symIdx],options:items};
+}
+
+function genFindNonSymmetric(){
+  const nonIdx=rr(0,3);
+  const items=[];
+  for(let i=0;i<4;i++){
+    if(i===nonIdx) items.push(nonSymEmojis[rr(0,nonSymEmojis.length-1)]);
+    else items.push(symEmojis[rr(0,symEmojis.length-1)]);
+  }
+  return{qText:'מצאו את הצורה שאינה סימטרית!',display:'',answer:items[nonIdx],options:items};
+}
+
+function genLetterSym(){
+  const isSym=rr(0,1)===1;
+  const letter=isSym?symLetters[rr(0,symLetters.length-1)]:nonSymLetters[rr(0,nonSymLetters.length-1)];
+  return{qText:'האם האות סימטרית?',display:'<div class="emoji-display" style="font-family:Arial,sans-serif">'+letter+'</div>',answer:isSym?'כן — סימטרית':'לא — לא סימטרית',options:['כן — סימטרית','לא — לא סימטרית']};
+}
+
+function genGridMirror(){
+  const rows=rr(3,5);const cols=rr(2,3);
+  // Create left half
+  const left=[];
+  for(let r=0;r<rows;r++){left[r]=[];for(let c=0;c<cols;c++) left[r][c]=rr(0,1)===1}
+  // Ensure at least some filled
+  left[0][0]=true;left[rows-1][cols-1]=true;
+  // Mirror = reverse each row
+  const right=[];
+  for(let r=0;r<rows;r++){right[r]=[];for(let c=0;c<cols;c++) right[r][c]=left[r][cols-1-c]}
+  // Pick a cell on right to be mystery
+  const mr=rr(0,rows-1);const mc=rr(0,cols-1);
+  const correctFill=right[mr][mc];
+  // Build display
+  let html='<div class="sym-grid-wrap">';
+  html+='<div class="sym-half" style="grid-template-columns:repeat('+cols+',1fr)">';
+  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++) html+='<div class="sym-cell '+(left[r][c]?'filled':'empty')+'"></div>';
+  html+='</div><div class="sym-line"></div>';
+  html+='<div class="sym-half" style="grid-template-columns:repeat('+cols+',1fr)">';
+  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+    if(r===mr&&c===mc) html+='<div class="sym-cell mystery">?</div>';
+    else html+='<div class="sym-cell '+(right[r][c]?'mirror-filled':'empty')+'"></div>';
+  }
+  html+='</div></div>';
+  return{qText:'המשבצת החסרה — צבועה או ריקה?',display:html,answer:correctFill?'צבועה 🟪':'ריקה ⬜',options:['צבועה 🟪','ריקה ⬜']};
+}
+
+function genCountSymLines(){
+  const shapes=[
+    {name:'ריבוע',emoji:'⬜',lines:4},
+    {name:'מלבן',emoji:'▬',lines:2},
+    {name:'עיגול',emoji:'⭕',lines:'אינסוף'},
+    {name:'משולש שווה צלעות',emoji:'🔺',lines:3},
+    {name:'משולש שווה שוקיים',emoji:'📐',lines:1},
+  ];
+  const shape=shapes[rr(0,shapes.length-1)];
+  return{qText:'כמה צירי סימטריה יש ל'+shape.name+'? '+shape.emoji,display:'<div class="emoji-display">'+shape.emoji+'</div>',answer:String(shape.lines),options:shuffle([String(shape.lines),'1','2','4','3','אינסוף'].filter((v,i,a)=>a.indexOf(v)===i)).slice(0,4)};
+}
+
+function genReflectOrTranslate(){
+  // Show original and transformed - is it reflection or translation?
+  const emoji=symEmojis[rr(0,symEmojis.length-1)];
+  const isReflect=rr(0,1)===1;
+  let display;
+  if(isReflect){
+    display='<div class="pairs-row"><div class="pair-card"><div class="pair-emoji">'+emoji+'</div><div class="pair-label">מקור</div></div><div class="pair-card"><div class="pair-emoji" style="transform:scaleX(-1)">'+emoji+'</div><div class="pair-label">תוצאה</div></div></div>';
+  }else{
+    display='<div class="pairs-row"><div class="pair-card"><div class="pair-emoji">'+emoji+'</div><div class="pair-label">מקור</div></div><div class="pair-card"><div class="pair-emoji">'+emoji+'</div><div class="pair-label">תוצאה</div></div></div>';
+  }
+  return{qText:'מה קרה לצורה?',display:display,answer:isReflect?'שיקוף (הפוך)':'הזזה (אותו כיוון)',options:['שיקוף (הפוך)','הזזה (אותו כיוון)']};
+}
+
+function genPickReflection(){
+  const emoji=['🦋','🐟','🐦','🚗','👟','✋'][rr(0,5)];
+  // 4 options: original, reflected, rotated, different
+  const correct='<span style="display:inline-block;transform:scaleX(-1);font-size:2rem">'+emoji+'</span>';
+  const wrong1='<span style="font-size:2rem">'+emoji+'</span>'; // same
+  const wrong2='<span style="display:inline-block;transform:rotate(90deg);font-size:2rem">'+emoji+'</span>';
+  const wrong3='<span style="display:inline-block;transform:rotate(180deg);font-size:2rem">'+emoji+'</span>';
+  const opts=[
+    {html:correct,val:'reflected'},
+    {html:wrong1,val:'same'},
+    {html:wrong2,val:'rotated'},
+    {html:wrong3,val:'flipped'},
+  ];
+  shuffle(opts);
+  return{qText:'מצאו את השיקוף של: <span style="font-size:2rem">'+emoji+'</span>',display:'',answer:'reflected',options:opts.map(o=>o.val),optionsHtml:opts.map(o=>o.html)};
+}
+
+function genNatureSym(){
+  const items=[
+    {name:'פרפר',emoji:'🦋',sym:true},
+    {name:'עלה',emoji:'🍁',sym:true},
+    {name:'פנים',emoji:'😊',sym:true},
+    {name:'פרח',emoji:'🌸',sym:true},
+    {name:'כוכב ים',emoji:'⭐',sym:true},
+    {name:'שבלול',emoji:'🐌',sym:false},
+    {name:'כלב',emoji:'🐕',sym:false},
+    {name:'ציפור',emoji:'🦜',sym:false},
+  ];
+  const item=items[rr(0,items.length-1)];
+  return{qText:item.emoji+' '+item.name+' — האם סימטרי בטבע?',display:'<div class="emoji-display">'+item.emoji+'</div>',answer:item.sym?'כן — סימטרי!':'לא — לא סימטרי',options:['כן — סימטרי!','לא — לא סימטרי']};
+}
+
+function genCompletePattern(){
+  const size=4;
+  const left=[];
+  for(let r=0;r<size;r++){left[r]=[];for(let c=0;c<size;c++) left[r][c]=rr(0,1)===1}
+  left[rr(0,size-1)][rr(0,size-1)]=true;
+  // Count filled on left
+  let leftCount=0;
+  for(let r=0;r<size;r++)for(let c=0;c<size;c++)if(left[r][c])leftCount++;
+  // Mirror
+  const right=[];
+  for(let r=0;r<size;r++){right[r]=[];for(let c=0;c<size;c++) right[r][c]=left[r][size-1-c]}
+  let rightCount=0;
+  for(let r=0;r<size;r++)for(let c=0;c<size;c++)if(right[r][c])rightCount++;
+
+  let html='<div class="sym-grid-wrap">';
+  html+='<div class="sym-half" style="grid-template-columns:repeat('+size+',1fr)">';
+  for(let r=0;r<size;r++)for(let c=0;c<size;c++) html+='<div class="sym-cell '+(left[r][c]?'filled':'empty')+'"></div>';
+  html+='</div><div class="sym-line"></div>';
+  html+='<div class="sym-half" style="grid-template-columns:repeat('+size+',1fr)">';
+  for(let r=0;r<size;r++)for(let c=0;c<size;c++) html+='<div class="sym-cell mystery"></div>';
+  html+='</div></div>';
+
+  return{qText:'כמה משבצות צבועות צריכות להיות בצד הימני?',display:html,answer:String(rightCount),options:shuffle([String(rightCount),String(rightCount+1),String(rightCount>1?rightCount-1:rightCount+2),String(leftCount+2)].filter((v,i,a)=>a.indexOf(v)===i)).slice(0,4)};
+}
+
+const levels=[
+  {title:'האם זה סימטרי?',instruction:'זהו — האם הצורה סימטרית?',tip:'💡 טיפ: צורה סימטרית = אם מקפלים באמצע, שני הצדדים חופפים! כמו פרפר 🦋',example:'🦋 פרפר = סימטרי! שני הכנפיים זהות.\n✂️ מספריים = לא סימטרי!',gen:()=>genIsSymmetric()},
+  {title:'סימטרי או לא? — תרגול',instruction:'עוד תרגול זיהוי סימטריה',tip:'💡 טיפ: דמיינו קו באמצע — האם שני הצדדים זהים?',example:'❤️ לב = סימטרי! 🔑 מפתח = לא סימטרי!',gen:()=>genIsSymmetric()},
+  {title:'מצאו את הסימטרי',instruction:'איזו צורה סימטרית?',tip:'💡 טיפ: רק אחת מהצורות סימטרית — מצאו אותה!',example:'חפשו את הצורה שאפשר לקפל באמצע',gen:()=>genFindSymmetric()},
+  {title:'מצאו את הלא-סימטרי',instruction:'איזו צורה לא סימטרית?',tip:'💡 טיפ: רוב הצורות סימטריות — מצאו את זו שלא!',example:'חפשו את הצורה שלא אפשר לקפל שווה',gen:()=>genFindNonSymmetric()},
+  {title:'סימטריה בטבע',instruction:'סימטריה בעולם שסביבנו',tip:'💡 טיפ: הרבה דברים בטבע סימטריים — פרפרים, עלים, פנים!',example:'🦋 פרפר, 🌸 פרח, 😊 פנים — כולם סימטריים!',gen:()=>genNatureSym()},
+  {title:'אותיות סימטריות',instruction:'האם האות באנגלית סימטרית?',tip:'💡 טיפ: חלק מהאותיות סימטריות (A, H, M, O, T, W, X) וחלק לא (B, F, G, L, P).',example:'A — סימטרית! ✓\nB — לא סימטרית! ✗',gen:()=>genLetterSym()},
+  {title:'שיקוף על משבצות',instruction:'המשבצת החסרה — צבועה או ריקה?',tip:'💡 טיפ: הקו הסגול באמצע הוא קו הסימטריה! הצד הימני הוא שיקוף (מראה) של השמאלי.',example:'מה שצבוע משמאל למעלה → צבוע מימין למעלה (הפוך!)',gen:()=>genGridMirror()},
+  {title:'שיקוף — תרגול',instruction:'עוד תרגול שיקוף על משבצות',tip:'💡 טיפ: כל שורה: מה שבצד שמאל של הקו הסגול → מתהפך לצד ימין!',example:'שורה: ⬜🟪🟪 | 🟪🟪⬜ (שיקוף!)',gen:()=>genGridMirror()},
+  {title:'השלמת חצי — כמה צבועות?',instruction:'כמה משבצות צריכות להיות צבועות בצד השני?',tip:'💡 טיפ: בשיקוף — אותו מספר משבצות צבועות בכל צד!',example:'אם בצד שמאל 5 צבועות → גם בצד ימין 5 צבועות!',gen:()=>genCompletePattern()},
+  {title:'שיקוף או הזזה?',instruction:'מה קרה לצורה — שיקוף או הזזה?',tip:'💡 טיפ: שיקוף = הצורה מתהפכת (כמו מראה). הזזה = הצורה זזה בלי להתהפך.',example:'שיקוף: 🐟 → 🐟 (הפוך!)\nהזזה: 🐟 → 🐟 (אותו כיוון, מקום אחר)',gen:()=>genReflectOrTranslate()},
+  {title:'שיקוף או הזזה — תרגול',instruction:'עוד תרגול הבחנה',tip:'💡 טיפ: הסתכלו על הכיוון! שיקוף מהפך, הזזה לא.',example:'אם הצורה מסתכלת לכיוון ההפוך = שיקוף!',gen:()=>genReflectOrTranslate()},
+  {title:'כמה צירי סימטריה?',instruction:'כמה צירי סימטריה יש לצורה?',tip:'💡 טיפ: ציר סימטריה = קו שאפשר לקפל עליו. ריבוע=4, מלבן=2, עיגול=אינסוף!',example:'⬜ ריבוע: 4 צירים (אנכי, אופקי, 2 אלכסונים)',gen:()=>genCountSymLines()},
+  {title:'שיקוף — מעורבב',instruction:'שאלות שיקוף מכל הסוגים',tip:'💡 טיפ: שימו לב — סימטריה? שיקוף? הזזה?',example:'כל שאלה היא הפתעה!',gen:()=>[genGridMirror,genReflectOrTranslate,genIsSymmetric,genCompletePattern][rr(0,3)]()},
+  {title:'אתגר — כל הסוגים',instruction:'שאלות מכל מה שלמדנו!',tip:'🏆 טיפ: השתמשו בכל מה שלמדתם!',example:'כל שאלה היא הפתעה!',gen:()=>[genIsSymmetric,genFindSymmetric,genGridMirror,genReflectOrTranslate,genCountSymLines,genNatureSym][rr(0,5)]()},
+  {title:'סופר-אתגר!',instruction:'הרמה הכי קשה!',tip:'🏆 טיפ: בהצלחה! 💪',example:'💪',gen:()=>[genGridMirror,genCompletePattern,genCountSymLines,genReflectOrTranslate,genLetterSym][rr(0,4)]()},
+];
+
+let currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+const QPL=5;
+
+function renderTabs(){const row=document.getElementById('tabsRow');row.innerHTML='';levels.forEach((_,i)=>{const t=document.createElement('button');t.className='tab';t.textContent=i+1;if(i===currentLevel)t.classList.add('active');if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}t.onclick=()=>goLevel(i);row.appendChild(t)});const at=row.querySelector('.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  const lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  const seen=new Set();
+  for(let i=0;i<QPL;i++){let q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(q.answer+q.qText));seen.add(q.answer+q.qText);currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  const list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach((q,idx)=>{
+    const card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    let h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    const cols=q.options.length<=2?2:q.options.length<=3?3:4;
+    h+='<div class="answer-options" style="grid-template-columns:repeat('+Math.min(cols,4)+',1fr)" id="opts-'+idx+'">';
+    q.options.forEach((opt,oi)=>{
+      const escaped=String(opt).replace(/'/g,"\\'");
+      const display=q.optionsHtml?q.optionsHtml[oi]:opt;
+      h+='<button class="answer-btn" onclick="checkA('+idx+',\''+escaped+'\',this)">'+display+'</button>';
+    });
+    h+='</div><div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkA(idx,chosen,btn){
+  const q=currentQuestions[idx];const card=document.getElementById('q-'+idx);const fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(b=>b.classList.add('disabled'));
+    fb.textContent=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(()=>{btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  const lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function nextLevel(){if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+renderLevel();
+</script>
+</body>
+</html>

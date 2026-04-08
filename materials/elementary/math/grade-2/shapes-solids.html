@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>צורות וגופים — כיתה ב' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#7c3aed;--primary-dark:#6d28d9;--primary-light:#ede9fe;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#7c3aed 0%,#8b5cf6 50%,#a78bfa 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(124,58,237,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.tip-example .math{direction:ltr;display:inline-block;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:20px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.shape-display{text-align:center;margin:16px 0;font-size:5rem;line-height:1}
+.shape-name{text-align:center;font-size:1.2rem;font-weight:800;margin:8px 0;color:var(--text)}
+.shape-row{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin:16px 0}
+.shape-card{background:var(--primary-light);border-radius:12px;padding:12px 16px;text-align:center;min-width:80px}
+.shape-card .emoji{font-size:2.5rem}
+.shape-card .label{font-size:.8rem;font-weight:700;margin-top:4px;color:var(--primary)}
+.info-table{width:100%;max-width:400px;margin:16px auto;border-collapse:collapse;direction:rtl}
+.info-table th,.info-table td{padding:8px 12px;border:1px solid var(--border);text-align:center;font-size:.9rem}
+.info-table th{background:var(--primary-light);color:var(--primary);font-weight:700}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-btn{padding:14px 12px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.05rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.answer-btn .btn-emoji{font-size:1.8rem;display:block;margin-bottom:4px}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:440px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:.95rem;padding:10px 8px}.question-card{padding:18px 14px}.header-title h1{font-size:1.1rem}.shape-display{font-size:3.5rem}.answer-btn .btn-emoji{font-size:1.4rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🔷</div><div><h1>צורות וגופים</h1><div class="subtitle">כיתה ב' — גופים תלת-ממדיים</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">צורות וגופים — כיתה ב' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>❓ גופים תלת-ממדיים</h2><p>גופים הם צורות תלת-ממדיות — יש להם אורך, רוחב וגובה!</p><p><strong>פאה</strong> = שטח שטוח (כמו צד של קופסה)<br><strong>צלע</strong> = הקו שבו נפגשות שתי פאות<br><strong>קדקוד</strong> = הנקודה שבה נפגשות צלעות</p><p>הגופים: 📦 קובייה, 📋 תיבה, 🥫 גליל, 🔺 פירמידה, 🍦 חרוט, ⚽ כדור</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const solids={
+  cube:{name:'קובייה',emoji:'🧊',faces:6,edges:12,vertices:8,faceShape:'ריבוע',realLife:['קוביית משחק 🎲','קוביית סוכר','קוביית קרח']},
+  box:{name:'תיבה (מלבנון)',emoji:'📦',faces:6,edges:12,vertices:8,faceShape:'מלבן',realLife:['קופסת נעליים 👟','ארון','מקרר']},
+  cylinder:{name:'גליל',emoji:'🥫',faces:3,edges:2,vertices:0,faceShape:'עיגול',realLife:['פחית שתייה 🥤','גליל נייר טואלט 🧻','נר']},
+  pyramid:{name:'פירמידה',emoji:'🔺',faces:5,edges:8,vertices:5,faceShape:'משולש',realLife:['פירמידה במצרים 🏛️','אוהל ⛺','גג בית']},
+  cone:{name:'חרוט',emoji:'🍦',faces:2,edges:1,vertices:1,faceShape:'עיגול',realLife:['גלידה בגביע 🍦','כובע ליצן 🎉','משפך']},
+  sphere:{name:'כדור',emoji:'⚽',faces:0,edges:0,vertices:0,faceShape:'אין פאות שטוחות',realLife:['כדורגל ⚽','כדור טניס 🎾','כדור הארץ 🌍']},
+};
+const solidKeys=Object.keys(solids);
+
+function genIdentify(){
+  const key=solidKeys[rr(0,solidKeys.length-1)];
+  const s=solids[key];
+  const opts=shuffle(solidKeys.slice()).slice(0,4);
+  if(!opts.includes(key)){opts[rr(0,3)]=key}
+  return{qText:'מהו שם הגוף?',display:'<div class="shape-display">'+s.emoji+'</div>',answer:s.name,options:shuffle(opts.map(k=>solids[k].name))};
+}
+
+function genIdentifyByName(){
+  const key=solidKeys[rr(0,solidKeys.length-1)];
+  const s=solids[key];
+  const opts=shuffle(solidKeys.slice()).slice(0,4);
+  if(!opts.includes(key)){opts[rr(0,3)]=key}
+  return{qText:'איזה גוף זה: <strong>'+s.name+'</strong>?',display:'',answer:s.emoji,options:shuffle(opts.map(k=>'<span class="btn-emoji">'+solids[k].emoji+'</span>'+solids[k].name)),answerFull:s.emoji+' '+s.name,optionsFull:opts.map(k=>({display:'<span class="btn-emoji">'+solids[k].emoji+'</span>'+solids[k].name,value:solids[k].name}))};
+}
+
+function genCountFaces(){
+  const key=solidKeys[rr(0,solidKeys.length-1)];
+  const s=solids[key];
+  const ans=s.faces;
+  return{qText:'כמה <strong>פאות</strong> יש ל'+s.name+'? '+s.emoji,display:'<div class="shape-display">'+s.emoji+'</div>',answer:String(ans),options:shuffle([String(ans),String(ans+1),String(ans>1?ans-1:ans+2),String(ans+3)].filter((v,i,a)=>a.indexOf(v)===i)).slice(0,4),equation:'ל'+s.name+' יש '+ans+' פאות'};
+}
+
+function genCountEdges(){
+  const key=solidKeys[rr(0,solidKeys.length-1)];
+  const s=solids[key];
+  const ans=s.edges;
+  return{qText:'כמה <strong>צלעות (מקצועות)</strong> יש ל'+s.name+'? '+s.emoji,display:'<div class="shape-display">'+s.emoji+'</div>',answer:String(ans),options:shuffle([String(ans),String(ans+2),String(ans>2?ans-2:ans+4),String(s.vertices)].filter((v,i,a)=>a.indexOf(v)===i)).slice(0,4),equation:'ל'+s.name+' יש '+ans+' צלעות'};
+}
+
+function genCountVertices(){
+  const key=solidKeys[rr(0,solidKeys.length-1)];
+  const s=solids[key];
+  const ans=s.vertices;
+  return{qText:'כמה <strong>קדקודים</strong> יש ל'+s.name+'? '+s.emoji,display:'<div class="shape-display">'+s.emoji+'</div>',answer:String(ans),options:shuffle([String(ans),String(ans+2),String(ans>0?ans-1:1),String(s.faces)].filter((v,i,a)=>a.indexOf(v)===i)).slice(0,4),equation:'ל'+s.name+' יש '+ans+' קדקודים'};
+}
+
+function genFaceShape(){
+  const key=solidKeys.filter(k=>solids[k].faceShape!=='אין פאות שטוחות')[rr(0,4)];
+  const s=solids[key];
+  return{qText:'מה צורת הפאות של '+s.name+'? '+s.emoji,display:'<div class="shape-display">'+s.emoji+'</div>',answer:s.faceShape,options:shuffle(['ריבוע','מלבן','עיגול','משולש'])};
+}
+
+function genRealLife(){
+  const key=solidKeys[rr(0,solidKeys.length-1)];
+  const s=solids[key];
+  const item=s.realLife[rr(0,s.realLife.length-1)];
+  const wrongKeys=solidKeys.filter(k=>k!==key);
+  const wrongs=shuffle(wrongKeys).slice(0,3).map(k=>solids[k].name);
+  return{qText:''+item+' — איזה גוף זה?',display:'',answer:s.name,options:shuffle([s.name,...wrongs])};
+}
+
+function genWhichHas(){
+  const prop=['faces','edges','vertices'][rr(0,2)];
+  const propHeb=prop==='faces'?'פאות':prop==='edges'?'צלעות':'קדקודים';
+  const dir=rr(0,1)?'most':'least';
+  const dirHeb=dir==='most'?'הכי הרבה':'הכי מעט';
+  const keys=shuffle(solidKeys.slice()).slice(0,4);
+  let best=keys[0];
+  for(const k of keys){
+    if(dir==='most'&&solids[k][prop]>solids[best][prop])best=k;
+    if(dir==='least'&&solids[k][prop]<solids[best][prop])best=k;
+  }
+  return{qText:'לאיזה גוף יש '+dirHeb+' '+propHeb+'?',display:'<div class="shape-row">'+keys.map(k=>'<div class="shape-card"><div class="emoji">'+solids[k].emoji+'</div><div class="label">'+solids[k].name+'</div></div>').join('')+'</div>',answer:solids[best].name,options:keys.map(k=>solids[k].name)};
+}
+
+function genMatchToObject(){
+  const objects=[
+    {name:'קופסת דגני בוקר 🥣',answer:'תיבה (מלבנון)'},
+    {name:'כדורסל 🏀',answer:'כדור'},
+    {name:'קוביית רוביק 🎲',answer:'קובייה'},
+    {name:'פחית קולה 🥤',answer:'גליל'},
+    {name:'גביע גלידה 🍦',answer:'חרוט'},
+    {name:'אוהל ⛺',answer:'פירמידה'},
+    {name:'כדור הארץ 🌍',answer:'כדור'},
+    {name:'גליל נייר 🧻',answer:'גליל'},
+    {name:'ארון בגדים 🚪',answer:'תיבה (מלבנון)'},
+    {name:'כובע יום הולדת 🎉',answer:'חרוט'},
+  ];
+  const obj=objects[rr(0,objects.length-1)];
+  return{qText:obj.name+' — דומה לאיזה גוף?',display:'',answer:obj.answer,options:shuffle(['קובייה','תיבה (מלבנון)','גליל','חרוט','כדור','פירמידה']).slice(0,4).includes(obj.answer)?shuffle(['קובייה','תיבה (מלבנון)','גליל','חרוט','כדור','פירמידה']).slice(0,4):shuffle([obj.answer,...shuffle(['קובייה','תיבה (מלבנון)','גליל','חרוט','כדור','פירמידה'].filter(x=>x!==obj.answer)).slice(0,3)])};
+}
+
+function genTrueFalse(){
+  const statements=[
+    {s:'לקובייה 6 פאות שוות',a:'נכון'},
+    {s:'לכדור יש פאות',a:'לא נכון'},
+    {s:'לגליל יש 2 עיגולים',a:'נכון'},
+    {s:'לפירמידה יש 4 קדקודים',a:'לא נכון'},
+    {s:'לתיבה יש 8 קדקודים',a:'נכון'},
+    {s:'לחרוט יש קדקוד אחד',a:'נכון'},
+    {s:'כל הפאות של הקובייה הן ריבועים',a:'נכון'},
+    {s:'לכדור יש 0 צלעות',a:'נכון'},
+    {s:'לגליל יש 3 פאות',a:'נכון'},
+    {s:'לפירמידה יש פאות שהן משולשים',a:'נכון'},
+  ];
+  const st=statements[rr(0,statements.length-1)];
+  return{qText:'נכון או לא נכון: "'+st.s+'"',display:'',answer:st.a,options:['נכון','לא נכון']};
+}
+
+const levels=[
+  {title:'הכירו את הגופים',instruction:'זהו את שם הגוף',tip:'💡 טיפ: 🧊 קובייה, 📦 תיבה, 🥫 גליל, 🔺 פירמידה, 🍦 חרוט, ⚽ כדור',example:'כל גוף נראה שונה — למדו את השמות!',gen:()=>genIdentify()},
+  {title:'זיהוי גופים — תרגול',instruction:'עוד תרגול זיהוי',tip:'💡 טיפ: קובייה = כל הצדדים שווים. תיבה = צדדים מלבניים. גליל = עגול.',example:'הסתכלו על הצורה ובחרו את השם הנכון!',gen:()=>genIdentify()},
+  {title:'גופים בחיים',instruction:'איזה גוף דומה לחפץ?',tip:'💡 טיפ: חשבו על חפצים מהחיים — קופסה=תיבה, כדור=כדור, פחית=גליל!',example:'🥤 פחית = גליל, 🎲 קובייה = קובייה, ⚽ כדור = כדור',gen:()=>genRealLife()},
+  {title:'התאמת חפצים לגופים',instruction:'מצאו את הגוף הדומה',tip:'💡 טיפ: הסתכלו על הצורה הכללית של החפץ!',example:'🎉 כובע מסיבה = חרוט, 📦 קופסה = תיבה',gen:()=>genMatchToObject()},
+  {title:'כמה פאות?',instruction:'ספרו את הפאות של הגוף',tip:'💡 טיפ: פאה = שטח שטוח. קובייה/תיבה=6, פירמידה=5, גליל=3, חרוט=2, כדור=0!',example:'קובייה: 6 פאות (למעלה, למטה, ו-4 צדדים)',gen:()=>genCountFaces()},
+  {title:'כמה צלעות?',instruction:'ספרו את הצלעות (המקצועות)',tip:'💡 טיפ: צלע = קו שבו נפגשות שתי פאות. קובייה/תיבה=12, פירמידה=8.',example:'קובייה: 12 צלעות (4 למעלה, 4 למטה, 4 אנכיות)',gen:()=>genCountEdges()},
+  {title:'כמה קדקודים?',instruction:'ספרו את הקדקודים',tip:'💡 טיפ: קדקוד = פינה/נקודה. קובייה/תיבה=8, פירמידה=5, חרוט=1, כדור=0!',example:'קובייה: 8 קדקודים (4 למעלה, 4 למטה)',gen:()=>genCountVertices()},
+  {title:'פאות, צלעות, קדקודים — מעורבב',instruction:'ספרו — שימו לב מה שואלים!',tip:'💡 טיפ: קראו בעיון — פאות? צלעות? קדקודים?',example:'כל אחד נספר בנפרד — שימו לב!',gen:()=>[genCountFaces,genCountEdges,genCountVertices][rr(0,2)]()},
+  {title:'צורת הפאות',instruction:'מה צורת הפאות של הגוף?',tip:'💡 טיפ: קובייה=ריבועים, תיבה=מלבנים, גליל=עיגולים, פירמידה=משולשים!',example:'לכל גוף יש פאות בצורה מסוימת',gen:()=>genFaceShape()},
+  {title:'נכון או לא נכון?',instruction:'האם המשפט נכון?',tip:'💡 טיפ: חשבו על הגוף ובדקו — האם זה באמת ככה?',example:'בדקו כל טענה בעיון!',gen:()=>genTrueFalse()},
+  {title:'לאיזה גוף יש הכי הרבה...?',instruction:'השוואה בין גופים',tip:'💡 טיפ: השוו — לאיזה גוף יש הכי הרבה פאות/צלעות/קדקודים?',example:'קובייה/תיבה: 6 פאות, 12 צלעות, 8 קדקודים — הכי הרבה!',gen:()=>genWhichHas()},
+  {title:'זיהוי וספירה — מעורבב',instruction:'שאלות מכל הסוגים',tip:'💡 טיפ: שימו לב מה שואלים — שם? ספירה? צורת פאות?',example:'כל שאלה היא הפתעה!',gen:()=>[genIdentify,genCountFaces,genFaceShape,genRealLife][rr(0,3)]()},
+  {title:'חפצים וגופים — מעורבב',instruction:'התאימו חפצים לגופים',tip:'💡 טיפ: הסתכלו על הצורה הכללית!',example:'🥤=גליל, 🎲=קובייה, ⚽=כדור, 🍦=חרוט',gen:()=>[genMatchToObject,genRealLife,genTrueFalse][rr(0,2)]()},
+  {title:'אתגר — כל הסוגים',instruction:'שאלות מכל מה שלמדנו!',tip:'🏆 טיפ: השתמשו בכל מה שלמדתם!',example:'כל שאלה היא הפתעה!',gen:()=>[genIdentify,genCountFaces,genCountEdges,genCountVertices,genFaceShape,genWhichHas,genTrueFalse][rr(0,6)]()},
+  {title:'סופר-אתגר!',instruction:'הרמה הכי קשה!',tip:'🏆 טיפ: בהצלחה! 💪',example:'💪',gen:()=>[genCountEdges,genCountVertices,genWhichHas,genMatchToObject,genTrueFalse][rr(0,4)]()},
+];
+
+let currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+const QPL=5;
+
+function renderTabs(){const row=document.getElementById('tabsRow');row.innerHTML='';levels.forEach((_,i)=>{const t=document.createElement('button');t.className='tab';t.textContent=i+1;if(i===currentLevel)t.classList.add('active');if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}t.onclick=()=>goLevel(i);row.appendChild(t)});const at=row.querySelector('.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  const lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  const seen=new Set();
+  for(let i=0;i<QPL;i++){let q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(q.answer+q.qText));seen.add(q.answer+q.qText);currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  const list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach((q,idx)=>{
+    const card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    let h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    const cols=q.options.length<=2?2:q.options.length<=3?3:q.options.length;
+    h+='<div class="answer-options" style="grid-template-columns:repeat('+Math.min(cols,4)+',1fr)" id="opts-'+idx+'">';
+    q.options.forEach(opt=>{
+      const escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,"&quot;");
+      h+='<button class="answer-btn" onclick="checkA('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+    });
+    h+='</div><div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkA(idx,chosen,btn){
+  const q=currentQuestions[idx];const card=document.getElementById('q-'+idx);const fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(b=>b.classList.add('disabled'));
+    fb.textContent=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(()=>{btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  const lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function nextLevel(){if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+renderLevel();
+</script>
+</body>
+</html>

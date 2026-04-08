@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>מבחן מסכם — כיתה ב' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#1e3a5f;--primary-dark:#172e4a;--primary-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f0f4f8;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#1e3a5f 0%,#2563eb 50%,#3b82f6 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(30,58,95,.4)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.tip-example .math{direction:ltr;display:inline-block;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:12px;color:var(--primary)}
+.q-topic{display:inline-block;background:#e0e7ff;color:#3730a3;padding:2px 10px;border-radius:12px;font-size:.7rem;font-weight:700;margin-bottom:8px}
+.exercise-display{text-align:center;margin:12px 0}.exercise-row{display:flex;align-items:center;justify-content:center;gap:8px;direction:ltr;flex-wrap:wrap}.exercise-num{font-size:2rem;font-weight:900;color:var(--text)}.exercise-op{font-size:1.8rem;font-weight:700;color:var(--primary)}.exercise-equals{font-size:1.8rem;font-weight:700;color:var(--text-light)}.exercise-answer-box{min-width:60px;height:50px;border:3px dashed var(--primary);border-radius:12px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:900;color:var(--primary);transition:all .3s}.exercise-answer-box.filled{border-style:solid}.exercise-answer-box.correct-answer{background:var(--success);border-color:var(--success);color:#fff}.exercise-answer-box.wrong-answer{background:var(--error);border-color:var(--error);color:#fff}
+.answer-options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.answer-btn{height:48px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:800;color:var(--text);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.04)}.answer-btn:active:not(.disabled){transform:scale(.96)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+/* Grade display */
+.grade-card{background:linear-gradient(135deg,#fef3c7,#fde68a);border:3px solid #fbbf24;border-radius:var(--radius);padding:20px;margin-top:16px;text-align:center}.grade-num{font-size:3rem;font-weight:900;color:var(--primary)}.grade-label{font-size:1rem;font-weight:700;color:var(--accent-dark)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:440px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)}.answer-btn{height:44px;font-size:1rem}.question-card{padding:18px 14px}.header-title h1{font-size:1.1rem}.exercise-num{font-size:1.6rem}.exercise-answer-box{min-width:50px;height:44px;font-size:1.6rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">📝</div><div><h1>מבחן מסכם — כיתה ב'</h1><div class="subtitle">כל מה שלמדתם — בואו נבדוק!</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">מבחן מסכם — כיתה ב' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="grade-card" id="gradeCard" style="display:none"><div class="grade-num" id="gradeNum"></div><div class="grade-label">ציון</div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>📝 מבחן מסכם</h2><p>המבחן המסכם בודק את כל מה שלמדתם בכיתה ב'!</p><p>כל רמה מתמקדת בנושא אחר: חיבור, חיסור, כפל, חילוק, שאלות מילוליות, ישר המספרים, זוגי/אי-זוגי, שטח, היקף, שעון, צורות, סימטריה — הכל!</p><p>בסוף כל רמה תקבלו <strong>ציון</strong>! המטרה: 💯</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function genD(ans){const s=new Set([ans]);const off=[-3,-2,-1,1,2,3,5,-5,10,-10];while(s.size<4){const d=ans+off[rr(0,off.length-1)];if(d>0)s.add(d)}return shuffle([...s])}
+
+// ===== QUESTION GENERATORS BY TOPIC =====
+function qAdd(){const a=rr(10,50);const b=rr(5,40);const ans=a+b;return{topic:'חיבור',qText:'חשבו:',display:'<div class="exercise-display"><div class="exercise-row"><span class="exercise-num">'+a+'</span><span class="exercise-op">+</span><span class="exercise-num">'+b+'</span><span class="exercise-equals">=</span><div class="exercise-answer-box" id="AX">?</div></div></div>',answer:ans,options:genD(ans),boxId:'AX'}}
+function qSub(){const a=rr(20,80);const b=rr(5,a-5);const ans=a-b;return{topic:'חיסור',qText:'חשבו:',display:'<div class="exercise-display"><div class="exercise-row"><span class="exercise-num">'+a+'</span><span class="exercise-op">−</span><span class="exercise-num">'+b+'</span><span class="exercise-equals">=</span><div class="exercise-answer-box" id="AX">?</div></div></div>',answer:ans,options:genD(ans),boxId:'AX'}}
+function qMul(){const a=rr(2,10);const b=rr(2,10);const ans=a*b;return{topic:'כפל',qText:'חשבו:',display:'<div class="exercise-display"><div class="exercise-row"><span class="exercise-num">'+a+'</span><span class="exercise-op">×</span><span class="exercise-num">'+b+'</span><span class="exercise-equals">=</span><div class="exercise-answer-box" id="AX">?</div></div></div>',answer:ans,options:genD(ans),boxId:'AX'}}
+function qDiv(){const a=rr(2,10);const b=rr(2,10);const total=a*b;return{topic:'חילוק',qText:'חשבו:',display:'<div class="exercise-display"><div class="exercise-row"><span class="exercise-num">'+total+'</span><span class="exercise-op">÷</span><span class="exercise-num">'+b+'</span><span class="exercise-equals">=</span><div class="exercise-answer-box" id="AX">?</div></div></div>',answer:a,options:genD(a),boxId:'AX'}}
+function qWord(){const templates=[
+  ()=>{const a=rr(10,30);const b=rr(5,20);return{t:'שאלה מילולית',s:'לדני '+a+' גולות. הוא קיבל עוד '+b+'.כמה ביחד?',a:a+b}},
+  ()=>{const a=rr(15,40);const b=rr(3,a-5);return{t:'שאלה מילולית',s:'היו '+a+' עוגיות. אכלו '+b+'. כמה נשארו?',a:a-b}},
+  ()=>{const a=rr(3,8);const b=rr(2,5);return{t:'שאלה מילולית',s:'בכל שקית '+b+' ממתקים. יש '+a+' שקיות. כמה ביחד?',a:a*b}},
+  ()=>{const b=rr(2,5);const ans=rr(3,8);return{t:'שאלה מילולית',s:'יש '+(ans*b)+' סוכריות. מחלקים ל-'+b+' ילדים. כמה לכל ילד?',a:ans}},
+];const t=templates[rr(0,3)]();return{topic:t.t,qText:t.s,display:'',answer:t.a,options:genD(t.a)}}
+function qEvenOdd(){const n=rr(2,99);const isE=n%2===0;return{topic:'זוגי/אי-זוגי',qText:'האם '+n+' זוגי או אי-זוגי?',display:'<div style="text-align:center;font-size:2.5rem;font-weight:900;margin:12px 0;color:var(--primary)">'+n+'</div>',answer:isE?'זוגי':'אי-זוגי',options:['זוגי','אי-זוגי']}}
+function qArea(){const w=rr(3,7);const h=rr(2,5);const ans=w*h;return{topic:'שטח',qText:'מהו שטח מלבן '+w+'×'+h+'?',display:'<div style="text-align:center;margin:12px 0"><div style="display:inline-block;border:3px solid var(--primary);border-radius:8px;padding:16px 32px;background:var(--primary-light)"><div style="font-weight:800">'+w+' × '+h+'</div></div></div>',answer:ans,options:genD(ans)}}
+function qPerim(){const w=rr(3,7);const h=rr(2,5);const ans=2*(w+h);return{topic:'היקף',qText:'מהו היקף מלבן '+w+'×'+h+'?',display:'<div style="text-align:center;margin:12px 0"><div style="display:inline-block;border:3px solid var(--primary);border-radius:8px;padding:16px 32px;background:var(--primary-light)"><div style="font-weight:800">'+w+' × '+h+'</div></div></div>',answer:ans,options:genD(ans)}}
+function qSequence(){const start=rr(2,10);const step=rr(2,5);const count=6;const nums=[];for(let i=0;i<count;i++)nums.push(start+i*step);const hide=rr(1,count-2);const ans=nums[hide];let d='<div style="display:flex;justify-content:center;gap:8px;margin:12px 0;direction:ltr">';for(let i=0;i<count;i++){if(i===hide)d+='<div style="width:44px;height:44px;background:var(--accent);color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.1rem;border:2px solid #fbbf24">?</div>';else d+='<div style="width:44px;height:44px;background:var(--primary-light);color:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem">'+nums[i]+'</div>';if(i<count-1)d+='<div style="display:flex;align-items:center;color:var(--text-light)">→</div>'}d+='</div>';return{topic:'סדרות',qText:'מהו המספר החסר?',display:d,answer:ans,options:genD(ans)}}
+function qShapes(){const shapes=[{n:'קובייה',e:'🧊',f:6},{n:'גליל',e:'🥫',f:3},{n:'כדור',e:'⚽',f:0},{n:'חרוט',e:'🍦',f:2},{n:'פירמידה',e:'🔺',f:5}];const s=shapes[rr(0,4)];return{topic:'גופים',qText:'כמה פאות יש ל'+s.n+'? '+s.e,display:'<div style="text-align:center;font-size:3rem;margin:12px 0">'+s.e+'</div>',answer:s.f,options:shuffle([s.f,s.f+1,s.f>1?s.f-1:s.f+2,s.f+3].filter((v,i,a)=>a.indexOf(v)===i)).slice(0,4)}}
+function qSymmetry(){const sym=['🦋','❤️','⭐','🏠','🌲'];const non=['✂️','🔑','🎸','🐕','✏️'];const isSym=rr(0,1);const emoji=isSym?sym[rr(0,4)]:non[rr(0,4)];return{topic:'סימטריה',qText:emoji+' — סימטרי?',display:'<div style="text-align:center;font-size:3.5rem;margin:12px 0">'+emoji+'</div>',answer:isSym?'כן':'לא',options:['כן','לא']}}
+function qMissing(){const op=rr(0,1);if(op===0){const ans=rr(5,30);const b=rr(3,15);const total=ans+b;return{topic:'השלמה',qText:'מצאו את החסר:',display:'<div class="exercise-display"><div class="exercise-row"><span class="exercise-num">?</span><span class="exercise-op">+</span><span class="exercise-num">'+b+'</span><span class="exercise-equals">=</span><span class="exercise-num">'+total+'</span></div></div>',answer:ans,options:genD(ans)}}else{const a=rr(2,10);const b=rr(2,10);return{topic:'השלמה',qText:'מצאו את החסר:',display:'<div class="exercise-display"><div class="exercise-row"><span class="exercise-num">?</span><span class="exercise-op">×</span><span class="exercise-num">'+b+'</span><span class="exercise-equals">=</span><span class="exercise-num">'+(a*b)+'</span></div></div>',answer:a,options:genD(a)}}}
+
+const allGens=[qAdd,qSub,qMul,qDiv,qWord,qEvenOdd,qArea,qPerim,qSequence,qShapes,qSymmetry,qMissing];
+
+const levels=[
+  {title:'חיבור וחיסור',instruction:'תרגילי חיבור וחיסור',tip:'💡 חיבור = סופרים קדימה, חיסור = סופרים אחורה',example:'<span class="math">25 + 18 = 43</span> | <span class="math">50 − 23 = 27</span>',gens:[qAdd,qSub]},
+  {title:'כפל וחילוק',instruction:'תרגילי כפל וחילוק',tip:'💡 כפל = קבוצות שוות, חילוק = חלוקה שווה',example:'<span class="math">6 × 7 = 42</span> | <span class="math">42 ÷ 7 = 6</span>',gens:[qMul,qDiv]},
+  {title:'שאלות מילוליות',instruction:'קראו ופתרו!',tip:'💡 "ביחד/סה"כ" = חיבור, "נשאר" = חיסור, "לכל אחד" = חילוק',example:'קראו בעיון ומצאו את הפעולה הנכונה!',gens:[qWord]},
+  {title:'זוגי ואי-זוגי + סדרות',instruction:'מספרים זוגיים, אי-זוגיים וסדרות',tip:'💡 זוגי = נגמר ב-0,2,4,6,8. סדרה = מצאו את הכלל!',example:'<span class="math">24</span> = זוגי | <span class="math">3, 6, 9, ?, 15</span> → 12',gens:[qEvenOdd,qSequence]},
+  {title:'שטח והיקף',instruction:'חישוב שטח והיקף מלבן',tip:'💡 שטח = אורך × רוחב, היקף = <span class="math">2 × (אורך + רוחב)</span>',example:'מלבן <span class="math">5×3</span>: שטח=15, היקף=16',gens:[qArea,qPerim]},
+  {title:'גופים וסימטריה',instruction:'צורות תלת-ממדיות וסימטריה',tip:'💡 פאה = שטח שטוח, סימטריה = שני צדדים זהים',example:'🧊 קובייה=6 פאות | 🦋 סימטרי ✓',gens:[qShapes,qSymmetry]},
+  {title:'השלמת חסר',instruction:'מצאו את המספר החסר!',tip:'💡 השתמשו בפעולה ההפוכה! חיבור↔חיסור, כפל↔חילוק',example:'<span class="math">? + 3 = 25</span> → <span class="math">25 − 3 = 22</span> ✓',gens:[qMissing]},
+  {title:'מעורבב — חשבון',instruction:'חיבור, חיסור, כפל וחילוק',tip:'💡 שימו לב לסימן!',example:'+ − × ÷ — כל אחד דורש שיטה אחרת!',gens:[qAdd,qSub,qMul,qDiv]},
+  {title:'מעורבב — כל הנושאים',instruction:'שאלות מכל הנושאים!',tip:'💡 קראו בעיון, זהו את הנושא, ופתרו!',example:'כל שאלה היא הפתעה — תהיו מוכנים לכל דבר!',gens:allGens},
+  {title:'מבחן — רמה 1',instruction:'10 שאלות מכל הנושאים',tip:'🏆 מבחן! קראו כל שאלה בעיון ופתרו.',example:'בסוף תקבלו ציון!',gens:allGens},
+  {title:'מבחן — רמה 2',instruction:'מבחן עם שאלות קצת יותר קשות',tip:'🏆 מבחן! קחו את הזמן.',example:'בהצלחה!',gens:allGens},
+  {title:'מבחן — רמה 3',instruction:'עוד מבחן!',tip:'🏆 מבחן! אתם כבר מומחים!',example:'💪',gens:allGens},
+  {title:'מבחן חצי-שנתי',instruction:'מבחן מקיף!',tip:'🏆 כמו מבחן אמיתי! קראו, חשבו, ופתרו.',example:'הציון שלכם מחכה בסוף!',gens:allGens},
+  {title:'מבחן סוף שנה',instruction:'המבחן הגדול!',tip:'🏆 המבחן הסופי — כל מה שלמדתם!',example:'הכל כאן — בהצלחה!',gens:allGens},
+  {title:'מבחן מצטיינים!',instruction:'הרמה הכי קשה — למצטיינים בלבד!',tip:'🏆 רק למצטיינים! 💪',example:'💯',gens:allGens},
+];
+
+let currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+const QPL=8;
+
+function renderTabs(){const row=document.getElementById('tabsRow');row.innerHTML='';levels.forEach((_,i)=>{const t=document.createElement('button');t.className='tab';t.textContent=i+1;if(i===currentLevel)t.classList.add('active');if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}t.onclick=()=>goLevel(i);row.appendChild(t)});const at=row.querySelector('.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  const lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  const seen=new Set();
+  const qpl=currentLevel>=9?10:QPL; // More questions for test levels
+  for(let i=0;i<qpl;i++){let q,att=0;do{const gen=lvl.gens[rr(0,lvl.gens.length-1)];q=gen();att++}while(att<50&&seen.has(q.answer+q.topic+q.qText));seen.add(q.answer+q.topic+q.qText);q._idx=i;currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  const list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach((q,idx)=>{
+    const card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    let h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div style="text-align:center"><span class="q-topic">'+q.topic+'</span></div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display.replace(/id="AX"/g,'id="ansBox-'+idx+'"');
+    const cols=q.options.length<=2?2:4;
+    h+='<div class="answer-options" style="grid-template-columns:repeat('+cols+',1fr)" id="opts-'+idx+'">';
+    q.options.forEach(opt=>{
+      const escaped=String(opt).replace(/'/g,"\\'");
+      h+='<button class="answer-btn" onclick="checkA('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+    });
+    h+='</div><div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkA(idx,chosen,btn){
+  const q=currentQuestions[idx];const card=document.getElementById('q-'+idx);const fb=document.getElementById('fb-'+idx);
+  const ab=document.getElementById('ansBox-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(String(chosen)===String(q.answer)){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    if(ab){ab.textContent=q.answer;ab.classList.add('filled','correct-answer')}
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(b=>b.classList.add('disabled'));
+    fb.textContent=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');
+    if(ab){ab.textContent=chosen;ab.classList.add('filled','wrong-answer')}
+    fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(()=>{btn.classList.remove('wrong-choice');if(ab){ab.textContent='?';ab.classList.remove('filled','wrong-answer')}fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===currentQuestions.length)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  const total=currentQuestions.length;
+  const grade=Math.round((levelCorrect/total)*100);
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  // Show grade for test levels
+  const gc=document.getElementById('gradeCard');
+  if(currentLevel>=9){gc.style.display='block';document.getElementById('gradeNum').textContent=grade}
+  else{gc.style.display='none'}
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם! 💯';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(grade>=80){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='תוצאה מעולה!'}
+  else if(grade>=60){document.getElementById('lcEmoji').textContent='👍';document.getElementById('lcTitle').textContent='טוב!';document.getElementById('lcSub').textContent='אפשר לשפר — נסו שוב!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='צריך עוד תרגול';document.getElementById('lcSub').textContent='חזרו על החומר ונסו שוב!'}
+  const lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function nextLevel(){if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+renderLevel();
+</script>
+</body>
+</html>

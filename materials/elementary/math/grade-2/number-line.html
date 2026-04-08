@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ישר המספרים — כיתה ב' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#4f46e5;--primary-dark:#4338ca;--primary-light:#e0e7ff;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#4f46e5 0%,#6366f1 50%,#818cf8 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(79,70,229,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.tip-example .math{direction:ltr;display:inline-block;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:20px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px 20px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+
+/* Number line */
+.number-line-wrap{margin:16px 0;padding:10px 0;direction:ltr}
+.number-line{position:relative;height:60px;margin:0 20px}
+.nl-line{position:absolute;top:28px;left:0;right:0;height:3px;background:var(--text);border-radius:2px}
+.nl-arrow-l,.nl-arrow-r{position:absolute;top:22px;width:0;height:0;border:7px solid transparent}.nl-arrow-l{left:-5px;border-right-color:var(--text)}.nl-arrow-r{right:-5px;border-left-color:var(--text)}
+.nl-tick{position:absolute;top:20px;width:2px;height:18px;background:var(--text);transform:translateX(-1px)}
+.nl-label{position:absolute;top:42px;font-size:.8rem;font-weight:700;color:var(--text);transform:translateX(-50%);white-space:nowrap}
+.nl-target{position:absolute;top:6px;width:28px;height:28px;background:var(--primary);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;transform:translateX(-50%);box-shadow:0 2px 8px rgba(79,70,229,.3);cursor:default}
+.nl-target.correct-pos{background:var(--success);box-shadow:0 2px 8px rgba(16,185,129,.3)}
+.nl-target.wrong-pos{background:var(--error);box-shadow:0 2px 8px rgba(239,68,68,.3)}
+.nl-mystery{position:absolute;top:2px;width:36px;height:36px;background:var(--accent);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:900;transform:translateX(-50%);box-shadow:0 2px 8px rgba(245,158,11,.3);border:3px solid #fbbf24}
+
+/* Answer options */
+.answer-options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.answer-btn{height:48px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.2rem;font-weight:800;color:var(--text);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.04)}.answer-btn:active:not(.disabled){transform:scale(.96)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)}.answer-btn{height:44px;font-size:1rem}.question-card{padding:18px 14px}.header-title h1{font-size:1.1rem}.nl-label{font-size:.7rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">📏</div><div><h1>ישר המספרים</h1><div class="subtitle">כיתה ב' — מיקום מספרים על הישר</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">ישר המספרים — כיתה ב' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>❓ איך משחקים?</h2><p>על ישר המספרים מסומנים מספרים ויש סימן <strong>?</strong> במקום מספר חסר.</p><p>בחרו את <strong>המספר הנכון</strong> שצריך להיות במקום הסימן.</p><p>15 רמות — ממספרים קטנים ועד מספרים שליליים, שברים וסדרות!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function genDistractors(ans,step){
+  const s=new Set([ans]);
+  const tryOff=[step,-step,step*2,-step*2,1,-1,2,-2];
+  while(s.size<4){const d=ans+tryOff[rr(0,tryOff.length-1)];s.add(d)}
+  return shuffle([...s]);
+}
+
+function genDistractorsFrac(ans){
+  const fracs=['¼','½','¾','1','1¼','1½','1¾','2','2½','0'];
+  const s=new Set([ans]);
+  while(s.size<4){s.add(fracs[rr(0,fracs.length-1)])}
+  return shuffle([...s]);
+}
+
+// Build number line HTML
+function buildNL(start,end,step,mysteryVal,mysteryPos,showLabels){
+  const count=Math.round((end-start)/step)+1;
+  let html='<div class="number-line-wrap"><div class="number-line">';
+  html+='<div class="nl-line"></div><div class="nl-arrow-l"></div><div class="nl-arrow-r"></div>';
+  for(let i=0;i<count;i++){
+    const val=start+i*step;
+    const pct=(i/(count-1))*100;
+    html+='<div class="nl-tick" style="left:'+pct+'%"></div>';
+    if(val===mysteryVal && mysteryPos){
+      html+='<div class="nl-mystery" style="left:'+pct+'%">?</div>';
+    } else if(showLabels!==false){
+      const label=Number.isInteger(val)?val:val.toFixed(1);
+      html+='<div class="nl-label" style="left:'+pct+'%">'+label+'</div>';
+    } else {
+      // Show some labels, hide others
+      if(i%2===0 || i===count-1) html+='<div class="nl-label" style="left:'+pct+'%">'+(Number.isInteger(val)?val:val.toFixed(1))+'</div>';
+    }
+  }
+  html+='</div></div>';
+  return html;
+}
+
+// Question generators
+function genPlaceOnLine(min,max,step){
+  const count=Math.round((max-min)/step)+1;
+  const idx=rr(1,count-2); // not first or last
+  const mystery=min+idx*step;
+  return{nl:buildNL(min,max,step,mystery,true),answer:mystery,options:genDistractors(mystery,step),qText:'איזה מספר נמצא במקום סימן ה-❓?'};
+}
+
+function genWhereIs(min,max,step){
+  const count=Math.round((max-min)/step)+1;
+  const idx=rr(1,count-2);
+  const target=min+idx*step;
+  // Show line without the target labeled, show target as number to place
+  let html='<div class="number-line-wrap"><div class="number-line">';
+  html+='<div class="nl-line"></div><div class="nl-arrow-l"></div><div class="nl-arrow-r"></div>';
+  for(let i=0;i<count;i++){
+    const val=min+i*step;
+    const pct=(i/(count-1))*100;
+    html+='<div class="nl-tick" style="left:'+pct+'%"></div>';
+    if(i===idx){
+      html+='<div class="nl-mystery" style="left:'+pct+'%">?</div>';
+    } else {
+      html+='<div class="nl-label" style="left:'+pct+'%">'+val+'</div>';
+    }
+  }
+  html+='</div></div>';
+  return{nl:html,answer:target,options:genDistractors(target,step),qText:'איזה מספר נמצא במקום סימן ה-❓?'};
+}
+
+function genNegative(){
+  const start=rr(-5,-1);
+  const end=start+rr(6,10);
+  const step=1;
+  return genWhereIs(start,end,step);
+}
+
+function genSequence(){
+  const start=rr(1,20);
+  const step=rr(2,5)*([1,-1][rr(0,1)]);
+  const absStep=Math.abs(step);
+  const count=rr(5,8);
+  const nums=[];
+  for(let i=0;i<count;i++) nums.push(start+i*step);
+  const hideIdx=rr(1,count-2);
+  const mystery=nums[hideIdx];
+  // Build as sequence display
+  let html='<div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:16px 0;direction:ltr">';
+  for(let i=0;i<count;i++){
+    if(i===hideIdx){
+      html+='<div style="width:48px;height:48px;background:var(--accent);color:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;border:3px solid #fbbf24">?</div>';
+    } else {
+      html+='<div style="width:48px;height:48px;background:var(--primary-light);color:var(--primary);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800">'+nums[i]+'</div>';
+    }
+    if(i<count-1) html+='<div style="display:flex;align-items:center;color:var(--text-light);font-size:1.2rem">→</div>';
+  }
+  html+='</div>';
+  return{nl:html,answer:mystery,options:genDistractors(mystery,absStep),qText:'מהו המספר החסר בסדרה?'};
+}
+
+function genSequencePositive(){
+  const step=rr(2,5);
+  const start=rr(1,10);
+  const count=rr(5,8);
+  const nums=[];
+  for(let i=0;i<count;i++) nums.push(start+i*step);
+  const hideIdx=rr(1,count-2);
+  const mystery=nums[hideIdx];
+  let html='<div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:16px 0;direction:ltr">';
+  for(let i=0;i<count;i++){
+    if(i===hideIdx){
+      html+='<div style="width:48px;height:48px;background:var(--accent);color:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;border:3px solid #fbbf24">?</div>';
+    } else {
+      html+='<div style="width:48px;height:48px;background:var(--primary-light);color:var(--primary);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800">'+nums[i]+'</div>';
+    }
+    if(i<count-1) html+='<div style="display:flex;align-items:center;color:var(--text-light);font-size:1.2rem">→</div>';
+  }
+  html+='</div>';
+  return{nl:html,answer:mystery,options:genDistractors(mystery,step),qText:'מהו המספר החסר בסדרה?'};
+}
+
+function genFraction(){
+  const fracs=[{label:'0',val:0},{label:'¼',val:0.25},{label:'½',val:0.5},{label:'¾',val:0.75},{label:'1',val:1},{label:'1½',val:1.5},{label:'2',val:2}];
+  const hideIdx=rr(1,fracs.length-2);
+  const mystery=fracs[hideIdx];
+  let html='<div class="number-line-wrap"><div class="number-line">';
+  html+='<div class="nl-line"></div>';
+  for(let i=0;i<fracs.length;i++){
+    const pct=(i/(fracs.length-1))*100;
+    html+='<div class="nl-tick" style="left:'+pct+'%"></div>';
+    if(i===hideIdx){
+      html+='<div class="nl-mystery" style="left:'+pct+'%">?</div>';
+    } else {
+      html+='<div class="nl-label" style="left:'+pct+'%">'+fracs[i].label+'</div>';
+    }
+  }
+  html+='</div></div>';
+  return{nl:html,answer:mystery.label,options:genDistractorsFrac(mystery.label),qText:'מהו המספר/השבר במקום סימן ה-❓?'};
+}
+
+function genBetween(){
+  const a=rr(10,90);
+  const b=a+rr(5,20);
+  const target=rr(a+1,b-1);
+  return{nl:'',answer:target,options:shuffle([target,a-rr(1,3),b+rr(1,3),rr(0,1)?a:b]),qText:'מצאו מספר שנמצא בין '+a+' ל-'+b};
+}
+
+const levels=[
+  {title:'מספרים עד 20',instruction:'מצאו את המספר החסר על הישר',tip:'💡 טיפ: ספרו את הסימנים על הישר — כל סימן הוא מספר!',example:'הסימנים עולים ב-1: <span class="math">1, 2, 3, 4, ?, 6</span> → 5!',gen:()=>genWhereIs(0,20,2)},
+  {title:'מספרים עד 50',instruction:'ישר מספרים עד 50',tip:'💡 טיפ: שימו לב לקפיצות — לפעמים הן ב-1, לפעמים ב-5 או ב-10!',example:'אם הקפיצות ב-5: <span class="math">10, 15, ?, 25</span> → 20!',gen:()=>genWhereIs(0,50,5)},
+  {title:'מספרים עד 100',instruction:'ישר מספרים עד 100',tip:'💡 טיפ: ספרו את הקפיצות בין מספרים סמוכים!',example:'קפיצות של 10: <span class="math">20, 30, ?, 50</span> → 40!',gen:()=>genWhereIs(0,100,10)},
+  {title:'עשרות שלמות',instruction:'מיקום עשרות שלמות',tip:'💡 טיפ: על הישר הזה כל סימן = 10!',example:'<span class="math">10, 20, 30, ?, 50</span> → 40!',gen:()=>genWhereIs(0,100,10)},
+  {title:'מספרים עד 1000',instruction:'מיקום מאות על ישר המספרים',tip:'💡 טיפ: כל סימן = 100! ספרו מאות.',example:'<span class="math">100, 200, ?, 400</span> → 300!',gen:()=>genWhereIs(0,1000,100)},
+  {title:'בין שני מספרים',instruction:'מצאו מספר שנמצא בין שני מספרים',tip:'💡 טיפ: המספר צריך להיות גדול מהראשון וקטן מהשני!',example:'בין 30 ל-40? → כל מספר מ-31 עד 39 מתאים!',gen:()=>genBetween()},
+  {title:'קפיצות של 2',instruction:'סדרה עם קפיצות של 2',tip:'💡 טיפ: ספרו — כל מספר גדל ב-2 מהקודם!',example:'<span class="math">4, 6, 8, ?, 12</span> → 10!',gen:()=>{const s=rr(1,10);return genWhereIs(s,s+18,2)}},
+  {title:'קפיצות של 5',instruction:'סדרה עם קפיצות של 5',tip:'💡 טיפ: קפיצות של 5 — תמיד נגמר ב-0 או 5!',example:'<span class="math">15, 20, 25, ?, 35</span> → 30!',gen:()=>{const s=rr(0,2)*5;return genWhereIs(s,s+40,5)}},
+  {title:'סדרות — מצאו את החסר',instruction:'מהו המספר החסר בסדרה?',tip:'💡 טיפ: מצאו את הכלל — בכמה עולה או יורד כל פעם?',example:'<span class="math">3, 6, 9, ?, 15</span> → הכלל: +3, אז 12!',gen:()=>genSequence()},
+  {title:'סדרות יורדות',instruction:'סדרות שיורדות!',tip:'💡 טיפ: גם סדרות יכולות לרדת! בדקו בכמה יורד כל פעם.',example:'<span class="math">20, 17, 14, ?, 8</span> → הכלל: −3, אז 11!',gen:()=>{const step=rr(2,4);const count=rr(5,7);const start=step*(count-1)+rr(1,5);const nums=[];for(let i=0;i<count;i++)nums.push(start-i*step);const hideIdx=rr(1,count-2);const mystery=nums[hideIdx];let html='<div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:16px 0;direction:ltr">';for(let i=0;i<count;i++){if(i===hideIdx){html+='<div style="width:48px;height:48px;background:var(--accent);color:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;border:3px solid #fbbf24">?</div>'}else{html+='<div style="width:48px;height:48px;background:var(--primary-light);color:var(--primary);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800">'+nums[i]+'</div>'}if(i<count-1)html+='<div style="display:flex;align-items:center;color:var(--text-light);font-size:1.2rem">→</div>'}html+='</div>';return{nl:html,answer:mystery,options:genDistractors(mystery,step),qText:'מהו המספר החסר בסדרה?'}}},
+  {title:'סדרות — קפיצות של 3',instruction:'סדרה עם קפיצות של 3',tip:'💡 טיפ: כל מספר גדל ב-3 מהקודם!',example:'<span class="math">3, 6, 9, ?, 15</span> → 12!',gen:()=>{const s=rr(1,5);return genWhereIs(s,s+24,3)}},
+  {title:'סדרות מעורבבות',instruction:'סדרות עם קפיצות שונות',tip:'💡 טיפ: מצאו קודם את גודל הקפיצה — ואז חשבו!',example:'בדקו: בכמה עולה מספר לספר?',gen:()=>genSequencePositive()},
+  {title:'מספרים תלת-ספרתיים',instruction:'מיקום מספרים תלת-ספרתיים על הישר',tip:'💡 טיפ: שימו לב לקפיצות — הן יכולות להיות 50 או 100!',example:'<span class="math">200, 250, ?, 350</span> → 300!',gen:()=>genWhereIs(rr(1,3)*100,rr(5,8)*100,50)},
+  {title:'אתגר — כל הסוגים',instruction:'שאלות מכל מה שלמדנו!',tip:'🏆 טיפ: שימו לב לסוג הישר ולקפיצות!',example:'כל שאלה היא הפתעה!',gen:()=>[()=>genWhereIs(0,50,5),()=>genSequencePositive(),()=>genBetween(),()=>genWhereIs(0,100,10)][rr(0,3)]()},
+  {title:'סופר-אתגר!',instruction:'הרמה הכי קשה!',tip:'🏆 טיפ: השתמשו בכל מה שלמדתם! 💪',example:'בהצלחה!',gen:()=>[()=>genWhereIs(rr(0,2)*100,rr(5,9)*100,100),()=>genSequencePositive(),()=>genBetween(),()=>genWhereIs(0,50,5)][rr(0,3)]()},
+];
+
+let currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+const QPL=5;
+
+function renderTabs(){const row=document.getElementById('tabsRow');row.innerHTML='';levels.forEach((_,i)=>{const t=document.createElement('button');t.className='tab';t.textContent=i+1;if(i===currentLevel)t.classList.add('active');if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}t.onclick=()=>goLevel(i);row.appendChild(t)});const at=row.querySelector('.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  const lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  const seen=new Set();
+  for(let i=0;i<QPL;i++){let q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(String(q.answer)));seen.add(String(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  const list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach((q,idx)=>{
+    const card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    let h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    h+=q.nl;
+    h+='<div class="answer-options" id="opts-'+idx+'">';
+    q.options.forEach(opt=>{h+='<button class="answer-btn" onclick="checkAnswer('+idx+',\''+opt+'\',this)">'+opt+'</button>'});
+    h+='</div><div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkAnswer(idx,chosen,btn){
+  const q=currentQuestions[idx];const card=document.getElementById('q-'+idx);const fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(String(chosen)===String(q.answer)){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(b=>b.classList.add('disabled'));
+    fb.textContent=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(()=>{btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  const lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function nextLevel(){if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+renderLevel();
+</script>
+</body>
+</html>

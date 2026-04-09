@@ -68,7 +68,7 @@ body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);
 
 .svg-area{position:absolute;top:0;left:0;width:100%;height:100%;z-index:100;pointer-events:none}
 .svg-area svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
-.svg-area svg.draw-active{pointer-events:auto}
+
 
 .svg-area svg line{stroke-linecap:round}
 
@@ -271,7 +271,7 @@ function loadLevel(){
   botRow.dataset.letters=JSON.stringify(bot);
 
   updateProgress();
-  updateSvgClass();
+
 
   // Show/hide areas
   document.getElementById('gameContainer').style.display=(mode==='print'?'none':'');
@@ -428,12 +428,6 @@ document.getElementById('bottomRow').addEventListener('click',function(e){
 });
 
 /* DRAW MODE */
-function updateSvgClass(){
-  const svg=document.getElementById('linesSvg');
-  if(mode==='draw') svg.classList.add('draw-active');
-  else svg.classList.remove('draw-active');
-}
-
 function getEventPos(e){
   if(e.touches&&e.touches.length) return{x:e.touches[0].clientX,y:e.touches[0].clientY};
   return{x:e.clientX,y:e.clientY};
@@ -515,7 +509,7 @@ document.querySelectorAll('.mode-btn').forEach(btn=>{
     document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
     this.classList.add('active');
     mode=this.dataset.mode;
-    updateSvgClass();
+  
     loadLevel();
   });
 });

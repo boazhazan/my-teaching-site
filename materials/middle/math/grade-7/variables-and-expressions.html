@@ -63,6 +63,7 @@ h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
 .step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
 .step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
 .step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
 
 /* Interactive elements inside steps */
 .mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
@@ -335,7 +336,7 @@ const steps=[
 <p><strong>למה זה שימושי?</strong> כי עם משתנה אפשר לרשום כלל כללי שמתאים ל<strong>כל</strong> המקרים, לא רק למספר ספציפי אחד.</p>
 <div class="highlight">🤔 חשבו: מה ההבדל בין "5 + 3 = 8" לבין "x + 3"?<br><br>
 במשפט הראשון — התשובה תמיד 8.<br>
-במשפט השני — התשובה <strong>תלויה ב-x</strong>. אם x=5 התשובה 8, אם x=10 התשובה 13!</div>
+במשפט השני — התשובה <strong>תלויה ב-<span class="math-expr">x</span></strong>. אם <span class="math-expr">x = 5</span> התשובה 8, אם <span class="math-expr">x = 10</span> התשובה 13!</div>
 `}},
 
 /* Step 2: Algebraic expression */
@@ -350,19 +351,19 @@ const steps=[
 </div>
 <p><strong>בואו נתרגם ממילים לביטויים:</strong></p>
 <div id="step2quiz">
-  <p>📋 "<strong>מספר הגדול מ-x ב-6</strong>" — מה הביטוי?</p>
+  <p>📋 "<strong>מספר הגדול מ-<span class="math-expr">x</span> ב-6</strong>" — מה הביטוי?</p>
   <div class="quiz-options" id="s2opts"></div>
   <div id="s2fb"></div>
 </div>
 <div class="reveal" id="s2reveal">
-<div class="success-box">✅ מעולה! "הגדול מ-x ב-6" → <code>x + 6</code></div>
+<div class="success-box">✅ מעולה! "הגדול מ-<span class="math-expr">x</span> ב-6" → <code>x + 6</code></div>
 <p style="margin-top:12px"><strong>מילון תרגום:</strong></p>
 <table class="mini-table" style="font-size:.9rem">
 <tr><th>ביטוי מילולי</th><th>ביטוי אלגברי</th></tr>
-<tr><td>הגדול מ-x ב-5</td><td style="direction:ltr"><code>x + 5</code></td></tr>
-<tr><td>הקטן מ-x ב-3</td><td style="direction:ltr"><code>x - 3</code></td></tr>
-<tr><td>פי 4 מ-x</td><td style="direction:ltr"><code>4x</code></td></tr>
-<tr><td>x חלקי 2</td><td style="direction:ltr"><code>x / 2</code></td></tr>
+<tr><td>הגדול מ-<span class="math-expr">x</span> ב-5</td><td style="direction:ltr"><code>x + 5</code></td></tr>
+<tr><td>הקטן מ-<span class="math-expr">x</span> ב-3</td><td style="direction:ltr"><code>x - 3</code></td></tr>
+<tr><td>פי 4 מ-<span class="math-expr">x</span></td><td style="direction:ltr"><code>4x</code></td></tr>
+<tr><td><span class="math-expr">x</span> חלקי 2</td><td style="direction:ltr"><code>x / 2</code></td></tr>
 </table>
 </div>
 `},init(){
@@ -409,7 +410,7 @@ const steps=[
 למשל: אם <span style="direction:ltr;display:inline-block">x = 3</span> אז <code>2x = 6</code> (ולא 5!)</div>
 <p><strong>בדקו את עצמכם:</strong> אם <code>a = 4</code>, כמה שווה <code>3a</code>?</p>
 <div class="q-input-row">
-  <input type="number" class="mini-input" id="mul3a" placeholder="?" aria-label="ערך 3a כאשר a=4">
+  <input type="number" class="mini-input" id="mul3a" placeholder="?" aria-label="ערך 3a כאשר a שווה 4">
   <button class="mini-btn" onclick="check3a()">בדקו</button>
 </div>
 <div id="mul3afb"></div>
@@ -434,14 +435,14 @@ const steps=[
 </div>
 <p><strong>תורכם:</strong> חשבו את <code>3n - 2</code> כאשר <code>n = 4</code></p>
 <div class="q-input-row">
-  <input type="number" class="mini-input" id="sub1" placeholder="?" aria-label="ערך 3n-2 כאשר n=4">
+  <input type="number" class="mini-input" id="sub1" placeholder="?" aria-label="ערך 3n פחות 2 כאשר n שווה 4">
   <button class="mini-btn" onclick="checkSub1()">בדקו</button>
 </div>
 <div id="sub1fb"></div>
 <div class="reveal" id="sub1reveal">
   <p style="margin-top:8px">עכשיו חשבו: <code>3n - 2</code> כאשר <code>n = 7</code></p>
   <div class="q-input-row">
-    <input type="number" class="mini-input" id="sub2" placeholder="?" aria-label="ערך 3n-2 כאשר n=7">
+    <input type="number" class="mini-input" id="sub2" placeholder="?" aria-label="ערך 3n פחות 2 כאשר n שווה 7">
     <button class="mini-btn" onclick="checkSub2()">בדקו</button>
   </div>
   <div id="sub2fb"></div>
@@ -461,7 +462,7 @@ const steps=[
 <tr><td>5</td><td>11</td></tr>
 </table>
 </div>
-<p>שימו לב: כשמוסיפים 1 ל-x, הערך של הביטוי עולה ב-<strong>2</strong>. למה? כי המקדם של x הוא 2!</p>
+<p>שימו לב: כשמוסיפים 1 ל-<span class="math-expr">x</span>, הערך של הביטוי עולה ב-<strong>2</strong>. למה? כי המקדם של <span class="math-expr">x</span> הוא 2!</p>
 <p><strong>תורכם למלא:</strong> הביטוי <code>3x + 2</code></p>
 <table class="mini-table">
 <tr><th style="direction:ltr">x</th><th style="direction:ltr">3x + 2</th></tr>
@@ -496,7 +497,7 @@ const steps=[
   <div class="summary-item">
     <div class="s-icon">✖️</div>
     <div class="s-title">סימן כפל</div>
-    <div class="s-text">כותבים 3a במקום 3 × a</div>
+    <div class="s-text">כותבים <span class="math-expr">3a</span> במקום <span class="math-expr">3 × a</span></div>
   </div>
   <div class="summary-item">
     <div class="s-icon">🔄</div>
@@ -539,13 +540,13 @@ window.check3a=function(){
   const v=parseInt(document.getElementById('mul3a').value);
   const fb=document.getElementById('mul3afb');
   if(v===12){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! 3 · 4 = 12</div>';document.getElementById('mul3a').classList.add('correct')}
-  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. 3a פירושו 3 כפול a, כלומר 3 · 4 = ?</div>';document.getElementById('mul3a').classList.add('wrong');setTimeout(()=>document.getElementById('mul3a').classList.remove('wrong'),1500)}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. <span class="math-expr">3a</span> פירושו 3 כפול <span class="math-expr">a</span>, כלומר <span class="math-expr">3 · 4</span> = ?</div>';document.getElementById('mul3a').classList.add('wrong');setTimeout(()=>document.getElementById('mul3a').classList.remove('wrong'),1500)}
 };
 window.showSubSteps=function(){
   document.getElementById('subSteps').innerHTML=`
     <div style="direction:ltr;text-align:center;font-size:1.1rem;line-height:2">
       <div style="animation:fadeIn .5s"><code>2x + 3</code></div>
-      <div style="animation:fadeIn .5s .3s both">↓ נציב x = 5</div>
+      <div style="animation:fadeIn .5s .3s both">↓ נציב <span class="math-expr">x = 5</span></div>
       <div style="animation:fadeIn .5s .6s both"><code>2 · 5 + 3</code></div>
       <div style="animation:fadeIn .5s .9s both">↓</div>
       <div style="animation:fadeIn .5s 1.2s both"><code>10 + 3</code></div>
@@ -574,7 +575,7 @@ window.checkTable=function(){
     else{el.classList.add('wrong');el.classList.remove('correct')}
   });
   if(ok===3){document.getElementById('tblFb').innerHTML='<div class="feedback-inline ok">✅ מושלם! מילאתם נכון את כל הטבלה!</div>';document.getElementById('tblReveal').classList.add('show')}
-  else{document.getElementById('tblFb').innerHTML='<div class="feedback-inline err">❌ '+ok+' מתוך 3 נכונים. רמז: הציבו את x בביטוי 3x + 2</div>'}
+  else{document.getElementById('tblFb').innerHTML='<div class="feedback-inline err">❌ '+ok+' מתוך 3 נכונים. רמז: הציבו את <span class="math-expr">x</span> בביטוי <span class="math-expr">3x + 2</span></div>'}
 };
 
 /* ===== QUESTION GENERATORS ===== */
@@ -608,11 +609,11 @@ function genEasy(){
     if(isAdd){
       const correct=vr+' + '+n;
       const opts=shuffle([correct,vr+' - '+n,n+vr,vr+' · '+n]);
-      qs.push({type:'mc',stem:'מהו הביטוי עבור: "<strong>מספר הגדול מ-'+vr+' ב-'+n+'</strong>"?',options:opts,answer:opts.indexOf(correct),explanation:'"הגדול ב-'+n+'" פירושו חיבור, כלומר <code>'+correct+'</code>'});
+      qs.push({type:'mc',stem:'מהו הביטוי עבור: "<strong>מספר הגדול מ-<span class="math-expr">'+vr+'</span> ב-'+n+'</strong>"?',options:opts,answer:opts.indexOf(correct),explanation:'"הגדול ב-'+n+'" פירושו חיבור, כלומר <code>'+correct+'</code>'});
     } else {
       const correct=vr+' - '+n;
       const opts=shuffle([correct,vr+' + '+n,n+vr,n+' - '+vr]);
-      qs.push({type:'mc',stem:'מהו הביטוי עבור: "<strong>מספר הקטן מ-'+vr+' ב-'+n+'</strong>"?',options:opts,answer:opts.indexOf(correct),explanation:'"הקטן ב-'+n+'" פירושו חיסור, כלומר <code>'+correct+'</code>'});
+      qs.push({type:'mc',stem:'מהו הביטוי עבור: "<strong>מספר הקטן מ-<span class="math-expr">'+vr+'</span> ב-'+n+'</strong>"?',options:opts,answer:opts.indexOf(correct),explanation:'"הקטן ב-'+n+'" פירושו חיסור, כלומר <code>'+correct+'</code>'});
     }
   }
   /* Q9-12: verbal to expression (mul/div) */
@@ -622,11 +623,11 @@ function genEasy(){
     if(i<2){
       const correct=n+vr;
       const opts=shuffle([correct,vr+' + '+n,vr+' - '+n,vr+' / '+n]);
-      qs.push({type:'mc',stem:'מהו הביטוי עבור: "<strong>פי '+n+' מ-'+vr+'</strong>"?',options:opts,answer:opts.indexOf(correct),explanation:'"פי '+n+'" פירושו כפל, כלומר <code>'+correct+'</code>'});
+      qs.push({type:'mc',stem:'מהו הביטוי עבור: "<strong>פי '+n+' מ-<span class="math-expr">'+vr+'</span></strong>"?',options:opts,answer:opts.indexOf(correct),explanation:'"פי '+n+'" פירושו כפל, כלומר <code>'+correct+'</code>'});
     } else {
       const correct=vr+' / '+n;
       const opts=shuffle([correct,n+vr,vr+' + '+n,vr+' - '+n]);
-      qs.push({type:'mc',stem:'מהו הביטוי עבור: "<strong>'+vr+' חלקי '+n+'</strong>"?',options:opts,answer:opts.indexOf(correct),explanation:'"חלקי '+n+'" פירושו חילוק, כלומר <code>'+correct+'</code>'});
+      qs.push({type:'mc',stem:'מהו הביטוי עבור: "<strong><span class="math-expr">'+vr+'</span> חלקי '+n+'</strong>"?',options:opts,answer:opts.indexOf(correct),explanation:'"חלקי '+n+'" פירושו חילוק, כלומר <code>'+correct+'</code>'});
     }
   }
   /* Q13-16: simple substitution */
@@ -652,12 +653,12 @@ function genEasy(){
       const ans=base+xv;
       const correct=''+ans;
       const opts=shuffle([correct,''+(base-xv),''+(base*xv),''+(xv-base)]);
-      qs.push({type:'mc',stem:'ל'+n1+' יש '+base+' מדבקות. ל'+n2+' יש x מדבקות יותר מ'+n1+'. אם <code>x = '+xv+'</code>, כמה מדבקות יש ל'+n2+'?',options:opts,answer:opts.indexOf(correct),explanation:'ל'+n2+' יש '+base+' + '+xv+' = <strong>'+ans+'</strong> מדבקות'});
+      qs.push({type:'mc',stem:'ל'+n1+' יש '+base+' מדבקות. ל'+n2+' יש <span class="math-expr">x</span> מדבקות יותר מ'+n1+'. אם <code>x = '+xv+'</code>, כמה מדבקות יש ל'+n2+'?',options:opts,answer:opts.indexOf(correct),explanation:'ל'+n2+' יש '+base+' + '+xv+' = <strong>'+ans+'</strong> מדבקות'});
     } else {
       const ans=base-xv;
       const correct=''+ans;
       const opts=shuffle([correct,''+(base+xv),''+(base*xv),''+xv]);
-      qs.push({type:'mc',stem:'ל'+n1+' יש '+base+' גולות. ל'+n2+' יש x גולות פחות מ'+n1+'. אם <code>x = '+xv+'</code>, כמה גולות יש ל'+n2+'?',options:opts,answer:opts.indexOf(correct),explanation:'ל'+n2+' יש '+base+' - '+xv+' = <strong>'+ans+'</strong> גולות'});
+      qs.push({type:'mc',stem:'ל'+n1+' יש '+base+' גולות. ל'+n2+' יש <span class="math-expr">x</span> גולות פחות מ'+n1+'. אם <code>x = '+xv+'</code>, כמה גולות יש ל'+n2+'?',options:opts,answer:opts.indexOf(correct),explanation:'ל'+n2+' יש '+base+' - '+xv+' = <strong>'+ans+'</strong> גולות'});
     }
   }
   return qs;
@@ -673,7 +674,7 @@ function genMedium(){
     const xs=[1,2,3,4,5];
     const results=xs.map(x=>m*x+b);
     const blanks=shuffle([0,1,2,3,4]).slice(0,3);
-    qs.push({type:'table',stem:'השלימו את הטבלה עבור הביטוי <code>'+expr+'</code>',expression:expr,rows:xs.map((x,j)=>({x,result:results[j],blank:blanks.includes(j)})),explanation:'הציבו כל ערך של x בביטוי '+expr});
+    qs.push({type:'table',stem:'השלימו את הטבלה עבור הביטוי <code>'+expr+'</code>',expression:expr,rows:xs.map((x,j)=>({x,result:results[j],blank:blanks.includes(j)})),explanation:'הציבו כל ערך של <span class="math-expr">x</span> בביטוי <code>'+expr+'</code>'});
   }
   /* Q5-8: number pairs to expression */
   for(let i=0;i<4;i++){
@@ -684,7 +685,7 @@ function genMedium(){
     const d2=b===0?'x + '+m:(m+1)+'x + '+(b-1);
     const d3=b===0?'x · '+(m+1):m+'x + '+(b+2);
     const opts=shuffle([correct,d1,d2,d3]);
-    qs.push({type:'mc',stem:'מצאו את הביטוי שמתאר את הקשר:<br><table class="q-table"><tr><th>x</th><th>תוצאה</th></tr>'+pairs.map(p=>'<tr><td>'+p[0]+'</td><td>'+p[1]+'</td></tr>').join('')+'</table>',options:opts,answer:opts.indexOf(correct),explanation:'הביטוי הוא <code>'+correct+'</code>. בדקו: כש-x='+pairs[0][0]+' → '+m+'·'+pairs[0][0]+(b?'+'+b:'')+'='+pairs[0][1]});
+    qs.push({type:'mc',stem:'מצאו את הביטוי שמתאר את הקשר:<br><table class="q-table"><tr><th>x</th><th>תוצאה</th></tr>'+pairs.map(p=>'<tr><td>'+p[0]+'</td><td>'+p[1]+'</td></tr>').join('')+'</table>',options:opts,answer:opts.indexOf(correct),explanation:'הביטוי הוא <code>'+correct+'</code>. בדקו: כש-<span class="math-expr">x='+pairs[0][0]+'</span> → <span class="math-expr">'+m+'·'+pairs[0][0]+(b?'+'+b:'')+'='+pairs[0][1]+'</span>'});
   }
   /* Q9-12: complex verbal (age problems) */
   for(let i=0;i<4;i++){
@@ -719,7 +720,7 @@ function genMedium(){
     } else {
       const target=base+perDay*RI(4,7);const days=Math.floor((target-base)/perDay);const ans=days;
       const actual=base+perDay*days;
-      qs.push({type:'input',stem:n+' קורא/ת ספר. ביום הראשון קרא/ה '+base+' עמודים, ובכל יום נוסף קורא/ת עוד '+perDay+' עמודים.<br>אחרי כמה ימים נוספים יגיע/תגיע ל-'+actual+' עמודים בסך הכול?',answer:ans,explanation:'צריך למצוא x כך ש-'+base+' + '+perDay+'x = '+actual+'<br>'+perDay+'x = '+(actual-base)+'<br>x = '+ans});
+      qs.push({type:'input',stem:n+' קורא/ת ספר. ביום הראשון קרא/ה '+base+' עמודים, ובכל יום נוסף קורא/ת עוד '+perDay+' עמודים.<br>אחרי כמה ימים נוספים יגיע/תגיע ל-'+actual+' עמודים בסך הכול?',answer:ans,explanation:'צריך למצוא <span class="math-expr">x</span> כך ש-<span class="math-expr">'+base+' + '+perDay+'x = '+actual+'</span><br><span class="math-expr">'+perDay+'x = '+(actual-base)+'</span><br><span class="math-expr">x = '+ans+'</span>'});
     }
   }
   return qs;
@@ -733,7 +734,7 @@ function genHard(){
     const n1=boyName(),n2=girlName();const diff=RI(10,50);
     const correct='2x + '+diff;
     const opts=shuffle([correct,'x + '+diff,'x + '+(diff*2),diff+'x']);
-    qs.push({type:'mc',stem:n2+' חסכה '+diff+' ש"ח יותר מ'+n1+'. <code>x</code> מייצג את החיסכון של '+n1+'.<br>מהו הביטוי ל<strong>סכום החיסכון של שניהם ביחד</strong>?',options:opts,answer:opts.indexOf(correct),explanation:n1+' חסך x, '+n2+' חסכה x + '+diff+'. ביחד: x + (x + '+diff+') = <code>'+correct+'</code>'});
+    qs.push({type:'mc',stem:n2+' חסכה '+diff+' ש"ח יותר מ'+n1+'. <code>x</code> מייצג את החיסכון של '+n1+'.<br>מהו הביטוי ל<strong>סכום החיסכון של שניהם ביחד</strong>?',options:opts,answer:opts.indexOf(correct),explanation:n1+' חסך <span class="math-expr">x</span>, '+n2+' חסכה <span class="math-expr">x + '+diff+'</span>. ביחד: <span class="math-expr">x + (x + '+diff+')</span> = <code>'+correct+'</code>'});
   }
   /* Q5-8: expression to verbal */
   for(let i=0;i<4;i++){
@@ -743,7 +744,7 @@ function genHard(){
     const d2=m+' ועוד '+b+' כפול מספר';
     const d3='פי '+(m+b)+' ממספר';
     const opts=shuffle([correct,d1,d2,d3]);
-    qs.push({type:'mc',stem:'איזה תיאור מילולי מתאים לביטוי <code>'+expr+'</code>?',options:opts,answer:opts.indexOf(correct),explanation:'<code>'+expr+'</code> = '+m+' כפול a ועוד '+b+', כלומר "'+correct+'"'});
+    qs.push({type:'mc',stem:'איזה תיאור מילולי מתאים לביטוי <code>'+expr+'</code>?',options:opts,answer:opts.indexOf(correct),explanation:'<code>'+expr+'</code> = '+m+' כפול <span class="math-expr">a</span> ועוד '+b+', כלומר "'+correct+'"'});
   }
   /* Q9-12: table with complex pattern */
   for(let i=0;i<4;i++){
@@ -752,7 +753,7 @@ function genHard(){
     const results=xs.map(x=>m*x+b);
     const expr=m+'x + '+b;
     const val=RI(6,10);const ans=m*val+b;
-    qs.push({type:'input',stem:'מצאו את החוקיות בטבלה:<br><table class="q-table"><tr><th>x</th><th>?</th></tr>'+xs.map((x,j)=>'<tr><td>'+x+'</td><td>'+results[j]+'</td></tr>').join('')+'</table>הביטוי הוא <code>'+expr+'</code>. מה הערך כאשר <code>x = '+val+'</code>?',answer:ans,explanation:'<code>'+expr+'</code> כאשר x='+val+': '+m+'·'+val+' + '+b+' = '+(m*val)+' + '+b+' = <strong>'+ans+'</strong>'});
+    qs.push({type:'input',stem:'מצאו את החוקיות בטבלה:<br><table class="q-table"><tr><th>x</th><th>?</th></tr>'+xs.map((x,j)=>'<tr><td>'+x+'</td><td>'+results[j]+'</td></tr>').join('')+'</table>הביטוי הוא <code>'+expr+'</code>. מה הערך כאשר <code>x = '+val+'</code>?',answer:ans,explanation:'<code>'+expr+'</code> כאשר <span class="math-expr">x='+val+'</span>: <span class="math-expr">'+m+'·'+val+' + '+b+' = '+(m*val)+' + '+b+' = '+ans+'</span>'});
   }
   /* Q13-16: complex story */
   for(let i=0;i<4;i++){
@@ -777,9 +778,9 @@ function genChallenge(){
   const qs=[];
   /* Q1-3: complex patterns */
   const patterns=[
-    {seq:[[1,1],[2,4],[3,9],[4,16]],answer:['n²','n^2','n*n'],display:'n²',explain:'כל מספר בריבוע: 1²=1, 2²=4, 3²=9...'},
-    {seq:[[1,3],[2,5],[3,7],[4,9]],answer:['2n+1','2n + 1','2*n+1'],display:'2n + 1',explain:'כפליים n ועוד 1: 2·1+1=3, 2·2+1=5...'},
-    {seq:[[1,2],[2,6],[3,12],[4,20]],answer:['n²+n','n^2+n','n*(n+1)','n(n+1)'],display:'n² + n',explain:'n בריבוע ועוד n: 1+1=2, 4+2=6, 9+3=12...'}
+    {seq:[[1,1],[2,4],[3,9],[4,16]],answer:['n²','n^2','n*n'],display:'n²',explain:'כל מספר בריבוע: <span class="math-expr">1²=1, 2²=4, 3²=9</span>...'},
+    {seq:[[1,3],[2,5],[3,7],[4,9]],answer:['2n+1','2n + 1','2*n+1'],display:'2n + 1',explain:'כפליים <span class="math-expr">n</span> ועוד 1: <span class="math-expr">2·1+1=3, 2·2+1=5</span>...'},
+    {seq:[[1,2],[2,6],[3,12],[4,20]],answer:['n²+n','n^2+n','n*(n+1)','n(n+1)'],display:'n² + n',explain:'<span class="math-expr">n</span> בריבוע ועוד <span class="math-expr">n</span>: <span class="math-expr">1+1=2, 4+2=6, 9+3=12</span>...'}
   ];
   patterns.forEach(p=>{
     qs.push({type:'input-text',stem:'מצאו את הביטוי הכללי:<br><table class="q-table"><tr><th>n</th><th>תוצאה</th></tr>'+p.seq.map(s=>'<tr><td>'+s[0]+'</td><td>'+s[1]+'</td></tr>').join('')+'<tr><td>n</td><td><strong>?</strong></td></tr></table>כתבו את הביטוי (למשל: 3n+2):',answer:p.answer,display:p.display,explanation:p.explain});
@@ -798,13 +799,13 @@ function genChallenge(){
     const expr2=m+'x - '+b;
     const together='x + ('+m+'x - '+b+')';
     const ans=xv+(m*xv-b);
-    qs.push({type:'input',stem:'ל'+n1+' יש x בולים. ל'+n2+' יש פי '+m+' מ'+n1+' פחות '+b+'.<br>כמה בולים יש ל<strong>שניהם ביחד</strong> כאשר <code>x = '+xv+'</code>?',answer:ans,explanation:n1+': '+xv+', '+n2+': '+m+'·'+xv+' - '+b+' = '+(m*xv-b)+'. ביחד: '+xv+' + '+(m*xv-b)+' = <strong>'+ans+'</strong>'});
+    qs.push({type:'input',stem:'ל'+n1+' יש <span class="math-expr">x</span> בולים. ל'+n2+' יש פי '+m+' מ'+n1+' פחות '+b+'.<br>כמה בולים יש ל<strong>שניהם ביחד</strong> כאשר <code>x = '+xv+'</code>?',answer:ans,explanation:n1+': '+xv+', '+n2+': '+m+'·'+xv+' - '+b+' = '+(m*xv-b)+'. ביחד: '+xv+' + '+(m*xv-b)+' = <strong>'+ans+'</strong>'});
   }
   /* Q10-12: who's right */
   const whoRight=[
-    {problem:'מחיר חולצה הוא x ש"ח. קונים 3 חולצות ומקבלים הנחה של 10 ש"ח.',correct:'3x - 10',wrong:'3(x - 10)',correctName:boyName(),wrongName:girlName(),explain:'ההנחה היא על הסכום הכולל, לא על כל חולצה: 3x - 10'},
-    {problem:'לאורי יש x כדורים. לגיא יש פי 2 ממנו ועוד 3.',correct:'2x + 3',wrong:'2(x + 3)',correctName:boyName(),wrongName:girlName(),explain:'קודם כופלים ב-2 ואז מוסיפים 3: 2x + 3'},
-    {problem:'טמפרטורה של x מעלות ירדה ב-5 מעלות ואז הוכפלה.',correct:'2(x - 5)',wrong:'2x - 5',correctName:boyName(),wrongName:girlName(),explain:'קודם הטמפרטורה ירדה (x-5) ואז הוכפלה: 2(x-5)'}
+    {problem:'מחיר חולצה הוא <span class="math-expr">x</span> ש"ח. קונים 3 חולצות ומקבלים הנחה של 10 ש"ח.',correct:'3x - 10',wrong:'3(x - 10)',correctName:boyName(),wrongName:girlName(),explain:'ההנחה היא על הסכום הכולל, לא על כל חולצה: <span class="math-expr">3x - 10</span>'},
+    {problem:'לאורי יש <span class="math-expr">x</span> כדורים. לגיא יש פי 2 ממנו ועוד 3.',correct:'2x + 3',wrong:'2(x + 3)',correctName:boyName(),wrongName:girlName(),explain:'קודם כופלים ב-2 ואז מוסיפים 3: <span class="math-expr">2x + 3</span>'},
+    {problem:'טמפרטורה של <span class="math-expr">x</span> מעלות ירדה ב-5 מעלות ואז הוכפלה.',correct:'2(x - 5)',wrong:'2x - 5',correctName:boyName(),wrongName:girlName(),explain:'קודם הטמפרטורה ירדה <span class="math-expr">(x - 5)</span> ואז הוכפלה: <span class="math-expr">2(x - 5)</span>'}
   ];
   whoRight.forEach(w=>{
     const opts=shuffle([
@@ -816,9 +817,9 @@ function genChallenge(){
   });
   /* Q13-15: logic puzzles */
   const puzzles=[
-    {stem:'חשבו על מספר. <strong>הכפילו ב-2</strong>. <strong>הוסיפו 6</strong>. <strong>חלקו ב-2</strong>. <strong>הפחיתו את המספר המקורי</strong>.<br>מה התוצאה תמיד?',answer:3,explanation:'נסמן x. אז: (2x+6)/2 - x = x+3-x = <strong>3</strong>'},
-    {stem:'חשבו על מספר. <strong>הוסיפו 5</strong>. <strong>הכפילו ב-2</strong>. <strong>הפחיתו 4</strong>. <strong>חלקו ב-2</strong>. <strong>הפחיתו את המספר המקורי</strong>.<br>מה התוצאה תמיד?',answer:3,explanation:'נסמן x. אז: (2(x+5)-4)/2 - x = (2x+10-4)/2 - x = (2x+6)/2 - x = x+3-x = <strong>3</strong>'},
-    {stem:'חשבו על מספר. <strong>הכפילו ב-3</strong>. <strong>הוסיפו 12</strong>. <strong>חלקו ב-3</strong>. <strong>הפחיתו את המספר המקורי</strong>.<br>מה התוצאה תמיד?',answer:4,explanation:'נסמן x. אז: (3x+12)/3 - x = x+4-x = <strong>4</strong>'}
+    {stem:'חשבו על מספר. <strong>הכפילו ב-2</strong>. <strong>הוסיפו 6</strong>. <strong>חלקו ב-2</strong>. <strong>הפחיתו את המספר המקורי</strong>.<br>מה התוצאה תמיד?',answer:3,explanation:'נסמן <span class="math-expr">x</span>. אז: <span class="math-expr">(2x+6)/2 - x = x+3-x</span> = <strong>3</strong>'},
+    {stem:'חשבו על מספר. <strong>הוסיפו 5</strong>. <strong>הכפילו ב-2</strong>. <strong>הפחיתו 4</strong>. <strong>חלקו ב-2</strong>. <strong>הפחיתו את המספר המקורי</strong>.<br>מה התוצאה תמיד?',answer:3,explanation:'נסמן <span class="math-expr">x</span>. אז: <span class="math-expr">(2(x+5)-4)/2 - x = (2x+10-4)/2 - x = (2x+6)/2 - x = x+3-x</span> = <strong>3</strong>'},
+    {stem:'חשבו על מספר. <strong>הכפילו ב-3</strong>. <strong>הוסיפו 12</strong>. <strong>חלקו ב-3</strong>. <strong>הפחיתו את המספר המקורי</strong>.<br>מה התוצאה תמיד?',answer:4,explanation:'נסמן <span class="math-expr">x</span>. אז: <span class="math-expr">(3x+12)/3 - x = x+4-x</span> = <strong>4</strong>'}
   ];
   puzzles.forEach(p=>qs.push({type:'input',stem:p.stem,answer:p.answer,explanation:p.explanation}));
   return qs;
@@ -883,7 +884,7 @@ function renderQuestion(){
         if(i===q.answer) cls+=' correct';
         else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel']) cls+=' wrong';
       }
-      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span>'+opt+'</span></div>';
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></div>';
     });
     html+='</div>';
     if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>בדקו</button>';

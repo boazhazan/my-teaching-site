@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>שעון אותיות — איזו אות המחוג מצביע עליה?</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap');
+:root{
+  --pri:#2563eb;--pri-dark:#1d4ed8;--pri-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --ok:#10b981;--no:#ef4444;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);direction:rtl;min-height:100vh}
+
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(0)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 0 transparent)}50%{filter:drop-shadow(0 0 8px rgba(16,185,129,.6))}}
+
+.header{background:linear-gradient(135deg,var(--pri-light),#fff);padding:20px;text-align:center;border-bottom:3px solid var(--pri)}
+.header h1{font-size:1.8rem;font-weight:800;color:var(--pri-dark);margin-bottom:4px}
+.header p{color:var(--text-light);font-size:.95rem}
+
+.mode-bar{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.mode-btn{padding:8px 20px;border:2px solid var(--border);border-radius:999px;background:var(--bg);cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:600;color:var(--text-light);transition:.25s ease}
+.mode-btn.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+.mode-btn:hover:not(.active){border-color:var(--pri);color:var(--pri)}
+
+.tabs-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.tabs{display:flex;gap:6px;min-width:max-content}
+.tab{padding:6px 14px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text-light);white-space:nowrap;transition:.25s ease}
+.tab.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tab.done{background:var(--ok);color:#fff;border-color:var(--ok)}
+.tab:hover:not(.active):not(.done){border-color:var(--pri);color:var(--pri)}
+
+.main{max-width:600px;margin:0 auto;padding:16px;animation:fi .4s ease}
+.q-counter{text-align:center;color:var(--text-light);font-size:.95rem;font-weight:600;margin-bottom:12px}
+.score-info{font-size:.85rem;color:var(--text-light);text-align:center;margin-top:4px}
+.score-info .ok{color:var(--ok)}.score-info .bad{color:var(--no)}
+
+.clock-card{background:var(--bg);border-radius:16px;box-shadow:var(--shadow-lg);padding:24px;margin-bottom:16px;display:flex;justify-content:center;position:relative;gap:16px;flex-wrap:wrap}
+.clock-card.shaking{animation:shake .5s ease}
+.clock-svg{width:300px;height:300px;max-width:100%}
+.clock-hand{transition:transform .8s ease}
+
+.answer-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+.ans-btn{min-width:60px;height:50px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;border-radius:var(--radius);border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;color:var(--text);transition:.25s ease;padding:0 16px}
+.ans-btn:hover{border-color:var(--pri);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.ans-btn.correct{background:#d1fae5;border-color:var(--ok);color:var(--ok);animation:bounce .5s ease}
+.ans-btn.wrong{background:#fee2e2;border-color:var(--no);color:var(--no);animation:shake .5s ease}
+.ans-btn:disabled{pointer-events:none}
+
+.draw-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:8;touch-action:none;cursor:crosshair;border-radius:16px}
+
+.overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.45);z-index:100;align-items:center;justify-content:center}
+.overlay.show{display:flex}
+.complete-card{background:var(--bg);border-radius:16px;padding:32px;text-align:center;max-width:380px;width:90%;box-shadow:var(--shadow-lg);animation:pop .5s ease}
+.complete-card .emoji{font-size:3.5rem;margin-bottom:12px}
+.complete-card h2{font-size:1.4rem;font-weight:800;color:var(--pri-dark);margin-bottom:8px}
+.complete-card p{color:var(--text-light);margin-bottom:20px;font-size:.95rem}
+.pill-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.pill-btn{padding:10px 22px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s ease}
+.pill-btn.primary{background:var(--pri);color:#fff}.pill-btn.primary:hover{background:var(--pri-dark)}
+.pill-btn.secondary{background:var(--bg-soft);color:var(--text);border:2px solid var(--border)}.pill-btn.secondary:hover{border-color:var(--pri);color:var(--pri)}
+
+.summary-card{background:var(--bg);border-radius:16px;padding:32px;text-align:center;max-width:420px;width:90%;box-shadow:var(--shadow-lg);animation:fi .4s ease}
+.summary-card h2{font-size:1.3rem;font-weight:800;color:var(--pri-dark);margin-bottom:16px}
+.summary-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:.95rem}
+.summary-row:last-of-type{border:none}
+.summary-label{color:var(--text-light)}.summary-value{font-weight:700}.summary-value.perfect{color:var(--ok)}
+
+@media print{
+  .mode-bar,.tabs-wrap,.overlay,.header p,.answer-row{display:none!important}
+  .header{border:none;padding:10px}
+  .draw-canvas{display:none!important}
+  body{background:#fff}
+  .clock-card{box-shadow:none;border:1px solid #ccc}
+  .main::after{content:'האות: ________';display:block;text-align:center;font-size:1.5rem;font-weight:700;margin-top:16px;border:2px dashed var(--border);padding:16px;border-radius:var(--radius)}
+}
+
+@media(max-width:600px){
+  .clock-svg{width:220px;height:220px}
+  .header h1{font-size:1.4rem}
+  .mode-btn{padding:6px 14px;font-size:.85rem}
+  .tab{padding:5px 10px;font-size:.8rem}
+  .ans-btn{min-width:50px;height:44px;font-size:1.5rem;padding:0 12px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🕐 שעון אותיות</h1>
+  <p>לאיזו אות המחוג מצביע?</p>
+</div>
+
+<div class="mode-bar">
+  <button class="mode-btn active" data-mode="click">👆 לחיצה</button>
+  <button class="mode-btn" data-mode="draw">✏️ ציור</button>
+  <button class="mode-btn" data-mode="print">🖨️ הדפסה</button>
+</div>
+
+<div class="tabs-wrap"><div class="tabs" id="tabs"></div></div>
+
+<div class="main" id="main">
+  <div class="q-counter" id="qCounter"></div>
+  <div class="clock-card" id="clockCard"></div>
+  <div class="answer-row" id="answerRow"></div>
+  <div class="score-info" id="scoreInfo"></div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="complete-card" id="completeCard">
+    <div class="emoji" id="completeEmoji">🎉</div>
+    <h2>כל הכבוד!</h2>
+    <p id="completeMsg"></p>
+    <div class="pill-btns">
+      <button class="pill-btn primary" onclick="nextLevel()">▶ שלב הבא</button>
+      <button class="pill-btn secondary" onclick="replayLevel()">🔄 שחקו שוב</button>
+    </div>
+  </div>
+  <div class="summary-card" id="summaryCard" style="display:none">
+    <h2>🏆 סיכום</h2>
+    <div id="summaryRows"></div>
+    <div class="pill-btns" style="margin-top:16px">
+      <button class="pill-btn primary" onclick="redoAll()">🔄 מההתחלה</button>
+      <button class="pill-btn secondary" onclick="closeOverlay()">✖ סגירה</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const LEVELS=[
+  {emoji:'🐱',name:'חתול',letters:['א','ב','ג','ד','ה','ו','ז','ח'],qCount:3,optCount:4},
+  {emoji:'🐶',name:'כלב',letters:['ט','י','כ','ל','מ','נ','ס','ע'],qCount:3,optCount:4},
+  {emoji:'🐭',name:'עכבר',letters:['פ','צ','ק','ר','ש','ת','ך','ם'],qCount:3,optCount:4},
+  {emoji:'🦊',name:'שועל',letters:['א','ד','ה','ח','ב','כ','ר','ת'],qCount:3,optCount:4},
+  {emoji:'🐸',name:'צפרדע',letters:['א','ב','ג','ד','ה','ו','ז','ח','ט','י'],qCount:4,optCount:4},
+  {emoji:'🐰',name:'ארנב',letters:['כ','ל','מ','נ','ס','ע','פ','צ','ק','ר'],qCount:4,optCount:4},
+  {emoji:'🦁',name:'אריה',letters:['ב','כ','ד','ר','ה','ח','ו','ז','נ','ן'],qCount:4,optCount:4},
+  {emoji:'🐻',name:'דוב',letters:['מ','ם','נ','ן','פ','ף','צ','ץ','כ','ך'],qCount:4,optCount:4},
+  {emoji:'🐧',name:'פינגווין',letters:['א','ב','ג','ד','ה','ו','ז','ח','ט','י','כ','ל'],qCount:4,optCount:5},
+  {emoji:'🦋',name:'פרפר',letters:['מ','נ','ס','ע','פ','צ','ק','ר','ש','ת','ך','ם'],qCount:4,optCount:5},
+  {emoji:'🐢',name:'צב',letters:['א','ה','ח','ת','ב','כ','ד','ר','ו','ז','ש','ע'],qCount:5,optCount:5},
+  {emoji:'🦉',name:'ינשוף',letters:['ב','ג','ד','ה','ו','ז','ח','ט','כ','מ','נ','פ'],qCount:5,optCount:5},
+  {emoji:'🐠',name:'דג',letters:['א','ד','ה','כ','ב','ר','ח','ת','ו','ז','מ','ם'],qCount:5,optCount:5},
+  {emoji:'🦄',name:'חד קרן',letters:['כ','ך','מ','ם','נ','ן','פ','ף','צ','ץ','ב','ד'],qCount:5,optCount:6}
+];
+const LEVEL15={
+  emoji:'🌟',name:'אתגר',
+  clock1:{letters:['א','ב','ד','ה','ו','ח','כ','ר','ש','ת','מ','נ']},
+  clock2:{letters:['ג','ז','ט','י','ל','ס','ע','פ','צ','ק','ן','ם']},
+  qCount:5,optCount:4
+};
+const TAB_LABELS=LEVELS.map(l=>l.emoji+' '+l.name).concat(['🌟 אתגר']);
+
+let cur=0,mode='click',questions=[],qIdx=0,correctCount=0,wrongCount=0;
+let levelDone=[],handAngle=0,answering=false;
+let drawCanvas=null,drawCtx=null,drawPts=[],isDrawing=false;
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function buildTabs(){
+  const w=document.getElementById('tabs');w.innerHTML='';
+  TAB_LABELS.forEach((l,i)=>{
+    const t=document.createElement('button');
+    t.className='tab'+(i===cur?' active':'')+(levelDone[i]?' done':'');
+    t.textContent=(i+1)+'. '+l;
+    t.onclick=()=>loadLevel(i);
+    w.appendChild(t);
+  });
+}
+
+function genQuestions(letters,qCount,optCount){
+  const idx=[...Array(letters.length).keys()];
+  shuffle(idx);
+  return idx.slice(0,qCount).map(ti=>{
+    const correct=letters[ti];
+    const others=letters.filter((_,i)=>i!==ti);
+    shuffle(others);
+    const opts=[correct,...others.slice(0,optCount-1)];
+    shuffle(opts);
+    return{targetIdx:ti,correct,options:opts};
+  });
+}
+
+function genDualQuestions(){
+  const l1=LEVEL15.clock1.letters,l2=LEVEL15.clock2.letters;
+  const i1=[...Array(l1.length).keys()],i2=[...Array(l2.length).keys()];
+  shuffle(i1);shuffle(i2);
+  return Array.from({length:LEVEL15.qCount},(_,k)=>{
+    const t1=i1[k%i1.length],t2=i2[k%i2.length];
+    const correct=l1[t1]+' + '+l2[t2];
+    const wrongs=new Set();
+    while(wrongs.size<LEVEL15.optCount-1){
+      const w1=l1[Math.floor(Math.random()*l1.length)];
+      const w2=l2[Math.floor(Math.random()*l2.length)];
+      const p=w1+' + '+w2;
+      if(p!==correct) wrongs.add(p);
+    }
+    const opts=[correct,...wrongs];shuffle(opts);
+    return{targetIdx1:t1,targetIdx2:t2,correct,options:opts};
+  });
+}
+
+function buildClockSVG(letters,emoji,targetIdx,id){
+  const N=letters.length,R=140,lR=R*.85,hR=R*.70,cx=150,cy=150;
+  let s=`<svg class="clock-svg" viewBox="0 0 300 300" id="${id}">`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${R+5}" fill="#f1f5f9" stroke="#1e293b" stroke-width="2.5"/>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="${R-2}" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>`;
+  // tick marks
+  for(let i=0;i<N;i++){
+    const a=(2*Math.PI/N)*i-Math.PI/2;
+    const x1=cx+(R-8)*Math.cos(a),y1=cy+(R-8)*Math.sin(a);
+    const x2=cx+(R-16)*Math.cos(a),y2=cy+(R-16)*Math.sin(a);
+    s+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round"/>`;
+  }
+  // letters
+  for(let i=0;i<N;i++){
+    const a=(2*Math.PI/N)*i-Math.PI/2;
+    const lx=cx+lR*Math.cos(a),ly=cy+lR*Math.sin(a);
+    s+=`<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="central" font-family="'Heebo',sans-serif" font-size="22" font-weight="700" fill="#1e293b" class="clk-letter" data-clock="${id}" data-idx="${i}">${letters[i]}</text>`;
+  }
+  // hand
+  const ang=targetIdx>=0?(360/N)*targetIdx:0;
+  s+=`<g class="clock-hand" data-clock="${id}" style="transform-origin:${cx}px ${cy}px;transform:rotate(${ang}deg)">`;
+  s+=`<line x1="${cx}" y1="${cy}" x2="${cx}" y2="${cy-hR}" stroke="#ef4444" stroke-width="4" stroke-linecap="round"/>`;
+  s+=`<polygon points="${cx},${cy-hR-10} ${cx-7},${cy-hR+3} ${cx+7},${cy-hR+3}" fill="#ef4444"/>`;
+  s+=`</g>`;
+  // center backing + emoji
+  s+=`<circle cx="${cx}" cy="${cy}" r="28" fill="white"/>`;
+  s+=`<circle cx="${cx}" cy="${cy}" r="6" fill="#ef4444"/>`;
+  s+=`<text x="${cx}" y="${cy+3}" text-anchor="middle" dominant-baseline="central" font-size="38">${emoji}</text>`;
+  s+=`</svg>`;
+  return s;
+}
+
+function rotateHand(svgId,targetIdx,N,animate){
+  const ang=(360/N)*targetIdx;
+  const hand=document.querySelector(`.clock-hand[data-clock="${svgId}"]`);
+  if(!hand)return;
+  // shortest path
+  let curA=handAngle;
+  if(svgId!=='clock1') curA=hand._angle||0;
+  let diff=ang-(curA%360);if(diff<0)diff+=360;
+  if(diff>180) diff-=360;
+  const newA=curA+diff;
+  if(svgId==='clock1')handAngle=newA; else hand._angle=newA;
+  if(!animate) hand.style.transition='none';
+  hand.style.transform=`rotate(${newA}deg)`;
+  if(!animate){void hand.offsetHeight;hand.style.transition='transform .8s ease';}
+}
+
+function loadLevel(idx){
+  cur=idx;qIdx=0;correctCount=0;wrongCount=0;answering=false;
+  removeDrawCanvas();
+  const card=document.getElementById('clockCard');
+
+  if(idx<LEVELS.length){
+    const lv=LEVELS[idx];
+    questions=genQuestions(lv.letters,lv.qCount,lv.optCount);
+    card.innerHTML=buildClockSVG(lv.letters,lv.emoji,questions[0].targetIdx,'clock1');
+    handAngle=(360/lv.letters.length)*questions[0].targetIdx;
+    showQuestion();
+  } else {
+    questions=genDualQuestions();
+    const q=questions[0];
+    card.innerHTML=buildClockSVG(LEVEL15.clock1.letters,LEVEL15.emoji,q.targetIdx1,'clock1')+
+                   buildClockSVG(LEVEL15.clock2.letters,LEVEL15.emoji,q.targetIdx2,'clock2');
+    handAngle=(360/12)*q.targetIdx1;
+    const h2=document.querySelector('.clock-hand[data-clock="clock2"]');
+    if(h2) h2._angle=(360/12)*q.targetIdx2;
+    showQuestion();
+  }
+  buildTabs();
+  if(mode==='draw') setupDrawCanvas();
+  const tabs=document.querySelectorAll('.tab');
+  if(tabs[idx]) tabs[idx].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+
+function showQuestion(){
+  const q=questions[qIdx];
+  const total=questions.length;
+  document.getElementById('qCounter').textContent=`שאלה ${qIdx+1} מתוך ${total}`;
+  document.getElementById('scoreInfo').innerHTML=
+    correctCount||wrongCount?`<span class="ok">✓ ${correctCount}</span> | <span class="bad">✗ ${wrongCount}</span>`:'';
+
+  // answer buttons
+  const row=document.getElementById('answerRow');
+  row.innerHTML='';
+  if(mode!=='draw'){
+    q.options.forEach(opt=>{
+      const b=document.createElement('button');
+      b.className='ans-btn';b.textContent=opt;
+      b.onclick=()=>checkAnswer(opt,b);
+      row.appendChild(b);
+    });
+  }
+
+  // animate hand(s)
+  if(cur<LEVELS.length){
+    const lv=LEVELS[cur];
+    rotateHand('clock1',q.targetIdx,lv.letters.length,qIdx>0);
+  } else {
+    rotateHand('clock1',q.targetIdx1,12,qIdx>0);
+    rotateHand('clock2',q.targetIdx2,12,qIdx>0);
+  }
+  // clear any letter highlights
+  document.querySelectorAll('.clk-letter').forEach(el=>{el.setAttribute('fill','#1e293b');});
+  document.querySelectorAll('.letter-highlight').forEach(el=>el.remove());
+}
+
+function checkAnswer(answer,btnEl){
+  if(answering)return;
+  answering=true;
+  const q=questions[qIdx];
+  if(answer===q.correct){
+    correctCount++;
+    if(btnEl) btnEl.classList.add('correct');
+    highlightCorrectLetter();
+    setTimeout(()=>{answering=false;advanceQuestion();},900);
+  } else {
+    wrongCount++;
+    if(btnEl){btnEl.classList.add('wrong');btnEl.disabled=true;}
+    document.getElementById('clockCard').classList.add('shaking');
+    setTimeout(()=>{document.getElementById('clockCard').classList.remove('shaking');answering=false;},500);
+  }
+  document.getElementById('scoreInfo').innerHTML=`<span class="ok">✓ ${correctCount}</span> | <span class="bad">✗ ${wrongCount}</span>`;
+}
+
+function highlightCorrectLetter(){
+  const q=questions[qIdx];
+  if(cur<LEVELS.length){
+    highlightLetterAt('clock1',q.targetIdx);
+  } else {
+    highlightLetterAt('clock1',q.targetIdx1);
+    highlightLetterAt('clock2',q.targetIdx2);
+  }
+}
+
+function highlightLetterAt(clockId,idx){
+  const el=document.querySelector(`.clk-letter[data-clock="${clockId}"][data-idx="${idx}"]`);
+  if(!el)return;
+  el.setAttribute('fill','#10b981');
+  const svg=el.closest('svg');
+  const circ=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  circ.setAttribute('cx',el.getAttribute('x'));
+  circ.setAttribute('cy',el.getAttribute('y'));
+  circ.setAttribute('r','18');circ.setAttribute('fill','rgba(16,185,129,.15)');
+  circ.setAttribute('stroke','#10b981');circ.setAttribute('stroke-width','2');
+  circ.classList.add('letter-highlight');
+  svg.insertBefore(circ,el);
+}
+
+function advanceQuestion(){
+  qIdx++;
+  if(qIdx>=questions.length){
+    levelDone[cur]=true;buildTabs();
+    setTimeout(showCompletion,300);
+  } else {
+    showQuestion();
+  }
+}
+
+// Draw mode
+function setupDrawCanvas(){
+  removeDrawCanvas();
+  const card=document.getElementById('clockCard');
+  const c=document.createElement('canvas');
+  c.className='draw-canvas';c.width=card.offsetWidth;c.height=card.offsetHeight;
+  card.appendChild(c);drawCanvas=c;drawCtx=c.getContext('2d');
+  c.addEventListener('pointerdown',drawStart,{passive:false});
+  c.addEventListener('pointermove',drawMove,{passive:false});
+  c.addEventListener('pointerup',drawEnd,{passive:false});
+  c.addEventListener('pointercancel',drawEnd,{passive:false});
+}
+function removeDrawCanvas(){if(drawCanvas){drawCanvas.remove();drawCanvas=null;drawCtx=null;}drawPts=[];isDrawing=false;}
+
+function drawStart(e){e.preventDefault();isDrawing=true;drawPts=[];
+  const r=drawCanvas.getBoundingClientRect();drawPts.push({x:e.clientX-r.left,y:e.clientY-r.top,cx:e.clientX,cy:e.clientY});}
+function drawMove(e){if(!isDrawing)return;e.preventDefault();
+  const r=drawCanvas.getBoundingClientRect();drawPts.push({x:e.clientX-r.left,y:e.clientY-r.top,cx:e.clientX,cy:e.clientY});
+  drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
+  drawCtx.beginPath();drawCtx.strokeStyle='rgba(37,99,235,.5)';drawCtx.lineWidth=3;drawCtx.lineCap='round';drawCtx.lineJoin='round';
+  drawPts.forEach((p,i)=>{i===0?drawCtx.moveTo(p.x,p.y):drawCtx.lineTo(p.x,p.y);});drawCtx.stroke();}
+
+function drawEnd(){
+  if(!isDrawing)return;isDrawing=false;
+  if(drawPts.length<3){drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);return;}
+  let sx=0,sy=0;drawPts.forEach(p=>{sx+=p.cx;sy+=p.cy;});
+  const centerX=sx/drawPts.length,centerY=sy/drawPts.length;
+  drawCtx.clearRect(0,0,drawCanvas.width,drawCanvas.height);
+
+  // Find which clock and which letter
+  const q=questions[qIdx];
+  if(cur<LEVELS.length){
+    const lv=LEVELS[cur];
+    const idx=findLetterByAngle(centerX,centerY,'clock1',lv.letters.length);
+    if(idx===q.targetIdx) checkAnswer(q.correct,null);
+    else checkAnswer('__wrong__',null);
+  } else {
+    // dual clocks — just fallback to showing buttons
+    // draw mode on dual clocks shows buttons instead
+  }
+}
+
+function findLetterByAngle(clientX,clientY,svgId,N){
+  const svg=document.getElementById(svgId);
+  if(!svg)return-1;
+  const r=svg.getBoundingClientRect();
+  const svgX=((clientX-r.left)/r.width)*300;
+  const svgY=((clientY-r.top)/r.height)*300;
+  const dx=svgX-150,dy=svgY-150;
+  let angle=Math.atan2(dy,dx)+Math.PI/2;
+  if(angle<0)angle+=2*Math.PI;
+  return Math.round((angle/(2*Math.PI))*N)%N;
+}
+
+// Mode switching
+document.querySelectorAll('.mode-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');mode=this.dataset.mode;
+    if(mode==='print'){window.print();setTimeout(()=>document.querySelector('[data-mode="click"]').click(),500);return;}
+    if(mode==='draw'){setupDrawCanvas();document.getElementById('answerRow').innerHTML='';}
+    else{removeDrawCanvas();showQuestion();}
+  });
+});
+
+// Completion
+function showCompletion(){
+  const lv=cur<LEVELS.length?LEVELS[cur]:LEVEL15;
+  document.getElementById('completeEmoji').textContent=lv.emoji+' 🎉';
+  document.getElementById('completeMsg').textContent=`ענית על ${correctCount} מתוך ${questions.length} שאלות נכון!`;
+  document.getElementById('completeCard').style.display='';
+  document.getElementById('summaryCard').style.display='none';
+  document.getElementById('overlay').classList.add('show');
+}
+function closeOverlay(){document.getElementById('overlay').classList.remove('show');}
+function nextLevel(){closeOverlay();if(cur<TAB_LABELS.length-1)loadLevel(cur+1);else showSummary();}
+function replayLevel(){closeOverlay();loadLevel(cur);}
+
+function showSummary(){
+  document.getElementById('completeCard').style.display='none';
+  document.getElementById('summaryCard').style.display='';
+  document.getElementById('overlay').classList.add('show');
+  const rows=document.getElementById('summaryRows');rows.innerHTML='';
+  let done=0;
+  TAB_LABELS.forEach((l,i)=>{
+    const ok=levelDone[i];if(ok)done++;
+    const r=document.createElement('div');r.className='summary-row';
+    r.innerHTML='<span class="summary-label">'+(i+1)+'. '+l+'</span><span class="summary-value '+(ok?'perfect':'')+'">'+(ok?'✅':'—')+'</span>';
+    rows.appendChild(r);
+  });
+  const t=document.createElement('div');t.className='summary-row';
+  t.innerHTML='<span class="summary-label" style="font-weight:700">סה״כ</span><span class="summary-value perfect">'+done+' / '+TAB_LABELS.length+'</span>';
+  rows.appendChild(t);
+}
+function redoAll(){closeOverlay();levelDone=new Array(TAB_LABELS.length).fill(false);loadLevel(0);}
+
+window.addEventListener('resize',()=>{if(mode==='draw'&&drawCanvas)setupDrawCanvas();});
+
+// Init
+levelDone=new Array(TAB_LABELS.length).fill(false);
+buildTabs();loadLevel(0);
+</script>
+</body>
+</html>

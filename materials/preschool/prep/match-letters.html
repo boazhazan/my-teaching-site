@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>חיבור אותיות — חברו כל אות לזהה שלה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap');
+:root{
+  --pri:#2563eb;--pri-dark:#1d4ed8;--pri-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --ok:#10b981;--no:#ef4444;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);direction:rtl;min-height:100vh}
+
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(0)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+@keyframes drawLine{from{stroke-dashoffset:500}to{stroke-dashoffset:0}}
+
+.header{background:linear-gradient(135deg,var(--pri-light),#fff);padding:20px;text-align:center;border-bottom:3px solid var(--pri)}
+.header h1{font-size:1.8rem;font-weight:800;color:var(--pri-dark);margin-bottom:4px}
+.header p{color:var(--text-light);font-size:.95rem}
+
+.mode-bar{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.mode-btn{padding:8px 20px;border:2px solid var(--border);border-radius:999px;background:var(--bg);cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:600;color:var(--text-light);transition:.25s ease}
+.mode-btn.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+.mode-btn:hover:not(.active){border-color:var(--pri);color:var(--pri)}
+
+.tabs-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.tabs{display:flex;gap:6px;min-width:max-content}
+.tab{padding:6px 14px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text-light);white-space:nowrap;transition:.25s ease}
+.tab.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tab.done{background:var(--ok);color:#fff;border-color:var(--ok)}
+.tab:hover:not(.active):not(.done){border-color:var(--pri);color:var(--pri)}
+
+.main{max-width:800px;margin:0 auto;padding:16px;animation:fi .4s ease}
+
+.progress-bar-wrap{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:8px 14px;background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow)}
+.progress-text{font-size:.9rem;font-weight:600;color:var(--text-light);white-space:nowrap}
+.progress-track{flex:1;height:8px;background:var(--border);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:var(--ok);border-radius:99px;transition:width .4s ease}
+.wrong-count{font-size:.85rem;color:var(--no);font-weight:600;white-space:nowrap}
+
+.game-container{position:relative;background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:20px 12px;overflow:visible}
+
+.letter-row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;position:relative;z-index:2}
+.letter-cell{min-width:44px;min-height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg);border:2px solid var(--border);border-radius:10px;box-shadow:var(--shadow);font-size:1.8rem;font-weight:700;cursor:pointer;transition:.25s ease;user-select:none;-webkit-user-select:none;padding:4px 8px;position:relative}
+.letter-cell:hover:not(.matched):not(.disabled){border-color:var(--pri);transform:translateY(-2px)}
+.letter-cell.selected{background:var(--pri-light);border-color:var(--pri)}
+.letter-cell.matched{background:#d1fae5;border-color:var(--ok);cursor:default;animation:bounce .5s ease}
+.letter-cell.wrong{animation:shake .4s ease;border-color:var(--no);background:#fef2f2}
+.letter-cell.disabled{pointer-events:none;opacity:.85}
+
+.dot{width:8px;height:8px;border-radius:50%;background:#94a3b8;margin-top:4px;flex-shrink:0}
+.dot-top{margin-top:0;margin-bottom:4px}
+.top-row .letter-cell{flex-direction:column}
+.bottom-row .letter-cell{flex-direction:column-reverse}
+
+.svg-area{position:relative;width:100%;height:150px;z-index:1}
+.svg-area svg{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+.svg-area svg.draw-active{pointer-events:auto}
+
+.svg-area svg line{stroke-linecap:round}
+
+.completion-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);z-index:100;justify-content:center;align-items:center}
+.completion-overlay.show{display:flex}
+.completion-card{background:var(--bg);border-radius:16px;padding:32px 28px;text-align:center;box-shadow:var(--shadow-lg);max-width:380px;width:90%;animation:pop .4s ease}
+.completion-card .emoji{font-size:3rem;margin-bottom:8px}
+.completion-card h3{font-size:1.4rem;font-weight:800;color:var(--pri-dark);margin-bottom:6px}
+.completion-card p{color:var(--text-light);font-size:.95rem;margin-bottom:16px}
+.completion-card .stats{display:flex;justify-content:center;gap:16px;margin-bottom:16px}
+.completion-card .stat{text-align:center}
+.completion-card .stat-val{font-size:1.5rem;font-weight:800;color:var(--pri)}
+.completion-card .stat-lbl{font-size:.8rem;color:var(--text-light)}
+.completion-card .stat-val.wrong-val{color:var(--no)}
+.btn-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.pill-btn{padding:10px 22px;border:none;border-radius:999px;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;transition:.25s ease}
+.pill-btn.primary{background:var(--pri);color:#fff}
+.pill-btn.primary:hover{background:var(--pri-dark)}
+.pill-btn.secondary{background:var(--bg-soft);color:var(--text);border:2px solid var(--border)}
+.pill-btn.secondary:hover{border-color:var(--pri);color:var(--pri)}
+
+/* Print mode */
+.print-area{display:none;background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px 16px;text-align:center}
+.print-area h3{font-size:1.2rem;font-weight:700;margin-bottom:16px;color:var(--pri-dark)}
+.print-game{direction:rtl}
+.print-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:8px 0}
+.print-cell{width:50px;height:56px;border:2px solid #333;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:700;font-family:'Heebo',sans-serif}
+.print-dot{width:8px;height:8px;border-radius:50%;background:#333;display:inline-block;margin:0 10px}
+.print-dots{display:flex;justify-content:center;gap:12px;margin:4px 0}
+.print-dot-wrap{width:50px;display:flex;justify-content:center}
+.print-space{height:120px;border-left:2px dashed #ccc;border-right:2px dashed #ccc;margin:0 20px}
+.print-btn{margin-top:16px}
+
+@media print{
+  body{background:#fff}
+  .header,.mode-bar,.tabs-wrap,.progress-bar-wrap,.game-container,.completion-overlay{display:none!important}
+  .print-area{display:block!important;box-shadow:none;border:none}
+  .print-btn{display:none!important}
+}
+
+@media(max-width:600px){
+  .header h1{font-size:1.4rem}
+  .header{padding:14px}
+  .letter-cell{min-width:40px;min-height:44px;font-size:1.5rem;padding:3px 6px}
+  .letter-row{gap:5px}
+  .svg-area{height:100px}
+  .mode-btn{padding:6px 14px;font-size:.85rem}
+  .tab{padding:5px 10px;font-size:.8rem}
+  .game-container{padding:14px 8px}
+  .main{padding:10px}
+  .completion-card{padding:24px 18px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🔗 חיבור אותיות</h1>
+  <p>חברו כל אות למקבילה שלה!</p>
+</div>
+
+<div class="mode-bar">
+  <button class="mode-btn active" data-mode="click">👆 לחיצה</button>
+  <button class="mode-btn" data-mode="draw">✏️ ציור</button>
+  <button class="mode-btn" data-mode="print">🖨️ הדפסה</button>
+</div>
+
+<div class="tabs-wrap">
+  <div class="tabs" id="tabs"></div>
+</div>
+
+<div class="main" id="mainArea">
+  <div class="progress-bar-wrap" id="progressWrap">
+    <span class="progress-text" id="progressText">חיברתם 0 מתוך 0 זוגות</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0"></div></div>
+    <span class="wrong-count" id="wrongCount"></span>
+  </div>
+
+  <div class="game-container" id="gameContainer">
+    <div class="letter-row top-row" id="topRow"></div>
+    <div class="svg-area" id="svgArea">
+      <svg id="linesSvg" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div class="letter-row bottom-row" id="bottomRow"></div>
+  </div>
+
+  <div class="print-area" id="printArea">
+    <h3 id="printTitle"></h3>
+    <div class="print-game" id="printGame"></div>
+    <button class="pill-btn primary print-btn" onclick="window.print()">🖨️ הדפסה</button>
+  </div>
+</div>
+
+<div class="completion-overlay" id="completionOverlay">
+  <div class="completion-card">
+    <div class="emoji">🔗🎉</div>
+    <h3>כל הכבוד!</h3>
+    <p>חיברתם את כל האותיות!</p>
+    <div class="stats">
+      <div class="stat"><div class="stat-val" id="statPairs">0</div><div class="stat-lbl">זוגות</div></div>
+      <div class="stat"><div class="stat-val wrong-val" id="statWrong">0</div><div class="stat-lbl">טעויות</div></div>
+    </div>
+    <div class="btn-row">
+      <button class="pill-btn primary" id="btnNext">▶ לשלב הבא</button>
+      <button class="pill-btn secondary" id="btnRetry">🔄 שחקו שוב</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const LEVELS=[
+  {top:['א','ב','ג','ד','ה','ו']},
+  {top:['ז','ח','ט','י','כ','ל']},
+  {top:['מ','נ','ס','ע','פ','צ','ק']},
+  {top:['ר','ש','ת','א','ב','ג','ד']},
+  {top:['ב','כ','ד','ר','ה','ח','ו','ז']},
+  {top:['ג','נ','מ','ם','ע','צ','ש','ת']},
+  {top:['כ','ך','מ','ם','נ','ן','פ','ף']},
+  {top:['א','ה','ח','ת','ב','כ','ד','ר','ו']},
+  {top:['ג','ז','ן','י','ע','צ','ץ','ש','ס']},
+  {top:['א','ב','ג','ד','ה','ו','ז','ח','ט','י']},
+  {top:['כ','ל','מ','נ','ס','ע','פ','צ','ק','ר']},
+  {top:['ב','ד','ה','כ','ח','ר','ו','ז','ע','ש']},
+  {top:['כ','ך','מ','ם','נ','ן','פ','ף','צ','ץ','ת']},
+  {top:['א','ב','ג','ד','ה','ו','ז','ח','ט','י','כ','ל']},
+  {top:['מ','נ','ס','ע','פ','צ','ק','ר','ש','ת','ך','ם']}
+];
+const COLORS=['#ef4444','#2563eb','#10b981','#f59e0b','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#84cc16','#06b6d4','#e11d48'];
+
+let curLevel=0, mode='click', matched=[], wrongCount=0, selectedTop=null, colorIdx=0;
+let dragLine=null, dragFrom=null, isDragging=false;
+const done=new Set();
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function shuffleDiff(top){
+  let bot;
+  let tries=0;
+  do{bot=shuffle(top);tries++;}while(bot.every((v,i)=>v===top[i])&&tries<100);
+  return bot;
+}
+
+function buildTabs(){
+  const t=document.getElementById('tabs');
+  t.innerHTML='';
+  LEVELS.forEach((_,i)=>{
+    const b=document.createElement('button');
+    b.className='tab'+(i===curLevel?' active':'')+(done.has(i)?' done':'');
+    b.textContent='שלב '+(i+1);
+    b.onclick=()=>{curLevel=i;buildTabs();loadLevel();};
+    t.appendChild(b);
+  });
+}
+
+function loadLevel(){
+  const lvl=LEVELS[curLevel];
+  const top=lvl.top;
+  const bot=shuffleDiff(top);
+  matched=[];wrongCount=0;selectedTop=null;colorIdx=0;
+  isDragging=false;dragLine=null;dragFrom=null;
+
+  const topRow=document.getElementById('topRow');
+  const botRow=document.getElementById('bottomRow');
+  const svg=document.getElementById('linesSvg');
+  svg.innerHTML='';
+
+  topRow.innerHTML='';botRow.innerHTML='';
+
+  top.forEach((ch,i)=>{
+    const cell=document.createElement('div');
+    cell.className='letter-cell';
+    cell.dataset.index=i;
+    cell.dataset.letter=ch;
+    cell.dataset.row='top';
+    const span=document.createElement('span');span.textContent=ch;
+    const dot=document.createElement('div');dot.className='dot';dot.dataset.dotFor='top-'+i;
+    cell.appendChild(span);cell.appendChild(dot);
+    topRow.appendChild(cell);
+  });
+
+  bot.forEach((ch,i)=>{
+    const cell=document.createElement('div');
+    cell.className='letter-cell';
+    cell.dataset.index=i;
+    cell.dataset.letter=ch;
+    cell.dataset.row='bottom';
+    // find which top index this letter corresponds to
+    // since duplicates might exist, we track by the actual top array index
+    const dot=document.createElement('div');dot.className='dot dot-top';dot.dataset.dotFor='bot-'+i;
+    const span=document.createElement('span');span.textContent=ch;
+    cell.appendChild(dot);cell.appendChild(span);
+    botRow.appendChild(cell);
+  });
+
+  // Store bottom order for matching
+  topRow.dataset.letters=JSON.stringify(top);
+  botRow.dataset.letters=JSON.stringify(bot);
+
+  updateProgress();
+  updateSvgClass();
+
+  // Show/hide areas
+  document.getElementById('gameContainer').style.display=(mode==='print'?'none':'');
+  document.getElementById('progressWrap').style.display=(mode==='print'?'none':'');
+  document.getElementById('printArea').style.display=(mode==='print'?'block':'none');
+  if(mode==='print') buildPrint(top,bot);
+}
+
+function updateProgress(){
+  const total=LEVELS[curLevel].top.length;
+  const m=matched.length;
+  document.getElementById('progressText').textContent='חיברתם '+m+' מתוך '+total+' זוגות';
+  document.getElementById('progressFill').style.width=(total?((m/total)*100)+'%':'0');
+  document.getElementById('wrongCount').textContent=wrongCount>0?'טעויות: '+wrongCount:'';
+}
+
+function getColor(){
+  const c=COLORS[colorIdx%COLORS.length];
+  colorIdx++;
+  return c;
+}
+
+function getDotPos(dotEl){
+  const svgArea=document.getElementById('svgArea');
+  const areaRect=svgArea.getBoundingClientRect();
+  const dotRect=dotEl.getBoundingClientRect();
+  return{
+    x:dotRect.left+dotRect.width/2-areaRect.left,
+    y:dotRect.top+dotRect.height/2-areaRect.top
+  };
+}
+
+function drawPermanentLine(topIdx,botIdx,color){
+  const svg=document.getElementById('linesSvg');
+  const topDot=document.querySelector('[data-dot-for="top-'+topIdx+'"]');
+  const botDot=document.querySelector('[data-dot-for="bot-'+botIdx+'"]');
+  if(!topDot||!botDot) return;
+  const p1=getDotPos(topDot);
+  const p2=getDotPos(botDot);
+  const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+  line.setAttribute('x1',p1.x);line.setAttribute('y1',p1.y);
+  line.setAttribute('x2',p2.x);line.setAttribute('y2',p2.y);
+  line.setAttribute('stroke',color);line.setAttribute('stroke-width','3');
+  line.setAttribute('stroke-opacity','0.7');line.setAttribute('stroke-linecap','round');
+  const len=Math.sqrt((p2.x-p1.x)**2+(p2.y-p1.y)**2);
+  line.setAttribute('stroke-dasharray',len);
+  line.setAttribute('stroke-dashoffset',len);
+  line.style.animation='drawLine 0.4s ease forwards';
+  line.dataset.topIdx=topIdx;line.dataset.botIdx=botIdx;
+  svg.appendChild(line);
+}
+
+function redrawAllLines(){
+  const svg=document.getElementById('linesSvg');
+  const lines=svg.querySelectorAll('line[data-top-idx]');
+  lines.forEach(line=>{
+    const ti=line.dataset.topIdx;
+    const bi=line.dataset.botIdx;
+    const topDot=document.querySelector('[data-dot-for="top-'+ti+'"]');
+    const botDot=document.querySelector('[data-dot-for="bot-'+bi+'"]');
+    if(!topDot||!botDot) return;
+    const p1=getDotPos(topDot);
+    const p2=getDotPos(botDot);
+    line.setAttribute('x1',p1.x);line.setAttribute('y1',p1.y);
+    line.setAttribute('x2',p2.x);line.setAttribute('y2',p2.y);
+    const len=Math.sqrt((p2.x-p1.x)**2+(p2.y-p1.y)**2);
+    line.setAttribute('stroke-dasharray',len);
+    line.setAttribute('stroke-dashoffset','0');
+    line.style.animation='none';
+  });
+}
+
+function markMatched(topCell,botCell){
+  topCell.classList.add('matched','disabled');
+  botCell.classList.add('matched','disabled');
+}
+
+function flashWrong(cell1,cell2){
+  wrongCount++;
+  updateProgress();
+  [cell1,cell2].forEach(c=>{
+    c.classList.add('wrong');
+    setTimeout(()=>c.classList.remove('wrong'),400);
+  });
+}
+
+function checkComplete(){
+  if(matched.length===LEVELS[curLevel].top.length){
+    done.add(curLevel);
+    buildTabs();
+    document.getElementById('statPairs').textContent=matched.length;
+    document.getElementById('statWrong').textContent=wrongCount;
+    document.getElementById('btnNext').style.display=curLevel<LEVELS.length-1?'':'none';
+    setTimeout(()=>document.getElementById('completionOverlay').classList.add('show'),500);
+  }
+}
+
+/* Try matching: topIdx is index in top row, botIdx is index in bottom row */
+function tryMatch(topIdx,botIdx){
+  const topLetters=JSON.parse(document.getElementById('topRow').dataset.letters);
+  const botLetters=JSON.parse(document.getElementById('bottomRow').dataset.letters);
+  const topCells=document.getElementById('topRow').children;
+  const botCells=document.getElementById('bottomRow').children;
+
+  // Check if this top letter equals this bottom letter
+  // But we need to handle duplicates: each top index can only match one bottom index
+  // We match by: topLetters[topIdx] === botLetters[botIdx] AND neither is already matched
+  if(topLetters[topIdx]===botLetters[botIdx]){
+    // Check not already matched
+    if(matched.some(m=>m.top===topIdx||m.bot===botIdx)) return;
+    const color=getColor();
+    matched.push({top:topIdx,bot:botIdx,color});
+    markMatched(topCells[topIdx],botCells[botIdx]);
+    drawPermanentLine(topIdx,botIdx,color);
+    updateProgress();
+    checkComplete();
+    return true;
+  }else{
+    flashWrong(topCells[topIdx],botCells[botIdx]);
+    return false;
+  }
+}
+
+function isMatched(row,idx){
+  if(row==='top') return matched.some(m=>m.top===idx);
+  return matched.some(m=>m.bot===idx);
+}
+
+/* CLICK MODE */
+document.getElementById('topRow').addEventListener('click',function(e){
+  if(mode!=='click') return;
+  const cell=e.target.closest('.letter-cell');
+  if(!cell||cell.classList.contains('matched')) return;
+  const idx=parseInt(cell.dataset.index);
+  if(cell.dataset.row!=='top') return;
+
+  // Deselect previous
+  document.querySelectorAll('#topRow .letter-cell').forEach(c=>c.classList.remove('selected'));
+  cell.classList.add('selected');
+  selectedTop=idx;
+});
+
+document.getElementById('bottomRow').addEventListener('click',function(e){
+  if(mode!=='click') return;
+  if(selectedTop===null) return;
+  const cell=e.target.closest('.letter-cell');
+  if(!cell||cell.classList.contains('matched')) return;
+  const idx=parseInt(cell.dataset.index);
+  if(cell.dataset.row!=='bottom') return;
+
+  const ok=tryMatch(selectedTop,idx);
+  selectedTop=null;
+  document.querySelectorAll('#topRow .letter-cell').forEach(c=>c.classList.remove('selected'));
+});
+
+/* DRAW MODE */
+function updateSvgClass(){
+  const svg=document.getElementById('linesSvg');
+  if(mode==='draw') svg.classList.add('draw-active');
+  else svg.classList.remove('draw-active');
+}
+
+function getEventPos(e){
+  if(e.touches&&e.touches.length) return{x:e.touches[0].clientX,y:e.touches[0].clientY};
+  return{x:e.clientX,y:e.clientY};
+}
+
+function startDrag(topIdx,topCell){
+  if(mode!=='draw'||isMatched('top',topIdx)) return;
+  isDragging=true;
+  dragFrom=topIdx;
+  topCell.classList.add('selected');
+  const svg=document.getElementById('linesSvg');
+  const topDot=topCell.querySelector('.dot');
+  const p=getDotPos(topDot);
+  dragLine=document.createElementNS('http://www.w3.org/2000/svg','line');
+  dragLine.setAttribute('x1',p.x);dragLine.setAttribute('y1',p.y);
+  dragLine.setAttribute('x2',p.x);dragLine.setAttribute('y2',p.y);
+  dragLine.setAttribute('stroke','#94a3b8');dragLine.setAttribute('stroke-width','3');
+  dragLine.setAttribute('stroke-opacity','0.5');dragLine.setAttribute('stroke-linecap','round');
+  dragLine.setAttribute('stroke-dasharray','6 4');
+  svg.appendChild(dragLine);
+}
+
+function moveDrag(e){
+  if(!isDragging||!dragLine) return;
+  const svgArea=document.getElementById('svgArea');
+  const rect=svgArea.getBoundingClientRect();
+  const pos=getEventPos(e);
+  dragLine.setAttribute('x2',pos.x-rect.left);
+  dragLine.setAttribute('y2',pos.y-rect.top);
+}
+
+function endDrag(e){
+  if(!isDragging) return;
+  isDragging=false;
+  // Remove drag line
+  if(dragLine){dragLine.remove();dragLine=null;}
+  // Deselect
+  document.querySelectorAll('#topRow .letter-cell').forEach(c=>c.classList.remove('selected'));
+
+  // Check if ended over a bottom cell
+  const pos=getEventPos(e);
+  const el=document.elementFromPoint(pos.x,pos.y);
+  if(!el) return;
+  const cell=el.closest('.letter-cell');
+  if(!cell||cell.dataset.row!=='bottom'||cell.classList.contains('matched')) return;
+  const botIdx=parseInt(cell.dataset.index);
+  tryMatch(dragFrom,botIdx);
+  dragFrom=null;
+}
+
+// Pointer events on top row cells for draw mode
+document.getElementById('topRow').addEventListener('pointerdown',function(e){
+  if(mode!=='draw') return;
+  const cell=e.target.closest('.letter-cell');
+  if(!cell||cell.classList.contains('matched')||cell.dataset.row!=='top') return;
+  e.preventDefault();
+  startDrag(parseInt(cell.dataset.index),cell);
+},{passive:false});
+
+document.addEventListener('pointermove',function(e){
+  if(!isDragging) return;
+  e.preventDefault();
+  moveDrag(e);
+},{passive:false});
+
+document.addEventListener('pointerup',function(e){
+  if(!isDragging) return;
+  endDrag(e);
+});
+
+// Prevent scrolling while dragging in game area
+document.getElementById('gameContainer').addEventListener('touchmove',function(e){
+  if(isDragging) e.preventDefault();
+},{passive:false});
+
+/* MODE SWITCHING */
+document.querySelectorAll('.mode-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    mode=this.dataset.mode;
+    updateSvgClass();
+    loadLevel();
+  });
+});
+
+/* PRINT MODE */
+function buildPrint(top,bot){
+  const area=document.getElementById('printGame');
+  const title=document.getElementById('printTitle');
+  title.textContent='שלב '+(curLevel+1)+' — חברו כל אות למקבילה שלה';
+  let html='<div class="print-row">';
+  top.forEach(ch=>{html+='<div class="print-cell">'+ch+'</div>';});
+  html+='</div><div class="print-dots">';
+  top.forEach(()=>{html+='<div class="print-dot-wrap"><div class="print-dot"></div></div>';});
+  html+='</div><div style="height:120px;border-right:2px dashed #ddd;border-left:2px dashed #ddd;margin:0 24px"></div>';
+  html+='<div class="print-dots">';
+  bot.forEach(()=>{html+='<div class="print-dot-wrap"><div class="print-dot"></div></div>';});
+  html+='</div><div class="print-row">';
+  bot.forEach(ch=>{html+='<div class="print-cell">'+ch+'</div>';});
+  html+='</div>';
+  area.innerHTML=html;
+}
+
+/* COMPLETION BUTTONS */
+document.getElementById('btnNext').addEventListener('click',function(){
+  document.getElementById('completionOverlay').classList.remove('show');
+  if(curLevel<LEVELS.length-1){curLevel++;buildTabs();loadLevel();}
+});
+document.getElementById('btnRetry').addEventListener('click',function(){
+  document.getElementById('completionOverlay').classList.remove('show');
+  loadLevel();
+});
+
+/* RESIZE: redraw lines */
+window.addEventListener('resize',redrawAllLines);
+
+/* INIT */
+buildTabs();
+loadLevel();
+</script>
+</body>
+</html>

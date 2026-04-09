@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>זיהוי מילים — מצאו את המילה הזהה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap');
+:root{
+  --pri:#2563eb;--pri-dark:#1d4ed8;--pri-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --ok:#10b981;--no:#ef4444;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Heebo','Noto Sans Hebrew','David',serif;background:var(--bg-soft);color:var(--text);direction:rtl;min-height:100vh}
+
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(0)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.6)}50%{box-shadow:0 0 0 8px rgba(245,158,11,0)}}
+@keyframes missedPulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.7)}50%{box-shadow:0 0 0 10px rgba(245,158,11,0)}}
+
+.header{background:linear-gradient(135deg,var(--pri-light),#fff);padding:20px;text-align:center;border-bottom:3px solid var(--pri)}
+.header h1{font-size:1.8rem;font-weight:800;color:var(--pri-dark);margin-bottom:4px}
+.header p{color:var(--text-light);font-size:.95rem}
+
+.mode-bar{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.mode-btn{padding:8px 20px;border:2px solid var(--border);border-radius:999px;background:var(--bg);cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:600;color:var(--text-light);transition:.25s ease}
+.mode-btn.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+.mode-btn:hover:not(.active){border-color:var(--pri);color:var(--pri)}
+
+.tabs-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.tabs{display:flex;gap:6px;min-width:max-content}
+.tab{padding:6px 14px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text-light);white-space:nowrap;transition:.25s ease}
+.tab.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tab.done{background:var(--ok);color:#fff;border-color:var(--ok)}
+.tab:hover:not(.active):not(.done){border-color:var(--pri);color:var(--pri)}
+
+.main{max-width:800px;margin:0 auto;padding:16px;animation:fi .4s ease}
+
+.progress-bar-wrap{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:8px 14px;background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow)}
+.progress-text{font-size:.9rem;font-weight:600;color:var(--text-light);white-space:nowrap}
+.progress-track{flex:1;height:8px;background:var(--border);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:var(--ok);border-radius:99px;transition:width .4s ease}
+
+/* Question card — Type A */
+.q-card{background:var(--bg);border:2px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:14px;position:relative}
+.q-card.card-done{border-color:var(--ok);background:#f0fdf4}
+.q-top{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.q-emoji{font-size:3rem;line-height:1}
+.target-frame{display:inline-block;border:3px solid var(--accent);background:#fffbeb;border-radius:var(--radius-sm);padding:8px 16px;font-size:1.5rem;font-weight:700;line-height:1.8}
+.q-label{font-size:.85rem;color:var(--accent-dark);font-weight:600}
+
+.word-cloud{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+
+.word-btn{padding:8px 16px;border-radius:var(--radius-sm);border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:1.3rem;font-weight:600;line-height:1.8;transition:.25s ease;user-select:none;-webkit-user-select:none;min-height:44px;display:inline-flex;align-items:center}
+.word-btn:hover:not(.checked){background:#f1f5f9;border-color:var(--pri)}
+.word-btn.selected{background:var(--pri-light);border-color:var(--pri)}
+.word-btn.correct{background:#d1fae5;border-color:var(--ok);animation:bounce .5s ease;cursor:default}
+.word-btn.wrong{background:#fee2e2;border-color:var(--no);animation:shake .4s ease}
+.word-btn.missed{background:#fef3c7;border-color:var(--accent);animation:missedPulse 1s ease 2}
+.word-btn.checked{pointer-events:none}
+
+.check-btn{display:inline-block;padding:10px 28px;border:none;border-radius:20px;background:var(--accent);color:#fff;font-family:inherit;font-size:1.1rem;font-weight:700;cursor:pointer;transition:.25s ease}
+.check-btn:hover{background:var(--accent-dark)}
+.check-btn:disabled{background:var(--border);color:var(--text-light);cursor:default}
+.check-btn.btn-done{background:var(--ok)}
+
+.card-result{display:inline-block;font-size:.9rem;font-weight:600;margin-right:12px;vertical-align:middle}
+.card-result.res-ok{color:var(--ok)}
+.card-result.res-partial{color:var(--accent-dark)}
+
+.check-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+/* Type B row */
+.b-row{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg);border:2px solid var(--border);border-radius:var(--radius);margin-bottom:10px;box-shadow:var(--shadow);flex-wrap:wrap}
+.b-row.row-done{border-color:var(--ok);background:#f0fdf4}
+.b-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.b-emoji{font-size:2rem;line-height:1}
+.b-target{display:inline-block;border:3px solid var(--accent);background:#fffbeb;border-radius:var(--radius-sm);padding:4px 12px;font-size:1.3rem;font-weight:700;line-height:1.8}
+.b-words{display:flex;flex-wrap:wrap;gap:8px;flex:1}
+.b-word{padding:6px 14px;border-radius:var(--radius-sm);border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:1.2rem;font-weight:600;line-height:1.8;transition:.25s ease;user-select:none;-webkit-user-select:none;min-height:44px;display:inline-flex;align-items:center}
+.b-word:hover:not(.checked){background:#f1f5f9;border-color:var(--pri)}
+.b-word.selected{background:var(--pri-light);border-color:var(--pri)}
+.b-word.correct{background:#d1fae5;border-color:var(--ok);animation:bounce .5s ease;cursor:default}
+.b-word.wrong{background:#fee2e2;border-color:var(--no);animation:shake .4s ease}
+.b-word.missed{background:#fef3c7;border-color:var(--accent);animation:missedPulse 1s ease 2}
+.b-word.checked{pointer-events:none}
+
+.type-b-check{text-align:center;margin-top:14px}
+
+/* Draw mode */
+.draw-overlay{position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;cursor:crosshair;display:none}
+.draw-mode .draw-overlay{display:block}
+.draw-mode .word-btn,.draw-mode .b-word{pointer-events:none}
+
+.completion-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);z-index:100;justify-content:center;align-items:center}
+.completion-overlay.show{display:flex}
+.completion-card{background:var(--bg);border-radius:16px;padding:32px 28px;text-align:center;box-shadow:var(--shadow-lg);max-width:400px;width:90%;animation:pop .4s ease}
+.completion-card .emoji{font-size:3rem;margin-bottom:8px}
+.completion-card h3{font-size:1.4rem;font-weight:800;color:var(--pri-dark);margin-bottom:6px}
+.completion-card p{color:var(--text-light);font-size:.95rem;margin-bottom:16px}
+.completion-card .stats{display:flex;justify-content:center;gap:20px;margin-bottom:16px}
+.completion-card .stat{text-align:center}
+.completion-card .stat-val{font-size:1.5rem;font-weight:800;color:var(--pri)}
+.completion-card .stat-val.ok-val{color:var(--ok)}
+.completion-card .stat-lbl{font-size:.8rem;color:var(--text-light)}
+.btn-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.pill-btn{padding:10px 22px;border:none;border-radius:999px;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;transition:.25s ease}
+.pill-btn.primary{background:var(--pri);color:#fff}
+.pill-btn.primary:hover{background:var(--pri-dark)}
+.pill-btn.secondary{background:var(--bg-soft);color:var(--text);border:2px solid var(--border)}
+.pill-btn.secondary:hover{border-color:var(--pri);color:var(--pri)}
+
+.print-area{display:none;max-width:800px;margin:0 auto;padding:16px}
+.print-area h3{text-align:center;font-size:1.2rem;font-weight:700;margin-bottom:16px;color:var(--pri-dark)}
+.print-q{border:2px solid #333;border-radius:8px;padding:12px;margin-bottom:12px}
+.print-q .pq-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.print-q .pq-emoji{font-size:2rem}
+.print-q .pq-target{font-size:1.4rem;font-weight:700;border:2px solid #333;border-radius:6px;padding:4px 12px}
+.print-q .pq-words{display:flex;flex-wrap:wrap;gap:8px}
+.print-q .pq-word{border:2px solid #999;border-radius:6px;padding:4px 10px;font-size:1.2rem;font-weight:600}
+.print-btn-wrap{text-align:center;margin-top:16px}
+
+@media print{
+  body{background:#fff}
+  .header,.mode-bar,.tabs-wrap,.progress-bar-wrap,.q-card,.b-row,.type-b-check,.completion-overlay{display:none!important}
+  .print-area{display:block!important}
+  .print-btn-wrap{display:none!important}
+}
+
+@media(max-width:600px){
+  .header h1{font-size:1.4rem}
+  .header{padding:14px}
+  .word-btn{font-size:1.1rem;padding:6px 12px}
+  .b-word{font-size:1.05rem;padding:5px 10px}
+  .q-emoji{font-size:2rem}
+  .b-emoji{font-size:1.8rem}
+  .target-frame{font-size:1.2rem;padding:6px 12px}
+  .b-target{font-size:1.1rem;padding:3px 8px}
+  .b-row{flex-direction:column;align-items:stretch}
+  .b-right{justify-content:center}
+  .b-words{justify-content:center}
+  .mode-btn{padding:6px 14px;font-size:.85rem}
+  .tab{padding:5px 10px;font-size:.8rem}
+  .main{padding:10px}
+  .q-card{padding:14px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📖 זיהוי מילים</h1>
+  <p>מצאו את כל המילים הזהות למילה שבמסגרת!</p>
+</div>
+
+<div class="mode-bar">
+  <button class="mode-btn active" data-mode="click">👆 לחיצה</button>
+  <button class="mode-btn" data-mode="draw">✏️ ציור</button>
+  <button class="mode-btn" data-mode="print">🖨️ הדפסה</button>
+</div>
+
+<div class="tabs-wrap">
+  <div class="tabs" id="tabs"></div>
+</div>
+
+<div class="main" id="mainArea">
+  <div class="progress-bar-wrap" id="progressWrap">
+    <span class="progress-text" id="progressText">השלמתם 0 מתוך 0</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0"></div></div>
+  </div>
+  <div id="content"></div>
+</div>
+
+<div class="print-area" id="printArea">
+  <h3 id="printTitle"></h3>
+  <div id="printContent"></div>
+  <div class="print-btn-wrap"><button class="pill-btn primary" onclick="window.print()">🖨️ הדפסה</button></div>
+</div>
+
+<div class="completion-overlay" id="completionOverlay">
+  <div class="completion-card">
+    <div class="emoji">📖🎉</div>
+    <h3>כל הכבוד!</h3>
+    <p>זיהיתם את כל המילים!</p>
+    <div class="stats">
+      <div class="stat"><div class="stat-val ok-val" id="statPerfect">0</div><div class="stat-lbl">מושלם</div></div>
+      <div class="stat"><div class="stat-val" id="statTotal">0</div><div class="stat-lbl">תרגילים</div></div>
+    </div>
+    <div class="btn-row">
+      <button class="pill-btn primary" id="btnNext">▶ לשלב הבא</button>
+      <button class="pill-btn secondary" id="btnRetry">🔄 שחקו שוב</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+
+/* LEVEL DATA */
+const LEVELS = [
+  /* Level 1 — Type A: Fruits */
+  {type:'A', questions:[
+    {emoji:'\uD83C\uDF4E',target:'\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05BC\u05D7\u05B7',words:['\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05BC\u05D7\u05B7','\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05BC\u05D7','\u05D8\u05B7\u05E4\u05BC\u05D5\u05BC\u05D7\u05B7','\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05BC\u05D7\u05B7','\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05B9\u05D7\u05B7','\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05BC\u05DB\u05B7','\u05EA\u05BC\u05D5\u05BC\u05E4\u05BC\u05B7\u05D7','\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05BC\u05D7\u05B7']},
+    {emoji:'\uD83C\uDF4C',target:'\u05D1\u05BC\u05B8\u05E0\u05B8\u05E0\u05B8\u05D4',words:['\u05D1\u05BC\u05B8\u05E0\u05B8\u05E0\u05B8\u05D4','\u05D1\u05BC\u05B8\u05E0\u05B7\u05E0\u05B8\u05D4','\u05D1\u05BC\u05B8\u05E0\u05B8\u05E0\u05B8\u05D4','\u05D1\u05BC\u05B8\u05E0\u05B8\u05E0\u05B8\u05D0','\u05D3\u05BC\u05B8\u05E0\u05B8\u05E0\u05B8\u05D4','\u05D1\u05BC\u05B8\u05E0\u05B8\u05E0\u05B8\u05D4','\u05E0\u05B8\u05D1\u05B8\u05E0\u05B8\u05D4','\u05D1\u05B7\u05BC\u05E0\u05B8\u05E0\u05B8\u05D4']},
+    {emoji:'\uD83C\uDF47',target:'\u05E2\u05B2\u05E0\u05B8\u05D1\u05B4\u05D9\u05DD',words:['\u05E2\u05B2\u05E0\u05B8\u05D1\u05B4\u05D9\u05DD','\u05E2\u05B2\u05E0\u05B8\u05D1\u05B4\u05D9\u05DD','\u05E2\u05B7\u05E0\u05B8\u05D1\u05B4\u05D9\u05DD','\u05E2\u05B2\u05E0\u05B8\u05D1\u05B4\u05D9\u05DD','\u05E2\u05B2\u05E0\u05B8\u05D1\u05B4\u05D9\u05DF','\u05E2\u05B2\u05D2\u05B8\u05D1\u05B4\u05D9\u05DD','\u05E2\u05B8\u05E0\u05B8\u05D1\u05B4\u05D9\u05DD','\u05E2\u05E0\u05D1\u05D9\u05DD']}
+  ]},
+  /* Level 2 — Type A: Animals */
+  {type:'A', questions:[
+    {emoji:'\uD83D\uDC31',target:'\u05D7\u05B8\u05EA\u05D5\u05BC\u05DC',words:['\u05D7\u05B8\u05EA\u05D5\u05BC\u05DC','\u05D7\u05B8\u05EA\u05D5\u05BC\u05DC','\u05D7\u05B7\u05EA\u05D5\u05BC\u05DC','\u05DB\u05BC\u05B8\u05EA\u05D5\u05BC\u05DC','\u05D7\u05B8\u05EA\u05D5\u05BC\u05DC','\u05D7\u05B8\u05EA\u05D5\u05B9\u05DC','\u05D7\u05B8\u05EA\u05D5\u05BC\u05E8','\u05D7\u05B8\u05D8\u05D5\u05BC\u05DC']},
+    {emoji:'\uD83D\uDC36',target:'\u05DB\u05BC\u05B6\u05DC\u05B6\u05D1',words:['\u05DB\u05BC\u05B6\u05DC\u05B6\u05D1','\u05DB\u05BC\u05B6\u05DC\u05B6\u05D1','\u05DB\u05B7\u05BC\u05DC\u05B6\u05D1','\u05D2\u05BC\u05B6\u05DC\u05B6\u05D1','\u05DB\u05BC\u05B6\u05DC\u05B6\u05D1','\u05DB\u05BC\u05B6\u05DC\u05B6\u05D3','\u05DB\u05BC\u05B5\u05DC\u05B6\u05D1','\u05DB\u05BC\u05B6\u05DC\u05B6\u05D1']},
+    {emoji:'\uD83D\uDC1F',target:'\u05D3\u05BC\u05B8\u05D2',words:['\u05D3\u05BC\u05B8\u05D2','\u05D3\u05BC\u05B8\u05D2','\u05D3\u05BC\u05B8\u05D2','\u05D3\u05BC\u05B8\u05E7','\u05E8\u05B8\u05D2','\u05D3\u05B7\u05BC\u05D2','\u05D3\u05BC\u05B8\u05D2','\u05D3\u05BC\u05B8\u05DA']}
+  ]},
+  /* Level 3 — Type A: Home */
+  {type:'A', questions:[
+    {emoji:'\uD83D\uDEAA',target:'\u05D3\u05BC\u05B6\u05DC\u05B6\u05EA',words:['\u05D3\u05BC\u05B6\u05DC\u05B6\u05EA','\u05D3\u05BC\u05B6\u05DC\u05B6\u05EA','\u05E8\u05B6\u05DC\u05B6\u05EA','\u05D3\u05BC\u05B6\u05DC\u05B6\u05EA','\u05D3\u05B7\u05BC\u05DC\u05B6\u05EA','\u05D3\u05BC\u05B6\u05DC\u05B6\u05D3','\u05D3\u05BC\u05B6\u05DC\u05B6\u05EA','\u05E8\u05B6\u05DC\u05B6\u05D3']},
+    {emoji:'\uD83E\uDE9F',target:'\u05D7\u05B7\u05DC\u05BC\u05D5\u05B9\u05DF',words:['\u05D7\u05B7\u05DC\u05BC\u05D5\u05B9\u05DF','\u05D7\u05B7\u05DC\u05BC\u05D5\u05B9\u05DF','\u05D7\u05B8\u05DC\u05D5\u05B9\u05DF','\u05D7\u05B7\u05DC\u05BC\u05D5\u05B9\u05DF','\u05D7\u05B7\u05DC\u05BC\u05D5\u05B9\u05E0','\u05DB\u05B7\u05BC\u05DC\u05BC\u05D5\u05B9\u05DF','\u05D7\u05B7\u05DC\u05BC\u05D5\u05BC\u05DF','\u05D7\u05B7\u05DC\u05BC\u05D5\u05B9\u05DF']},
+    {emoji:'\uD83D\uDECF\uFE0F',target:'\u05DE\u05B4\u05D8\u05BC\u05B8\u05D4',words:['\u05DE\u05B4\u05D8\u05BC\u05B8\u05D4','\u05DE\u05B4\u05D8\u05BC\u05B8\u05D4','\u05DE\u05B4\u05D8\u05B8\u05D4','\u05DE\u05B4\u05D8\u05BC\u05B8\u05D4','\u05DE\u05B4\u05D8\u05BC\u05B8\u05D0','\u05E0\u05B4\u05D8\u05BC\u05B8\u05D4','\u05DE\u05B4\u05D8\u05BC\u05B8\u05D4','\u05DE\u05D9\u05D8\u05D4']}
+  ]},
+  /* Level 4 — Type A: Clothing */
+  {type:'A', questions:[
+    {emoji:'\uD83D\uDC55',target:'\u05D7\u05BB\u05DC\u05B0\u05E6\u05B8\u05D4',words:['\u05D7\u05BB\u05DC\u05B0\u05E6\u05B8\u05D4','\u05D7\u05BB\u05DC\u05B0\u05E6\u05B8\u05D4','\u05D7\u05BB\u05DC\u05B0\u05E6\u05B8\u05D4','\u05DB\u05BC\u05BB\u05DC\u05B0\u05E6\u05B8\u05D4','\u05D7\u05BB\u05DC\u05B0\u05E6\u05B8\u05D0','\u05D7\u05BB\u05DC\u05B0\u05E6\u05B8\u05D4','\u05D7\u05D5\u05BC\u05DC\u05B0\u05E6\u05B8\u05D4','\u05D7\u05BB\u05DC\u05B0\u05D8\u05B8\u05D4']},
+    {emoji:'\uD83D\uDC56',target:'\u05DE\u05B4\u05DB\u05B0\u05E0\u05B8\u05E1\u05B7\u05D9\u05B4\u05DD',words:['\u05DE\u05B4\u05DB\u05B0\u05E0\u05B8\u05E1\u05B7\u05D9\u05B4\u05DD','\u05DE\u05B4\u05DB\u05B0\u05E0\u05B8\u05E1\u05B7\u05D9\u05B4\u05DD','\u05DE\u05B4\u05DB\u05B0\u05E0\u05B8\u05E1\u05B7\u05D9\u05B4\u05DD','\u05DE\u05B4\u05DB\u05B0\u05E0\u05B8\u05E1\u05B7\u05D9\u05B4\u05DF','\u05DE\u05B4\u05DB\u05B0\u05E0\u05B8\u05E9\u05C2\u05B7\u05D9\u05B4\u05DD','\u05E0\u05B4\u05DB\u05B0\u05E0\u05B8\u05E1\u05B7\u05D9\u05B4\u05DD','\u05DE\u05B4\u05DB\u05E0\u05E1\u05D9\u05D9\u05DD']},
+    {emoji:'\uD83E\uDDE6',target:'\u05D2\u05B7\u05BC\u05E8\u05B0\u05D1\u05B7\u05BC\u05D9\u05B4\u05DD',words:['\u05D2\u05B7\u05BC\u05E8\u05B0\u05D1\u05B7\u05BC\u05D9\u05B4\u05DD','\u05D2\u05B7\u05BC\u05E8\u05B0\u05D1\u05B7\u05BC\u05D9\u05B4\u05DD','\u05D2\u05B7\u05BC\u05E8\u05B0\u05D1\u05B7\u05BC\u05D9\u05B4\u05DD','\u05D2\u05B7\u05BC\u05E8\u05B0\u05D1\u05B7\u05BC\u05D9\u05B4\u05DF','\u05D2\u05B7\u05BC\u05E8\u05B0\u05D3\u05B7\u05BC\u05D9\u05B4\u05DD','\u05DB\u05B7\u05BC\u05E8\u05B0\u05D1\u05B7\u05BC\u05D9\u05B4\u05DD','\u05D2\u05B7\u05E8\u05B0\u05D1\u05B7\u05BC\u05D9\u05B4\u05DD']}
+  ]},
+  /* Level 5 — Type A: Food */
+  {type:'A', questions:[
+    {emoji:'\uD83C\uDF5E',target:'\u05DC\u05B6\u05D7\u05B6\u05DD',words:['\u05DC\u05B6\u05D7\u05B6\u05DD','\u05DC\u05B6\u05D7\u05B6\u05DD','\u05DC\u05B6\u05D7\u05B6\u05DD','\u05DC\u05B7\u05D7\u05B6\u05DD','\u05DC\u05B6\u05D7\u05B6\u05DF','\u05DC\u05B6\u05D7\u05B6\u05D3','\u05DC\u05B6\u05DB\u05B6\u05DD','\u05DC\u05D7\u05DD']},
+    {emoji:'\uD83E\uDD5B',target:'\u05D7\u05B8\u05DC\u05B8\u05D1',words:['\u05D7\u05B8\u05DC\u05B8\u05D1','\u05D7\u05B8\u05DC\u05B8\u05D1','\u05D7\u05B8\u05DC\u05B8\u05D1','\u05D7\u05B7\u05DC\u05B8\u05D1','\u05D7\u05B8\u05DC\u05B8\u05D3','\u05DB\u05B8\u05DC\u05B8\u05D1','\u05D7\u05B8\u05DC\u05B8\u05D1','\u05D7\u05DC\u05D1']},
+    {emoji:'\uD83C\uDF82',target:'\u05E2\u05D5\u05BC\u05D2\u05B8\u05D4',words:['\u05E2\u05D5\u05BC\u05D2\u05B8\u05D4','\u05E2\u05D5\u05BC\u05D2\u05B8\u05D4','\u05E2\u05D5\u05BC\u05D2\u05B8\u05D4','\u05E2\u05D5\u05BC\u05D2\u05B8\u05D0','\u05E2\u05D5\u05D2\u05D4','\u05E2\u05D5\u05BC\u05D2\u05B7\u05D4','\u05E2\u05D5\u05BC\u05D3\u05B8\u05D4','\u05E2\u05D5\u05BC\u05D2\u05B8\u05D4']},
+    {emoji:'\uD83C\uDF66',target:'\u05D2\u05BC\u05B0\u05DC\u05B4\u05D9\u05D3\u05B8\u05D4',words:['\u05D2\u05BC\u05B0\u05DC\u05B4\u05D9\u05D3\u05B8\u05D4','\u05D2\u05BC\u05B0\u05DC\u05B4\u05D9\u05D3\u05B8\u05D4','\u05D2\u05BC\u05B0\u05DC\u05B4\u05D9\u05D3\u05B8\u05D4','\u05D2\u05BC\u05B0\u05DC\u05B4\u05D9\u05D3\u05B8\u05D0','\u05D2\u05BC\u05B0\u05DC\u05B4\u05D9\u05D3\u05B7\u05D4','\u05D2\u05B0\u05DC\u05D9\u05D3\u05D4','\u05D2\u05BC\u05B0\u05DC\u05B4\u05D9\u05D8\u05B8\u05D4','\u05D2\u05BC\u05B0\u05DC\u05B4\u05D9\u05D3\u05B8\u05D4']}
+  ]},
+  /* Level 6 — Type A: Nature */
+  {type:'A', questions:[
+    {emoji:'\u2600\uFE0F',target:'\u05E9\u05B6\u05C1\u05DE\u05B6\u05E9\u05C1',words:['\u05E9\u05B6\u05C1\u05DE\u05B6\u05E9\u05C1','\u05E9\u05B6\u05C1\u05DE\u05B6\u05E9\u05C1','\u05E9\u05B6\u05C1\u05DE\u05B6\u05E9\u05C1','\u05E9\u05B6\u05C2\u05DE\u05B6\u05E9\u05C1','\u05E9\u05C1\u05DE\u05E9','\u05E9\u05B6\u05C1\u05DE\u05B6\u05E9\u05C2','\u05E9\u05B6\u05C1\u05DE\u05B6\u05E9\u05C1','\u05E9\u05B6\u05C1\u05DE\u05B5\u05E9\u05C1']},
+    {emoji:'\uD83C\uDF19',target:'\u05D9\u05B8\u05E8\u05B5\u05D7\u05B7',words:['\u05D9\u05B8\u05E8\u05B5\u05D7\u05B7','\u05D9\u05B8\u05E8\u05B5\u05D7\u05B7','\u05D9\u05B8\u05E8\u05B5\u05D7\u05B7','\u05D9\u05B8\u05E8\u05B5\u05D0','\u05D9\u05B8\u05E8\u05B7\u05D7','\u05D9\u05B8\u05E8\u05B5\u05D7\u05B7','\u05D9\u05B8\u05E8\u05B5\u05DB\u05B7','\u05D9\u05E8\u05D7']},
+    {emoji:'\u2B50',target:'\u05DB\u05BC\u05D5\u05B9\u05DB\u05B8\u05D1',words:['\u05DB\u05BC\u05D5\u05B9\u05DB\u05B8\u05D1','\u05DB\u05BC\u05D5\u05B9\u05DB\u05B8\u05D1','\u05DB\u05BC\u05D5\u05B9\u05DB\u05B8\u05D1','\u05DB\u05BC\u05D5\u05B9\u05DB\u05B8\u05D3','\u05DB\u05BC\u05D5\u05B9\u05DB\u05B7\u05D1','\u05DB\u05D5\u05DB\u05D1','\u05DB\u05BC\u05D5\u05B9\u05DB\u05B8\u05D1','\u05D2\u05BC\u05D5\u05B9\u05DB\u05B8\u05D1']},
+    {emoji:'\uD83C\uDF33',target:'\u05E2\u05B5\u05E5',words:['\u05E2\u05B5\u05E5','\u05E2\u05B5\u05E5','\u05E2\u05B5\u05E5','\u05E2\u05B5\u05E6','\u05E2\u05B5\u05D3','\u05E2\u05B5\u05E5','\u05E2\u05E5','\u05E2\u05B7\u05E5']}
+  ]},
+  /* Level 7 — Type A: Vehicles */
+  {type:'A', questions:[
+    {emoji:'\uD83D\uDE97',target:'\u05DE\u05B0\u05DB\u05D5\u05B9\u05E0\u05B4\u05D9\u05EA',words:['\u05DE\u05B0\u05DB\u05D5\u05B9\u05E0\u05B4\u05D9\u05EA','\u05DE\u05B0\u05DB\u05D5\u05B9\u05E0\u05B4\u05D9\u05EA','\u05DE\u05B0\u05DB\u05D5\u05B9\u05E0\u05B4\u05D9\u05EA','\u05DE\u05B0\u05DB\u05D5\u05B9\u05E0\u05B4\u05D9\u05D3','\u05DE\u05B0\u05DB\u05D5\u05E0\u05D9\u05EA','\u05DE\u05B0\u05DB\u05D5\u05B9\u05E0\u05B4\u05D9\u05EA','\u05E0\u05B0\u05DB\u05D5\u05B9\u05E0\u05B4\u05D9\u05EA','\u05DE\u05B0\u05DB\u05D5\u05B9\u05E0\u05B7\u05D9\u05EA']},
+    {emoji:'\uD83D\uDE8C',target:'\u05D0\u05D5\u05B9\u05D8\u05D5\u05B9\u05D1\u05BC\u05D5\u05BC\u05E1',words:['\u05D0\u05D5\u05B9\u05D8\u05D5\u05B9\u05D1\u05BC\u05D5\u05BC\u05E1','\u05D0\u05D5\u05B9\u05D8\u05D5\u05B9\u05D1\u05BC\u05D5\u05BC\u05E1','\u05D0\u05D5\u05B9\u05D8\u05D5\u05B9\u05D1\u05BC\u05D5\u05BC\u05E1','\u05D0\u05D5\u05D8\u05D5\u05D1\u05D5\u05E1','\u05D0\u05D5\u05B9\u05D8\u05D5\u05B9\u05D1\u05BC\u05D5\u05BC\u05E3','\u05D0\u05D5\u05B9\u05D8\u05D5\u05B9\u05D1\u05BC\u05D5\u05BC\u05E1','\u05D0\u05D5\u05B9\u05D8\u05D5\u05B9\u05D3\u05BC\u05D5\u05BC\u05E1','\u05D0\u05D5\u05B9\u05D8\u05D5\u05B9\u05D1\u05BC\u05D5\u05D1\u05E1']},
+    {emoji:'\uD83D\uDEA2',target:'\u05D0\u05B3\u05E0\u05B4\u05D9\u05BC\u05B8\u05D4',words:['\u05D0\u05B3\u05E0\u05B4\u05D9\u05BC\u05B8\u05D4','\u05D0\u05B3\u05E0\u05B4\u05D9\u05BC\u05B8\u05D4','\u05D0\u05B3\u05E0\u05B4\u05D9\u05BC\u05B8\u05D4','\u05D0\u05B3\u05E0\u05B4\u05D9\u05BC\u05B8\u05D0','\u05D0\u05E0\u05D9\u05D4','\u05D0\u05B3\u05E0\u05B4\u05D9\u05BC\u05B8\u05D4','\u05D0\u05B3\u05E0\u05B4\u05D9\u05BC\u05B7\u05D4','\u05D0\u05B3\u05E0\u05B4\u05D9\u05D4']}
+  ]},
+  /* Level 8 — Type A: More animals */
+  {type:'A', questions:[
+    {emoji:'\uD83D\uDC30',target:'\u05D0\u05B7\u05E8\u05B0\u05E0\u05B8\u05D1',words:['\u05D0\u05B7\u05E8\u05B0\u05E0\u05B8\u05D1','\u05D0\u05B7\u05E8\u05B0\u05E0\u05B8\u05D1','\u05D0\u05B7\u05E8\u05B0\u05E0\u05B8\u05D1','\u05D0\u05B7\u05E8\u05B0\u05E0\u05B8\u05D3','\u05D0\u05E8\u05E0\u05D1','\u05D0\u05B7\u05E8\u05B0\u05E0\u05B8\u05D1','\u05D0\u05B7\u05E8\u05B0\u05E0\u05B7\u05D1','\u05D0\u05B7\u05E8\u05B0\u05E0\u05B8\u05D1\u05BC']},
+    {emoji:'\uD83D\uDC04',target:'\u05E4\u05BC\u05B8\u05E8\u05B8\u05D4',words:['\u05E4\u05BC\u05B8\u05E8\u05B8\u05D4','\u05E4\u05BC\u05B8\u05E8\u05B8\u05D4','\u05E4\u05BC\u05B8\u05E8\u05B8\u05D4','\u05E4\u05B8\u05E8\u05B8\u05D4','\u05E4\u05BC\u05B8\u05E8\u05B8\u05D0','\u05E4\u05BC\u05B8\u05E8\u05B8\u05D4','\u05D1\u05BC\u05B8\u05E8\u05B8\u05D4','\u05E4\u05E8\u05D4']},
+    {emoji:'\uD83D\uDC34',target:'\u05E1\u05D5\u05BC\u05E1',words:['\u05E1\u05D5\u05BC\u05E1','\u05E1\u05D5\u05BC\u05E1','\u05E1\u05D5\u05BC\u05E1','\u05E1\u05D5\u05E1','\u05E9\u05C1\u05D5\u05BC\u05E9\u05C1','\u05E1\u05D5\u05BC\u05E1','\u05E1\u05D5\u05BC\u05D3','\u05E1\u05D5\u05BC\u05E3']},
+    {emoji:'\uD83E\uDDF8',target:'\u05D3\u05BC\u05BB\u05D1\u05BC\u05D5\u05B9\u05DF',words:['\u05D3\u05BC\u05BB\u05D1\u05BC\u05D5\u05B9\u05DF','\u05D3\u05BC\u05BB\u05D1\u05BC\u05D5\u05B9\u05DF','\u05D3\u05BC\u05BB\u05D1\u05BC\u05D5\u05B9\u05DF','\u05D3\u05D5\u05D1\u05D5\u05DF','\u05D3\u05BC\u05BB\u05D1\u05BC\u05D5\u05B9\u05DF','\u05D3\u05BC\u05BB\u05D1\u05BC\u05D5\u05B9\u05E0','\u05D3\u05BC\u05BB\u05D1\u05BC\u05D5\u05B9\u05DF','\u05D3\u05BC\u05BB\u05D1\u05BC\u05D5\u05B9\u05D3']}
+  ]},
+  /* Level 9 — Type B */
+  {type:'B', rows:[
+    {emoji:'\uD83E\uDD64',target:'\u05DB\u05BC\u05D5\u05B9\u05E1',words:['\u05DB\u05BC\u05D5\u05B9\u05E1\u05B5\u05E1','\u05DB\u05BC\u05D5\u05B9\u05E1\u05B4\u05D9\u05EA','\u05DB\u05BC\u05D5\u05B9\u05E1','\u05E1\u05D5\u05BC\u05E1','\u05DB\u05BC\u05B9\u05DC','\u05DB\u05BC\u05D5\u05B9\u05E1','\u05DB\u05BC\u05D5\u05BC\u05E1']},
+    {emoji:'\uD83C\uDF4A',target:'\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05BC\u05D6',words:['\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05BC\u05D6','\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05D6','\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05BC\u05D6','\u05D8\u05B7\u05E4\u05BC\u05D5\u05BC\u05D6','\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05BC\u05D5','\u05EA\u05E4\u05D5\u05D6','\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05BC\u05D6']},
+    {emoji:'\uD83C\uDFE0',target:'\u05D1\u05B7\u05BC\u05D9\u05B4\u05EA',words:['\u05D1\u05B7\u05BC\u05D9\u05B4\u05EA','\u05D1\u05B7\u05D9\u05EA','\u05D1\u05B7\u05BC\u05D9\u05B4\u05EA','\u05D1\u05B7\u05BC\u05EA','\u05D1\u05BC\u05D5\u05B9\u05EA','\u05D1\u05B7\u05BC\u05D9\u05B4\u05EA','\u05D3\u05B7\u05BC\u05D9\u05B4\u05EA']},
+    {emoji:'\uD83C\uDF39',target:'\u05E4\u05BC\u05B6\u05E8\u05B7\u05D7',words:['\u05E4\u05BC\u05B6\u05E8\u05B7\u05D7','\u05E4\u05BC\u05B6\u05E8\u05B7\u05D7','\u05E4\u05BC\u05B5\u05E8\u05D5\u05BC\u05EA','\u05E4\u05E8\u05D7','\u05E4\u05BC\u05B6\u05E8\u05B7\u05D7','\u05E4\u05BC\u05B6\u05E8\u05B7\u05DA','\u05E4\u05BC\u05B6\u05E8\u05B6\u05D7']},
+    {emoji:'\uD83D\uDCD6',target:'\u05E1\u05B5\u05E4\u05B6\u05E8',words:['\u05E1\u05B5\u05E4\u05B6\u05E8','\u05E1\u05B5\u05E4\u05B6\u05E8','\u05E1\u05B5\u05E4\u05B6\u05D3','\u05E1\u05E4\u05E8','\u05E1\u05B5\u05E4\u05B6\u05E8','\u05E1\u05B8\u05E4\u05B8\u05E8','\u05E6\u05B5\u05E4\u05B6\u05E8']},
+    {emoji:'\uD83C\uDF08',target:'\u05E7\u05B6\u05E9\u05C1\u05B6\u05EA',words:['\u05E7\u05B6\u05E9\u05C1\u05B6\u05EA','\u05E7\u05B6\u05E9\u05C1\u05B6\u05EA','\u05E7\u05B6\u05E9\u05C1\u05B6\u05D3','\u05E7\u05B6\u05E9\u05C1\u05EA','\u05E7\u05B6\u05E9\u05C1\u05B6\u05EA','\u05E7\u05B4\u05E9\u05C1\u05B5\u05EA','\u05E7\u05E9\u05EA']}
+  ]},
+  /* Level 10 — Type B */
+  {type:'B', rows:[
+    {emoji:'\uD83E\uDD21',target:'\u05DC\u05B5\u05D9\u05E6\u05B8\u05DF',words:['\u05DC\u05B7\u05D9\u05B4\u05DC','\u05DC\u05B5\u05D9\u05E6\u05B8\u05DF','\u05E6\u05B9\u05D0\u05DF','\u05DC\u05B7\u05D7\u05B0\u05E6\u05B8\u05DF','\u05DC\u05B5\u05D9\u05E6\u05B8\u05DF','\u05DC\u05B4\u05D9\u05E6\u05B4\u05D9']},
+    {emoji:'\uD83D\uDC51',target:'\u05DB\u05BC\u05B6\u05EA\u05B6\u05E8',words:['\u05DB\u05BC\u05B6\u05EA\u05B6\u05E8','\u05DB\u05BC\u05D5\u05B9\u05EA\u05B6\u05E8','\u05DB\u05BC\u05B6\u05EA\u05B6\u05E8','\u05DB\u05BC\u05B6\u05EA\u05B6\u05D3','\u05DB\u05EA\u05E8','\u05D2\u05BC\u05B6\u05EA\u05B6\u05E8','\u05DB\u05BC\u05B6\u05EA\u05B6\u05E8']},
+    {emoji:'\uD83C\uDF3B',target:'\u05D7\u05B7\u05DE\u05BC\u05B8\u05E0\u05B4\u05D9\u05EA',words:['\u05D7\u05B7\u05DE\u05BC\u05B8\u05E0\u05B4\u05D9\u05EA','\u05D7\u05B7\u05DE\u05BC\u05B8\u05E0\u05B4\u05D9\u05EA','\u05D7\u05B7\u05DE\u05BC\u05B8\u05E0\u05B4\u05D9\u05D3','\u05D7\u05DE\u05E0\u05D9\u05EA','\u05D7\u05B7\u05DE\u05BC\u05B8\u05E0\u05B4\u05D9\u05EA','\u05D7\u05B7\u05DE\u05BC\u05B8\u05E0\u05B7\u05D9\u05EA','\u05D7\u05B7\u05DE\u05BC\u05B8\u05E1\u05B4\u05D9\u05EA']},
+    {emoji:'\uD83E\uDDF2',target:'\u05DE\u05B7\u05D2\u05B0\u05E0\u05B5\u05D8',words:['\u05DE\u05B7\u05D2\u05B0\u05E0\u05B5\u05D8','\u05DE\u05B7\u05D2\u05B0\u05E0\u05B5\u05D8','\u05DE\u05B7\u05D2\u05B0\u05E0\u05B5\u05D3','\u05DE\u05D2\u05E0\u05D8','\u05DE\u05B7\u05D2\u05B0\u05E0\u05B5\u05D8','\u05DE\u05B7\u05D2\u05B0\u05E0\u05B7\u05D8','\u05E0\u05B7\u05D2\u05B0\u05E0\u05B5\u05D8']},
+    {emoji:'\uD83D\uDD11',target:'\u05DE\u05B7\u05E4\u05B0\u05EA\u05B5\u05D7\u05B7',words:['\u05DE\u05B7\u05E4\u05B0\u05EA\u05B5\u05D7\u05B7','\u05DE\u05B7\u05E4\u05B0\u05EA\u05B5\u05D7\u05B7','\u05DE\u05B7\u05E4\u05B0\u05EA\u05B5\u05D7','\u05DE\u05E4\u05EA\u05D7','\u05DE\u05B7\u05E4\u05B0\u05EA\u05B5\u05D7\u05B7','\u05DE\u05B7\u05E4\u05B0\u05EA\u05B5\u05DB\u05B7','\u05DE\u05B7\u05E4\u05B0\u05EA\u05B7\u05D7']},
+    {emoji:'\uD83C\uDFA8',target:'\u05E6\u05B6\u05D1\u05B7\u05E2',words:['\u05E6\u05B6\u05D1\u05B7\u05E2','\u05E6\u05B6\u05D1\u05B7\u05E2','\u05E6\u05B6\u05D1\u05B7\u05E8','\u05E6\u05D1\u05E2','\u05E6\u05B6\u05D1\u05B7\u05E2','\u05E6\u05B8\u05D1\u05B7\u05E2','\u05E6\u05B6\u05D3\u05B7\u05E2']}
+  ]},
+  /* Level 11 — Type B */
+  {type:'B', rows:[
+    {emoji:'\uD83E\uDDE6',target:'\u05D2\u05B7\u05BC\u05E8\u05B0\u05D1\u05B7\u05BC\u05D9\u05B4\u05DD',words:['\u05D2\u05B8\u05E8\u05B7\u05D1','\u05E7\u05B7\u05D1\u05B7\u05BC\u05D9\u05B4\u05DD','\u05D2\u05B7\u05BC\u05E8\u05B0\u05D1\u05B7\u05BC\u05D9\u05B4\u05DD','\u05E8\u05B7\u05D1\u05BC\u05B4\u05D9\u05DD','\u05D2\u05B7\u05BC\u05E8\u05B0\u05E9\u05C1\u05B7\u05D9\u05B4\u05DD','\u05D2\u05B7\u05BC\u05E8\u05B0\u05D1\u05B7\u05BC\u05D9\u05B4\u05DD']},
+    {emoji:'\uD83D\uDC26',target:'\u05E6\u05B4\u05E4\u05BC\u05D5\u05B9\u05E8',words:['\u05E6\u05B4\u05E4\u05BC\u05D5\u05B9\u05E8','\u05E6\u05B4\u05E4\u05BC\u05D5\u05B9\u05E8','\u05E6\u05B4\u05E4\u05BC\u05D5\u05E8','\u05E6\u05E4\u05D5\u05E8','\u05E6\u05B4\u05E4\u05BC\u05D5\u05B9\u05E8','\u05E6\u05B4\u05E4\u05BC\u05D5\u05B9\u05DF','\u05E6\u05B4\u05E4\u05BC\u05D5\u05B9\u05E8\u05B6\u05EA']},
+    {emoji:'\uD83D\uDC1B',target:'\u05D7\u05B4\u05E4\u05BC\u05D5\u05BC\u05E9\u05C1\u05B4\u05D9\u05EA',words:['\u05D7\u05B4\u05E4\u05BC\u05D5\u05BC\u05E9\u05C1\u05B4\u05D9\u05EA','\u05D7\u05B4\u05E4\u05BC\u05D5\u05BC\u05E9\u05C1\u05B4\u05D9\u05EA','\u05D7\u05D9\u05E4\u05D5\u05E9\u05D9\u05EA','\u05D7\u05B4\u05E4\u05BC\u05D5\u05BC\u05E9\u05C1\u05B4\u05D9\u05D3','\u05D7\u05B4\u05E4\u05BC\u05D5\u05BC\u05E9\u05C1\u05B4\u05D9\u05EA','\u05D7\u05B4\u05E4\u05BC\u05D5\u05BC\u05E9\u05C2\u05B4\u05D9\u05EA','\u05D7\u05B4\u05E4\u05BC\u05D5\u05BC\u05E1\u05B4\u05D9\u05EA']},
+    {emoji:'\uD83D\uDE80',target:'\u05D8\u05B4\u05D9\u05DC',words:['\u05D8\u05B4\u05D9\u05DC','\u05D8\u05B4\u05D9\u05DC','\u05D8\u05B7\u05D9\u05B4\u05DC','\u05D8\u05D9\u05DC','\u05D8\u05B4\u05D9\u05DC','\u05D8\u05B4\u05D9\u05E8','\u05D8\u05B4\u05D9\u05DC\u05B6\u05EA']},
+    {emoji:'\uD83C\uDF53',target:'\u05EA\u05BC\u05D5\u05BC\u05EA',words:['\u05EA\u05BC\u05D5\u05BC\u05EA','\u05EA\u05BC\u05D5\u05BC\u05EA','\u05EA\u05D5\u05EA','\u05EA\u05BC\u05D5\u05BC\u05D3','\u05EA\u05BC\u05D5\u05BC\u05EA','\u05EA\u05BC\u05D5\u05BC\u05EA\u05B4\u05D9\u05DD','\u05D3\u05BC\u05D5\u05BC\u05EA']},
+    {emoji:'\uD83E\uDD55',target:'\u05D2\u05BC\u05B6\u05D6\u05B6\u05E8',words:['\u05D2\u05BC\u05B6\u05D6\u05B6\u05E8','\u05D2\u05BC\u05B6\u05D6\u05B6\u05E8','\u05D2\u05BC\u05B6\u05D6\u05B6\u05D3','\u05D2\u05D6\u05E8','\u05D2\u05BC\u05B6\u05D6\u05B6\u05E8','\u05D2\u05BC\u05B6\u05D6\u05B7\u05E8','\u05D2\u05BC\u05B6\u05D5\u05B6\u05E8']}
+  ]},
+  /* Level 12 — Type B */
+  {type:'B', rows:[
+    {emoji:'\uD83C\uDF3E',target:'\u05D3\u05B7\u05BC\u05D7\u05B0\u05DC\u05B4\u05D9\u05DC',words:['\u05D7\u05B8\u05DC\u05B4\u05D9\u05DC','\u05D1\u05B7\u05BC\u05D7\u05B2\u05DC\u05B4\u05D9\u05DC','\u05D3\u05B7\u05BC\u05D7\u05B0\u05DC\u05B4\u05D9\u05DC','\u05D7\u05B6\u05DC\u05B6\u05D3','\u05D3\u05B7\u05BC\u05D7\u05B0\u05DC\u05B4\u05D9\u05DC','\u05DC\u05B4\u05D9\u05DC']},
+    {emoji:'\uD83D\uDC1D',target:'\u05D3\u05BC\u05B0\u05D1\u05D5\u05B9\u05E8\u05B8\u05D4',words:['\u05D3\u05BC\u05B0\u05D1\u05D5\u05B9\u05E8\u05B8\u05D4','\u05D3\u05BC\u05B0\u05D1\u05D5\u05B9\u05E8\u05B8\u05D4','\u05D3\u05D1\u05D5\u05E8\u05D4','\u05D3\u05BC\u05B0\u05D1\u05D5\u05B9\u05E8\u05B8\u05D0','\u05D3\u05BC\u05B0\u05D1\u05D5\u05B9\u05E8\u05B8\u05D4','\u05D3\u05BC\u05B0\u05D1\u05D5\u05B9\u05E8\u05B7\u05D4','\u05D3\u05BC\u05B0\u05D1\u05D5\u05B9\u05E8\u05B8\u05D4']},
+    {emoji:'\uD83E\uDD8B',target:'\u05E4\u05B7\u05BC\u05E8\u05B0\u05E4\u05B7\u05BC\u05E8',words:['\u05E4\u05B7\u05BC\u05E8\u05B0\u05E4\u05B7\u05BC\u05E8','\u05E4\u05B7\u05BC\u05E8\u05B0\u05E4\u05B7\u05BC\u05E8','\u05E4\u05E8\u05E4\u05E8','\u05E4\u05B7\u05BC\u05E8\u05B0\u05E4\u05B7\u05BC\u05D3','\u05E4\u05B7\u05BC\u05E8\u05B0\u05E4\u05B7\u05BC\u05E8','\u05E4\u05B7\u05BC\u05E8\u05B0\u05E4\u05B8\u05E8','\u05E4\u05B7\u05BC\u05E8\u05B0\u05E4\u05B7\u05BC\u05E8']},
+    {emoji:'\uD83D\uDC22',target:'\u05E6\u05B8\u05D1',words:['\u05E6\u05B8\u05D1','\u05E6\u05B8\u05D1','\u05E6\u05B8\u05D3','\u05E6\u05D1','\u05E6\u05B8\u05D1','\u05E6\u05B7\u05D1','\u05E6\u05B8\u05D1\u05B8\u05E8']},
+    {emoji:'\uD83E\uDDC1',target:'\u05E7\u05B8\u05E4\u05B6\u05D4',words:['\u05E7\u05B8\u05E4\u05B6\u05D4','\u05E7\u05B8\u05E4\u05B6\u05D4','\u05E7\u05B8\u05E4\u05B6\u05D0','\u05E7\u05E4\u05D4','\u05E7\u05B8\u05E4\u05B6\u05D4','\u05E7\u05B8\u05E4\u05B7\u05D4','\u05E7\u05B8\u05E4\u05B6\u05D3']},
+    {emoji:'\u26BD',target:'\u05DB\u05B7\u05BC\u05D3\u05D5\u05BC\u05E8',words:['\u05DB\u05B7\u05BC\u05D3\u05D5\u05BC\u05E8','\u05DB\u05B7\u05BC\u05D3\u05D5\u05BC\u05E8','\u05DB\u05B7\u05BC\u05D3\u05D5\u05E8','\u05DB\u05D3\u05D5\u05E8','\u05DB\u05B7\u05BC\u05D3\u05D5\u05BC\u05E8','\u05DB\u05B7\u05BC\u05D3\u05D5\u05BC\u05D3','\u05D2\u05B7\u05BC\u05D3\u05D5\u05BC\u05E8']}
+  ]},
+  /* Level 13 — Type B */
+  {type:'B', rows:[
+    {emoji:'\uD83D\uDC55',target:'\u05D7\u05BB\u05DC\u05B0\u05E6\u05B8\u05D4',words:['\u05D7\u05B7\u05DC\u05B8\u05E5','\u05D7\u05BB\u05DC\u05B0\u05D3\u05B8\u05D4','\u05D7\u05BB\u05DC\u05B0\u05E6\u05B8\u05D4','\u05E6\u05B7\u05DC\u05B7\u05BC\u05D7\u05B7\u05EA','\u05D7\u05BB\u05DC\u05B0\u05E6\u05B8\u05D4','\u05DC\u05B5\u05D9\u05E6\u05B8\u05DF']},
+    {emoji:'\uD83C\uDF1F',target:'\u05DB\u05BC\u05D5\u05B9\u05DB\u05B8\u05D1',words:['\u05DB\u05BC\u05D5\u05B9\u05DB\u05B8\u05D1','\u05DB\u05BC\u05D5\u05B9\u05DB\u05B8\u05D1','\u05DB\u05D5\u05DB\u05D1','\u05DB\u05BC\u05D5\u05B9\u05DB\u05B8\u05D3','\u05DB\u05BC\u05D5\u05B9\u05DB\u05B8\u05D1','\u05DB\u05BC\u05D5\u05B9\u05DB\u05B7\u05D1','\u05D2\u05BC\u05D5\u05B9\u05DB\u05B8\u05D1']},
+    {emoji:'\uD83D\uDE97',target:'\u05DE\u05B0\u05DB\u05D5\u05B9\u05E0\u05B4\u05D9\u05EA',words:['\u05DE\u05B0\u05DB\u05D5\u05B9\u05E0\u05B4\u05D9\u05EA','\u05DE\u05B0\u05DB\u05D5\u05B9\u05E0\u05B4\u05D9\u05EA','\u05DE\u05DB\u05D5\u05E0\u05D9\u05EA','\u05DE\u05B0\u05DB\u05D5\u05B9\u05E0\u05B4\u05D9\u05D3','\u05DE\u05B0\u05DB\u05D5\u05B9\u05E0\u05B4\u05D9\u05EA','\u05E0\u05B0\u05DB\u05D5\u05B9\u05E0\u05B4\u05D9\u05EA','\u05DE\u05B0\u05DB\u05D5\u05B9\u05E0\u05B7\u05D9\u05EA']},
+    {emoji:'\uD83D\uDCDA',target:'\u05E1\u05B5\u05E4\u05B6\u05E8',words:['\u05E1\u05B5\u05E4\u05B6\u05E8','\u05E1\u05B5\u05E4\u05B6\u05E8','\u05E1\u05E4\u05E8','\u05E1\u05B5\u05E4\u05B6\u05D3','\u05E1\u05B5\u05E4\u05B6\u05E8','\u05E1\u05B8\u05E4\u05B8\u05E8','\u05E6\u05B5\u05E4\u05B6\u05E8']},
+    {emoji:'\u270F\uFE0F',target:'\u05E2\u05B4\u05E4\u05BC\u05B8\u05E8\u05D5\u05B9\u05DF',words:['\u05E2\u05B4\u05E4\u05BC\u05B8\u05E8\u05D5\u05B9\u05DF','\u05E2\u05B4\u05E4\u05BC\u05B8\u05E8\u05D5\u05B9\u05DF','\u05E2\u05E4\u05E8\u05D5\u05DF','\u05E2\u05B4\u05E4\u05BC\u05B8\u05E8\u05D5\u05B9\u05E0','\u05E2\u05B4\u05E4\u05BC\u05B8\u05E8\u05D5\u05B9\u05DF','\u05E2\u05B4\u05E4\u05BC\u05B8\u05E8\u05D5\u05B9\u05D3','\u05E2\u05B4\u05E4\u05BC\u05B7\u05E8\u05D5\u05B9\u05DF']},
+    {emoji:'\uD83C\uDF88',target:'\u05D1\u05BC\u05B8\u05DC\u05D5\u05B9\u05DF',words:['\u05D1\u05BC\u05B8\u05DC\u05D5\u05B9\u05DF','\u05D1\u05BC\u05B8\u05DC\u05D5\u05B9\u05DF','\u05D1\u05DC\u05D5\u05DF','\u05D1\u05BC\u05B8\u05DC\u05D5\u05B9\u05E0','\u05D1\u05BC\u05B8\u05DC\u05D5\u05B9\u05DF','\u05D1\u05BC\u05B8\u05DC\u05D5\u05B9\u05D3','\u05D3\u05BC\u05B8\u05DC\u05D5\u05B9\u05DF']}
+  ]},
+  /* Level 14 — Type B */
+  {type:'B', rows:[
+    {emoji:'\uD83C\uDF19',target:'\u05D9\u05B8\u05E8\u05B5\u05D7\u05B7',words:['\u05E8\u05B5\u05D9\u05D7\u05B7','\u05D9\u05B8\u05E8\u05B5\u05D0','\u05D9\u05B8\u05E8\u05B5\u05D7\u05B7','\u05D7\u05D5\u05B9\u05D3','\u05D9\u05B8\u05E8\u05B5\u05D7\u05B7','\u05D9\u05B8\u05E8\u05B7\u05D7','\u05D9\u05B6\u05E8\u05B7\u05D7']},
+    {emoji:'\uD83D\uDD14',target:'\u05E4\u05B7\u05BC\u05E2\u05B2\u05DE\u05D5\u05B9\u05DF',words:['\u05E4\u05B7\u05BC\u05E2\u05B2\u05DE\u05D5\u05B9\u05DF','\u05E4\u05B7\u05BC\u05E2\u05B2\u05DE\u05D5\u05B9\u05DF','\u05E4\u05E2\u05DE\u05D5\u05DF','\u05E4\u05B7\u05BC\u05E2\u05B2\u05DE\u05D5\u05B9\u05E0','\u05E4\u05B7\u05BC\u05E2\u05B2\u05DE\u05D5\u05B9\u05DF','\u05E4\u05B7\u05BC\u05E2\u05B2\u05DE\u05D5\u05B9\u05D3','\u05E4\u05B7\u05BC\u05E2\u05B7\u05DE\u05D5\u05B9\u05DF']},
+    {emoji:'\uD83C\uDF4E',target:'\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05BC\u05D7\u05B7',words:['\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05BC\u05D7\u05B7','\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05BC\u05D7\u05B7','\u05EA\u05E4\u05D5\u05D7','\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05BC\u05D7','\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05BC\u05D7\u05B7','\u05D8\u05B7\u05E4\u05BC\u05D5\u05BC\u05D7\u05B7','\u05EA\u05B7\u05BC\u05E4\u05BC\u05D5\u05B9\u05D7\u05B7']},
+    {emoji:'\uD83D\uDC3E',target:'\u05DB\u05BC\u05B6\u05DC\u05B6\u05D1',words:['\u05DB\u05BC\u05B6\u05DC\u05B6\u05D1','\u05DB\u05BC\u05B6\u05DC\u05B6\u05D1','\u05DB\u05DC\u05D1','\u05DB\u05BC\u05B6\u05DC\u05B6\u05D3','\u05DB\u05BC\u05B6\u05DC\u05B6\u05D1','\u05D2\u05BC\u05B6\u05DC\u05B6\u05D1','\u05DB\u05BC\u05B5\u05DC\u05B6\u05D1']},
+    {emoji:'\uD83C\uDF3A',target:'\u05E9\u05C1\u05D5\u05B9\u05E9\u05C1\u05B7\u05E0\u05BC\u05B8\u05D4',words:['\u05E9\u05C1\u05D5\u05B9\u05E9\u05C1\u05B7\u05E0\u05BC\u05B8\u05D4','\u05E9\u05C1\u05D5\u05B9\u05E9\u05C1\u05B7\u05E0\u05BC\u05B8\u05D4','\u05E9\u05D5\u05E9\u05E0\u05D4','\u05E9\u05C1\u05D5\u05B9\u05E9\u05C1\u05B7\u05E0\u05BC\u05B8\u05D0','\u05E9\u05C1\u05D5\u05B9\u05E9\u05C1\u05B7\u05E0\u05BC\u05B8\u05D4','\u05E9\u05C1\u05D5\u05B9\u05E9\u05C1\u05B7\u05E0\u05BC\u05B7\u05D4','\u05E9\u05C2\u05D5\u05B9\u05E9\u05C1\u05B7\u05E0\u05BC\u05B8\u05D4']},
+    {emoji:'\uD83C\uDF0A',target:'\u05D9\u05B8\u05DD',words:['\u05D9\u05B8\u05DD','\u05D9\u05B8\u05DD','\u05D9\u05D5\u05B9\u05DD','\u05D9\u05B8\u05D3','\u05D9\u05B8\u05DD','\u05D9\u05B7\u05DD','\u05D9\u05B8\u05DE\u05B4\u05D9\u05DD']}
+  ]},
+  /* Level 15 — Type B: Mixed challenge */
+  {type:'B', rows:[
+    {emoji:'\uD83C\uDFE0',target:'\u05D1\u05B7\u05BC\u05D9\u05B4\u05EA',words:['\u05D1\u05B7\u05BC\u05D9\u05B4\u05EA','\u05D1\u05B7\u05D9\u05EA','\u05D1\u05B7\u05BC\u05D9\u05B4\u05EA','\u05D1\u05B7\u05BC\u05EA','\u05D1\u05BC\u05D5\u05B9\u05EA','\u05D1\u05B7\u05BC\u05D9\u05B4\u05EA','\u05D3\u05B7\u05BC\u05D9\u05B4\u05EA','\u05D1\u05D9\u05EA']},
+    {emoji:'\uD83C\uDF38',target:'\u05E4\u05BC\u05B6\u05E8\u05B7\u05D7',words:['\u05E4\u05BC\u05B6\u05E8\u05B7\u05D7','\u05E4\u05BC\u05B6\u05E8\u05B7\u05D7','\u05E4\u05E8\u05D7','\u05E4\u05BC\u05B6\u05E8\u05B7\u05DA','\u05E4\u05BC\u05B6\u05E8\u05B7\u05D7','\u05E4\u05BC\u05B5\u05E8\u05D5\u05BC\u05EA','\u05E4\u05BC\u05B6\u05E8\u05B6\u05D7','\u05E4\u05BC\u05B6\u05E8\u05B7\u05D7']},
+    {emoji:'\uD83D\uDCDA',target:'\u05E1\u05B5\u05E4\u05B6\u05E8',words:['\u05E1\u05B5\u05E4\u05B6\u05E8','\u05E1\u05B5\u05E4\u05B6\u05E8','\u05E1\u05E4\u05E8','\u05E1\u05B5\u05E4\u05B6\u05D3','\u05E1\u05B5\u05E4\u05B6\u05E8','\u05E6\u05B5\u05E4\u05B6\u05E8','\u05E1\u05B8\u05E4\u05B8\u05E8','\u05E1\u05B5\u05E4\u05B6\u05E8']},
+    {emoji:'\u270F\uFE0F',target:'\u05E2\u05B4\u05E4\u05BC\u05B8\u05E8\u05D5\u05B9\u05DF',words:['\u05E2\u05B4\u05E4\u05BC\u05B8\u05E8\u05D5\u05B9\u05DF','\u05E2\u05B4\u05E4\u05BC\u05B8\u05E8\u05D5\u05B9\u05DF','\u05E2\u05E4\u05E8\u05D5\u05DF','\u05E2\u05B4\u05E4\u05BC\u05B8\u05E8\u05D5\u05B9\u05E0','\u05E2\u05B4\u05E4\u05BC\u05B8\u05E8\u05D5\u05B9\u05DF','\u05E2\u05B4\u05E4\u05BC\u05B7\u05E8\u05D5\u05B9\u05DF','\u05E2\u05B4\u05E4\u05BC\u05B8\u05E8\u05D5\u05B9\u05D3','\u05E2\u05B4\u05E4\u05BC\u05B8\u05E8\u05D5\u05B9\u05DF']},
+    {emoji:'\uD83C\uDF88',target:'\u05D1\u05BC\u05B8\u05DC\u05D5\u05B9\u05DF',words:['\u05D1\u05BC\u05B8\u05DC\u05D5\u05B9\u05DF','\u05D1\u05BC\u05B8\u05DC\u05D5\u05B9\u05DF','\u05D1\u05DC\u05D5\u05DF','\u05D1\u05BC\u05B8\u05DC\u05D5\u05B9\u05E0','\u05D1\u05BC\u05B8\u05DC\u05D5\u05B9\u05DF','\u05D3\u05BC\u05B8\u05DC\u05D5\u05B9\u05DF','\u05D1\u05BC\u05B8\u05DC\u05D5\u05B9\u05D3','\u05D1\u05BC\u05B8\u05DC\u05D5\u05B9\u05DF']},
+    {emoji:'\uD83E\uDD8B',target:'\u05E4\u05B7\u05BC\u05E8\u05B0\u05E4\u05B7\u05BC\u05E8',words:['\u05E4\u05B7\u05BC\u05E8\u05B0\u05E4\u05B7\u05BC\u05E8','\u05E4\u05B7\u05BC\u05E8\u05B0\u05E4\u05B7\u05BC\u05E8','\u05E4\u05E8\u05E4\u05E8','\u05E4\u05B7\u05BC\u05E8\u05B0\u05E4\u05B7\u05BC\u05D3','\u05E4\u05B7\u05BC\u05E8\u05B0\u05E4\u05B7\u05BC\u05E8','\u05E4\u05B7\u05BC\u05E8\u05B0\u05E4\u05B8\u05E8','\u05E4\u05B7\u05BC\u05E8\u05B0\u05E4\u05B7\u05BC\u05E8','\u05E4\u05B7\u05BC\u05E8\u05B0\u05E4\u05B7\u05BC\u05E8']},
+    {emoji:'\uD83C\uDF08',target:'\u05E7\u05B6\u05E9\u05C1\u05B6\u05EA',words:['\u05E7\u05B6\u05E9\u05C1\u05B6\u05EA','\u05E7\u05B6\u05E9\u05C1\u05B6\u05EA','\u05E7\u05E9\u05EA','\u05E7\u05B6\u05E9\u05C1\u05B6\u05D3','\u05E7\u05B6\u05E9\u05C1\u05B6\u05EA','\u05E7\u05B4\u05E9\u05C1\u05B5\u05EA','\u05E7\u05B6\u05E9\u05C1\u05B6\u05EA','\u05E7\u05B6\u05E9\u05C2\u05B6\u05EA']}
+  ]}
+];
+
+let curLevel=0, mode='click';
+const doneLevels=new Set();
+
+function buildTabs(){
+  const t=document.getElementById('tabs');t.innerHTML='';
+  LEVELS.forEach((_,i)=>{
+    const b=document.createElement('button');
+    b.className='tab'+(i===curLevel?' active':'')+(doneLevels.has(i)?' done':'');
+    b.textContent='שלב '+(i+1);
+    b.onclick=()=>{curLevel=i;buildTabs();loadLevel();};
+    t.appendChild(b);
+  });
+}
+
+function loadLevel(){
+  const cont=document.getElementById('content');
+  const pw=document.getElementById('progressWrap');
+  const pa=document.getElementById('printArea');
+  if(mode==='print'){pw.style.display='none';cont.style.display='none';pa.style.display='block';buildPrint();return;}
+  pw.style.display='';cont.style.display='';pa.style.display='none';
+  cont.innerHTML='';
+  const lvl=LEVELS[curLevel];
+  if(lvl.type==='A') buildTypeA(lvl,cont);
+  else buildTypeB(lvl,cont);
+}
+
+/* ===== TYPE A ===== */
+function buildTypeA(lvl,cont){
+  const total=lvl.questions.length;
+  let checked=0,perfect=0;
+  updateProg(0,total);
+
+  lvl.questions.forEach((q,qi)=>{
+    const card=document.createElement('div');
+    card.className='q-card';
+    if(mode==='draw') card.classList.add('draw-mode');
+
+    const top=document.createElement('div');top.className='q-top';
+    const em=document.createElement('span');em.className='q-emoji';em.textContent=q.emoji;
+    const tf=document.createElement('div');
+    tf.innerHTML='<div class="q-label">מצאו את המילה:</div><div class="target-frame">'+q.target+'</div>';
+    top.appendChild(em);top.appendChild(tf);card.appendChild(top);
+
+    const cloud=document.createElement('div');cloud.className='word-cloud';
+    const shuffled=shuffle(q.words.map((w,i)=>({w,i})));
+    const correctSet=new Set();
+    q.words.forEach((w,i)=>{if(w===q.target)correctSet.add(i);});
+
+    shuffled.forEach(item=>{
+      const btn=document.createElement('button');
+      btn.className='word-btn';btn.textContent=item.w;
+      btn.dataset.origIdx=item.i;
+      btn.dataset.isCorrect=correctSet.has(item.i)?'1':'0';
+      if(mode==='click') btn.onclick=()=>btn.classList.toggle('selected');
+      cloud.appendChild(btn);
+    });
+    card.appendChild(cloud);
+
+    // Draw canvas
+    if(mode==='draw'){
+      const cvs=document.createElement('canvas');cvs.className='draw-overlay';
+      setupDraw(cvs,cloud);card.appendChild(cvs);
+    }
+
+    const row=document.createElement('div');row.className='check-row';
+    const cb=document.createElement('button');cb.className='check-btn';cb.textContent='✅ בדקו!';
+    const res=document.createElement('span');res.className='card-result';
+    row.appendChild(cb);row.appendChild(res);card.appendChild(row);
+
+    cb.onclick=()=>{
+      if(card.classList.contains('card-done'))return;
+      const btns=cloud.querySelectorAll('.word-btn');
+      let ok=true,cc=0,tc=0,wc=0;
+      btns.forEach(b=>{
+        const sel=b.classList.contains('selected');
+        const cor=b.dataset.isCorrect==='1';
+        b.classList.add('checked');
+        if(cor)tc++;
+        if(sel&&cor){b.classList.add('correct');cc++;}
+        else if(sel&&!cor){b.classList.add('wrong');wc++;ok=false;}
+        else if(!sel&&cor){b.classList.add('missed');ok=false;}
+      });
+      checked++;
+      if(ok){perfect++;card.classList.add('card-done');cb.textContent='✅ מושלם!';cb.classList.add('btn-done');res.className='card-result res-ok';res.textContent='⭐ מצוין!';}
+      else{cb.disabled=true;cb.textContent=cc+'/'+tc;res.className='card-result res-partial';res.textContent=wc>0?'😅 '+wc+' טעויות':'🤏 חסרות '+(tc-cc);}
+      updateProg(checked,total);
+      if(checked===total)finishLevel(perfect,total);
+    };
+    cont.appendChild(card);
+  });
+}
+
+/* ===== TYPE B ===== */
+function buildTypeB(lvl,cont){
+  const total=lvl.rows.length;
+  let rowStates=lvl.rows.map(()=>({checked:false,perfect:false}));
+  updateProg(0,total);
+
+  lvl.rows.forEach((r,ri)=>{
+    const row=document.createElement('div');row.className='b-row';
+    if(mode==='draw') row.classList.add('draw-mode');
+    row.dataset.ri=ri;
+
+    const right=document.createElement('div');right.className='b-right';
+    const em=document.createElement('span');em.className='b-emoji';em.textContent=r.emoji;
+    const tf=document.createElement('span');tf.className='b-target';tf.textContent=r.target;
+    right.appendChild(em);right.appendChild(tf);row.appendChild(right);
+
+    const words=document.createElement('div');words.className='b-words';
+    const shuffled=shuffle(r.words.map((w,i)=>({w,i})));
+    const correctSet=new Set();
+    r.words.forEach((w,i)=>{if(w===r.target)correctSet.add(i);});
+
+    shuffled.forEach(item=>{
+      const btn=document.createElement('button');
+      btn.className='b-word';btn.textContent=item.w;
+      btn.dataset.origIdx=item.i;
+      btn.dataset.isCorrect=correctSet.has(item.i)?'1':'0';
+      if(mode==='click') btn.onclick=()=>btn.classList.toggle('selected');
+      words.appendChild(btn);
+    });
+    row.appendChild(words);
+
+    // Draw canvas for row
+    if(mode==='draw'){
+      row.style.position='relative';
+      const cvs=document.createElement('canvas');cvs.className='draw-overlay';
+      setupDraw(cvs,words);row.appendChild(cvs);
+    }
+    cont.appendChild(row);
+  });
+
+  const wrap=document.createElement('div');wrap.className='type-b-check';
+  const cb=document.createElement('button');cb.className='check-btn';cb.textContent='✅ בדקו!';
+  const res=document.createElement('span');res.className='card-result';res.style.marginRight='12px';
+  wrap.appendChild(cb);wrap.appendChild(res);cont.appendChild(wrap);
+
+  cb.onclick=()=>{
+    if(cb.disabled)return;
+    let checked=0,perfect=0;
+    lvl.rows.forEach((r,ri)=>{
+      if(rowStates[ri].checked)return;
+      rowStates[ri].checked=true;
+      const rowEl=cont.querySelectorAll('.b-row')[ri];
+      const btns=rowEl.querySelectorAll('.b-word');
+      let ok=true,cc=0,tc=0;
+      btns.forEach(b=>{
+        const sel=b.classList.contains('selected');
+        const cor=b.dataset.isCorrect==='1';
+        b.classList.add('checked');
+        if(cor)tc++;
+        if(sel&&cor){b.classList.add('correct');cc++;}
+        else if(sel&&!cor){b.classList.add('wrong');ok=false;}
+        else if(!sel&&cor){b.classList.add('missed');ok=false;}
+      });
+      if(ok){rowStates[ri].perfect=true;rowEl.classList.add('row-done');}
+      checked++;
+    });
+    const totalChecked=rowStates.filter(s=>s.checked).length;
+    const totalPerfect=rowStates.filter(s=>s.perfect).length;
+    updateProg(totalChecked,total);
+    cb.disabled=true;cb.textContent=totalPerfect+'/'+total+' מושלם';
+    if(totalPerfect===total){cb.classList.add('btn-done');res.className='card-result res-ok';res.textContent='⭐ מצוין!';}
+    else{res.className='card-result res-partial';res.textContent=(total-totalPerfect)+' שורות עם טעויות';}
+    finishLevel(totalPerfect,total);
+  };
+}
+
+function updateProg(done,total){
+  document.getElementById('progressText').textContent='השלמתם '+done+' מתוך '+total;
+  document.getElementById('progressFill').style.width=((done/total)*100)+'%';
+}
+
+function finishLevel(perfect,total){
+  doneLevels.add(curLevel);buildTabs();
+  document.getElementById('statPerfect').textContent=perfect;
+  document.getElementById('statTotal').textContent=total;
+  document.getElementById('btnNext').style.display=curLevel<LEVELS.length-1?'':'none';
+  setTimeout(()=>document.getElementById('completionOverlay').classList.add('show'),600);
+}
+
+/* DRAW MODE */
+function setupDraw(canvas,wordsContainer){
+  let drawing=false,ctx,points=[];
+  function init(){const r=canvas.parentElement.getBoundingClientRect();canvas.width=r.width;canvas.height=r.height;ctx=canvas.getContext('2d');}
+  function pos(e){const r=canvas.getBoundingClientRect();const t=e.touches?e.touches[0]:e;return{x:t.clientX-r.left,y:t.clientY-r.top};}
+  canvas.addEventListener('pointerdown',e=>{e.preventDefault();init();drawing=true;points=[pos(e)];ctx.clearRect(0,0,canvas.width,canvas.height);ctx.beginPath();ctx.strokeStyle='rgba(37,99,235,0.5)';ctx.lineWidth=3;ctx.lineCap='round';ctx.moveTo(points[0].x,points[0].y);},{passive:false});
+  canvas.addEventListener('pointermove',e=>{if(!drawing)return;e.preventDefault();const p=pos(e);points.push(p);ctx.lineTo(p.x,p.y);ctx.stroke();},{passive:false});
+  canvas.addEventListener('pointerup',e=>{if(!drawing)return;drawing=false;const cr=canvas.getBoundingClientRect();wordsContainer.querySelectorAll('.b-word,.word-btn').forEach(btn=>{if(btn.classList.contains('checked'))return;const br=btn.getBoundingClientRect();const cx=br.left+br.width/2-cr.left,cy=br.top+br.height/2-cr.top;if(pip(points,cx,cy))btn.classList.toggle('selected');});setTimeout(()=>{if(ctx)ctx.clearRect(0,0,canvas.width,canvas.height);},300);},{passive:false});
+  canvas.addEventListener('touchmove',e=>{if(drawing)e.preventDefault();},{passive:false});
+}
+function pip(pts,px,py){if(pts.length<3)return false;let ins=false;for(let i=0,j=pts.length-1;i<pts.length;j=i++){const xi=pts[i].x,yi=pts[i].y,xj=pts[j].x,yj=pts[j].y;if(((yi>py)!==(yj>py))&&(px<(xj-xi)*(py-yi)/(yj-yi)+xi))ins=!ins;}return ins;}
+
+/* PRINT */
+function buildPrint(){
+  const t=document.getElementById('printTitle');
+  t.textContent='שלב '+(curLevel+1)+' — מצאו את המילים הזהות למילה שבמסגרת';
+  const pc=document.getElementById('printContent');pc.innerHTML='';
+  const lvl=LEVELS[curLevel];
+  const items=lvl.type==='A'?lvl.questions:lvl.rows;
+  items.forEach(q=>{
+    const d=document.createElement('div');d.className='print-q';
+    const top=document.createElement('div');top.className='pq-top';
+    const em=document.createElement('span');em.className='pq-emoji';em.textContent=q.emoji;
+    const tf=document.createElement('span');tf.className='pq-target';tf.textContent=q.target;
+    top.appendChild(em);top.appendChild(tf);d.appendChild(top);
+    const w=document.createElement('div');w.className='pq-words';
+    shuffle(q.words.map((x,i)=>({x,i}))).forEach(item=>{const s=document.createElement('span');s.className='pq-word';s.textContent=item.x;w.appendChild(s);});
+    d.appendChild(w);pc.appendChild(d);
+  });
+}
+
+/* MODE SWITCH */
+document.querySelectorAll('.mode-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');mode=this.dataset.mode;loadLevel();
+  });
+});
+
+/* COMPLETION BUTTONS */
+document.getElementById('btnNext').onclick=()=>{document.getElementById('completionOverlay').classList.remove('show');if(curLevel<LEVELS.length-1){curLevel++;buildTabs();loadLevel();}};
+document.getElementById('btnRetry').onclick=()=>{document.getElementById('completionOverlay').classList.remove('show');loadLevel();};
+
+buildTabs();loadLevel();
+</script>
+</body>
+</html>

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>זיהוי אות מדויקת — מצאו את הזהות בדיוק</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap');
+:root{
+  --pri:#2563eb;--pri-dark:#1d4ed8;--pri-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --ok:#10b981;--no:#ef4444;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Heebo','Noto Sans Hebrew','David',sans-serif;background:var(--bg-soft);color:var(--text);direction:rtl;min-height:100vh}
+
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes fi{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{0%{transform:scale(0)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.6)}50%{box-shadow:0 0 0 8px rgba(245,158,11,0)}}
+@keyframes missedPulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.7)}50%{box-shadow:0 0 0 10px rgba(245,158,11,0)}}
+
+.header{background:linear-gradient(135deg,var(--pri-light),#fff);padding:20px;text-align:center;border-bottom:3px solid var(--pri)}
+.header h1{font-size:1.8rem;font-weight:800;color:var(--pri-dark);margin-bottom:4px}
+.header p{color:var(--text-light);font-size:.95rem}
+
+.mode-bar{display:flex;justify-content:center;gap:8px;padding:12px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.mode-btn{padding:8px 20px;border:2px solid var(--border);border-radius:999px;background:var(--bg);cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:600;color:var(--text-light);transition:.25s ease}
+.mode-btn.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+.mode-btn:hover:not(.active){border-color:var(--pri);color:var(--pri)}
+
+.tabs-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border)}
+.tabs{display:flex;gap:6px;min-width:max-content}
+.tab{padding:6px 14px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text-light);white-space:nowrap;transition:.25s ease}
+.tab.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+.tab.done{background:var(--ok);color:#fff;border-color:var(--ok)}
+.tab:hover:not(.active):not(.done){border-color:var(--pri);color:var(--pri)}
+
+.main{max-width:900px;margin:0 auto;padding:16px;animation:fi .4s ease}
+
+.progress-bar-wrap{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:8px 14px;background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow)}
+.progress-text{font-size:.9rem;font-weight:600;color:var(--text-light);white-space:nowrap}
+.progress-track{flex:1;height:8px;background:var(--border);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:var(--ok);border-radius:99px;transition:width .4s ease}
+
+.cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+.ex-card{background:var(--bg);border:2px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);transition:.25s ease;position:relative}
+.ex-card.card-done{border-color:var(--ok);background:#f0fdf4}
+.ex-card.card-done .target-frame{border-color:var(--ok);background:#d1fae5}
+
+.target-frame{border:3px solid var(--accent);background:#fffbeb;border-radius:var(--radius-sm);padding:10px;text-align:center;margin-bottom:12px}
+.target-letter{font-size:2.5rem;font-weight:800;color:var(--text);line-height:1.2}
+.target-label{font-size:.8rem;color:var(--accent-dark);font-weight:600;margin-top:2px}
+
+.letter-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.grid-cell{width:100%;aspect-ratio:1;min-height:44px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:700;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:.25s ease;background:var(--bg);user-select:none;-webkit-user-select:none}
+.grid-cell:hover:not(.checked){background:#f1f5f9}
+.grid-cell.selected{background:var(--pri-light);border-color:var(--pri)}
+.grid-cell.correct{background:#d1fae5;border-color:var(--ok);cursor:default;animation:bounce .5s ease}
+.grid-cell.wrong{background:#fee2e2;border-color:var(--no);animation:shake .4s ease}
+.grid-cell.missed{background:#fef3c7;border-color:var(--accent);animation:missedPulse 1s ease 2}
+.grid-cell.checked{cursor:default;pointer-events:none}
+.grid-cell.draw-selected{background:var(--pri-light);border-color:var(--pri)}
+
+.check-btn{display:block;width:100%;padding:8px;border:none;border-radius:999px;background:var(--pri);color:#fff;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;transition:.25s ease}
+.check-btn:hover{background:var(--pri-dark)}
+.check-btn:disabled{background:var(--border);color:var(--text-light);cursor:default}
+.check-btn.btn-done{background:var(--ok)}
+
+.card-result{text-align:center;font-size:.85rem;font-weight:600;margin-top:6px;min-height:20px}
+.card-result.res-ok{color:var(--ok)}
+.card-result.res-partial{color:var(--accent-dark)}
+
+.completion-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);z-index:100;justify-content:center;align-items:center}
+.completion-overlay.show{display:flex}
+.completion-card{background:var(--bg);border-radius:16px;padding:32px 28px;text-align:center;box-shadow:var(--shadow-lg);max-width:400px;width:90%;animation:pop .4s ease}
+.completion-card .emoji{font-size:3rem;margin-bottom:8px}
+.completion-card h3{font-size:1.4rem;font-weight:800;color:var(--pri-dark);margin-bottom:6px}
+.completion-card p{color:var(--text-light);font-size:.95rem;margin-bottom:16px}
+.completion-card .stats{display:flex;justify-content:center;gap:20px;margin-bottom:16px}
+.completion-card .stat{text-align:center}
+.completion-card .stat-val{font-size:1.5rem;font-weight:800;color:var(--pri)}
+.completion-card .stat-val.ok-val{color:var(--ok)}
+.completion-card .stat-lbl{font-size:.8rem;color:var(--text-light)}
+.btn-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.pill-btn{padding:10px 22px;border:none;border-radius:999px;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;transition:.25s ease}
+.pill-btn.primary{background:var(--pri);color:#fff}
+.pill-btn.primary:hover{background:var(--pri-dark)}
+.pill-btn.secondary{background:var(--bg-soft);color:var(--text);border:2px solid var(--border)}
+.pill-btn.secondary:hover{border-color:var(--pri);color:var(--pri)}
+
+.print-area{display:none;max-width:900px;margin:0 auto;padding:16px}
+.print-area h3{text-align:center;font-size:1.2rem;font-weight:700;margin-bottom:16px;color:var(--pri-dark)}
+.print-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.print-card{border:2px solid #333;border-radius:8px;padding:12px;text-align:center}
+.print-target{font-size:2.2rem;font-weight:800;border:3px solid #333;border-radius:6px;padding:6px;margin-bottom:10px;display:inline-block;min-width:60px}
+.print-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.print-cell{border:2px solid #999;border-radius:6px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;min-height:36px}
+.print-btn-wrap{text-align:center;margin-top:16px}
+
+/* Draw mode canvas overlay */
+.draw-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;cursor:crosshair;display:none}
+.ex-card{position:relative}
+.ex-card.draw-mode .draw-canvas{display:block}
+.ex-card.draw-mode .grid-cell{pointer-events:none}
+
+@media print{
+  body{background:#fff}
+  .header,.mode-bar,.tabs-wrap,.progress-bar-wrap,.cards-grid,.completion-overlay{display:none!important}
+  .print-area{display:block!important}
+  .print-btn-wrap{display:none!important}
+}
+
+@media(max-width:600px){
+  .header h1{font-size:1.4rem}
+  .header{padding:14px}
+  .cards-grid{grid-template-columns:1fr}
+  .target-letter{font-size:2rem}
+  .grid-cell{font-size:1.4rem;min-height:40px}
+  .mode-btn{padding:6px 14px;font-size:.85rem}
+  .tab{padding:5px 10px;font-size:.8rem}
+  .main{padding:10px}
+  .ex-card{padding:12px}
+  .print-cards{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🔠 זיהוי אות מדויקת</h1>
+  <p>מצאו רק את האותיות שזהות בדיוק לאות שבמסגרת!</p>
+</div>
+
+<div class="mode-bar">
+  <button class="mode-btn active" data-mode="click">👆 לחיצה</button>
+  <button class="mode-btn" data-mode="draw">✏️ ציור</button>
+  <button class="mode-btn" data-mode="print">🖨️ הדפסה</button>
+</div>
+
+<div class="tabs-wrap">
+  <div class="tabs" id="tabs"></div>
+</div>
+
+<div class="main" id="mainArea">
+  <div class="progress-bar-wrap" id="progressWrap">
+    <span class="progress-text" id="progressText">השלמתם 0 מתוך 6 תרגילים</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0"></div></div>
+  </div>
+  <div class="cards-grid" id="cardsGrid"></div>
+</div>
+
+<div class="print-area" id="printArea">
+  <h3 id="printTitle"></h3>
+  <div class="print-cards" id="printCards"></div>
+  <div class="print-btn-wrap"><button class="pill-btn primary" onclick="window.print()">🖨️ הדפסה</button></div>
+</div>
+
+<div class="completion-overlay" id="completionOverlay">
+  <div class="completion-card">
+    <div class="emoji">🔠🎉</div>
+    <h3>כל הכבוד!</h3>
+    <p>זיהיתם את כל האותיות בדיוק!</p>
+    <div class="stats">
+      <div class="stat"><div class="stat-val ok-val" id="statPerfect">0</div><div class="stat-lbl">מושלם</div></div>
+      <div class="stat"><div class="stat-val" id="statTotal">0</div><div class="stat-lbl">תרגילים</div></div>
+    </div>
+    <div class="btn-row">
+      <button class="pill-btn primary" id="btnNext">▶ לשלב הבא</button>
+      <button class="pill-btn secondary" id="btnRetry">🔄 שחקו שוב</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== LEVEL DATA ===== */
+/* Each level = 6 exercises. Each exercise = {target, grid:[9 chars], correct:[indices of correct in grid]} */
+/* We store grid BEFORE shuffle — shuffle happens at render time */
+
+const L = [
+  /* Level 1: Simple letters */
+  [
+    {target:'\u05EA\u05BC', grid:['\u05EA\u05BC','\u05EA','\u05D7\u05BC','\u05D4','\u05EA\u05BC','\u05D7','\u05EA','\u05EA\u05BC','\u05D4']},
+    {target:'\u05DB\u05BC', grid:['\u05DB\u05BC','\u05DB','\u05D1','\u05DB\u05BC','\u05DA','\u05DB','\u05DB\u05BC','\u05D1','\u05DA']},
+    {target:'\u05D0', grid:['\u05D0','\u05E2','\u05D0','\u05E6','\u05D0','\u05E2','\u05D4','\u05D0','\u05D7']},
+    {target:'\u05E9\u05C1', grid:['\u05E9\u05C1','\u05E9\u05C2','\u05E9','\u05E9\u05C1','\u05E2','\u05E9\u05C2','\u05E9\u05C1','\u05E9','\u05E1']},
+    {target:'\u05D3', grid:['\u05D3','\u05E8','\u05D3','\u05DA','\u05D3','\u05E8','\u05D3','\u05DA','\u05E8']},
+    {target:'\u05E4\u05BC', grid:['\u05E4\u05BC','\u05E4','\u05E3','\u05E4\u05BC','\u05DB','\u05E4','\u05E4\u05BC','\u05E3','\u05D1']}
+  ],
+  /* Level 2: Similar letters */
+  [
+    {target:'\u05D1', grid:['\u05D1','\u05DB','\u05D1','\u05D1\u05BC','\u05D1','\u05DB','\u05DA','\u05D1\u05BC','\u05DB']},
+    {target:'\u05D4', grid:['\u05D4','\u05D7','\u05D4','\u05EA','\u05D4','\u05D7','\u05DD','\u05D4','\u05EA']},
+    {target:'\u05E8', grid:['\u05E8','\u05D3','\u05E8','\u05DA','\u05E8','\u05D3','\u05E8','\u05DA','\u05D3']},
+    {target:'\u05D5', grid:['\u05D5','\u05D6','\u05D5','\u05DF','\u05D5','\u05D9','\u05D6','\u05D5','\u05DF']},
+    {target:'\u05D6', grid:['\u05D6','\u05D5','\u05D6','\u05DF','\u05D6','\u05D9','\u05D5','\u05D6','\u05DF']},
+    {target:'\u05D7', grid:['\u05D7','\u05D4','\u05D7','\u05EA','\u05D7','\u05D4','\u05DB','\u05D7','\u05DD']}
+  ],
+  /* Level 3: Final forms */
+  [
+    {target:'\u05DB', grid:['\u05DB','\u05DA','\u05DB\u05BC','\u05DB','\u05D1','\u05DA','\u05DB','\u05DB\u05BC','\u05DA']},
+    {target:'\u05DA', grid:['\u05DA','\u05DB','\u05DA','\u05DB\u05BC','\u05E8','\u05DA','\u05DB','\u05D3','\u05DA']},
+    {target:'\u05DE', grid:['\u05DE','\u05DD','\u05DE','\u05E0','\u05DE','\u05DD','\u05E1','\u05DE','\u05DD']},
+    {target:'\u05DD', grid:['\u05DD','\u05DE','\u05DD','\u05E1','\u05DD','\u05DE','\u05DD','\u05E1','\u05E0']},
+    {target:'\u05E0', grid:['\u05E0','\u05DF','\u05E0','\u05D2','\u05E0','\u05DF','\u05DB','\u05E0','\u05D2']},
+    {target:'\u05DF', grid:['\u05DF','\u05E0','\u05DF','\u05D5','\u05DF','\u05D6','\u05DF','\u05E0','\u05D9']}
+  ],
+  /* Level 4: Niqqud confusion */
+  [
+    {target:'\u05E9\u05C2', grid:['\u05E9\u05C2','\u05E9\u05C1','\u05E9','\u05E9\u05C2','\u05E1','\u05E9\u05C1','\u05E9\u05C2','\u05E9','\u05E2']},
+    {target:'\u05D1\u05BC', grid:['\u05D1\u05BC','\u05D1','\u05DB\u05BC','\u05D1\u05BC','\u05DB','\u05D1','\u05D1\u05BC','\u05DB\u05BC','\u05DA']},
+    {target:'\u05E4', grid:['\u05E4','\u05E4\u05BC','\u05E3','\u05E4','\u05DB','\u05E4\u05BC','\u05E4','\u05E3','\u05D1']},
+    {target:'\u05EA', grid:['\u05EA','\u05EA\u05BC','\u05D7','\u05EA','\u05D4','\u05EA\u05BC','\u05EA','\u05D7','\u05DD']},
+    {target:'\u05DB', grid:['\u05DB','\u05DB\u05BC','\u05DA','\u05DB','\u05D1','\u05DB\u05BC','\u05DB','\u05DA','\u05D1\u05BC']},
+    {target:'\u05E9', grid:['\u05E9','\u05E9\u05C1','\u05E9\u05C2','\u05E9','\u05E2','\u05E9\u05C1','\u05E9','\u05E9\u05C2','\u05E1']}
+  ],
+  /* Level 5: Mixed similar + dagesh */
+  [
+    {target:'\u05D1', grid:['\u05D1','\u05D1\u05BC','\u05DB','\u05D1','\u05DA','\u05D1\u05BC','\u05DB','\u05D1','\u05DB\u05BC']},
+    {target:'\u05D4', grid:['\u05D4','\u05D7','\u05D4','\u05EA','\u05EA\u05BC','\u05D7','\u05D4','\u05DD','\u05D4']},
+    {target:'\u05E6', grid:['\u05E6','\u05E5','\u05E2','\u05E6','\u05E5','\u05E6','\u05E2','\u05E0','\u05E5']},
+    {target:'\u05E5', grid:['\u05E5','\u05E6','\u05E5','\u05E2','\u05E5','\u05E6','\u05DF','\u05E2','\u05E6']},
+    {target:'\u05D2', grid:['\u05D2','\u05E0','\u05D2','\u05D6','\u05D2','\u05E0','\u05D3','\u05D6','\u05E0']},
+    {target:'\u05E2', grid:['\u05E2','\u05E6','\u05E2','\u05E6','\u05E1','\u05E2','\u05E6','\u05DD','\u05E6']}
+  ],
+  /* Level 6: Hard similar letters */
+  [
+    {target:'\u05D3', grid:['\u05D3','\u05E8','\u05DA','\u05D3','\u05E8','\u05D3','\u05DA','\u05E8','\u05DB']},
+    {target:'\u05E8', grid:['\u05E8','\u05D3','\u05DA','\u05E8','\u05D3','\u05E8','\u05DA','\u05D3','\u05E8']},
+    {target:'\u05E1', grid:['\u05E1','\u05DD','\u05E9','\u05E1','\u05DD','\u05E1','\u05E9','\u05DD','\u05E2']},
+    {target:'\u05D9', grid:['\u05D9','\u05D5','\u05DF','\u05D9','\u05D6','\u05D9','\u05D5','\u05DF','\u05D9']},
+    {target:'\u05E3', grid:['\u05E3','\u05DA','\u05E4','\u05E3','\u05E3','\u05DA','\u05E4\u05BC','\u05E4','\u05E3']},
+    {target:'\u05DA', grid:['\u05DA','\u05E3','\u05E8','\u05DA','\u05DA','\u05E3','\u05D3','\u05DA','\u05E8']}
+  ],
+  /* Level 7: All dagesh variants */
+  [
+    {target:'\u05EA\u05BC', grid:['\u05EA\u05BC','\u05EA','\u05EA\u05BC','\u05D7','\u05EA','\u05D7\u05BC','\u05EA\u05BC','\u05D4','\u05EA']},
+    {target:'\u05DB\u05BC', grid:['\u05DB\u05BC','\u05DB','\u05D1\u05BC','\u05DB\u05BC','\u05D1','\u05DB','\u05DB\u05BC','\u05DA','\u05D1\u05BC']},
+    {target:'\u05E4\u05BC', grid:['\u05E4\u05BC','\u05E4','\u05D1\u05BC','\u05E4\u05BC','\u05E3','\u05E4','\u05E4\u05BC','\u05DB\u05BC','\u05D1']},
+    {target:'\u05D1\u05BC', grid:['\u05D1\u05BC','\u05D1','\u05DB\u05BC','\u05D1\u05BC','\u05DB','\u05D1','\u05D1\u05BC','\u05DA','\u05DB\u05BC']},
+    {target:'\u05E9\u05C1', grid:['\u05E9\u05C1','\u05E9','\u05E9\u05C2','\u05E9\u05C1','\u05E1','\u05E9\u05C2','\u05E9\u05C1','\u05E9','\u05E2']},
+    {target:'\u05E9\u05C2', grid:['\u05E9\u05C2','\u05E9\u05C1','\u05E9','\u05E9\u05C2','\u05E2','\u05E9\u05C1','\u05E9\u05C2','\u05E9','\u05E1']}
+  ],
+  /* Level 8: Finals mixed */
+  [
+    {target:'\u05E4', grid:['\u05E4','\u05E4\u05BC','\u05E3','\u05E4','\u05DB','\u05E4\u05BC','\u05E4','\u05E3','\u05D1']},
+    {target:'\u05E3', grid:['\u05E3','\u05E4','\u05E3','\u05DA','\u05E4\u05BC','\u05E3','\u05E4','\u05DA','\u05E3']},
+    {target:'\u05DE', grid:['\u05DE','\u05DD','\u05E0','\u05DE','\u05DD','\u05DE','\u05E1','\u05E0','\u05DE']},
+    {target:'\u05DD', grid:['\u05DD','\u05DE','\u05E1','\u05DD','\u05DE','\u05DD','\u05E1','\u05DD','\u05E0']},
+    {target:'\u05E6', grid:['\u05E6','\u05E5','\u05E2','\u05E6','\u05E5','\u05E6','\u05E2','\u05E6','\u05E0']},
+    {target:'\u05E5', grid:['\u05E5','\u05E6','\u05E2','\u05E5','\u05E6','\u05E5','\u05DF','\u05E5','\u05E2']}
+  ],
+  /* Level 9: Tricky pairs */
+  [
+    {target:'\u05D5', grid:['\u05D5','\u05D6','\u05DF','\u05D5','\u05D9','\u05D6','\u05D5','\u05DF','\u05D5']},
+    {target:'\u05D6', grid:['\u05D6','\u05D5','\u05D6','\u05DF','\u05D9','\u05D5','\u05D6','\u05DF','\u05D6']},
+    {target:'\u05D2', grid:['\u05D2','\u05E0','\u05D2','\u05D6','\u05E0','\u05D2','\u05D3','\u05D6','\u05E0']},
+    {target:'\u05E0', grid:['\u05E0','\u05D2','\u05E0','\u05DF','\u05D2','\u05E0','\u05DF','\u05D2','\u05D6']},
+    {target:'\u05D7', grid:['\u05D7','\u05D4','\u05EA\u05BC','\u05D7','\u05D4','\u05D7','\u05EA','\u05DD','\u05D7']},
+    {target:'\u05D4', grid:['\u05D4','\u05D7','\u05D4','\u05EA','\u05D7','\u05DD','\u05D4','\u05EA\u05BC','\u05D4']}
+  ],
+  /* Level 10: 2 correct only — harder */
+  [
+    {target:'\u05D1', grid:['\u05D1','\u05D1\u05BC','\u05DB','\u05DA','\u05D1','\u05DB\u05BC','\u05D1\u05BC','\u05DB','\u05DA']},
+    {target:'\u05E9\u05C1', grid:['\u05E9\u05C1','\u05E9','\u05E9\u05C2','\u05E1','\u05E2','\u05E9\u05C1','\u05E9\u05C2','\u05E9','\u05E1']},
+    {target:'\u05DA', grid:['\u05DA','\u05DB','\u05E8','\u05D3','\u05E3','\u05DA','\u05DB\u05BC','\u05DB','\u05E8']},
+    {target:'\u05DD', grid:['\u05DD','\u05DE','\u05E1','\u05E0','\u05DD','\u05DE','\u05E1','\u05E0','\u05DE']},
+    {target:'\u05EA\u05BC', grid:['\u05EA\u05BC','\u05EA','\u05D7','\u05D4','\u05EA','\u05EA\u05BC','\u05D7','\u05D4','\u05D7\u05BC']},
+    {target:'\u05E4\u05BC', grid:['\u05E4\u05BC','\u05E4','\u05E3','\u05DB','\u05E4','\u05E4\u05BC','\u05E3','\u05D1\u05BC','\u05D1']}
+  ],
+  /* Level 11: Very similar mix */
+  [
+    {target:'\u05D0', grid:['\u05D0','\u05E2','\u05D0','\u05E6','\u05E2','\u05D7','\u05E6','\u05E2','\u05D0']},
+    {target:'\u05E2', grid:['\u05E2','\u05D0','\u05E6','\u05E2','\u05E6','\u05D0','\u05E2','\u05E6','\u05D0']},
+    {target:'\u05DF', grid:['\u05DF','\u05D5','\u05D6','\u05DF','\u05D9','\u05D5','\u05DF','\u05D6','\u05D9']},
+    {target:'\u05D9', grid:['\u05D9','\u05D5','\u05D6','\u05DF','\u05D9','\u05D5','\u05D6','\u05DF','\u05D9']},
+    {target:'\u05E1', grid:['\u05E1','\u05DD','\u05E9','\u05E1','\u05DE','\u05DD','\u05E9\u05C2','\u05DD','\u05E1']},
+    {target:'\u05E9', grid:['\u05E9','\u05E9\u05C1','\u05E9\u05C2','\u05E9','\u05E2','\u05E9\u05C1','\u05E9\u05C2','\u05E1','\u05E9']}
+  ],
+  /* Level 12: Dagesh vs no-dagesh intensive */
+  [
+    {target:'\u05DB', grid:['\u05DB','\u05DB\u05BC','\u05D1','\u05DA','\u05DB','\u05D1\u05BC','\u05DA','\u05DB\u05BC','\u05D1']},
+    {target:'\u05DB\u05BC', grid:['\u05DB\u05BC','\u05DB','\u05D1\u05BC','\u05DB\u05BC','\u05D1','\u05DB','\u05DA','\u05D1\u05BC','\u05DB\u05BC']},
+    {target:'\u05D1\u05BC', grid:['\u05D1\u05BC','\u05D1','\u05DB\u05BC','\u05D1\u05BC','\u05DB','\u05D1','\u05DA','\u05DB\u05BC','\u05D1\u05BC']},
+    {target:'\u05EA', grid:['\u05EA','\u05EA\u05BC','\u05D7','\u05EA','\u05D4','\u05EA\u05BC','\u05D7','\u05EA','\u05EA\u05BC']},
+    {target:'\u05E4\u05BC', grid:['\u05E4\u05BC','\u05E4','\u05E3','\u05D1\u05BC','\u05E4\u05BC','\u05E4','\u05D1','\u05E4\u05BC','\u05E3']},
+    {target:'\u05E4', grid:['\u05E4','\u05E4\u05BC','\u05E3','\u05E4','\u05DB','\u05E4\u05BC','\u05E4','\u05E3','\u05E4\u05BC']}
+  ],
+  /* Level 13: Maximum final-form confusion */
+  [
+    {target:'\u05DB', grid:['\u05DB','\u05DA','\u05DB\u05BC','\u05DB','\u05D1','\u05DA','\u05DB\u05BC','\u05DB','\u05D1\u05BC']},
+    {target:'\u05DA', grid:['\u05DA','\u05DB','\u05E8','\u05DA','\u05D3','\u05DB','\u05DA','\u05E3','\u05E8']},
+    {target:'\u05E0', grid:['\u05E0','\u05DF','\u05D2','\u05E0','\u05DF','\u05E0','\u05D2','\u05D6','\u05DF']},
+    {target:'\u05DF', grid:['\u05DF','\u05E0','\u05D5','\u05DF','\u05D9','\u05E0','\u05DF','\u05D5','\u05D6']},
+    {target:'\u05E6', grid:['\u05E6','\u05E5','\u05E2','\u05E6','\u05E5','\u05E6','\u05E2','\u05E0','\u05E5']},
+    {target:'\u05E5', grid:['\u05E5','\u05E6','\u05DF','\u05E5','\u05E6','\u05E2','\u05E5','\u05E6','\u05DF']}
+  ],
+  /* Level 14: Subtle differences */
+  [
+    {target:'\u05E9\u05C1', grid:['\u05E9\u05C1','\u05E9\u05C2','\u05E9','\u05E9\u05C1','\u05E9\u05C2','\u05E9','\u05E1','\u05E9\u05C1','\u05E2']},
+    {target:'\u05E9\u05C2', grid:['\u05E9\u05C2','\u05E9\u05C1','\u05E9','\u05E9\u05C2','\u05E9\u05C1','\u05E9','\u05E2','\u05E9\u05C2','\u05E1']},
+    {target:'\u05D1', grid:['\u05D1','\u05D1\u05BC','\u05DB','\u05DB\u05BC','\u05D1','\u05DA','\u05D1\u05BC','\u05DB','\u05DB\u05BC']},
+    {target:'\u05D3', grid:['\u05D3','\u05E8','\u05DA','\u05D3','\u05E8','\u05DA','\u05DB','\u05D3','\u05E8']},
+    {target:'\u05D4', grid:['\u05D4','\u05D7','\u05EA','\u05D4','\u05EA\u05BC','\u05D7','\u05DD','\u05D4','\u05D7']},
+    {target:'\u05DD', grid:['\u05DD','\u05DE','\u05E1','\u05DD','\u05E0','\u05DE','\u05E1','\u05DD','\u05E0']}
+  ],
+  /* Level 15: Ultimate challenge — 2 correct, maximum confusion */
+  [
+    {target:'\u05D1', grid:['\u05D1\u05BC','\u05DB','\u05D1','\u05DA','\u05DB\u05BC','\u05D1\u05BC','\u05D1','\u05DB','\u05DA']},
+    {target:'\u05E9\u05C1', grid:['\u05E9\u05C2','\u05E9','\u05E9\u05C1','\u05E1','\u05E9\u05C2','\u05E9','\u05E9\u05C1','\u05E2','\u05E1']},
+    {target:'\u05DA', grid:['\u05DB','\u05E8','\u05DA','\u05D3','\u05E3','\u05DB\u05BC','\u05DA','\u05E8','\u05D3']},
+    {target:'\u05EA\u05BC', grid:['\u05EA','\u05D7','\u05EA\u05BC','\u05D4','\u05EA','\u05D7\u05BC','\u05EA\u05BC','\u05D7','\u05D4']},
+    {target:'\u05E5', grid:['\u05E6','\u05E2','\u05E5','\u05DF','\u05E6','\u05E2','\u05E5','\u05E6','\u05DF']},
+    {target:'\u05E4', grid:['\u05E4\u05BC','\u05E3','\u05E4','\u05DB','\u05E4\u05BC','\u05E3','\u05E4','\u05D1\u05BC','\u05D1']}
+  ]
+];
+
+let curLevel = 0, mode = 'click';
+const donelevels = new Set();
+const cardStates = []; // track each card's state per level
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+
+function buildTabs() {
+  const t = document.getElementById('tabs');
+  t.innerHTML = '';
+  L.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.className = 'tab' + (i === curLevel ? ' active' : '') + (donelevels.has(i) ? ' done' : '');
+    b.textContent = 'שלב ' + (i + 1);
+    b.onclick = () => { curLevel = i; buildTabs(); loadLevel(); };
+    t.appendChild(b);
+  });
+}
+
+function loadLevel() {
+  cardStates.length = 0;
+  const grid = document.getElementById('cardsGrid');
+  const printArea = document.getElementById('printArea');
+  const mainArea = document.getElementById('mainArea');
+
+  // Show/hide based on mode
+  if (mode === 'print') {
+    mainArea.querySelector('.progress-bar-wrap').style.display = 'none';
+    grid.style.display = 'none';
+    printArea.style.display = 'block';
+    buildPrintView();
+    return;
+  }
+  mainArea.querySelector('.progress-bar-wrap').style.display = '';
+  grid.style.display = '';
+  printArea.style.display = 'none';
+
+  grid.innerHTML = '';
+  const exercises = L[curLevel];
+
+  exercises.forEach((ex, ei) => {
+    cardStates.push({ checked: false, perfect: false });
+    const card = document.createElement('div');
+    card.className = 'ex-card';
+    card.dataset.idx = ei;
+
+    // Target frame
+    const tf = document.createElement('div');
+    tf.className = 'target-frame';
+    const tl = document.createElement('div');
+    tl.className = 'target-letter';
+    tl.textContent = ex.target;
+    const tlbl = document.createElement('div');
+    tlbl.className = 'target-label';
+    tlbl.textContent = 'מצאו את האות הזו:';
+    tf.appendChild(tl);
+    tf.appendChild(tlbl);
+    card.appendChild(tf);
+
+    // Determine which indices are correct
+    const correctSet = new Set();
+    ex.grid.forEach((ch, ci) => { if (ch === ex.target) correctSet.add(ci); });
+
+    // Shuffle grid
+    const indices = shuffle([...Array(9).keys()]);
+    const shuffledGrid = indices.map(i => ex.grid[i]);
+    const shuffledCorrect = new Set();
+    indices.forEach((origIdx, newIdx) => { if (correctSet.has(origIdx)) shuffledCorrect.add(newIdx); });
+
+    // Letter grid
+    const lg = document.createElement('div');
+    lg.className = 'letter-grid';
+    lg.dataset.cardIdx = ei;
+
+    shuffledGrid.forEach((ch, ci) => {
+      const cell = document.createElement('div');
+      cell.className = 'grid-cell';
+      cell.textContent = ch;
+      cell.dataset.cellIdx = ci;
+      cell.dataset.isCorrect = shuffledCorrect.has(ci) ? '1' : '0';
+      if (mode === 'click') {
+        cell.addEventListener('click', () => toggleCell(cell));
+      }
+      lg.appendChild(cell);
+    });
+    card.appendChild(lg);
+
+    // Draw canvas
+    if (mode === 'draw') {
+      card.classList.add('draw-mode');
+      const canvas = document.createElement('canvas');
+      canvas.className = 'draw-canvas';
+      setupDrawCanvas(canvas, lg, card);
+      card.appendChild(canvas);
+    }
+
+    // Check button
+    const btn = document.createElement('button');
+    btn.className = 'check-btn';
+    btn.textContent = '✅ בדקו!';
+    btn.addEventListener('click', () => checkCard(card, ei));
+    card.appendChild(btn);
+
+    // Result text
+    const res = document.createElement('div');
+    res.className = 'card-result';
+    card.appendChild(res);
+
+    grid.appendChild(card);
+  });
+
+  updateProgress();
+}
+
+function toggleCell(cell) {
+  if (cell.classList.contains('checked')) return;
+  cell.classList.toggle('selected');
+}
+
+function checkCard(card, idx) {
+  if (cardStates[idx].checked) return;
+  cardStates[idx].checked = true;
+
+  const cells = card.querySelectorAll('.grid-cell');
+  const btn = card.querySelector('.check-btn');
+  const res = card.querySelector('.card-result');
+  let allCorrect = true;
+  let correctCount = 0, totalCorrect = 0, wrongSelections = 0;
+
+  cells.forEach(cell => {
+    const isCorrect = cell.dataset.isCorrect === '1';
+    const isSelected = cell.classList.contains('selected') || cell.classList.contains('draw-selected');
+    cell.classList.add('checked');
+
+    if (isCorrect) totalCorrect++;
+
+    if (isSelected && isCorrect) {
+      cell.classList.add('correct');
+      correctCount++;
+    } else if (isSelected && !isCorrect) {
+      cell.classList.add('wrong');
+      wrongSelections++;
+      allCorrect = false;
+    } else if (!isSelected && isCorrect) {
+      cell.classList.add('missed');
+      allCorrect = false;
+    }
+  });
+
+  if (allCorrect) {
+    cardStates[idx].perfect = true;
+    card.classList.add('card-done');
+    btn.textContent = '✅ מושלם!';
+    btn.classList.add('btn-done');
+    res.className = 'card-result res-ok';
+    res.textContent = '⭐ מצוין!';
+  } else {
+    btn.textContent = correctCount + '/' + totalCorrect + ' נכון';
+    btn.disabled = true;
+    res.className = 'card-result res-partial';
+    if (wrongSelections > 0) {
+      res.textContent = '😅 ' + wrongSelections + ' טעויות, ' + (totalCorrect - correctCount) + ' חסרות';
+    } else {
+      res.textContent = '🤏 חסרות ' + (totalCorrect - correctCount) + ' אותיות';
+    }
+  }
+
+  updateProgress();
+  checkLevelComplete();
+}
+
+function updateProgress() {
+  const completed = cardStates.filter(s => s.checked).length;
+  document.getElementById('progressText').textContent = 'השלמתם ' + completed + ' מתוך 6 תרגילים';
+  document.getElementById('progressFill').style.width = ((completed / 6) * 100) + '%';
+}
+
+function checkLevelComplete() {
+  if (cardStates.length === 6 && cardStates.every(s => s.checked)) {
+    const perfect = cardStates.filter(s => s.perfect).length;
+    donelevels.add(curLevel);
+    buildTabs();
+    document.getElementById('statPerfect').textContent = perfect;
+    document.getElementById('statTotal').textContent = '6';
+    document.getElementById('btnNext').style.display = curLevel < L.length - 1 ? '' : 'none';
+    setTimeout(() => document.getElementById('completionOverlay').classList.add('show'), 600);
+  }
+}
+
+/* DRAW MODE */
+function setupDrawCanvas(canvas, gridEl, card) {
+  let drawing = false;
+  let ctx;
+  let points = [];
+
+  function initCanvas() {
+    const rect = card.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    ctx = canvas.getContext('2d');
+  }
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return { x: t.clientX - rect.left, y: t.clientY - rect.top };
+  }
+
+  canvas.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    initCanvas();
+    drawing = true;
+    points = [getPos(e)];
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(37,99,235,0.5)';
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    const p = points[0];
+    ctx.moveTo(p.x, p.y);
+  }, { passive: false });
+
+  canvas.addEventListener('pointermove', (e) => {
+    if (!drawing) return;
+    e.preventDefault();
+    const p = getPos(e);
+    points.push(p);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+  }, { passive: false });
+
+  canvas.addEventListener('pointerup', (e) => {
+    if (!drawing) return;
+    drawing = false;
+    ctx.closePath();
+
+    // Detect which cells are inside the drawn circle
+    const cells = gridEl.querySelectorAll('.grid-cell');
+    const canvasRect = canvas.getBoundingClientRect();
+
+    cells.forEach(cell => {
+      if (cell.classList.contains('checked')) return;
+      const cr = cell.getBoundingClientRect();
+      const cx = cr.left + cr.width / 2 - canvasRect.left;
+      const cy = cr.top + cr.height / 2 - canvasRect.top;
+      if (isPointInsidePath(points, cx, cy)) {
+        cell.classList.toggle('draw-selected');
+        cell.classList.toggle('selected');
+      }
+    });
+
+    // Clear canvas after a moment
+    setTimeout(() => { if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height); }, 300);
+  }, { passive: false });
+
+  canvas.addEventListener('touchmove', (e) => { if (drawing) e.preventDefault(); }, { passive: false });
+}
+
+function isPointInsidePath(points, px, py) {
+  if (points.length < 3) return false;
+  // Ray casting
+  let inside = false;
+  for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+    const xi = points[i].x, yi = points[i].y;
+    const xj = points[j].x, yj = points[j].y;
+    if (((yi > py) !== (yj > py)) && (px < (xj - xi) * (py - yi) / (yj - yi) + xi)) {
+      inside = !inside;
+    }
+  }
+  return inside;
+}
+
+/* PRINT MODE */
+function buildPrintView() {
+  const title = document.getElementById('printTitle');
+  title.textContent = 'שלב ' + (curLevel + 1) + ' — מצאו את האותיות הזהות בדיוק לאות שבמסגרת';
+  const pc = document.getElementById('printCards');
+  pc.innerHTML = '';
+  L[curLevel].forEach(ex => {
+    const card = document.createElement('div');
+    card.className = 'print-card';
+    const target = document.createElement('div');
+    target.className = 'print-target';
+    target.textContent = ex.target;
+    card.appendChild(target);
+    const grid = document.createElement('div');
+    grid.className = 'print-grid';
+    const indices = shuffle([...Array(9).keys()]);
+    indices.forEach(i => {
+      const cell = document.createElement('div');
+      cell.className = 'print-cell';
+      cell.textContent = ex.grid[i];
+      grid.appendChild(cell);
+    });
+    card.appendChild(grid);
+    pc.appendChild(card);
+  });
+}
+
+/* MODE SWITCHING */
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', function () {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    mode = this.dataset.mode;
+    loadLevel();
+  });
+});
+
+/* COMPLETION BUTTONS */
+document.getElementById('btnNext').addEventListener('click', () => {
+  document.getElementById('completionOverlay').classList.remove('show');
+  if (curLevel < L.length - 1) { curLevel++; buildTabs(); loadLevel(); }
+});
+document.getElementById('btnRetry').addEventListener('click', () => {
+  document.getElementById('completionOverlay').classList.remove('show');
+  loadLevel();
+});
+
+/* INIT */
+buildTabs();
+loadLevel();
+</script>
+</body>
+</html>

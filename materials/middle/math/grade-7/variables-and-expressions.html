@@ -1053,13 +1053,14 @@ function switchSection(sec){
   document.querySelectorAll('.section-btn').forEach(b=>{
     b.classList.toggle('active',b.dataset.section===sec);
   });
-  document.getElementById('learnSection').style.display=sec==='learn'?'':'none';
-  document.getElementById('practiceSection').style.display=sec==='practice'?'':'none';
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
   if(sec==='practice'){
     if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
     if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
     if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
     renderLevelTabs();renderQuestion();
+    console.log('Level:',state.level,'Questions:',questions[state.level]?questions[state.level].length:0,'QuestionArea HTML length:',document.getElementById('questionArea').innerHTML.length);
   }
   saveState();
 }

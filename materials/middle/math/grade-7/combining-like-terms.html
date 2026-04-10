@@ -1,0 +1,803 @@
+<!--
+  Title: כינוס איברים דומים
+  Unit: ממספרים למשתנים
+  Subject: מתמטיקה
+  Grade: ז׳
+  Lesson: 7
+  Tags: אלגברה, כינוס, איברים-דומים, פישוט
+  Ages: 12-13
+  Icon: 🔗
+  Badge: חדש!
+  Description: זיהוי איברים דומים, כינוס ופישוט ביטויים אלגבריים עם משתנה אחד ושניים. תרגול ב-4 רמות קושי
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>כינוס איברים דומים | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid var(--accent);padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
+.step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:.85em;margin:0 2px;line-height:1}
+.frac .num{border-bottom:1.5px solid currentColor;padding:0 4px}
+.frac .den{padding:0 4px}
+.mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.mini-table th,.mini-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:1rem}
+.mini-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.mini-table td{background:var(--bg)}
+.mini-input{width:60px;padding:6px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:1rem;font-family:inherit;font-weight:700;transition:.3s}
+.mini-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.mini-input.correct{border-color:var(--success);background:#ecfdf5}
+.mini-input.wrong{border-color:var(--error);background:#fef2f2}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.reveal{display:none;animation:fadeIn .5s ease}
+.reveal.show{display:block}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-stem code,.q-stem .expr{font-size:1.1em}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;transition:.25s}
+.q-opt.selected .q-opt-letter{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-opt.correct .q-opt-letter{background:var(--success);color:#fff;border-color:var(--success)}
+.q-opt.wrong .q-opt-letter{background:var(--error);color:#fff;border-color:var(--error)}
+.q-input-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-input{width:120px;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1.1rem;font-family:inherit;font-weight:700;text-align:center;transition:.3s;direction:ltr}
+.q-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+.q-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.q-table th,.q-table td{border:2px solid var(--border);padding:8px 14px;text-align:center;font-size:1rem;min-width:60px}
+.q-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.q-check-btn{padding:10px 28px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;box-shadow:var(--shadow)}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.92rem;animation:fadeIn .3s}
+.q-feedback.correct{background:#ecfdf5;border-right:4px solid var(--success);color:#065f46}
+.q-feedback.wrong{background:#fef2f2;border-right:4px solid var(--error);color:#991b1b}
+.q-nav{display:flex;justify-content:space-between;margin-top:16px}
+.q-nav-btn{padding:10px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+.level-complete{text-align:center;padding:24px;animation:fadeIn .5s}
+.level-complete .big-emoji{font-size:4rem;margin-bottom:12px}
+.level-complete h2{font-size:1.4rem;color:var(--primary-dark);margin-bottom:8px}
+.level-complete .score-display{font-size:1.8rem;font-weight:800;color:var(--success);margin-bottom:16px}
+.level-complete .score-display.medium-score{color:var(--accent)}
+.level-complete .score-display.low-score{color:var(--error)}
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}100%{transform:translateY(105vh) rotate(720deg) scale(.3);opacity:0}}
+.print-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer;font-size:1rem;box-shadow:var(--shadow);transition:.25s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.print-btn:hover{background:var(--primary-dark);transform:scale(1.1)}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){
+  .container{padding:0 10px 30px}
+  .step-card,.q-card{padding:18px 14px}
+  .step-title{font-size:1.15rem}
+  .step-summary-grid{grid-template-columns:1fr}
+  .section-toggle{max-width:280px;margin:12px auto}
+  .section-btn{font-size:.88rem;padding:8px 14px}
+  .q-opt{padding:10px 12px;font-size:.9rem}
+  .topbar-title{font-size:.9rem}
+}
+@media print{
+  .topbar,.section-toggle,.step-nav,.q-nav,.print-btn,.level-tabs,.confetti-container,.q-check-btn{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .step-card,.q-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+  .container{max-width:100%}
+  .q-feedback{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">🔗 כיתה ז׳ — כינוס איברים דומים</span>
+  <div style="display:flex;align-items:center;gap:10px"><button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button><a href="../../../../materials.html">← חזרה לחומרי לימוד</a></div>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+
+<section id="learnSection">
+  <div class="step-progress">
+    <div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div>
+    <div class="step-progress-text" id="stepText"></div>
+  </div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress">
+    <div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div>
+    <div class="level-progress-text" id="levelText"></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+
+</div>
+
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const today=new Date();const dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+let rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(arr){return arr[Math.floor(R()*arr.length)]}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function frac(n,d){return '<span class="frac"><span class="num">'+n+'</span><span class="den">'+d+'</span></span>'}
+
+const boyNames=["דני","יואב","עמית","אורי","נועם","גיא","איתי","רון","תומר","עידו"];
+const girlNames=["מיכל","נועה","שירה","תמר","רונית","יעל","דנה","אורית","הילה","ליאת"];
+function boyName(){return pick(boyNames)}
+function girlName(){return pick(girlNames)}
+function anyName(){return R()>.5?boyName():girlName()}
+
+const LETTERS=['א','ב','ג','ד'];
+
+let state={section:'learn',step:0,level:'easy',qIndex:0};
+let scores={easy:[],medium:[],hard:[],challenge:[]};
+let answered={easy:[],medium:[],hard:[],challenge:[]};
+let questions={easy:null,medium:null,hard:null,challenge:null};
+const LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+const LEVEL_NAMES={easy:'קל',medium:'בינוני',hard:'קשה',challenge:'אתגר'};
+const TOTAL_STEPS=7;
+
+const LS_KEY='combineterms_v1_'+dateSeed;
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores,answered,state}))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+const steps=[
+/* Step 0 — Cookie fair opening */
+{title:'🍪 שלב 1 — יריד העוגיות',render(){return `
+<p>נועה מוכרת עוגיות ביריד. יש לה <strong>20 עוגיות בודדות</strong> ו-<strong>10 קופסאות</strong> עם <span class="math-expr">x</span> עוגיות בכל קופסה.</p>
+<div class="rule-box">💡 <strong>סך הכול:</strong> <span class="math-expr">20 + 10x</span> עוגיות.</div>
+<p>במהלך היום לקוחות קנו ממנה:</p>
+<ul style="margin:10px 20px;line-height:1.9">
+  <li>לקוח ראשון: <strong>4 עוגיות בודדות</strong></li>
+  <li>לקוח שני: <strong>קופסה אחת</strong> (<span class="math-expr">x</span> עוגיות)</li>
+  <li>לקוח שלישי: <strong>2 קופסאות</strong> (<span class="math-expr">2x</span> עוגיות)</li>
+  <li>לקוח רביעי: <strong>3 עוגיות בודדות</strong></li>
+</ul>
+<p>כתבו ביטוי שמתאר את מספר העוגיות שנותרו לנועה:</p>
+<div class="mid-expr">20 + 10x − 4 − x − 2x − 3</div>
+<p>האם אתם יכולים לפשט את הביטוי? כמה עוגיות נשארו לנועה?</p>
+<div class="check-row"><input type="number" id="ckQ1" class="input" placeholder="מספר קבוע"><input type="number" id="ckQ1x" class="input" placeholder="מקדם של x"><button class="btn" onclick="checkCookies()">בדיקה</button></div>
+<div id="cookiesFb"></div>
+<div class="reveal" id="cookiesReveal"><p>👈 נכון! <span class="math-expr">20 − 4 − 3 = 13</span> עוגיות בודדות, ו-<span class="math-expr">10x − x − 2x = 7x</span> קופסאות.</p><p>הביטוי המפושט: <span class="math-expr">13 + 7x</span></p><p>זה בדיוק מה שהולכים ללמוד היום — <strong>כינוס איברים דומים</strong>!</p></div>
+`}},
+
+/* Step 1 — Definition of like terms */
+{title:'🎯 שלב 2 — מה זה "איברים דומים"?',render(){return `
+<div class="rule-box">📌 <strong>איברים דומים</strong> הם איברים שמכילים את <strong>אותו משתנה באותה חזקה</strong>, או שניהם מספרים קבועים.</div>
+<p><strong>דוגמאות לאיברים דומים:</strong></p>
+<ul style="margin:10px 20px;line-height:1.9">
+  <li><span class="math-expr">3x</span> ו-<span class="math-expr">7x</span> — שניהם עם <span class="math-expr">x</span></li>
+  <li><span class="math-expr">5a</span> ו-<span class="math-expr">−2a</span> — שניהם עם <span class="math-expr">a</span></li>
+  <li><span class="math-expr">4</span> ו-<span class="math-expr">11</span> — שניהם מספרים קבועים</li>
+</ul>
+<p><strong>דוגמאות לאיברים שאינם דומים:</strong></p>
+<ul style="margin:10px 20px;line-height:1.9">
+  <li><span class="math-expr">3x</span> ו-<span class="math-expr">3y</span> — משתנים שונים</li>
+  <li><span class="math-expr">5a</span> ו-<span class="math-expr">5</span> — אחד עם משתנה, אחד בלי</li>
+</ul>
+<p>בביטוי <span class="math-expr">4 + 3a + 7 + 5a</span> — כמה זוגות של איברים דומים יש?</p>
+<div class="check-row"><input type="number" id="likeQ" class="input" placeholder="מספר זוגות"><button class="btn" onclick="checkLike()">בדיקה</button></div>
+<div id="likeFb"></div>
+<div class="reveal" id="likeReveal"><p>👈 נכון! יש 2 זוגות: <span class="math-expr">(4, 7)</span> — קבועים, ו-<span class="math-expr">(3a, 5a)</span> — עם המשתנה <span class="math-expr">a</span>.</p></div>
+`}},
+
+/* Step 2 — The rule */
+{title:'🧮 שלב 3 — הכלל: כיצד מכנסים?',render(){return `
+<div class="rule-box">📌 <strong>הכלל:</strong> כדי לכנס איברים דומים, מחברים או מחסרים את <strong>המקדמים</strong> (המספרים שלפני המשתנה).</div>
+<p><strong>דוגמה 1:</strong></p>
+<div class="mid-expr">a + 4a = 1a + 4a = 5a</div>
+<p>(כש-<span class="math-expr">a</span> לבד, המקדם הוא 1 — אפילו אם לא כותבים אותו).</p>
+<p><strong>דוגמה 2:</strong></p>
+<div class="mid-expr">3 + 7x + 5 = (3+5) + 7x = 8 + 7x</div>
+<p><strong>דוגמה 3:</strong></p>
+<div class="mid-expr">7 + 8y + 7y − 2y = 7 + (8+7−2)y = 7 + 13y</div>
+<p>פשטו: <span class="math-expr">9 + 6m + 4m − 2</span></p>
+<div class="check-row"><input type="number" id="rulQ1" class="input" placeholder="קבוע"><input type="number" id="rulQ2" class="input" placeholder="מקדם של m"><button class="btn" onclick="checkRule()">בדיקה</button></div>
+<div id="ruleFb"></div>
+<div class="reveal" id="ruleReveal"><p>👈 נכון! <span class="math-expr">9 − 2 = 7</span> ו-<span class="math-expr">6m + 4m = 10m</span>.</p><p>התשובה: <span class="math-expr">7 + 10m</span></p></div>
+`}},
+
+/* Step 3 — Two variables */
+{title:'🎨 שלב 4 — כינוס עם שני משתנים',render(){return `
+<p>כשיש בביטוי שני משתנים (או יותר), מכנסים כל קבוצה בנפרד.</p>
+<p><strong>דוגמה:</strong> <span class="math-expr">4 + 3a + 4a + 9b − b</span></p>
+<div class="rule-box">🔵 <strong>איברי a:</strong> <span class="math-expr">3a + 4a = 7a</span><br>🟢 <strong>איברי b:</strong> <span class="math-expr">9b − b = 8b</span><br>⚪ <strong>קבוע:</strong> <span class="math-expr">4</span><br>📌 <strong>התוצאה:</strong> <span class="math-expr">4 + 7a + 8b</span></div>
+<p>פשטו: <span class="math-expr">12a + 6b + 15 − 4a − 4b</span></p>
+<div class="check-row"><input type="number" id="twoQk" class="input" placeholder="קבוע"><input type="number" id="twoQa" class="input" placeholder="מקדם a"><input type="number" id="twoQb" class="input" placeholder="מקדם b"><button class="btn" onclick="checkTwo()">בדיקה</button></div>
+<div id="twoFb"></div>
+<div class="reveal" id="twoReveal"><p>👈 נכון! <span class="math-expr">12a − 4a = 8a</span>, <span class="math-expr">6b − 4b = 2b</span>, קבוע <span class="math-expr">15</span>.</p><p>התשובה: <span class="math-expr">15 + 8a + 2b</span></p></div>
+`}},
+
+/* Step 4 — Decimals and fractions */
+{title:'🔢 שלב 5 — כינוס עם שברים ועשרוניים',render(){return `
+<p>אותו כלל בדיוק חל גם כשהמקדמים הם שברים או מספרים עשרוניים.</p>
+<p><strong>דוגמה 1:</strong></p>
+<div class="mid-expr">0.5 + 5m + 9m + 7.5 = 8 + 14m</div>
+<p><strong>דוגמה 2:</strong></p>
+<div class="mid-expr">2.6a + 8 − 0.3a + 2a − 2 = 4.3a + 6</div>
+<p>פשטו: <span class="math-expr">1.5x + 3 + 2.5x − 1</span></p>
+<div class="check-row"><input type="number" step="0.1" id="decQk" class="input" placeholder="קבוע"><input type="number" step="0.1" id="decQx" class="input" placeholder="מקדם x"><button class="btn" onclick="checkDec()">בדיקה</button></div>
+<div id="decFb"></div>
+<div class="reveal" id="decReveal"><p>👈 נכון! <span class="math-expr">1.5x + 2.5x = 4x</span>, <span class="math-expr">3 − 1 = 2</span>.</p><p>התשובה: <span class="math-expr">2 + 4x</span></p></div>
+`}},
+
+/* Step 5 — Decomposition */
+{title:'🔄 שלב 6 — פירוק ביטוי לסכום',render(){return `
+<p>הפעולה ההפוכה של הכינוס היא <strong>פירוק</strong>: איך כותבים איבר כסכום של כמה איברים דומים?</p>
+<p><strong>דוגמה:</strong> איך לכתוב <span class="math-expr">5x</span> כסכום של שני איברים?</p>
+<ul style="margin:10px 20px;line-height:1.9">
+  <li><span class="math-expr">5x = 2x + 3x</span></li>
+  <li><span class="math-expr">5x = x + 4x</span></li>
+  <li><span class="math-expr">5x = 10x − 5x</span></li>
+</ul>
+<div class="rule-box">📌 יש אינסוף דרכים לפרק ביטוי — כל זוג מספרים שסכומם 5 יעבוד!</div>
+<p>כתבו את <span class="math-expr">7y</span> כסכום <span class="math-expr">ay + by</span>, כאשר <span class="math-expr">a</span> ו-<span class="math-expr">b</span> שניהם חיוביים ו-<span class="math-expr">a ≠ b</span>. מה סכום <span class="math-expr">a + b</span>?</p>
+<div class="check-row"><input type="number" id="decompQ" class="input" placeholder="a+b="><button class="btn" onclick="checkDecomp()">בדיקה</button></div>
+<div id="decompFb"></div>
+<div class="reveal" id="decompReveal"><p>👈 נכון! לכל פירוק של <span class="math-expr">7y</span> לסכום של שני איברים, <span class="math-expr">a + b = 7</span>.</p></div>
+`}},
+
+/* Step 6 — Summary */
+{title:'🏁 שלב 7 — סיכום',render(){return `
+<p style="font-size:1.1rem;text-align:center;margin-bottom:20px">בשיעור הזה למדנו על <strong>כינוס איברים דומים</strong>:</p>
+<div class="summary-grid">
+  <div class="s-card"><div class="s-icon">🎯</div><div class="s-title">איברים דומים</div><div class="s-text">אותו משתנה באותה חזקה, או שניהם מספרים קבועים.</div></div>
+  <div class="s-card"><div class="s-icon">🧮</div><div class="s-title">כינוס = חיבור מקדמים</div><div class="s-text">מחברים או מחסרים את המקדמים בלבד, המשתנה נשאר.</div></div>
+  <div class="s-card"><div class="s-icon">🔢</div><div class="s-title">מקדם 1</div><div class="s-text"><span class="math-expr">x = 1x</span> — אם לא כתוב מקדם, המקדם הוא 1.</div></div>
+  <div class="s-card"><div class="s-icon">🎨</div><div class="s-title">מספר משתנים</div><div class="s-text">מכנסים כל קבוצה של איברים דומים בנפרד.</div></div>
+</div>
+<p style="text-align:center;margin-top:20px"><strong>מוכנים לתרגול? 💪</strong></p>
+`}}
+];
+
+function renderStep(idx){
+  state.step=idx;
+  const s=steps[idx];
+  const fill=((idx+1)/TOTAL_STEPS*100).toFixed(0);
+  document.getElementById('stepFill').style.width=fill+'%';
+  document.getElementById('stepText').textContent='שלב '+(idx+1)+' מתוך '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+s.title+'</div>'+s.render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'לתרגול ←':'הבא ←';
+  if(s.init) s.init();
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+window.checkCookies=function(){
+  const k=parseInt(document.getElementById('ckQ1').value);
+  const x=parseInt(document.getElementById('ckQ1x').value);
+  const fb=document.getElementById('cookiesFb');
+  if(k===13&&x===7){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! 13 + 7x עוגיות נשארו.</div>';document.getElementById('cookiesReveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ קבעו את הקבועים והמקדמים בנפרד: 20−4−3 ו-10x−x−2x.</div>'}
+};
+window.checkLike=function(){
+  const v=parseInt(document.getElementById('likeQ').value);
+  const fb=document.getElementById('likeFb');
+  if(v===2){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! שני זוגות.</div>';document.getElementById('likeReveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ חפשו: קבועים דומים לקבועים, משתנים דומים למשתנים.</div>'}
+};
+window.checkRule=function(){
+  const k=parseInt(document.getElementById('rulQ1').value);
+  const m=parseInt(document.getElementById('rulQ2').value);
+  const fb=document.getElementById('ruleFb');
+  if(k===7&&m===10){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! 7 + 10m.</div>';document.getElementById('ruleReveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ חשבו 9−2 לקבועים ו-6m+4m למשתנה.</div>'}
+};
+window.checkTwo=function(){
+  const k=parseInt(document.getElementById('twoQk').value);
+  const a=parseInt(document.getElementById('twoQa').value);
+  const b=parseInt(document.getElementById('twoQb').value);
+  const fb=document.getElementById('twoFb');
+  if(k===15&&a===8&&b===2){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! 15 + 8a + 2b.</div>';document.getElementById('twoReveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ כנסו כל קבוצה בנפרד.</div>'}
+};
+window.checkDec=function(){
+  const k=parseFloat(document.getElementById('decQk').value);
+  const x=parseFloat(document.getElementById('decQx').value);
+  const fb=document.getElementById('decFb');
+  if(Math.abs(k-2)<1e-9&&Math.abs(x-4)<1e-9){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! 2 + 4x.</div>';document.getElementById('decReveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ חברו 1.5+2.5 ו-3−1.</div>'}
+};
+window.checkDecomp=function(){
+  const v=parseInt(document.getElementById('decompQ').value);
+  const fb=document.getElementById('decompFb');
+  if(v===7){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! לכל פירוק של 7y, סכום המקדמים הוא 7.</div>';document.getElementById('decompReveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ המקדמים של הפירוקים חייבים להצטבר ל-7 (המקדם המקורי).</div>'}
+};
+
+/* ===== QUESTION GENERATORS ===== */
+function genEasy(){
+  rng=mulberry32(dateSeed+100);
+  const qs=[];
+  /* Q1-5: Can this be simplified? */
+  const items=[
+    {e:'x + 3',ans:1},
+    {e:'7y + y',ans:0},
+    {e:'5a + 2b',ans:1},
+    {e:'10t − 8t',ans:0},
+    {e:'3 + 4x',ans:1}
+  ];
+  items.forEach(it=>{
+    qs.push({type:'mc',stem:'האם אפשר לכנס איברים דומים בביטוי <span class="math-expr">'+it.e+'</span>?',options:['כן','לא'],answer:it.ans});
+  });
+  /* Q6-10: Simple single-variable combining: ax + bx */
+  for(let i=0;i<5;i++){
+    const a=RI(1,9),b=RI(1,9);
+    const v=['x','a','m','y','n'][i];
+    qs.push({type:'num',stem:'מה המקדם של <span class="math-expr">'+v+'</span> ב-<span class="math-expr">'+a+v+' + '+b+v+'</span>?',answer:a+b});
+  }
+  /* Q11-15: Combining with constants: c + ax + d */
+  for(let i=0;i<5;i++){
+    const c=RI(1,9),d=RI(1,9),a=RI(2,9);
+    const v=['x','y','m','a','b'][i];
+    qs.push({type:'num',stem:'פשטו <span class="math-expr">'+c+' + '+a+v+' + '+d+'</span>. מה הקבוע?',answer:c+d});
+  }
+  /* Q16-20: 3-term variable combining */
+  for(let i=0;i<5;i++){
+    const a=RI(2,5),b=RI(1,4),c=RI(2,5);
+    const v='m';
+    qs.push({type:'num',stem:'מה המקדם של <span class="math-expr">'+v+'</span> ב-<span class="math-expr">'+a+v+' + '+b+v+' + '+c+v+'</span>?',answer:a+b+c});
+  }
+  return qs;
+}
+
+function genMedium(){
+  rng=mulberry32(dateSeed+200);
+  const qs=[];
+  /* Q1-5: Combine with two variables, coefficient of one */
+  for(let i=0;i<5;i++){
+    const a=RI(3,9),b=RI(2,8),c=RI(2,6);
+    qs.push({type:'num',stem:'פשטו <span class="math-expr">'+a+'a + '+b+'b + '+c+'a</span>. מה המקדם של <span class="math-expr">a</span>?',answer:a+c});
+  }
+  /* Q6-10: Combine with subtraction, find constant */
+  for(let i=0;i<5;i++){
+    const c=RI(10,20),d=RI(2,8),a=RI(3,9),b=RI(1,5);
+    qs.push({type:'num',stem:'פשטו <span class="math-expr">'+c+' + '+a+'x − '+d+' + '+b+'x</span>. מה הקבוע?',answer:c-d});
+  }
+  /* Q11-15: Match simplification (MC) */
+  const mcs=[
+    {e:'2x + 3x + 6 − x',opts:['5x + 6','4x + 6','4x + 5'],ans:1},
+    {e:'4a + 7 − a + 3',opts:['3a + 10','5a + 10','4a + 10'],ans:0},
+    {e:'8y − 2y + 5',opts:['6y + 5','10y + 5','6y − 5'],ans:0},
+    {e:'6 + 3m + 4 − m',opts:['10 + 2m','10 + 4m','6 + 2m'],ans:0},
+    {e:'9b − 4b + 2b',opts:['7b','11b','6b'],ans:0}
+  ];
+  mcs.forEach(q=>qs.push({type:'mc',stem:'מה הצורה המפושטת של <span class="math-expr">'+q.e+'</span>?',options:q.opts,answer:q.ans}));
+  /* Q16-20: Decimals — find coefficient */
+  for(let i=0;i<5;i++){
+    const a=[0.5,1.5,2.5,3.5,0.2][i];
+    const b=[2,3,4,5,3][i];
+    qs.push({type:'num',stem:'פשטו <span class="math-expr">'+a+'x + '+b+'x</span>. מה המקדם של <span class="math-expr">x</span>?',answer:Math.round((a+b)*10)/10});
+  }
+  return qs;
+}
+
+function genHard(){
+  rng=mulberry32(dateSeed+300);
+  const qs=[];
+  /* Q1-5: Complex combining — find final coefficient */
+  const hs=[
+    {stem:'פשטו <span class="math-expr">9 + 7m − m + 10m − 7</span>. מה המקדם של <span class="math-expr">m</span>?',ans:16},
+    {stem:'פשטו <span class="math-expr">1 + 8a + 1 − 4a + 2a − 2</span>. מה המקדם של <span class="math-expr">a</span>?',ans:6},
+    {stem:'פשטו <span class="math-expr">12a + 6b + 15 − 4a − 4b</span>. מה המקדם של <span class="math-expr">a</span>?',ans:8},
+    {stem:'פשטו <span class="math-expr">5x + 3 − 2x + 7x − 1</span>. מה המקדם של <span class="math-expr">x</span>?',ans:10},
+    {stem:'פשטו <span class="math-expr">11y − 3 + 2y − 4y + 8</span>. מה המקדם של <span class="math-expr">y</span>?',ans:9}
+  ];
+  hs.forEach(q=>qs.push({type:'num',stem:q.stem,answer:q.ans}));
+  /* Q6-10: MC — find simplified form */
+  const mcs=[
+    {e:'7x + 5 − 3x',opts:['4x + 5','10x + 5','4x − 5'],ans:0},
+    {e:'2x + 4x − 5x + x',opts:['2x','3x','4x'],ans:0},
+    {e:'10m − 3m + 5 − 2m',opts:['5m + 5','15m + 5','5m − 5'],ans:0},
+    {e:'3 + 6x + 4 − 2x',opts:['7 + 4x','7 + 8x','3 + 4x'],ans:0},
+    {e:'15a − 7a + 3a − a',opts:['10a','4a','12a'],ans:0}
+  ];
+  mcs.forEach(q=>qs.push({type:'mc',stem:'מה הצורה המפושטת של <span class="math-expr">'+q.e+'</span>?',options:q.opts,answer:q.ans}));
+  /* Q11-14: Equal or not after combining */
+  const eq=[
+    {a:'2x + 2x + 5',b:'5x + 4',same:false},
+    {a:'13y + 5x − 3y − x',b:'4x + 10y',same:true},
+    {a:'6a + 2 − a',b:'5a + 2',same:true},
+    {a:'3m + 4 + 2m',b:'5m + 3',same:false}
+  ];
+  eq.forEach(q=>qs.push({type:'mc',stem:'האם <span class="math-expr">'+q.a+'</span> שווה ל-<span class="math-expr">'+q.b+'</span>?',options:['כן','לא'],answer:q.same?0:1}));
+  /* Q15-20: Decimals complex — 6 questions */
+  const dec=[
+    {stem:'פשטו <span class="math-expr">0.5 + 5m + 9m + 7.5</span>. מה המקדם של <span class="math-expr">m</span>?',ans:14},
+    {stem:'פשטו <span class="math-expr">0.5 + 5m + 9m + 7.5</span>. מה הקבוע?',ans:8},
+    {stem:'פשטו <span class="math-expr">2.6a + 8 − 0.3a + 2a − 2</span>. מה המקדם של <span class="math-expr">a</span>?',ans:4.3},
+    {stem:'פשטו <span class="math-expr">2.6a + 8 − 0.3a + 2a − 2</span>. מה הקבוע?',ans:6},
+    {stem:'פשטו <span class="math-expr">1.5x + 2.5x + 4x</span>. מה המקדם של <span class="math-expr">x</span>?',ans:8},
+    {stem:'פשטו <span class="math-expr">3.2y − 1.2y + 0.5y</span>. מה המקדם של <span class="math-expr">y</span>?',ans:2.5}
+  ];
+  dec.forEach(q=>qs.push({type:'num',stem:q.stem,answer:q.ans}));
+  return qs;
+}
+
+function genChallenge(){
+  rng=mulberry32(dateSeed+400);
+  const qs=[];
+  /* Q1-3: Odd one out — 4 MC options, find the one with different final coefficient */
+  const odd=[
+    {stem:'איזה מהביטויים מתפשט לתוצאה שונה מהאחרים?',options:['<span class="math-expr">3x + 2x</span>','<span class="math-expr">4x + x</span>','<span class="math-expr">6x − x</span>','<span class="math-expr">7x − 3x</span>'],ans:3},
+    {stem:'איזה מהביטויים מתפשט לתוצאה שונה מהאחרים?',options:['<span class="math-expr">2a + 5a</span>','<span class="math-expr">8a − a</span>','<span class="math-expr">4a + 3a</span>','<span class="math-expr">10a − 4a</span>'],ans:3},
+    {stem:'איזה מהביטויים מתפשט לתוצאה שונה מהאחרים?',options:['<span class="math-expr">6m − 2m</span>','<span class="math-expr">2m + 2m</span>','<span class="math-expr">5m − m</span>','<span class="math-expr">m + 3m + m</span>'],ans:3}
+  ];
+  odd.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans}));
+  /* Q4-6: Cookie fair — find remaining */
+  const cookies=[
+    {stem:'לנועה יש 30 עוגיות בודדות ו-8 קופסאות עם <span class="math-expr">x</span> עוגיות בכל קופסה. לקוח קנה 5 עוגיות ו-2 קופסאות. כמה עוגיות בודדות נשארו?',ans:25},
+    {stem:'באותו יריד: 30 עוגיות בודדות ו-8 קופסאות. לקוח קנה 5 עוגיות ו-2 קופסאות. מה המקדם של <span class="math-expr">x</span> בביטוי של מה שנשאר?',ans:6},
+    {stem:'אם עכשיו יש 50 עוגיות בודדות ו-12 קופסאות, ולקוחות קנו 15 בודדות ו-5 קופסאות — מה המקדם של <span class="math-expr">x</span> בביטוי של מה שנשאר?',ans:7}
+  ];
+  cookies.forEach(q=>qs.push({type:'num',stem:q.stem,answer:q.ans}));
+  /* Q7-9: Missing coefficients */
+  const miss=[
+    {stem:'השלימו: <span class="math-expr">☐x + 5 − 3x + 3 = 4x + 8</span>. מה ☐?',ans:7},
+    {stem:'השלימו: <span class="math-expr">6a + ☐ − 2a + 4 = 4a + 10</span>. מה ☐?',ans:6},
+    {stem:'השלימו: <span class="math-expr">8y − ☐y + 2 + 3 = 3y + 5</span>. מה ☐?',ans:5}
+  ];
+  miss.forEach(q=>qs.push({type:'num',stem:q.stem,answer:q.ans}));
+  /* Q10-12: Decomposition — find sum of coefficients equalling the original */
+  const dec=[
+    {stem:'כתבנו <span class="math-expr">9x</span> כסכום <span class="math-expr">ax + bx + cx</span> כאשר <span class="math-expr">a, b, c</span> שלמים חיוביים שונים זה מזה. מה הערך של <span class="math-expr">a + b + c</span>?',ans:9},
+    {stem:'כתבנו <span class="math-expr">12m</span> כסכום <span class="math-expr">am + bm</span> כאשר <span class="math-expr">b = 2a</span>. מה <span class="math-expr">a</span>?',ans:4},
+    {stem:'כתבנו <span class="math-expr">15y</span> כסכום <span class="math-expr">ay + by</span> כאשר <span class="math-expr">b = 2a</span>. מה <span class="math-expr">b</span>?',ans:10}
+  ];
+  dec.forEach(q=>qs.push({type:'num',stem:q.stem,answer:q.ans}));
+  /* Q13-15: T-shirt printing 20(x-5) */
+  const tshirt=[
+    {stem:'חולצה עולה <span class="math-expr">x</span> ש"ח, והנחה של 5 ש"ח. בהזמנה של 20 חולצות — כמה חוסכים (בש"ח)?',ans:100},
+    {stem:'אותה הזמנה: 20 חולצות במחיר <span class="math-expr">(x − 5)</span> כל אחת. כמה משלמים אם <span class="math-expr">x = 40</span>?',ans:700},
+    {stem:'20 חולצות במחיר <span class="math-expr">(x − 5)</span> כל אחת. כמה משלמים אם <span class="math-expr">x = 25</span>?',ans:400}
+  ];
+  tshirt.forEach(q=>qs.push({type:'num',stem:q.stem,answer:q.ans}));
+  return qs;
+}
+
+function generateQuestions(level){
+  if(level==='easy') return genEasy();
+  if(level==='medium') return genMedium();
+  if(level==='hard') return genHard();
+  return genChallenge();
+}
+
+function renderLevelTabs(){
+  const container=document.getElementById('levelTabs');
+  container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(lv=>{
+    const btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    const done=scores[lv].filter(s=>s===1).length;
+    const total=LEVEL_COUNTS[lv];
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+total+')</span>':'');
+    btn.onclick=()=>switchLevel(lv);
+    container.appendChild(btn);
+  });
+}
+
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv]) questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+
+function updateLevelProgress(){
+  const lv=state.level;const total=LEVEL_COUNTS[lv];
+  const done=answered[lv].filter(a=>a).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+
+function renderQuestion(){
+  const lv=state.level;const idx=state.qIndex;
+  const qs=questions[lv];
+  if(!qs) return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  const q=qs[idx];
+  const area=document.getElementById('questionArea');
+  const isAnswered=answered[lv][idx];
+
+  let html='<div class="q-card"><div class="q-number">שאלה '+(idx+1)+' מתוך '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach((opt,i)=>{
+      const letter=LETTERS[i];
+      let cls='q-opt';
+      if(isAnswered){
+        cls+=' disabled';
+        if(i===q.answer) cls+=' correct';
+        else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel']) cls+=' wrong';
+      }
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>בדקו</button>';
+  } else if(q.type==='input'||q.type==='input-text'){
+    html+='<div class="q-input-row"><input type="'+(q.type==='input'?'number':'text')+'" class="q-input" id="qInput" placeholder="תשובה" dir="ltr" aria-label="תשובה">';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">בדקו</button>';
+    html+='</div>';
+    if(isAnswered){
+      const inp=q.type==='input'?q.answer:(q.display||q.answer[0]);
+      html+='<div style="margin-top:4px;font-weight:700;direction:ltr">תשובה: '+inp+'</div>';
+    }
+  }
+
+  if(isAnswered){
+    const isCorrect=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'✅ נכון! ':'❌ ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(el=>{
+      el.onclick=()=>{
+        area.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+  const inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){
+    inp.focus();
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkInput()});
+  }
+
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'סיום':'הבא ←';
+}
+
+window.checkMC=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const selected=document.querySelector('.q-opt.selected');
+  if(!selected) return;
+  const si=parseInt(selected.dataset.i);
+  const isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  answered[lv][idx+'_sel']=si;
+
+  document.querySelectorAll('.q-opt').forEach((el,i)=>{
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer) el.classList.add('correct');
+    else if(i===si&&!isCorrect) el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון מאוד!','✅ יפה!'])+' ':'❌ לא נכון. ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkInput=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inp=document.getElementById('qInput');
+  const val=inp.value.trim();
+  if(!val) return;
+  let isCorrect=false;
+  if(q.type==='input'){
+    const num=parseFloat(val.replace(',','.'));
+    if(Array.isArray(q.answer)) isCorrect=q.answer.some(a=>Math.abs(a-num)<1e-9);
+    else isCorrect=Math.abs(q.answer-num)<1e-9;
+  } else {
+    const norm=val.replace(/\s+/g,'').toLowerCase();
+    isCorrect=q.answer.some(a=>a.replace(/\s+/g,'').toLowerCase()===norm);
+  }
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');
+  inp.disabled=true;
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון!'])+' ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+function nextQuestion(){
+  const lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function')showAuthModal();
+    return;
+  }
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+
+function renderLevelComplete(){
+  const lv=state.level;
+  const correct=scores[lv].filter(s=>s===1).length;
+  const total=LEVEL_COUNTS[lv];
+  const pct=Math.round(correct/total*100);
+  const scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  const emoji=pct>=80?'🎉':pct>=50?'👏':'💪';
+
+  document.getElementById('questionArea').innerHTML=`
+    <div class="q-card"><div class="level-complete">
+      <div class="big-emoji">${emoji}</div>
+      <h2>סיימתם את רמת "${LEVEL_NAMES[lv]}"!</h2>
+      <div class="score-display${scoreClass}">${correct} / ${total}</div>
+      <p style="color:var(--text-light);margin-bottom:16px">${pct}% הצלחה</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="mini-btn" onclick="retryLevel()">🔄 נסו שוב</button>
+        ${lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">▶ לרמה הבאה</button>':''}
+      </div>
+    </div></div>`;
+
+  if(pct>=80) showConfetti();
+  saveState();
+}
+
+window.retryLevel=function(){
+  const lv=state.level;
+  scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);
+  state.qIndex=0;
+  renderLevelTabs();renderQuestion();saveState();
+};
+
+window.nextLevel=function(){
+  const order=['easy','medium','hard','challenge'];
+  const ci=order.indexOf(state.level);
+  if(ci<order.length-1) switchLevel(order[ci+1]);
+};
+
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.section===sec);
+  });
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+function showConfetti(){
+  const box=document.getElementById('confettiBox');
+  box.innerHTML='';
+  const colors=['#2563eb','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';
+    c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(()=>box.innerHTML='',5000);
+}
+
+function init(){
+  loadState();
+  Object.keys(LEVEL_COUNTS).forEach(lv=>{
+    if(!scores[lv]||!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice') switchSection('practice');
+}
+init();
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+</body>
+</html>

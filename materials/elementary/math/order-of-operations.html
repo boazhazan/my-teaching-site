@@ -316,6 +316,7 @@ function buildPool(items) {
 function renderDots() {
   const wrap = document.getElementById('dotsWrap');
   wrap.innerHTML = '';
+  const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
   pool.forEach((_,i) => {
     const d = document.createElement('div');
     const s = status[i];
@@ -324,7 +325,7 @@ function renderDots() {
        s==='wrong'   ? ' wrong'   :
        s==='skipped' ? ' skipped' : '') +
       (i===currentIdx ? ' active' : '');
-    d.textContent = i+1;
+    d.textContent = (i+1)+(lk&&i>0?' 🔒':'');
     d.title = pool[i].expr;
     d.onclick = () => goTo(i);
     wrap.appendChild(d);
@@ -392,7 +393,7 @@ function skip() {
 }
 
 // ── NAV ──
-function goTo(i) { if(i>=0 && i<pool.length){ currentIdx=i; render(); } }
+function goTo(i) { if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return;} if(i>=0 && i<pool.length){ currentIdx=i; render(); } }
 
 function goNext() {
   // find next pending or skipped after current
@@ -488,6 +489,7 @@ function launchConfetti() {
 
 buildPool();
 render();
+document.addEventListener('DOMContentLoaded',function(){renderDots();});
 </script>
   <script src="../../../js/auth-gate.js"></script>
 </body>

@@ -168,10 +168,11 @@ function buildPool(items){
 // ── DOTS ──
 function renderDots(){
   const w=document.getElementById('dotsWrap');w.innerHTML='';
+  const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
   pool.forEach((_,i)=>{
     const d=document.createElement('div');const s=status[i];
     d.className='dt'+(s==='solved'?' solved':s==='wrong'?' wrong':s==='skipped'?' skipped':'')+(i===curIdx?' active':'');
-    d.textContent=i+1;d.onclick=()=>goTo(i);w.appendChild(d);
+    d.textContent=(i+1)+(lk&&i>0?' 🔒':'');d.onclick=()=>goTo(i);w.appendChild(d);
   });
 }
 
@@ -231,13 +232,19 @@ function checkAns(btn,val){
   document.getElementById('skipBtn').disabled=true;
   renderDots();
 
-  // Auto-advance after 1.2s if not last
-  if(curIdx<pool.length-1)setTimeout(()=>{curIdx++;render()},1200);
+  // Auto-advance after 1.2s if not last (but only if logged in — free users stop at q1)
+  if(curIdx<pool.length-1){
+    if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+      if(typeof showAuthModal==='function')setTimeout(()=>showAuthModal(),1000);
+    } else {
+      setTimeout(()=>{curIdx++;render()},1200);
+    }
+  }
 }
 
-function goTo(i){if(i>=0&&i<pool.length){curIdx=i;render()}}
-function goNext(){if(curIdx<pool.length-1){curIdx++;render()}}
-function skip(){if(status[curIdx]==='pending'){status[curIdx]='skipped'}if(curIdx<pool.length-1){curIdx++;render()}else render()}
+function goTo(i){if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}if(i>=0&&i<pool.length){curIdx=i;render()}}
+function goNext(){if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}if(curIdx<pool.length-1){curIdx++;render()}}
+function skip(){if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}if(status[curIdx]==='pending'){status[curIdx]='skipped'}if(curIdx<pool.length-1){curIdx++;render()}else render()}
 
 // ── SUMMARY ──
 function showSummary(){
@@ -317,6 +324,7 @@ function launchConfetti(){
 }
 
 buildPool();render();
+document.addEventListener('DOMContentLoaded',function(){renderDots();});
 </script>
   <script src="../../../js/auth-gate.js"></script>
 </body>

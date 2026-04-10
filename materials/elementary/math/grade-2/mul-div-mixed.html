@@ -425,11 +425,12 @@ const QPL = 6;
 
 // ===== RENDER =====
 function renderTabs() {
+  const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
   const row = document.getElementById('tabsRow');
   row.innerHTML = '';
   levels.forEach((_,i) => {
     const t = document.createElement('button');
-    t.className = 'tab'; t.textContent = i+1;
+    t.className = 'tab'; t.textContent = (i+1) + (lk&&i>0?' 🔒':'');
     if(i===currentLevel) t.classList.add('active');
     if(levelResults[i]!==undefined){ t.classList.add('done'); if(levelResults[i]===0) t.classList.add('perfect'); }
     t.onclick = () => goLevel(i);
@@ -603,8 +604,8 @@ function showLevelComplete() {
 }
 
 // ===== NAV =====
-function goLevel(i){ currentLevel=i; renderLevel(); window.scrollTo({top:0,behavior:'smooth'}); }
-function nextLevel(){ if(currentLevel<levels.length-1){ currentLevel++; renderLevel(); window.scrollTo({top:0,behavior:'smooth'}); } }
+function goLevel(i){if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});}
+function nextLevel(){if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return} if(currentLevel<levels.length-1){ currentLevel++; renderLevel(); window.scrollTo({top:0,behavior:'smooth'}); } }
 function retry(){ renderLevel(); window.scrollTo({top:0,behavior:'smooth'}); }
 function setMode(m){ mode=m; document.getElementById('modeChoice').classList.toggle('active',m==='choice'); document.getElementById('modeInput').classList.toggle('active',m==='input'); renderLevel(); }
 function updateProgress(){ document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%'; document.getElementById('totalCorrect').textContent=totalCorrect; document.getElementById('totalWrong').textContent=totalWrong; }
@@ -645,6 +646,7 @@ function printTable(){
 function toggleTip(){ var t=document.getElementById('levelTip'); t.classList.toggle('collapsed'); document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'; }
 
 renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs();});
 </script>
   <script src="../../../../js/auth-gate.js"></script>
 </body>

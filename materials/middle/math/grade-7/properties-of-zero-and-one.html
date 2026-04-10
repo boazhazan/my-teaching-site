@@ -1,0 +1,958 @@
+<!--
+  Title: התכונות של 0 ושל 1
+  Unit: ממספרים למשתנים
+  Subject: מתמטיקה
+  Grade: ז׳
+  Lesson: 4
+  Tags: חשבון, אפס, אחד, ניטרלי, הופכי
+  Ages: 12-13
+  Icon: 0️⃣
+  Badge: חדש!
+  Description: איבר ניטרלי בחיבור ובכפל, חילוק באפס, מספרים הופכיים וחילוק כמכפלה בהופכי. תרגול ב-4 רמות קושי
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>התכונות של 0 ושל 1 | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid var(--accent);padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
+.step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:.85em;margin:0 2px;line-height:1}
+.frac .num{border-bottom:1.5px solid currentColor;padding:0 4px}
+.frac .den{padding:0 4px}
+.mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.mini-table th,.mini-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:1rem}
+.mini-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.mini-table td{background:var(--bg)}
+.mini-input{width:60px;padding:6px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:1rem;font-family:inherit;font-weight:700;transition:.3s}
+.mini-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.mini-input.correct{border-color:var(--success);background:#ecfdf5}
+.mini-input.wrong{border-color:var(--error);background:#fef2f2}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.reveal{display:none;animation:fadeIn .5s ease}
+.reveal.show{display:block}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-stem code,.q-stem .expr{font-size:1.1em}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;transition:.25s}
+.q-opt.selected .q-opt-letter{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-opt.correct .q-opt-letter{background:var(--success);color:#fff;border-color:var(--success)}
+.q-opt.wrong .q-opt-letter{background:var(--error);color:#fff;border-color:var(--error)}
+.q-input-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-input{width:120px;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1.1rem;font-family:inherit;font-weight:700;text-align:center;transition:.3s;direction:ltr}
+.q-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+.q-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.q-table th,.q-table td{border:2px solid var(--border);padding:8px 14px;text-align:center;font-size:1rem;min-width:60px}
+.q-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.q-check-btn{padding:10px 28px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;box-shadow:var(--shadow)}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.92rem;animation:fadeIn .3s}
+.q-feedback.correct{background:#ecfdf5;border-right:4px solid var(--success);color:#065f46}
+.q-feedback.wrong{background:#fef2f2;border-right:4px solid var(--error);color:#991b1b}
+.q-nav{display:flex;justify-content:space-between;margin-top:16px}
+.q-nav-btn{padding:10px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+.level-complete{text-align:center;padding:24px;animation:fadeIn .5s}
+.level-complete .big-emoji{font-size:4rem;margin-bottom:12px}
+.level-complete h2{font-size:1.4rem;color:var(--primary-dark);margin-bottom:8px}
+.level-complete .score-display{font-size:1.8rem;font-weight:800;color:var(--success);margin-bottom:16px}
+.level-complete .score-display.medium-score{color:var(--accent)}
+.level-complete .score-display.low-score{color:var(--error)}
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}100%{transform:translateY(105vh) rotate(720deg) scale(.3);opacity:0}}
+.print-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer;font-size:1rem;box-shadow:var(--shadow);transition:.25s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.print-btn:hover{background:var(--primary-dark);transform:scale(1.1)}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){
+  .container{padding:0 10px 30px}
+  .step-card,.q-card{padding:18px 14px}
+  .step-title{font-size:1.15rem}
+  .step-summary-grid{grid-template-columns:1fr}
+  .section-toggle{max-width:280px;margin:12px auto}
+  .section-btn{font-size:.88rem;padding:8px 14px}
+  .q-opt{padding:10px 12px;font-size:.9rem}
+  .topbar-title{font-size:.9rem}
+}
+@media print{
+  .topbar,.section-toggle,.step-nav,.q-nav,.print-btn,.level-tabs,.confetti-container,.q-check-btn{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .step-card,.q-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+  .container{max-width:100%}
+  .q-feedback{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">0️⃣ כיתה ז׳ — התכונות של 0 ושל 1</span>
+  <div style="display:flex;align-items:center;gap:10px"><button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button><a href="../../../../materials.html">← חזרה לחומרי לימוד</a></div>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+
+<section id="learnSection">
+  <div class="step-progress">
+    <div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div>
+    <div class="step-progress-text" id="stepText"></div>
+  </div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress">
+    <div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div>
+    <div class="level-progress-text" id="levelText"></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+
+</div>
+
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const today=new Date();const dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+let rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(arr){return arr[Math.floor(R()*arr.length)]}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function frac(n,d){return '<span class="frac"><span class="num">'+n+'</span><span class="den">'+d+'</span></span>'}
+
+const boyNames=["דני","יואב","עמית","אורי","נועם","גיא","איתי","רון","תומר","עידו"];
+const girlNames=["מיכל","נועה","שירה","תמר","רונית","יעל","דנה","אורית","הילה","ליאת"];
+function boyName(){return pick(boyNames)}
+function girlName(){return pick(girlNames)}
+function anyName(){return R()>.5?boyName():girlName()}
+
+const LETTERS=['א','ב','ג','ד'];
+
+let state={section:'learn',step:0,level:'easy',qIndex:0};
+let scores={easy:[],medium:[],hard:[],challenge:[]};
+let answered={easy:[],medium:[],hard:[],challenge:[]};
+let questions={easy:null,medium:null,hard:null,challenge:null};
+const LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+const LEVEL_NAMES={easy:'קל',medium:'בינוני',hard:'קשה',challenge:'אתגר'};
+const TOTAL_STEPS=7;
+
+const LS_KEY='zero_one_v1_'+dateSeed;
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores,answered,state}))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+const steps=[
+/* Step 0: Opening */
+{title:'🤔 מה מיוחד ב-0 וב-1?', render(){return `
+<p>בואו נתחיל בחידה. השלימו את המספר החסר בכל ביטוי כך שהשוויון יהיה נכון:</p>
+<table class="mini-table">
+<tr><th>ביטוי</th><th>מספר חסר</th></tr>
+<tr><td><span class="math-expr">4 + ☐ = 4</span></td><td><input type="number" class="mini-input" id="zo1" aria-label="חסר 1"></td></tr>
+<tr><td><span class="math-expr">4 - ☐ = 4</span></td><td><input type="number" class="mini-input" id="zo2" aria-label="חסר 2"></td></tr>
+<tr><td><span class="math-expr">4 · ☐ = 4</span></td><td><input type="number" class="mini-input" id="zo3" aria-label="חסר 3"></td></tr>
+<tr><td><span class="math-expr">4 : ☐ = 4</span></td><td><input type="number" class="mini-input" id="zo4" aria-label="חסר 4"></td></tr>
+</table>
+<div style="text-align:center"><button class="mini-btn" onclick="checkOpenZO()">בדקו</button></div>
+<div id="openFb"></div>
+<div class="reveal" id="openReveal">
+  <div class="success-box">✨ <strong>המספרים החסרים: 0, 0, 1, 1</strong></div>
+  <p>שמתם לב שיש כאן שני מספרים מיוחדים — <strong>0</strong> ו-<strong>1</strong>?</p>
+  <div class="highlight">💡 <strong>0 ו-1 הם מספרים מיוחדים</strong> עם תכונות שלא קיימות אצל אף מספר אחר. בשיעור הזה נכיר את כל התכונות שלהם!</div>
+</div>
+`}},
+
+/* Step 1: Zero — additive identity */
+{title:'➕ 0 — האיבר הניטרלי לחיבור', render(){return `
+<div class="rule-box">📌 כשמחברים או מחסירים <strong>0</strong>, המספר לא משתנה</div>
+<div class="example">
+<strong>דוגמאות:</strong><br>
+<span class="math-expr">7 + 0 = 7</span><br>
+<span class="math-expr">0 + 7 = 7</span><br>
+<span class="math-expr">7 - 0 = 7</span>
+</div>
+<p>זה נכון לכל מספר. אם נסמן מספר כללי באות <span class="math-expr">a</span>, נוכל לכתוב:</p>
+<div class="rule-box" style="font-size:1.3rem"><span class="math-expr">a + 0 = a</span><br><span class="math-expr">a - 0 = a</span></div>
+<p>בגלל התכונה הזאת, קוראים ל-0 <strong>"האיבר הניטרלי לחיבור"</strong>.</p>
+<div class="warning">⚠️ <strong>שימו לב!</strong> <span class="math-expr">0 - a ≠ a</span>!<br>למשל: <span class="math-expr">0 - 7 = -7</span> (ולא 7).</div>
+<p><strong>בדקו את עצמכם:</strong> מה הערך של <span class="math-expr">23 + 0 - 0 + 0</span>?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="zeroAdd" placeholder="?" aria-label="תשובה">
+  <button class="mini-btn" onclick="checkZeroAdd()">בדקו</button>
+</div>
+<div id="zeroAddFb"></div>
+`}},
+
+/* Step 2: Zero in multiplication */
+{title:'✖️ 0 בכפל — תוצאה תמיד 0', render(){return `
+<div class="rule-box">📌 כשכופלים כל מספר ב-<strong>0</strong>, התוצאה תמיד <strong>0</strong></div>
+<div class="example">
+<strong>דוגמאות:</strong><br>
+<span class="math-expr">5 · 0 = 0</span><br>
+<span class="math-expr">0 · 100 = 0</span><br>
+<span class="math-expr">a · 0 = 0</span>
+</div>
+<div class="highlight">💡 <strong>תובנה חשובה:</strong> זה עובד גם עם ביטויים מורכבים בסוגריים!<br>
+<span class="math-expr">(13 - 6 · 2) · 0 = 0</span> — לא צריך לחשב את הסוגריים בכלל!<br>
+ברגע שיש כפל ב-0 בסוף, התוצאה היא 0.</div>
+<p><strong>חידה מהירה:</strong> כמה זה <span class="math-expr">482 · 0</span>?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="zeroMul" placeholder="?" aria-label="תשובה">
+  <button class="mini-btn" onclick="checkZeroMul()">בדקו</button>
+</div>
+<div id="zeroMulFb"></div>
+<div class="reveal" id="zeroMulReveal">
+  <div class="success-box">✅ נכון! לא צריך לדעת מה זה 482, כי כל מספר כפול 0 הוא 0.</div>
+</div>
+`}},
+
+/* Step 3: Division by zero — forbidden */
+{title:'🚫 חילוק באפס — אסור!', render(){return `
+<div class="warning" style="font-size:1.15rem;text-align:center"><strong>🚫 אסור לחלק באפס!</strong><br><span class="math-expr">a : 0</span> — לא מוגדר!</div>
+<p><strong>למה?</strong> בואו נחשוב יחד.</p>
+<div class="example">
+<p>נניח ש-<span class="math-expr">6 : 0 = x</span> כלשהו.</p>
+<p>אז לפי הקשר בין כפל לחילוק: <span class="math-expr">x · 0 = 6</span></p>
+<p>אבל אנחנו יודעים — <strong>כל</strong> מספר כפול 0 הוא 0, ולעולם לא 6!</p>
+<p>אז אין מספר <span class="math-expr">x</span> שמתאים. <strong>החילוק לא מוגדר.</strong></p>
+</div>
+<div class="rule-box">⚠️ גם <span class="math-expr">0 : 0</span> לא מוגדר<br>
+✅ אבל מותר לחלק 0 במספר אחר! <span class="math-expr">0 : 5 = 0</span></div>
+<p>כשביטוי <strong>לא מוגדר</strong>, נסמן אותו בסימן <strong>Ø</strong>.</p>
+<p><strong>תורכם:</strong> סמנו לכל ביטוי האם הוא <strong>מוגדר</strong> או <strong>לא מוגדר (Ø)</strong>:</p>
+<div id="defQuiz"></div>
+`},init(){
+  const items=[
+    {expr:'9 : 0',defined:false},
+    {expr:'0 : 9',defined:true},
+    {expr:'0 · 5',defined:true},
+    {expr:'(4 - 4) : 0',defined:false}
+  ];
+  const c=document.getElementById('defQuiz');
+  let html='';
+  items.forEach((it,i)=>{
+    html+='<div style="display:flex;align-items:center;gap:8px;margin:6px 0;flex-wrap:wrap"><span style="min-width:90px"><span class="math-expr">'+it.expr+'</span></span>';
+    html+='<button class="mini-btn" data-idx="'+i+'" data-val="def">מוגדר</button>';
+    html+='<button class="mini-btn" data-idx="'+i+'" data-val="ndef">לא מוגדר Ø</button>';
+    html+='<span id="dfb'+i+'"></span></div>';
+  });
+  c.innerHTML=html;
+  c.querySelectorAll('button').forEach(b=>{
+    b.onclick=()=>{
+      const i=parseInt(b.dataset.idx);
+      const val=b.dataset.val==='def';
+      const ok=val===items[i].defined;
+      document.getElementById('dfb'+i).innerHTML=ok?'<span style="color:var(--success);font-weight:700">✅</span>':'<span style="color:var(--error);font-weight:700">❌</span>';
+    };
+  });
+}},
+
+/* Step 4: One — multiplicative identity */
+{title:'✖️ 1 — האיבר הניטרלי לכפל', render(){return `
+<div class="rule-box">📌 כשכופלים או מחלקים ב-<strong>1</strong>, המספר לא משתנה</div>
+<div class="example">
+<strong>דוגמאות:</strong><br>
+<span class="math-expr">8 · 1 = 8</span><br>
+<span class="math-expr">1 · 8 = 8</span><br>
+<span class="math-expr">8 : 1 = 8</span>
+</div>
+<p>לכל מספר <span class="math-expr">a</span>:</p>
+<div class="rule-box" style="font-size:1.3rem"><span class="math-expr">a · 1 = a</span><br><span class="math-expr">a : 1 = a</span></div>
+<p>בגלל התכונה הזאת קוראים ל-1 <strong>"האיבר הניטרלי לכפל"</strong>.</p>
+<div class="highlight">💡 <strong>תובנה:</strong> כשמחלקים מספר בעצמו, מקבלים תמיד 1!<br>
+<span class="math-expr">a : a = 1</span> (כל עוד <span class="math-expr">a ≠ 0</span>)</div>
+<p><strong>בדקו את עצמכם:</strong> השלימו את המספר החסר ב-<span class="math-expr">17 · ☐ = 17</span></p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="oneMul" placeholder="?" aria-label="תשובה">
+  <button class="mini-btn" onclick="checkOneMul()">בדקו</button>
+</div>
+<div id="oneMulFb"></div>
+`}},
+
+/* Step 5: Reciprocals */
+{title:'🔄 מספרים הופכיים', render(){return `
+<div class="rule-box">📌 שני מספרים שהמכפלה שלהם היא <strong>1</strong> נקראים <strong>מספרים הופכיים</strong></div>
+<div class="example">
+<strong>דוגמאות:</strong><br>
+<span class="math-expr">8 · </span>${frac(1,8)}<span class="math-expr"> = 1</span> &nbsp;→&nbsp; ${frac(1,8)} <strong>הוא ההופכי של 8</strong><br>
+${frac(1,5)}<span class="math-expr"> · 5 = 1</span> &nbsp;→&nbsp; <span class="math-expr">5</span> <strong>הוא ההופכי של</strong> ${frac(1,5)}<br>
+<span class="math-expr">3 · </span>${frac(1,3)}<span class="math-expr"> = 1</span>
+</div>
+<p>באופן כללי:</p>
+<div class="rule-box" style="font-size:1.2rem"><span class="math-expr">a · </span>${frac(1,'a')}<span class="math-expr"> = 1</span> &nbsp;→&nbsp; ההופכי של <span class="math-expr">a</span> הוא ${frac(1,'a')}</div>
+<p>אם המספר הוא שבר ${frac('a','b')}, ההופכי שלו הוא ${frac('b','a')} — פשוט הופכים בין המונה למכנה!</p>
+<div class="warning">⚠️ <strong>ל-0 אין מספר הופכי!</strong> כי <span class="math-expr">0 · ☐ = 1</span> אין פתרון — כל מספר כפול 0 הוא 0.</div>
+<p><strong>תורכם:</strong> מהו ההופכי של <strong>4</strong>? (כתבו כשבר עשרוני, למשל 0.25)</p>
+<div class="q-input-row">
+  <input type="text" class="mini-input" id="recip" placeholder="?" aria-label="הופכי של 4">
+  <button class="mini-btn" onclick="checkRecip()">בדקו</button>
+</div>
+<div id="recipFb"></div>
+`}},
+
+/* Step 6: Division as multiplication by reciprocal */
+{title:'🔀 חילוק כמכפלה בהופכי', render(){return `
+<div class="rule-box">⭐ במקום לחלק במספר — אפשר <strong>לכפול בהופכי שלו!</strong></div>
+<p>זה כלל מאוד שימושי, במיוחד בחילוק שברים.</p>
+<div class="example">
+<strong>דוגמה 1:</strong> ${frac(2,3)}<span class="math-expr"> : </span>${frac(2,5)}<br>
+במקום לחלק ב-${frac(2,5)}, נכפול בהופכי שלו (${frac(5,2)}):<br>
+${frac(2,3)}<span class="math-expr"> · </span>${frac(5,2)}<span class="math-expr"> = </span>${frac(10,6)}<span class="math-expr"> = </span>${frac(5,3)}
+</div>
+<div class="example">
+<strong>דוגמה 2:</strong> <span class="math-expr">5 : 1</span>${frac(3,5)}<br>
+נכתוב את <span class="math-expr">1</span>${frac(3,5)} כשבר רגיל: ${frac(8,5)}<br>
+ההופכי שלו: ${frac(5,8)}<br>
+לכן: <span class="math-expr">5 · </span>${frac(5,8)}<span class="math-expr"> = </span>${frac(25,8)}
+</div>
+<div class="highlight">💡 <strong>הכלל הכללי:</strong> <span class="math-expr">a : b = a · </span>${frac(1,'b')}<br>
+(כשעובדים עם שברים — תמיד עוברים לכפל בהופכי!)</div>
+<p>בשיעורים הבאים נשתמש בכלל הזה הרבה — הוא בסיס לחילוק שברים אלגבריים.</p>
+`}},
+
+/* Step 7: Summary */
+{title:'🏆 סיכום', render(){return `
+<p style="font-size:1.1rem;text-align:center;margin-bottom:20px">בשיעור הזה למדנו את כל התכונות של 0 ו-1:</p>
+<div class="step-summary-grid">
+  <div class="summary-item">
+    <div class="s-icon">➕</div>
+    <div class="s-title">0 — ניטרלי לחיבור</div>
+    <div class="s-text"><span class="math-expr">a + 0 = a</span></div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">✖️</div>
+    <div class="s-title">0 בכפל</div>
+    <div class="s-text"><span class="math-expr">a · 0 = 0</span></div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🚫</div>
+    <div class="s-title">חילוק באפס</div>
+    <div class="s-text">לא מוגדר! (Ø)</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">1️⃣</div>
+    <div class="s-title">1 — ניטרלי לכפל</div>
+    <div class="s-text"><span class="math-expr">a · 1 = a</span></div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🔄</div>
+    <div class="s-title">הופכי</div>
+    <div class="s-text"><span class="math-expr">a · </span>${frac(1,'a')}<span class="math-expr"> = 1</span></div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🔀</div>
+    <div class="s-title">חילוק כהופכי</div>
+    <div class="s-text"><span class="math-expr">a : b = a · </span>${frac(1,'b')}</div>
+  </div>
+</div>
+<div class="success-box" style="text-align:center;font-size:1.1rem;margin-top:20px">
+  <p>🌟 מוכנים לתרגול?</p>
+  <p>4 רמות קושי מחכות לכם</p>
+  <button class="mini-btn accent" style="margin-top:12px;font-size:1rem;padding:12px 32px" onclick="switchSection('practice')">!מוכנים לתרגול ←</button>
+</div>
+`}}
+];
+
+function renderStep(idx){
+  state.step=idx;
+  const s=steps[idx];
+  const fill=((idx+1)/TOTAL_STEPS*100).toFixed(0);
+  document.getElementById('stepFill').style.width=fill+'%';
+  document.getElementById('stepText').textContent='שלב '+(idx+1)+' מתוך '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+s.title+'</div>'+s.render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'לתרגול ←':'הבא ←';
+  if(s.init) s.init();
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+window.checkOpenZO=function(){
+  const vals=[parseInt(document.getElementById('zo1').value),parseInt(document.getElementById('zo2').value),parseInt(document.getElementById('zo3').value),parseInt(document.getElementById('zo4').value)];
+  const ans=[0,0,1,1];
+  let ok=0;
+  vals.forEach((v,i)=>{
+    const el=document.getElementById('zo'+(i+1));
+    if(v===ans[i]){el.classList.add('correct');el.classList.remove('wrong');ok++}
+    else{el.classList.add('wrong');el.classList.remove('correct')}
+  });
+  const fb=document.getElementById('openFb');
+  if(ok===4){fb.innerHTML='<div class="feedback-inline ok">✅ מצוין! כל ה-4 נכונים!</div>';document.getElementById('openReveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ '+ok+' מתוך 4 נכונים. חשבו: איזה מספר אם נחבר/נחסר/נכפול/נחלק לא ישנה את 4?</div>'}
+};
+window.checkZeroAdd=function(){
+  const v=parseInt(document.getElementById('zeroAdd').value);
+  const fb=document.getElementById('zeroAddFb');
+  if(v===23){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! חיבור וחיסור של 0 לא משנים את המספר.</div>';document.getElementById('zeroAdd').classList.add('correct')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. כל פעולת ±0 משאירה את המספר ללא שינוי.</div>'}
+};
+window.checkZeroMul=function(){
+  const v=parseInt(document.getElementById('zeroMul').value);
+  const fb=document.getElementById('zeroMulFb');
+  if(v===0){fb.innerHTML='<div class="feedback-inline ok">✅ נכון!</div>';document.getElementById('zeroMul').classList.add('correct');document.getElementById('zeroMulReveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ זכרו: כל מספר כפול 0 שווה 0.</div>'}
+};
+window.checkOneMul=function(){
+  const v=parseInt(document.getElementById('oneMul').value);
+  const fb=document.getElementById('oneMulFb');
+  if(v===1){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! 1 הוא האיבר הניטרלי לכפל.</div>';document.getElementById('oneMul').classList.add('correct')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ חשבו: באיזה מספר אם נכפול את 17 נקבל 17?</div>'}
+};
+window.checkRecip=function(){
+  const v=document.getElementById('recip').value.trim().replace(/\s/g,'');
+  const fb=document.getElementById('recipFb');
+  if(v==='0.25'||v==='1/4'||v==='.25'){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! ההופכי של 4 הוא 1/4 = 0.25, כי 4 · 0.25 = 1.</div>';document.getElementById('recip').classList.add('correct')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ ההופכי של מספר n הוא 1/n. ההופכי של 4?</div>'}
+};
+
+/* ===== QUESTION GENERATORS — STUBS, will be filled in next phases ===== */
+function genEasy(){
+  rng=mulberry32(dateSeed+100);
+  const qs=[];
+  /* Q1-5: השלמת תרגילים עם 0/1 */
+  const slot1=[
+    {tmpl:(n)=>({stem:'השלימו את המספר החסר: <code>'+n+' + ☐ = '+n+'</code>',ans:0,exp:'חיבור 0 לא משנה את המספר.'})},
+    {tmpl:(n)=>({stem:'השלימו את המספר החסר: <code>'+n+' - ☐ = '+n+'</code>',ans:0,exp:'חיסור 0 לא משנה את המספר.'})},
+    {tmpl:(n)=>({stem:'השלימו את המספר החסר: <code>☐ · '+n+' = '+n+'</code>',ans:1,exp:'1 הוא האיבר הניטרלי לכפל.'})},
+    {tmpl:(n)=>({stem:'השלימו את המספר החסר: <code>'+n+' : ☐ = '+n+'</code>',ans:1,exp:'1 הוא האיבר הניטרלי לחילוק.'})},
+    {tmpl:(n)=>({stem:'השלימו את המספר החסר: <code>'+n+' · ☐ = 0</code>',ans:0,exp:'כל מספר כפול 0 שווה 0.'})}
+  ];
+  shuffle(slot1).forEach(s=>{
+    const n=RI(3,99);const item=s.tmpl(n);
+    qs.push({type:'input',stem:item.stem,answer:item.ans,explanation:item.exp});
+  });
+  /* Q6-10: חישוב ביטויים עם 0/1 */
+  for(let i=0;i<5;i++){
+    const variants=[
+      ()=>{const a=RI(5,30);return {stem:'חשבו: <code>'+a+' · 1 =</code>',ans:a,exp:'<span class="math-expr">'+a+' · 1 = '+a+'</span> (כפל ב-1).'};},
+      ()=>{const a=RI(5,30);return {stem:'חשבו: <code>0 : '+a+' =</code>',ans:0,exp:'<span class="math-expr">0 : '+a+' = 0</span> (חילוק 0 במספר).'};},
+      ()=>{const a=RI(5,30);return {stem:'חשבו: <code>'+a+' - '+a+' : 1 =</code>',ans:0,exp:'<span class="math-expr">'+a+' - '+a+' : 1 = '+a+' - '+a+' = 0</span>'};},
+      ()=>{const a=RI(2,12);const b=2*a;return {stem:'חשבו: <code>'+b+' : '+a+' : 1 =</code>',ans:2,exp:'<span class="math-expr">'+b+' : '+a+' = 2</span>, ואז <span class="math-expr">2 : 1 = 2</span>.'};},
+      ()=>{const a=RI(10,50);return {stem:'חשבו: <code>'+a+' + 0 - 0 + 0 =</code>',ans:a,exp:'חיבור וחיסור של 0 לא משנים.'};},
+      ()=>{const a=RI(2,15);const b=RI(2,9);return {stem:'חשבו: <code>('+a+' - '+a+') · '+b+' =</code>',ans:0,exp:'<span class="math-expr">'+a+' - '+a+' = 0</span>, ו-<span class="math-expr">0 · '+b+' = 0</span>.'};}
+    ];
+    const pickV=variants[i%variants.length];
+    const it=pickV();
+    qs.push({type:'input',stem:it.stem,answer:it.ans,explanation:it.exp});
+  }
+  /* Q11-14: מוגדר/לא מוגדר */
+  const defItems=[
+    {expr:'9 : 0',def:false,exp:'אסור לחלק באפס — לא מוגדר.'},
+    {expr:'0 : 9',def:true,exp:'מותר לחלק 0 במספר אחר. <span class="math-expr">0 : 9 = 0</span>.'},
+    {expr:'0 · 0',def:true,exp:'<span class="math-expr">0 · 0 = 0</span> — מוגדר.'},
+    {expr:'(4 - 4) : 0',def:false,exp:'<span class="math-expr">4 - 4 = 0</span>, אבל חילוק באפס לא מוגדר.'}
+  ];
+  shuffle(defItems).forEach(it=>{
+    const opts=['מוגדר','לא מוגדר Ø'];
+    qs.push({type:'mc',stem:'האם הביטוי מוגדר? <code>'+it.expr+'</code>',options:opts,answer:it.def?0:1,explanation:it.exp});
+  });
+  /* Q15-17: <,>,= */
+  const cmpItems=[
+    {a:482,opA:'· 0',va:0,b:482,opB:'+ 1',vb:483,sign:'<',exp:'<span class="math-expr">482 · 0 = 0</span>, ו-<span class="math-expr">482 + 1 = 483</span>. 0 קטן מ-483.'},
+    {a:13,opA:'+ 0',va:13,b:13,opB:'· 0',vb:0,sign:'>',exp:'<span class="math-expr">13 + 0 = 13</span>, ו-<span class="math-expr">13 · 0 = 0</span>. 13 גדול מ-0.'},
+    {a:1,opA:'· 89',va:89,b:89,opB:': 1',vb:89,sign:'=',exp:'<span class="math-expr">1 · 89 = 89</span>, ו-<span class="math-expr">89 : 1 = 89</span>. שווים.'}
+  ];
+  cmpItems.forEach(it=>{
+    const opts=['<','=','>'];
+    const ai=opts.indexOf(it.sign);
+    qs.push({type:'mc',stem:'איזה סימן יש להציב? <code>'+it.a+' '+it.opA+' ☐ '+it.b+' '+it.opB+'</code>',options:opts,answer:ai,explanation:it.exp});
+  });
+  /* Q18-20: השלמת פעולה */
+  const opItems=[
+    {a:8,b:1,res:8,op:'·',others:['+','-',':'],exp:'<span class="math-expr">8 · 1 = 8</span>'},
+    {a:25,b:0,res:0,op:'·',others:['+','-',':'],exp:'<span class="math-expr">25 · 0 = 0</span>'},
+    {a:0,b:27,res:27,op:'+',others:['-','·',':'],exp:'<span class="math-expr">0 + 27 = 27</span>'}
+  ];
+  opItems.forEach(it=>{
+    const opts=shuffle([it.op,...it.others]);
+    qs.push({type:'mc',stem:'איזו פעולה להציב? <code>'+it.a+' ☐ '+it.b+' = '+it.res+'</code>',options:opts,answer:opts.indexOf(it.op),explanation:it.exp});
+  });
+  return qs;
+}
+function genMedium(){
+  rng=mulberry32(dateSeed+200);
+  const qs=[];
+  /* Q1-5: מציאת מספר חסר עם 0/1 */
+  const m1=[
+    ()=>{const n=RI(20,200);return {stem:'מצאו את המספר החסר: <code>'+n+' - ☐ = 0</code>',ans:n,exp:'<span class="math-expr">'+n+' - '+n+' = 0</span>.'};},
+    ()=>{const n=RI(2,15);return {stem:'מצאו את המספר החסר: <code>0 : ☐ = 0</code> (תנו דוגמה לערך חיובי)',ans:n,exp:'כל מספר חיובי ≠ 0 מתאים. <span class="math-expr">0 : '+n+' = 0</span>.'};},
+    ()=>{const n=RI(3,15);return {stem:'מצאו את המספר החסר: <code>('+n+' - ☐) · '+n+' = 0</code>',ans:n,exp:'הסוגריים חייבים להיות 0, ולכן <span class="math-expr">'+n+' - '+n+' = 0</span>.'};},
+    ()=>{return {stem:'מצאו את המספר החסר: <code>(5 - 4) : ☐ = 1</code>',ans:1,exp:'<span class="math-expr">5 - 4 = 1</span>, ו-<span class="math-expr">1 : 1 = 1</span>.'};},
+    ()=>{const n=RI(5,40);return {stem:'מצאו את המספר החסר: <code>'+n+' · ☐ = '+n+'</code>',ans:1,exp:'1 הוא האיבר הניטרלי לכפל.'};}
+  ];
+  shuffle(m1).forEach(f=>{const it=f();qs.push({type:'input',stem:it.stem,answer:it.ans,explanation:it.exp})});
+  /* Q6-9: מציאת ההופכי */
+  const recItems=[
+    {n:8,ans:[0.125,1/8],disp:'1/8',exp:'<span class="math-expr">8 · </span><span class="frac"><span class="num">1</span><span class="den">8</span></span><span class="math-expr"> = 1</span>'},
+    {n:5,ans:[0.2,1/5],disp:'1/5',exp:'<span class="math-expr">5 · </span><span class="frac"><span class="num">1</span><span class="den">5</span></span><span class="math-expr"> = 1</span>'},
+    {n:4,ans:[0.25,1/4],disp:'1/4',exp:'<span class="math-expr">4 · </span><span class="frac"><span class="num">1</span><span class="den">4</span></span><span class="math-expr"> = 1</span>'},
+    {n:10,ans:[0.1,1/10],disp:'1/10',exp:'<span class="math-expr">10 · 0.1 = 1</span>'}
+  ];
+  shuffle(recItems).forEach(it=>{
+    qs.push({type:'input',stem:'מצאו את ההופכי של <code>'+it.n+'</code> (כתבו כשבר עשרוני, למשל 0.5)',answer:it.ans,explanation:it.exp});
+  });
+  /* Q10-13: כתיבת ההופכי (MC) */
+  const recMC=[
+    {n:'5',correct:'1/5',wrong:['5','5/1','-5']},
+    {n:'1/3',correct:'3',wrong:['1/3','-3','3/3']},
+    {n:'1',correct:'1',wrong:['0','1/1 (לא קיים)','-1']},
+    {n:'2/7',correct:'7/2',wrong:['2/7','-2/7','7']}
+  ];
+  shuffle(recMC).forEach(it=>{
+    const opts=shuffle([it.correct,...it.wrong]);
+    qs.push({type:'mc',stem:'מהו ההופכי של <code>'+it.n+'</code>?',options:opts,answer:opts.indexOf(it.correct),explanation:'המכפלה צריכה לתת 1.'});
+  });
+  /* Q14-17: חילוק כמכפלה בהופכי */
+  const divItems=[
+    {a:7,bn:1,bd:3,resn:21,resd:1,exp:'<span class="math-expr">7 · 3 = 21</span>'},
+    {a:6,bn:1,bd:2,resn:12,resd:1,exp:'<span class="math-expr">6 · 2 = 12</span>'},
+    {a:10,bn:1,bd:5,resn:50,resd:1,exp:'<span class="math-expr">10 · 5 = 50</span>'},
+    {a:8,bn:1,bd:4,resn:32,resd:1,exp:'<span class="math-expr">8 · 4 = 32</span>'}
+  ];
+  shuffle(divItems).forEach(it=>{
+    qs.push({type:'input',stem:'חשבו: <code>'+it.a+' : (1/'+it.bd+') =</code>',answer:it.resn,explanation:'במקום לחלק ב-1/'+it.bd+', נכפול ב-'+it.bd+'. '+it.exp});
+  });
+  /* Q18-20: נכון/לא נכון */
+  const tfItems=[
+    {claim:'<code>a · 0 = 0</code> נכון לכל מספר <span class="math-expr">a</span>',ans:true,exp:'כל מספר כפול 0 שווה 0.'},
+    {claim:'<code>a : a = 1</code> נכון לכל מספר <span class="math-expr">a</span>',ans:false,exp:'לא נכון! עבור <span class="math-expr">a = 0</span> הביטוי לא מוגדר.'},
+    {claim:'<code>(a + a) · 1 = 2a</code> נכון לכל מספר <span class="math-expr">a</span>',ans:true,exp:'<span class="math-expr">a + a = 2a</span>, ו-<span class="math-expr">2a · 1 = 2a</span>.'}
+  ];
+  tfItems.forEach(it=>{
+    const opts=['נכון','לא נכון'];
+    qs.push({type:'mc',stem:'האם הטענה נכונה?<br>'+it.claim,options:opts,answer:it.ans?0:1,explanation:it.exp});
+  });
+  return qs;
+}
+function genHard(){
+  rng=mulberry32(dateSeed+300);
+  const qs=[];
+  /* Q1-5: ביטויים מורכבים */
+  const h1=[
+    {stem:'חשבו: <code>(13 - 6 · 2) · 0 =</code>',ans:0,exp:'כפל ב-0 = 0, גם בלי לחשב את הסוגריים.'},
+    {stem:'חשבו: <code>(9 + 4) · 1 =</code>',ans:13,exp:'כפל ב-1 לא משנה: <span class="math-expr">9 + 4 = 13</span>.'},
+    {stem:'מצאו את המספר החסר: <code>(9 + 4) : ☐ = 13</code>',ans:1,exp:'<span class="math-expr">9 + 4 = 13</span>, ו-<span class="math-expr">13 : 1 = 13</span>.'},
+    {stem:'מצאו את המספר החסר: <code>5 · (1 - ☐) = 0</code>',ans:1,exp:'הסוגריים חייבים להיות 0, ולכן <span class="math-expr">1 - 1 = 0</span>.'},
+    {stem:'חשבו: <code>0 · (482 + 17 - 9) =</code>',ans:0,exp:'כפל ב-0 → 0, ללא קשר לסוגריים.'}
+  ];
+  h1.forEach(it=>qs.push({type:'input',stem:it.stem,answer:it.ans,explanation:it.exp}));
+  /* Q6-9: חילוק כמכפלה בהופכי - מורכב */
+  const h2=[
+    {stem:'חשבו: <code>5/6 : 2 =</code> (כתבו כשבר עשרוני)',ans:[5/12],exp:'<span class="math-expr">5/6 · 1/2 = 5/12 ≈ 0.4167</span>'},
+    {stem:'חשבו: <code>3 : 1/4 =</code>',ans:12,exp:'<span class="math-expr">3 · 4 = 12</span>'},
+    {stem:'חשבו: <code>1/2 : 1/8 =</code>',ans:4,exp:'<span class="math-expr">1/2 · 8 = 4</span>'},
+    {stem:'חשבו: <code>4 : 1/5 =</code>',ans:20,exp:'<span class="math-expr">4 · 5 = 20</span>'}
+  ];
+  h2.forEach(it=>qs.push({type:'input',stem:it.stem,answer:it.ans,explanation:it.exp}));
+  /* Q10-13: a≠0 — נכון/לא נכון */
+  const h3=[
+    {claim:'בהינתן <span class="math-expr">a ≠ 0</span>: <code>a : a = 1</code>',ans:true,exp:'נכון — כל מספר חלקי עצמו = 1, אם הוא לא 0.'},
+    {claim:'בהינתן <span class="math-expr">a ≠ 0</span>: <code>a/0 = 0</code>',ans:false,exp:'לא נכון! חילוק באפס לא מוגדר.'},
+    {claim:'בהינתן <span class="math-expr">a ≠ 0</span>: <code>0/a = 0</code>',ans:true,exp:'נכון — מותר לחלק 0 במספר אחר.'},
+    {claim:'בהינתן <span class="math-expr">a ≠ 0</span>: <code>(10·a) : (2·a) = 5</code>',ans:true,exp:'<span class="math-expr">10a : 2a = 10/2 = 5</span>.'}
+  ];
+  h3.forEach(it=>{const opts=['נכון','לא נכון'];qs.push({type:'mc',stem:'האם הטענה נכונה?<br>'+it.claim,options:opts,answer:it.ans?0:1,explanation:it.exp})});
+  /* Q14-17: השלמת מספר חסר - מורכב */
+  const h4=[
+    {stem:'מצאו את המספר החסר: <code>(18 - 7 · ☐) · 1/4 = 1</code>',ans:2,exp:'הסוגריים חייבים להיות 4, אז <span class="math-expr">7 · 2 = 14</span>, ו-<span class="math-expr">18 - 14 = 4</span>.'},
+    {stem:'מצאו את המספר החסר: <code>5 · (1 - ☐) = 0</code>',ans:1,exp:'<span class="math-expr">1 - 1 = 0</span>, ו-<span class="math-expr">5 · 0 = 0</span>.'},
+    {stem:'מצאו את המספר החסר: <code>☐ · (12 - 12) = 0</code> (תנו דוגמה למספר חיובי)',ans:[1,2,3,4,5,6,7,8,9,10],exp:'הסוגריים = 0, אז כל מספר כפול 0 = 0.'},
+    {stem:'מצאו את המספר החסר: <code>(8 + ☐) : 1 = 8</code>',ans:0,exp:'<span class="math-expr">8 : 1 = 8</span>, אז הסוגריים = 8, ולכן ☐ = 0.'}
+  ];
+  h4.forEach(it=>qs.push({type:'input',stem:it.stem,answer:it.ans,explanation:it.exp}));
+  /* Q18-20: השלמת פעולה — מורכב */
+  const h5=[
+    {stem:'איזו פעולה להציב? <code>8 ☐ 1 = 8</code>',options:['+','-','·',':'],correct:'·',exp:'גם · וגם : תקפים. הבחירה כאן היא ·.'},
+    {stem:'איזו פעולה להציב? <code>0 ☐ 27 = 0</code>',options:['+','-','·',':'],correct:'·',exp:'<span class="math-expr">0 · 27 = 0</span> (גם 0 : 27 = 0).'},
+    {stem:'איזו פעולה להציב? <code>15 ☐ 0 = 15</code>',options:['+','-','·',':'],correct:'+',exp:'<span class="math-expr">15 + 0 = 15</span> (גם 15 - 0 = 15).'}
+  ];
+  h5.forEach(it=>{
+    const opts=shuffle([...it.options]);
+    qs.push({type:'mc',stem:it.stem,options:opts,answer:opts.indexOf(it.correct),explanation:it.exp});
+  });
+  return qs;
+}
+function genChallenge(){
+  rng=mulberry32(dateSeed+400);
+  const qs=[];
+  /* Q1-3: a≠0 - true/false */
+  const c1=[
+    {claim:'<code>1 + a = 1 · a</code>',ans:false,exp:'לא נכון. לדוגמה <span class="math-expr">a = 2</span>: <span class="math-expr">1+2 = 3</span> אבל <span class="math-expr">1·2 = 2</span>.'},
+    {claim:'<code>(a + a) · 1 = 2a</code>',ans:true,exp:'<span class="math-expr">a + a = 2a</span>, כפול 1 לא משנה.'},
+    {claim:'<code>a + 0 = 0 + a</code>',ans:true,exp:'נכון מחוק החילוף, וכי 0 לא משנה את המספר.'}
+  ];
+  c1.forEach(it=>{const opts=['נכון','לא נכון'];qs.push({type:'mc',stem:'בכל הסעיפים <span class="math-expr">a ≠ 0</span>. נכון או לא נכון?<br>'+it.claim,options:opts,answer:it.ans?0:1,explanation:it.exp})});
+  /* Q4-6: השלמת פעולות בין מספרים */
+  const c2=[
+    {stem:'איזו פעולה ייתן 0? <code>0 ☐ 10 = 0</code>',options:['+','-','·',':'],correct:'·',exp:'<span class="math-expr">0 · 10 = 0</span> (וגם 0 : 10 = 0).'},
+    {stem:'איזו פעולה תיתן 13.2? <code>13.2 ☐ 0 = 13.2</code>',options:['+','-','·',':'],correct:'+',exp:'<span class="math-expr">13.2 + 0 = 13.2</span> (וגם 13.2 - 0).'},
+    {stem:'איזו פעולה תיתן 0.7? <code>0.7 ☐ 1 = 0.7</code>',options:['+','-','·',':'],correct:'·',exp:'<span class="math-expr">0.7 · 1 = 0.7</span> (וגם 0.7 : 1).'}
+  ];
+  c2.forEach(it=>{const opts=shuffle([...it.options]);qs.push({type:'mc',stem:it.stem,options:opts,answer:opts.indexOf(it.correct),explanation:it.exp})});
+  /* Q7-9: נוסחת המרת טמפרטורה k = 5/9·(f-32) + 273 */
+  const tempItems=[
+    {f:32,ans:273,exp:'<span class="math-expr">5/9 · (32 - 32) + 273 = 5/9 · 0 + 273 = 0 + 273 = 273</span>'},
+    {f:113,ans:318,exp:'<span class="math-expr">5/9 · (113 - 32) + 273 = 5/9 · 81 + 273 = 45 + 273 = 318</span>'},
+    {f:212,ans:373,exp:'<span class="math-expr">5/9 · (212 - 32) + 273 = 5/9 · 180 + 273 = 100 + 273 = 373</span>'}
+  ];
+  tempItems.forEach(it=>qs.push({type:'input',stem:'נוסחת המרת טמפרטורה: <code>k = 5/9 · (f - 32) + 273</code>.<br>חשבו את <span class="math-expr">k</span> עבור <code>f = '+it.f+'</code>',answer:it.ans,explanation:it.exp}));
+  /* Q10-12: שיטות בונוס */
+  const bonusItems=[
+    {x:90,a:99,b:100,c:99,exp:'שיטה 1: <span class="math-expr">90 + 90/10 = 99</span>. שיטה 2: <span class="math-expr">90 + 10 = 100</span>. שיטה 3: <span class="math-expr">90 + 0.1·90 = 99</span>.'},
+    {x:80,a:88,b:90,c:88,exp:'שיטה 1: <span class="math-expr">80 + 8 = 88</span>. שיטה 2: <span class="math-expr">80 + 10 = 90</span>. שיטה 3: <span class="math-expr">80 + 8 = 88</span>.'},
+    {x:50,a:55,b:60,c:55,exp:'שיטה 1: <span class="math-expr">50 + 5 = 55</span>. שיטה 2: <span class="math-expr">50 + 10 = 60</span>. שיטה 3: <span class="math-expr">50 + 5 = 55</span>.'}
+  ];
+  bonusItems.forEach(it=>{
+    qs.push({type:'mc',stem:'לעובד יש שלוש שיטות בונוס: <code>x + x/10</code>, <code>x + 10</code>, <code>x + 0.1·x</code>. כשהמשכורת היא <code>x = '+it.x+'</code>, איזו שיטה נותנת את הסכום הגבוה ביותר?',options:['שיטה 1','שיטה 2','שיטה 3','כולן שוות'],answer:it.b>it.a&&it.b>it.c?1:(it.a===it.b&&it.b===it.c?3:0),explanation:it.exp});
+  });
+  /* Q13-15: חידות עם הופכיים */
+  qs.push({type:'input',stem:'איזה מספר הוא ההופכי של עצמו? (תנו תשובה חיובית)',answer:1,explanation:'<span class="math-expr">1 · 1 = 1</span>. רק 1 (ו-1-) מקיים זאת.'});
+  qs.push({type:'input',stem:'מצאו מספר <span class="math-expr">a</span> כך ש-<code>a · 1/a = 1</code> (חוץ מ-1).<br>תנו דוגמה אחת — מספר חיובי בין 2 ל-10.',answer:[2,3,4,5,6,7,8,9,10],explanation:'כל מספר ≠ 0 מקיים את התכונה. <span class="math-expr">a · 1/a = 1</span> תמיד.'});
+  qs.push({type:'mc',stem:'אם ההופכי של מספר הוא המספר עצמו, מה המספר יכול להיות?',options:['רק 0','רק 1','1 או 1-','כל מספר חיובי'],answer:2,explanation:'<span class="math-expr">1 · 1 = 1</span> ו-<span class="math-expr">(-1) · (-1) = 1</span>. רק שני המספרים האלה הם הופכי של עצמם.'});
+  return qs;
+}
+
+function generateQuestions(level){
+  if(level==='easy') return genEasy();
+  if(level==='medium') return genMedium();
+  if(level==='hard') return genHard();
+  return genChallenge();
+}
+
+function renderLevelTabs(){
+  const container=document.getElementById('levelTabs');
+  container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(lv=>{
+    const btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    const done=scores[lv].filter(s=>s===1).length;
+    const total=LEVEL_COUNTS[lv];
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+total+')</span>':'');
+    btn.onclick=()=>switchLevel(lv);
+    container.appendChild(btn);
+  });
+}
+
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv]) questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+
+function updateLevelProgress(){
+  const lv=state.level;const total=LEVEL_COUNTS[lv];
+  const done=answered[lv].filter(a=>a).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+
+function renderQuestion(){
+  const lv=state.level;const idx=state.qIndex;
+  const qs=questions[lv];
+  if(!qs) return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  const q=qs[idx];
+  const area=document.getElementById('questionArea');
+  const isAnswered=answered[lv][idx];
+
+  let html='<div class="q-card"><div class="q-number">שאלה '+(idx+1)+' מתוך '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach((opt,i)=>{
+      const letter=LETTERS[i];
+      let cls='q-opt';
+      if(isAnswered){
+        cls+=' disabled';
+        if(i===q.answer) cls+=' correct';
+        else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel']) cls+=' wrong';
+      }
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>בדקו</button>';
+  } else if(q.type==='input'||q.type==='input-text'){
+    html+='<div class="q-input-row"><input type="'+(q.type==='input'?'number':'text')+'" class="q-input" id="qInput" placeholder="תשובה" dir="ltr" aria-label="תשובה">';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">בדקו</button>';
+    html+='</div>';
+    if(isAnswered){
+      const inp=q.type==='input'?q.answer:(q.display||q.answer[0]);
+      html+='<div style="margin-top:4px;font-weight:700;direction:ltr">תשובה: '+inp+'</div>';
+    }
+  }
+
+  if(isAnswered){
+    const isCorrect=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'✅ נכון! ':'❌ ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(el=>{
+      el.onclick=()=>{
+        area.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+  const inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){
+    inp.focus();
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkInput()});
+  }
+
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'סיום':'הבא ←';
+}
+
+window.checkMC=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const selected=document.querySelector('.q-opt.selected');
+  if(!selected) return;
+  const si=parseInt(selected.dataset.i);
+  const isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  answered[lv][idx+'_sel']=si;
+
+  document.querySelectorAll('.q-opt').forEach((el,i)=>{
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer) el.classList.add('correct');
+    else if(i===si&&!isCorrect) el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון מאוד!','✅ יפה!'])+' ':'❌ לא נכון. ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkInput=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inp=document.getElementById('qInput');
+  const val=inp.value.trim();
+  if(!val) return;
+  let isCorrect=false;
+  if(q.type==='input'){
+    const num=parseFloat(val.replace(',','.'));
+    if(Array.isArray(q.answer)) isCorrect=q.answer.some(a=>Math.abs(a-num)<1e-9);
+    else isCorrect=Math.abs(q.answer-num)<1e-9;
+  } else {
+    const norm=val.replace(/\s+/g,'').toLowerCase();
+    isCorrect=q.answer.some(a=>a.replace(/\s+/g,'').toLowerCase()===norm);
+  }
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');
+  inp.disabled=true;
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון!'])+' ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+function nextQuestion(){
+  const lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function')showAuthModal();
+    return;
+  }
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+
+function renderLevelComplete(){
+  const lv=state.level;
+  const correct=scores[lv].filter(s=>s===1).length;
+  const total=LEVEL_COUNTS[lv];
+  const pct=Math.round(correct/total*100);
+  const scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  const emoji=pct>=80?'🎉':pct>=50?'👏':'💪';
+
+  document.getElementById('questionArea').innerHTML=`
+    <div class="q-card"><div class="level-complete">
+      <div class="big-emoji">${emoji}</div>
+      <h2>סיימתם את רמת "${LEVEL_NAMES[lv]}"!</h2>
+      <div class="score-display${scoreClass}">${correct} / ${total}</div>
+      <p style="color:var(--text-light);margin-bottom:16px">${pct}% הצלחה</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="mini-btn" onclick="retryLevel()">🔄 נסו שוב</button>
+        ${lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">▶ לרמה הבאה</button>':''}
+      </div>
+    </div></div>`;
+
+  if(pct>=80) showConfetti();
+  saveState();
+}
+
+window.retryLevel=function(){
+  const lv=state.level;
+  scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);
+  state.qIndex=0;
+  renderLevelTabs();renderQuestion();saveState();
+};
+
+window.nextLevel=function(){
+  const order=['easy','medium','hard','challenge'];
+  const ci=order.indexOf(state.level);
+  if(ci<order.length-1) switchLevel(order[ci+1]);
+};
+
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.section===sec);
+  });
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+function showConfetti(){
+  const box=document.getElementById('confettiBox');
+  box.innerHTML='';
+  const colors=['#2563eb','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';
+    c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(()=>box.innerHTML='',5000);
+}
+
+function init(){
+  loadState();
+  Object.keys(LEVEL_COUNTS).forEach(lv=>{
+    if(!scores[lv]||!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice') switchSection('practice');
+}
+init();
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+</body>
+</html>

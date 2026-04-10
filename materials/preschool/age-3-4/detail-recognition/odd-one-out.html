@@ -394,11 +394,13 @@ function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.fl
 
 // ===== RENDER TABS =====
 function renderTabs(){
+  const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
   const c = document.getElementById('levelTabs');
   c.innerHTML = levels.map((lv,i) => {
     const cls = i===currentLevel?'active':'';
     const comp = levelResults[lv.id]?'completed':'';
-    return `<button class="level-tab ${cls} ${comp}" onclick="goLevel(${i})" style="${i===currentLevel?'background:'+lv.color+';border-color:'+lv.color:''}">${lv.title}</button>`;
+    const lock = lk&&i>0?' 🔒':'';
+    return `<button class="level-tab ${cls} ${comp}" onclick="goLevel(${i})" style="${i===currentLevel?'background:'+lv.color+';border-color:'+lv.color:''}">${lv.title}${lock}</button>`;
   }).join('');
   // scroll active tab into view
   setTimeout(()=>{const a=c.querySelector('.active');if(a)a.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})},100);
@@ -631,8 +633,8 @@ function showLevelComplete(){
 }
 
 // ===== NAVIGATION =====
-function goLevel(i){ currentLevel=i; renderLevel(); window.scrollTo({top:0,behavior:'smooth'}); }
-function nextLevel(){ if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'});} }
+function goLevel(i){ if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return;} currentLevel=i; renderLevel(); window.scrollTo({top:0,behavior:'smooth'}); }
+function nextLevel(){ if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return;} if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'});} }
 function retry(){ renderLevel(); window.scrollTo({top:0,behavior:'smooth'}); }
 
 // ===== MODE =====
@@ -659,6 +661,7 @@ function printCurrent(){ window.print(); }
 // ===== INIT =====
 const area = document.getElementById('exerciseArea');
 renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs();});
 </script>
 
   <script src="../../../../js/auth-gate.js"></script>

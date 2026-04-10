@@ -152,7 +152,7 @@ function drawMaze(ctx,maze,canW,canH,n,th){
 }
 
 // ===== RENDER =====
-function rTabs(){const el=document.getElementById('tabs');el.innerHTML=THEMES.map((t,i)=>`<button class="tb ${i===cur?'on':''} ${reso[i]?'dn':''}" onclick="go(${i})">${t.t}</button>`).join('');setTimeout(()=>{const a=el.querySelector('.on');if(a)a.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})},100)}
+function rTabs(){const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());const el=document.getElementById('tabs');el.innerHTML=THEMES.map((t,i)=>`<button class="tb ${i===cur?'on':''} ${reso[i]?'dn':''}" onclick="go(${i})">${t.t}${lk&&i>0?' 🔒':''}</button>`).join('');setTimeout(()=>{const a=el.querySelector('.on');if(a)a.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})},100)}
 
 function rLv(){
 const th=THEMES[cur],ar=document.getElementById('area');
@@ -290,11 +290,12 @@ function chk(){
   }
 }
 
-function go(i){cur=i;rLv();window.scrollTo({top:0,behavior:'smooth'})}
-function nxt(){if(cur<THEMES.length-1){cur++;rLv();window.scrollTo({top:0,behavior:'smooth'})}}
+function go(i){if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}cur=i;rLv();window.scrollTo({top:0,behavior:'smooth'})}
+function nxt(){if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}if(cur<THEMES.length-1){cur++;rLv();window.scrollTo({top:0,behavior:'smooth'})}}
 function retry(){rLv();window.scrollTo({top:0,behavior:'smooth'})}
 function uPr(){document.getElementById('pf').style.width=Math.round(Object.keys(reso).length/THEMES.length*100)+'%'}
 rLv();
+document.addEventListener('DOMContentLoaded',function(){rTabs();});
 </script>
   <script src="../../../../js/auth-gate.js"></script>
 </body>

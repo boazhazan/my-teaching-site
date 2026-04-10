@@ -475,7 +475,7 @@ function floodFill(ctx,startX,startY,fillR,fillG,fillB,w,h){
   ctx.putImageData(imgData,0,0);
 }
 
-function rTabs(){const el=document.getElementById('tabs');el.innerHTML=PICS.map((p,i)=>`<button class="tb ${i===cur?'on':''} ${reso[p.id]?'dn':''}" onclick="go(${i})">${p.t}</button>`).join('');setTimeout(()=>{const a=el.querySelector('.on');if(a)a.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})},100)}
+function rTabs(){const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());const el=document.getElementById('tabs');el.innerHTML=PICS.map((p,i)=>`<button class="tb ${i===cur?'on':''} ${reso[p.id]?'dn':''}" onclick="go(${i})">${p.t}${lk&&i>0?' 🔒':''}</button>`).join('');setTimeout(()=>{const a=el.querySelector('.on');if(a)a.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})},100)}
 
 function rLv(){
 const pic=PICS[cur],ar=document.getElementById('area');
@@ -527,11 +527,12 @@ cv.onclick=function(e){
 function resetPic(){drawPic()}
 function pickN(el){document.querySelectorAll('.ck-item').forEach(c=>c.classList.remove('on'));el.classList.add('on');selN=parseInt(el.dataset.n)}
 function done(){reso[PICS[cur].id]=true;document.getElementById('q0').classList.add('ok');document.getElementById('ld').classList.add('show');document.getElementById('ld').scrollIntoView({behavior:'smooth',block:'center'});rTabs();uPr()}
-function go(i){cur=i;rLv();window.scrollTo({top:0,behavior:'smooth'})}
-function nxt(){if(cur<PICS.length-1){cur++;rLv();window.scrollTo({top:0,behavior:'smooth'})}}
+function go(i){if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}cur=i;rLv();window.scrollTo({top:0,behavior:'smooth'})}
+function nxt(){if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}if(cur<PICS.length-1){cur++;rLv();window.scrollTo({top:0,behavior:'smooth'})}}
 function retry(){rLv();window.scrollTo({top:0,behavior:'smooth'})}
 function uPr(){document.getElementById('pf').style.width=Math.round(Object.keys(reso).length/PICS.length*100)+'%'}
 rLv();
+document.addEventListener('DOMContentLoaded',function(){rTabs();});
 </script>
   <script src="../../../../js/auth-gate.js"></script>
 </body>

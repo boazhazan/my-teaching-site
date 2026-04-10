@@ -98,7 +98,7 @@ const LV=[
 
 let cur=0,md='click',reso={},selItems=[],grpCount=0,grpColorIdx=0;
 
-function rTabs(){const el=document.getElementById('tabs');el.innerHTML=LV.map((l,i)=>`<button class="tb ${i===cur?'on':''} ${reso[l.id]?'dn':''}" onclick="go(${i})">${l.t}</button>`).join('');setTimeout(()=>{const a=el.querySelector('.on');if(a)a.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})},100)}
+function rTabs(){const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());const el=document.getElementById('tabs');el.innerHTML=LV.map((l,i)=>`<button class="tb ${i===cur?'on':''} ${reso[l.id]?'dn':''}" onclick="go(${i})">${l.t}${lk&&i>0?' 🔒':''}</button>`).join('');setTimeout(()=>{const a=el.querySelector('.on');if(a)a.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})},100)}
 
 function rLv(){
 const lv=LV[cur],ar=document.getElementById('area'),isDw=md==='draw';
@@ -285,12 +285,13 @@ function done(){
   rTabs();uPr();
 }
 
-function go(i){cur=i;rLv();window.scrollTo({top:0,behavior:'smooth'})}
-function nxt(){if(cur<LV.length-1){cur++;rLv();window.scrollTo({top:0,behavior:'smooth'})}}
+function go(i){if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}cur=i;rLv();window.scrollTo({top:0,behavior:'smooth'})}
+function nxt(){if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}if(cur<LV.length-1){cur++;rLv();window.scrollTo({top:0,behavior:'smooth'})}}
 function retry(){rLv();window.scrollTo({top:0,behavior:'smooth'})}
 function setM(m){md=m;document.getElementById('mc1').classList.toggle('on',m==='click');document.getElementById('mc2').classList.toggle('on',m==='draw');if(m==='click')document.getElementById('hb').classList.remove('show');rLv()}
 function uPr(){document.getElementById('pf').style.width=Math.round(Object.keys(reso).length/LV.length*100)+'%'}
 rLv();
+document.addEventListener('DOMContentLoaded',function(){rTabs();});
 </script>
   <script src="../../../../js/auth-gate.js"></script>
 </body>

@@ -91,7 +91,7 @@ const LV=[
 let cur=0,md='click',g1=0,g2=0,res={};
 function sh(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
 const E1=['!מעולה 📉','!עין חדה 🔍','!יופי 👏','!מדהים 🌟'];
-function rTabs(){const el=document.getElementById('tabs');el.innerHTML=LV.map((l,i)=>`<button class="tb ${i===cur?'on':''} ${res[l.id]?'dn':''}" onclick="go(${i})">${l.t}</button>`).join('');setTimeout(()=>{const a=el.querySelector('.on');if(a)a.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})},100)}
+function rTabs(){const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());const el=document.getElementById('tabs');el.innerHTML=LV.map((l,i)=>`<button class="tb ${i===cur?'on':''} ${res[l.id]?'dn':''}" onclick="go(${i})">${l.t}${lk&&i>0?' 🔒':''}</button>`).join('');setTimeout(()=>{const a=el.querySelector('.on');if(a)a.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})},100)}
 function rLv(){const lv=LV[cur],ar=document.getElementById('area'),isDw=md==='draw';let h=`<div class="ph">📉 הכי מעט — ${lv.t}</div>`;
 lv.qs.forEach((q,qi)=>{const minN=Math.min(...q.groups);const indexed=q.groups.map((n,i)=>({n,isTarget:n===minN,origIdx:i}));const shuffled=sh(indexed);
 h+=`<div class="mc ${isDw?'dw':''}" id="q${qi}" data-done="0" data-wrong="0">`;if(isDw)h+=`<canvas class="dc" id="cv${qi}"></canvas>`;
@@ -110,11 +110,12 @@ const groups=card.querySelectorAll('.group-box:not(.done)');let best=null,bestD=
 if(best){if(best.dataset.target==='true'){best.classList.add('ok-pick','done','circled');best.style.setProperty('--circ-color','#27ae60');card.dataset.done='1';card.querySelectorAll('.group-box').forEach(g=>{if(!g.classList.contains('ok-pick'))g.classList.add('done')});g1++;const w=parseInt(card.dataset.wrong);const fb=document.getElementById('fb'+qi);if(w===0){card.classList.add('ok');fb.textContent=E1[Math.floor(Math.random()*E1.length)];fb.classList.add('ok','show')}else{card.classList.add('bad');fb.textContent=`נכון! עם ${w} טעויות 💪`;fb.classList.add('bad','show')}const ar=document.getElementById('area');ar._done++;if(ar._done>=ar._total)setTimeout(showD,600)}else{best.classList.add('no-pick');g2++;card.dataset.wrong=parseInt(card.dataset.wrong)+1;setTimeout(()=>best.classList.remove('no-pick'),600)}uPr()}},{passive:false});
 cv.addEventListener('pointercancel',function(){dw=false;ctx.clearRect(0,0,cv.width,cv.height)})})}
 function showD(){res[LV[cur].id]=true;let tw=0;LV[cur].qs.forEach((q,i)=>{tw+=parseInt(document.getElementById('q'+i).dataset.wrong)});const t=LV[cur].qs.length;const el=document.getElementById('ld');document.getElementById('lsc').textContent=(t-Math.min(tw,t))+' / '+t;if(tw===0){document.getElementById('lt').textContent='🏆 מושלם!';document.getElementById('ls').textContent='מצאתם את כל הקבוצות הקטנות!'}else if(tw<=2){document.getElementById('lt').textContent='👏 כל הכבוד!';document.getElementById('ls').textContent='כמעט מושלם!'}else{document.getElementById('lt').textContent='💪 סיימתם!';document.getElementById('ls').textContent='נסו שוב לשיפור!'}el.classList.add('show');el.scrollIntoView({behavior:'smooth',block:'center'});rTabs()}
-function go(i){cur=i;rLv();window.scrollTo({top:0,behavior:'smooth'})}
-function nxt(){if(cur<LV.length-1){cur++;rLv();window.scrollTo({top:0,behavior:'smooth'})}}
+function go(i){if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}cur=i;rLv();window.scrollTo({top:0,behavior:'smooth'})}
+function nxt(){if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}if(cur<LV.length-1){cur++;rLv();window.scrollTo({top:0,behavior:'smooth'})}}
 function retry(){rLv();window.scrollTo({top:0,behavior:'smooth'})}
 function setM(m){md=m;document.getElementById('mc1').classList.toggle('on',m==='click');document.getElementById('mc2').classList.toggle('on',m==='draw');if(m==='click')document.getElementById('hb').classList.remove('show');rLv()}
 function uPr(){const d=Object.keys(res).length;document.getElementById('pf').style.width=Math.round(d/LV.length*100)+'%';document.getElementById('g1').textContent=g1;document.getElementById('g2').textContent=g2}
 rLv();
+document.addEventListener('DOMContentLoaded',function(){rTabs();});
 </script>  <script src="../../../../js/auth-gate.js"></script>
 </body></html>

@@ -127,7 +127,7 @@ let cur=0,md='click',g1=0,g2=0,res={};
 function sh(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
 const E1=['!מעולה 🔢','!ספירה מושלמת ⭐','!יופי 👏','!מדהים 🌟'];
 
-function rTabs(){const el=document.getElementById('tabs');el.innerHTML=LV.map((l,i)=>`<button class="tb ${i===cur?'on':''} ${res[l.id]?'dn':''}" onclick="go(${i})">${l.t}</button>`).join('');setTimeout(()=>{const a=el.querySelector('.on');if(a)a.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})},100)}
+function rTabs(){const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());const el=document.getElementById('tabs');el.innerHTML=LV.map((l,i)=>`<button class="tb ${i===cur?'on':''} ${res[l.id]?'dn':''}" onclick="go(${i})">${l.t}${lk&&i>0?' 🔒':''}</button>`).join('');setTimeout(()=>{const a=el.querySelector('.on');if(a)a.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})},100)}
 
 function rLv(){
 const lv=LV[cur],ar=document.getElementById('area'),isDw=md==='draw';
@@ -207,12 +207,13 @@ function showD(){
   el.classList.add('show');el.scrollIntoView({behavior:'smooth',block:'center'});rTabs();
 }
 
-function go(i){cur=i;rLv();window.scrollTo({top:0,behavior:'smooth'})}
-function nxt(){if(cur<LV.length-1){cur++;rLv();window.scrollTo({top:0,behavior:'smooth'})}}
+function go(i){if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}cur=i;rLv();window.scrollTo({top:0,behavior:'smooth'})}
+function nxt(){if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}if(cur<LV.length-1){cur++;rLv();window.scrollTo({top:0,behavior:'smooth'})}}
 function retry(){rLv();window.scrollTo({top:0,behavior:'smooth'})}
 function setM(m){md=m;document.getElementById('mc1').classList.toggle('on',m==='click');document.getElementById('mc2').classList.toggle('on',m==='draw');if(m==='click')document.getElementById('hb').classList.remove('show');rLv()}
 function uPr(){const d=Object.keys(res).length;document.getElementById('pf').style.width=Math.round(d/LV.length*100)+'%';document.getElementById('g1').textContent=g1;document.getElementById('g2').textContent=g2}
 rLv();
+document.addEventListener('DOMContentLoaded',function(){rTabs();});
 </script>
   <script src="../../../../js/auth-gate.js"></script>
 </body>

@@ -113,8 +113,9 @@ const SHAPES=[
 let cur=0,selCol=COLORS[0],res={};
 
 function rTabs(){
+  const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
   const el=document.getElementById('tabs');
-  el.innerHTML=SHAPES.map((s,i)=>`<button class="tb ${i===cur?'on':''} ${res[s.id]?'dn':''}" onclick="go(${i})">${s.t}</button>`).join('');
+  el.innerHTML=SHAPES.map((s,i)=>`<button class="tb ${i===cur?'on':''} ${res[s.id]?'dn':''}" onclick="go(${i})">${s.t}${lk&&i>0?' 🔒':''}</button>`).join('');
   setTimeout(()=>{const a=el.querySelector('.on');if(a)a.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})},100);
 }
 
@@ -321,12 +322,13 @@ function completeLv(){
   rTabs();uPr();
 }
 
-function go(i){cur=i;rLv();window.scrollTo({top:0,behavior:'smooth'})}
-function nxt(){if(cur<SHAPES.length-1){cur++;rLv();window.scrollTo({top:0,behavior:'smooth'})}}
+function go(i){if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}cur=i;rLv();window.scrollTo({top:0,behavior:'smooth'})}
+function nxt(){if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}if(cur<SHAPES.length-1){cur++;rLv();window.scrollTo({top:0,behavior:'smooth'})}}
 function retry(){rLv();window.scrollTo({top:0,behavior:'smooth'})}
 function uPr(){document.getElementById('pf').style.width=Math.round(Object.keys(res).length/SHAPES.length*100)+'%'}
 
 rLv();
+document.addEventListener('DOMContentLoaded',function(){rTabs();});
 </script>
   <script src="../../../../js/auth-gate.js"></script>
 </body>

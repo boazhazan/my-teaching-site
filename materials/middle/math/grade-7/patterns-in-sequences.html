@@ -1,0 +1,1142 @@
+<!--
+  Title: חוקיות בסדרות
+  Unit: ממספרים למשתנים
+  Subject: מתמטיקה
+  Grade: ז׳
+  Lesson: 2
+  Tags: אלגברה, סדרות, חוקיות, ביטויים, דפוסים
+  Ages: 12-13
+  Icon: 🔢
+  Badge: חדש!
+  Description: מהי סדרה? איך מוצאים חוקיות? ביטויים כלליים לסדרות — תרגול ב-4 רמות קושי עם משוב מיידי
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>חוקיות בסדרות | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+
+/* Top bar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Section toggle */
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+
+/* Container */
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+
+/* ===== TEACHING SECTION ===== */
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid var(--accent);padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
+.step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+
+/* Interactive elements inside steps */
+.mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.mini-table th,.mini-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:1rem}
+.mini-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.mini-table td{background:var(--bg)}
+.mini-input{width:60px;padding:6px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:1rem;font-family:inherit;font-weight:700;transition:.3s}
+.mini-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.mini-input.correct{border-color:var(--success);background:#ecfdf5}
+.mini-input.wrong{border-color:var(--error);background:#fef2f2}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.reveal{display:none;animation:fadeIn .5s ease}
+.reveal.show{display:block}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+
+/* Shape grids */
+.sg{display:inline-grid;gap:2px;vertical-align:middle;margin:4px}
+.sc{width:18px;height:18px;border-radius:3px}
+.shape-row{display:flex;gap:16px;align-items:flex-end;justify-content:center;flex-wrap:wrap;margin:12px 0;padding:14px;background:var(--bg-soft);border-radius:var(--radius);border:1px solid var(--border)}
+.shape-box{text-align:center}
+.shape-lbl{font-weight:700;color:var(--primary-dark);font-size:.85rem;margin-bottom:4px}
+.shape-cnt{font-weight:600;color:var(--text-light);font-size:.82rem;margin-top:4px}
+
+/* Step nav */
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== PRACTICE SECTION ===== */
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-stem code,.q-stem .expr{font-size:1.1em}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;transition:.25s}
+.q-opt.selected .q-opt-letter{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-opt.correct .q-opt-letter{background:var(--success);color:#fff;border-color:var(--success)}
+.q-opt.wrong .q-opt-letter{background:var(--error);color:#fff;border-color:var(--error)}
+
+.q-input-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-input{width:120px;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1.1rem;font-family:inherit;font-weight:700;text-align:center;transition:.3s;direction:ltr}
+.q-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+
+.q-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.q-table th,.q-table td{border:2px solid var(--border);padding:8px 14px;text-align:center;font-size:1rem;min-width:60px}
+.q-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.q-table input{width:55px;padding:5px;border:2px solid var(--border);border-radius:4px;text-align:center;font-size:1rem;font-family:inherit;font-weight:700}
+.q-table input:focus{border-color:var(--primary);outline:none}
+.q-table input.correct{border-color:var(--success);background:#ecfdf5}
+.q-table input.wrong{border-color:var(--error);background:#fef2f2}
+
+.q-check-btn{padding:10px 28px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;box-shadow:var(--shadow)}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.92rem;animation:fadeIn .3s}
+.q-feedback.correct{background:#ecfdf5;border-right:4px solid var(--success);color:#065f46}
+.q-feedback.wrong{background:#fef2f2;border-right:4px solid var(--error);color:#991b1b}
+
+.q-nav{display:flex;justify-content:space-between;margin-top:16px}
+.q-nav-btn{padding:10px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Level complete */
+.level-complete{text-align:center;padding:24px;animation:fadeIn .5s}
+.level-complete .big-emoji{font-size:4rem;margin-bottom:12px}
+.level-complete h2{font-size:1.4rem;color:var(--primary-dark);margin-bottom:8px}
+.level-complete .score-display{font-size:1.8rem;font-weight:800;color:var(--success);margin-bottom:16px}
+.level-complete .score-display.medium-score{color:var(--accent)}
+.level-complete .score-display.low-score{color:var(--error)}
+
+/* Celebration confetti */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{
+  0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}
+  100%{transform:translateY(105vh) rotate(720deg) scale(.3);opacity:0}
+}
+
+/* Print button */
+.print-btn{position:fixed;bottom:20px;left:20px;width:48px;height:48px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer;font-size:1.3rem;box-shadow:var(--shadow-lg);transition:.25s;z-index:40;display:flex;align-items:center;justify-content:center}
+.print-btn:hover{background:var(--primary-dark);transform:scale(1.1)}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+/* Responsive */
+@media(max-width:600px){
+  .container{padding:0 10px 30px}
+  .step-card,.q-card{padding:18px 14px}
+  .step-title{font-size:1.15rem}
+  .step-summary-grid{grid-template-columns:1fr}
+  .section-toggle{max-width:280px;margin:12px auto}
+  .section-btn{font-size:.88rem;padding:8px 14px}
+  .q-opt{padding:10px 12px;font-size:.9rem}
+  .topbar-title{font-size:.9rem}
+  .sc{width:14px;height:14px}
+  .shape-row{gap:10px;padding:10px}
+}
+
+/* Print */
+@media print{
+  .topbar,.section-toggle,.step-nav,.q-nav,.print-btn,.level-tabs,.confetti-container,.q-check-btn{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .step-card,.q-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+  .container{max-width:100%}
+  .q-feedback{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">🔢 כיתה ז׳ — חוקיות בסדרות</span>
+  <a href="../../../../materials.html">← חזרה לדף החומרים</a>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+
+<!-- ===== LEARNING SECTION ===== -->
+<section id="learnSection">
+  <div class="step-progress">
+    <div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div>
+    <div class="step-progress-text" id="stepText"></div>
+  </div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+
+<!-- ===== PRACTICE SECTION ===== -->
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress">
+    <div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div>
+    <div class="level-progress-text" id="levelText"></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+
+</div>
+
+<button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button>
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const today=new Date();const dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+let rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(arr){return arr[Math.floor(R()*arr.length)]}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const LETTERS=['א','ב','ג','ד'];
+
+/* ===== SHAPE RENDERING ===== */
+const COLORS={blue:'#2563eb',orange:'#f59e0b',green:'#10b981',purple:'#8b5cf6',red:'#ef4444',pink:'#ec4899'};
+function shapeRect(rows,cols){const c=[];for(let r=0;r<rows;r++)for(let i=0;i<cols;i++)c.push([r,i]);return c}
+function shapeL(n){if(n<1)return[];const c=[];for(let r=0;r<n;r++)c.push([r,0]);for(let i=1;i<n;i++)c.push([n-1,i]);return c}
+function shapeStair(n){const c=[];for(let r=0;r<n;r++)for(let i=0;i<=r;i++)c.push([r,i]);return c}
+function shapePlus(n){if(n<1)return[];if(n===1)return[[0,0]];const c=[];const m=n-1;for(let r=0;r<2*n-1;r++)c.push([r,m]);for(let i=0;i<2*n-1;i++)if(i!==m)c.push([m,i]);return c}
+
+function grid(cells,clr,sz){
+  sz=sz||18;
+  if(!cells.length)return'';
+  const mr=Math.max(...cells.map(c=>c[0]))+1;
+  const mc=Math.max(...cells.map(c=>c[1]))+1;
+  const s=new Set(cells.map(c=>c[0]*1000+c[1]));
+  let h='<div class="sg" style="grid-template-columns:repeat('+mc+','+sz+'px)">';
+  for(let r=0;r<mr;r++)for(let c=0;c<mc;c++)
+    h+='<div class="sc" style="width:'+sz+'px;height:'+sz+'px;background:'+(s.has(r*1000+c)?clr:'transparent')+'"></div>';
+  return h+'</div>';
+}
+function shapeSeqHTML(patFn,maxN,clr,showCount){
+  let h='<div class="shape-row">';
+  for(let n=1;n<=maxN;n++){
+    const cells=patFn(n);
+    h+='<div class="shape-box"><div class="shape-lbl">'+n+'</div>';
+    h+=grid(cells,clr);
+    if(showCount!==false) h+='<div class="shape-cnt">'+cells.length+'</div>';
+    h+='</div>';
+    if(n<maxN) h+='<div style="font-size:1.2rem;color:var(--primary);align-self:center">→</div>';
+  }
+  return h+'</div>';
+}
+
+/* ===== STATE ===== */
+let state={section:'learn',step:0,level:'easy',qIndex:0};
+let scores={easy:[],medium:[],hard:[],challenge:[]};
+let answered={easy:[],medium:[],hard:[],challenge:[]};
+let questions={easy:null,medium:null,hard:null,challenge:null};
+const LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+const LEVEL_NAMES={easy:'קל',medium:'בינוני',hard:'קשה',challenge:'אתגר'};
+const TOTAL_STEPS=7;
+
+/* ===== LOCAL STORAGE ===== */
+const LS_KEY='patterns_seq_v1_'+dateSeed;
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores,answered,state}))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+/* ===== TEACHING SECTION ===== */
+const steps=[
+/* Step 0: What is a sequence? */
+{title:'🔢 מהי סדרה?', render(){return `
+<p>הסתכלו על שורת המספרים הבאה:</p>
+<div style="text-align:center;font-size:1.8rem;font-weight:800;color:var(--primary-dark);margin:16px 0;direction:ltr;letter-spacing:8px">2, 4, 6, 8, ___</div>
+<p><strong>שאלה:</strong> מה המספר הבא?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s0input" placeholder="?" aria-label="המספר הבא">
+  <button class="mini-btn" onclick="checkS0()">בדקו</button>
+</div>
+<div id="s0fb"></div>
+<div class="reveal" id="s0reveal">
+  <div class="highlight">
+    <p>כל פעם מוסיפים <strong>2</strong>: &nbsp; <span style="direction:ltr;display:inline-block">2 → 4 → 6 → 8 → <strong>10</strong></span></p>
+  </div>
+  <div class="rule-box">📌 סדרה היא רשימת מספרים (או צורות) שמסודרים לפי <strong>חוקיות</strong> — כלל קבוע</div>
+  <p style="margin-top:12px">דוגמאות נוספות:</p>
+  <div class="example">
+    <strong>סדרת הזוגיים:</strong> <span style="direction:ltr;display:inline-block">2, 4, 6, 8, 10, ...</span> &nbsp;(מוסיפים 2)<br>
+    <strong>סדרת כפולות 5:</strong> <span style="direction:ltr;display:inline-block">5, 10, 15, 20, 25, ...</span> &nbsp;(מוסיפים 5)<br>
+    <strong>ספירה לאחור:</strong> <span style="direction:ltr;display:inline-block">20, 17, 14, 11, ...</span> &nbsp;(מפחיתים 3)
+  </div>
+  <div class="success-box">💡 כל איבר בסדרה נקרא <strong>איבר</strong>. המיקום שלו (ראשון, שני, שלישי...) נקרא <strong>מקום</strong> או <strong>מספר סדורי</strong>.</div>
+</div>
+`}},
+
+/* Step 1: Patterns in number sequences */
+{title:'🔍 חיפוש החוקיות', render(){return `
+<p>כדי למצוא את <strong>החוקיות</strong> בסדרה, בודקים: מה ההפרש בין כל שני איברים עוקבים?</p>
+<div class="example">
+  <p><strong>דוגמה:</strong> <span style="direction:ltr;display:inline-block">3, 7, 11, 15, 19, ...</span></p>
+  <div style="direction:ltr;text-align:center;margin:8px 0;font-size:1.1rem">
+    <span>3</span><span style="color:var(--accent);font-weight:700;margin:0 4px">⟶<sup>+4</sup></span>
+    <span>7</span><span style="color:var(--accent);font-weight:700;margin:0 4px">⟶<sup>+4</sup></span>
+    <span>11</span><span style="color:var(--accent);font-weight:700;margin:0 4px">⟶<sup>+4</sup></span>
+    <span>15</span><span style="color:var(--accent);font-weight:700;margin:0 4px">⟶<sup>+4</sup></span>
+    <span>19</span>
+  </div>
+  <p>ההפרש קבוע: <strong>+4</strong> בכל פעם. זוהי <strong>סדרה חשבונית</strong>!</p>
+</div>
+<div class="rule-box">📌 בסדרה חשבונית — ההפרש בין כל שני איברים עוקבים <strong>קבוע</strong>. הפרש זה נקרא <strong>"ד" (d)</strong></div>
+<p><strong>תורכם:</strong> מה ההפרש בסדרה <span style="direction:ltr;display:inline-block;font-weight:700;font-size:1.1rem">5, 12, 19, 26, 33</span>?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s1input" placeholder="d = ?" aria-label="ההפרש">
+  <button class="mini-btn" onclick="checkS1()">בדקו</button>
+</div>
+<div id="s1fb"></div>
+<div class="reveal" id="s1reveal">
+  <div class="success-box">✅ ההפרש הוא <strong>7</strong>. בכל צעד מוסיפים 7!</div>
+  <p style="margin-top:12px"><strong>בדקו:</strong> גם סדרה <em>יורדת</em> היא חשבונית!</p>
+  <div class="example">
+    <span style="direction:ltr;display:inline-block">30, 25, 20, 15, 10, ...</span><br>
+    ההפרש: <strong>-5</strong> (מפחיתים 5 בכל פעם)
+  </div>
+</div>
+`}},
+
+/* Step 2: Shape sequences */
+{title:'🟦 סדרות צורניות', render(){return `
+<p>סדרות לא חייבות להיות רק מספרים — הן יכולות להיות גם <strong>צורות</strong> שגדלות!</p>
+<p><strong>דוגמה — מלבנים גדלים:</strong></p>
+`+shapeSeqHTML(function(n){return shapeRect(n,2)},4,COLORS.blue)+`
+<p>הסדרה המספרית: <span style="direction:ltr;display:inline-block;font-weight:700">2, 4, 6, 8</span> — בכל פעם מוסיפים <strong>2</strong>!</p>
+<p style="margin-top:16px"><strong>דוגמה — צורת ל׳ (L):</strong></p>
+`+shapeSeqHTML(shapeL,4,COLORS.orange)+`
+<p>הסדרה המספרית: <span style="direction:ltr;display:inline-block;font-weight:700">1, 3, 5, 7</span> — בכל פעם מוסיפים <strong>2</strong>!</p>
+<p style="margin-top:12px"><strong>שאלה:</strong> כמה ריבועים יהיו ב<strong>צורת ל׳ מספר 5</strong>?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s2input" placeholder="?" aria-label="מספר ריבועים בצורה 5">
+  <button class="mini-btn" onclick="checkS2()">בדקו</button>
+</div>
+<div id="s2fb"></div>
+<div class="reveal" id="s2reveal">
+  <div class="success-box">✅ בצורה 5 יש <strong>9</strong> ריבועים. הסדרה: 1, 3, 5, 7, <strong>9</strong></div>
+  <div class="highlight">💡 <strong>תובנה:</strong> צורות גדלות יוצרות סדרות מספריות — אפשר לחזות את הצורה הבאה בעזרת החוקיות!</div>
+</div>
+`}},
+
+/* Step 3: From sequence to table */
+{title:'📊 מסדרה לטבלה', render(){return `
+<p>כדי לחקור סדרה בצורה מסודרת, נרשום אותה <strong>בטבלה</strong>:</p>
+<div class="example">
+<p>סדרה: <span style="direction:ltr;display:inline-block;font-weight:700">5, 8, 11, 14, 17, ...</span> &nbsp;(הפרש: +3)</p>
+<table class="mini-table">
+<tr><th>מקום (<span class="math-expr">n</span>)</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+<tr><td><strong>איבר</strong></td><td>5</td><td>8</td><td>11</td><td>14</td><td>17</td></tr>
+</table>
+</div>
+<p><span class="math-expr">n</span> הוא <strong>מספר המקום</strong> של האיבר בסדרה.</p>
+<p><strong>תורכם למלא:</strong> סדרה: <span style="direction:ltr;display:inline-block;font-weight:700">4, 7, 10, ___, ___</span></p>
+<table class="mini-table">
+<tr><th>מקום (<span class="math-expr">n</span>)</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+<tr><td><strong>איבר</strong></td><td>4</td><td>7</td><td>10</td><td><input type="number" class="mini-input" id="tbl1" aria-label="איבר 4"></td><td><input type="number" class="mini-input" id="tbl2" aria-label="איבר 5"></td></tr>
+</table>
+<div style="text-align:center;margin-top:8px">
+  <button class="mini-btn" onclick="checkS3()">בדקו</button>
+</div>
+<div id="s3fb"></div>
+<div class="reveal" id="s3reveal">
+  <div class="success-box">✅ הסדרה: 4, 7, 10, <strong>13</strong>, <strong>16</strong> (הפרש +3)</div>
+  <div class="highlight">💡 הטבלה עוזרת לנו לראות את הקשר בין <strong>מספר המקום</strong> (<span class="math-expr">n</span>) ל<strong>ערך האיבר</strong>. זה המפתח למציאת ביטוי כללי!</div>
+</div>
+`}},
+
+/* Step 4: The general expression */
+{title:'✨ הביטוי הכללי', render(){return `
+<div class="rule-box">📌 ביטוי כללי הוא <strong>נוסחה</strong> שנותנת לנו את <strong>כל</strong> איבר בסדרה, לפי מקומו <span class="math-expr">n</span></div>
+<p><strong>דוגמה:</strong> הסדרה <span style="direction:ltr;display:inline-block;font-weight:700">2, 4, 6, 8, ...</span></p>
+<table class="mini-table">
+<tr><th><span class="math-expr">n</span></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+<tr><td><strong>איבר</strong></td><td>2</td><td>4</td><td>6</td><td>8</td><td>10</td></tr>
+</table>
+<p>הביטוי הכללי: <code>2n</code></p>
+<p>בדיקה: <span class="math-expr">n=1</span> → <span class="math-expr">2·1=2</span> ✓ &nbsp;|&nbsp; <span class="math-expr">n=3</span> → <span class="math-expr">2·3=6</span> ✓ &nbsp;|&nbsp; <span class="math-expr">n=5</span> → <span class="math-expr">2·5=10</span> ✓</p>
+<div class="example">
+<p><strong>עוד דוגמה:</strong> הסדרה <span style="direction:ltr;display:inline-block;font-weight:700">3, 5, 7, 9, ...</span></p>
+<table class="mini-table">
+<tr><th><span class="math-expr">n</span></th><th>1</th><th>2</th><th>3</th><th>4</th></tr>
+<tr><td><strong>איבר</strong></td><td>3</td><td>5</td><td>7</td><td>9</td></tr>
+</table>
+<p>ההפרש 2, אז ננסה <code>2n</code>. אבל: <span class="math-expr">2·1=2</span> ≠ 3. חסר 1!</p>
+<p>הביטוי הכללי: <code>2n + 1</code></p>
+<p>בדיקה: <span class="math-expr">n=1</span> → 3 ✓ &nbsp;|&nbsp; <span class="math-expr">n=2</span> → 5 ✓ &nbsp;|&nbsp; <span class="math-expr">n=4</span> → 9 ✓</p>
+</div>
+<p><strong>בדקו:</strong> הסדרה <span style="direction:ltr;display:inline-block;font-weight:700">4, 8, 12, 16, ...</span> — מה הביטוי?</p>
+<div id="s4quiz">
+  <div class="quiz-options" id="s4opts"></div>
+  <div id="s4fb"></div>
+</div>
+<div class="reveal" id="s4reveal">
+  <div class="success-box">✅ הביטוי הכללי הוא <code>4n</code>. בדיקה: <span class="math-expr">4·1=4</span> ✓, <span class="math-expr">4·2=8</span> ✓, <span class="math-expr">4·3=12</span> ✓</div>
+</div>
+`},init(){
+  const opts=shuffle([
+    {text:'<code>4n</code>',correct:true},
+    {text:'<code>n + 4</code>',correct:false},
+    {text:'<code>4n + 1</code>',correct:false},
+    {text:'<code>n · n</code>',correct:false}
+  ]);
+  const container=document.getElementById('s4opts');
+  container.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');
+    d.className='quiz-opt';
+    d.innerHTML=o.text;
+    d.onclick=()=>{
+      container.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){
+        d.classList.add('correct-answer');
+        document.getElementById('s4fb').innerHTML='<div class="feedback-inline ok">✅ נכון מאוד!</div>';
+        document.getElementById('s4reveal').classList.add('show');
+      } else {
+        d.classList.add('wrong-answer');
+        document.getElementById('s4fb').innerHTML='<div class="feedback-inline err">❌ נסו שוב — ההפרש 4, כל איבר הוא 4 כפול מקומו</div>';
+      }
+    };
+    container.appendChild(d);
+  });
+}},
+
+/* Step 5: Building general expression - method */
+{title:'🔧 איך בונים ביטוי כללי?', render(){return `
+<p>הנה <strong>שיטה פשוטה</strong> לבנות ביטוי כללי לסדרה חשבונית:</p>
+<div class="highlight">
+<p><strong>שלב 1:</strong> מצאו את ההפרש (<span class="math-expr">d</span>)</p>
+<p><strong>שלב 2:</strong> כתבו <span class="math-expr">d · n</span></p>
+<p><strong>שלב 3:</strong> בדקו עבור <span class="math-expr">n = 1</span> — מה צריך להוסיף או להפחית?</p>
+<p><strong>שלב 4:</strong> כתבו הביטוי הסופי ובדקו!</p>
+</div>
+<p style="margin-top:16px"><strong>דוגמה מפורטת:</strong> הסדרה <span style="direction:ltr;display:inline-block;font-weight:700">7, 10, 13, 16, ...</span></p>
+<div id="s5steps">
+  <button class="mini-btn accent" onclick="showS5Steps()">▶ הראו פתרון צעד אחר צעד</button>
+</div>
+<div class="reveal" id="s5reveal">
+  <p style="margin-top:16px"><strong>תורכם:</strong> מצאו ביטוי כללי לסדרה <span style="direction:ltr;display:inline-block;font-weight:700">2, 9, 16, 23, ...</span></p>
+  <p>ההפרש: <span style="direction:ltr;display:inline-block">9 - 2 = <strong>7</strong></span></p>
+  <p>ננסה <span class="math-expr">7n</span>: כש-<span class="math-expr">n=1</span> → 7, אבל צריך 2. ההפרש: <span style="direction:ltr;display:inline-block">2 - 7 = <strong>-5</strong></span></p>
+  <p>מהו הביטוי הכללי?</p>
+  <div class="q-input-row">
+    <span>הביטוי: <span class="math-expr">7n</span></span>
+    <input type="number" class="mini-input" id="s5corr" placeholder="+? / -?" aria-label="התיקון">
+    <button class="mini-btn" onclick="checkS5()">בדקו</button>
+  </div>
+  <div id="s5fb2"></div>
+</div>
+`}},
+
+/* Step 6: Summary */
+{title:'🏆 סיכום', render(){return `
+<p style="font-size:1.1rem;text-align:center;margin-bottom:20px">בשיעור הזה למדנו 4 דברים חשובים:</p>
+<div class="step-summary-grid">
+  <div class="summary-item">
+    <div class="s-icon">🔢</div>
+    <div class="s-title">סדרה</div>
+    <div class="s-text">רשימת מספרים/צורות שמסודרים לפי חוקיות</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🔍</div>
+    <div class="s-title">הפרש</div>
+    <div class="s-text">ההפרש הקבוע בין איברים עוקבים בסדרה חשבונית</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🟦</div>
+    <div class="s-title">סדרות צורניות</div>
+    <div class="s-text">צורות שגדלות לפי חוקיות — ניתן לספור ולמצוא סדרה</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">✨</div>
+    <div class="s-title">ביטוי כללי</div>
+    <div class="s-text">נוסחה שנותנת כל איבר בסדרה לפי מקומו <span class="math-expr">n</span></div>
+  </div>
+</div>
+<div class="success-box" style="text-align:center;font-size:1.1rem;margin-top:20px">
+  <p>🌟 עכשיו אתם מוכנים לתרגול!</p>
+  <p>4 רמות קושי מחכות לכם — 75 שאלות!</p>
+  <button class="mini-btn accent" style="margin-top:12px;font-size:1rem;padding:12px 32px" onclick="switchSection('practice')">!מוכנים לתרגול ←</button>
+</div>
+`}}
+];
+
+function renderStep(idx){
+  state.step=idx;
+  const s=steps[idx];
+  const fill=((idx+1)/TOTAL_STEPS*100).toFixed(0);
+  document.getElementById('stepFill').style.width=fill+'%';
+  document.getElementById('stepText').textContent='שלב '+(idx+1)+' מתוך '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+s.title+'</div>'+s.render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'לתרגול ←':'הבא ←';
+  if(s.init) s.init();
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+/* Step interactive handlers */
+window.checkS0=function(){
+  const v=parseInt(document.getElementById('s0input').value);
+  const fb=document.getElementById('s0fb');
+  if(v===10){fb.innerHTML='<div class="feedback-inline ok">✅ מעולה! 8 + 2 = 10</div>';document.getElementById('s0reveal').classList.add('show')}
+  else if(isNaN(v)){fb.innerHTML='<div class="feedback-inline err">הקלידו מספר</div>'}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. רמז: מה מוסיפים כל פעם?</div>'}
+};
+window.checkS1=function(){
+  const v=parseInt(document.getElementById('s1input').value);
+  const fb=document.getElementById('s1fb');
+  if(v===7){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! 12 - 5 = 7</div>';document.getElementById('s1reveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. רמז: חשבו 12 - 5 = ?</div>'}
+};
+window.checkS2=function(){
+  const v=parseInt(document.getElementById('s2input').value);
+  const fb=document.getElementById('s2fb');
+  if(v===9){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! 7 + 2 = 9</div>';document.getElementById('s2reveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. הסדרה: 1, 3, 5, 7, ___ (מוסיפים 2)</div>'}
+};
+window.checkS3=function(){
+  const v1=parseInt(document.getElementById('tbl1').value);
+  const v2=parseInt(document.getElementById('tbl2').value);
+  let ok=0;
+  if(v1===13){document.getElementById('tbl1').classList.add('correct');ok++}else{document.getElementById('tbl1').classList.add('wrong')}
+  if(v2===16){document.getElementById('tbl2').classList.add('correct');ok++}else{document.getElementById('tbl2').classList.add('wrong')}
+  const fb=document.getElementById('s3fb');
+  if(ok===2){fb.innerHTML='<div class="feedback-inline ok">✅ מושלם!</div>';document.getElementById('s3reveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ '+ok+' מתוך 2 נכונים. רמז: ההפרש הוא 3</div>'}
+};
+window.showS5Steps=function(){
+  document.getElementById('s5steps').innerHTML=`
+    <div style="margin:12px 0;font-size:1rem;line-height:2">
+      <div style="animation:fadeIn .5s"><strong>שלב 1:</strong> ההפרש: <span style="direction:ltr;display:inline-block">10 - 7 = <strong>3</strong></span> ← d = 3</div>
+      <div style="animation:fadeIn .5s .3s both"><strong>שלב 2:</strong> ננסה <code>3n</code></div>
+      <div style="animation:fadeIn .5s .6s both"><strong>שלב 3:</strong> כש-<span class="math-expr">n=1</span>: <span style="direction:ltr;display:inline-block">3·1 = 3</span>, אבל האיבר הראשון הוא <strong>7</strong>. צריך להוסיף <span style="direction:ltr;display:inline-block">7 - 3 = <strong>4</strong></span></div>
+      <div style="animation:fadeIn .5s .9s both"><strong>שלב 4:</strong> הביטוי: <code>3n + 4</code></div>
+      <div style="animation:fadeIn .5s 1.2s both"><strong>בדיקה:</strong> <span class="math-expr">n=2</span>: <span style="direction:ltr;display:inline-block">3·2+4 = 10</span> ✓ | <span class="math-expr">n=3</span>: <span style="direction:ltr;display:inline-block">3·3+4 = 13</span> ✓ | <span class="math-expr">n=4</span>: <span style="direction:ltr;display:inline-block">3·4+4 = 16</span> ✓</div>
+    </div>`;
+  document.getElementById('s5reveal').classList.add('show');
+};
+window.checkS5=function(){
+  const v=parseInt(document.getElementById('s5corr').value);
+  const fb=document.getElementById('s5fb2');
+  if(v===-5){fb.innerHTML='<div class="feedback-inline ok">✅ מעולה! הביטוי הכללי: <code>7n - 5</code>. בדיקה: <span class="math-expr">7·1-5=2</span> ✓, <span class="math-expr">7·2-5=9</span> ✓</div>';document.getElementById('s5corr').classList.add('correct')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. <span class="math-expr">7n</span> כש-<span class="math-expr">n=1</span> נותן 7. האיבר הראשון הוא 2. אז: <span style="direction:ltr;display:inline-block">2 - 7 = ?</span></div>'}
+};
+
+/* ===== QUESTION GENERATORS ===== */
+function makeUnique(correct,dists){
+  const opts=[correct];
+  for(const d of dists){if(d!==correct&&!opts.includes(d))opts.push(d);if(opts.length>=4)break}
+  let off=1;
+  while(opts.length<4){const v=correct+off;if(!opts.includes(v))opts.push(v);off=off>0?-off:-off+1}
+  return shuffle(opts.map(String));
+}
+
+function genEasy(){
+  rng=mulberry32(dateSeed+100);
+  const qs=[];
+  /* Q1-5: Next term in arithmetic sequence */
+  for(let i=0;i<5;i++){
+    const a=RI(1,15);const d=RI(2,7);
+    const terms=[a,a+d,a+2*d,a+3*d];
+    const ans=a+4*d;
+    const opts=makeUnique(ans,[ans+d,ans-d,ans+1,ans-1,a+3*d]);
+    const ci=opts.indexOf(String(ans));
+    qs.push({type:'mc',stem:'מה המספר <strong>הבא</strong> בסדרה?<br><div style="direction:ltr;font-size:1.3rem;font-weight:700;text-align:center;margin:8px 0;letter-spacing:6px">'+terms.join(', ')+', ___</div>',options:opts,answer:ci,explanation:'ההפרש הקבוע הוא <strong>'+d+'</strong>, לכן האיבר הבא: '+terms[3]+' + '+d+' = <strong>'+ans+'</strong>'});
+  }
+  /* Q6-9: Find common difference */
+  for(let i=0;i<4;i++){
+    const a=RI(1,20);const d=RI(2,9);
+    const terms=[a,a+d,a+2*d,a+3*d,a+4*d];
+    const opts=makeUnique(d,[d+1,d-1,d*2,a]);
+    const ci=opts.indexOf(String(d));
+    qs.push({type:'mc',stem:'מהו <strong>ההפרש</strong> בסדרה?<br><div style="direction:ltr;font-size:1.2rem;font-weight:700;text-align:center;margin:8px 0;letter-spacing:6px">'+terms.join(', ')+'</div>',options:opts,answer:ci,explanation:'ההפרש: '+terms[1]+' - '+terms[0]+' = <strong>'+d+'</strong>'});
+  }
+  /* Q10-13: Shape counting */
+  const shapePats=[
+    {fn:function(n){return shapeRect(n,2)},cnt:function(n){return 2*n},name:'מלבנים',clr:COLORS.blue},
+    {fn:function(n){return shapeRect(n,3)},cnt:function(n){return 3*n},name:'מלבנים',clr:COLORS.green},
+    {fn:shapeL,cnt:function(n){return 2*n-1},name:'צורת ל׳',clr:COLORS.orange},
+    {fn:function(n){return shapeRect(1,n)},cnt:function(n){return n},name:'שורה',clr:COLORS.purple}
+  ];
+  for(let i=0;i<4;i++){
+    const p=shapePats[i];
+    const askN=RI(4,6);
+    const ans=p.cnt(askN);
+    const stemShapes=shapeSeqHTML(p.fn,3,p.clr);
+    const opts=makeUnique(ans,[ans+1,ans-1,ans+2,p.cnt(askN-1)]);
+    const ci=opts.indexOf(String(ans));
+    qs.push({type:'mc',stem:'כמה ריבועים יהיו <strong>בצורה מספר '+askN+'</strong>?'+stemShapes,options:opts,answer:ci,explanation:'הסדרה: '+[1,2,3].map(n=>p.cnt(n)).join(', ')+', ... ← בצורה '+askN+': <strong>'+ans+'</strong> ריבועים'});
+  }
+  /* Q14-17: Match sequence to expression */
+  for(let i=0;i<4;i++){
+    const d=RI(2,5);const c=RI(0,4);
+    const terms=[d+c,2*d+c,3*d+c,4*d+c];
+    const correct=c===0?d+'n':d+'n + '+c;
+    const d1=c===0?(d+1)+'n':d+'n - '+c;
+    const d2=c===0?'n + '+d:(d+1)+'n + '+(c-1>0?c-1:1);
+    const d3=c===0?d+'n + 1':(d-1>0?(d-1):'')+'n + '+(c+d);
+    const opts=shuffle([correct,d1,d2,d3]);
+    const ci=opts.indexOf(correct);
+    qs.push({type:'mc',stem:'איזה ביטוי כללי מתאים לסדרה?<br><div style="direction:ltr;font-size:1.2rem;font-weight:700;text-align:center;margin:8px 0;letter-spacing:6px">'+terms.join(', ')+', ...</div>',options:opts,answer:ci,explanation:'ההפרש '+d+', האיבר הראשון '+terms[0]+'. הביטוי: <code>'+correct+'</code>'});
+  }
+  /* Q18-20: Compute specific term */
+  for(let i=0;i<3;i++){
+    const d=RI(2,6);const c=RI(0,5);
+    const expr=c===0?d+'n':d+'n + '+c;
+    const n=RI(5,10);
+    const ans=d*n+c;
+    qs.push({type:'input',stem:'הביטוי הכללי של סדרה הוא <code>'+expr+'</code>.<br>מה ערך <strong>האיבר במקום <span class="math-expr">n = '+n+'</span></strong>?',answer:ans,explanation:'<span class="math-expr">'+expr+'</span> = <span class="math-expr">'+d+'·'+n+(c?'+'+c:'')+'</span> = <strong>'+ans+'</strong>'});
+  }
+  return qs;
+}
+
+function genMedium(){
+  rng=mulberry32(dateSeed+200);
+  const qs=[];
+  /* Q1-4: Table completion */
+  for(let i=0;i<4;i++){
+    const d=RI(2,5);const c=RI(1,6);
+    const expr=d+'n + '+c;
+    const ns=[1,2,3,4,5];
+    const results=ns.map(n=>d*n+c);
+    const blanks=shuffle([0,1,2,3,4]).slice(0,3);
+    qs.push({type:'table',stem:'השלימו את הטבלה עבור הביטוי <code>'+expr+'</code>',expression:expr,rows:ns.map((n,j)=>({x:n,result:results[j],blank:blanks.includes(j)})),explanation:'הציבו כל ערך של <span class="math-expr">n</span> בביטוי <code>'+expr+'</code>'});
+  }
+  /* Q5-8: Find expression from sequence */
+  for(let i=0;i<4;i++){
+    const d=RI(2,6);const c=RI(-3,5);
+    const terms=[d+c,2*d+c,3*d+c,4*d+c];
+    const correct=c===0?d+'n':(c>0?d+'n + '+c:d+'n - '+(-c));
+    const d1=c===0?(d+1)+'n':(c>0?(d+1)+'n + '+(c-1>0?c-1:1):d+'n + '+(-c));
+    const d2=c===0?'n + '+d:(c>0?d+'n - '+c:(d-1>0?(d-1):'')+'n - '+(c));
+    const d3=c===0?d+'n + 2':(c>0?(d-1>0?(d-1):'')+'n + '+(c+d):d+'n + '+(c+1));
+    const opts=shuffle([correct,d1,d2,d3]);
+    const ci=opts.indexOf(correct);
+    qs.push({type:'mc',stem:'מצאו את <strong>הביטוי הכללי</strong> של הסדרה:<br><table class="q-table"><tr><th><span class="math-expr">n</span></th><th>1</th><th>2</th><th>3</th><th>4</th></tr><tr><td><strong>איבר</strong></td><td>'+terms.join('</td><td>')+'</td></tr></table>',options:opts,answer:ci,explanation:'ההפרש '+d+(c>0?', תיקון +'+c:c<0?', תיקון '+c:'')+'. הביטוי: <code>'+correct+'</code>'});
+  }
+  /* Q9-12: Shape pattern → expression */
+  const mPats=[
+    {fn:function(n){return shapeRect(n,2)},cnt:function(n){return 2*n},expr:'2n',clr:COLORS.blue},
+    {fn:shapeL,cnt:function(n){return 2*n-1},expr:'2n - 1',clr:COLORS.orange},
+    {fn:function(n){return shapeRect(n,3)},cnt:function(n){return 3*n},expr:'3n',clr:COLORS.green},
+    {fn:function(n){return shapeRect(2,n)},cnt:function(n){return 2*n},expr:'2n',clr:COLORS.purple}
+  ];
+  for(let i=0;i<4;i++){
+    const p=mPats[i];
+    const stemShapes=shapeSeqHTML(p.fn,4,p.clr);
+    const counts=[1,2,3,4].map(n=>p.cnt(n));
+    const correct=p.expr;
+    const dists=shuffle(['n + 1','3n + 1','n²','2n + 1','3n - 1','n + 2']).filter(x=>x!==correct).slice(0,3);
+    const opts=shuffle([correct,...dists]);
+    const ci=opts.indexOf(correct);
+    qs.push({type:'mc',stem:'מצאו את <strong>הביטוי הכללי</strong> למספר הריבועים בכל צורה:'+stemShapes+'<br>הסדרה: <span style="direction:ltr;display:inline-block;font-weight:700">'+counts.join(', ')+'</span>',options:opts,answer:ci,explanation:'הביטוי הכללי: <code>'+correct+'</code>'});
+  }
+  /* Q13-16: Reverse — given expression, find specific term */
+  for(let i=0;i<4;i++){
+    const d=RI(3,7);const c=RI(-2,6);
+    const expr=c===0?d+'n':(c>0?d+'n + '+c:d+'n - '+(-c));
+    const n=RI(8,15);
+    const ans=d*n+c;
+    qs.push({type:'input',stem:'הביטוי הכללי של סדרה הוא <code>'+expr+'</code>.<br>מהו <strong>האיבר ה-'+n+'</strong> בסדרה?',answer:ans,explanation:'נציב <span class="math-expr">n='+n+'</span>: <span class="math-expr">'+d+'·'+n+(c>0?'+'+c:c<0?'−'+(-c):'')+'</span> = <strong>'+ans+'</strong>'});
+  }
+  /* Q17-20: Two-step patterns */
+  for(let i=0;i<4;i++){
+    const a=RI(1,5);const d=RI(2,5);const c=RI(1,4);
+    const terms=[];for(let n=1;n<=5;n++)terms.push(d*n+c);
+    const nextTerm=d*6+c;
+    const opts=makeUnique(nextTerm,[nextTerm+1,nextTerm-1,nextTerm+d,terms[4]+1]);
+    const ci=opts.indexOf(String(nextTerm));
+    qs.push({type:'mc',stem:'מה <strong>האיבר הבא</strong> בסדרה?<br><div style="direction:ltr;font-size:1.2rem;font-weight:700;text-align:center;margin:8px 0;letter-spacing:6px">'+terms.join(', ')+', ___</div>',options:opts,answer:ci,explanation:'ההפרש '+d+'. האיבר הבא: '+terms[4]+' + '+d+' = <strong>'+nextTerm+'</strong>'});
+  }
+  return qs;
+}
+
+function genHard(){
+  rng=mulberry32(dateSeed+300);
+  const qs=[];
+  /* Q1-4: Complex expressions (larger numbers) */
+  for(let i=0;i<4;i++){
+    const d=RI(5,12);const c=RI(-5,10);
+    const terms=[d+c,2*d+c,3*d+c,4*d+c,5*d+c];
+    const correct=c===0?d+'n':(c>0?d+'n + '+c:d+'n - '+(-c));
+    const d1=c>0?d+'n - '+c:d+'n + '+(-c);
+    const d2=(d+1)+'n + '+(c-1);
+    const d3=(d-1)+'n + '+(c+1);
+    const opts=shuffle([correct,d1,d2,d3]);
+    const ci=opts.indexOf(correct);
+    qs.push({type:'mc',stem:'מצאו את <strong>הביטוי הכללי</strong>:<br><table class="q-table"><tr><th><span class="math-expr">n</span></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr><tr><td><strong>איבר</strong></td><td>'+terms.join('</td><td>')+'</td></tr></table>',options:opts,answer:ci,explanation:'ההפרש '+d+(c!==0?', תיקון '+(c>0?'+':'')+c:'')+'. הביטוי: <code>'+correct+'</code>'});
+  }
+  /* Q5-8: Quadratic patterns */
+  const quadPats=[
+    {fn:function(n){return n*n},expr:'n²',terms:[1,4,9,16,25]},
+    {fn:function(n){return n*n+1},expr:'n² + 1',terms:[2,5,10,17,26]},
+    {fn:function(n){return n*(n+1)},expr:'n(n+1)',terms:[2,6,12,20,30]},
+    {fn:function(n){return 2*n*n},expr:'2n²',terms:[2,8,18,32,50]}
+  ];
+  for(let i=0;i<4;i++){
+    const p=quadPats[i];
+    const askN=RI(6,8);
+    const ans=i===0?askN*askN:i===1?askN*askN+1:i===2?askN*(askN+1):2*askN*askN;
+    qs.push({type:'input',stem:'מצאו את החוקיות:<br><table class="q-table"><tr><th><span class="math-expr">n</span></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr><tr><td><strong>איבר</strong></td><td>'+p.terms.join('</td><td>')+'</td></tr></table>הביטוי הוא <code>'+p.expr+'</code>. מה הערך כש-<span class="math-expr">n = '+askN+'</span>?',answer:ans,explanation:'<code>'+p.expr+'</code> כש-<span class="math-expr">n='+askN+'</span> = <strong>'+ans+'</strong>'});
+  }
+  /* Q9-12: Membership — is X in the sequence? */
+  for(let i=0;i<4;i++){
+    const d=RI(3,7);const c=RI(1,d-1);
+    const first=d+c;
+    const isMember=i<2;
+    let target,pos;
+    if(isMember){
+      pos=RI(8,20);target=d*pos+c;
+    } else {
+      target=d*RI(8,20)+c+RI(1,d-1);
+      if(target%d===c%d) target++;
+    }
+    const checkN=(target-c)/d;
+    const isIn=Number.isInteger(checkN)&&checkN>=1;
+    const correct=isIn?'כן, במקום '+Math.round(checkN):'לא';
+    const wrong=isIn?'לא':'כן, במקום '+Math.round(checkN);
+    const wrong2=isIn?'כן, במקום '+(Math.round(checkN)+1):'כן, במקום '+Math.ceil(checkN);
+    const wrong3=isIn?'כן, במקום '+(Math.round(checkN)-1):'לא, כי ההפרש לא מתאים';
+    const opts=shuffle([correct,wrong,wrong2,wrong3]);
+    const ci=opts.indexOf(correct);
+    qs.push({type:'mc',stem:'האם המספר <strong>'+target+'</strong> שייך לסדרה <span style="direction:ltr;display:inline-block;font-weight:700">'+first+', '+(first+d)+', '+(first+2*d)+', '+(first+3*d)+', ...</span>?',options:opts,answer:ci,explanation:isIn?'<span class="math-expr">'+d+'n + '+c+' = '+target+'</span> → <span class="math-expr">n = '+Math.round(checkN)+'</span>. כן, שייך!':'<span class="math-expr">('+target+' - '+c+') / '+d+' = '+checkN.toFixed(2)+'</span> — לא שלם, לכן לא שייך לסדרה.'});
+  }
+  /* Q13-16: Far term prediction */
+  for(let i=0;i<4;i++){
+    const d=RI(3,8);const c=RI(-3,7);
+    const expr=c===0?d+'n':(c>0?d+'n + '+c:d+'n - '+(-c));
+    const n=pick([20,50,100]);
+    const ans=d*n+c;
+    qs.push({type:'input',stem:'הביטוי הכללי של סדרה: <code>'+expr+'</code>.<br>מהו <strong>האיבר ה-'+n+'</strong>?',answer:ans,explanation:'נציב <span class="math-expr">n='+n+'</span>: <span class="math-expr">'+d+'·'+n+(c>0?'+'+c:c<0?'−'+(-c):'')+'</span> = <strong>'+ans+'</strong>'});
+  }
+  /* Q17-20: Shape-based expressions (complex) */
+  const hPats=[
+    {fn:shapeStair,cnt:function(n){return n*(n+1)/2},expr:'n(n+1)/2',clr:COLORS.pink},
+    {fn:shapePlus,cnt:function(n){return n===1?1:4*n-3},expr:'4n - 3',clr:COLORS.red},
+    {fn:function(n){return shapeRect(n,n)},cnt:function(n){return n*n},expr:'n²',clr:COLORS.purple},
+    {fn:shapeL,cnt:function(n){return 2*n-1},expr:'2n - 1',clr:COLORS.orange}
+  ];
+  for(let i=0;i<4;i++){
+    const p=hPats[i];
+    const stemShapes=shapeSeqHTML(p.fn,4,p.clr);
+    const counts=[1,2,3,4].map(n=>p.cnt(n));
+    const askN=5;
+    const ans=p.cnt(askN);
+    qs.push({type:'input',stem:'ספרו את הריבועים בכל צורה ומצאו את <strong>מספר הריבועים בצורה '+askN+'</strong>:'+stemShapes+'<br>הסדרה: <span style="direction:ltr;display:inline-block;font-weight:700">'+counts.join(', ')+', ___</span>',answer:ans,explanation:'הביטוי: <code>'+p.expr+'</code>. בצורה '+askN+': <strong>'+ans+'</strong> ריבועים'});
+  }
+  return qs;
+}
+
+function genChallenge(){
+  rng=mulberry32(dateSeed+400);
+  const qs=[];
+  /* Q1-3: Quadratic expression discovery */
+  const cPats=[
+    {terms:[[1,1],[2,4],[3,9],[4,16],[5,25]],answer:['n²','n^2','n*n'],display:'n²',explain:'כל מספר בריבוע: <span class="math-expr">1²=1, 2²=4, 3²=9, 4²=16</span>'},
+    {terms:[[1,2],[2,6],[3,12],[4,20],[5,30]],answer:['n²+n','n^2+n','n(n+1)','n*(n+1)'],display:'n(n+1)',explain:'<span class="math-expr">n</span> בריבוע ועוד <span class="math-expr">n</span>: <span class="math-expr">1+1=2, 4+2=6, 9+3=12</span>'},
+    {terms:[[1,3],[2,8],[3,15],[4,24],[5,35]],answer:['n²+2n','n^2+2n','n(n+2)','n*(n+2)'],display:'n(n+2)',explain:'<span class="math-expr">n</span> כפול <span class="math-expr">(n+2)</span>: <span class="math-expr">1·3=3, 2·4=8, 3·5=15</span>'}
+  ];
+  cPats.forEach(p=>{
+    qs.push({type:'input-text',stem:'מצאו את <strong>הביטוי הכללי</strong>:<br><table class="q-table"><tr><th><span class="math-expr">n</span></th><th>תוצאה</th></tr>'+p.terms.map(t=>'<tr><td>'+t[0]+'</td><td>'+t[1]+'</td></tr>').join('')+'</table>כתבו את הביטוי (למשל: 3n+2):',answer:p.answer,display:p.display,explanation:p.explain});
+  });
+  /* Q4-6: Find position where value exceeds target */
+  for(let i=0;i<3;i++){
+    const d=RI(3,7);const c=RI(1,10);
+    const expr=c===0?d+'n':d+'n + '+c;
+    const target=pick([50,80,100]);
+    const ans=Math.ceil((target-c)/d);
+    const actual=d*ans+c;
+    qs.push({type:'input',stem:'הסדרה עם הביטוי <code>'+expr+'</code>.<br>באיזה <strong>מקום</strong> (<span class="math-expr">n</span>) האיבר <strong>עובר לראשונה</strong> את '+target+'?',answer:ans,explanation:'צריך <span class="math-expr">'+expr+' ≥ '+target+'</span> → <span class="math-expr">n ≥ '+((target-c)/d).toFixed(1)+'</span> → <span class="math-expr">n = '+ans+'</span> (ערך: '+actual+')'});
+  }
+  /* Q7-9: Who's right? */
+  const whoRight=[
+    {seq:'2, 5, 8, 11, 14',correct:'3n - 1',wrong:'3n + 2',explain:'בדיקה: <span class="math-expr">3·1-1=2</span> ✓, <span class="math-expr">3·2-1=5</span> ✓. לעומת: <span class="math-expr">3·1+2=5</span> ✗'},
+    {seq:'4, 9, 14, 19, 24',correct:'5n - 1',wrong:'5n + 4',explain:'בדיקה: <span class="math-expr">5·1-1=4</span> ✓, <span class="math-expr">5·2-1=9</span> ✓. לעומת: <span class="math-expr">5·1+4=9</span> ✗'},
+    {seq:'1, 4, 9, 16, 25',correct:'n²',wrong:'4n - 3',explain:'<span class="math-expr">n²</span>: <span class="math-expr">1,4,9,16,25</span> ✓. <span class="math-expr">4n-3</span>: <span class="math-expr">1,5,9,13,17</span> — לא מתאים מהאיבר השני!'}
+  ];
+  const names=[['דני','מיכל'],['עמית','נועה'],['גיא','שירה']];
+  whoRight.forEach((w,i)=>{
+    const [n1,n2]=names[i];
+    const opts=shuffle([n1+' — <code>'+w.correct+'</code>',n2+' — <code>'+w.wrong+'</code>']);
+    const ci=opts.findIndex(o=>o.includes(w.correct));
+    qs.push({type:'mc',stem:'<strong>מי צודק?</strong><br>הסדרה: <span style="direction:ltr;display:inline-block;font-weight:700">'+w.seq+'</span><br>'+n1+' טוען/ת שהביטוי הוא <code>'+w.correct+'</code>.<br>'+n2+' טוען/ת שהביטוי הוא <code>'+w.wrong+'</code>.',options:opts,answer:ci,explanation:w.explain});
+  });
+  /* Q10-12: Real-world application */
+  for(let i=0;i<3;i++){
+    const base=RI(20,50);const perWeek=RI(5,15);
+    const weeks=RI(8,20);
+    const ans=base+perWeek*weeks;
+    const name=pick(['דני','נועה','עמית','שירה','אורי','יעל']);
+    qs.push({type:'input',stem:name+' חוסך/ת כסף. בחודש הראשון חסך/ה '+base+' ש"ח, ובכל חודש נוסף חוסך/ת עוד '+perWeek+' ש"ח.<br>כמה כסף בסך הכול יהיה אחרי <strong>'+weeks+' חודשים נוספים</strong>?',answer:ans,explanation:'סך הכול: '+base+' + '+perWeek+'·'+weeks+' = '+base+' + '+(perWeek*weeks)+' = <strong>'+ans+'</strong> ש"ח'});
+  }
+  /* Q13-15: Two sequences meeting point */
+  for(let i=0;i<3;i++){
+    const d1=RI(2,4);const c1=RI(1,10);
+    const d2=RI(d1+1,d1+3);const c2=RI(c1-5,c1-1);
+    const diff_d=d2-d1;const diff_c=c1-c2;
+    const n=Math.ceil(diff_c/diff_d);
+    const meetN=diff_c%diff_d===0?n:n;
+    const v1=d1*meetN+c1;const v2=d2*meetN+c2;
+    if(v1===v2){
+      qs.push({type:'input',stem:'<strong>שתי סדרות:</strong><br>סדרה א׳: <code>'+(c1>0?d1+'n + '+c1:d1+'n - '+(-c1))+'</code><br>סדרה ב׳: <code>'+(c2>0?d2+'n + '+c2:c2===0?d2+'n':d2+'n - '+(-c2))+'</code><br>באיזה <strong>מקום</strong> (<span class="math-expr">n</span>) שתי הסדרות נותנות <strong>אותו ערך</strong>?',answer:meetN,explanation:'<span class="math-expr">'+d1+'n'+(c1>0?'+'+c1:c1<0?c1:'')+'</span> = <span class="math-expr">'+d2+'n'+(c2>0?'+'+c2:c2<0?c2:'')+'</span> → <span class="math-expr">n = '+meetN+'</span> (ערך: '+v1+')'});
+    } else {
+      /* fallback: simple expression computation */
+      const fd=RI(4,8);const fc=RI(-3,5);
+      const fn=RI(15,25);const fans=fd*fn+fc;
+      const fexpr=fc>=0?fd+'n + '+fc:fd+'n - '+(-fc);
+      qs.push({type:'input',stem:'הביטוי הכללי הוא <code>'+fexpr+'</code>. מהו האיבר ה-<strong>'+fn+'</strong>?',answer:fans,explanation:'<span class="math-expr">'+fd+'·'+fn+(fc>=0?'+'+fc:'−'+(-fc))+'</span> = <strong>'+fans+'</strong>'});
+    }
+  }
+  return qs;
+}
+
+function generateQuestions(level){
+  if(level==='easy') return genEasy();
+  if(level==='medium') return genMedium();
+  if(level==='hard') return genHard();
+  return genChallenge();
+}
+
+/* ===== PRACTICE RENDERING ===== */
+function renderLevelTabs(){
+  const container=document.getElementById('levelTabs');
+  container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(lv=>{
+    const btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    const done=scores[lv].filter(s=>s===1).length;
+    const total=LEVEL_COUNTS[lv];
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+total+')</span>':'');
+    btn.onclick=()=>switchLevel(lv);
+    container.appendChild(btn);
+  });
+}
+
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv]) questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+
+function updateLevelProgress(){
+  const lv=state.level;const total=LEVEL_COUNTS[lv];
+  const done=answered[lv].filter(a=>a).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+
+function renderQuestion(){
+  const lv=state.level;const idx=state.qIndex;
+  const qs=questions[lv];
+  if(!qs) return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  const q=qs[idx];
+  const area=document.getElementById('questionArea');
+  const isAnswered=answered[lv][idx];
+
+  let html='<div class="q-card"><div class="q-number">שאלה '+(idx+1)+' מתוך '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach((opt,i)=>{
+      const letter=LETTERS[i];
+      let cls='q-opt';
+      if(isAnswered){
+        cls+=' disabled';
+        if(i===q.answer) cls+=' correct';
+        else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel']) cls+=' wrong';
+      }
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>בדקו</button>';
+  } else if(q.type==='input'||q.type==='input-text'){
+    html+='<div class="q-input-row"><input type="'+(q.type==='input'?'number':'text')+'" class="q-input" id="qInput" placeholder="תשובה" dir="ltr" aria-label="תשובה">';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">בדקו</button>';
+    html+='</div>';
+    if(isAnswered){
+      const inp=q.type==='input'?q.answer:(q.display||q.answer[0]);
+      html+='<div style="margin-top:4px;font-weight:700;direction:ltr">תשובה: '+inp+'</div>';
+    }
+  } else if(q.type==='table'){
+    html+='<table class="q-table"><tr><th style="direction:ltr">n</th><th style="direction:ltr">'+q.expression+'</th></tr>';
+    q.rows.forEach((row,ri)=>{
+      html+='<tr><td>'+row.x+'</td><td>';
+      if(row.blank&&!isAnswered) html+='<input type="number" class="q-table-input" data-ri="'+ri+'" data-ans="'+row.result+'">';
+      else html+=row.result;
+      html+='</td></tr>';
+    });
+    html+='</table>';
+    if(!isAnswered) html+='<div style="text-align:center;margin-top:8px"><button class="q-check-btn" id="qCheckBtn" onclick="checkTable2()">בדקו</button></div>';
+  }
+
+  if(isAnswered){
+    const isCorrect=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'✅ נכון! ':'❌ ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(el=>{
+      el.onclick=()=>{
+        area.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+  const inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){
+    inp.focus();
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkInput()});
+  }
+
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'סיום':'הבא ←';
+}
+
+window.checkMC=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const selected=document.querySelector('.q-opt.selected');
+  if(!selected) return;
+  const si=parseInt(selected.dataset.i);
+  const isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  answered[lv][idx+'_sel']=si;
+
+  document.querySelectorAll('.q-opt').forEach((el,i)=>{
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer) el.classList.add('correct');
+    else if(i===si&&!isCorrect) el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון מאוד!','✅ יפה!'])+' ':'❌ לא נכון. ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkInput=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inp=document.getElementById('qInput');
+  const val=inp.value.trim();
+  if(!val) return;
+  let isCorrect=false;
+  if(q.type==='input'){
+    isCorrect=parseFloat(val)===q.answer;
+  } else {
+    const norm=val.replace(/\s+/g,'').toLowerCase();
+    isCorrect=q.answer.some(a=>a.replace(/\s+/g,'').toLowerCase()===norm);
+  }
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');
+  inp.disabled=true;
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון!'])+' ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkTable2=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inputs=document.querySelectorAll('.q-table-input');
+  let allCorrect=true;
+  inputs.forEach(inp=>{
+    const ans=parseInt(inp.dataset.ans);
+    const val=parseInt(inp.value);
+    if(val===ans){inp.classList.add('correct')}
+    else{inp.classList.add('wrong');allCorrect=false}
+  });
+  scores[lv][idx]=allCorrect?1:0;
+  answered[lv][idx]=true;
+  inputs.forEach(inp=>inp.disabled=true);
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(allCorrect?'correct':'wrong')+'">'+(allCorrect?'✅ מעולה! ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+function nextQuestion(){
+  const lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+
+function renderLevelComplete(){
+  const lv=state.level;
+  const correct=scores[lv].filter(s=>s===1).length;
+  const total=LEVEL_COUNTS[lv];
+  const pct=Math.round(correct/total*100);
+  const scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  const emoji=pct>=80?'🎉':pct>=50?'👏':'💪';
+
+  document.getElementById('questionArea').innerHTML=`
+    <div class="q-card"><div class="level-complete">
+      <div class="big-emoji">${emoji}</div>
+      <h2>סיימתם את רמת "${LEVEL_NAMES[lv]}"!</h2>
+      <div class="score-display${scoreClass}">${correct} / ${total}</div>
+      <p style="color:var(--text-light);margin-bottom:16px">${pct}% הצלחה</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="mini-btn" onclick="retryLevel()">🔄 נסו שוב</button>
+        ${lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">▶ לרמה הבאה</button>':''}
+      </div>
+    </div></div>`;
+
+  if(pct>=80) showConfetti();
+  saveState();
+}
+
+window.retryLevel=function(){
+  const lv=state.level;
+  scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);
+  state.qIndex=0;
+  renderLevelTabs();renderQuestion();saveState();
+};
+
+window.nextLevel=function(){
+  const order=['easy','medium','hard','challenge'];
+  const ci=order.indexOf(state.level);
+  if(ci<order.length-1) switchLevel(order[ci+1]);
+};
+
+/* ===== SECTION SWITCHING ===== */
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.section===sec);
+  });
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+/* ===== CONFETTI ===== */
+function showConfetti(){
+  const box=document.getElementById('confettiBox');
+  box.innerHTML='';
+  const colors=['#2563eb','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';
+    c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(()=>box.innerHTML='',5000);
+}
+
+/* ===== INIT ===== */
+function init(){
+  loadState();
+  Object.keys(LEVEL_COUNTS).forEach(lv=>{
+    if(!scores[lv]||!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice') switchSection('practice');
+}
+init();
+</script>
+</body>
+</html>

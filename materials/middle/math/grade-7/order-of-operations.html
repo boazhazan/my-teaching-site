@@ -1,0 +1,976 @@
+<!--
+  Title: סדר פעולות החשבון
+  Unit: ממספרים למשתנים
+  Subject: מתמטיקה
+  Grade: ז׳
+  Lesson: 3
+  Tags: חשבון, סדר-פעולות, סוגריים, שברים
+  Ages: 12-13
+  Icon: 🔢
+  Badge: חדש!
+  Description: סדר פעולות החשבון — סוגריים, כפל וחילוק לפני חיבור וחיסור, שברים כחילוק, והשלמת חסרים. תרגול ב-4 רמות קושי
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>סדר פעולות החשבון | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+
+/* Top bar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Section toggle */
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+
+/* Container */
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+
+/* ===== TEACHING SECTION ===== */
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid var(--accent);padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
+.step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+
+/* Fractions */
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 4px;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary);direction:ltr}
+.frac-num,.frac-den{padding:2px 6px;font-size:.95em}
+.frac-bar{width:100%;height:2px;background:var(--primary)}
+
+/* Big LTR expression */
+.big-expr{direction:ltr;text-align:center;font-size:2rem;font-weight:800;color:var(--primary-dark);margin:16px 0;padding:14px;background:var(--bg-soft);border:2px dashed var(--primary);border-radius:var(--radius);letter-spacing:2px}
+.mid-expr{direction:ltr;text-align:center;font-size:1.4rem;font-weight:700;color:var(--primary-dark);margin:10px 0}
+
+/* Pyramid rules */
+.pyramid{display:flex;flex-direction:column;gap:8px;margin:16px 0}
+.pyramid-row{padding:14px 20px;border-radius:var(--radius);text-align:center;font-weight:700;box-shadow:var(--shadow)}
+.pyramid-row.gold{background:linear-gradient(135deg,#fde68a,#fbbf24);color:#78350f}
+.pyramid-row.silver{background:linear-gradient(135deg,#e5e7eb,#9ca3af);color:#1f2937}
+.pyramid-row.bronze{background:linear-gradient(135deg,#fed7aa,#fb923c);color:#7c2d12}
+
+/* Student chat box */
+.students{display:flex;flex-direction:column;gap:10px;margin:14px 0}
+.student-bubble{padding:12px 16px;border-radius:var(--radius);background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;gap:10px;font-size:.95rem}
+.student-emoji{font-size:1.8rem}
+.student-name{font-weight:700;color:var(--primary-dark)}
+
+/* Interactive elements inside steps */
+.mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.mini-table th,.mini-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:1rem}
+.mini-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.mini-table td{background:var(--bg)}
+.mini-input{width:60px;padding:6px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:1rem;font-family:inherit;font-weight:700;transition:.3s}
+.mini-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.mini-input.correct{border-color:var(--success);background:#ecfdf5}
+.mini-input.wrong{border-color:var(--error);background:#fef2f2}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.reveal{display:none;animation:fadeIn .5s ease}
+.reveal.show{display:block}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+
+/* Solution steps animation */
+.sol-steps{direction:ltr;text-align:center;font-size:1.1rem;line-height:2;margin:12px 0;padding:14px;background:var(--bg-soft);border-radius:var(--radius-sm)}
+.sol-steps .sol-line{animation:fadeIn .5s both}
+.sol-steps .highlight-part{background:#fef3c7;padding:2px 6px;border-radius:4px;font-weight:800;color:#78350f}
+
+/* Step nav */
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== PRACTICE SECTION ===== */
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-stem code,.q-stem .expr{font-size:1.1em}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;transition:.25s}
+.q-opt.selected .q-opt-letter{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-opt.correct .q-opt-letter{background:var(--success);color:#fff;border-color:var(--success)}
+.q-opt.wrong .q-opt-letter{background:var(--error);color:#fff;border-color:var(--error)}
+
+.q-input-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-input{width:120px;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1.1rem;font-family:inherit;font-weight:700;text-align:center;transition:.3s;direction:ltr}
+.q-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+
+.q-check-btn{padding:10px 28px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;box-shadow:var(--shadow)}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.92rem;animation:fadeIn .3s}
+.q-feedback.correct{background:#ecfdf5;border-right:4px solid var(--success);color:#065f46}
+.q-feedback.wrong{background:#fef2f2;border-right:4px solid var(--error);color:#991b1b}
+
+.q-nav{display:flex;justify-content:space-between;margin-top:16px}
+.q-nav-btn{padding:10px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Level complete */
+.level-complete{text-align:center;padding:24px;animation:fadeIn .5s}
+.level-complete .big-emoji{font-size:4rem;margin-bottom:12px}
+.level-complete h2{font-size:1.4rem;color:var(--primary-dark);margin-bottom:8px}
+.level-complete .score-display{font-size:1.8rem;font-weight:800;color:var(--success);margin-bottom:16px}
+.level-complete .score-display.medium-score{color:var(--accent)}
+.level-complete .score-display.low-score{color:var(--error)}
+
+/* Celebration confetti */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{
+  0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}
+  100%{transform:translateY(105vh) rotate(720deg) scale(.3);opacity:0}
+}
+
+/* Print button */
+.print-btn{position:fixed;bottom:20px;left:20px;width:48px;height:48px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer;font-size:1.3rem;box-shadow:var(--shadow-lg);transition:.25s;z-index:40;display:flex;align-items:center;justify-content:center}
+.print-btn:hover{background:var(--primary-dark);transform:scale(1.1)}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+
+/* Responsive */
+@media(max-width:600px){
+  .container{padding:0 10px 30px}
+  .step-card,.q-card{padding:18px 14px}
+  .step-title{font-size:1.15rem}
+  .step-summary-grid{grid-template-columns:1fr}
+  .section-toggle{max-width:280px;margin:12px auto}
+  .section-btn{font-size:.88rem;padding:8px 14px}
+  .q-opt{padding:10px 12px;font-size:.9rem}
+  .topbar-title{font-size:.9rem}
+  .big-expr{font-size:1.5rem}
+}
+
+/* Print */
+@media print{
+  .topbar,.section-toggle,.step-nav,.q-nav,.print-btn,.level-tabs,.confetti-container,.q-check-btn{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .step-card,.q-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+  .container{max-width:100%}
+  .q-feedback{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">🔢 כיתה ז׳ — סדר פעולות החשבון</span>
+  <a href="../../../../materials.html">← חזרה לחומרי לימוד</a>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+
+<section id="learnSection">
+  <div class="step-progress">
+    <div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div>
+    <div class="step-progress-text" id="stepText"></div>
+  </div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress">
+    <div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div>
+    <div class="level-progress-text" id="levelText"></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+
+</div>
+
+<button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button>
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const today=new Date();const dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+let rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(arr){return arr[Math.floor(R()*arr.length)]}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const LETTERS=['א','ב','ג','ד'];
+
+function frac(num,den){return '<span class="frac"><span class="frac-num">'+num+'</span><span class="frac-bar"></span><span class="frac-den">'+den+'</span></span>'}
+
+/* ===== STATE ===== */
+let state={section:'learn',step:0,level:'easy',qIndex:0};
+let scores={easy:[],medium:[],hard:[],challenge:[]};
+let answered={easy:[],medium:[],hard:[],challenge:[]};
+let questions={easy:null,medium:null,hard:null,challenge:null};
+const LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+const LEVEL_NAMES={easy:'קל',medium:'בינוני',hard:'קשה',challenge:'אתגר'};
+const TOTAL_STEPS=7;
+
+/* ===== LOCAL STORAGE ===== */
+const LS_KEY='order_ops_v1_'+dateSeed;
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores,answered,state}))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+/* ===== TEACHING SECTION ===== */
+const steps=[
+/* Step 0: Opening debate */
+{title:'🤔 למה סדר הפעולות חשוב?', render(){return `
+<p>בואו נחשוב יחד. שלושה תלמידים פתרו את אותו התרגיל, וקיבלו <strong>שלוש תשובות שונות</strong>!</p>
+<div class="big-expr">4 : 2 · (2 + 2) = ?</div>
+<div class="students">
+  <div class="student-bubble"><span class="student-emoji">🧒</span><div><span class="student-name">יובל:</span> "התשובה היא <strong>2</strong>!"</div></div>
+  <div class="student-bubble"><span class="student-emoji">👧</span><div><span class="student-name">אלמה:</span> "התשובה היא <strong>8</strong>!"</div></div>
+  <div class="student-bubble"><span class="student-emoji">🧑</span><div><span class="student-name">סער:</span> "התשובה היא <strong>½</strong>!"</div></div>
+</div>
+<p style="margin-top:14px"><strong>מי צודק לדעתכם?</strong></p>
+<div class="quiz-options" id="s0opts"></div>
+<div id="s0fb"></div>
+<div class="reveal" id="s0reveal">
+  <div class="success-box">✅ אלמה צודקת! התשובה הנכונה היא <strong>8</strong>.</div>
+  <div class="highlight">
+    <p>כיצד מגיעים ל-8? לפי <strong>סדר פעולות החשבון</strong>:</p>
+    <p>1. קודם סוגריים: <span class="math-expr">(2 + 2) = 4</span></p>
+    <p>2. עכשיו יש לנו <span class="math-expr">4 : 2 · 4</span></p>
+    <p>3. כפל וחילוק — משמאל לימין: <span class="math-expr">4 : 2 = 2</span>, אחר כך <span class="math-expr">2 · 4 = 8</span></p>
+  </div>
+  <div class="rule-box">📌 בלי כללים מוסכמים — אותו תרגיל יכול לתת תוצאות שונות! לכן יש <strong>סדר מוסכם</strong> לכל העולם.</div>
+</div>
+`},init(){
+  const opts=shuffle([
+    {text:'יובל — 2',correct:false,why:'לא. ייתכן שיובל חישב רק <span class="math-expr">4 : 2 = 2</span> ושכח את החלק השני.'},
+    {text:'אלמה — 8',correct:true,why:''},
+    {text:'סער — ½',correct:false,why:'לא. סער חישב כנראה <span class="math-expr">2 · (2 + 2) = 8</span> קודם, ואז <span class="math-expr">4 : 8 = ½</span> — זה לא לפי הסדר הנכון!'}
+  ]);
+  const container=document.getElementById('s0opts');
+  container.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');
+    d.className='quiz-opt';
+    d.textContent=o.text;
+    d.onclick=()=>{
+      container.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){
+        d.classList.add('correct-answer');
+        document.getElementById('s0fb').innerHTML='<div class="feedback-inline ok">✅ נכון!</div>';
+        document.getElementById('s0reveal').classList.add('show');
+      } else {
+        d.classList.add('wrong-answer');
+        document.getElementById('s0fb').innerHTML='<div class="feedback-inline err">❌ '+o.why+' נסו שוב</div>';
+      }
+    };
+    container.appendChild(d);
+  });
+}},
+
+/* Step 1: The rules */
+{title:'📜 הכללים: סדר פעולות החשבון', render(){return `
+<p>כדי שכולנו נקבל אותה תוצאה, יש <strong>שלושה כללים</strong> לפי סדר חשיבות:</p>
+<div class="pyramid">
+  <div class="pyramid-row gold">🥇 <strong>סוגריים קודם</strong> — תמיד פותרים קודם מה שבתוך הסוגריים</div>
+  <div class="pyramid-row silver">🥈 <strong>כפל וחילוק</strong> — אחרי הסוגריים, משמאל לימין</div>
+  <div class="pyramid-row bronze">🥉 <strong>חיבור וחיסור</strong> — בסוף, משמאל לימין</div>
+</div>
+<div class="warning">⚠️ <strong>שימו לב:</strong> כפל וחילוק הם באותה "רמה" — פותרים אותם לפי הסדר משמאל לימין. אותו דבר לגבי חיבור וחיסור.</div>
+<p><strong>בואו נפתור יחד:</strong> <span class="math-expr">4 : 2 · (2 + 2)</span></p>
+<div id="s1steps">
+  <button class="mini-btn accent" onclick="showS1Steps()">▶ הראו פתרון צעד אחר צעד</button>
+</div>
+`}},
+
+/* Step 2: Guided practice */
+{title:'🎯 תרגול מודרך', render(){return `
+<p>נפתור 3 תרגילים יחד. בכל אחד — מה פותרים קודם?</p>
+
+<div class="example">
+<p><strong>תרגיל 1:</strong> <span class="math-expr">16 : 2 · 4</span></p>
+<p>כאן יש רק חילוק וכפל — משמאל לימין!</p>
+<div class="sol-steps">
+<div>16 : 2 · 4</div>
+<div>= <span class="highlight-part">8</span> · 4</div>
+<div>= <strong>32</strong></div>
+</div>
+</div>
+
+<div class="example">
+<p><strong>תרגיל 2:</strong> <span class="math-expr">9 + 3 : 3</span></p>
+<p>יש חילוק וחיבור — חילוק קודם!</p>
+<div class="sol-steps">
+<div>9 + 3 : 3</div>
+<div>= 9 + <span class="highlight-part">1</span></div>
+<div>= <strong>10</strong></div>
+</div>
+</div>
+
+<div class="example">
+<p><strong>תרגיל 3:</strong> <span class="math-expr">(10 + 5) · 3</span></p>
+<p>יש סוגריים — קודם!</p>
+<div class="sol-steps">
+<div>(10 + 5) · 3</div>
+<div>= <span class="highlight-part">15</span> · 3</div>
+<div>= <strong>45</strong></div>
+</div>
+</div>
+
+<p style="margin-top:16px"><strong>תורכם:</strong> מה פותרים <strong>קודם</strong> בתרגיל <span class="math-expr">20 - 3 · 4</span>?</p>
+<div class="quiz-options" id="s2opts"></div>
+<div id="s2fb"></div>
+<div class="reveal" id="s2reveal">
+  <div class="success-box">✅ נכון! כפל לפני חיסור: <span class="math-expr">3 · 4 = 12</span>, ואז <span class="math-expr">20 - 12 = 8</span></div>
+</div>
+`},init(){
+  const opts=shuffle([
+    {text:'20 - 3 (קודם חיסור)',correct:false},
+    {text:'3 · 4 (קודם כפל)',correct:true},
+    {text:'20 · 4 (מימין לשמאל)',correct:false},
+    {text:'כולם באותו זמן',correct:false}
+  ]);
+  const container=document.getElementById('s2opts');
+  container.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');
+    d.className='quiz-opt';
+    d.innerHTML=o.text;
+    d.onclick=()=>{
+      container.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){
+        d.classList.add('correct-answer');
+        document.getElementById('s2fb').innerHTML='<div class="feedback-inline ok">✅ נכון מאוד!</div>';
+        document.getElementById('s2reveal').classList.add('show');
+      } else {
+        d.classList.add('wrong-answer');
+        document.getElementById('s2fb').innerHTML='<div class="feedback-inline err">❌ נסו שוב — כפל לפני חיסור</div>';
+      }
+    };
+    container.appendChild(d);
+  });
+}},
+
+/* Step 3: Fractions = division */
+{title:'➗ קו השבר = סוגריים + חילוק', render(){return `
+<div class="rule-box">📌 <strong>קו השבר הוא כמו סוגריים!</strong> צריך לחשב מונה ומכנה לפני שמחלקים</div>
+<p>לדוגמה, השבר הבא:</p>
+<div style="text-align:center;margin:14px 0;font-size:1.4rem">`+frac('48','8 - 2')+` = <span class="math-expr">48 : (8 - 2)</span> = <span class="math-expr">48 : 6 = 8</span></div>
+<p>קו השבר "מקבץ" את כל המכנה ליחידה אחת — בדיוק כמו סוגריים!</p>
+<div class="example">
+<p>הסתכלו על 4 ביטויים שבנויים מאותם מספרים — <strong>48, 8, 2, 2</strong> — אבל עם מיקום שונה של סוגריים:</p>
+<table class="mini-table">
+<tr><th>הביטוי</th><th>התוצאה</th></tr>
+<tr><td style="direction:ltr">48 : 8 - 2 · 2</td><td><strong>2</strong></td></tr>
+<tr><td style="direction:ltr">48 : (8 - 2) · 2</td><td><strong>16</strong></td></tr>
+<tr><td style="direction:ltr">48 : (8 - 2 · 2)</td><td><strong>12</strong></td></tr>
+<tr><td style="direction:ltr">48 : [(8 - 2) · 2]</td><td><strong>4</strong></td></tr>
+</table>
+<p style="margin-top:10px">אותם מספרים — <strong>4 תוצאות שונות</strong>! כל הסוגריים משנים את הסדר.</p>
+</div>
+<p><strong>תורכם:</strong> מה ערך השבר `+frac('20','3 + 2')+` ?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s3input" placeholder="?" aria-label="תוצאה">
+  <button class="mini-btn" onclick="checkS3()">בדקו</button>
+</div>
+<div id="s3fb"></div>
+<div class="reveal" id="s3reveal">
+  <div class="success-box">✅ נכון! המכנה: <span class="math-expr">3 + 2 = 5</span>, ואז <span class="math-expr">20 : 5 = 4</span></div>
+</div>
+`}},
+
+/* Step 4: Nested brackets */
+{title:'🔗 סוגריים מקוננים', render(){return `
+<p>כשיש הרבה סוגריים בתוך סוגריים — משתמשים בסוגים שונים כדי לא להתבלבל:</p>
+<div class="pyramid">
+  <div class="pyramid-row" style="background:var(--primary-light);color:var(--primary-dark)">🔵 <strong>פנימי:</strong> ( ) — סוגריים עגולים</div>
+  <div class="pyramid-row" style="background:#fce7f3;color:#9f1239">🟣 <strong>אמצעי:</strong> [ ] — סוגריים מרובעים</div>
+  <div class="pyramid-row" style="background:#dcfce7;color:#065f46">🟢 <strong>חיצוני:</strong> { } — סוגריים מסולסלים</div>
+</div>
+<p><strong>דוגמה:</strong> <span class="math-expr">100 : [50 - (13 + 12)]</span></p>
+<div class="sol-steps">
+<div><strong>שלב 1:</strong> סוגריים פנימיים: <span class="math-expr">(13 + 12) = 25</span></div>
+<div><strong>שלב 2:</strong> סוגריים מרובעים: <span class="math-expr">[50 - 25] = 25</span></div>
+<div><strong>שלב 3:</strong> חילוק: <span class="math-expr">100 : 25 = 4</span></div>
+</div>
+<div class="highlight">💡 <strong>כלל:</strong> מתחילים מהפנים החוצה — קודם הפנימיים, אחר כך האמצעיים, בסוף החיצוניים!</div>
+<p><strong>תורכם:</strong> כמה שווה <span class="math-expr">60 : [20 - (5 + 5)]</span>?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s4input" placeholder="?" aria-label="תוצאה">
+  <button class="mini-btn" onclick="checkS4()">בדקו</button>
+</div>
+<div id="s4fb"></div>
+<div class="reveal" id="s4reveal">
+  <div class="success-box">✅ נכון! <span class="math-expr">(5 + 5) = 10</span> → <span class="math-expr">[20 - 10] = 10</span> → <span class="math-expr">60 : 10 = 6</span></div>
+</div>
+`}},
+
+/* Step 5: Missing numbers */
+{title:'❓ השלמת מספרים חסרים', render(){return `
+<div class="rule-box">🧠 <strong>לעבוד אחורה!</strong> כשיש מספר חסר — פתרו מה שכבר ידוע, ואז חשבו מה חסר.</div>
+<p><strong>דוגמה:</strong> <span class="math-expr">3 · ☐ + 10 = 31</span></p>
+<div class="sol-steps">
+<div><strong>שלב 1:</strong> הסוף: 31. לפני זה הוספנו 10, אז לפני החיבור היה: <span class="math-expr">31 - 10 = 21</span></div>
+<div><strong>שלב 2:</strong> 21 הוא תוצאה של <span class="math-expr">3 · ☐</span>. אז <span class="math-expr">☐ = 21 : 3 = 7</span></div>
+<div><strong>בדיקה:</strong> <span class="math-expr">3 · 7 + 10 = 21 + 10 = 31</span> ✓</div>
+</div>
+<div class="example">
+<p><strong>דוגמה 2:</strong> <span class="math-expr">(20 - ☐) : 4 = 3</span></p>
+<p>הסוף: 3. לפני החילוק ב-4 היה <span class="math-expr">3 · 4 = 12</span>.</p>
+<p>אז <span class="math-expr">20 - ☐ = 12</span>, כלומר <span class="math-expr">☐ = 20 - 12 = 8</span></p>
+</div>
+<p><strong>תורכם:</strong> מצאו את המספר החסר: <span class="math-expr">5 · ☐ - 4 = 16</span></p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s5input" placeholder="?" aria-label="המספר החסר">
+  <button class="mini-btn" onclick="checkS5()">בדקו</button>
+</div>
+<div id="s5fb"></div>
+<div class="reveal" id="s5reveal">
+  <div class="success-box">✅ נכון! <span class="math-expr">16 + 4 = 20</span>, ואז <span class="math-expr">20 : 5 = 4</span></div>
+</div>
+`}},
+
+/* Step 6: Summary */
+{title:'🏆 סיכום', render(){return `
+<p style="font-size:1.1rem;text-align:center;margin-bottom:20px">בשיעור הזה למדנו 4 כללים חשובים:</p>
+<div class="step-summary-grid">
+  <div class="summary-item">
+    <div class="s-icon">🥇</div>
+    <div class="s-title">סוגריים קודם</div>
+    <div class="s-text">תמיד! מה שבתוך הסוגריים פותרים ראשון</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">✖️</div>
+    <div class="s-title">כפל וחילוק</div>
+    <div class="s-text">לפני חיבור וחיסור — משמאל לימין</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">➗</div>
+    <div class="s-title">קו השבר</div>
+    <div class="s-text">כמו סוגריים — קודם מונה ומכנה, אחר כך מחלקים</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🔗</div>
+    <div class="s-title">סוגריים בתוך סוגריים</div>
+    <div class="s-text">( ) → [ ] → { } — מהפנים החוצה</div>
+  </div>
+</div>
+<div class="success-box" style="text-align:center;font-size:1.1rem;margin-top:20px">
+  <p>🌟 עכשיו אתם מוכנים לתרגול!</p>
+  <p>4 רמות קושי — 75 שאלות!</p>
+  <button class="mini-btn accent" style="margin-top:12px;font-size:1rem;padding:12px 32px" onclick="switchSection('practice')">!מוכנים לתרגול ←</button>
+</div>
+`}}
+];
+
+function renderStep(idx){
+  state.step=idx;
+  const s=steps[idx];
+  const fill=((idx+1)/TOTAL_STEPS*100).toFixed(0);
+  document.getElementById('stepFill').style.width=fill+'%';
+  document.getElementById('stepText').textContent='שלב '+(idx+1)+' מתוך '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+s.title+'</div>'+s.render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'לתרגול ←':'הבא ←';
+  if(s.init) s.init();
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+/* Step handlers */
+window.showS1Steps=function(){
+  document.getElementById('s1steps').innerHTML=`
+    <div class="sol-steps">
+      <div class="sol-line"><span class="math-expr">4 : 2 · (2 + 2)</span></div>
+      <div class="sol-line" style="animation-delay:.3s">↓ <strong>סוגריים</strong></div>
+      <div class="sol-line" style="animation-delay:.6s">4 : 2 · <span class="highlight-part">4</span></div>
+      <div class="sol-line" style="animation-delay:.9s">↓ <strong>חילוק משמאל</strong></div>
+      <div class="sol-line" style="animation-delay:1.2s"><span class="highlight-part">2</span> · 4</div>
+      <div class="sol-line" style="animation-delay:1.5s">↓ <strong>כפל</strong></div>
+      <div class="sol-line" style="animation-delay:1.8s;font-size:1.4rem">= <strong>8</strong> ✅</div>
+    </div>`;
+};
+window.checkS3=function(){
+  const v=parseInt(document.getElementById('s3input').value);
+  const fb=document.getElementById('s3fb');
+  if(v===4){fb.innerHTML='<div class="feedback-inline ok">✅ מעולה!</div>';document.getElementById('s3reveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. קו השבר = קודם פותרים את המכנה (3+2), אחר כך מחלקים</div>'}
+};
+window.checkS4=function(){
+  const v=parseInt(document.getElementById('s4input').value);
+  const fb=document.getElementById('s4fb');
+  if(v===6){fb.innerHTML='<div class="feedback-inline ok">✅ נכון!</div>';document.getElementById('s4reveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. קודם (5+5), אחר כך [20-10], ולבסוף 60 חלקי התוצאה</div>'}
+};
+window.checkS5=function(){
+  const v=parseInt(document.getElementById('s5input').value);
+  const fb=document.getElementById('s5fb');
+  if(v===4){fb.innerHTML='<div class="feedback-inline ok">✅ מעולה!</div>';document.getElementById('s5reveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. עבדו אחורה: מה לפני החיסור? מה לפני הכפל?</div>'}
+};
+
+/* ===== QUESTION GENERATORS ===== */
+function genEasy(){
+  const qs=[];
+  /* Q1-5: basic 2-op expressions, no parens */
+  const basicOps=[
+    {expr:'3 + 4 · 2',ans:11,wrong:[14,10,18],expl:'קודם כפל: <span class="math-expr">4 · 2 = 8</span>, אחר כך חיבור: <span class="math-expr">3 + 8 = 11</span>'},
+    {expr:'10 − 6 : 2',ans:7,wrong:[2,4,8],expl:'קודם חילוק: <span class="math-expr">6 : 2 = 3</span>, אחר כך חיסור: <span class="math-expr">10 − 3 = 7</span>'},
+    {expr:'5 · 3 − 4',ans:11,wrong:[5,-5,15],expl:'קודם כפל: <span class="math-expr">5 · 3 = 15</span>, אחר כך חיסור: <span class="math-expr">15 − 4 = 11</span>'},
+    {expr:'20 : 4 + 3',ans:8,wrong:[2,5,12],expl:'קודם חילוק: <span class="math-expr">20 : 4 = 5</span>, אחר כך חיבור: <span class="math-expr">5 + 3 = 8</span>'},
+    {expr:'2 + 3 · 5',ans:17,wrong:[25,13,20],expl:'קודם כפל: <span class="math-expr">3 · 5 = 15</span>, אחר כך חיבור: <span class="math-expr">2 + 15 = 17</span>'}
+  ];
+  basicOps.forEach(o=>{
+    const opts=shuffle([o.ans,...o.wrong]);
+    qs.push({type:'mc',stem:'פתרו: <span class="math-expr">'+o.expr+'</span>',options:opts.map(String),answer:opts.indexOf(o.ans),explanation:o.expl});
+  });
+  /* Q6-10: one pair of parens */
+  const parenOps=[
+    {expr:'(3 + 4) · 2',ans:14,wrong:[11,10,7],expl:'קודם סוגריים: <span class="math-expr">(3 + 4) = 7</span>, אחר כך כפל: <span class="math-expr">7 · 2 = 14</span>'},
+    {expr:'20 : (2 + 3)',ans:4,wrong:[13,10,5],expl:'קודם סוגריים: <span class="math-expr">(2 + 3) = 5</span>, אחר כך חילוק: <span class="math-expr">20 : 5 = 4</span>'},
+    {expr:'(10 − 6) · 3',ans:12,wrong:[8,4,7],expl:'קודם סוגריים: <span class="math-expr">(10 − 6) = 4</span>, אחר כך כפל: <span class="math-expr">4 · 3 = 12</span>'},
+    {expr:'2 · (5 + 4)',ans:18,wrong:[14,10,9],expl:'קודם סוגריים: <span class="math-expr">(5 + 4) = 9</span>, אחר כך כפל: <span class="math-expr">2 · 9 = 18</span>'},
+    {expr:'(8 + 4) : 3',ans:4,wrong:[9,10,12],expl:'קודם סוגריים: <span class="math-expr">(8 + 4) = 12</span>, אחר כך חילוק: <span class="math-expr">12 : 3 = 4</span>'}
+  ];
+  parenOps.forEach(o=>{
+    const opts=shuffle([o.ans,...o.wrong]);
+    qs.push({type:'mc',stem:'פתרו: <span class="math-expr">'+o.expr+'</span>',options:opts.map(String),answer:opts.indexOf(o.ans),explanation:o.expl});
+  });
+  /* Q11-14: "what to solve first" MC */
+  const whatFirst=[
+    {expr:'7 + 3 · 4',opts:['3 · 4','7 + 3','7 · 4','זה לא משנה'],ans:0,expl:'קודם כפל — הוא קודם לחיבור. לכן מתחילים מ-<span class="math-expr">3 · 4</span>'},
+    {expr:'(6 + 2) · 5',opts:['6 + 2','2 · 5','6 · 5','זה לא משנה'],ans:0,expl:'סוגריים תמיד קודמים! מתחילים מ-<span class="math-expr">(6 + 2)</span>'},
+    {expr:'15 − 12 : 4',opts:['12 : 4','15 − 12','15 : 4','זה לא משנה'],ans:0,expl:'חילוק קודם לחיסור. מתחילים מ-<span class="math-expr">12 : 4</span>'},
+    {expr:'8 : (1 + 1)',opts:['1 + 1','8 : 1','אין צורך בסוגריים','זה לא משנה'],ans:0,expl:'סוגריים תמיד קודמים. מתחילים מ-<span class="math-expr">(1 + 1)</span>'}
+  ];
+  whatFirst.forEach(w=>{
+    qs.push({type:'mc',stem:'מה פותרים קודם בתרגיל <span class="math-expr">'+w.expr+'</span>?',options:w.opts,answer:w.ans,explanation:w.expl});
+  });
+  /* Q15-17: match expression to result MC */
+  const match=[
+    {expr:'2 + 3 · 4',opts:['20','14','10','24'],ans:1,expl:'כפל קודם: <span class="math-expr">3 · 4 = 12</span>, ואז: <span class="math-expr">2 + 12 = 14</span>'},
+    {expr:'(2 + 3) · 4',opts:['20','14','10','9'],ans:0,expl:'סוגריים קודם: <span class="math-expr">(2 + 3) = 5</span>, ואז: <span class="math-expr">5 · 4 = 20</span>'},
+    {expr:'12 : 3 + 1',opts:['3','4','5','12'],ans:2,expl:'חילוק קודם: <span class="math-expr">12 : 3 = 4</span>, ואז: <span class="math-expr">4 + 1 = 5</span>'}
+  ];
+  match.forEach(m=>{
+    qs.push({type:'mc',stem:'כמה שווה <span class="math-expr">'+m.expr+'</span>?',options:m.opts,answer:m.ans,explanation:m.expl});
+  });
+  /* Q18-20: simple fill-in-blank input */
+  qs.push({type:'input',stem:'פתרו: <span class="math-expr">6 + 2 · 5</span>',answer:16,explanation:'כפל קודם: <span class="math-expr">2 · 5 = 10</span>, ואז: <span class="math-expr">6 + 10 = 16</span>'});
+  qs.push({type:'input',stem:'פתרו: <span class="math-expr">(9 − 3) · 2</span>',answer:12,explanation:'סוגריים קודם: <span class="math-expr">(9 − 3) = 6</span>, ואז: <span class="math-expr">6 · 2 = 12</span>'});
+  qs.push({type:'input',stem:'פתרו: <span class="math-expr">18 : 3 − 1</span>',answer:5,explanation:'חילוק קודם: <span class="math-expr">18 : 3 = 6</span>, ואז: <span class="math-expr">6 − 1 = 5</span>'});
+  return qs;
+}
+
+function genMedium(){
+  const qs=[];
+  /* Q1-5: 3-op expressions */
+  const three=[
+    {expr:'2 + 3 · 4 − 5',ans:9,wrong:[15,5,25],expl:'כפל קודם: <span class="math-expr">3 · 4 = 12</span>, ואז משמאל לימין: <span class="math-expr">2 + 12 − 5 = 9</span>'},
+    {expr:'20 − 6 : 2 + 1',ans:18,wrong:[8,7,12],expl:'חילוק קודם: <span class="math-expr">6 : 2 = 3</span>, ואז: <span class="math-expr">20 − 3 + 1 = 18</span>'},
+    {expr:'3 · 2 + 4 · 5',ans:26,wrong:[50,30,70],expl:'שני הכפלים קודם: <span class="math-expr">3 · 2 = 6</span>, <span class="math-expr">4 · 5 = 20</span>, ואז: <span class="math-expr">6 + 20 = 26</span>'},
+    {expr:'10 : 2 + 3 · 4',ans:17,wrong:[32,26,20],expl:'חילוק וכפל קודם: <span class="math-expr">10 : 2 = 5</span>, <span class="math-expr">3 · 4 = 12</span>, ואז: <span class="math-expr">5 + 12 = 17</span>'},
+    {expr:'15 − 2 · 3 + 1',ans:10,wrong:[40,4,15],expl:'כפל קודם: <span class="math-expr">2 · 3 = 6</span>, ואז: <span class="math-expr">15 − 6 + 1 = 10</span>'}
+  ];
+  three.forEach(o=>{
+    const opts=shuffle([o.ans,...o.wrong]);
+    qs.push({type:'mc',stem:'פתרו: <span class="math-expr">'+o.expr+'</span>',options:opts.map(String),answer:opts.indexOf(o.ans),explanation:o.expl});
+  });
+  /* Q6-9: bracket comparison — with vs without */
+  qs.push({type:'input',stem:'פתרו: <span class="math-expr">10 − 4 + 2</span>',answer:8,explanation:'משמאל לימין: <span class="math-expr">10 − 4 = 6</span>, ואז: <span class="math-expr">6 + 2 = 8</span>'});
+  qs.push({type:'input',stem:'פתרו: <span class="math-expr">10 − (4 + 2)</span>',answer:4,explanation:'סוגריים קודם: <span class="math-expr">(4 + 2) = 6</span>, ואז: <span class="math-expr">10 − 6 = 4</span>'});
+  qs.push({type:'input',stem:'פתרו: <span class="math-expr">24 : 6 · 2</span>',answer:8,explanation:'משמאל לימין: <span class="math-expr">24 : 6 = 4</span>, ואז: <span class="math-expr">4 · 2 = 8</span>'});
+  qs.push({type:'input',stem:'פתרו: <span class="math-expr">24 : (6 · 2)</span>',answer:2,explanation:'סוגריים קודם: <span class="math-expr">(6 · 2) = 12</span>, ואז: <span class="math-expr">24 : 12 = 2</span>'});
+  /* Q10-13: fractions as division */
+  qs.push({type:'input',stem:'פתרו: '+frac('12 + 8','4'),answer:5,explanation:'קו השבר = חילוק, והמונה הוא סוגריים: <span class="math-expr">(12 + 8) : 4 = 20 : 4 = 5</span>'});
+  qs.push({type:'input',stem:'פתרו: '+frac('20 − 5','3'),answer:5,explanation:'קו השבר = חילוק: <span class="math-expr">(20 − 5) : 3 = 15 : 3 = 5</span>'});
+  qs.push({type:'input',stem:'פתרו: '+frac('18','2 + 1'),answer:6,explanation:'קו השבר = חילוק, גם המכנה הוא סוגריים: <span class="math-expr">18 : (2 + 1) = 18 : 3 = 6</span>'});
+  qs.push({type:'input',stem:'פתרו: '+frac('3 · 4','2'),answer:6,explanation:'קו השבר = חילוק: <span class="math-expr">(3 · 4) : 2 = 12 : 2 = 6</span>'});
+  /* Q14-17: 2-op fill blank (find missing number) */
+  qs.push({type:'input',stem:'איזה מספר חסר? <span class="math-expr">3 + ? · 2 = 11</span>',answer:4,explanation:'<span class="math-expr">? · 2 = 11 − 3 = 8</span>, אז <span class="math-expr">? = 4</span>'});
+  qs.push({type:'input',stem:'איזה מספר חסר? <span class="math-expr">20 − ? : 2 = 17</span>',answer:6,explanation:'<span class="math-expr">? : 2 = 20 − 17 = 3</span>, אז <span class="math-expr">? = 6</span>'});
+  qs.push({type:'input',stem:'איזה מספר חסר? <span class="math-expr">(? + 2) · 3 = 15</span>',answer:3,explanation:'<span class="math-expr">? + 2 = 15 : 3 = 5</span>, אז <span class="math-expr">? = 3</span>'});
+  qs.push({type:'input',stem:'איזה מספר חסר? <span class="math-expr">? · 4 − 2 = 14</span>',answer:4,explanation:'<span class="math-expr">? · 4 = 14 + 2 = 16</span>, אז <span class="math-expr">? = 4</span>'});
+  /* Q18-20: find the error MC */
+  qs.push({type:'mc',stem:'דן פתר: <span class="math-expr">3 + 4 · 2 = 14</span>. האם צדק?',options:['כן, נכון','לא — התשובה היא 11','לא — התשובה היא 10','לא — התשובה היא 9'],answer:1,explanation:'דן טעה! הוא חיבר קודם. צריך <strong>כפל קודם</strong>: <span class="math-expr">4 · 2 = 8</span>, ואז <span class="math-expr">3 + 8 = 11</span>'});
+  qs.push({type:'mc',stem:'רינה פתרה: <span class="math-expr">12 : 4 · 3 = 1</span>. האם צדקה?',options:['כן, נכון','לא — התשובה היא 9','לא — התשובה היא 12','לא — התשובה היא 3'],answer:1,explanation:'רינה טעתה! במקרה של כפל וחילוק פותרים <strong>משמאל לימין</strong>: <span class="math-expr">12 : 4 = 3</span>, ואז <span class="math-expr">3 · 3 = 9</span>'});
+  qs.push({type:'mc',stem:'תום פתר: <span class="math-expr">20 − (3 + 5) = 22</span>. האם צדק?',options:['כן, נכון','לא — התשובה היא 12','לא — התשובה היא 18','לא — התשובה היא 28'],answer:1,explanation:'תום טעה! <span class="math-expr">(3 + 5) = 8</span>, ואז <span class="math-expr">20 − 8 = 12</span>'});
+  return qs;
+}
+
+function genHard(){
+  const qs=[];
+  /* Q1-5: nested brackets */
+  qs.push({type:'input',stem:'פתרו: <span class="math-expr">[20 − (5 + 3)] · 2</span>',answer:24,explanation:'סוגריים פנימיים קודם: <span class="math-expr">(5 + 3) = 8</span>, ואז <span class="math-expr">[20 − 8] = 12</span>, ואז <span class="math-expr">12 · 2 = 24</span>'});
+  qs.push({type:'input',stem:'פתרו: <span class="math-expr">3 · [15 − (4 + 5)]</span>',answer:18,explanation:'<span class="math-expr">(4 + 5) = 9</span>, ואז <span class="math-expr">[15 − 9] = 6</span>, ואז <span class="math-expr">3 · 6 = 18</span>'});
+  qs.push({type:'input',stem:'פתרו: <span class="math-expr">{30 : [2 · (1 + 2)]} + 1</span>',answer:6,explanation:'<span class="math-expr">(1 + 2) = 3</span>, ואז <span class="math-expr">[2 · 3] = 6</span>, ואז <span class="math-expr">{30 : 6} = 5</span>, ואז <span class="math-expr">5 + 1 = 6</span>'});
+  qs.push({type:'input',stem:'פתרו: <span class="math-expr">[4 + (10 − 6)] · 3</span>',answer:24,explanation:'<span class="math-expr">(10 − 6) = 4</span>, ואז <span class="math-expr">[4 + 4] = 8</span>, ואז <span class="math-expr">8 · 3 = 24</span>'});
+  qs.push({type:'input',stem:'פתרו: <span class="math-expr">50 − [2 · (4 + 6)]</span>',answer:30,explanation:'<span class="math-expr">(4 + 6) = 10</span>, ואז <span class="math-expr">[2 · 10] = 20</span>, ואז <span class="math-expr">50 − 20 = 30</span>'});
+  /* Q6-9: complex fractions */
+  qs.push({type:'input',stem:'פתרו: '+frac('3 · 4 + 2','7'),answer:2,explanation:'המונה: <span class="math-expr">3 · 4 + 2 = 12 + 2 = 14</span>, ואז <span class="math-expr">14 : 7 = 2</span>'});
+  qs.push({type:'input',stem:'פתרו: '+frac('24','2 · 3'),answer:4,explanation:'המכנה: <span class="math-expr">2 · 3 = 6</span>, ואז <span class="math-expr">24 : 6 = 4</span>'});
+  qs.push({type:'input',stem:'פתרו: '+frac('5 + 10','6 − 1'),answer:3,explanation:'מונה: <span class="math-expr">5 + 10 = 15</span>, מכנה: <span class="math-expr">6 − 1 = 5</span>, ואז <span class="math-expr">15 : 5 = 3</span>'});
+  qs.push({type:'input',stem:'פתרו: <span class="math-expr">2 · </span>'+frac('8 + 4','3'),answer:8,explanation:'השבר קודם: <span class="math-expr">(8 + 4) : 3 = 12 : 3 = 4</span>, ואז <span class="math-expr">2 · 4 = 8</span>'});
+  /* Q10-13: missing operations MC */
+  qs.push({type:'mc',stem:'איזה סימן חסר? <span class="math-expr">6 ? 3 + 2 = 4</span>',options:['+','−','·',':'],answer:3,explanation:'צריך חילוק: <span class="math-expr">6 : 3 = 2</span>, ואז <span class="math-expr">2 + 2 = 4</span>'});
+  qs.push({type:'mc',stem:'איזה סימן חסר? <span class="math-expr">10 − 3 ? 2 = 4</span>',options:['+','−','·',':'],answer:2,explanation:'צריך כפל: <span class="math-expr">3 · 2 = 6</span>, ואז <span class="math-expr">10 − 6 = 4</span>'});
+  qs.push({type:'mc',stem:'איזה סימן חסר? <span class="math-expr">20 ? 4 · 2 = 12</span>',options:['+','−','·',':'],answer:1,explanation:'צריך חיסור: <span class="math-expr">4 · 2 = 8</span>, ואז <span class="math-expr">20 − 8 = 12</span>'});
+  qs.push({type:'mc',stem:'איזה סימן חסר? <span class="math-expr">(5 + 3) ? 2 = 4</span>',options:['+','−','·',':'],answer:3,explanation:'<span class="math-expr">(5 + 3) = 8</span>, וצריך חילוק: <span class="math-expr">8 : 2 = 4</span>'});
+  /* Q14-17: complex missing number */
+  qs.push({type:'input',stem:'איזה מספר חסר? <span class="math-expr">2 · (? + 3) − 4 = 10</span>',answer:4,explanation:'<span class="math-expr">2 · (? + 3) = 14</span>, אז <span class="math-expr">? + 3 = 7</span>, אז <span class="math-expr">? = 4</span>'});
+  qs.push({type:'input',stem:'איזה מספר חסר? <span class="math-expr">(? − 1) · 3 + 2 = 17</span>',answer:6,explanation:'<span class="math-expr">(? − 1) · 3 = 15</span>, אז <span class="math-expr">? − 1 = 5</span>, אז <span class="math-expr">? = 6</span>'});
+  qs.push({type:'input',stem:'איזה מספר חסר? <span class="math-expr">12 : (? + 1) = 3</span>',answer:3,explanation:'<span class="math-expr">? + 1 = 12 : 3 = 4</span>, אז <span class="math-expr">? = 3</span>'});
+  qs.push({type:'input',stem:'איזה מספר חסר? <span class="math-expr">3 · ? − 2 · 5 = 5</span>',answer:5,explanation:'<span class="math-expr">3 · ? = 5 + 10 = 15</span>, אז <span class="math-expr">? = 5</span>'});
+  /* Q18-20: add parentheses MC */
+  qs.push({type:'mc',stem:'איפה צריך סוגריים כדי שהתרגיל <span class="math-expr">2 + 3 · 4 = 20</span> יהיה נכון?',options:['(2 + 3) · 4','2 + (3 · 4)','לא צריך סוגריים','אי אפשר'],answer:0,explanation:'<span class="math-expr">(2 + 3) · 4 = 5 · 4 = 20</span> ✓'});
+  qs.push({type:'mc',stem:'איפה צריך סוגריים כדי שהתרגיל <span class="math-expr">10 − 4 − 3 = 9</span> יהיה נכון?',options:['(10 − 4) − 3','10 − (4 − 3)','לא צריך סוגריים','אי אפשר'],answer:1,explanation:'<span class="math-expr">10 − (4 − 3) = 10 − 1 = 9</span> ✓'});
+  qs.push({type:'mc',stem:'איפה צריך סוגריים כדי שהתרגיל <span class="math-expr">12 : 2 + 2 = 3</span> יהיה נכון?',options:['(12 : 2) + 2','12 : (2 + 2)','לא צריך סוגריים','אי אפשר'],answer:1,explanation:'<span class="math-expr">12 : (2 + 2) = 12 : 4 = 3</span> ✓'});
+  return qs;
+}
+
+function genChallenge(){
+  const qs=[];
+  /* Q1-3: Four 10s puzzle MC */
+  qs.push({type:'mc',stem:'השתמשו בארבע פעמים ב-10 ובפעולות חשבון כדי לקבל 20. איזה תרגיל נכון?',options:['10 + 10 + 10 − 10','10 + 10 · 10 : 10','10 · 10 − 10 − 10','10 · (10 + 10) : 10'],answer:3,explanation:'<span class="math-expr">10 · (10 + 10) : 10 = 10 · 20 : 10 = 200 : 10 = 20</span> ✓'});
+  qs.push({type:'mc',stem:'איזה מהתרגילים שווה ל-100?',options:['10 + 10 · 10','(10 + 10) · 5','10 · 10 + 10','10 · (10 − 1)'],answer:1,explanation:'<span class="math-expr">10 + 10 · 10 = 110</span>, <span class="math-expr">(10 + 10) · 5 = 20 · 5 = 100</span> ✓, <span class="math-expr">10 · 10 + 10 = 110</span>, <span class="math-expr">10 · 9 = 90</span>'});
+  qs.push({type:'mc',stem:'איזה תרגיל שווה ל-0?',options:['5 · 5 − 5 · 5','5 + 5 − 5 − 5','(5 − 5) · 5','כל התשובות נכונות'],answer:3,explanation:'כל התרגילים שווים ל-0: <span class="math-expr">25 − 25 = 0</span>, <span class="math-expr">10 − 10 = 0</span>, <span class="math-expr">0 · 5 = 0</span>'});
+  /* Q4-6: multi-step fractions */
+  qs.push({type:'input',stem:'פתרו: '+frac('3 · (4 + 2)','2 · 3'),answer:3,explanation:'מונה: <span class="math-expr">3 · (4 + 2) = 3 · 6 = 18</span>, מכנה: <span class="math-expr">2 · 3 = 6</span>, ואז <span class="math-expr">18 : 6 = 3</span>'});
+  qs.push({type:'input',stem:'פתרו: '+frac('20 − 2 · 4','4')+' <span class="math-expr"> + 1</span>',answer:4,explanation:'מונה: <span class="math-expr">20 − 8 = 12</span>, ואז <span class="math-expr">12 : 4 = 3</span>, ואז <span class="math-expr">3 + 1 = 4</span>'});
+  qs.push({type:'input',stem:'פתרו: '+frac('(10 + 5) · 2','3 · (4 − 2)'),answer:5,explanation:'מונה: <span class="math-expr">15 · 2 = 30</span>, מכנה: <span class="math-expr">3 · 2 = 6</span>, ואז <span class="math-expr">30 : 6 = 5</span>'});
+  /* Q7-9: advanced bracket placement */
+  qs.push({type:'mc',stem:'איפה צריך להוסיף סוגריים כדי ש-<span class="math-expr">8 − 3 · 2 = 10</span> יהיה נכון?',options:['(8 − 3) · 2','8 − (3 · 2)','8 · (3 − 2)','אי אפשר'],answer:0,explanation:'<span class="math-expr">(8 − 3) · 2 = 5 · 2 = 10</span> ✓'});
+  qs.push({type:'mc',stem:'איפה צריך להוסיף סוגריים כדי ש-<span class="math-expr">6 + 4 : 2 · 3 = 15</span> יהיה נכון?',options:['(6 + 4) : 2 · 3','6 + (4 : 2) · 3','(6 + 4 : 2) · 3','6 + 4 : (2 · 3)'],answer:0,explanation:'<span class="math-expr">(6 + 4) : 2 · 3 = 10 : 2 · 3 = 5 · 3 = 15</span> ✓'});
+  qs.push({type:'mc',stem:'איפה צריך להוסיף סוגריים כדי ש-<span class="math-expr">4 + 8 : 2 = 6</span> יהיה נכון?',options:['(4 + 8) : 2','4 + (8 : 2)','לא צריך סוגריים','אי אפשר'],answer:0,explanation:'<span class="math-expr">(4 + 8) : 2 = 12 : 2 = 6</span> ✓ (בלי סוגריים זה <span class="math-expr">4 + 4 = 8</span>)'});
+  /* Q10-12: match expression to result MC */
+  qs.push({type:'mc',stem:'איזה תרגיל שווה ל-7?',options:['(2 + 3) · 2 − 3','10 − 2 · 2 + 1','15 : 3 + 2','כל התשובות נכונות'],answer:3,explanation:'<span class="math-expr">(2+3)·2−3 = 10−3 = 7</span> ✓, <span class="math-expr">10 − 4 + 1 = 7</span> ✓, <span class="math-expr">5 + 2 = 7</span> ✓'});
+  qs.push({type:'mc',stem:'איזה תרגיל שווה ל-12?',options:['(3 + 1) · 3','24 : 2','2 + 5 · 3','רק א ו-ב'],answer:3,explanation:'<span class="math-expr">(3+1)·3 = 4·3 = 12</span> ✓, <span class="math-expr">24:2 = 12</span> ✓, <span class="math-expr">2 + 5·3 = 2+15 = 17</span> ✗. רק א ו-ב נכונים'});
+  qs.push({type:'mc',stem:'איזה תרגיל שווה ל-0?',options:['(5 − 5) · 100','7 − 7 + 0','3 · 0 + 0','כל התשובות נכונות'],answer:3,explanation:'כולם שווים 0'});
+  /* Q13-15: build expression MC */
+  qs.push({type:'mc',stem:'באיזה תרגיל התוצאה היא 10?',options:['2 · (3 + 2)','4 + 2 · 3','(8 + 2) : 1','כל התשובות נכונות'],answer:3,explanation:'<span class="math-expr">2 · 5 = 10</span> ✓, <span class="math-expr">4 + 6 = 10</span> ✓, <span class="math-expr">10 : 1 = 10</span> ✓'});
+  qs.push({type:'mc',stem:'בחרו את התרגיל עם הערך הגדול ביותר:',options:['2 + 3 · 4','(2 + 3) · 4','2 · 3 + 4','2 · (3 + 4)'],answer:1,explanation:'<span class="math-expr">2 + 12 = 14</span>, <span class="math-expr">5 · 4 = 20</span> ✓ הגדול ביותר, <span class="math-expr">6 + 4 = 10</span>, <span class="math-expr">2 · 7 = 14</span>'});
+  qs.push({type:'mc',stem:'בחרו את התרגיל עם הערך הקטן ביותר:',options:['10 − 2 · 3','(10 − 2) · 3','10 − (2 + 3)','10 · 2 − 3'],answer:0,explanation:'<span class="math-expr">10 − 6 = 4</span> ✓ הקטן ביותר, <span class="math-expr">8 · 3 = 24</span>, <span class="math-expr">10 − 5 = 5</span>, <span class="math-expr">20 − 3 = 17</span>'});
+  return qs;
+}
+
+function generateQuestions(level){
+  if(level==='easy') return genEasy();
+  if(level==='medium') return genMedium();
+  if(level==='hard') return genHard();
+  return genChallenge();
+}
+
+/* ===== PRACTICE RENDERING ===== */
+function renderLevelTabs(){
+  const container=document.getElementById('levelTabs');
+  container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(lv=>{
+    const btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    const done=scores[lv].filter(s=>s===1).length;
+    const total=LEVEL_COUNTS[lv];
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+total+')</span>':'');
+    btn.onclick=()=>switchLevel(lv);
+    container.appendChild(btn);
+  });
+}
+
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv]) questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+
+function updateLevelProgress(){
+  const lv=state.level;const total=LEVEL_COUNTS[lv];
+  const done=answered[lv].filter(a=>a).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+
+function renderQuestion(){
+  const lv=state.level;const idx=state.qIndex;
+  const qs=questions[lv];
+  if(!qs) return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  const q=qs[idx];
+  const area=document.getElementById('questionArea');
+  const isAnswered=answered[lv][idx];
+
+  let html='<div class="q-card"><div class="q-number">שאלה '+(idx+1)+' מתוך '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach((opt,i)=>{
+      const letter=LETTERS[i];
+      let cls='q-opt';
+      if(isAnswered){
+        cls+=' disabled';
+        if(i===q.answer) cls+=' correct';
+        else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel']) cls+=' wrong';
+      }
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span>'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>בדקו</button>';
+  } else if(q.type==='input'||q.type==='input-text'){
+    html+='<div class="q-input-row"><input type="'+(q.type==='input'?'number':'text')+'" class="q-input" id="qInput" placeholder="תשובה" dir="ltr" aria-label="תשובה">';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">בדקו</button>';
+    html+='</div>';
+    if(isAnswered){
+      const inp=q.type==='input'?q.answer:(q.display||q.answer[0]);
+      html+='<div style="margin-top:4px;font-weight:700;direction:ltr">תשובה: '+inp+'</div>';
+    }
+  }
+
+  if(isAnswered){
+    const isCorrect=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'✅ נכון! ':'❌ ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(el=>{
+      el.onclick=()=>{
+        area.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+  const inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){
+    inp.focus();
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkInput()});
+  }
+
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'סיום':'הבא ←';
+}
+
+window.checkMC=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const selected=document.querySelector('.q-opt.selected');
+  if(!selected) return;
+  const si=parseInt(selected.dataset.i);
+  const isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  answered[lv][idx+'_sel']=si;
+
+  document.querySelectorAll('.q-opt').forEach((el,i)=>{
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer) el.classList.add('correct');
+    else if(i===si&&!isCorrect) el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון מאוד!','✅ יפה!'])+' ':'❌ לא נכון. ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkInput=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inp=document.getElementById('qInput');
+  const val=inp.value.trim();
+  if(!val) return;
+  let isCorrect=false;
+  if(q.type==='input'){
+    isCorrect=parseFloat(val)===q.answer;
+  } else {
+    const norm=val.replace(/\s+/g,'').toLowerCase();
+    isCorrect=q.answer.some(a=>a.replace(/\s+/g,'').toLowerCase()===norm);
+  }
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');
+  inp.disabled=true;
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון!'])+' ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+function nextQuestion(){
+  const lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+
+function renderLevelComplete(){
+  const lv=state.level;
+  const correct=scores[lv].filter(s=>s===1).length;
+  const total=LEVEL_COUNTS[lv];
+  const pct=Math.round(correct/total*100);
+  const scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  const emoji=pct>=80?'🎉':pct>=50?'👏':'💪';
+
+  document.getElementById('questionArea').innerHTML=`
+    <div class="q-card"><div class="level-complete">
+      <div class="big-emoji">${emoji}</div>
+      <h2>סיימתם את רמת "${LEVEL_NAMES[lv]}"!</h2>
+      <div class="score-display${scoreClass}">${correct} / ${total}</div>
+      <p style="color:var(--text-light);margin-bottom:16px">${pct}% הצלחה</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="mini-btn" onclick="retryLevel()">🔄 נסו שוב</button>
+        ${lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">▶ לרמה הבאה</button>':''}
+      </div>
+    </div></div>`;
+
+  if(pct>=80) showConfetti();
+  saveState();
+}
+
+window.retryLevel=function(){
+  const lv=state.level;
+  scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);
+  state.qIndex=0;
+  renderLevelTabs();renderQuestion();saveState();
+};
+
+window.nextLevel=function(){
+  const order=['easy','medium','hard','challenge'];
+  const ci=order.indexOf(state.level);
+  if(ci<order.length-1) switchLevel(order[ci+1]);
+};
+
+/* ===== SECTION SWITCHING ===== */
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.section===sec);
+  });
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+/* ===== CONFETTI ===== */
+function showConfetti(){
+  const box=document.getElementById('confettiBox');
+  box.innerHTML='';
+  const colors=['#2563eb','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';
+    c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(()=>box.innerHTML='',5000);
+}
+
+/* ===== INIT ===== */
+function init(){
+  loadState();
+  Object.keys(LEVEL_COUNTS).forEach(lv=>{
+    if(!scores[lv]||!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice') switchSection('practice');
+}
+init();
+</script>
+</body>
+</html>

@@ -1005,10 +1005,12 @@ function renderQuestion() {
   // dots
   const dr = document.getElementById('dots-row');
   dr.innerHTML = '';
+  const lk = (typeof AuthState !== 'undefined' && !AuthState.isLoggedIn());
   dotResults.forEach((r,i) => {
     const d = document.createElement('div');
     const cls = i < qIndex ? (r==='correct'?'done':'wrong-dot') : i===qIndex?'current':'';
     d.className = 'dot ' + cls;
+    if (lk && i > 0) d.textContent = '🔒';
     dr.appendChild(d);
   });
 
@@ -1099,6 +1101,11 @@ function showHint() {
 function nextQ() {
   qIndex++;
   if (qIndex < quizQuestions.length) {
+    if (qIndex > 0 && typeof AuthState !== 'undefined' && !AuthState.isLoggedIn()) {
+      qIndex--;
+      if (typeof showAuthModal === 'function') showAuthModal();
+      return;
+    }
     updateTopBar();
     renderQuestion();
   } else {

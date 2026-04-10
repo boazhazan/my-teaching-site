@@ -1046,6 +1046,10 @@ window.checkTable2=function(){
 function nextQuestion(){
   const lv=state.level;
   if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function')showAuthModal();
+    return;
+  }
   state.qIndex++;renderQuestion();saveState();
 }
 function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}

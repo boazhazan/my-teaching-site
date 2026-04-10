@@ -797,12 +797,42 @@ function applyContentLocks() {
 function showUpgradeBanner() {
   if (document.getElementById('authUpgradeBanner')) return;
 
+  const slot = document.getElementById('authBannerSlot');
   const isExercisePage = document.querySelector('[data-premium], [data-exercise], [data-section], [data-question]');
   const isMaterialsPage = document.querySelector('.materials-content');
-  if (!isExercisePage && !isMaterialsPage) return;
+  if (!slot && !isExercisePage && !isMaterialsPage) return;
 
   const banner = document.createElement('div');
   banner.id = 'authUpgradeBanner';
+  // Compact style when placed inside a header slot, full-width otherwise
+  if (slot) {
+    banner.style.cssText = `
+      background: linear-gradient(135deg, #dbeafe, #fef3c7);
+      border: 2px solid #2563eb;
+      border-radius: 12px;
+      padding: 12px 18px;
+      margin: 0;
+      max-width: 320px;
+      text-align: center;
+      direction: rtl;
+      font-family: 'Heebo', sans-serif;
+      cursor: pointer;
+      position: relative;
+      z-index: 50;
+    `;
+    banner.innerHTML = `
+      <p style="font-weight: 700; font-size: 0.95rem; margin-bottom: 2px; color: #1e293b;">
+        \uD83D\uDD13 נהנים? יש עוד המון תוכן!
+      </p>
+      <p style="font-size: 0.82rem; color: #2563eb; font-weight: 600;">
+        להרשמה — \u20AA${AUTH_CONFIG.price} חד-פעמי לגישה מלאה
+      </p>
+    `;
+    banner.addEventListener('click', showAuthModal);
+    slot.appendChild(banner);
+    return;
+  }
+
   banner.style.cssText = `
     background: linear-gradient(135deg, #dbeafe, #fef3c7);
     border: 2px solid #2563eb;

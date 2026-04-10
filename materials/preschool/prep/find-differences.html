@@ -505,10 +505,11 @@ function init() {
 function buildTabs() {
   const tabs = document.getElementById("levelTabs");
   tabs.innerHTML = "";
+  const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
   levels.forEach((lv, i) => {
     const btn = document.createElement("button");
     btn.className = "tb" + (i === curLevel ? " on" : "") + (levelComplete[i] ? " dn" : "");
-    btn.textContent = (i + 1) + ". " + lv.name;
+    btn.textContent = (i + 1) + ". " + lv.name + (lk&&i>0?' 🔒':'');
     btn.onclick = () => goToLevel(i);
     tabs.appendChild(btn);
   });
@@ -526,6 +527,7 @@ function updateTabs() {
 }
 
 function goToLevel(idx) {
+  if(idx>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return;}
   if (idx < 0 || idx >= levels.length) {
     showSummary();
     return;
@@ -879,6 +881,7 @@ window.addEventListener("resize", () => {
 });
 
 init();
+document.addEventListener('DOMContentLoaded',function(){buildTabs();});
 </script>
   <script src="../../../js/auth-gate.js"></script>
 </body>

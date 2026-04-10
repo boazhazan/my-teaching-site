@@ -172,10 +172,11 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 
 function buildTabs(){
   const w=document.getElementById('tabs');w.innerHTML='';
+  const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
   TAB_LABELS.forEach((l,i)=>{
     const t=document.createElement('button');
     t.className='tab'+(i===cur?' active':'')+(levelDone[i]?' done':'');
-    t.textContent=(i+1)+'. '+l;
+    t.textContent=(i+1)+'. '+l+(lk&&i>0?' 🔒':'');
     t.onclick=()=>loadLevel(i);
     w.appendChild(t);
   });
@@ -262,6 +263,7 @@ function rotateHand(svgId,targetIdx,N,animate){
 }
 
 function loadLevel(idx){
+  if(idx>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return;}
   cur=idx;qIdx=0;correctCount=0;wrongCount=0;answering=false;
   removeDrawCanvas();
   const card=document.getElementById('clockCard');
@@ -473,6 +475,7 @@ window.addEventListener('resize',()=>{if(mode==='draw'&&drawCanvas)setupDrawCanv
 // Init
 levelDone=new Array(TAB_LABELS.length).fill(false);
 buildTabs();loadLevel(0);
+document.addEventListener('DOMContentLoaded',function(){buildTabs();});
 </script>
   <script src="../../../js/auth-gate.js"></script>
 </body>

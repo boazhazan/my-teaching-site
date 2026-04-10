@@ -246,16 +246,21 @@ function genGrid(letter,count,dist,size){
 function buildTabs(){
   const wrap=document.getElementById('tabs');
   wrap.innerHTML='';
+  const locked=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
   TAB_LABELS.forEach((l,i)=>{
     const t=document.createElement('button');
     t.className='tab'+(i===cur?' active':'')+(levelDone[i]?' done':'');
-    t.textContent=(i+1)+' · '+l;
+    t.textContent=(i+1)+' · '+l+(locked&&i>0?' 🔒':'');
     t.onclick=()=>loadLevel(i);
     wrap.appendChild(t);
   });
 }
 
 function loadLevel(idx){
+  if(idx>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function')showAuthModal();
+    return;
+  }
   cur=idx;
   checking=false;
   document.getElementById('scoreText').textContent='';
@@ -519,6 +524,8 @@ window.addEventListener('resize',()=>{if(mode==='draw'&&drawCanvas) setupDrawCan
 levelDone=new Array(TAB_LABELS.length).fill(false);
 buildTabs();
 loadLevel(0);
+// Re-render tabs after auth-gate.js loads, so 🔒 icons appear
+document.addEventListener('DOMContentLoaded',function(){buildTabs();});
 </script>
   <script src="../../../js/auth-gate.js"></script>
 </body>

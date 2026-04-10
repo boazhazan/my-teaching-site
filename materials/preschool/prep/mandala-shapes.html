@@ -313,11 +313,12 @@ function iconSVG(type,color,sz){sz=sz||24;return'<svg viewBox="0 0 40 40" width=
 
 function init(){res=[];for(var i=0;i<LEVELS.length;i++)res.push('pending');buildTabs();goTo(0)}
 
-function buildTabs(){var el=document.getElementById('tabs');el.innerHTML='';for(var i=0;i<LEVELS.length;i++){var b=document.createElement('button');b.className='tb'+(i===cur?' on':'')+(res[i]==='correct'?' dn':'');b.textContent=i+1;b.onclick=(function(idx){return function(){goTo(idx)}})(i);el.appendChild(b)}}
+function buildTabs(){var el=document.getElementById('tabs');el.innerHTML='';var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());for(var i=0;i<LEVELS.length;i++){var b=document.createElement('button');b.className='tb'+(i===cur?' on':'')+(res[i]==='correct'?' dn':'');b.textContent=(i+1)+(lk&&i>0?' 🔒':'');b.onclick=(function(idx){return function(){goTo(idx)}})(i);el.appendChild(b)}}
 
 function updateTabs(){var bs=document.querySelectorAll('.tb');for(var i=0;i<bs.length;i++){bs[i].className='tb'+(i===cur?' on':'')+(res[i]==='correct'?' dn':'')}if(bs[cur])bs[cur].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})}
 
 function goTo(idx){
+if(idx>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}
 if(idx<0||idx>=LEVELS.length){showSumm();return}
 cur=idx;colored={};totalShapes=0;wrongCount=0;
 if(!freeMode){selectedColor='';selectedType=''}
@@ -693,6 +694,7 @@ function clearDraw(){if(dCtx&&dCvs)dCtx.clearRect(0,0,dCvs.width,dCvs.height)}
 
 window.addEventListener('resize',function(){if(mode==='draw')setupDraw()});
 init();
+document.addEventListener('DOMContentLoaded',function(){buildTabs();});
 </script>
   <script src="../../../js/auth-gate.js"></script>
 </body>

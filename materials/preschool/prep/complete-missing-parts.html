@@ -418,10 +418,11 @@ function buildColors(){var r=document.getElementById('colorsRow');r.innerHTML=''
 function selColor(c){curColor=c;var bs=document.querySelectorAll('.clr-btn');for(var i=0;i<bs.length;i++)bs[i].className='clr-btn'+(bs[i].getAttribute('data-c')===c?' on':'')}
 function buildWidths(){var r=document.getElementById('widthRow');r.innerHTML='';for(var i=0;i<WIDTHS.length;i++){var b=document.createElement('button');var sz=WIDTHS[i]*3+8;b.className='w-btn'+(WIDTHS[i]===curWidth?' on':'');b.style.width=sz+'px';b.style.height=sz+'px';b.title=WNAMES[i];b.setAttribute('data-w',WIDTHS[i]);b.onclick=function(){selWidth(parseInt(this.getAttribute('data-w')))};r.appendChild(b)}}
 function selWidth(w){curWidth=w;var bs=document.querySelectorAll('.w-btn');for(var i=0;i<bs.length;i++)bs[i].className='w-btn'+(parseInt(bs[i].getAttribute('data-w'))===w?' on':'')}
-function buildTabs(){var el=document.getElementById('tabs');el.innerHTML='';for(var i=0;i<LEVELS.length;i++){var b=document.createElement('button');b.className='tb'+(i===cur?' on':'')+(res[i]==='correct'?' dn':'');b.textContent=(i+1)+' '+LEVELS[i].name;b.onclick=(function(x){return function(){goTo(x)}})(i);el.appendChild(b)}}
+function buildTabs(){var el=document.getElementById('tabs');el.innerHTML='';var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());for(var i=0;i<LEVELS.length;i++){var b=document.createElement('button');b.className='tb'+(i===cur?' on':'')+(res[i]==='correct'?' dn':'');b.textContent=(i+1)+' '+LEVELS[i].name+(lk&&i>0?' 🔒':'');b.onclick=(function(x){return function(){goTo(x)}})(i);el.appendChild(b)}}
 function updateTabs(){var bs=document.querySelectorAll('.tb');for(var i=0;i<bs.length;i++)bs[i].className='tb'+(i===cur?' on':'')+(res[i]==='correct'?' dn':'');if(bs[cur])bs[cur].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})}
 
 function goTo(idx){
+if(idx>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}
 if(idx<0||idx>=LEVELS.length){showSumm();return}
 cur=idx;itemDrawn={};itemDone={};cvsMap={};activeKey=null;drawingOn=null;
 document.getElementById('gameArea').style.display='';
@@ -537,6 +538,7 @@ function retryPending(){retryFiltered(function(s){return s!=='correct'})}
 function retryAll(){retryFiltered(function(){return true})}
 window.addEventListener('resize',function(){var cs=document.querySelectorAll('.item-canvas');for(var i=0;i<cs.length;i++){var k=cs[i].getAttribute('data-key'),en=cvsMap[k];if(en)cs[i]._saved=en.ctx.getImageData(0,0,en.canvas.width,en.canvas.height)}setupCvs()});
 init();
+document.addEventListener('DOMContentLoaded',function(){buildTabs();});
 </script>
   <script src="../../../js/auth-gate.js"></script>
 </body>

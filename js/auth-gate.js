@@ -787,9 +787,10 @@ function applyContentLocks() {
     });
   }
 
-  // 4. Show upgrade banner if locked content exists
+  // 4. Show upgrade banner if locked content exists OR we're on a lesson page
   const hasLockedContent = document.querySelector('[data-auth-locked="true"], [data-premium], .level-tab, .tab-btn, [data-level]');
-  if (hasLockedContent) {
+  const isLessonPage = location.pathname.indexOf('/materials/') !== -1;
+  if (hasLockedContent || isLessonPage) {
     showUpgradeBanner();
   }
 }
@@ -800,7 +801,8 @@ function showUpgradeBanner() {
   const slot = document.getElementById('authBannerSlot');
   const isExercisePage = document.querySelector('[data-premium], [data-exercise], [data-section], [data-question]');
   const isMaterialsPage = document.querySelector('.materials-content');
-  if (!slot && !isExercisePage && !isMaterialsPage) return;
+  const isLessonPage = location.pathname.indexOf('/materials/') !== -1;
+  if (!slot && !isExercisePage && !isMaterialsPage && !isLessonPage) return;
 
   const banner = document.createElement('div');
   banner.id = 'authUpgradeBanner';

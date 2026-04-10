@@ -217,16 +217,21 @@ function shuffleDiff(top){
 function buildTabs(){
   const t=document.getElementById('tabs');
   t.innerHTML='';
+  const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
   LEVELS.forEach((_,i)=>{
     const b=document.createElement('button');
     b.className='tab'+(i===curLevel?' active':'')+(done.has(i)?' done':'');
-    b.textContent='שלב '+(i+1);
-    b.onclick=()=>{curLevel=i;buildTabs();loadLevel();};
+    b.textContent='שלב '+(i+1)+(lk&&i>0?' 🔒':'');
+    b.onclick=()=>{
+      if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return;}
+      curLevel=i;buildTabs();loadLevel();
+    };
     t.appendChild(b);
   });
 }
 
 function loadLevel(){
+  if(curLevel>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){curLevel=0;if(typeof showAuthModal==='function')showAuthModal();return;}
   const lvl=LEVELS[curLevel];
   const top=lvl.top;
   const bot=shuffleDiff(top);
@@ -548,6 +553,7 @@ window.addEventListener('resize',redrawAllLines);
 /* INIT */
 buildTabs();
 loadLevel();
+document.addEventListener('DOMContentLoaded',function(){buildTabs();});
 </script>
   <script src="../../../js/auth-gate.js"></script>
 </body>

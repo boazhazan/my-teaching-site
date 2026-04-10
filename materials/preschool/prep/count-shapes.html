@@ -182,9 +182,10 @@ function ri(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 function shuf(a){for(var i=a.length-1;i>0;i--){var j=ri(0,i);var t=a[i];a[i]=a[j];a[j]=t}return a}
 function iconSVG(type,sz){var c=SC[type].color;sz=sz||24;return'<svg viewBox="0 0 40 40" width="'+sz+'" height="'+sz+'" style="stroke:'+c+';stroke-width:2.5;fill:'+c+';fill-opacity:0.15;vertical-align:middle">'+ICONS[type]+'</svg>'}
 function init(){res=[];for(var i=0;i<LD.length;i++)res.push('pending');buildTabs();goTo(0)}
-function buildTabs(){var el=document.getElementById('tabs');el.innerHTML='';for(var i=0;i<LD.length;i++){var b=document.createElement('button');b.className='tb'+(i===cur?' on':'')+(res[i]==='correct'?' dn':'')+(res[i]==='wrong'?' fail':'');b.textContent=i+1;b.onclick=(function(idx){return function(){goTo(idx)}})(i);el.appendChild(b)}}
+function buildTabs(){var el=document.getElementById('tabs');el.innerHTML='';var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());for(var i=0;i<LD.length;i++){var b=document.createElement('button');b.className='tb'+(i===cur?' on':'')+(res[i]==='correct'?' dn':'')+(res[i]==='wrong'?' fail':'');b.textContent=(i+1)+(lk&&i>0?' 🔒':'');b.onclick=(function(idx){return function(){goTo(idx)}})(i);el.appendChild(b)}}
 function updateTabs(){var bs=document.querySelectorAll('.tb');for(var i=0;i<bs.length;i++){bs[i].className='tb'+(i===cur?' on':'')+(res[i]==='correct'?' dn':'')+(res[i]==='wrong'?' fail':'')}if(bs[cur])bs[cur].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'})}
 function goTo(idx){
+if(idx>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}
 if(ld&&attempted&&res[cur]!=='correct'){res[cur]='wrong';updateTabs()}
 if(idx<0||idx>=LD.length){showSumm();return}
 cur=idx;attempted=false;locked={};colored={};ans={};activeType=null;
@@ -409,6 +410,7 @@ function pickColor(btn){dColor=btn.dataset.color;var bs=document.querySelectorAl
 function clearDraw(){if(dCtx&&dCvs)dCtx.clearRect(0,0,dCvs.width,dCvs.height)}
 window.addEventListener('resize',function(){if(mode==='draw')setupDraw()});
 init();
+document.addEventListener('DOMContentLoaded',function(){buildTabs();});
 </script>
   <script src="../../../js/auth-gate.js"></script>
 </body>

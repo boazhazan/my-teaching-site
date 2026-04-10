@@ -257,10 +257,11 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 function buildTabs(){
   const w=document.getElementById('tabs');
   w.innerHTML='';
+  const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
   LEVELS.forEach((lv,i)=>{
     const t=document.createElement('button');
     t.className='tab'+(i===cur?' active':'')+(levelDone[i]?' done':'');
-    t.textContent=(i+1)+' '+lv.emoji;
+    t.textContent=(i+1)+' '+lv.emoji+(lk&&i>0?' 🔒':'');
     t.onclick=()=>loadLevel(i);
     w.appendChild(t);
   });
@@ -277,6 +278,7 @@ function getTargetPositions(lv){
 }
 
 function loadLevel(idx){
+  if(idx>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return;}
   cur=idx;checking=false;phase='find';
   document.getElementById('scoreText').textContent='';
   document.getElementById('checkBtn').style.display='';
@@ -582,6 +584,7 @@ window.addEventListener('resize',()=>{
 
 /* Init */
 loadLevel(0);
+document.addEventListener('DOMContentLoaded',function(){buildTabs();});
 </script>
   <script src="../../../js/auth-gate.js"></script>
 </body>

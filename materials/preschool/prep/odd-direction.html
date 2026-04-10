@@ -313,10 +313,11 @@ function generateLevel(lv){
 /* ===== Init tabs ===== */
 function initTabs(){
   $tabs.innerHTML = '';
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
   for(var i = 0; i < TOTAL; i++){
     var b = document.createElement('button');
     b.className = 'tb' + (i === curLevel ? ' on' : '');
-    b.textContent = 'שלב ' + (i + 1);
+    b.textContent = 'שלב ' + (i + 1)+(lk&&i>0?' 🔒':'');
     b.dataset.lv = i;
     b.onclick = function(){ goLevel(+this.dataset.lv); };
     $tabs.appendChild(b);
@@ -478,6 +479,7 @@ $comp.onclick = function(e){
 };
 
 function goLevel(lv){
+  if(lv>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return;}
   curLevel = lv;
   updateTabs();
   renderLevel();
@@ -669,6 +671,7 @@ document.querySelectorAll('.mbtn').forEach(function(b){
 /* ===== Init ===== */
 for(var i = 0; i < TOTAL; i++){ levelResults.push(null); levelErrors.push(0); }
 initTabs();
+document.addEventListener('DOMContentLoaded',function(){initTabs();});
 renderLevel();
 updateProgress();
 

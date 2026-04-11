@@ -48,8 +48,15 @@
     }
 
     .ask-teacher-btn .duck-icon {
-      font-size: 1.3rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #fff;
+      padding: 2px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
       animation: duckWobble 2s ease-in-out infinite;
+      flex-shrink: 0;
     }
 
     @keyframes duckWobble {
@@ -107,20 +114,20 @@
     return context;
   }
 
-  // ===== Build relative path back to site root =====
-  function resolveAskTeacherHref() {
+  // ===== Build relative path back to site root (returns "../../" etc.) =====
+  function resolveRoot() {
     const path = window.location.pathname;
     // find the last "materials/" segment — everything after it is under the site root
     const idx = path.lastIndexOf('/materials/');
-    if (idx === -1) return 'ask-teacher.html';
-    // count slashes after /materials/ up to the filename
+    if (idx === -1) return '';
     const tail = path.slice(idx + 1); // "materials/..."
     const parts = tail.split('/').filter(Boolean);
     // parts = ['materials', 'stage', 'subject', 'grade', 'file.html']  (or shallower)
-    // number of directories above the file = parts.length - 1
     const up = parts.length - 1;
-    return '../'.repeat(up) + 'ask-teacher.html';
+    return '../'.repeat(up);
   }
+  function resolveAskTeacherHref() { return resolveRoot() + 'ask-teacher.html'; }
+  function resolveDuckIconSrc() { return resolveRoot() + 'assets/images_DuckMe/logo_bot.png'; }
 
   // ===== Build the button =====
   function createAskButton() {
@@ -131,7 +138,7 @@
     const btn = document.createElement('a');
     btn.className = 'ask-teacher-btn';
     btn.href = '#';
-    btn.innerHTML = '<span class="duck-icon">🦆</span> שאל את המורה';
+    btn.innerHTML = '<img class="duck-icon" src="' + resolveDuckIconSrc() + '" alt="DuckMe"> שאל את המורה';
 
     btn.addEventListener('click', (e) => {
       e.preventDefault();

@@ -1,0 +1,1079 @@
+<!--
+  Title: תיבה — חלק 1
+  Unit: מלבנים
+  Subject: מתמטיקה
+  Grade: ז׳
+  Lesson: 6
+  Tags: גיאומטריה, מלבנים, תיבה, נפח, תלת-ממד
+  Ages: 12-13
+  Icon: 📦
+  Badge: חדש!
+  Description: מבנה התיבה — פאות, מקצועות, קודקודים, נפח ושטח פנים
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>תיבה — חלק 1 | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid var(--accent);padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
+.step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:.85em;margin:0 2px;line-height:1}
+.frac .num{border-bottom:1.5px solid currentColor;padding:0 4px}
+.frac .den{padding:0 4px}
+.mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.mini-table th,.mini-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:1rem}
+.mini-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.mini-table td{background:var(--bg)}
+.mini-input{width:60px;padding:6px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:1rem;font-family:inherit;font-weight:700;transition:.3s}
+.mini-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.mini-input.correct{border-color:var(--success);background:#ecfdf5}
+.mini-input.wrong{border-color:var(--error);background:#fef2f2}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.reveal{display:none;animation:fadeIn .5s ease}
+.reveal.show{display:block}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-stem code,.q-stem .expr{font-size:1.1em}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;transition:.25s}
+.q-opt.selected .q-opt-letter{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-opt.correct .q-opt-letter{background:var(--success);color:#fff;border-color:var(--success)}
+.q-opt.wrong .q-opt-letter{background:var(--error);color:#fff;border-color:var(--error)}
+.q-input-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-input{width:120px;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1.1rem;font-family:inherit;font-weight:700;text-align:center;transition:.3s;direction:ltr}
+.q-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+.q-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.q-table th,.q-table td{border:2px solid var(--border);padding:8px 14px;text-align:center;font-size:1rem;min-width:60px}
+.q-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.q-check-btn{padding:10px 28px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;box-shadow:var(--shadow)}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.92rem;animation:fadeIn .3s}
+.q-feedback.correct{background:#ecfdf5;border-right:4px solid var(--success);color:#065f46}
+.q-feedback.wrong{background:#fef2f2;border-right:4px solid var(--error);color:#991b1b}
+.q-nav{display:flex;justify-content:space-between;margin-top:16px}
+.q-nav-btn{padding:10px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+.level-complete{text-align:center;padding:24px;animation:fadeIn .5s}
+.level-complete .big-emoji{font-size:4rem;margin-bottom:12px}
+.level-complete h2{font-size:1.4rem;color:var(--primary-dark);margin-bottom:8px}
+.level-complete .score-display{font-size:1.8rem;font-weight:800;color:var(--success);margin-bottom:16px}
+.level-complete .score-display.medium-score{color:var(--accent)}
+.level-complete .score-display.low-score{color:var(--error)}
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}100%{transform:translateY(105vh) rotate(720deg) scale(.3);opacity:0}}
+.print-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer;font-size:1rem;box-shadow:var(--shadow);transition:.25s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.print-btn:hover{background:var(--primary-dark);transform:scale(1.1)}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){
+  .container{padding:0 10px 30px}
+  .step-card,.q-card{padding:18px 14px}
+  .step-title{font-size:1.15rem}
+  .step-summary-grid{grid-template-columns:1fr}
+  .section-toggle{max-width:280px;margin:12px auto}
+  .section-btn{font-size:.88rem;padding:8px 14px}
+  .q-opt{padding:10px 12px;font-size:.9rem}
+  .topbar-title{font-size:.9rem}
+}
+@media print{
+  .topbar,.section-toggle,.step-nav,.q-nav,.print-btn,.level-tabs,.confetti-container,.q-check-btn{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .step-card,.q-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+  .container{max-width:100%}
+  .q-feedback{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">📦 כיתה ז׳ — תיבה (חלק 1)</span>
+  <div style="display:flex;align-items:center;gap:10px"><button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button><a href="../../../../materials.html">← חזרה לחומרי לימוד</a></div>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+
+<section id="learnSection">
+  <div class="step-progress">
+    <div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div>
+    <div class="step-progress-text" id="stepText"></div>
+  </div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress">
+    <div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div>
+    <div class="level-progress-text" id="levelText"></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+
+</div>
+
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const today=new Date();const dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+let rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(arr){return arr[Math.floor(R()*arr.length)]}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function frac(n,d){return '<span class="frac"><span class="num">'+n+'</span><span class="den">'+d+'</span></span>'}
+
+const boyNames=["דני","יואב","עמית","אורי","נועם","גיא","איתי","רון","תומר","עידו"];
+const girlNames=["מיכל","נועה","שירה","תמר","רונית","יעל","דנה","אורית","הילה","ליאת"];
+function boyName(){return pick(boyNames)}
+function girlName(){return pick(girlNames)}
+function anyName(){return R()>.5?boyName():girlName()}
+
+const LETTERS=['א','ב','ג','ד'];
+
+/* ===== SVG HELPERS (geometry drawings) ===== */
+function svgPerp(a,b){
+  return '<svg width="220" height="140" viewBox="0 0 220 140" style="display:block;margin:10px auto">'+
+    '<line x1="20" y1="70" x2="200" y2="70" stroke="#4a9eda" stroke-width="3"/>'+
+    '<line x1="110" y1="15" x2="110" y2="125" stroke="#4a9eda" stroke-width="3"/>'+
+    '<rect x="95" y="55" width="15" height="15" fill="none" stroke="#1a2f5a" stroke-width="2"/>'+
+    '<text x="205" y="68" font-size="16" font-weight="700" fill="#1a2f5a">'+a+'</text>'+
+    '<text x="115" y="14" font-size="16" font-weight="700" fill="#1a2f5a">'+b+'</text>'+
+    '</svg>';
+}
+function svgPar(a,b){
+  return '<svg width="220" height="140" viewBox="0 0 220 140" style="display:block;margin:10px auto">'+
+    '<line x1="20" y1="50" x2="200" y2="50" stroke="#4a9eda" stroke-width="3"/>'+
+    '<line x1="20" y1="100" x2="200" y2="100" stroke="#4a9eda" stroke-width="3"/>'+
+    '<polygon points="105,44 118,50 105,56" fill="#1a2f5a"/>'+
+    '<polygon points="105,94 118,100 105,106" fill="#1a2f5a"/>'+
+    '<text x="205" y="48" font-size="16" font-weight="700" fill="#1a2f5a">'+a+'</text>'+
+    '<text x="205" y="98" font-size="16" font-weight="700" fill="#1a2f5a">'+b+'</text>'+
+    '</svg>';
+}
+function svgNone(a,b){
+  return '<svg width="220" height="140" viewBox="0 0 220 140" style="display:block;margin:10px auto">'+
+    '<line x1="20" y1="30" x2="200" y2="115" stroke="#4a9eda" stroke-width="3"/>'+
+    '<line x1="200" y1="40" x2="20" y2="115" stroke="#4a9eda" stroke-width="3"/>'+
+    '<text x="200" y="25" font-size="16" font-weight="700" fill="#1a2f5a">'+a+'</text>'+
+    '<text x="8" y="25" font-size="16" font-weight="700" fill="#1a2f5a">'+b+'</text>'+
+    '</svg>';
+}
+function svg3perp(a,b,c){
+  /* a⊥c, b⊥c  → a∥b */
+  return '<svg width="240" height="160" viewBox="0 0 240 160" style="display:block;margin:10px auto">'+
+    '<line x1="20" y1="50" x2="220" y2="50" stroke="#4a9eda" stroke-width="3"/>'+
+    '<line x1="20" y1="110" x2="220" y2="110" stroke="#4a9eda" stroke-width="3"/>'+
+    '<line x1="120" y1="15" x2="120" y2="145" stroke="#f59e0b" stroke-width="3"/>'+
+    '<rect x="105" y="50" width="15" height="15" fill="none" stroke="#1a2f5a" stroke-width="2"/>'+
+    '<rect x="105" y="110" width="15" height="15" fill="none" stroke="#1a2f5a" stroke-width="2"/>'+
+    '<text x="225" y="48" font-size="16" font-weight="700" fill="#1a2f5a">'+a+'</text>'+
+    '<text x="225" y="108" font-size="16" font-weight="700" fill="#1a2f5a">'+b+'</text>'+
+    '<text x="124" y="14" font-size="16" font-weight="700" fill="#1a2f5a">'+c+'</text>'+
+    '</svg>';
+}
+function svg3pp(a,b,c){
+  /* a∥b, c⊥a (implies c⊥b) */
+  return '<svg width="240" height="160" viewBox="0 0 240 160" style="display:block;margin:10px auto">'+
+    '<line x1="20" y1="50" x2="220" y2="50" stroke="#4a9eda" stroke-width="3"/>'+
+    '<line x1="20" y1="110" x2="220" y2="110" stroke="#4a9eda" stroke-width="3"/>'+
+    '<polygon points="155,44 168,50 155,56" fill="#1a2f5a"/>'+
+    '<polygon points="155,104 168,110 155,116" fill="#1a2f5a"/>'+
+    '<line x1="80" y1="15" x2="80" y2="145" stroke="#f59e0b" stroke-width="3"/>'+
+    '<rect x="80" y="50" width="15" height="15" fill="none" stroke="#1a2f5a" stroke-width="2"/>'+
+    '<text x="225" y="48" font-size="16" font-weight="700" fill="#1a2f5a">'+a+'</text>'+
+    '<text x="225" y="108" font-size="16" font-weight="700" fill="#1a2f5a">'+b+'</text>'+
+    '<text x="84" y="14" font-size="16" font-weight="700" fill="#1a2f5a">'+c+'</text>'+
+    '</svg>';
+}
+function svgRect(A,B,C,D,opts){
+  /* Rectangle ABCD with corners: A top-right, B top-left, C bottom-left, D bottom-right.
+     opts: {marks:[...], parallel:bool, eq:bool, lbls:{top,left,bottom,right}} */
+  opts=opts||{};
+  const x1=40,y1=30,x2=200,y2=120;
+  let s='<svg width="240" height="160" viewBox="0 0 240 160" style="display:block;margin:10px auto">';
+  s+='<rect x="'+x1+'" y="'+y1+'" width="'+(x2-x1)+'" height="'+(y2-y1)+'" fill="none" stroke="#4a9eda" stroke-width="3"/>';
+  if(opts.angles!==false){
+    s+='<rect x="'+x1+'" y="'+y1+'" width="12" height="12" fill="none" stroke="#1a2f5a" stroke-width="2"/>';
+    s+='<rect x="'+(x2-12)+'" y="'+y1+'" width="12" height="12" fill="none" stroke="#1a2f5a" stroke-width="2"/>';
+    s+='<rect x="'+(x2-12)+'" y="'+(y2-12)+'" width="12" height="12" fill="none" stroke="#1a2f5a" stroke-width="2"/>';
+    s+='<rect x="'+x1+'" y="'+(y2-12)+'" width="12" height="12" fill="none" stroke="#1a2f5a" stroke-width="2"/>';
+  }
+  if(opts.parallel){
+    /* double arrows on top/bottom (horizontal sides) */
+    s+='<polygon points="115,'+(y1-6)+' 128,'+y1+' 115,'+(y1+6)+'" fill="#1a2f5a"/>';
+    s+='<polygon points="115,'+(y2-6)+' 128,'+y2+' 115,'+(y2+6)+'" fill="#1a2f5a"/>';
+    /* single arrows on left/right */
+    s+='<polygon points="'+(x1-6)+',70 '+x1+',83 '+(x1+6)+',70" fill="#f59e0b"/>';
+    s+='<polygon points="'+(x2-6)+',70 '+x2+',83 '+(x2+6)+',70" fill="#f59e0b"/>';
+  }
+  if(opts.eq){
+    /* tick marks for equal sides: 1 tick on top/bottom, 2 on left/right */
+    s+='<line x1="118" y1="'+(y1-5)+'" x2="122" y2="'+(y1+5)+'" stroke="#1a2f5a" stroke-width="2"/>';
+    s+='<line x1="118" y1="'+(y2-5)+'" x2="122" y2="'+(y2+5)+'" stroke="#1a2f5a" stroke-width="2"/>';
+    s+='<line x1="'+(x1-5)+'" y1="71" x2="'+(x1+5)+'" y2="76" stroke="#f59e0b" stroke-width="2"/>';
+    s+='<line x1="'+(x1-5)+'" y1="79" x2="'+(x1+5)+'" y2="84" stroke="#f59e0b" stroke-width="2"/>';
+    s+='<line x1="'+(x2-5)+'" y1="71" x2="'+(x2+5)+'" y2="76" stroke="#f59e0b" stroke-width="2"/>';
+    s+='<line x1="'+(x2-5)+'" y1="79" x2="'+(x2+5)+'" y2="84" stroke="#f59e0b" stroke-width="2"/>';
+  }
+  /* Corner labels: A=top-right, B=top-left, C=bottom-left, D=bottom-right */
+  s+='<text x="'+(x2+5)+'" y="'+(y1-5)+'" font-size="16" font-weight="700" fill="#1a2f5a">'+A+'</text>';
+  s+='<text x="'+(x1-15)+'" y="'+(y1-5)+'" font-size="16" font-weight="700" fill="#1a2f5a">'+B+'</text>';
+  s+='<text x="'+(x1-15)+'" y="'+(y2+18)+'" font-size="16" font-weight="700" fill="#1a2f5a">'+C+'</text>';
+  s+='<text x="'+(x2+5)+'" y="'+(y2+18)+'" font-size="16" font-weight="700" fill="#1a2f5a">'+D+'</text>';
+  /* Optional length labels */
+  if(opts.lbls){
+    if(opts.lbls.top)    s+='<text x="115" y="'+(y1-10)+'" font-size="14" font-weight="700" fill="#0f766e">'+opts.lbls.top+'</text>';
+    if(opts.lbls.bottom) s+='<text x="115" y="'+(y2+30)+'" font-size="14" font-weight="700" fill="#0f766e">'+opts.lbls.bottom+'</text>';
+    if(opts.lbls.left)   s+='<text x="'+(x1-30)+'" y="80" font-size="14" font-weight="700" fill="#0f766e">'+opts.lbls.left+'</text>';
+    if(opts.lbls.right)  s+='<text x="'+(x2+10)+'" y="80" font-size="14" font-weight="700" fill="#0f766e">'+opts.lbls.right+'</text>';
+  }
+  s+='</svg>';
+  return s;
+}
+function svgDiag(A,B,C,D,opts){
+  /* Rectangle ABCD with diagonals AC and BD. Corners: A=top-right, B=top-left, C=bottom-left, D=bottom-right.
+     opts: {showO:bool, eq:bool (equal diagonals ticks), halves:bool (show AO=OC=BO=OD ticks),
+             lblAC:'...', lblBD:'...', lblAO:'...', lblOC:'...', lblBO:'...', lblOD:'...', dashed:bool} */
+  opts=opts||{};
+  const x1=50,y1=35,x2=210,y2=125;
+  const ox=(x1+x2)/2, oy=(y1+y2)/2;
+  let s='<svg width="260" height="170" viewBox="0 0 260 170" style="display:block;margin:10px auto">';
+  /* rectangle */
+  s+='<rect x="'+x1+'" y="'+y1+'" width="'+(x2-x1)+'" height="'+(y2-y1)+'" fill="none" stroke="#4a9eda" stroke-width="3"/>';
+  /* diagonals */
+  const dashAttr=opts.dashed?' stroke-dasharray="5,4"':'';
+  s+='<line x1="'+x2+'" y1="'+y1+'" x2="'+x1+'" y2="'+y2+'" stroke="#f59e0b" stroke-width="2.5"'+dashAttr+'/>'; /* A-C */
+  s+='<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="#10b981" stroke-width="2.5"'+dashAttr+'/>'; /* B-D */
+  /* equal diagonal tick marks */
+  if(opts.eq){
+    s+='<line x1="'+(ox+25)+'" y1="'+(oy-18)+'" x2="'+(ox+32)+'" y2="'+(oy-14)+'" stroke="#1a2f5a" stroke-width="2"/>';
+    s+='<line x1="'+(ox-32)+'" y1="'+(oy+14)+'" x2="'+(ox-25)+'" y2="'+(oy+18)+'" stroke="#1a2f5a" stroke-width="2"/>';
+    s+='<line x1="'+(ox-32)+'" y1="'+(oy-18)+'" x2="'+(ox-25)+'" y2="'+(oy-14)+'" stroke="#1a2f5a" stroke-width="2"/>';
+    s+='<line x1="'+(ox+25)+'" y1="'+(oy+14)+'" x2="'+(ox+32)+'" y2="'+(oy+18)+'" stroke="#1a2f5a" stroke-width="2"/>';
+  }
+  /* halves ticks — AO=OC, BO=OD */
+  if(opts.halves){
+    /* AO and OC — 1 tick each on A-C diagonal */
+    s+='<circle cx="'+((x2+ox)/2)+'" cy="'+((y1+oy)/2)+'" r="3" fill="#1a2f5a"/>';
+    s+='<circle cx="'+((x1+ox)/2)+'" cy="'+((y2+oy)/2)+'" r="3" fill="#1a2f5a"/>';
+    /* BO and OD — 2 ticks each on B-D diagonal */
+    s+='<circle cx="'+((x1+ox)/2-4)+'" cy="'+((y1+oy)/2)+'" r="2.5" fill="#b91c1c"/>';
+    s+='<circle cx="'+((x1+ox)/2+4)+'" cy="'+((y1+oy)/2+3)+'" r="2.5" fill="#b91c1c"/>';
+    s+='<circle cx="'+((x2+ox)/2-4)+'" cy="'+((y2+oy)/2-3)+'" r="2.5" fill="#b91c1c"/>';
+    s+='<circle cx="'+((x2+ox)/2+4)+'" cy="'+((y2+oy)/2)+'" r="2.5" fill="#b91c1c"/>';
+  }
+  /* intersection point O */
+  if(opts.showO){
+    s+='<circle cx="'+ox+'" cy="'+oy+'" r="4" fill="#1a2f5a"/>';
+    s+='<text x="'+(ox+7)+'" y="'+(oy-6)+'" font-size="14" font-weight="700" fill="#1a2f5a">O</text>';
+  }
+  /* Corner labels */
+  s+='<text x="'+(x2+5)+'" y="'+(y1-5)+'" font-size="16" font-weight="700" fill="#1a2f5a">'+A+'</text>';
+  s+='<text x="'+(x1-15)+'" y="'+(y1-5)+'" font-size="16" font-weight="700" fill="#1a2f5a">'+B+'</text>';
+  s+='<text x="'+(x1-15)+'" y="'+(y2+18)+'" font-size="16" font-weight="700" fill="#1a2f5a">'+C+'</text>';
+  s+='<text x="'+(x2+5)+'" y="'+(y2+18)+'" font-size="16" font-weight="700" fill="#1a2f5a">'+D+'</text>';
+  /* Optional segment labels */
+  if(opts.lblAC) s+='<text x="'+(ox+18)+'" y="'+(oy-22)+'" font-size="13" font-weight="700" fill="#d97706">'+opts.lblAC+'</text>';
+  if(opts.lblBD) s+='<text x="'+(ox-46)+'" y="'+(oy-22)+'" font-size="13" font-weight="700" fill="#059669">'+opts.lblBD+'</text>';
+  if(opts.lblAO) s+='<text x="'+((x2+ox)/2+4)+'" y="'+((y1+oy)/2-4)+'" font-size="12" font-weight="700" fill="#b91c1c">'+opts.lblAO+'</text>';
+  if(opts.lblOC) s+='<text x="'+((x1+ox)/2-22)+'" y="'+((y2+oy)/2+14)+'" font-size="12" font-weight="700" fill="#b91c1c">'+opts.lblOC+'</text>';
+  s+='</svg>';
+  return s;
+}
+function svg4lines(a,b,c,d){
+  /* a∥b (horizontal), c⊥a (vertical), d slanted diagonal (unrelated) */
+  return '<svg width="270" height="180" viewBox="0 0 270 180" style="display:block;margin:10px auto">'+
+    '<line x1="20" y1="60" x2="250" y2="60" stroke="#4a9eda" stroke-width="3"/>'+
+    '<line x1="20" y1="120" x2="250" y2="120" stroke="#4a9eda" stroke-width="3"/>'+
+    '<polygon points="160,54 173,60 160,66" fill="#1a2f5a"/>'+
+    '<polygon points="160,114 173,120 160,126" fill="#1a2f5a"/>'+
+    '<line x1="90" y1="20" x2="90" y2="165" stroke="#f59e0b" stroke-width="3"/>'+
+    '<rect x="75" y="60" width="15" height="15" fill="none" stroke="#1a2f5a" stroke-width="2"/>'+
+    '<line x1="190" y1="25" x2="250" y2="165" stroke="#10b981" stroke-width="3"/>'+
+    '<text x="255" y="58" font-size="16" font-weight="700" fill="#1a2f5a">'+a+'</text>'+
+    '<text x="255" y="118" font-size="16" font-weight="700" fill="#1a2f5a">'+b+'</text>'+
+    '<text x="94" y="18" font-size="16" font-weight="700" fill="#1a2f5a">'+c+'</text>'+
+    '<text x="255" y="178" font-size="16" font-weight="700" fill="#1a2f5a">'+d+'</text>'+
+    '</svg>';
+}
+function svgGrid(w,h,lblTop,lblRight){
+  /* Rectangle w×h with unit grid. lblTop/lblRight shown as length labels. */
+  const cell=24;
+  const x1=30, y1=20;
+  const W=w*cell, H=h*cell;
+  const x2=x1+W, y2=y1+H;
+  let s='<svg width="'+(W+80)+'" height="'+(H+60)+'" viewBox="0 0 '+(W+80)+' '+(H+60)+'" style="display:block;margin:10px auto">';
+  /* grid fill */
+  s+='<rect x="'+x1+'" y="'+y1+'" width="'+W+'" height="'+H+'" fill="#dbeafe" stroke="#4a9eda" stroke-width="3"/>';
+  /* grid lines */
+  for(let i=1;i<w;i++){
+    s+='<line x1="'+(x1+i*cell)+'" y1="'+y1+'" x2="'+(x1+i*cell)+'" y2="'+y2+'" stroke="#4a9eda" stroke-width="1" opacity="0.5"/>';
+  }
+  for(let j=1;j<h;j++){
+    s+='<line x1="'+x1+'" y1="'+(y1+j*cell)+'" x2="'+x2+'" y2="'+(y1+j*cell)+'" stroke="#4a9eda" stroke-width="1" opacity="0.5"/>';
+  }
+  /* labels */
+  s+='<text x="'+(x1+W/2)+'" y="'+(y2+20)+'" font-size="15" font-weight="700" fill="#1a2f5a" text-anchor="middle">'+(lblTop||w)+'</text>';
+  s+='<text x="'+(x2+18)+'" y="'+(y1+H/2+5)+'" font-size="15" font-weight="700" fill="#1a2f5a" text-anchor="middle">'+(lblRight||h)+'</text>';
+  s+='</svg>';
+  return s;
+}
+function svgLShape(a,b,c,d){
+  /* L-shape polygon built from two rectangles. Outer dims a (width) × b (height), inner notch c×d cut from top-right.
+     Labels: outer width 'a', outer height 'b', notch width 'c', notch height 'd'. */
+  const cell=18;
+  const x1=40, y1=20;
+  const W=a*cell, H=b*cell;
+  const nx=c*cell, ny=d*cell;
+  /* path: start bottom-left, go up, right, down (ny), right, down, left to start */
+  const pts=[
+    [x1,      y1+H],
+    [x1,      y1],
+    [x1+W-nx, y1],
+    [x1+W-nx, y1+ny],
+    [x1+W,    y1+ny],
+    [x1+W,    y1+H],
+    [x1,      y1+H]
+  ];
+  let s='<svg width="'+(W+100)+'" height="'+(H+60)+'" viewBox="0 0 '+(W+100)+' '+(H+60)+'" style="display:block;margin:10px auto">';
+  s+='<polygon points="'+pts.map(p=>p.join(',')).join(' ')+'" fill="#dbeafe" stroke="#4a9eda" stroke-width="3"/>';
+  /* labels on external edges */
+  s+='<text x="'+(x1+(W-nx)/2)+'" y="'+(y1-6)+'" font-size="13" font-weight="700" fill="#1a2f5a" text-anchor="middle">'+(a-c)+'</text>';
+  s+='<text x="'+(x1+W-nx+nx/2)+'" y="'+(y1+ny+14)+'" font-size="13" font-weight="700" fill="#1a2f5a" text-anchor="middle">'+c+'</text>';
+  s+='<text x="'+(x1+W/2)+'" y="'+(y1+H+20)+'" font-size="13" font-weight="700" fill="#1a2f5a" text-anchor="middle">'+a+'</text>';
+  s+='<text x="'+(x1-18)+'" y="'+(y1+H/2)+'" font-size="13" font-weight="700" fill="#1a2f5a" text-anchor="middle">'+b+'</text>';
+  s+='<text x="'+(x1+W-nx-12)+'" y="'+(y1+ny/2+4)+'" font-size="13" font-weight="700" fill="#1a2f5a" text-anchor="middle">'+d+'</text>';
+  s+='<text x="'+(x1+W+8)+'" y="'+(y1+ny+(H-ny)/2+4)+'" font-size="13" font-weight="700" fill="#1a2f5a" text-anchor="middle">'+(b-d)+'</text>';
+  s+='</svg>';
+  return s;
+}
+function svgBox(a,b,c,opts){
+  /* Isometric box a (width) × b (depth) × c (height). 8 vertices labeled A-H.
+     Front face ABCD (a×c), top face EFBA (a×b perspective), right face BFGC (b×c perspective).
+     opts: {lblA,lblB,lblC} - labels for dims, {highlight:'ABCD'|'EFGH'|..} - highlight a face. */
+  opts=opts||{};
+  const unit=18;
+  const dx=0.5,dy=0.35; /* perspective shift factor */
+  const W=a*unit, Hh=c*unit, Dd=b*unit;
+  const shx=Dd*dx, shy=Dd*dy;
+  const x0=50+shx, y0=40;
+  /* front: A=(x0,y0+H) bottom-left, B=(x0+W,y0+H) bottom-right, C=(x0+W,y0) top-right, D=(x0,y0) top-left  — wait, let's use standard naming
+     Let front face = ABCD: A top-left, B top-right, C bottom-right, D bottom-left
+     Back face EFGH: E behind A (top-left-back), F behind B, G behind C, H behind D */
+  const A={x:x0,y:y0}, B={x:x0+W,y:y0}, C={x:x0+W,y:y0+Hh}, D={x:x0,y:y0+Hh};
+  const E={x:A.x-shx,y:A.y-shy}, F={x:B.x-shx,y:B.y-shy}, G={x:C.x-shx,y:C.y-shy}, H={x:D.x-shx,y:D.y-shy};
+  const svgW=W+shx+100, svgH=Hh+shy+60;
+  let s='<svg width="'+svgW+'" height="'+svgH+'" viewBox="0 0 '+svgW+' '+svgH+'" style="display:block;margin:10px auto">';
+  /* top face EFBA */
+  s+='<polygon points="'+E.x+','+E.y+' '+F.x+','+F.y+' '+B.x+','+B.y+' '+A.x+','+A.y+'" fill="'+(opts.highlight==='top'?'#fde68a':'#e0f2fe')+'" stroke="#1e40af" stroke-width="2.2"/>';
+  /* right face BFGC */
+  s+='<polygon points="'+B.x+','+B.y+' '+F.x+','+F.y+' '+G.x+','+G.y+' '+C.x+','+C.y+'" fill="'+(opts.highlight==='right'?'#fde68a':'#dbeafe')+'" stroke="#1e40af" stroke-width="2.2"/>';
+  /* front face ABCD */
+  s+='<polygon points="'+A.x+','+A.y+' '+B.x+','+B.y+' '+C.x+','+C.y+' '+D.x+','+D.y+'" fill="'+(opts.highlight==='front'?'#fde68a':'#bfdbfe')+'" stroke="#1e40af" stroke-width="2.5"/>';
+  /* hidden edges dashed: E-H, H-G, H-D */
+  s+='<line x1="'+E.x+'" y1="'+E.y+'" x2="'+H.x+'" y2="'+H.y+'" stroke="#1e40af" stroke-width="1.5" stroke-dasharray="4 3"/>';
+  s+='<line x1="'+H.x+'" y1="'+H.y+'" x2="'+G.x+'" y2="'+G.y+'" stroke="#1e40af" stroke-width="1.5" stroke-dasharray="4 3"/>';
+  s+='<line x1="'+H.x+'" y1="'+H.y+'" x2="'+D.x+'" y2="'+D.y+'" stroke="#1e40af" stroke-width="1.5" stroke-dasharray="4 3"/>';
+  /* vertex labels */
+  const fs=13;
+  s+='<text x="'+(A.x-10)+'" y="'+(A.y+4)+'" font-size="'+fs+'" font-weight="700" fill="#1e40af">A</text>';
+  s+='<text x="'+(B.x+4)+'" y="'+(B.y+4)+'" font-size="'+fs+'" font-weight="700" fill="#1e40af">B</text>';
+  s+='<text x="'+(C.x+4)+'" y="'+(C.y+10)+'" font-size="'+fs+'" font-weight="700" fill="#1e40af">C</text>';
+  s+='<text x="'+(D.x-10)+'" y="'+(D.y+14)+'" font-size="'+fs+'" font-weight="700" fill="#1e40af">D</text>';
+  s+='<text x="'+(E.x-12)+'" y="'+(E.y)+'" font-size="'+fs+'" font-weight="700" fill="#1e40af">E</text>';
+  s+='<text x="'+(F.x+4)+'" y="'+(F.y)+'" font-size="'+fs+'" font-weight="700" fill="#1e40af">F</text>';
+  s+='<text x="'+(G.x+4)+'" y="'+(G.y+6)+'" font-size="'+fs+'" font-weight="700" fill="#1e40af">G</text>';
+  s+='<text x="'+(H.x-12)+'" y="'+(H.y+6)+'" font-size="'+fs+'" font-weight="700" fill="#1e40af">H</text>';
+  /* dimension labels */
+  if(opts.lblA!==undefined) s+='<text x="'+((A.x+B.x)/2)+'" y="'+(A.y-6)+'" font-size="13" font-weight="700" fill="#d97706" text-anchor="middle">'+opts.lblA+'</text>';
+  if(opts.lblC!==undefined) s+='<text x="'+(B.x+8)+'" y="'+((B.y+C.y)/2+4)+'" font-size="13" font-weight="700" fill="#d97706">'+opts.lblC+'</text>';
+  if(opts.lblB!==undefined) s+='<text x="'+((B.x+F.x)/2+5)+'" y="'+((B.y+F.y)/2-3)+'" font-size="13" font-weight="700" fill="#d97706">'+opts.lblB+'</text>';
+  s+='</svg>';
+  return s;
+}
+
+let state={section:'learn',step:0,level:'easy',qIndex:0};
+let scores={easy:[],medium:[],hard:[],challenge:[]};
+let answered={easy:[],medium:[],hard:[],challenge:[]};
+let questions={easy:null,medium:null,hard:null,challenge:null};
+const LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+const LEVEL_NAMES={easy:'קל',medium:'בינוני',hard:'קשה',challenge:'אתגר'};
+const TOTAL_STEPS=7;
+
+const LS_KEY='box3d1_v1_'+dateSeed;
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores,answered,state}))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+const steps=[
+/* Step 1 — What is a box */
+{title:'📦 שלב 1 — מהי תיבה?',render(){return `
+<p><strong>תיבה</strong> היא גוף תלת-ממדי שבו <strong>כל 6 הפאות הן מלבנים</strong>. זהו "מלבן תלת-ממדי".</p>
+<p><strong>דוגמאות מהחיים:</strong> קופסת נעליים, קופסת חלב, קופסת קורנפלקס, ספר, מזוודה.</p>
+`+svgBox(5,3,3,{lblA:'a',lblB:'b',lblC:'c'})+`
+<div class="rule-box">📌 <strong>שלושת המאפיינים העיקריים של תיבה:</strong><br>• <strong>6 פאות</strong> (כל פאה = מלבן)<br>• <strong>12 מקצועות</strong> (הקווים שבין הפאות)<br>• <strong>8 קודקודים</strong> (הפינות)</div>
+<div class="highlight">💡 התיבה שבסרטוט מיוצגת על ידי 8 הקודקודים <span class="math-expr">A, B, C, D, E, F, G, H</span>. הקווים המקווקווים הם מקצועות <strong>נסתרים</strong> שאי אפשר לראות מהזווית הזו.</div>
+<p><strong>שאלת הבנה:</strong> כמה פאות יש לתיבה?</p>
+<div class="quiz-options" id="s1Opts">
+  <div class="quiz-opt" onclick="s1Pick(0)">4</div>
+  <div class="quiz-opt" onclick="s1Pick(1)">6</div>
+  <div class="quiz-opt" onclick="s1Pick(2)">8</div>
+  <div class="quiz-opt" onclick="s1Pick(3)">12</div>
+</div>
+<div id="s1Fb"></div>
+`}},
+
+/* Step 2 — Faces of the box */
+{title:'🟦 שלב 2 — פאות התיבה',render(){return `
+<p>לתיבה יש <strong>6 פאות</strong> המסודרות ב-<strong>3 זוגות של פאות נגדיות</strong>. כל זוג הוא שני מלבנים חופפים (שווים).</p>
+`+svgBox(5,3,3,{lblA:'',lblB:'',lblC:''})+`
+<div class="rule-box">📌 <strong>6 הפאות בתיבה ABCDEFGH:</strong><br>• פאה קדמית <span class="math-expr">ABCD</span> ⬌ פאה אחורית <span class="math-expr">EFGH</span><br>• פאה עליונה <span class="math-expr">ABFE</span> ⬌ פאה תחתונה <span class="math-expr">DCGH</span><br>• פאה ימנית <span class="math-expr">BCGF</span> ⬌ פאה שמאלית <span class="math-expr">ADHE</span></div>
+<div class="highlight">💡 <strong>עיקרון חשוב:</strong> פאות נגדיות הן מלבנים <strong>חופפים</strong> — כלומר, באותם הממדים בדיוק.</div>
+<p><strong>שאלת הבנה:</strong> מהי הפאה הנגדית לפאה <span class="math-expr">ABCD</span>?</p>
+<div class="quiz-options" id="s2Opts">
+  <div class="quiz-opt" onclick="s2Pick(0)"><span class="math-expr">ABFE</span></div>
+  <div class="quiz-opt" onclick="s2Pick(1)"><span class="math-expr">EFGH</span></div>
+  <div class="quiz-opt" onclick="s2Pick(2)"><span class="math-expr">BCGF</span></div>
+  <div class="quiz-opt" onclick="s2Pick(3)"><span class="math-expr">DCGH</span></div>
+</div>
+<div id="s2Fb"></div>
+`}},
+
+/* Step 3 — Edges */
+{title:'📏 שלב 3 — מקצועות התיבה',render(){return `
+<p><strong>מקצוע</strong> הוא הקו שמחבר בין שני קודקודים סמוכים — גבול בין שתי פאות. לתיבה יש <strong>12 מקצועות</strong>.</p>
+`+svgBox(5,3,3,{lblA:'a',lblB:'b',lblC:'c'})+`
+<div class="rule-box">📌 <strong>12 המקצועות מחולקים ל-3 קבוצות של 4 מקצועות שוים:</strong><br>• 4 מקצועות באורך <span class="math-expr">a</span> (אורך) — AB, DC, HG, EF<br>• 4 מקצועות באורך <span class="math-expr">b</span> (רוחב/עומק) — AE, BF, CG, DH<br>• 4 מקצועות באורך <span class="math-expr">c</span> (גובה) — AD, BC, FG, EH</div>
+<div class="highlight">💡 ממדי התיבה הם <strong>3 מספרים</strong>: <span class="math-expr">a</span> (אורך), <span class="math-expr">b</span> (רוחב), <span class="math-expr">c</span> (גובה). שלושתם יחד קובעים את התיבה.</div>
+<p><strong>שאלת הבנה:</strong> כמה מקצועות יש לתיבה בסך הכל?</p>
+<div class="quiz-options" id="s3Opts">
+  <div class="quiz-opt" onclick="s3Pick(0)">6</div>
+  <div class="quiz-opt" onclick="s3Pick(1)">8</div>
+  <div class="quiz-opt" onclick="s3Pick(2)">12</div>
+  <div class="quiz-opt" onclick="s3Pick(3)">24</div>
+</div>
+<div id="s3Fb"></div>
+`}},
+
+/* Step 4 — Volume */
+{title:'📐 שלב 4 — נפח התיבה',render(){return `
+<p><strong>נפח</strong> של תיבה = כמות המקום שהתיבה תופסת במרחב — או כמה יחידות קוביות קטנות (1×1×1) אפשר להכניס אליה.</p>
+`+svgBox(4,3,2,{lblA:'4',lblB:'3',lblC:'2'})+`
+<div class="rule-box">📌 <strong>נוסחת הנפח:</strong><br><span class="math-expr">V = a · b · c</span><br>(מכפלת שלושת הממדים)<br><br>יחידת מידה: <strong>סמ"ק</strong> (סנטימטר מעוקב) או <strong>מ"ק</strong> (מטר מעוקב).</div>
+<div class="highlight">💡 <strong>דוגמה:</strong> תיבה 4×3×2. נפח = <span class="math-expr">4·3·2 = 24</span> סמ"ק.<br>
+אפשר לחשוב על זה כך: שכבה תחתונה של 12 קוביות (4×3), כפול 2 שכבות → 24.</div>
+<p><strong>שאלת הבנה:</strong> תיבה שממדיה 2×3×5 ס"מ. מה נפחה?</p>
+<div class="quiz-options" id="s4Opts">
+  <div class="quiz-opt" onclick="s4Pick(0)">10 סמ"ק</div>
+  <div class="quiz-opt" onclick="s4Pick(1)">15 סמ"ק</div>
+  <div class="quiz-opt" onclick="s4Pick(2)">30 סמ"ק</div>
+  <div class="quiz-opt" onclick="s4Pick(3)">60 סמ"ק</div>
+</div>
+<div id="s4Fb"></div>
+`}},
+
+/* Step 5 — Surface area */
+{title:'🎨 שלב 5 — שטח פנים',render(){return `
+<p><strong>שטח פנים</strong> של תיבה = סכום שטחי כל 6 הפאות. זה כמו "לצבוע את החלק החיצוני של התיבה" — כמה צבע צריך.</p>
+`+svgBox(4,3,2,{lblA:'4',lblB:'3',lblC:'2'})+`
+<div class="rule-box">📌 <strong>נוסחת שטח הפנים:</strong><br><span class="math-expr">S = 2·(a·b + a·c + b·c)</span><br>כי כל זוג פאות נגדיות תורם <span class="math-expr">2·(a·b)</span> (או <span class="math-expr">2·(a·c)</span>, <span class="math-expr">2·(b·c)</span>).</div>
+<div class="highlight">💡 <strong>דוגמה — תיבה 4×3×2:</strong><br>
+• 2 פאות 4×3 (עליונה+תחתונה): <span class="math-expr">2·12 = 24</span> סמ"ר<br>
+• 2 פאות 4×2 (קדמית+אחורית): <span class="math-expr">2·8 = 16</span> סמ"ר<br>
+• 2 פאות 3×2 (ימנית+שמאלית): <span class="math-expr">2·6 = 12</span> סמ"ר<br>
+<strong>סה"כ:</strong> <span class="math-expr">24 + 16 + 12 = 52</span> סמ"ר.</div>
+<p><strong>שאלת הבנה:</strong> תיבה שממדיה 2×6×3 ס"מ. מה שטח הפנים שלה?</p>
+<div class="quiz-options" id="s5Opts">
+  <div class="quiz-opt" onclick="s5Pick(0)">36 סמ"ר</div>
+  <div class="quiz-opt" onclick="s5Pick(1)">72 סמ"ר</div>
+  <div class="quiz-opt" onclick="s5Pick(2)">54 סמ"ר</div>
+  <div class="quiz-opt" onclick="s5Pick(3)">108 סמ"ר</div>
+</div>
+<div id="s5Fb"></div>
+`}},
+
+/* Step 6 — Net (spreading) */
+{title:'🗺️ שלב 6 — פריסה של תיבה',render(){return `
+<p><strong>פריסה</strong> של תיבה = כל 6 הפאות, "מפורשות" לצורה שטוחה דו-ממדית. כאילו פותחים קופסת קרטון ומשטחים אותה.</p>
+<p>פריסה אחת נפוצה של תיבה <span class="math-expr">a × b × c</span> היא צורת "צלב":</p>
+<div style="text-align:center;margin:16px 0">
+  <svg width="260" height="220" viewBox="0 0 260 220" style="display:block;margin:0 auto">
+    <rect x="80" y="20" width="60" height="40" fill="#bfdbfe" stroke="#1e40af" stroke-width="2"/>
+    <text x="110" y="45" font-size="12" font-weight="700" fill="#1e40af" text-anchor="middle">עליון</text>
+    <rect x="20" y="60" width="60" height="60" fill="#dbeafe" stroke="#1e40af" stroke-width="2"/>
+    <text x="50" y="95" font-size="12" font-weight="700" fill="#1e40af" text-anchor="middle">שמאל</text>
+    <rect x="80" y="60" width="60" height="60" fill="#bfdbfe" stroke="#1e40af" stroke-width="2"/>
+    <text x="110" y="95" font-size="12" font-weight="700" fill="#1e40af" text-anchor="middle">קדמי</text>
+    <rect x="140" y="60" width="60" height="60" fill="#dbeafe" stroke="#1e40af" stroke-width="2"/>
+    <text x="170" y="95" font-size="12" font-weight="700" fill="#1e40af" text-anchor="middle">ימין</text>
+    <rect x="200" y="60" width="60" height="60" fill="#bfdbfe" stroke="#1e40af" stroke-width="2"/>
+    <text x="230" y="95" font-size="12" font-weight="700" fill="#1e40af" text-anchor="middle">אחורי</text>
+    <rect x="80" y="120" width="60" height="40" fill="#bfdbfe" stroke="#1e40af" stroke-width="2"/>
+    <text x="110" y="145" font-size="12" font-weight="700" fill="#1e40af" text-anchor="middle">תחתון</text>
+  </svg>
+</div>
+<div class="rule-box">📌 <strong>עיקרון:</strong> פריסה של תיבה תמיד מכילה בדיוק <strong>6 מלבנים</strong> — שלושה זוגות של פאות חופפות — וניתן לקפל אותה לתיבה.</div>
+<div class="highlight">💡 ישנן <strong>הרבה פריסות אפשריות</strong> לתיבה אחת (11 סוגי פריסות שונים!) — לא רק צלב. העיקר: 6 פאות במיקום שנכון לקיפול.</div>
+<p><strong>שאלת הבנה:</strong> מכמה מלבנים מורכבת פריסה של תיבה?</p>
+<div class="quiz-options" id="s6Opts">
+  <div class="quiz-opt" onclick="s6Pick(0)">4</div>
+  <div class="quiz-opt" onclick="s6Pick(1)">5</div>
+  <div class="quiz-opt" onclick="s6Pick(2)">6</div>
+  <div class="quiz-opt" onclick="s6Pick(3)">8</div>
+</div>
+<div id="s6Fb"></div>
+`}},
+
+/* Step 7 — Summary */
+{title:'🏁 שלב 7 — סיכום',render(){return `
+<p style="font-size:1.1rem;text-align:center;margin-bottom:16px">מה למדנו על התיבה:</p>
+<div class="step-summary-grid">
+  <div class="summary-item"><div class="s-icon">📦</div><div class="s-title">מבנה</div><div class="s-text">6 פאות, 12 מקצועות, 8 קודקודים</div></div>
+  <div class="summary-item"><div class="s-icon">📐</div><div class="s-title">נפח</div><div class="s-text"><span class="math-expr">V = a · b · c</span></div></div>
+  <div class="summary-item"><div class="s-icon">🎨</div><div class="s-title">שטח פנים</div><div class="s-text"><span class="math-expr">S = 2(ab + ac + bc)</span></div></div>
+  <div class="summary-item"><div class="s-icon">🗺️</div><div class="s-title">פריסה</div><div class="s-text">6 מלבנים בשטח (3 זוגות חופפים)</div></div>
+</div>
+<div class="highlight" style="margin-top:16px">⚠️ זכרו: נפח ביחידות סמ"ק (שלישי), שטח פנים ביחידות סמ"ר (שני). אל תתבלבלו.</div>
+<p style="text-align:center;margin-top:20px"><strong>מוכנים לתרגול על תיבה? 💪</strong></p>
+`}}
+];
+
+function renderStep(idx){
+  state.step=idx;
+  const s=steps[idx];
+  const fill=((idx+1)/TOTAL_STEPS*100).toFixed(0);
+  document.getElementById('stepFill').style.width=fill+'%';
+  document.getElementById('stepText').textContent='שלב '+(idx+1)+' מתוך '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+s.title+'</div>'+s.render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'לתרגול ←':'הבא ←';
+  if(s.init) s.init();
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+function stepPick(prefix,choice,correct,okMsg,errMsg){
+  const opts=document.querySelectorAll('#'+prefix+'Opts .quiz-opt');
+  opts.forEach((el,i)=>{
+    el.classList.remove('selected','correct-answer','wrong-answer');
+    el.onclick=null;
+    if(i===correct) el.classList.add('correct-answer');
+    else if(i===choice) el.classList.add('wrong-answer');
+  });
+  const fb=document.getElementById(prefix+'Fb');
+  if(choice===correct) fb.innerHTML='<div class="feedback-inline ok">✅ '+okMsg+'</div>';
+  else fb.innerHTML='<div class="feedback-inline err">❌ '+errMsg+'</div>';
+}
+window.s1Pick=function(c){stepPick('s1',c,1,'נכון! לתיבה יש 6 פאות.','תיבה היא גוף עם 6 פאות מלבניות, 12 מקצועות ו-8 קודקודים.')};
+window.s2Pick=function(c){stepPick('s2',c,1,'נכון! הפאה הנגדית ל-ABCD היא EFGH.','ABCD היא הפאה הקדמית; הפאה הנגדית (האחורית) היא EFGH.')};
+window.s3Pick=function(c){stepPick('s3',c,2,'נכון! לתיבה יש 12 מקצועות.','12 מקצועות = 3 קבוצות של 4 מקצועות שוים (אורך, רוחב, גובה).')};
+window.s4Pick=function(c){stepPick('s4',c,2,'נכון! V = 2·3·5 = 30 סמ"ק.','נפח = מכפלת שלושת הממדים = 2·3·5 = 30 סמ"ק.')};
+window.s5Pick=function(c){stepPick('s5',c,1,'נכון! S = 2·(2·6 + 2·3 + 6·3) = 2·(12+6+18) = 72 סמ"ר.','שטח פנים = 2·(ab+ac+bc) = 2·(12+6+18) = 72 סמ"ר.')};
+window.s6Pick=function(c){stepPick('s6',c,2,'נכון! פריסה של תיבה מורכבת מ-6 פאות מלבניות.','6 פאות = 3 זוגות של פאות נגדיות חופפות.')};
+
+/* ===== QUESTION GENERATORS ===== */
+function genEasy(){
+  rng=mulberry32(dateSeed+100);
+  const qs=[];
+  /* Q1-5: Volume computation */
+  const e1=[
+    {a:2,b:3,c:4},{a:5,b:2,c:3},{a:4,b:4,c:2},{a:6,b:3,c:2},{a:5,b:4,c:3}
+  ];
+  e1.forEach(q=>{
+    const V=q.a*q.b*q.c;
+    qs.push({type:'mc',stem:'תיבה שממדיה '+q.a+'×'+q.b+'×'+q.c+' ס"מ. מה נפחה?',options:[String(V-4),String(V-2),String(V),String(V+4)],answer:2,explanation:'V = '+q.a+'·'+q.b+'·'+q.c+' = '+V+' סמ"ק.'});
+  });
+  /* Q6-10: Identify opposite faces */
+  const e2=[
+    {stem:'בתיבה ABCDEFGH, מהי הפאה הנגדית ל-<span class="math-expr">ABCD</span>?',options:['<span class="math-expr">ABFE</span>','<span class="math-expr">EFGH</span>','<span class="math-expr">BCGF</span>','<span class="math-expr">ADHE</span>'],ans:1,ex:'ABCD היא הפאה הקדמית; הנגדית היא EFGH (אחורית).'},
+    {stem:'בתיבה ABCDEFGH, מהי הפאה הנגדית ל-<span class="math-expr">ABFE</span>?',options:['<span class="math-expr">ABCD</span>','<span class="math-expr">EFGH</span>','<span class="math-expr">DCGH</span>','<span class="math-expr">BCGF</span>'],ans:2,ex:'ABFE היא הפאה העליונה; הנגדית (התחתונה) היא DCGH.'},
+    {stem:'בתיבה ABCDEFGH, מהי הפאה הנגדית ל-<span class="math-expr">BCGF</span>?',options:['<span class="math-expr">ADHE</span>','<span class="math-expr">ABCD</span>','<span class="math-expr">EFGH</span>','<span class="math-expr">ABFE</span>'],ans:0,ex:'BCGF היא הפאה הימנית; הנגדית (השמאלית) היא ADHE.'},
+    {stem:'כמה זוגות של פאות נגדיות יש בתיבה?',options:['1','2','3','6'],ans:2,ex:'6 פאות מחולקות ל-3 זוגות של פאות נגדיות חופפות.'},
+    {stem:'פאות נגדיות בתיבה הן:',options:['תמיד חופפות (שוות)','לא בהכרח שוות','תמיד ריבועים','שונות בשטח'],ans:0,ex:'שתי פאות נגדיות הן מלבנים חופפים — אותם ממדים בדיוק.'}
+  ];
+  e2.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  /* Q11-15: Face area */
+  const e3=[
+    {a:5,b:4,S:20,stem:'פאה מלבנית בתיבה שממדיה 5×4 ס"מ. מה שטחה?'},
+    {a:6,b:3,S:18,stem:'פאה מלבנית בתיבה שממדיה 6×3 ס"מ. מה שטחה?'},
+    {a:7,b:2,S:14,stem:'פאה מלבנית בתיבה שממדיה 7×2 ס"מ. מה שטחה?'},
+    {a:8,b:5,S:40,stem:'פאה מלבנית בתיבה שממדיה 8×5 ס"מ. מה שטחה?'},
+    {a:4,b:4,S:16,stem:'פאה מלבנית בתיבה שממדיה 4×4 ס"מ. מה שטחה (הפאה היא ריבוע)?'}
+  ];
+  e3.forEach(q=>{
+    qs.push({type:'mc',stem:q.stem,options:[String(q.S-4),String(q.S-2),String(q.S),String(q.S+4)],answer:2,explanation:'שטח פאה = a·b = '+q.a+'·'+q.b+' = '+q.S+' סמ"ר.'});
+  });
+  /* Q16-20: True/False */
+  const e4=[
+    {stem:'נכון / לא נכון: לתיבה יש 8 פאות.',options:['נכון','לא נכון — יש 6 פאות','לא נכון — יש 12 פאות','תלוי בגודל'],ans:1,ex:'לתיבה תמיד בדיוק 6 פאות.'},
+    {stem:'נכון / לא נכון: כל פאות התיבה חופפות (שוות).',options:['נכון','לא נכון — רק פאות נגדיות חופפות','נכון רק בקובייה','לא נכון — אף פאה לא חופפת'],ans:1,ex:'בדרך כלל 3 זוגות שונים. רק בקובייה (תיבה מיוחדת) כל הפאות חופפות.'},
+    {stem:'נכון / לא נכון: לתיבה 12 מקצועות.',options:['נכון','לא נכון — יש 6','לא נכון — יש 8','לא נכון — יש 24'],ans:0,ex:'12 מקצועות = 3 קבוצות של 4 מקצועות שווים.'},
+    {stem:'נכון / לא נכון: לתיבה 8 קודקודים.',options:['לא נכון — יש 6','לא נכון — יש 12','נכון','לא נכון — יש 4'],ans:2,ex:'8 קודקודים = פינות התיבה (4 למעלה, 4 למטה).'},
+    {stem:'קוביה (קובייה) היא תיבה שבה:',options:['יש 12 פאות','כל הפאות הן ריבועים חופפים','אין מקצועות','הפאה הקדמית מיוחדת'],ans:1,ex:'קובייה = תיבה שכל ממדיה שווים (a=b=c), ולכן כל פאותיה ריבועים חופפים.'}
+  ];
+  e4.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  return qs;
+}
+
+function genMedium(){
+  rng=mulberry32(dateSeed+200);
+  const qs=[];
+  /* Q1-5: Surface area computation */
+  const m1=[
+    {a:3,b:4,c:5,S:94},{a:2,b:5,c:3,S:62},{a:6,b:2,c:4,S:88},{a:5,b:5,c:2,S:90},{a:3,b:3,c:3,S:54}
+  ];
+  m1.forEach(q=>{
+    qs.push({type:'mc',stem:'תיבה שממדיה '+q.a+'×'+q.b+'×'+q.c+' ס"מ. מה שטח הפנים שלה?',options:[String(q.S-8),String(q.S-4),String(q.S),String(q.S+8)],answer:2,explanation:'S = 2·('+q.a+'·'+q.b+' + '+q.a+'·'+q.c+' + '+q.b+'·'+q.c+') = 2·('+(q.a*q.b)+'+'+(q.a*q.c)+'+'+(q.b*q.c)+') = '+q.S+' סמ"ר.'});
+  });
+  /* Q6-10: Which face belongs to which dim */
+  const m2=[
+    {stem:'תיבה שממדיה 7×6×16 ס"מ. מה שטח הפאה הגדולה ביותר?',options:['42','96','112','280'],ans:2,ex:'הפאות: 7×6=42, 7×16=112, 6×16=96. הגדולה = 112.'},
+    {stem:'תיבה 5×3×4. מה שטח הפאה הקטנה ביותר?',options:['12','15','20','60'],ans:0,ex:'הפאות: 5·3=15, 5·4=20, 3·4=12. הקטנה = 12.'},
+    {stem:'תיבה 8×8×3. כמה פאות ריבועיות יש בה?',options:['אף אחת','2','4','6'],ans:1,ex:'הפאות 8×8 (עליונה+תחתונה) הן ריבועים — 2 פאות.'},
+    {stem:'תיבה 6×6×6 (קובייה). שטח כל פאה?',options:['12','24','36','72'],ans:2,ex:'כל פאה היא ריבוע 6×6 → שטח 36.'},
+    {stem:'תיבה 4×5×7. כמה פאות שונות יש (לא כולל פאות נגדיות חופפות)?',options:['1','2','3','6'],ans:2,ex:'3 פאות שונות: 4×5, 4×7, 5×7 (כל אחת מופיעה פעמיים כפאות נגדיות).'}
+  ];
+  m2.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  /* Q11-15: Is it a valid net? */
+  const m3=[
+    {stem:'פריסה של תיבה מורכבת מכמה מלבנים?',options:['4','5','6','8'],ans:2,ex:'6 פאות = 6 מלבנים בפריסה.'},
+    {stem:'בפריסה של תיבה שממדיה 3×4×5, כמה מלבנים שונים נראה (לפי גודל)?',options:['1','2','3','6'],ans:2,ex:'3 גדלים של פאות: 3×4, 3×5, 4×5. כל אחד מופיע פעמיים.'},
+    {stem:'בפריסה של קובייה, כמה מלבנים שונים נראה?',options:['1 (כולם ריבועים חופפים)','3','6','לא תלוי בצורה'],ans:0,ex:'בקובייה כל 6 הפאות הן אותו ריבוע בדיוק.'},
+    {stem:'פריסה של תיבה מכילה 6 ריבועים חופפים. מה סוג התיבה?',options:['תיבה רגילה','קובייה','תיבה ארוכה','אי אפשר לדעת'],ans:1,ex:'6 ריבועים חופפים → כל הפאות שוות → קובייה.'},
+    {stem:'בתיבה 2×3×10, כמה פאות בעלות שטח 20 סמ"ר?',options:['0','2','4','6'],ans:1,ex:'הפאות: 2×3=6, 2×10=20, 3×10=30. רק הפאות 2×10 (2 פאות נגדיות) בעלות שטח 20.'}
+  ];
+  m3.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  /* Q16-20: Dimensions from volume */
+  const m4=[
+    {V:24,stem:'אילו ממדים אפשריים לתיבה שנפחה 24 סמ"ק?',options:['2×3×4','2×4×5','3×3×3','4×4×2'],ans:0,ex:'2·3·4 = 24 ✓. האחרים: 40, 27, 32.'},
+    {V:36,stem:'אילו ממדים אפשריים לתיבה שנפחה 36 סמ"ק?',options:['2×3×4','3×3×4','5×5×5','4×4×4'],ans:1,ex:'3·3·4 = 36 ✓. השאר: 2·3·4=24, 5³=125, 4³=64.'},
+    {V:60,stem:'אילו ממדים אפשריים לתיבה שנפחה 60 סמ"ק?',options:['2×3×10','3×4×5','4×4×4','שתי התשובות הראשונות'],ans:3,ex:'גם 2·3·10=60 וגם 3·4·5=60.'},
+    {V:48,stem:'תיבה שנפחה 48 סמ"ק. אורך 6, רוחב 4. מה הגובה?',options:['1','2','3','4'],ans:1,ex:'גובה = V/(a·b) = 48/(6·4) = 48/24 = 2.'},
+    {V:30,stem:'תיבה שנפחה 30 סמ"ק. אורך 5, גובה 3. מה הרוחב?',options:['1','2','3','4'],ans:1,ex:'רוחב = V/(a·c) = 30/(5·3) = 2.'}
+  ];
+  m4.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  return qs;
+}
+
+function genHard(){
+  rng=mulberry32(dateSeed+300);
+  const qs=[];
+  /* Q1-5: Given 2 dims + volume → find third */
+  const h1=[
+    {a:4,b:5,V:60,c:3},{a:3,b:6,V:54,c:3},{a:2,b:7,V:42,c:3},{a:5,b:5,V:75,c:3},{a:4,b:4,V:64,c:4}
+  ];
+  h1.forEach(q=>{
+    qs.push({type:'mc',stem:'תיבה שנפחה '+q.V+' סמ"ק. שניים מממדיה '+q.a+' ס"מ ו-'+q.b+' ס"מ. מה הממד השלישי?',options:[String(q.c-1),String(q.c),String(q.c+1),String(q.c+2)],answer:1,explanation:'c = V/(a·b) = '+q.V+'/('+q.a+'·'+q.b+') = '+q.V+'/'+(q.a*q.b)+' = '+q.c+'.'});
+  });
+  /* Q6-10: Given 2 dims + surface → find third */
+  const h2=[
+    {a:3,b:4,S:94,c:5},{a:2,b:5,S:62,c:3},{a:4,b:6,S:108,c:3},{a:5,b:5,S:90,c:2},{a:2,b:3,S:52,c:4}
+  ];
+  h2.forEach(q=>{
+    qs.push({type:'mc',stem:'תיבה ששטח הפנים שלה '+q.S+' סמ"ר. שניים מממדיה '+q.a+' ו-'+q.b+'. מה הממד השלישי?',options:[String(q.c-1),String(q.c),String(q.c+1),String(q.c+2)],answer:1,explanation:'S = 2·(ab+ac+bc). הצבה: '+q.S+' = 2·('+(q.a*q.b)+' + '+(q.a+q.b)+'·c) → פתרון נותן c = '+q.c+'.'});
+  });
+  /* Q11-15: Scaling box dimensions */
+  const h3=[
+    {stem:'תיבה a×b×c. מגדילים ממד אחד פי 2. פי כמה גדל הנפח?',options:['פי 1','פי 2','פי 4','פי 8'],ans:1,ex:'נפח חדש = 2a·b·c = 2·(abc). פי 2.'},
+    {stem:'תיבה a×b×c. מגדילים את שלושת הממדים פי 2. פי כמה גדל הנפח?',options:['פי 2','פי 4','פי 6','פי 8'],ans:3,ex:'נפח חדש = 2a·2b·2c = 8·(abc). פי 8.'},
+    {stem:'תיבה a×b×c. מגדילים את שלושת הממדים פי 3. פי כמה גדל הנפח?',options:['פי 3','פי 9','פי 18','פי 27'],ans:3,ex:'נפח חדש = 3a·3b·3c = 27·(abc). פי 27.'},
+    {stem:'תיבה a×b×c. מגדילים את שלושת הממדים פי 2. פי כמה גדל שטח הפנים?',options:['פי 2','פי 4','פי 6','פי 8'],ans:1,ex:'שטח פנים חדש = 2(4ab+4ac+4bc) = 4·S. פי 4.'},
+    {stem:'מגדילים את שני מימדי הבסיס פי 2 ומשאירים את הגובה. פי כמה גדל הנפח?',options:['פי 2','פי 3','פי 4','פי 8'],ans:2,ex:'נפח חדש = 2a·2b·c = 4·(abc). פי 4.'}
+  ];
+  h3.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  /* Q16-20: Applied / remaining */
+  const h4=[
+    {stem:'מתיבה 10×8×6 חותכים קובייה 2×2×2. מה הנפח שנותר?',options:['472','476','480','488'],ans:0,ex:'נפח תיבה = 480. פחות נפח קובייה = 8. → 472.'},
+    {stem:'מתיבה 5×4×3 חותכים קובייה 1×1×1. מה הנפח שנותר?',options:['58','59','60','61'],ans:1,ex:'60 − 1 = 59.'},
+    {stem:'כמה קוביות 2×2×2 אפשר להכניס לתיבה 4×4×4?',options:['4','8','16','64'],ans:1,ex:'נפח תיבה = 64. נפח קוביה = 8. 64/8 = 8.'},
+    {stem:'כמה קוביות 1×1×1 אפשר להכניס לתיבה 3×3×3?',options:['9','18','24','27'],ans:3,ex:'3·3·3 = 27.'},
+    {stem:'תיבה שנפחה 64 סמ"ק. אם כל הממדים שווים, מהו כל ממד?',options:['2','3','4','8'],ans:2,ex:'a³ = 64 → a = 4.'}
+  ];
+  h4.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  return qs;
+}
+
+function genChallenge(){
+  rng=mulberry32(dateSeed+400);
+  const qs=[];
+  /* Q1-3: Cubes in a box */
+  const c1=[
+    {stem:'תיבה ממדיה 2×4×8 ס"מ. כמה קוביות בגודל 1×1×1 אפשר להכניס בה?',options:['16','32','48','64'],ans:3,ex:'נפח התיבה = 2·4·8 = 64 סמ"ק. כל קוביה 1 סמ"ק. תוצאה: 64.'},
+    {stem:'אותה תיבה 2×4×8. כמה קוביות בגודל 2×2×2 אפשר להכניס?',options:['4','6','8','12'],ans:2,ex:'לאורך כל מימד: 2/2=1, 4/2=2, 8/2=4. 1·2·4 = 8 קוביות.'},
+    {stem:'תיבה 6×6×6. כמה קוביות 3×3×3 נכנסות?',options:['2','4','6','8'],ans:3,ex:'לאורך כל מימד: 6/3=2. 2·2·2 = 8.'}
+  ];
+  c1.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  /* Q4-6: Wrapping paper */
+  const c2=[
+    {stem:'תיבה שנפחה 30 סמ"ק, אחד הממדים 5 ס"מ, השני 3 ס"מ. רוצים לעטוף אותה בנייר. כמה סמ"ר נייר דרוש (בדיוק שטח הפנים)?',options:['30','46','62','94'],ans:2,ex:'ממד 3: c = 30/(5·3) = 2. שטח פנים = 2·(5·3+5·2+3·2) = 2·(15+10+6) = 62 סמ"ר.'},
+    {stem:'תיבה קטנה 2×2×3. האם נייר בשטח 35 סמ"ר מספיק לעטיפתה?',options:['כן, בדיוק','כן, עם עודף','לא מספיק','תלוי בכיוון'],ans:2,ex:'שטח פנים = 2·(4+6+6) = 32 סמ"ר. 35 > 32 → כן, מספיק עם עודף.'},
+    {stem:'מפעל עוטף קופסאות נעליים 30×20×10 ס"מ. כמה סמ"ר נייר לכל קופסה?',options:['600','1,600','2,200','6,000'],ans:2,ex:'S = 2·(30·20 + 30·10 + 20·10) = 2·(600+300+200) = 2,200 סמ"ר.'}
+  ];
+  c2.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  /* Q7-9: Milk cartons 1000 cc */
+  const c3=[
+    {stem:'מפעל משווק חלב באריזות שנפחן 1,000 סמ"ק. אילו ממדים לא מתאימים?',options:['10×10×10','5×10×20','4×5×50','10×20×30'],ans:3,ex:'10·10·10 = 1,000 ✓. 5·10·20 = 1,000 ✓. 4·5·50 = 1,000 ✓. 10·20·30 = 6,000 ✗ (לא 1,000).'},
+    {stem:'אריזת חלב 1,000 סמ"ק בצורת קובייה. מהם ממדיה?',options:['5×5×5','8×8×8','10×10×10','15×15×15'],ans:2,ex:'a³ = 1,000 → a = 10 ס"מ.'},
+    {stem:'קופסת 1 ליטר (1,000 סמ"ק) שממדיה 10×10×c. מה c?',options:['1','5','10','100'],ans:2,ex:'10·10·c = 1000 → c = 10.'}
+  ];
+  c3.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  /* Q10-12: Doubling one dim — volume */
+  const c4=[
+    {stem:'תיבה ממדיה a=16, b=5, c=7. מגדילים את a פי 2. פי כמה גדל הנפח?',options:['פי 1','פי 2','פי 4','פי 8'],ans:1,ex:'נפח חדש = 2a·b·c = 2·(abc). פי 2 בדיוק.'},
+    {stem:'נפח מקורי של תיבה 16×5×7 ומוכפלים a פי 2. מה הנפח החדש?',options:['560','720','1,120','1,400'],ans:2,ex:'נפח מקורי = 560. חדש = 2·560 = 1,120.'},
+    {stem:'נפח תיבה לא משתנה, אך מקטינים ממד אחד פי 2. מה קרה לממד השני?',options:['הוכפל פי 2','הוכפל פי 4','הוקטן פי 2','לא השתנה'],ans:0,ex:'כדי לשמור על הנפח: אם ממד אחד קטן פי 2, ממד אחר צריך לגדול פי 2.'}
+  ];
+  c4.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  /* Q13-15: Is the box necessarily a cube? */
+  const c5=[
+    {stem:'נתונה תיבה שנפחה 125 סמ"ק ואחד מממדיה 5 ס"מ. יואב טוען שהתיבה קובייה בהכרח. האם הוא צודק?',options:['צודק','לא צודק','צודק רק אם עוד ממד 5','לא ניתן לדעת'],ans:1,ex:'לא צודק. דוגמה: 5×5×5 = 125 (קובייה), אך גם 5×25×1 = 125 (תיבה לא קובייתית). יואב לא צודק.'},
+    {stem:'תיבה נפח 27 סמ"ק ואחד הממדים 3 ס"מ. האם בהכרח קובייה?',options:['כן','לא','כן רק אם b=c','לא ניתן לדעת'],ans:1,ex:'לא. דוגמה: 3×3×3=27 ✓ אך גם 3×9×1=27, או 3×1×9.'},
+    {stem:'קובייה שנפחה 1,000 סמ"ק. מהו שטח הפנים שלה?',options:['100','400','600','1,000'],ans:2,ex:'a³=1000 → a=10. שטח פנים קובייה = 6a² = 6·100 = 600.'}
+  ];
+  c5.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  return qs;
+}
+
+function generateQuestions(level){
+  if(level==='easy') return genEasy();
+  if(level==='medium') return genMedium();
+  if(level==='hard') return genHard();
+  return genChallenge();
+}
+
+function renderLevelTabs(){
+  const container=document.getElementById('levelTabs');
+  container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(lv=>{
+    const btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    const done=scores[lv].filter(s=>s===1).length;
+    const total=LEVEL_COUNTS[lv];
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+total+')</span>':'');
+    btn.onclick=()=>switchLevel(lv);
+    container.appendChild(btn);
+  });
+}
+
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv]) questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+
+function updateLevelProgress(){
+  const lv=state.level;const total=LEVEL_COUNTS[lv];
+  const done=answered[lv].filter(a=>a).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+
+function renderQuestion(){
+  const lv=state.level;const idx=state.qIndex;
+  const qs=questions[lv];
+  if(!qs) return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  const q=qs[idx];
+  const area=document.getElementById('questionArea');
+  const isAnswered=answered[lv][idx];
+
+  let html='<div class="q-card"><div class="q-number">שאלה '+(idx+1)+' מתוך '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach((opt,i)=>{
+      const letter=LETTERS[i];
+      let cls='q-opt';
+      if(isAnswered){
+        cls+=' disabled';
+        if(i===q.answer) cls+=' correct';
+        else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel']) cls+=' wrong';
+      }
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>בדקו</button>';
+  } else if(q.type==='input'||q.type==='input-text'){
+    html+='<div class="q-input-row"><input type="'+(q.type==='input'?'number':'text')+'" class="q-input" id="qInput" placeholder="תשובה" dir="ltr" aria-label="תשובה">';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">בדקו</button>';
+    html+='</div>';
+    if(isAnswered){
+      const inp=q.type==='input'?q.answer:(q.display||q.answer[0]);
+      html+='<div style="margin-top:4px;font-weight:700;direction:ltr">תשובה: '+inp+'</div>';
+    }
+  }
+
+  if(isAnswered){
+    const isCorrect=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'✅ נכון! ':'❌ ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(el=>{
+      el.onclick=()=>{
+        area.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+  const inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){
+    inp.focus();
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkInput()});
+  }
+
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'סיום':'הבא ←';
+}
+
+window.checkMC=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const selected=document.querySelector('.q-opt.selected');
+  if(!selected) return;
+  const si=parseInt(selected.dataset.i);
+  const isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  answered[lv][idx+'_sel']=si;
+
+  document.querySelectorAll('.q-opt').forEach((el,i)=>{
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer) el.classList.add('correct');
+    else if(i===si&&!isCorrect) el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון מאוד!','✅ יפה!'])+' ':'❌ לא נכון. ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkInput=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inp=document.getElementById('qInput');
+  const val=inp.value.trim();
+  if(!val) return;
+  let isCorrect=false;
+  if(q.type==='input'){
+    const num=parseFloat(val.replace(',','.'));
+    if(Array.isArray(q.answer)) isCorrect=q.answer.some(a=>Math.abs(a-num)<1e-9);
+    else isCorrect=Math.abs(q.answer-num)<1e-9;
+  } else {
+    const norm=val.replace(/\s+/g,'').toLowerCase();
+    isCorrect=q.answer.some(a=>a.replace(/\s+/g,'').toLowerCase()===norm);
+  }
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');
+  inp.disabled=true;
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון!'])+' ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+function nextQuestion(){
+  const lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function')showAuthModal();
+    return;
+  }
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+
+function renderLevelComplete(){
+  const lv=state.level;
+  const correct=scores[lv].filter(s=>s===1).length;
+  const total=LEVEL_COUNTS[lv];
+  const pct=Math.round(correct/total*100);
+  const scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  const emoji=pct>=80?'🎉':pct>=50?'👏':'💪';
+
+  document.getElementById('questionArea').innerHTML=`
+    <div class="q-card"><div class="level-complete">
+      <div class="big-emoji">${emoji}</div>
+      <h2>סיימתם את רמת "${LEVEL_NAMES[lv]}"!</h2>
+      <div class="score-display${scoreClass}">${correct} / ${total}</div>
+      <p style="color:var(--text-light);margin-bottom:16px">${pct}% הצלחה</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="mini-btn" onclick="retryLevel()">🔄 נסו שוב</button>
+        ${lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">▶ לרמה הבאה</button>':''}
+      </div>
+    </div></div>`;
+
+  if(pct>=80) showConfetti();
+  saveState();
+}
+
+window.retryLevel=function(){
+  const lv=state.level;
+  scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);
+  state.qIndex=0;
+  renderLevelTabs();renderQuestion();saveState();
+};
+
+window.nextLevel=function(){
+  const order=['easy','medium','hard','challenge'];
+  const ci=order.indexOf(state.level);
+  if(ci<order.length-1) switchLevel(order[ci+1]);
+};
+
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.section===sec);
+  });
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+function showConfetti(){
+  const box=document.getElementById('confettiBox');
+  box.innerHTML='';
+  const colors=['#2563eb','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';
+    c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(()=>box.innerHTML='',5000);
+}
+
+function init(){
+  loadState();
+  Object.keys(LEVEL_COUNTS).forEach(lv=>{
+    if(!scores[lv]||!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice') switchSection('practice');
+}
+init();
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+</body>
+</html>

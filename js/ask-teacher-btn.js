@@ -7,6 +7,12 @@
   // ===== CSS =====
   const style = document.createElement('style');
   style.textContent = `
+    /* reserve space at page bottom so the floating button never covers content/nav buttons */
+    body { padding-bottom: 100px !important; }
+    @media (max-width: 768px) {
+      body { padding-bottom: 110px !important; }
+    }
+
     .ask-teacher-float {
       position: fixed;
       bottom: 24px;

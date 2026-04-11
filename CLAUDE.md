@@ -100,6 +100,23 @@ my-teaching-site/
 
 **להוסיף גם `data-premium`** לחלקי התוכן שיש לנעול לפי הכללים בסעיף "מערכת נעילת תכנים" למטה. טעינת הסקריפט לבדה לא נועלת כלום — היא רק מאפשרת את הלוגיקה. הנעילה האמיתית באה ממאפייני HTML או מתנאים ב-JS של הקובץ.
 
+### חובה: כפתור "שאל את המורה" בכל קובץ שיעור
+בכל קובץ שיעור (בכל שלב — preschool, elementary, middle, high, bagrut) **חובה** לטעון את `js/ask-teacher-btn.js` בנוסף ל-`auth-gate.js`. הסקריפט מוסיף כפתור צף 🦆 בפינה השמאלית-תחתונה שמעביר ל-`ask-teacher.html` עם הקשר (נושא/רמה/שאלה) מה-URL.
+
+**הנתיב משתנה לפי עומק הקובץ — זהה ל-auth-gate.js:**
+- עומק 4 (`materials/{stage}/{subject}/grade-N/file.html`):
+  ```html
+  <script src="../../../../js/auth-gate.js"></script>
+  <script src="../../../../js/ask-teacher-btn.js"></script>
+  ```
+- עומק 3 (`materials/preschool/prep/file.html`, `materials/elementary/holidays/file.html` וכו'):
+  ```html
+  <script src="../../../js/auth-gate.js"></script>
+  <script src="../../../js/ask-teacher-btn.js"></script>
+  ```
+
+**אל תוסיף** את `ask-teacher-btn.js` לדפי השורש של האתר (index, about, services, materials, duckme, contact). הכפתור שם מיותר — הוא רק לדפי תרגיל/הקניה.
+
 **קבצי שיעור שמנהלים רמות דינמית ב-JS** (כמו `match-letters.html` שיש לו state פנימי של 15 רמות) — לא ניתן להוסיף להם `data-premium` סטטי. במקום, להוסיף בתחילת הפונקציה שמטעינה רמה:
 ```js
 if (typeof AuthState !== 'undefined' && !AuthState.isLoggedIn() && level > 1) {
@@ -312,3 +329,4 @@ if (typeof AuthState !== 'undefined' && !AuthState.isLoggedIn() && level > 1) {
 - אל תוסיף נעילה לתיכון/בגרות
 - אל תוסיף `data-auth-locked` לפריטי קטלוג ב-materials.html — אף פעם, בשום שלב. כל קישור לשיעור בקטלוג פתוח לכולם; הנעילה היא רק בתוך השיעור.
 - אל תשנה את `js/main.js` בלי סיבה — הוא יציב והפונקציונליות שלו (טאבים, פילטרים, badge חדש) משמשת את כל האתר
+- אל תשכח להוסיף `<script src="{path}/js/ask-teacher-btn.js"></script>` לכל קובץ שיעור חדש (מיד אחרי `auth-gate.js`, באותו עומק נתיב). דף `ask-teacher.html` בשורש הוא יעד הניווט של הכפתור.

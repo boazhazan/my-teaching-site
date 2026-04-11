@@ -716,6 +716,15 @@ function renderQuestion(){
   const qs=questions[lv];
   if(!qs) return;
   if(idx>=qs.length){renderLevelComplete();return}
+  // AUTH GATE: Q2+ locked for non-logged-in users
+  if(idx>0 && typeof AuthState!=='undefined' && !AuthState.isLoggedIn()){
+    const lockArea=document.getElementById('questionArea');
+    lockArea.innerHTML='<div class="q-card" data-premium style="text-align:center;padding:40px 20px"><div class="q-number">שאלה '+(idx+1)+' מתוך '+qs.length+'</div><div style="font-size:3.5rem;margin:24px 0">🔒</div><div style="font-size:1.15rem;color:var(--text);font-weight:700;margin-bottom:12px">תוכן זמין למנויים</div><div style="color:var(--text-light);margin-bottom:20px">שאלה 1 פתוחה להתנסות — להמשך תרגול יש להירשם</div><button class="q-check-btn" onclick="if(typeof showAuthModal===\'function\')showAuthModal()">לפתיחת גישה מלאה</button></div>';
+    document.getElementById('qPrev').disabled=idx===0;
+    document.getElementById('qNext').textContent=idx>=qs.length-1?'סיום':'הבא ←';
+    updateLevelProgress();
+    return;
+  }
   const q=qs[idx];
   const area=document.getElementById('questionArea');
   const isAnswered=answered[lv][idx];

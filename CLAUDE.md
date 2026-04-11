@@ -165,7 +165,7 @@ if (typeof AuthState !== 'undefined' && !AuthState.isLoggedIn() && level > 1) {
 **אל תוסיף נעילה.** הספציפיקציה עוד לא נסגרה — להשאיר פתוח לחלוטין עד הוראה מפורשת.
 
 #### דף materials.html
-בכל טאב (`<div class="materials-content" id="tab-...">`) — הפריט הראשון ב-`<div class="materials-list">` נשאר פתוח, כל השאר מקבלים `data-auth-locked="true"`. **חל רק על** elementary/middle/high/bagrut. **טאבי preschool נשארים פתוחים לחלוטין** (החלטה מודעת — לתת לילדים גישה חופשית לתכנים הצעירים).
+**אל תוסיף `data-auth-locked` לפריטי קטלוג — אף פעם.** כל השיעורים בקטלוג פתוחים לחיצה לכולם. הנעילה קורית **רק בתוך השיעור** (שאלה/תרגיל 1 פתוח, 2+ נעול). הקטלוג הוא רק רשימת כותרות — אסור לחסום כניסה לשיעור עצמו.
 
 ---
 
@@ -204,7 +204,7 @@ if (typeof AuthState !== 'undefined' && !AuthState.isLoggedIn() && level > 1) {
 
 ### כללי הוספה
 1. **אל תוסיף ידנית** את הבדג' `<span class="material-badge">חדש!</span>` — `js/main.js` מוסיף אותו אוטומטית לכל פריט עם `data-created` שתאריכו תוך 3 הימים האחרונים. הוספה ידנית = בדג' כפול.
-2. **הפריט הראשון בכל materials-list** נשאר פתוח. **כל פריט נוסף** חייב לקבל `data-auth-locked="true"` (חוץ מטאבי preschool).
+2. **אין `data-auth-locked` בקטלוג.** כל קישור לשיעור בקטלוג פתוח לכולם. הנעילה היא רק בתוך השיעור עצמו (תרגיל/שאלה 1 פתוחים, 2+ נעול).
 3. **תגיות (`data-tags`)** — preschool משתמש בתגיות עבריות מתוך הרשימה הסגורה למטה. שלבים אחרים יכולים להמציא תגיות חופשיות (אבל עקביות).
 
 ### תגיות preschool הסגורות (לפילטר)
@@ -310,5 +310,5 @@ if (typeof AuthState !== 'undefined' && !AuthState.isLoggedIn() && level > 1) {
 - אל תשתמש ב-`unicode-bidi:isolate` בביטויי math — תמיד `embed`
 - אל תשתמש ב-`−` (minus sign) בתוך JS literals
 - אל תוסיף נעילה לתיכון/בגרות
-- אל תוסיף `data-auth-locked` לפריטי preschool ב-materials.html
+- אל תוסיף `data-auth-locked` לפריטי קטלוג ב-materials.html — אף פעם, בשום שלב. כל קישור לשיעור בקטלוג פתוח לכולם; הנעילה היא רק בתוך השיעור.
 - אל תשנה את `js/main.js` בלי סיבה — הוא יציב והפונקציונליות שלו (טאבים, פילטרים, badge חדש) משמשת את כל האתר

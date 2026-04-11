@@ -1,0 +1,918 @@
+<!--
+  Title: צלעות המלבן
+  Unit: מלבנים
+  Subject: מתמטיקה
+  Grade: ז׳
+  Lesson: 2
+  Tags: גיאומטריה, מלבנים, צלעות
+  Ages: 12-13
+  Icon: ▭
+  Badge: חדש!
+  Description: תכונות צלעות המלבן — צלעות נגדיות שוות ומקבילות, צלעות סמוכות מאונכות
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>צלעות המלבן | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid var(--accent);padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
+.step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:.85em;margin:0 2px;line-height:1}
+.frac .num{border-bottom:1.5px solid currentColor;padding:0 4px}
+.frac .den{padding:0 4px}
+.mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.mini-table th,.mini-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:1rem}
+.mini-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.mini-table td{background:var(--bg)}
+.mini-input{width:60px;padding:6px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:1rem;font-family:inherit;font-weight:700;transition:.3s}
+.mini-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.mini-input.correct{border-color:var(--success);background:#ecfdf5}
+.mini-input.wrong{border-color:var(--error);background:#fef2f2}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.reveal{display:none;animation:fadeIn .5s ease}
+.reveal.show{display:block}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-stem code,.q-stem .expr{font-size:1.1em}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;transition:.25s}
+.q-opt.selected .q-opt-letter{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-opt.correct .q-opt-letter{background:var(--success);color:#fff;border-color:var(--success)}
+.q-opt.wrong .q-opt-letter{background:var(--error);color:#fff;border-color:var(--error)}
+.q-input-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-input{width:120px;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1.1rem;font-family:inherit;font-weight:700;text-align:center;transition:.3s;direction:ltr}
+.q-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+.q-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.q-table th,.q-table td{border:2px solid var(--border);padding:8px 14px;text-align:center;font-size:1rem;min-width:60px}
+.q-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.q-check-btn{padding:10px 28px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;box-shadow:var(--shadow)}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.92rem;animation:fadeIn .3s}
+.q-feedback.correct{background:#ecfdf5;border-right:4px solid var(--success);color:#065f46}
+.q-feedback.wrong{background:#fef2f2;border-right:4px solid var(--error);color:#991b1b}
+.q-nav{display:flex;justify-content:space-between;margin-top:16px}
+.q-nav-btn{padding:10px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+.level-complete{text-align:center;padding:24px;animation:fadeIn .5s}
+.level-complete .big-emoji{font-size:4rem;margin-bottom:12px}
+.level-complete h2{font-size:1.4rem;color:var(--primary-dark);margin-bottom:8px}
+.level-complete .score-display{font-size:1.8rem;font-weight:800;color:var(--success);margin-bottom:16px}
+.level-complete .score-display.medium-score{color:var(--accent)}
+.level-complete .score-display.low-score{color:var(--error)}
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}100%{transform:translateY(105vh) rotate(720deg) scale(.3);opacity:0}}
+.print-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer;font-size:1rem;box-shadow:var(--shadow);transition:.25s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.print-btn:hover{background:var(--primary-dark);transform:scale(1.1)}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){
+  .container{padding:0 10px 30px}
+  .step-card,.q-card{padding:18px 14px}
+  .step-title{font-size:1.15rem}
+  .step-summary-grid{grid-template-columns:1fr}
+  .section-toggle{max-width:280px;margin:12px auto}
+  .section-btn{font-size:.88rem;padding:8px 14px}
+  .q-opt{padding:10px 12px;font-size:.9rem}
+  .topbar-title{font-size:.9rem}
+}
+@media print{
+  .topbar,.section-toggle,.step-nav,.q-nav,.print-btn,.level-tabs,.confetti-container,.q-check-btn{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .step-card,.q-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+  .container{max-width:100%}
+  .q-feedback{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">▭ כיתה ז׳ — צלעות המלבן</span>
+  <div style="display:flex;align-items:center;gap:10px"><button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button><a href="../../../../materials.html">← חזרה לחומרי לימוד</a></div>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+
+<section id="learnSection">
+  <div class="step-progress">
+    <div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div>
+    <div class="step-progress-text" id="stepText"></div>
+  </div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress">
+    <div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div>
+    <div class="level-progress-text" id="levelText"></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+
+</div>
+
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const today=new Date();const dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+let rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(arr){return arr[Math.floor(R()*arr.length)]}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function frac(n,d){return '<span class="frac"><span class="num">'+n+'</span><span class="den">'+d+'</span></span>'}
+
+const boyNames=["דני","יואב","עמית","אורי","נועם","גיא","איתי","רון","תומר","עידו"];
+const girlNames=["מיכל","נועה","שירה","תמר","רונית","יעל","דנה","אורית","הילה","ליאת"];
+function boyName(){return pick(boyNames)}
+function girlName(){return pick(girlNames)}
+function anyName(){return R()>.5?boyName():girlName()}
+
+const LETTERS=['א','ב','ג','ד'];
+
+/* ===== SVG HELPERS (geometry drawings) ===== */
+function svgPerp(a,b){
+  return '<svg width="220" height="140" viewBox="0 0 220 140" style="display:block;margin:10px auto">'+
+    '<line x1="20" y1="70" x2="200" y2="70" stroke="#4a9eda" stroke-width="3"/>'+
+    '<line x1="110" y1="15" x2="110" y2="125" stroke="#4a9eda" stroke-width="3"/>'+
+    '<rect x="95" y="55" width="15" height="15" fill="none" stroke="#1a2f5a" stroke-width="2"/>'+
+    '<text x="205" y="68" font-size="16" font-weight="700" fill="#1a2f5a">'+a+'</text>'+
+    '<text x="115" y="14" font-size="16" font-weight="700" fill="#1a2f5a">'+b+'</text>'+
+    '</svg>';
+}
+function svgPar(a,b){
+  return '<svg width="220" height="140" viewBox="0 0 220 140" style="display:block;margin:10px auto">'+
+    '<line x1="20" y1="50" x2="200" y2="50" stroke="#4a9eda" stroke-width="3"/>'+
+    '<line x1="20" y1="100" x2="200" y2="100" stroke="#4a9eda" stroke-width="3"/>'+
+    '<polygon points="105,44 118,50 105,56" fill="#1a2f5a"/>'+
+    '<polygon points="105,94 118,100 105,106" fill="#1a2f5a"/>'+
+    '<text x="205" y="48" font-size="16" font-weight="700" fill="#1a2f5a">'+a+'</text>'+
+    '<text x="205" y="98" font-size="16" font-weight="700" fill="#1a2f5a">'+b+'</text>'+
+    '</svg>';
+}
+function svgNone(a,b){
+  return '<svg width="220" height="140" viewBox="0 0 220 140" style="display:block;margin:10px auto">'+
+    '<line x1="20" y1="30" x2="200" y2="115" stroke="#4a9eda" stroke-width="3"/>'+
+    '<line x1="200" y1="40" x2="20" y2="115" stroke="#4a9eda" stroke-width="3"/>'+
+    '<text x="200" y="25" font-size="16" font-weight="700" fill="#1a2f5a">'+a+'</text>'+
+    '<text x="8" y="25" font-size="16" font-weight="700" fill="#1a2f5a">'+b+'</text>'+
+    '</svg>';
+}
+function svg3perp(a,b,c){
+  /* a⊥c, b⊥c  → a∥b */
+  return '<svg width="240" height="160" viewBox="0 0 240 160" style="display:block;margin:10px auto">'+
+    '<line x1="20" y1="50" x2="220" y2="50" stroke="#4a9eda" stroke-width="3"/>'+
+    '<line x1="20" y1="110" x2="220" y2="110" stroke="#4a9eda" stroke-width="3"/>'+
+    '<line x1="120" y1="15" x2="120" y2="145" stroke="#f59e0b" stroke-width="3"/>'+
+    '<rect x="105" y="50" width="15" height="15" fill="none" stroke="#1a2f5a" stroke-width="2"/>'+
+    '<rect x="105" y="110" width="15" height="15" fill="none" stroke="#1a2f5a" stroke-width="2"/>'+
+    '<text x="225" y="48" font-size="16" font-weight="700" fill="#1a2f5a">'+a+'</text>'+
+    '<text x="225" y="108" font-size="16" font-weight="700" fill="#1a2f5a">'+b+'</text>'+
+    '<text x="124" y="14" font-size="16" font-weight="700" fill="#1a2f5a">'+c+'</text>'+
+    '</svg>';
+}
+function svg3pp(a,b,c){
+  /* a∥b, c⊥a (implies c⊥b) */
+  return '<svg width="240" height="160" viewBox="0 0 240 160" style="display:block;margin:10px auto">'+
+    '<line x1="20" y1="50" x2="220" y2="50" stroke="#4a9eda" stroke-width="3"/>'+
+    '<line x1="20" y1="110" x2="220" y2="110" stroke="#4a9eda" stroke-width="3"/>'+
+    '<polygon points="155,44 168,50 155,56" fill="#1a2f5a"/>'+
+    '<polygon points="155,104 168,110 155,116" fill="#1a2f5a"/>'+
+    '<line x1="80" y1="15" x2="80" y2="145" stroke="#f59e0b" stroke-width="3"/>'+
+    '<rect x="80" y="50" width="15" height="15" fill="none" stroke="#1a2f5a" stroke-width="2"/>'+
+    '<text x="225" y="48" font-size="16" font-weight="700" fill="#1a2f5a">'+a+'</text>'+
+    '<text x="225" y="108" font-size="16" font-weight="700" fill="#1a2f5a">'+b+'</text>'+
+    '<text x="84" y="14" font-size="16" font-weight="700" fill="#1a2f5a">'+c+'</text>'+
+    '</svg>';
+}
+function svgRect(A,B,C,D,opts){
+  /* Rectangle ABCD with corners: A top-right, B top-left, C bottom-left, D bottom-right.
+     opts: {marks:[...], parallel:bool, eq:bool, lbls:{top,left,bottom,right}} */
+  opts=opts||{};
+  const x1=40,y1=30,x2=200,y2=120;
+  let s='<svg width="240" height="160" viewBox="0 0 240 160" style="display:block;margin:10px auto">';
+  s+='<rect x="'+x1+'" y="'+y1+'" width="'+(x2-x1)+'" height="'+(y2-y1)+'" fill="none" stroke="#4a9eda" stroke-width="3"/>';
+  if(opts.angles!==false){
+    s+='<rect x="'+x1+'" y="'+y1+'" width="12" height="12" fill="none" stroke="#1a2f5a" stroke-width="2"/>';
+    s+='<rect x="'+(x2-12)+'" y="'+y1+'" width="12" height="12" fill="none" stroke="#1a2f5a" stroke-width="2"/>';
+    s+='<rect x="'+(x2-12)+'" y="'+(y2-12)+'" width="12" height="12" fill="none" stroke="#1a2f5a" stroke-width="2"/>';
+    s+='<rect x="'+x1+'" y="'+(y2-12)+'" width="12" height="12" fill="none" stroke="#1a2f5a" stroke-width="2"/>';
+  }
+  if(opts.parallel){
+    /* double arrows on top/bottom (horizontal sides) */
+    s+='<polygon points="115,'+(y1-6)+' 128,'+y1+' 115,'+(y1+6)+'" fill="#1a2f5a"/>';
+    s+='<polygon points="115,'+(y2-6)+' 128,'+y2+' 115,'+(y2+6)+'" fill="#1a2f5a"/>';
+    /* single arrows on left/right */
+    s+='<polygon points="'+(x1-6)+',70 '+x1+',83 '+(x1+6)+',70" fill="#f59e0b"/>';
+    s+='<polygon points="'+(x2-6)+',70 '+x2+',83 '+(x2+6)+',70" fill="#f59e0b"/>';
+  }
+  if(opts.eq){
+    /* tick marks for equal sides: 1 tick on top/bottom, 2 on left/right */
+    s+='<line x1="118" y1="'+(y1-5)+'" x2="122" y2="'+(y1+5)+'" stroke="#1a2f5a" stroke-width="2"/>';
+    s+='<line x1="118" y1="'+(y2-5)+'" x2="122" y2="'+(y2+5)+'" stroke="#1a2f5a" stroke-width="2"/>';
+    s+='<line x1="'+(x1-5)+'" y1="71" x2="'+(x1+5)+'" y2="76" stroke="#f59e0b" stroke-width="2"/>';
+    s+='<line x1="'+(x1-5)+'" y1="79" x2="'+(x1+5)+'" y2="84" stroke="#f59e0b" stroke-width="2"/>';
+    s+='<line x1="'+(x2-5)+'" y1="71" x2="'+(x2+5)+'" y2="76" stroke="#f59e0b" stroke-width="2"/>';
+    s+='<line x1="'+(x2-5)+'" y1="79" x2="'+(x2+5)+'" y2="84" stroke="#f59e0b" stroke-width="2"/>';
+  }
+  /* Corner labels: A=top-right, B=top-left, C=bottom-left, D=bottom-right */
+  s+='<text x="'+(x2+5)+'" y="'+(y1-5)+'" font-size="16" font-weight="700" fill="#1a2f5a">'+A+'</text>';
+  s+='<text x="'+(x1-15)+'" y="'+(y1-5)+'" font-size="16" font-weight="700" fill="#1a2f5a">'+B+'</text>';
+  s+='<text x="'+(x1-15)+'" y="'+(y2+18)+'" font-size="16" font-weight="700" fill="#1a2f5a">'+C+'</text>';
+  s+='<text x="'+(x2+5)+'" y="'+(y2+18)+'" font-size="16" font-weight="700" fill="#1a2f5a">'+D+'</text>';
+  /* Optional length labels */
+  if(opts.lbls){
+    if(opts.lbls.top)    s+='<text x="115" y="'+(y1-10)+'" font-size="14" font-weight="700" fill="#0f766e">'+opts.lbls.top+'</text>';
+    if(opts.lbls.bottom) s+='<text x="115" y="'+(y2+30)+'" font-size="14" font-weight="700" fill="#0f766e">'+opts.lbls.bottom+'</text>';
+    if(opts.lbls.left)   s+='<text x="'+(x1-30)+'" y="80" font-size="14" font-weight="700" fill="#0f766e">'+opts.lbls.left+'</text>';
+    if(opts.lbls.right)  s+='<text x="'+(x2+10)+'" y="80" font-size="14" font-weight="700" fill="#0f766e">'+opts.lbls.right+'</text>';
+  }
+  s+='</svg>';
+  return s;
+}
+function svg4lines(a,b,c,d){
+  /* a∥b (horizontal), c⊥a (vertical), d slanted diagonal (unrelated) */
+  return '<svg width="270" height="180" viewBox="0 0 270 180" style="display:block;margin:10px auto">'+
+    '<line x1="20" y1="60" x2="250" y2="60" stroke="#4a9eda" stroke-width="3"/>'+
+    '<line x1="20" y1="120" x2="250" y2="120" stroke="#4a9eda" stroke-width="3"/>'+
+    '<polygon points="160,54 173,60 160,66" fill="#1a2f5a"/>'+
+    '<polygon points="160,114 173,120 160,126" fill="#1a2f5a"/>'+
+    '<line x1="90" y1="20" x2="90" y2="165" stroke="#f59e0b" stroke-width="3"/>'+
+    '<rect x="75" y="60" width="15" height="15" fill="none" stroke="#1a2f5a" stroke-width="2"/>'+
+    '<line x1="190" y1="25" x2="250" y2="165" stroke="#10b981" stroke-width="3"/>'+
+    '<text x="255" y="58" font-size="16" font-weight="700" fill="#1a2f5a">'+a+'</text>'+
+    '<text x="255" y="118" font-size="16" font-weight="700" fill="#1a2f5a">'+b+'</text>'+
+    '<text x="94" y="18" font-size="16" font-weight="700" fill="#1a2f5a">'+c+'</text>'+
+    '<text x="255" y="178" font-size="16" font-weight="700" fill="#1a2f5a">'+d+'</text>'+
+    '</svg>';
+}
+
+let state={section:'learn',step:0,level:'easy',qIndex:0};
+let scores={easy:[],medium:[],hard:[],challenge:[]};
+let answered={easy:[],medium:[],hard:[],challenge:[]};
+let questions={easy:null,medium:null,hard:null,challenge:null};
+const LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+const LEVEL_NAMES={easy:'קל',medium:'בינוני',hard:'קשה',challenge:'אתגר'};
+const TOTAL_STEPS=7;
+
+const LS_KEY='rectsides_v1_'+dateSeed;
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores,answered,state}))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+const steps=[
+/* Step 1 — What is a rectangle */
+{title:'▭ שלב 1 — מהו מלבן?',render(){return `
+<p><strong>מלבן</strong> הוא מרובע (צורה עם 4 צלעות) שבו <strong>כל ארבע הזוויות ישרות</strong> (כל זווית 90°).</p>
+`+svgRect('A','B','C','D')+`
+<p>במלבן <span class="math-expr">ABCD</span> שלמעלה, כל 4 הפינות מסומנות בריבוע קטן — סימן לזווית ישרה.</p>
+<div class="highlight">💡 <strong>ריבוע</strong> הוא מקרה מיוחד של מלבן — מלבן שבו כל הצלעות שוות זו לזו.</div>
+<p><strong>שאלת הבנה:</strong> כמה זוויות ישרות יש במלבן?</p>
+<div class="quiz-options" id="s1Opts">
+  <div class="quiz-opt" onclick="s1Pick(0)">1</div>
+  <div class="quiz-opt" onclick="s1Pick(1)">2</div>
+  <div class="quiz-opt" onclick="s1Pick(2)">3</div>
+  <div class="quiz-opt" onclick="s1Pick(3)">4</div>
+</div>
+<div id="s1Fb"></div>
+`}},
+
+/* Step 2 — Opposite vs adjacent sides */
+{title:'🔗 שלב 2 — צלעות נגדיות וצלעות סמוכות',render(){return `
+<p>למלבן <span class="math-expr">ABCD</span> יש 4 צלעות: <span class="math-expr">AB</span>, <span class="math-expr">BC</span>, <span class="math-expr">CD</span>, <span class="math-expr">DA</span>.</p>
+<div class="rule-box">📌 <strong>צלעות נגדיות</strong> — לא חולקות קודקוד משותף.<br>במלבן <span class="math-expr">ABCD</span>: <span class="math-expr">AB</span> ↔ <span class="math-expr">CD</span>, ו-<span class="math-expr">BC</span> ↔ <span class="math-expr">AD</span>.</div>
+<div class="rule-box">📌 <strong>צלעות סמוכות</strong> — חולקות קודקוד משותף.<br>דוגמה: <span class="math-expr">AB</span> ו-<span class="math-expr">BC</span> חולקות את הקודקוד <span class="math-expr">B</span>.</div>
+`+svgRect('A','B','C','D')+`
+<p><strong>שאלת הבנה:</strong> מהי הצלע הנגדית ל-<span class="math-expr">AB</span> במלבן <span class="math-expr">ABCD</span>?</p>
+<div class="quiz-options" id="s2Opts">
+  <div class="quiz-opt" onclick="s2Pick(0)"><span dir="ltr" style="unicode-bidi:embed">BC</span></div>
+  <div class="quiz-opt" onclick="s2Pick(1)"><span dir="ltr" style="unicode-bidi:embed">CD</span></div>
+  <div class="quiz-opt" onclick="s2Pick(2)"><span dir="ltr" style="unicode-bidi:embed">AD</span></div>
+  <div class="quiz-opt" onclick="s2Pick(3)"><span dir="ltr" style="unicode-bidi:embed">AC</span></div>
+</div>
+<div id="s2Fb"></div>
+`}},
+
+/* Step 3 — Opposite sides are parallel */
+{title:'⏸️ שלב 3 — תכונה 1: צלעות נגדיות מקבילות',render(){return `
+<div class="rule-box">📌 <strong>תכונה 1:</strong> במלבן, כל זוג צלעות נגדיות הן <strong>מקבילות</strong> זו לזו.<br><br><span class="math-expr">AB ∥ CD</span> וגם <span class="math-expr">BC ∥ AD</span></div>
+`+svgRect('A','B','C','D',{parallel:true})+`
+<p><strong>למה זה נכון?</strong> <span class="math-expr">AB</span> ו-<span class="math-expr">CD</span> שתיהן מאונכות ל-<span class="math-expr">BC</span> (כי הזוויות ישרות). לפי <strong>כלל 1</strong> — שני ישרים שמאונכים לאותו ישר הם מקבילים. לכן <span class="math-expr">AB ∥ CD</span>. אותו נימוק עובד גם ל-<span class="math-expr">BC ∥ AD</span>.</p>
+<p><strong>שאלת הבנה:</strong> במלבן <span class="math-expr">EFGH</span>, מהי הצלע המקבילה ל-<span class="math-expr">EF</span>?</p>
+<div class="quiz-options" id="s3Opts">
+  <div class="quiz-opt" onclick="s3Pick(0)"><span dir="ltr" style="unicode-bidi:embed">FG</span></div>
+  <div class="quiz-opt" onclick="s3Pick(1)"><span dir="ltr" style="unicode-bidi:embed">GH</span></div>
+  <div class="quiz-opt" onclick="s3Pick(2)"><span dir="ltr" style="unicode-bidi:embed">EH</span></div>
+  <div class="quiz-opt" onclick="s3Pick(3)"><span dir="ltr" style="unicode-bidi:embed">EG</span></div>
+</div>
+<div id="s3Fb"></div>
+`}},
+
+/* Step 4 — Opposite sides are equal */
+{title:'📏 שלב 4 — תכונה 2: צלעות נגדיות שוות',render(){return `
+<div class="rule-box">📌 <strong>תכונה 2:</strong> במלבן, כל זוג צלעות נגדיות הן <strong>שוות באורך</strong>.<br><br><span class="math-expr">AB = CD</span> וגם <span class="math-expr">BC = AD</span></div>
+`+svgRect('A','B','C','D',{eq:true})+`
+<p>בסרטוט, הקווים הקצרים על הצלעות מציינים ששני זוגות הצלעות שוות באורך.</p>
+<div class="highlight">💡 דוגמה: אם <span class="math-expr">AB = 8</span> ס"מ, אז גם <span class="math-expr">CD = 8</span> ס"מ.</div>
+<p><strong>שאלת הבנה:</strong> במלבן <span class="math-expr">ABCD</span>, אורך הצלע <span class="math-expr">AB = 12</span> ס"מ. מה אורך הצלע <span class="math-expr">CD</span>?</p>
+<div class="quiz-options" id="s4Opts">
+  <div class="quiz-opt" onclick="s4Pick(0)">6 ס"מ</div>
+  <div class="quiz-opt" onclick="s4Pick(1)">12 ס"מ</div>
+  <div class="quiz-opt" onclick="s4Pick(2)">24 ס"מ</div>
+  <div class="quiz-opt" onclick="s4Pick(3)">אי אפשר לדעת</div>
+</div>
+<div id="s4Fb"></div>
+`}},
+
+/* Step 5 — Adjacent sides are perpendicular */
+{title:'📐 שלב 5 — תכונה 3: צלעות סמוכות מאונכות',render(){return `
+<div class="rule-box">📌 <strong>תכונה 3:</strong> במלבן, כל זוג צלעות סמוכות הן <strong>מאונכות</strong> זו לזו.<br><br><span class="math-expr">AB ⊥ BC</span>, <span class="math-expr">BC ⊥ CD</span>, <span class="math-expr">CD ⊥ DA</span>, <span class="math-expr">DA ⊥ AB</span></div>
+`+svgRect('A','B','C','D')+`
+<p>תכונה זו נובעת ישירות מההגדרה — כל הזוויות במלבן הן 90°, ולכן כל שתי צלעות שנפגשות בקודקוד יוצרות ביניהן זווית ישרה.</p>
+<p><strong>שאלת הבנה:</strong> במלבן <span class="math-expr">PQRS</span>, איזה זוג צלעות <strong>לא</strong> מאונך?</p>
+<div class="quiz-options" id="s5Opts">
+  <div class="quiz-opt" onclick="s5Pick(0)"><span dir="ltr" style="unicode-bidi:embed">PQ ⊥ QR</span></div>
+  <div class="quiz-opt" onclick="s5Pick(1)"><span dir="ltr" style="unicode-bidi:embed">QR ⊥ RS</span></div>
+  <div class="quiz-opt" onclick="s5Pick(2)"><span dir="ltr" style="unicode-bidi:embed">PQ ⊥ RS</span></div>
+  <div class="quiz-opt" onclick="s5Pick(3)"><span dir="ltr" style="unicode-bidi:embed">RS ⊥ SP</span></div>
+</div>
+<div id="s5Fb"></div>
+`}},
+
+/* Step 6 — When is a quadrilateral a rectangle */
+{title:'❓ שלב 6 — מתי מרובע הוא מלבן?',render(){return `
+<p>לא כל מרובע הוא מלבן. הנה הכללים לזיהוי:</p>
+<ul style="margin:10px 20px;line-height:1.9">
+  <li>✅ מרובע עם <strong>4 זוויות ישרות</strong> — <strong>תמיד</strong> מלבן</li>
+  <li>✅ מרובע עם <strong>3 זוויות ישרות</strong> — <strong>גם מלבן</strong> (סכום זוויות במרובע = 360°, ולכן הרביעית חייבת להיות 90°)</li>
+  <li>❌ מרובע עם <strong>כל הצלעות שוות</strong> — <strong>לא בהכרח</strong> מלבן (יכול להיות מעוין עם זוויות לא-ישרות)</li>
+  <li>❌ מרובע עם <strong>צלעות נגדיות שוות</strong> — <strong>לא בהכרח</strong> מלבן (יכול להיות מקבילית)</li>
+</ul>
+<div class="highlight">💡 חשוב: כדי להוכיח שמרובע הוא מלבן, חייבים לבדוק שיש לפחות 3 זוויות ישרות.</div>
+<p><strong>שאלת הבנה:</strong> מרובע <span class="math-expr">KLMN</span> הוא בהכרח מלבן אם:</p>
+<div class="quiz-options" id="s6Opts">
+  <div class="quiz-opt" onclick="s6Pick(0)">כל הצלעות שוות</div>
+  <div class="quiz-opt" onclick="s6Pick(1)">יש בו 3 זוויות ישרות</div>
+  <div class="quiz-opt" onclick="s6Pick(2)">צלעות נגדיות שוות</div>
+  <div class="quiz-opt" onclick="s6Pick(3)">יש לו 4 צלעות</div>
+</div>
+<div id="s6Fb"></div>
+`}},
+
+/* Step 7 — Summary */
+{title:'🏁 שלב 7 — סיכום',render(){return `
+<p style="font-size:1.1rem;text-align:center;margin-bottom:16px">3 תכונות של צלעות המלבן:</p>
+<div class="step-summary-grid">
+  <div class="summary-item"><div class="s-icon">∥</div><div class="s-title">צלעות נגדיות מקבילות</div><div class="s-text"><span class="math-expr">AB ∥ CD</span>, <span class="math-expr">BC ∥ AD</span></div></div>
+  <div class="summary-item"><div class="s-icon">=</div><div class="s-title">צלעות נגדיות שוות</div><div class="s-text"><span class="math-expr">AB = CD</span>, <span class="math-expr">BC = AD</span></div></div>
+  <div class="summary-item"><div class="s-icon">⊥</div><div class="s-title">צלעות סמוכות מאונכות</div><div class="s-text"><span class="math-expr">AB ⊥ BC</span>, <span class="math-expr">BC ⊥ CD</span>, ...</div></div>
+  <div class="summary-item"><div class="s-icon">▭</div><div class="s-title">3 זוויות ישרות = מלבן</div><div class="s-text">מספיקות 3 זוויות ישרות כדי לקבוע שמרובע הוא מלבן.</div></div>
+</div>
+<p style="text-align:center;margin-top:20px"><strong>מוכנים לתרגול? 💪</strong></p>
+`}}
+];
+
+function renderStep(idx){
+  state.step=idx;
+  const s=steps[idx];
+  const fill=((idx+1)/TOTAL_STEPS*100).toFixed(0);
+  document.getElementById('stepFill').style.width=fill+'%';
+  document.getElementById('stepText').textContent='שלב '+(idx+1)+' מתוך '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+s.title+'</div>'+s.render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'לתרגול ←':'הבא ←';
+  if(s.init) s.init();
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+function stepPick(prefix,choice,correct,okMsg,errMsg){
+  const opts=document.querySelectorAll('#'+prefix+'Opts .quiz-opt');
+  opts.forEach((el,i)=>{
+    el.classList.remove('selected','correct-answer','wrong-answer');
+    el.onclick=null;
+    if(i===correct) el.classList.add('correct-answer');
+    else if(i===choice) el.classList.add('wrong-answer');
+  });
+  const fb=document.getElementById(prefix+'Fb');
+  if(choice===correct) fb.innerHTML='<div class="feedback-inline ok">✅ '+okMsg+'</div>';
+  else fb.innerHTML='<div class="feedback-inline err">❌ '+errMsg+'</div>';
+}
+window.s1Pick=function(c){stepPick('s1',c,3,'נכון! במלבן יש 4 זוויות ישרות, אחת בכל פינה.','במלבן יש 4 זוויות — כולן ישרות.')};
+window.s2Pick=function(c){stepPick('s2',c,1,'נכון! AB ו-CD נגדיות — לא חולקות קודקוד.','AB ו-CD אינן חולקות קודקוד, לכן הן נגדיות.')};
+window.s3Pick=function(c){stepPick('s3',c,1,'נכון! EF ו-GH הן הצלעות הנגדיות — ולכן מקבילות.','במלבן EFGH, EF מקבילה ל-GH (צלעות נגדיות).')};
+window.s4Pick=function(c){stepPick('s4',c,1,'נכון! צלעות נגדיות במלבן שוות באורך — לכן CD = AB = 12 ס"מ.','צלעות נגדיות במלבן שוות — AB = CD = 12 ס"מ.')};
+window.s5Pick=function(c){stepPick('s5',c,2,'נכון! PQ ו-RS הן צלעות נגדיות — ולכן מקבילות, לא מאונכות.','רק צלעות סמוכות (שחולקות קודקוד) מאונכות. PQ ו-RS הן נגדיות ולכן מקבילות.')};
+window.s6Pick=function(c){stepPick('s6',c,1,'נכון! 3 זוויות ישרות מספיקות — הרביעית חייבת להיות 90° כי סכום הזוויות במרובע = 360°.','רק 3 זוויות ישרות גוררות שגם הרביעית ישרה. שאר האפשרויות לא מספיקות.')};
+
+/* ===== QUESTION GENERATORS ===== */
+function genEasy(){
+  rng=mulberry32(dateSeed+100);
+  const qs=[];
+  /* Q1-5: Identify opposite/adjacent sides */
+  const e1=[
+    {stem:'במלבן <span class="math-expr">ABCD</span>, מהי הצלע הנגדית ל-<span class="math-expr">AB</span>?',options:['BC','CD','AD','AC'],ans:1,ex:'הצלע הנגדית ל-AB היא CD (לא חולקות קודקוד).'},
+    {stem:'במלבן <span class="math-expr">ABCD</span>, מהי הצלע הנגדית ל-<span class="math-expr">BC</span>?',options:['AB','CD','AD','BD'],ans:2,ex:'הצלע הנגדית ל-BC היא AD.'},
+    {stem:'במלבן <span class="math-expr">KLMN</span>, מהי הצלע הנגדית ל-<span class="math-expr">KL</span>?',options:['LM','MN','KN','KM'],ans:1,ex:'הצלע הנגדית ל-KL היא MN.'},
+    {stem:'במלבן <span class="math-expr">EFGH</span>, איזו צלע סמוכה ל-<span class="math-expr">EF</span>?',options:['GH','FG','EH ו-FG','EG'],ans:2,ex:'EF חולקת קודקוד E עם EH ו-F עם FG — שתיהן סמוכות.'},
+    {stem:'במלבן <span class="math-expr">PQRS</span>, מהי הצלע הסמוכה ל-<span class="math-expr">QR</span> בקודקוד <span class="math-expr">Q</span>?',options:['PQ','RS','PS','QS'],ans:0,ex:'QR חולקת עם PQ את הקודקוד Q.'}
+  ];
+  e1.forEach(q=>qs.push({type:'mc',stem:q.stem+svgRect('A','B','C','D'),options:q.options,answer:q.ans,explanation:q.ex}));
+  /* Q6-10: Compute opposite side length */
+  const e2=[
+    {AB:7,bc:5,q:'במלבן <span class="math-expr">ABCD</span>, <span class="math-expr">AB = 7</span> ס"מ. מה אורך <span class="math-expr">CD</span>?',ans:7,ex:'צלעות נגדיות שוות באורך: CD = AB = 7 ס"מ.'},
+    {AB:9,bc:4,q:'במלבן <span class="math-expr">ABCD</span>, <span class="math-expr">AD = 4</span> ס"מ. מה אורך <span class="math-expr">BC</span>?',ans:4,ex:'צלעות נגדיות שוות: BC = AD = 4 ס"מ.'},
+    {AB:12,bc:8,q:'במלבן <span class="math-expr">ABCD</span>, <span class="math-expr">AB = 12</span> ס"מ, <span class="math-expr">BC = 8</span> ס"מ. מה אורך <span class="math-expr">CD</span>?',ans:12,ex:'CD = AB = 12 ס"מ.'},
+    {AB:15,bc:6,q:'במלבן <span class="math-expr">ABCD</span>, <span class="math-expr">AB = 15</span> ס"מ, <span class="math-expr">BC = 6</span> ס"מ. מה אורך <span class="math-expr">AD</span>?',ans:6,ex:'AD = BC = 6 ס"מ.'},
+    {AB:20,bc:10,q:'במלבן <span class="math-expr">ABCD</span>, <span class="math-expr">AB = 20</span> ס"מ, <span class="math-expr">AD = 10</span> ס"מ. מה אורך <span class="math-expr">CD</span>?',ans:20,ex:'CD = AB = 20 ס"מ.'}
+  ];
+  e2.forEach(q=>{
+    qs.push({type:'mc',stem:q.q+svgRect('A','B','C','D',{lbls:{top:q.AB,right:q.bc}}),options:[String(q.ans-2),String(q.ans),String(q.ans+2),'אי אפשר לדעת'],answer:1,explanation:q.ex});
+  });
+  /* Q11-15: Notation for relationships */
+  const e3=[
+    {stem:'איך כותבים בסימון מתמטי: "AB מקביל ל-CD"?',options:['AB ⊥ CD','AB ∥ CD','AB = CD','AB ≠ CD'],ans:1,ex:'סימן ∥ מציין מקבילות.'},
+    {stem:'איך כותבים בסימון מתמטי: "BC מאונך ל-CD"?',options:['BC ⊥ CD','BC ∥ CD','BC + CD','BC > CD'],ans:0,ex:'סימן ⊥ מציין אנך.'},
+    {stem:'במלבן, איזה משפט <strong>נכון</strong>?',options:['AB ⊥ CD','AB ∥ CD','AB = BC','AB ⊥ AB'],ans:1,ex:'צלעות נגדיות מקבילות.'},
+    {stem:'במלבן, איזה משפט <strong>נכון</strong>?',options:['AB ⊥ BC','AB ∥ BC','AB = BC','BC ⊥ AD'],ans:0,ex:'צלעות סמוכות מאונכות.'},
+    {stem:'איזה זוג צלעות <strong>לא</strong> נגדיות במלבן <span class="math-expr">ABCD</span>?',options:['AB ו-CD','BC ו-AD','AB ו-BC','AD ו-BC'],ans:2,ex:'AB ו-BC חולקות את הקודקוד B — הן סמוכות, לא נגדיות.'}
+  ];
+  e3.forEach(q=>qs.push({type:'mc',stem:q.stem+svgRect('A','B','C','D'),options:q.options,answer:q.ans,explanation:q.ex}));
+  /* Q16-20: True/False about rectangle */
+  const e4=[
+    {stem:'במלבן יש 4 זוויות ישרות.',ans:0,ex:'נכון — זוהי הגדרת המלבן.'},
+    {stem:'במלבן, כל הצלעות שוות באורך.',ans:1,ex:'לא נכון — רק זוגות צלעות נגדיות שוות. אם כל הצלעות שוות, זה ריבוע.'},
+    {stem:'במלבן, צלעות נגדיות מקבילות זו לזו.',ans:0,ex:'נכון — תכונה 1 של המלבן.'},
+    {stem:'במלבן, צלעות סמוכות מקבילות זו לזו.',ans:1,ex:'לא נכון — צלעות סמוכות מאונכות, לא מקבילות.'},
+    {stem:'במלבן, צלעות נגדיות שוות באורך.',ans:0,ex:'נכון — תכונה 2 של המלבן.'}
+  ];
+  e4.forEach(q=>qs.push({type:'mc',stem:q.stem+svgRect('A','B','C','D'),options:['נכון','לא נכון'],answer:q.ans,explanation:q.ex}));
+  return qs;
+}
+
+function genMedium(){
+  rng=mulberry32(dateSeed+200);
+  const qs=[];
+  /* Q1-5: Compute both missing sides */
+  const m1=[
+    {a:12,b:5},{a:10,b:7},{a:14,b:9},{a:20,b:8},{a:16,b:11}
+  ];
+  m1.forEach(q=>{
+    qs.push({type:'mc',stem:'במלבן <span class="math-expr">ABCD</span>, <span class="math-expr">AB = '+q.a+'</span> ס"מ ו-<span class="math-expr">BC = '+q.b+'</span> ס"מ. מהם אורכי <span class="math-expr">CD</span> ו-<span class="math-expr">AD</span>?'+svgRect('A','B','C','D',{lbls:{top:q.a,right:q.b}}),options:['CD = '+q.a+', AD = '+q.b,'CD = '+q.b+', AD = '+q.a,'CD = '+q.a+', AD = '+q.a,'CD = '+q.b+', AD = '+q.b],answer:0,explanation:'צלעות נגדיות שוות: CD = AB = '+q.a+' ס"מ, AD = BC = '+q.b+' ס"מ.'});
+  });
+  /* Q6-10: Is it necessarily a rectangle? */
+  const m2=[
+    {stem:'מרובע שבו 3 זוויות ישרות. האם הוא בהכרח מלבן?',ans:0,ex:'נכון — אם 3 זוויות ישרות, סכום הזוויות במרובע (360°) מכריח שגם הרביעית תהיה ישרה.'},
+    {stem:'מרובע שבו כל הצלעות שוות. האם הוא בהכרח מלבן?',ans:1,ex:'לא — יכול להיות מעוין עם זוויות לא-ישרות.'},
+    {stem:'מרובע שבו 4 זוויות ישרות. האם הוא בהכרח מלבן?',ans:0,ex:'נכון — זוהי ההגדרה של מלבן.'},
+    {stem:'מרובע שבו צלעות נגדיות שוות. האם הוא בהכרח מלבן?',ans:1,ex:'לא — יכול להיות מקבילית (צלעות נגדיות שוות ומקבילות, אבל הזוויות לא בהכרח ישרות).'},
+    {stem:'מרובע שבו 2 זוויות ישרות. האם הוא בהכרח מלבן?',ans:1,ex:'לא — ייתכנו מצבים שבהם שתי הזוויות הנותרות לא ישרות.'}
+  ];
+  m2.forEach(q=>qs.push({type:'mc',stem:q.stem,options:['כן','לא'],answer:q.ans,explanation:q.ex}));
+  /* Q11-15: Two rectangles sharing a side */
+  const m3=[
+    {q:'שני מלבנים <span class="math-expr">ABCD</span> ו-<span class="math-expr">DCEF</span> צמודים לאורך הצלע <span class="math-expr">DC</span>. נתון <span class="math-expr">AB = 8</span> ס"מ. מה אורך <span class="math-expr">DC</span>?',options:['4','6','8','16'],idx:2,ex:'במלבן ABCD, DC נגדית ל-AB, לכן DC = AB = 8.'},
+    {q:'אותם מלבנים. נתון גם <span class="math-expr">EF = 8</span> ס"מ. מה אורך <span class="math-expr">DC</span> (כפי שמופיעה במלבן DCEF)?',options:['4','8','12','16'],idx:1,ex:'במלבן DCEF, DC נגדית ל-EF, לכן DC = EF = 8. (עקבי עם ABCD.)'},
+    {q:'שני מלבנים <span class="math-expr">ABCD</span> ו-<span class="math-expr">BCFE</span> צמודים לאורך <span class="math-expr">BC</span>. נתון <span class="math-expr">AD = 5</span> ס"מ. מה אורך <span class="math-expr">BC</span>?',options:['3','5','10','אי אפשר לדעת'],idx:1,ex:'BC = AD = 5 (צלעות נגדיות במלבן ABCD).'},
+    {q:'מלבן <span class="math-expr">ABCD</span> עם <span class="math-expr">AB = 10</span>. עליו נבנה מלבן <span class="math-expr">EFGH</span> שזהה בגודל. מה אורך <span class="math-expr">EF</span>?',options:['5','10','20','אי אפשר לדעת'],idx:1,ex:'אם המלבן "זהה בגודל" אז EF = AB = 10.'},
+    {q:'מלבן <span class="math-expr">ABCD</span> עם <span class="math-expr">AB = 14</span>, <span class="math-expr">BC = 6</span>. מה היקף המלבן?',options:['20','32','40','84'],idx:2,ex:'היקף = 2·(14+6) = 40 ס"מ.'}
+  ];
+  m3.forEach(q=>qs.push({type:'mc',stem:q.q+svgRect('A','B','C','D'),options:q.options,answer:q.idx,explanation:q.ex}));
+  /* Q16-20: Parallel/perpendicular in rectangle */
+  const m4=[
+    {stem:'במלבן <span class="math-expr">ABCD</span>, איזה זוג <strong>מקביל</strong>?',options:['AB ו-BC','AB ו-CD','BC ו-CD','AC ו-BD'],ans:1,ex:'AB ו-CD צלעות נגדיות ולכן מקבילות.'},
+    {stem:'במלבן <span class="math-expr">ABCD</span>, איזה זוג <strong>מאונך</strong>?',options:['AB ו-CD','BC ו-AD','AB ו-BC','AD ו-BC'],ans:2,ex:'AB ו-BC צלעות סמוכות — מאונכות.'},
+    {stem:'במלבן <span class="math-expr">ABCD</span>, איזה משפט <strong>לא נכון</strong>?',options:['AB ∥ CD','BC ∥ AD','AB ⊥ BC','AB ∥ BC'],ans:3,ex:'AB ו-BC מאונכות (סמוכות), לא מקבילות.'},
+    {stem:'במלבן <span class="math-expr">ABCD</span>, כמה זוגות צלעות מקבילות יש?',options:['1','2','3','4'],ans:1,ex:'יש 2 זוגות: (AB,CD) ו-(BC,AD).'},
+    {stem:'במלבן <span class="math-expr">ABCD</span>, כמה זוגות צלעות סמוכות (מאונכות) יש?',options:['2','3','4','6'],ans:2,ex:'4 זוגות: (AB,BC), (BC,CD), (CD,DA), (DA,AB).'}
+  ];
+  m4.forEach(q=>qs.push({type:'mc',stem:q.stem+svgRect('A','B','C','D'),options:q.options,answer:q.ans,explanation:q.ex}));
+  return qs;
+}
+
+function genHard(){
+  rng=mulberry32(dateSeed+300);
+  const qs=[];
+  /* Q1-5: Distance / perpendicular properties */
+  const h1=[
+    {stem:'במלבן <span class="math-expr">ABCD</span>, <span class="math-expr">AB = 18</span> ס"מ, <span class="math-expr">BC = 7</span> ס"מ. המרחק מ-<span class="math-expr">A</span> לצלע <span class="math-expr">CD</span>?',options:['7','9','11','18'],ans:0,ex:'המרחק מנקודה לישר הוא האנך. AD ⊥ CD ו-AD = BC = 7.'},
+    {stem:'במלבן <span class="math-expr">ABCD</span>, <span class="math-expr">AB = 20</span>, <span class="math-expr">BC = 5</span>. המרחק מ-<span class="math-expr">B</span> לצלע <span class="math-expr">AD</span>?',options:['5','10','15','20'],ans:3,ex:'AB ⊥ AD, לכן המרחק מ-B ל-AD הוא |AB| = 20.'},
+    {stem:'במלבן, אם המרחק מקודקוד <span class="math-expr">A</span> לצלע <span class="math-expr">CD</span> הוא 8, מה אורך <span class="math-expr">BC</span>?',options:['4','8','12','16'],ans:1,ex:'המרחק = AD = BC = 8.'},
+    {stem:'במלבן <span class="math-expr">ABCD</span>, <span class="math-expr">AB = 15</span>, <span class="math-expr">AD = 6</span>. מה היקף המלבן?',options:['21','36','42','90'],ans:2,ex:'היקף = 2·(15+6) = 42.'},
+    {stem:'במלבן <span class="math-expr">ABCD</span> היקף = 24. אם <span class="math-expr">AB = 8</span>, מה אורך <span class="math-expr">BC</span>?',options:['2','4','6','8'],ans:1,ex:'2·(8+BC)=24, BC = 4.'}
+  ];
+  h1.forEach(q=>qs.push({type:'mc',stem:q.stem+svgRect('A','B','C','D'),options:q.options,answer:q.ans,explanation:q.ex}));
+  /* Q6-10: Which is a rectangle */
+  const h2=[
+    {stem:'מרובע <span class="math-expr">KLMN</span> עם כל הצלעות שוות. האם הוא מלבן?',options:['כן, בהכרח','לא בהכרח — ייתכן מעוין שאינו מלבן','לא, אף פעם לא','אי אפשר לדעת'],ans:1,ex:'מעוין עם זוויות לא ישרות הוא דוגמה נגדית.'},
+    {stem:'מרובע <span class="math-expr">KLMN</span> עם 3 זוויות ישרות. האם הוא מלבן?',options:['כן, בהכרח','לא','אי אפשר לדעת','רק אם הצלעות שוות'],ans:0,ex:'סכום הזוויות במרובע = 360°. אם 3 זוויות = 90° כל אחת, הרביעית = 90° בהכרח.'},
+    {stem:'מרובע <span class="math-expr">KLMN</span> עם צלעות נגדיות שוות ומקבילות. האם הוא מלבן?',options:['כן, בהכרח','לא בהכרח — ייתכנה מקבילית לא מלבנית','לא, אף פעם לא','רק אם גם האלכסונים שווים'],ans:1,ex:'זוהי הגדרת מקבילית — לא מספיקה לקבוע שהיא מלבן.'},
+    {stem:'מרובע <span class="math-expr">KLMN</span> עם זווית אחת בלבד ישרה. האם הוא מלבן?',options:['כן','לא','אולי','צריך לחשב'],ans:1,ex:'זווית אחת ישרה לא מספיקה — צריך לפחות 3.'},
+    {stem:'ריבוע הוא...',options:['מלבן','לא מלבן','מקבילית שאינה מלבן','טרפז'],ans:0,ex:'ריבוע הוא מקרה פרטי של מלבן (מלבן עם כל הצלעות שוות).'}
+  ];
+  h2.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  /* Q11-15: Two adjacent rectangles */
+  const h3=[
+    {stem:'שני מלבנים <span class="math-expr">ABCD</span> ו-<span class="math-expr">DCEF</span> צמודים לאורך <span class="math-expr">DC</span>. <span class="math-expr">AB = 10</span>, <span class="math-expr">BC = 4</span>, <span class="math-expr">CE = 6</span>. מה אורך <span class="math-expr">EF</span>?',options:['4','6','10','16'],ans:2,ex:'במלבן DCEF, EF נגדית ל-DC. DC = AB = 10, לכן EF = 10.'},
+    {stem:'אותם מלבנים. מה אורך <span class="math-expr">DF</span>?',options:['4','6','10','16'],ans:1,ex:'במלבן DCEF, DF נגדית ל-CE. DF = CE = 6.'},
+    {stem:'אותם מלבנים. מה <strong>ההיקף הכולל</strong> של הצורה המורכבת (החיצוני בלבד)?',options:['24','30','40','44'],ans:2,ex:'ההיקף הכולל: 2·AB + BC + CE + AD + DF = 2·10 + 4 + 6 + 4 + 6 = 40.'},
+    {stem:'שני מלבנים <span class="math-expr">PQRS</span> ו-<span class="math-expr">SRTU</span> צמודים לאורך <span class="math-expr">SR</span>. <span class="math-expr">PQ = 7</span>, <span class="math-expr">QR = 3</span>. מה אורך <span class="math-expr">SR</span>?',options:['3','7','10','14'],ans:1,ex:'SR = PQ = 7 (צלעות נגדיות במלבן PQRS).'},
+    {stem:'אותה צורה: <span class="math-expr">RT = 5</span>. מה אורך <span class="math-expr">SU</span>?',options:['3','5','7','12'],ans:1,ex:'במלבן SRTU, צלעות נגדיות שוות: SU = RT = 5.'}
+  ];
+  h3.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  /* Q16-20: Complex true/false */
+  const h4=[
+    {stem:'טענה: "אם במרובע 2 זוגות צלעות נגדיות שוות, אז זה מלבן." נכון או לא נכון?',options:['נכון','לא נכון','אי אפשר לדעת'],ans:1,ex:'זוהי הגדרת מקבילית, לא מלבן. מקבילית עם זוויות לא-ישרות היא דוגמה נגדית.'},
+    {stem:'טענה: "במלבן, האלכסונים שווים זה לזה." נכון או לא נכון?',options:['נכון','לא נכון','אי אפשר לדעת'],ans:0,ex:'נכון — זוהי תכונה ידועה של מלבן (נלמד בשיעור הבא).'},
+    {stem:'טענה: "במלבן <span class="math-expr">ABCD</span>, אם <span class="math-expr">AB = BC</span>, אז המלבן הוא ריבוע." נכון או לא נכון?',options:['נכון','לא נכון','אי אפשר לדעת'],ans:0,ex:'נכון — אם שתי צלעות סמוכות שוות, כל 4 הצלעות שוות (מכיוון ש-CD = AB ו-DA = BC).'},
+    {stem:'טענה: "במלבן, הצלעות הסמוכות יכולות להיות שוות." נכון או לא נכון?',options:['נכון','לא נכון','אי אפשר לדעת'],ans:0,ex:'נכון — זה יקרה בדיוק כשהמלבן הוא ריבוע.'},
+    {stem:'טענה: "מרובע עם 4 זוויות שוות זו לזו הוא בהכרח מלבן." נכון או לא נכון?',options:['נכון','לא נכון','אי אפשר לדעת'],ans:0,ex:'נכון — סכום הזוויות = 360°, אז אם כולן שוות, כל אחת 90°.'}
+  ];
+  h4.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  return qs;
+}
+
+function genChallenge(){
+  rng=mulberry32(dateSeed+400);
+  const qs=[];
+  /* Q1-3: Rectangle with equal adjacent sides = square */
+  const c1=[
+    {stem:'במלבן <span class="math-expr">ABCD</span>, כל זוג צלעות סמוכות שוות באורכן. מה ניתן להסיק?',options:['זהו ריבוע','זהו מעוין שאינו ריבוע','אין מספיק מידע','זה לא אפשרי'],ans:0,ex:'אם AB=BC ו-CD=AB (נגדית), ו-AD=BC (נגדית), אז כל 4 שוות = ריבוע.'},
+    {stem:'מלבן <span class="math-expr">ABCD</span> עם <span class="math-expr">AB = 5</span>. כדי שיהיה ריבוע, מה צריך להיות אורך <span class="math-expr">BC</span>?',options:['2.5','5','10','25'],ans:1,ex:'בריבוע BC = AB = 5.'},
+    {stem:'במלבן <span class="math-expr">ABCD</span>, היקף = 20. בנוסף, <span class="math-expr">AB = BC</span>. מה אורך כל צלע?',options:['4','5','6','10'],ans:1,ex:'זהו ריבוע עם היקף 20 → כל צלע 20:4 = 5.'}
+  ];
+  c1.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  /* Q4-6: Combining rectangles — length = 2·width */
+  const c2=[
+    {stem:'מלבן <span class="math-expr">ABCD</span> עם <span class="math-expr">AB = 2·BC</span>. אם מצמידים שני מלבנים כאלה לאורך הצלע הארוכה, איזו צורה מתקבלת?',options:['ריבוע','מלבן גדול יותר','משולש','מעוין'],ans:0,ex:'שני מלבנים 2x×x צמודים לאורך הצלע הארוכה יוצרים ריבוע 2x×2x.'},
+    {stem:'אותם שני מלבנים — אם מצמידים לאורך הצלע <strong>הקצרה</strong>, איזו צורה מתקבלת?',options:['ריבוע','מלבן ארוך יותר','משולש','מעוין'],ans:1,ex:'שני מלבנים 2x×x צמודים לאורך הקצרה יוצרים מלבן 4x×x.'},
+    {stem:'מלבן עם יחס צלעות 3:1 (אורך:רוחב). אם מחברים 3 כאלה לאורך הצלע הארוכה... איזו צורה?',options:['ריבוע','מלבן','משולש','לא אפשרי'],ans:0,ex:'3 מלבנים 3x×x צמודים לאורך הארוכה: התוצאה 3x×3x = ריבוע.'}
+  ];
+  c2.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  /* Q7-9: Three adjacent rectangles */
+  const c3=[
+    {stem:'שלושה מלבנים זהים בגודל 4×2 מחוברים זה ליד זה לאורך הצלע הארוכה (4). מה ההיקף של הצורה הכוללת?',options:['16','20','24','28'],ans:1,ex:'הצורה היא מלבן 4×(2·3)=4×6. היקף = 2·(4+6) = 20.'},
+    {stem:'שלושה מלבנים זהים עם צלעות 4×3, מצורפים אחד ליד השני לאורך הצלע 4. שטח הצורה הכוללת?',options:['12','24','36','48'],ans:2,ex:'כל מלבן 4×3=12. שלושה: 36.'},
+    {stem:'אותם שלושה מלבנים. אם מצורפים לאורך הצלע 4, מה אורך הצלע הארוכה של הצורה הכוללת?',options:['4','9','12','16'],ans:1,ex:'3 מלבנים צמודים לאורך 4, ולרוחב כל אחד 3. אורך כולל = 3·3 = 9.'}
+  ];
+  c3.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  /* Q10-12: Who is right? */
+  const c4=[
+    {stem:'רועי אומר: "מלבן עם זווית חדה אחת הוא לא אפשרי." לימור אומרת: "אפשרי — לא כל הזוויות חייבות להיות 90° במרובע." מי צודק?',options:['רועי','לימור','שניהם','אף אחד'],ans:0,ex:'רועי צודק — במלבן כל הזוויות חייבות להיות ישרות (90°).'},
+    {stem:'תמר טוענת: "כל ריבוע הוא מלבן." אורי טוען: "כל מלבן הוא ריבוע." מי צודק?',options:['תמר','אורי','שניהם','אף אחד'],ans:0,ex:'ריבוע הוא מקרה פרטי של מלבן, אבל לא כל מלבן הוא ריבוע.'},
+    {stem:'שלומי אומר: "אם במרובע צלעות נגדיות מקבילות, הוא מלבן." נועה אומרת: "לא — אלא אם כן יש גם זווית ישרה אחת לפחות." מי צודק?',options:['שלומי','נועה','שניהם','אף אחד'],ans:1,ex:'נועה צודקת — צלעות נגדיות מקבילות מגדירות מקבילית; צריך גם זווית ישרה כדי לקבוע שזה מלבן.'}
+  ];
+  c4.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  /* Q13-15: Variable sides — prep for perimeter/area */
+  const c5=[
+    {stem:'במלבן, צלע אחת היא <span class="math-expr">a</span> ס"מ, והצלע הסמוכה היא <span class="math-expr">a + 3</span> ס"מ. מה ההיקף?',options:['2a + 3','4a + 3','4a + 6','2a + 6'],ans:2,ex:'היקף = 2·(a + (a+3)) = 2·(2a+3) = 4a+6.'},
+    {stem:'אותו מלבן — אם <span class="math-expr">a = 5</span>, מה ההיקף?',options:['13','16','23','26'],ans:3,ex:'4·5 + 6 = 26.'},
+    {stem:'מלבן עם צלעות <span class="math-expr">x</span> ו-<span class="math-expr">2x</span>. אם ההיקף 18, מה <span class="math-expr">x</span>?',options:['2','3','6','9'],ans:1,ex:'2·(x+2x) = 6x = 18, אז x = 3.'}
+  ];
+  c5.forEach(q=>qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.ans,explanation:q.ex}));
+  return qs;
+}
+
+function generateQuestions(level){
+  if(level==='easy') return genEasy();
+  if(level==='medium') return genMedium();
+  if(level==='hard') return genHard();
+  return genChallenge();
+}
+
+function renderLevelTabs(){
+  const container=document.getElementById('levelTabs');
+  container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(lv=>{
+    const btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    const done=scores[lv].filter(s=>s===1).length;
+    const total=LEVEL_COUNTS[lv];
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+total+')</span>':'');
+    btn.onclick=()=>switchLevel(lv);
+    container.appendChild(btn);
+  });
+}
+
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv]) questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+
+function updateLevelProgress(){
+  const lv=state.level;const total=LEVEL_COUNTS[lv];
+  const done=answered[lv].filter(a=>a).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+
+function renderQuestion(){
+  const lv=state.level;const idx=state.qIndex;
+  const qs=questions[lv];
+  if(!qs) return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  const q=qs[idx];
+  const area=document.getElementById('questionArea');
+  const isAnswered=answered[lv][idx];
+
+  let html='<div class="q-card"><div class="q-number">שאלה '+(idx+1)+' מתוך '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach((opt,i)=>{
+      const letter=LETTERS[i];
+      let cls='q-opt';
+      if(isAnswered){
+        cls+=' disabled';
+        if(i===q.answer) cls+=' correct';
+        else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel']) cls+=' wrong';
+      }
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>בדקו</button>';
+  } else if(q.type==='input'||q.type==='input-text'){
+    html+='<div class="q-input-row"><input type="'+(q.type==='input'?'number':'text')+'" class="q-input" id="qInput" placeholder="תשובה" dir="ltr" aria-label="תשובה">';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">בדקו</button>';
+    html+='</div>';
+    if(isAnswered){
+      const inp=q.type==='input'?q.answer:(q.display||q.answer[0]);
+      html+='<div style="margin-top:4px;font-weight:700;direction:ltr">תשובה: '+inp+'</div>';
+    }
+  }
+
+  if(isAnswered){
+    const isCorrect=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'✅ נכון! ':'❌ ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(el=>{
+      el.onclick=()=>{
+        area.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+  const inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){
+    inp.focus();
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkInput()});
+  }
+
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'סיום':'הבא ←';
+}
+
+window.checkMC=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const selected=document.querySelector('.q-opt.selected');
+  if(!selected) return;
+  const si=parseInt(selected.dataset.i);
+  const isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  answered[lv][idx+'_sel']=si;
+
+  document.querySelectorAll('.q-opt').forEach((el,i)=>{
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer) el.classList.add('correct');
+    else if(i===si&&!isCorrect) el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון מאוד!','✅ יפה!'])+' ':'❌ לא נכון. ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkInput=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inp=document.getElementById('qInput');
+  const val=inp.value.trim();
+  if(!val) return;
+  let isCorrect=false;
+  if(q.type==='input'){
+    const num=parseFloat(val.replace(',','.'));
+    if(Array.isArray(q.answer)) isCorrect=q.answer.some(a=>Math.abs(a-num)<1e-9);
+    else isCorrect=Math.abs(q.answer-num)<1e-9;
+  } else {
+    const norm=val.replace(/\s+/g,'').toLowerCase();
+    isCorrect=q.answer.some(a=>a.replace(/\s+/g,'').toLowerCase()===norm);
+  }
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');
+  inp.disabled=true;
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון!'])+' ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+function nextQuestion(){
+  const lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function')showAuthModal();
+    return;
+  }
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+
+function renderLevelComplete(){
+  const lv=state.level;
+  const correct=scores[lv].filter(s=>s===1).length;
+  const total=LEVEL_COUNTS[lv];
+  const pct=Math.round(correct/total*100);
+  const scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  const emoji=pct>=80?'🎉':pct>=50?'👏':'💪';
+
+  document.getElementById('questionArea').innerHTML=`
+    <div class="q-card"><div class="level-complete">
+      <div class="big-emoji">${emoji}</div>
+      <h2>סיימתם את רמת "${LEVEL_NAMES[lv]}"!</h2>
+      <div class="score-display${scoreClass}">${correct} / ${total}</div>
+      <p style="color:var(--text-light);margin-bottom:16px">${pct}% הצלחה</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="mini-btn" onclick="retryLevel()">🔄 נסו שוב</button>
+        ${lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">▶ לרמה הבאה</button>':''}
+      </div>
+    </div></div>`;
+
+  if(pct>=80) showConfetti();
+  saveState();
+}
+
+window.retryLevel=function(){
+  const lv=state.level;
+  scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);
+  state.qIndex=0;
+  renderLevelTabs();renderQuestion();saveState();
+};
+
+window.nextLevel=function(){
+  const order=['easy','medium','hard','challenge'];
+  const ci=order.indexOf(state.level);
+  if(ci<order.length-1) switchLevel(order[ci+1]);
+};
+
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.section===sec);
+  });
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+function showConfetti(){
+  const box=document.getElementById('confettiBox');
+  box.innerHTML='';
+  const colors=['#2563eb','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';
+    c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(()=>box.innerHTML='',5000);
+}
+
+function init(){
+  loadState();
+  Object.keys(LEVEL_COUNTS).forEach(lv=>{
+    if(!scores[lv]||!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice') switchSection('practice');
+}
+init();
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+</body>
+</html>

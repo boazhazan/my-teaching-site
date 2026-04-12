@@ -1,0 +1,825 @@
+<!--
+  Title: ערך מוחלט
+  Unit: מספרים מכוונים
+  Subject: מתמטיקה
+  Grade: ז׳
+  Lesson: 4
+  Tags: מספרים-מכוונים,ערך-מוחלט,מרחק
+  Icon: 📏
+  Description: ערך מוחלט — מרחק מספר מ-0, חישוב ערכים מוחלטים והשוואתם
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ערך מוחלט | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+  --neg:#ef4444;--pos:#10b981;--zero:#2563eb;
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid var(--accent);padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card code{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:var(--primary);flex-shrink:0}
+.q-check-btn{padding:10px 32px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;display:block;margin:8px auto 0}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem}
+.q-feedback.correct{background:#ecfdf5;color:#065f46;border-right:4px solid var(--success)}
+.q-feedback.wrong{background:#fef2f2;color:#991b1b;border-right:4px solid var(--error)}
+.q-input-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.q-input{padding:10px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:1rem;font-weight:700;width:120px;text-align:center;direction:ltr}
+.q-input:focus{outline:none;border-color:var(--primary)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+.q-nav{display:flex;justify-content:space-between;margin-top:12px;gap:8px}
+.q-nav-btn{padding:8px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.level-complete{text-align:center;padding:24px}
+.level-complete .big-emoji{font-size:3.5rem;margin-bottom:12px}
+.level-complete h2{font-size:1.3rem;margin-bottom:8px;color:var(--primary-dark)}
+.score-display{font-size:2.5rem;font-weight:800;color:var(--success);margin:8px 0}
+.score-display.medium-score{color:var(--accent)}
+.score-display.low-score{color:var(--error)}
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media print{.topbar,.section-toggle,.step-nav,.q-nav,.mini-btn,.q-check-btn{display:none!important}.container{max-width:100%}body{background:#fff}}
+.print-btn{background:none;border:none;font-size:1.2rem;cursor:pointer;padding:4px 8px;border-radius:6px;transition:.2s}
+.print-btn:hover{background:var(--bg-soft)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">📏 כיתה ז׳ — ערך מוחלט</span>
+  <div style="display:flex;align-items:center;gap:10px"><button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button><a href="../../../../materials.html">← חזרה לחומרי לימוד</a></div>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+<section id="learnSection">
+  <div class="step-progress"><div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div><div class="step-progress-text" id="stepText"></div></div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress"><div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div><div class="level-progress-text" id="levelText"></div></div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+</div>
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+var today=new Date(),dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+var rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(a){return a[Math.floor(R()*a.length)]}
+function shuffle(a){var c=[].concat(a);for(var i=c.length-1;i>0;i--){var j=Math.floor(R()*(i+1));var t=c[i];c[i]=c[j];c[j]=t}return c}
+var LETTERS=['\u05D0','\u05D1','\u05D2','\u05D3'];
+
+function fmtN(v){
+  if(v==null)return '?';
+  var n=typeof v==='number'?v:parseFloat(v);
+  if(Math.abs(n)<.0001)return '0';
+  if(n<0){var abs=Math.abs(n);var s=(abs===Math.floor(abs))?''+abs:parseFloat(abs.toFixed(4))+'';return s+'\u2212';}
+  return (n===Math.floor(n))?''+n:parseFloat(n.toFixed(4))+'';
+}
+
+function fmtAbs(v){
+  var n=typeof v==='number'?v:parseFloat(v);
+  return '|'+fmtN(n)+'|';
+}
+
+/* SVG number line */
+function nlSVG(min,max,step,hl,opts){
+  opts=opts||{};
+  var w=opts.w||560,h=opts.h||75,pad=opts.pad||40,th=opts.th||10,fs=opts.fs||13;
+  var us=w-2*pad,range=max-min;
+  function tx(v){return pad+(v-min)/range*us}
+  var my=h*.45;
+  var s='<svg viewBox="0 0 '+w+' '+h+'" style="width:100%;max-width:'+w+'px;display:block;margin:8px auto" xmlns="http://www.w3.org/2000/svg">';
+  s+='<line x1="'+(pad-14)+'" y1="'+my+'" x2="'+(w-pad+14)+'" y2="'+my+'" stroke="#1e293b" stroke-width="2"/>';
+  s+='<polygon points="'+(w-pad+20)+','+my+' '+(w-pad+10)+','+(my-5)+' '+(w-pad+10)+','+(my+5)+'" fill="#1e293b"/>';
+  s+='<polygon points="'+(pad-20)+','+my+' '+(pad-10)+','+(my-5)+' '+(pad-10)+','+(my+5)+'" fill="#1e293b"/>';
+  for(var v=min;v<=max+step/100;v+=step){
+    v=Math.round(v*10000)/10000;
+    var x=tx(v),iz=Math.abs(v)<.0001;
+    var col=iz?'#2563eb':v>0?'#10b981':'#ef4444';
+    s+='<line x1="'+x+'" y1="'+(my-th)+'" x2="'+x+'" y2="'+(my+th)+'" stroke="'+col+'" stroke-width="'+(iz?3:2)+'"/>';
+    if(!opts.noLabels){
+      var lbl=fmtN(v),fc=iz?'#2563eb':'#1e293b',fw=iz?'800':'600';
+      s+='<text x="'+x+'" y="'+(my+th+15)+'" text-anchor="middle" font-size="'+fs+'" font-weight="'+fw+'" fill="'+fc+'" font-family="Rubik,Heebo,sans-serif">'+lbl+'</text>';
+    }
+  }
+  if(hl)for(var hi=0;hi<hl.length;hi++){
+    var p=hl[hi],px=tx(p.value),r=p.r||6,c=p.color||'#ef4444';
+    s+='<circle cx="'+px+'" cy="'+my+'" r="'+r+'" fill="'+c+'" stroke="#fff" stroke-width="2"/>';
+    if(p.label)s+='<text x="'+px+'" y="'+(my-r-6)+'" text-anchor="middle" font-size="11" font-weight="700" fill="'+c+'" font-family="Rubik,Heebo,sans-serif">'+p.label+'</text>';
+  }
+  /* distance arcs */
+  if(opts.arcs)for(var ai=0;ai<opts.arcs.length;ai++){
+    var arc=opts.arcs[ai],x1=tx(arc.from),x2=tx(arc.to),cy=my-20;
+    var mx=(x1+x2)/2,dx=Math.abs(x2-x1)/2;
+    s+='<path d="M'+Math.min(x1,x2)+','+my+' Q'+mx+','+(my-35)+' '+Math.max(x1,x2)+','+my+'" fill="none" stroke="'+(arc.color||'#8b5cf6')+'" stroke-width="2" stroke-dasharray="4,3"/>';
+    s+='<text x="'+mx+'" y="'+(my-28)+'" text-anchor="middle" font-size="11" font-weight="700" fill="'+(arc.color||'#8b5cf6')+'" font-family="Rubik,Heebo,sans-serif">'+(arc.label||'')+'</text>';
+  }
+  s+='</svg>';return s;
+}
+
+/* ===== STATE ===== */
+var state={section:'learn',step:0,level:'easy',qIndex:0};
+var scores={easy:[],medium:[],hard:[],challenge:[]};
+var answered={easy:[],medium:[],hard:[],challenge:[]};
+var questions={easy:null,medium:null,hard:null,challenge:null};
+var LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+var LEVEL_NAMES={easy:'\u05E7\u05DC',medium:'\u05D1\u05D9\u05E0\u05D5\u05E0\u05D9',hard:'\u05E7\u05E9\u05D4',challenge:'\u05D0\u05EA\u05D2\u05E8'};
+var TOTAL_STEPS=7;
+var LS_KEY='bh_g7_abs_val_'+dateSeed;
+
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores:scores,answered:answered,state:state}))}catch(e){}}
+function loadState(){try{var d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+/* ===== TEACHING STEPS ===== */
+var steps=[
+/* Step 0 — What is absolute value */
+{title:'\uD83D\uDCCF \u05DE\u05D4\u05D5 \u05E2\u05E8\u05DA \u05DE\u05D5\u05D7\u05DC\u05D8?',render:function(){return '\
+<div class="rule-box">\u2728 \u05E2\u05E8\u05DA \u05DE\u05D5\u05D7\u05DC\u05D8 \u05E9\u05DC \u05DE\u05E1\u05E4\u05E8 = <strong>\u05D4\u05DE\u05E8\u05D7\u05E7</strong> \u05E9\u05DC\u05D5 \u05DE-0 \u05E2\u05DC \u05E6\u05D9\u05E8 \u05D4\u05DE\u05E1\u05E4\u05E8\u05D9\u05DD</div>\
+<p>\u05DE\u05E8\u05D7\u05E7 \u05EA\u05DE\u05D9\u05D3 \u05D7\u05D9\u05D5\u05D1\u05D9 (\u05D0\u05D5 0) \u2014 \u05DC\u05D0 \u05DE\u05E9\u05E0\u05D4 \u05DC\u05D0\u05D9\u05D6\u05D4 \u05DB\u05D9\u05D5\u05D5\u05DF!</p>'+
+nlSVG(-6,6,1,[{value:-5,color:'#ef4444',r:7,label:'5\u2212'},{value:5,color:'#10b981',r:7,label:'5'}],{arcs:[{from:0,to:5,label:'5 \u05D9\u05D7\u05D9\u05D3\u05D5\u05EA',color:'#10b981'},{from:0,to:-5,label:'5 \u05D9\u05D7\u05D9\u05D3\u05D5\u05EA',color:'#ef4444'}]})+'\
+<div class="example">\
+<span class="math-expr">|5| = 5</span> &emsp;\
+<span class="math-expr">|5\u2212| = 5</span> &emsp;\u2192 \u05D0\u05D5\u05EA\u05D5 \u05DE\u05E8\u05D7\u05E7!\
+</div>\
+<p><strong>\u2753 \u05E9\u05D0\u05DC\u05D4:</strong> \u05DE\u05D4 \u05D4\u05DE\u05E8\u05D7\u05E7 \u05E9\u05DC <span class="math-expr">3\u2212</span> \u05DE-0?</p>\
+<div class="quiz-options" id="s0quiz">\
+<div class="quiz-opt" onclick="pickOpt(this,0,\'s0quiz\',\'s0fb\',0)">3</div>\
+<div class="quiz-opt" onclick="pickOpt(this,1,\'s0quiz\',\'s0fb\',0)">3\u2212</div>\
+<div class="quiz-opt" onclick="pickOpt(this,2,\'s0quiz\',\'s0fb\',0)">0</div>\
+</div><div id="s0fb"></div>'}},
+
+/* Step 1 — Notation */
+{title:'\u270D\uFE0F \u05E1\u05D9\u05DE\u05D5\u05DF \u05E2\u05E8\u05DA \u05DE\u05D5\u05D7\u05DC\u05D8',render:function(){return '\
+<div class="highlight">\u05E1\u05D9\u05DE\u05D5\u05DF: <span class="math-expr">|a|</span> \u2014 \u05E9\u05E0\u05D9 \u05E7\u05D5\u05D5\u05D9\u05DD \u05D0\u05E0\u05DB\u05D9\u05D9\u05DD \u05DE\u05E1\u05D1\u05D9\u05D1 \u05DC\u05DE\u05E1\u05E4\u05E8<br>\u05E7\u05D5\u05E8\u05D0\u05D9\u05DD: "\u05D4\u05E2\u05E8\u05DA \u05D4\u05DE\u05D5\u05D7\u05DC\u05D8 \u05E9\u05DC a"</div>\
+<div class="example">\
+<span class="math-expr">|7| = 7</span> &emsp;\
+<span class="math-expr">|7\u2212| = 7</span> &emsp;\
+<span class="math-expr">|0| = 0</span>\
+</div>\
+<div class="rule-box">\u2B50 \u05D4\u05E2\u05E8\u05DA \u05D4\u05DE\u05D5\u05D7\u05DC\u05D8 <strong>\u05EA\u05DE\u05D9\u05D3</strong> \u2265 0!</div>\
+<p><strong>\u2753 \u05EA\u05E8\u05D2\u05D9\u05DC:</strong> \u05D7\u05E9\u05D1\u05D5: <span class="math-expr">|12| = ?</span>, <span class="math-expr">|12\u2212| = ?</span>, <span class="math-expr">|0| = ?</span></p>\
+<div class="quiz-options" id="s1quiz">\
+<div class="quiz-opt" onclick="pickOpt(this,0,\'s1quiz\',\'s1fb\',0)">12, 12, 0</div>\
+<div class="quiz-opt" onclick="pickOpt(this,1,\'s1quiz\',\'s1fb\',0)">12, 12\u2212, 0</div>\
+<div class="quiz-opt" onclick="pickOpt(this,2,\'s1quiz\',\'s1fb\',0)">12\u2212, 12, 0</div>\
+</div><div id="s1fb"></div>'}},
+
+/* Step 2 — Simple calculation rule */
+{title:'\uD83D\uDCA1 \u05DB\u05DC\u05DC \u05D7\u05D9\u05E9\u05D5\u05D1 \u05E4\u05E9\u05D5\u05D8',render:function(){return '\
+<div class="rule-box">\
+\u2022 |\u05D7\u05D9\u05D5\u05D1\u05D9| = \u05D4\u05DE\u05E1\u05E4\u05E8 \u05E2\u05E6\u05DE\u05D5. \u05D3\u05D5\u05D2\u05DE\u05D4: <span class="math-expr">|8| = 8</span><br>\
+\u2022 |\u05E9\u05DC\u05D9\u05DC\u05D9| = \u05D4\u05DE\u05E1\u05E4\u05E8 <strong>\u05D1\u05DC\u05D9 \u05D4\u05DE\u05D9\u05E0\u05D5\u05E1</strong>. \u05D3\u05D5\u05D2\u05DE\u05D4: <span class="math-expr">|8\u2212| = 8</span><br>\
+\u2022 <span class="math-expr">|0| = 0</span>\
+</div>\
+<div class="highlight">\uD83C\uDFAF \u05D1\u05E7\u05D9\u05E6\u05D5\u05E8: "\u05DE\u05D5\u05E8\u05D9\u05D3\u05D9\u05DD \u05D0\u05EA \u05D4\u05DE\u05D9\u05E0\u05D5\u05E1 \u05D0\u05DD \u05D9\u05E9"</div>\
+<div class="example">\
+<span class="math-expr">|3| = 3</span> &emsp;\
+<span class="math-expr">|15\u2212| = 15</span> &emsp;\
+<span class="math-expr">|100| = 100</span> &emsp;\
+<span class="math-expr">|1\u2212| = 1</span>\
+</div>\
+<p><strong>\u2753 \u05E9\u05D0\u05DC\u05D4:</strong> \u05DE\u05D4 \u05D4\u05EA\u05D5\u05E6\u05D0\u05D4 \u05E9\u05DC <span class="math-expr">|20\u2212|</span>?</p>\
+<div class="quiz-options" id="s2quiz">\
+<div class="quiz-opt" onclick="pickOpt(this,0,\'s2quiz\',\'s2fb\',0)">20</div>\
+<div class="quiz-opt" onclick="pickOpt(this,1,\'s2quiz\',\'s2fb\',0)">20\u2212</div>\
+<div class="quiz-opt" onclick="pickOpt(this,2,\'s2quiz\',\'s2fb\',0)">0</div>\
+</div><div id="s2fb"></div>'}},
+
+/* Step 3 — Decimals and fractions */
+{title:'\uD83D\uDD22 \u05E2\u05E9\u05E8\u05D5\u05E0\u05D9\u05D9\u05DD \u05D5\u05E9\u05D1\u05E8\u05D9\u05DD',render:function(){return '\
+<p>\u05D0\u05D5\u05EA\u05D5 \u05DB\u05DC\u05DC \u05D1\u05D3\u05D9\u05D5\u05E7 \u2014 \u05DE\u05D5\u05E8\u05D9\u05D3\u05D9\u05DD \u05D0\u05EA \u05D4\u05DE\u05D9\u05E0\u05D5\u05E1 \u05D0\u05DD \u05D9\u05E9:</p>\
+<div class="example">\
+<span class="math-expr">|4.3\u2212| = 4.3</span> &emsp;\
+<span class="math-expr">|0.7| = 0.7</span><br>\
+<span class="math-expr">|3/5| = 3/5</span> &emsp;\
+<span class="math-expr">|8.6\u2212| = 8.6</span>\
+</div>\
+<p><strong>\u2753 \u05EA\u05E8\u05D2\u05D9\u05DC:</strong> \u05DE\u05D4 \u05D4\u05EA\u05D5\u05E6\u05D0\u05D4 \u05E9\u05DC <span class="math-expr">|2.5\u2212|</span>?</p>\
+<div class="quiz-options" id="s3quiz">\
+<div class="quiz-opt" onclick="pickOpt(this,0,\'s3quiz\',\'s3fb\',0)">2.5</div>\
+<div class="quiz-opt" onclick="pickOpt(this,1,\'s3quiz\',\'s3fb\',0)">2.5\u2212</div>\
+<div class="quiz-opt" onclick="pickOpt(this,2,\'s3quiz\',\'s3fb\',0)">0</div>\
+<div class="quiz-opt" onclick="pickOpt(this,3,\'s3quiz\',\'s3fb\',0)">25</div>\
+</div><div id="s3fb"></div>'}},
+
+/* Step 4 — Distance connection */
+{title:'\uD83D\uDCCF \u05DE\u05E8\u05D7\u05E7 \u05DE-0 = \u05E2\u05E8\u05DA \u05DE\u05D5\u05D7\u05DC\u05D8',render:function(){return '\
+<div class="highlight">\u05D4\u05DE\u05E8\u05D7\u05E7 \u05D1\u05D9\u05DF 0 \u05DC\u05DE\u05E1\u05E4\u05E8 = \u05D4\u05E2\u05E8\u05DA \u05D4\u05DE\u05D5\u05D7\u05DC\u05D8 \u05E9\u05DC\u05D5!</div>'+
+nlSVG(-6,6,1,[{value:-5,color:'#ef4444',r:6,label:'5\u2212'},{value:0,color:'#2563eb',r:6}],{arcs:[{from:0,to:-5,label:'5 \u05D9\u05D7\u05D9\u05D3\u05D5\u05EA',color:'#ef4444'}]})+'\
+<div class="example">\
+\u2022 \u05D4\u05DE\u05E8\u05D7\u05E7 \u05D1\u05D9\u05DF 0 \u05DC-11 \u05D4\u05D5\u05D0 <strong>11</strong> \u05D9\u05D7\u05D9\u05D3\u05D5\u05EA \u2192 <span class="math-expr">|11| = 11</span><br>\
+\u2022 \u05D4\u05DE\u05E8\u05D7\u05E7 \u05D1\u05D9\u05DF 0 \u05DC-<span class="math-expr">5\u2212</span> \u05D4\u05D5\u05D0 <strong>5</strong> \u05D9\u05D7\u05D9\u05D3\u05D5\u05EA \u2192 <span class="math-expr">|5\u2212| = 5</span><br>\
+\u2022 \u05D4\u05DE\u05E8\u05D7\u05E7 \u05D1\u05D9\u05DF 0 \u05DC-<span class="math-expr">2\u2212</span> \u05D4\u05D5\u05D0 <strong>2</strong> \u05D9\u05D7\u05D9\u05D3\u05D5\u05EA \u2192 <span class="math-expr">|2\u2212| = 2</span>\
+</div>\
+<p><strong>\u2753 \u05E9\u05D0\u05DC\u05D4:</strong> \u05D4\u05DE\u05E8\u05D7\u05E7 \u05D1\u05D9\u05DF 0 \u05DC-<span class="math-expr">9\u2212</span> \u05D4\u05D5\u05D0...?</p>\
+<div class="quiz-options" id="s4quiz">\
+<div class="quiz-opt" onclick="pickOpt(this,0,\'s4quiz\',\'s4fb\',0)">9 \u05D9\u05D7\u05D9\u05D3\u05D5\u05EA, \u05D5\u05DC\u05DB\u05DF |9\u2212| = 9</div>\
+<div class="quiz-opt" onclick="pickOpt(this,1,\'s4quiz\',\'s4fb\',0)">9\u2212 \u05D9\u05D7\u05D9\u05D3\u05D5\u05EA</div>\
+<div class="quiz-opt" onclick="pickOpt(this,2,\'s4quiz\',\'s4fb\',0)">0 \u05D9\u05D7\u05D9\u05D3\u05D5\u05EA</div>\
+</div><div id="s4fb"></div>'}},
+
+/* Step 5 — Comparing absolute values */
+{title:'\u2696\uFE0F \u05D4\u05E9\u05D5\u05D5\u05D0\u05EA \u05E2\u05E8\u05DB\u05D9\u05DD \u05DE\u05D5\u05D7\u05DC\u05D8\u05D9\u05DD',render:function(){return '\
+<div class="example">\
+<span class="math-expr">|3| \u2610 |8|</span> \u2192 3 < 8 \u2192 <span class="math-expr">|3| < |8|</span><br>\
+<span class="math-expr">|7\u2212| \u2610 |6|</span> \u2192 7 > 6 \u2192 <span class="math-expr">|7\u2212| > |6|</span><br>\
+<span class="math-expr">|11\u2212| \u2610 |11|</span> \u2192 11 = 11 \u2192 <span class="math-expr">|11\u2212| = |11|</span>\
+</div>\
+<div class="rule-box">\u2B50 <span class="math-expr">|a| = |a\u2212|</span> \u05EA\u05DE\u05D9\u05D3! \u05D0\u05D5\u05EA\u05D5 \u05DE\u05E8\u05D7\u05E7 \u05DE-0</div>\
+<div class="highlight">\u05D4\u05DE\u05E1\u05E4\u05E8\u05D9\u05DD \u05E9\u05DE\u05E8\u05D7\u05E7\u05DD \u05DE-0 \u05E9\u05D5\u05D5\u05D4 \u05DC-4 \u05D4\u05DD: <strong>4</strong> \u05D5-<strong>4\u2212</strong></div>\
+<p><strong>\u2753 \u05EA\u05E8\u05D2\u05D9\u05DC:</strong> \u05D4\u05E9\u05DC\u05D9\u05DE\u05D5: <span class="math-expr">|5\u2212| \u2610 |3|</span></p>\
+<div class="quiz-options" id="s5quiz">\
+<div class="quiz-opt" onclick="pickOpt(this,0,\'s5quiz\',\'s5fb\',0)">></div>\
+<div class="quiz-opt" onclick="pickOpt(this,1,\'s5quiz\',\'s5fb\',0)"><</div>\
+<div class="quiz-opt" onclick="pickOpt(this,2,\'s5quiz\',\'s5fb\',0)">=</div>\
+</div><div id="s5fb"></div>'}},
+
+/* Step 6 — Summary */
+{title:'\uD83C\uDFAF \u05E1\u05D9\u05DB\u05D5\u05DD',render:function(){return '\
+<div class="step-summary-grid">\
+<div class="summary-item"><div class="s-icon">\uD83D\uDCCF</div><div class="s-title">\u05E2\u05E8\u05DA \u05DE\u05D5\u05D7\u05DC\u05D8 = \u05DE\u05E8\u05D7\u05E7 \u05DE-0</div><div class="s-text">\u05DB\u05DE\u05D4 \u05E8\u05D7\u05D5\u05E7 \u05D4\u05DE\u05E1\u05E4\u05E8 \u05DE-0 \u05E2\u05DC \u05D4\u05E6\u05D9\u05E8</div></div>\
+<div class="summary-item"><div class="s-icon">\u2795</div><div class="s-title">|a| \u2265 0 \u05EA\u05DE\u05D9\u05D3</div><div class="s-text">\u05E2\u05E8\u05DA \u05DE\u05D5\u05D7\u05DC\u05D8 \u05D0\u05E3 \u05E4\u05E2\u05DD \u05DC\u05D0 \u05E9\u05DC\u05D9\u05DC\u05D9</div></div>\
+<div class="summary-item"><div class="s-icon">\uD83D\uDD04</div><div class="s-title">|a| = |a\u2212| \u05EA\u05DE\u05D9\u05D3</div><div class="s-text">\u05D0\u05D5\u05EA\u05D5 \u05DE\u05E8\u05D7\u05E7 \u05DE\u05E9\u05E0\u05D9 \u05D4\u05E6\u05D3\u05D3\u05D9\u05DD</div></div>\
+<div class="summary-item"><div class="s-icon">\uD83D\uDCA1</div><div class="s-title">\u05D4\u05DB\u05DC\u05DC</div><div class="s-text">\u05DE\u05D5\u05E8\u05D9\u05D3\u05D9\u05DD \u05D0\u05EA \u05D4\u05DE\u05D9\u05E0\u05D5\u05E1 \u05D0\u05DD \u05D9\u05E9</div></div>\
+</div>\
+<div class="success-box">\uD83C\uDFAF \u05DE\u05D5\u05DB\u05E0\u05D9\u05DD \u05DC\u05EA\u05E8\u05D2\u05D5\u05DC? \u05DC\u05D7\u05E6\u05D5 \u05E2\u05DC <strong>"\u05EA\u05E8\u05D2\u05D5\u05DC"</strong> \u05DC\u05DE\u05E2\u05DC\u05D4!</div>'}}
+];
+
+/* ===== TEACHING HELPERS ===== */
+window.pickOpt=function(el,elIdx,quizId,fbId,correctIdx){
+  var opts=document.querySelectorAll('#'+quizId+' .quiz-opt');
+  var ci=0;
+  opts.forEach(function(o,i){if(o===el)ci=i;o.onclick=null;o.style.cursor='default'});
+  if(ci===correctIdx){
+    el.classList.add('correct-answer');
+    document.getElementById(fbId).innerHTML='<div class="feedback-inline ok">\u2705 \u05E0\u05DB\u05D5\u05DF!</div>';
+  } else {
+    el.classList.add('wrong-answer');
+    opts[correctIdx].classList.add('correct-answer');
+    var explanations={0:'\u05D4\u05DE\u05E8\u05D7\u05E7 \u05E9\u05DC 3\u2212 \u05DE-0 \u05D4\u05D5\u05D0 3 \u05D9\u05D7\u05D9\u05D3\u05D5\u05EA',1:'|12| = 12, |12\u2212| = 12, |0| = 0',2:'|20\u2212| = 20 \u2014 \u05DE\u05D5\u05E8\u05D9\u05D3\u05D9\u05DD \u05D0\u05EA \u05D4\u05DE\u05D9\u05E0\u05D5\u05E1!',3:'|2.5\u2212| = 2.5 \u2014 \u05DE\u05D5\u05E8\u05D9\u05D3\u05D9\u05DD \u05D0\u05EA \u05D4\u05DE\u05D9\u05E0\u05D5\u05E1',4:'9\u2212 \u05E8\u05D7\u05D5\u05E7 9 \u05D9\u05D7\u05D9\u05D3\u05D5\u05EA \u05DE-0, \u05DC\u05DB\u05DF |9\u2212| = 9',5:'|5\u2212| = 5, |3| = 3, \u05D5\u05DC\u05DB\u05DF 5 > 3'};
+    document.getElementById(fbId).innerHTML='<div class="feedback-inline err">\u274C '+explanations[state.step]+'</div>';
+  }
+};
+
+/* ===== STEP RENDERING ===== */
+function renderStep(idx){
+  state.step=idx;
+  document.getElementById('stepFill').style.width=((idx+1)/TOTAL_STEPS*100)+'%';
+  document.getElementById('stepText').textContent=(idx+1)+' / '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+steps[idx].title+'</div>'+steps[idx].render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'\u05DC\u05EA\u05E8\u05D2\u05D5\u05DC \u2190':'\u05D4\u05D1\u05D0 \u2190';
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+/* ===== QUESTION GENERATORS ===== */
+/* ===== EASY (20) ===== */
+function genEasy(){
+  var rng2=mulberry32(dateSeed+100),R2=function(){return rng2()},RI2=function(a,b){return a+Math.floor(R2()*(b-a+1))};
+  var qs=[];
+  /* Q1-5: |positive int| */
+  for(var i=0;i<5;i++){
+    var n=RI2(1,20);
+    var w1=n+RI2(1,3),w2=-n,w3=0;
+    var opts=['<span dir="ltr" style="unicode-bidi:embed">'+n+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">'+fmtN(w2)+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">'+w1+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">0</span>'];
+    qs.push({type:'mc',stem:'\u05D7\u05E9\u05D1\u05D5: <span class="math-expr" dir="ltr" style="unicode-bidi:embed">|'+n+'|</span> = ?',
+      options:opts,answer:0,
+      explanation:'|'+n+'| = '+n+' \u2014 \u05DE\u05E1\u05E4\u05E8 \u05D7\u05D9\u05D5\u05D1\u05D9, \u05D4\u05E2\u05E8\u05DA \u05D4\u05DE\u05D5\u05D7\u05DC\u05D8 \u05D4\u05D5\u05D0 \u05D4\u05DE\u05E1\u05E4\u05E8 \u05E2\u05E6\u05DE\u05D5'});
+  }
+  /* Q6-10: |negative int| */
+  for(var i=0;i<5;i++){
+    var n=RI2(1,20);
+    var w1=-n,w2=n+RI2(1,3),w3=0;
+    var opts=['<span dir="ltr" style="unicode-bidi:embed">'+n+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">'+fmtN(w1)+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">'+w2+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">0</span>'];
+    qs.push({type:'mc',stem:'\u05D7\u05E9\u05D1\u05D5: <span class="math-expr" dir="ltr" style="unicode-bidi:embed">|'+fmtN(-n)+'|</span> = ?',
+      options:opts,answer:0,
+      explanation:'|'+fmtN(-n)+'| = '+n+' \u2014 \u05DE\u05D5\u05E8\u05D9\u05D3\u05D9\u05DD \u05D0\u05EA \u05D4\u05DE\u05D9\u05E0\u05D5\u05E1!'});
+  }
+  /* Q11-15: distance from 0 */
+  for(var i=0;i<5;i++){
+    var n=RI2(-15,15);while(n===0)n=RI2(-15,15);
+    var dist=Math.abs(n);
+    var w1=n,w2=-dist,w3=0;
+    var opts=['<span dir="ltr" style="unicode-bidi:embed">'+dist+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">'+fmtN(w1)+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">'+fmtN(w2)+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">0</span>'];
+    qs.push({type:'mc',stem:'\u05DE\u05D4\u05D5 \u05D4\u05DE\u05E8\u05D7\u05E7 \u05D1\u05D9\u05DF <span class="math-expr" dir="ltr" style="unicode-bidi:embed">'+fmtN(n)+'</span> \u05DC-0?',
+      options:opts,answer:0,
+      explanation:'\u05D4\u05DE\u05E8\u05D7\u05E7 \u05E9\u05DC '+fmtN(n)+' \u05DE-0 \u05D4\u05D5\u05D0 '+dist+' \u05D9\u05D7\u05D9\u05D3\u05D5\u05EA'});
+  }
+  /* Q16-20: true/false about absolute value */
+  var tfQs=[
+    {stem:'\u05E0\u05DB\u05D5\u05DF \u05D0\u05D5 \u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF: <span class="math-expr" dir="ltr" style="unicode-bidi:embed">|5\u2212| = 5\u2212</span>',
+     opts:['\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF! |5\u2212| = 5','\u05E0\u05DB\u05D5\u05DF','\u05DC\u05D0 \u05E0\u05D9\u05EA\u05DF \u05DC\u05D3\u05E2\u05EA'],answer:0,explanation:'|5\u2212| = 5 \u2014 \u05E2\u05E8\u05DA \u05DE\u05D5\u05D7\u05DC\u05D8 \u05EA\u05DE\u05D9\u05D3 \u05D0\u05D9 \u05E9\u05DC\u05D9\u05DC\u05D9!'},
+    {stem:'\u05E0\u05DB\u05D5\u05DF \u05D0\u05D5 \u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF: <span class="math-expr" dir="ltr" style="unicode-bidi:embed">|3| = 3</span>',
+     opts:['\u05E0\u05DB\u05D5\u05DF!','\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF','\u05E8\u05E7 \u05DC\u05E4\u05E2\u05DE\u05D9\u05DD'],answer:0,explanation:'|3| = 3 \u2014 \u05D4\u05E2\u05E8\u05DA \u05D4\u05DE\u05D5\u05D7\u05DC\u05D8 \u05E9\u05DC \u05D7\u05D9\u05D5\u05D1\u05D9 \u05D4\u05D5\u05D0 \u05D4\u05DE\u05E1\u05E4\u05E8 \u05E2\u05E6\u05DE\u05D5'},
+    {stem:'\u05E0\u05DB\u05D5\u05DF \u05D0\u05D5 \u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF: <span class="math-expr" dir="ltr" style="unicode-bidi:embed">|0| = 0</span>',
+     opts:['\u05E0\u05DB\u05D5\u05DF!','\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF','\u05D0\u05D9\u05DF \u05E2\u05E8\u05DA \u05DE\u05D5\u05D7\u05DC\u05D8 \u05DC-0'],answer:0,explanation:'|0| = 0 \u2014 \u05D4\u05DE\u05E8\u05D7\u05E7 \u05E9\u05DC 0 \u05DE\u05E2\u05E6\u05DE\u05D5 \u05D4\u05D5\u05D0 0'},
+    {stem:'\u05E0\u05DB\u05D5\u05DF \u05D0\u05D5 \u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF: <span class="math-expr" dir="ltr" style="unicode-bidi:embed">|8\u2212| = 8\u2212</span>',
+     opts:['\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF! |8\u2212| = 8','\u05E0\u05DB\u05D5\u05DF','\u05DC\u05D0 \u05E0\u05D9\u05EA\u05DF \u05DC\u05D3\u05E2\u05EA'],answer:0,explanation:'|8\u2212| = 8 \u2014 \u05E2\u05E8\u05DA \u05DE\u05D5\u05D7\u05DC\u05D8 \u05EA\u05DE\u05D9\u05D3 \u05D7\u05D9\u05D5\u05D1\u05D9 \u05D0\u05D5 0!'},
+    {stem:'\u05E0\u05DB\u05D5\u05DF \u05D0\u05D5 \u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF: <span class="math-expr" dir="ltr" style="unicode-bidi:embed">|10\u2212| = |10|</span>',
+     opts:['\u05E0\u05DB\u05D5\u05DF! \u05E9\u05E0\u05D9\u05D4\u05DD \u05E9\u05D5\u05D5\u05D9\u05DD \u05DC-10','\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF','\u05E8\u05E7 \u05D0\u05DD 10 > 0'],answer:0,explanation:'|10\u2212| = 10 \u05D5-|10| = 10 \u2014 \u05D0\u05D5\u05EA\u05D5 \u05DE\u05E8\u05D7\u05E7 \u05DE-0!'}
+  ];
+  for(var i=0;i<5;i++)qs.push({type:'mc',stem:tfQs[i].stem,options:tfQs[i].opts,answer:tfQs[i].answer,explanation:tfQs[i].explanation});
+  return qs;
+}
+/* ===== MEDIUM (20) ===== */
+function genMedium(){
+  var rng2=mulberry32(dateSeed+200),R2=function(){return rng2()},RI2=function(a,b){return a+Math.floor(R2()*(b-a+1))};
+  var qs=[];
+  /* Q1-5: |decimal/fraction| */
+  var decFrac=[[4.3,-1],[0.7,1],[3.5,-1],[8.6,-1],[1.2,1],[6.4,-1],[0.9,1],[2.7,-1]];
+  for(var i=0;i<5;i++){
+    var df=decFrac[RI2(0,decFrac.length-1)];
+    var v=df[0]*df[1],abs=df[0];
+    var w1=-abs,w2=abs+1,w3=0;
+    var opts=['<span dir="ltr" style="unicode-bidi:embed">'+abs+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">'+fmtN(w1)+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">'+w2+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">0</span>'];
+    qs.push({type:'mc',stem:'\u05D7\u05E9\u05D1\u05D5: <span class="math-expr" dir="ltr" style="unicode-bidi:embed">|'+fmtN(v)+'|</span> = ?',
+      options:opts,answer:0,
+      explanation:'|'+fmtN(v)+'| = '+abs});
+  }
+  /* Q6-10: compare |a| vs |b| */
+  for(var i=0;i<5;i++){
+    var a=RI2(-12,12),b=RI2(-12,12);while(Math.abs(a)===Math.abs(b))b=RI2(-12,12);
+    var absA=Math.abs(a),absB=Math.abs(b);
+    var sign=absA>absB?'>':absA<absB?'<':'=';
+    var opts=['<span dir="ltr" style="unicode-bidi:embed">|'+fmtN(a)+'| '+sign+' |'+fmtN(b)+'|</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">|'+fmtN(a)+'| '+(sign==='>'?'<':'>')+' |'+fmtN(b)+'|</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">|'+fmtN(a)+'| = |'+fmtN(b)+'|</span>'];
+    qs.push({type:'mc',stem:'\u05D4\u05E9\u05DC\u05D9\u05DE\u05D5 <, > \u05D0\u05D5 =: <span class="math-expr" dir="ltr" style="unicode-bidi:embed">|'+fmtN(a)+'| \u2610 |'+fmtN(b)+'|</span>',
+      options:opts,answer:0,
+      explanation:'|'+fmtN(a)+'| = '+absA+', |'+fmtN(b)+'| = '+absB+' \u2192 '+absA+' '+sign+' '+absB});
+  }
+  /* Q11-15: numbers at distance d from 0 */
+  for(var i=0;i<5;i++){
+    var d=RI2(1,12);
+    var opts=[fmtN(d)+' \u05D5-'+fmtN(-d),
+              '\u05E8\u05E7 '+fmtN(d),
+              '\u05E8\u05E7 '+fmtN(-d),
+              '0 \u05D5-'+fmtN(d)];
+    qs.push({type:'mc',stem:'\u05D4\u05DE\u05E1\u05E4\u05E8\u05D9\u05DD \u05E9\u05DE\u05E8\u05D7\u05E7\u05DD \u05DE-0 \u05E9\u05D5\u05D5\u05D4 \u05DC-<span class="math-expr" dir="ltr" style="unicode-bidi:embed">'+d+'</span> \u05D4\u05DD:',
+      options:opts,answer:0,
+      explanation:'\u05DE\u05E8\u05D7\u05E7 '+d+' \u05DE-0: '+fmtN(d)+' (\u05D9\u05DE\u05D9\u05E0\u05D4) \u05D5-'+fmtN(-d)+' (\u05E9\u05DE\u05D0\u05DC\u05D4)'});
+  }
+  /* Q16-20: -|a| calculations (minus outside) */
+  for(var i=0;i<5;i++){
+    var n=RI2(1,15);var neg=R2()>0.5;
+    var v=neg?-n:n;
+    var result=-Math.abs(v);/* always negative */
+    var w1=Math.abs(v),w2=v,w3=0;
+    var opts=['<span dir="ltr" style="unicode-bidi:embed">'+fmtN(result)+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">'+w1+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">'+fmtN(w2)+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">0</span>'];
+    qs.push({type:'mc',stem:'\u05D7\u05E9\u05D1\u05D5: <span class="math-expr" dir="ltr" style="unicode-bidi:embed">\u2212|'+fmtN(v)+'|</span> = ?',
+      options:opts,answer:0,
+      explanation:'\u05E7\u05D5\u05D3\u05DD \u05DE\u05D7\u05E9\u05D1\u05D9\u05DD |'+fmtN(v)+'| = '+Math.abs(v)+', \u05D0\u05D7\u05E8 \u05DB\u05DA \u05DE\u05D5\u05E1\u05D9\u05E4\u05D9\u05DD \u05DE\u05D9\u05E0\u05D5\u05E1: '+fmtN(result)});
+  }
+  return qs;
+}
+/* ===== HARD (20) ===== */
+function genHard(){
+  var rng2=mulberry32(dateSeed+300),R2=function(){return rng2()},RI2=function(a,b){return a+Math.floor(R2()*(b-a+1))};
+  var qs=[];
+  /* Q1-5: -|negative| calculations */
+  for(var i=0;i<5;i++){
+    var n=RI2(1,20);
+    var result=-n;
+    var w1=n,w2=-n-1,w3=0;
+    var opts=['<span dir="ltr" style="unicode-bidi:embed">'+fmtN(result)+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">'+w1+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">'+fmtN(w2)+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">0</span>'];
+    qs.push({type:'mc',stem:'\u05D7\u05E9\u05D1\u05D5: <span class="math-expr" dir="ltr" style="unicode-bidi:embed">\u2212|'+fmtN(-n)+'|</span> = ?',
+      options:opts,answer:0,
+      explanation:'|'+fmtN(-n)+'| = '+n+', \u05D5\u05D0\u05D6 \u2212'+n+' = '+fmtN(-n)});
+  }
+  /* Q6-10: compare |a| with a number */
+  for(var i=0;i<5;i++){
+    var a=RI2(-12,-1),b=RI2(0,12);
+    var absA=Math.abs(a);
+    var sign=absA>b?'>':absA<b?'<':'=';
+    var correct='<span dir="ltr" style="unicode-bidi:embed">|'+fmtN(a)+'| '+sign+' '+fmtN(b)+'</span>';
+    var wrong1='<span dir="ltr" style="unicode-bidi:embed">|'+fmtN(a)+'| '+(sign==='>'?'<':'>')+' '+fmtN(b)+'</span>';
+    var wrong2='<span dir="ltr" style="unicode-bidi:embed">|'+fmtN(a)+'| = '+fmtN(b)+'</span>';
+    var opts=[correct,wrong1];
+    if(sign!=='=')opts.push(wrong2);
+    else opts=[correct,wrong1,'<span dir="ltr" style="unicode-bidi:embed">|'+fmtN(a)+'| > '+fmtN(b)+'</span>'];
+    qs.push({type:'mc',stem:'\u05D4\u05E9\u05DC\u05D9\u05DE\u05D5: <span class="math-expr" dir="ltr" style="unicode-bidi:embed">|'+fmtN(a)+'| \u2610 '+fmtN(b)+'</span>',
+      options:opts,answer:0,
+      explanation:'|'+fmtN(a)+'| = '+absA+', \u05D5\u05DC\u05DB\u05DF '+absA+' '+sign+' '+b});
+  }
+  /* Q11-15: mixed absolute value computations */
+  var mixedQs=[
+    {stem:'<span class="math-expr" dir="ltr" style="unicode-bidi:embed">|15| = ?</span>',ans:15,exp:'|15| = 15'},
+    {stem:'<span class="math-expr" dir="ltr" style="unicode-bidi:embed">|8\u2212| = ?</span>',ans:8,exp:'|8\u2212| = 8'},
+    {stem:'<span class="math-expr" dir="ltr" style="unicode-bidi:embed">|4.3\u2212| = ?</span>',ans:4.3,exp:'|4.3\u2212| = 4.3'},
+    {stem:'<span class="math-expr" dir="ltr" style="unicode-bidi:embed">\u2212|6| = ?</span>',ans:-6,exp:'\u2212|6| = 6\u2212'},
+    {stem:'<span class="math-expr" dir="ltr" style="unicode-bidi:embed">\u2212|3\u2212| = ?</span>',ans:-3,exp:'|3\u2212| = 3, \u05D5\u05D0\u05D6 \u22123 = 3\u2212'}
+  ];
+  for(var i=0;i<5;i++){
+    var mq=mixedQs[i];
+    qs.push({type:'input',stem:'\u05D7\u05E9\u05D1\u05D5: '+mq.stem,answer:mq.ans,explanation:mq.exp});
+  }
+  /* Q16-20: true/false statements */
+  var stmts=[
+    {stem:'\u05E0\u05DB\u05D5\u05DF \u05D0\u05D5 \u05DC\u05D0: <span class="math-expr">|a| > a</span> <strong>\u05EA\u05DE\u05D9\u05D3</strong>',
+     opts:['\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF! \u05DB\u05E9-a \u05D7\u05D9\u05D5\u05D1\u05D9 |a| = a','\u05E0\u05DB\u05D5\u05DF!','\u05E8\u05E7 \u05DC\u05E4\u05E2\u05DE\u05D9\u05DD'],answer:0,
+     explanation:'\u05DB\u05E9-a \u05D7\u05D9\u05D5\u05D1\u05D9 \u05D0\u05D5 0, |a| = a \u2014 \u05D5\u05D0\u05D6 a \u05DC\u05D0 \u05D2\u05D3\u05D5\u05DC \u05DE\u05E2\u05E6\u05DE\u05D5!'},
+    {stem:'\u05E0\u05DB\u05D5\u05DF \u05D0\u05D5 \u05DC\u05D0: <span class="math-expr">|a| \u2265 0</span> <strong>\u05EA\u05DE\u05D9\u05D3</strong>',
+     opts:['\u05E0\u05DB\u05D5\u05DF!','\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF','\u05E8\u05E7 \u05DC\u05E4\u05E2\u05DE\u05D9\u05DD'],answer:0,
+     explanation:'\u05E2\u05E8\u05DA \u05DE\u05D5\u05D7\u05DC\u05D8 = \u05DE\u05E8\u05D7\u05E7, \u05D5\u05DE\u05E8\u05D7\u05E7 \u05EA\u05DE\u05D9\u05D3 \u2265 0'},
+    {stem:'\u05E0\u05DB\u05D5\u05DF \u05D0\u05D5 \u05DC\u05D0: <span class="math-expr">|a\u2212| = |a|</span> <strong>\u05EA\u05DE\u05D9\u05D3</strong>',
+     opts:['\u05E0\u05DB\u05D5\u05DF!','\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF','\u05E8\u05E7 \u05D0\u05DD a > 0'],answer:0,
+     explanation:'\u05D0\u05D5\u05EA\u05D5 \u05DE\u05E8\u05D7\u05E7 \u05DE-0 \u05DE\u05E9\u05E0\u05D9 \u05D4\u05E6\u05D3\u05D3\u05D9\u05DD!'},
+    {stem:'\u05E0\u05DB\u05D5\u05DF \u05D0\u05D5 \u05DC\u05D0: \u05D0\u05DD <span class="math-expr">a < 0</span> \u05D0\u05D6 <span class="math-expr">|a| = a\u2212</span>',
+     opts:['\u05E0\u05DB\u05D5\u05DF! \u05DE\u05D5\u05E8\u05D9\u05D3\u05D9\u05DD \u05D0\u05EA \u05D4\u05DE\u05D9\u05E0\u05D5\u05E1','\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF','\u05E8\u05E7 \u05D0\u05DD a = 1\u2212'],answer:0,
+     explanation:'\u05DB\u05E9-a \u05E9\u05DC\u05D9\u05DC\u05D9, |a| = \u2212a (\u05D4\u05E0\u05D2\u05D3\u05D9 \u05E9\u05DC\u05D5 \u2014 \u05E9\u05D4\u05D5\u05D0 \u05D7\u05D9\u05D5\u05D1\u05D9)'},
+    {stem:'\u05E0\u05DB\u05D5\u05DF \u05D0\u05D5 \u05DC\u05D0: <span class="math-expr">\u2212|a| \u2264 0</span> <strong>\u05EA\u05DE\u05D9\u05D3</strong>',
+     opts:['\u05E0\u05DB\u05D5\u05DF!','\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF','\u05E8\u05E7 \u05D0\u05DD a \u2260 0'],answer:0,
+     explanation:'|a| \u2265 0 \u05EA\u05DE\u05D9\u05D3, \u05D5\u05DC\u05DB\u05DF \u2212|a| \u2264 0 \u05EA\u05DE\u05D9\u05D3'}
+  ];
+  for(var i=0;i<5;i++)qs.push({type:'mc',stem:stmts[i].stem,options:stmts[i].opts,answer:stmts[i].answer,explanation:stmts[i].explanation});
+  return qs;
+}
+/* ===== CHALLENGE (15) ===== */
+function genChallenge(){
+  var rng2=mulberry32(dateSeed+400),R2=function(){return rng2()},RI2=function(a,b){return a+Math.floor(R2()*(b-a+1))};
+  function sh2(a){var c=[].concat(a);for(var i=c.length-1;i>0;i--){var j=Math.floor(R2()*(i+1));var t=c[i];c[i]=c[j];c[j]=t}return c}
+  var qs=[];
+  /* Q1-3: how many solutions for distance */
+  var distQs=[
+    {d:'1/2',count:2,exp:'\u05E9\u05EA\u05D9 \u05EA\u05E9\u05D5\u05D1\u05D5\u05EA: 1/2 \u05D5-1/2\u2212'},
+    {d:'7',count:2,exp:'\u05E9\u05EA\u05D9 \u05EA\u05E9\u05D5\u05D1\u05D5\u05EA: 7 \u05D5-7\u2212'},
+    {d:'0',count:1,exp:'\u05EA\u05E9\u05D5\u05D1\u05D4 \u05D0\u05D7\u05EA \u05D1\u05DC\u05D1\u05D3: 0'}
+  ];
+  for(var i=0;i<3;i++){
+    var dq=distQs[i];
+    var opts=['<span dir="ltr" style="unicode-bidi:embed">'+dq.count+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">'+(dq.count===1?2:1)+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">'+(dq.count===1?0:3)+'</span>',
+              '\u05D0\u05D9\u05E0\u05E1\u05D5\u05E3'];
+    qs.push({type:'mc',stem:'\u05DB\u05DE\u05D4 \u05DE\u05E1\u05E4\u05E8\u05D9\u05DD \u05D9\u05E9 \u05E9\u05DE\u05E8\u05D7\u05E7\u05DD \u05DE-0 \u05E9\u05D5\u05D5\u05D4 \u05DC-<span class="math-expr" dir="ltr" style="unicode-bidi:embed">'+dq.d+'</span>?',
+      options:opts,answer:0,
+      explanation:dq.exp});
+  }
+  /* Q4-6: comparisons */
+  var compQs=[
+    {stem:'<span class="math-expr" dir="ltr" style="unicode-bidi:embed">|7\u2212| \u2610 4</span>',sign:'>',exp:'|7\u2212| = 7, \u05D5-7 > 4'},
+    {stem:'<span class="math-expr" dir="ltr" style="unicode-bidi:embed">|11\u2212| \u2610 |11|</span>',sign:'=',exp:'|11\u2212| = 11 = |11|'},
+    {stem:'<span class="math-expr" dir="ltr" style="unicode-bidi:embed">|7| \u2610 |6\u2212|</span>',sign:'>',exp:'|7| = 7, |6\u2212| = 6, \u05D5-7 > 6'}
+  ];
+  for(var i=0;i<3;i++){
+    var cq=compQs[i];
+    var opts=[cq.sign,'<','=','>'].filter(function(v,j,a){return a.indexOf(v)===j});
+    while(opts.length<3)opts.push('\u2260');
+    if(opts[0]!==cq.sign){var ci=opts.indexOf(cq.sign);var tmp=opts[0];opts[0]=opts[ci];opts[ci]=tmp}
+    qs.push({type:'mc',stem:'\u05D4\u05E9\u05DC\u05D9\u05DE\u05D5: '+cq.stem,
+      options:opts,answer:0,explanation:cq.exp});
+  }
+  /* Q7-9: sort with absolute values */
+  var sortQs=[
+    {display:['|2\u2212|','2\u2212','|3|','3\u2212','0','|0|'],values:[2,-2,3,-3,0,0]},
+    {display:['|5\u2212|','1\u2212','|4|','4\u2212','0'],values:[5,-1,4,-4,0]},
+    {display:['|1\u2212|','3\u2212','|2|','0','|4\u2212|'],values:[1,-3,2,0,4]}
+  ];
+  for(var i=0;i<3;i++){
+    var sq=sortQs[i];
+    var sorted=[].concat(sq.values).sort(function(a,b){return a-b});
+    var sortedStr=sorted.map(function(n){return fmtN(n)}).join(' , ');
+    var wrong1=[].concat(sq.values).sort(function(a,b){return b-a}).map(function(n){return fmtN(n)}).join(' , ');
+    var wrong2=[].concat(sq.values).sort(function(a,b){return Math.abs(a)-Math.abs(b)}).map(function(n){return fmtN(n)}).join(' , ');
+    if(wrong2===sortedStr)wrong2=wrong1;
+    var opts=['<span dir="ltr" style="unicode-bidi:embed">'+sortedStr+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">'+wrong1+'</span>',
+              '<span dir="ltr" style="unicode-bidi:embed">'+wrong2+'</span>'];
+    qs.push({type:'mc',stem:'\u05E1\u05D3\u05E8\u05D5 \u05DE\u05D4\u05E7\u05D8\u05DF \u05DC\u05D2\u05D3\u05D5\u05DC (\u05D7\u05E9\u05D1\u05D5 \u05E2\u05E8\u05DB\u05D9\u05DD \u05DE\u05D5\u05D7\u05DC\u05D8\u05D9\u05DD \u05E7\u05D5\u05D3\u05DD!): <span class="math-expr" dir="ltr" style="unicode-bidi:embed">'+sq.display.join(' , ')+'</span>',
+      options:opts,answer:0,
+      explanation:'\u05E7\u05D5\u05D3\u05DD \u05DE\u05D7\u05E9\u05D1\u05D9\u05DD \u05E2\u05E8\u05DB\u05D9\u05DD \u05DE\u05D5\u05D7\u05DC\u05D8\u05D9\u05DD, \u05D0\u05D7\u05E8 \u05DB\u05DA \u05DE\u05E1\u05D3\u05E8\u05D9\u05DD: '+sortedStr});
+  }
+  /* Q10-12: axis reasoning — |b|>|a|, who's farther, who's bigger */
+  var axisQs=[
+    {stem:'a \u05D7\u05D9\u05D5\u05D1\u05D9, b \u05E9\u05DC\u05D9\u05DC\u05D9, \u05D5-<span class="math-expr">|b| > |a|</span>. \u05DE\u05D9 <strong>\u05E8\u05D7\u05D5\u05E7 \u05D9\u05D5\u05EA\u05E8</strong> \u05DE-0?',
+     opts:['b','a','\u05E9\u05E0\u05D9\u05D4\u05DD \u05D1\u05D0\u05D5\u05EA\u05D5 \u05DE\u05E8\u05D7\u05E7'],answer:0,
+     explanation:'|b| > |a| \u05D0\u05D5\u05DE\u05E8 \u05E9-b \u05E8\u05D7\u05D5\u05E7 \u05D9\u05D5\u05EA\u05E8 \u05DE-0'},
+    {stem:'a \u05D7\u05D9\u05D5\u05D1\u05D9, b \u05E9\u05DC\u05D9\u05DC\u05D9, \u05D5-<span class="math-expr">|b| > |a|</span>. \u05DE\u05D9 <strong>\u05D2\u05D3\u05D5\u05DC \u05D9\u05D5\u05EA\u05E8</strong>?',
+     opts:['a \u2014 \u05DB\u05D9 a \u05D7\u05D9\u05D5\u05D1\u05D9 \u05D5-b \u05E9\u05DC\u05D9\u05DC\u05D9','b \u2014 \u05DB\u05D9 \u05D4\u05D5\u05D0 \u05E8\u05D7\u05D5\u05E7 \u05D9\u05D5\u05EA\u05E8','\u05DC\u05D0 \u05E0\u05D9\u05EA\u05DF \u05DC\u05D3\u05E2\u05EA'],answer:0,
+     explanation:'a \u05D7\u05D9\u05D5\u05D1\u05D9 \u05D5-b \u05E9\u05DC\u05D9\u05DC\u05D9 \u2014 \u05DB\u05DC \u05D7\u05D9\u05D5\u05D1\u05D9 \u05D2\u05D3\u05D5\u05DC \u05DE\u05DB\u05DC \u05E9\u05DC\u05D9\u05DC\u05D9!'},
+    {stem:'\u05E0\u05EA\u05D5\u05DF <span class="math-expr">|a| = |b|</span> \u05D5-<span class="math-expr">a \u2260 b</span>. \u05DE\u05D4 \u05D4\u05E7\u05E9\u05E8 \u05D1\u05D9\u05DF a \u05DC-b?',
+     opts:['\u05D4\u05DD \u05E0\u05D2\u05D3\u05D9\u05D9\u05DD: a = \u2212b','\u05E9\u05E0\u05D9\u05D4\u05DD \u05E9\u05D5\u05D5\u05D9\u05DD','\u05DC\u05D0 \u05E0\u05D9\u05EA\u05DF \u05DC\u05D3\u05E2\u05EA'],answer:0,
+     explanation:'\u05D0\u05DD |a| = |b| \u05D5-a \u2260 b, \u05D0\u05D6 a \u05D5-b \u05E0\u05D2\u05D3\u05D9\u05D9\u05DD (a = \u2212b)'}
+  ];
+  for(var i=0;i<3;i++)qs.push({type:'mc',stem:axisQs[i].stem,options:axisQs[i].opts,answer:axisQs[i].answer,explanation:axisQs[i].explanation});
+  /* Q13-15: solve |x| = k */
+  var solveQs=[
+    {stem:'\u05DE\u05E6\u05D0\u05D5 x: <span class="math-expr" dir="ltr" style="unicode-bidi:embed">|x| = 7</span>',
+     opts:['x = 7 \u05D0\u05D5 x = 7\u2212','\u05E8\u05E7 x = 7','x = 0','\u05D0\u05D9\u05DF \u05E4\u05EA\u05E8\u05D5\u05DF'],answer:0,
+     explanation:'\u05E9\u05E0\u05D9 \u05DE\u05E1\u05E4\u05E8\u05D9\u05DD \u05D1\u05DE\u05E8\u05D7\u05E7 7 \u05DE-0: 7 \u05D5-7\u2212'},
+    {stem:'\u05DE\u05E6\u05D0\u05D5 x: <span class="math-expr" dir="ltr" style="unicode-bidi:embed">|x| = 0</span>',
+     opts:['x = 0 \u05D1\u05DC\u05D1\u05D3','x = 0 \u05D0\u05D5 x = 0\u2212','\u05D0\u05D9\u05DF \u05E4\u05EA\u05E8\u05D5\u05DF','\u05DB\u05DC \u05DE\u05E1\u05E4\u05E8'],answer:0,
+     explanation:'\u05E8\u05E7 0 \u05E0\u05DE\u05E6\u05D0 \u05D1\u05DE\u05E8\u05D7\u05E7 0 \u05DE\u05E2\u05E6\u05DE\u05D5'},
+    {stem:'\u05DE\u05E6\u05D0\u05D5 x: <span class="math-expr" dir="ltr" style="unicode-bidi:embed">|x| = 3\u2212</span>',
+     opts:['\u05D0\u05D9\u05DF \u05E4\u05EA\u05E8\u05D5\u05DF! \u05E2\u05E8\u05DA \u05DE\u05D5\u05D7\u05DC\u05D8 \u05DC\u05D0 \u05D9\u05DB\u05D5\u05DC \u05DC\u05D4\u05D9\u05D5\u05EA \u05E9\u05DC\u05D9\u05DC\u05D9','x = 3\u2212','x = 3 \u05D0\u05D5 x = 3\u2212','x = 3'],answer:0,
+     explanation:'\u05E2\u05E8\u05DA \u05DE\u05D5\u05D7\u05DC\u05D8 \u05EA\u05DE\u05D9\u05D3 \u2265 0, \u05D0\u05D6 |x| = 3\u2212 \u05D0\u05D9\u05DF \u05E4\u05EA\u05E8\u05D5\u05DF!'}
+  ];
+  for(var i=0;i<3;i++)qs.push({type:'mc',stem:solveQs[i].stem,options:solveQs[i].opts,answer:solveQs[i].answer,explanation:solveQs[i].explanation});
+  return qs;
+}
+
+function generateQuestions(level){
+  if(level==='easy')return genEasy();
+  if(level==='medium')return genMedium();
+  if(level==='hard')return genHard();
+  return genChallenge();
+}
+
+/* ===== PRACTICE RENDERING ===== */
+function renderLevelTabs(){
+  var container=document.getElementById('levelTabs');container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(function(lv){
+    var btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    var done=scores[lv].filter(function(s){return s===1}).length;
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+LEVEL_COUNTS[lv]+')</span>':'');
+    btn.onclick=function(){switchLevel(lv)};
+    container.appendChild(btn);
+  });
+}
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv])questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length)scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length)answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+function updateLevelProgress(){
+  var lv=state.level,total=LEVEL_COUNTS[lv];
+  var done=answered[lv].filter(function(a){return a}).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+function renderQuestion(){
+  var lv=state.level,idx=state.qIndex,qs=questions[lv];
+  if(!qs)return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  if(idx>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    var la=document.getElementById('questionArea');
+    la.innerHTML='<div class="q-card" style="text-align:center;padding:40px 20px"><div class="q-number">\u05E9\u05D0\u05DC\u05D4 '+(idx+1)+' \u05DE\u05EA\u05D5\u05DA '+qs.length+'</div><div style="font-size:3.5rem;margin:24px 0">\uD83D\uDD12</div><div style="font-size:1.15rem;font-weight:700;margin-bottom:12px">\u05EA\u05D5\u05DB\u05DF \u05D6\u05DE\u05D9\u05DF \u05DC\u05DE\u05E0\u05D5\u05D9\u05D9\u05DD</div><div style="color:var(--text-light);margin-bottom:20px">\u05E9\u05D0\u05DC\u05D4 1 \u05E4\u05EA\u05D5\u05D7\u05D4 \u05DC\u05D4\u05EA\u05E0\u05E1\u05D5\u05EA \u2014 \u05DC\u05D4\u05DE\u05E9\u05DA \u05EA\u05E8\u05D2\u05D5\u05DC \u05D9\u05E9 \u05DC\u05D4\u05D9\u05E8\u05E9\u05DD</div><button class="q-check-btn" onclick="if(typeof showAuthModal===\'function\')showAuthModal()">\u05DC\u05E4\u05EA\u05D9\u05D7\u05EA \u05D2\u05D9\u05E9\u05D4 \u05DE\u05DC\u05D0\u05D4</button></div>';
+    document.getElementById('qPrev').disabled=idx===0;
+    document.getElementById('qNext').textContent=idx>=qs.length-1?'\u05E1\u05D9\u05D5\u05DD':'\u05D4\u05D1\u05D0 \u2190';
+    updateLevelProgress();return;
+  }
+  var q=qs[idx],area=document.getElementById('questionArea'),isAnswered=answered[lv][idx];
+  var html='<div class="q-card"><div class="q-number">\u05E9\u05D0\u05DC\u05D4 '+(idx+1)+' \u05DE\u05EA\u05D5\u05DA '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach(function(opt,i){
+      var letter=LETTERS[i],cls='q-opt';
+      if(isAnswered){cls+=' disabled';if(i===q.answer)cls+=' correct';else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel'])cls+=' wrong'}
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span>'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered)html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>\u05D1\u05D3\u05E7\u05D5</button>';
+  } else if(q.type==='input'){
+    html+='<div class="q-input-row"><input type="number" class="q-input" id="qInput" placeholder="\u05EA\u05E9\u05D5\u05D1\u05D4" dir="ltr">';
+    if(!isAnswered)html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">\u05D1\u05D3\u05E7\u05D5</button>';
+    html+='</div>';
+    if(isAnswered)html+='<div style="margin-top:4px;font-weight:700;direction:ltr">\u05EA\u05E9\u05D5\u05D1\u05D4: '+fmtN(q.answer)+'</div>';
+  }
+  if(isAnswered){
+    var ic=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(ic?'correct':'wrong')+'">'+(ic?'\u2705 \u05E0\u05DB\u05D5\u05DF! ':'\u274C ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(function(el){
+      el.onclick=function(){
+        area.querySelectorAll('.q-opt').forEach(function(o){o.classList.remove('selected')});
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+  var inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){inp.focus();inp.addEventListener('keydown',function(e){if(e.key==='Enter')checkInput()})}
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'\u05E1\u05D9\u05D5\u05DD':'\u05D4\u05D1\u05D0 \u2190';
+}
+
+window.checkMC=function(){
+  var lv=state.level,idx=state.qIndex,q=questions[lv][idx];
+  var selected=document.querySelector('.q-opt.selected');if(!selected)return;
+  var si=parseInt(selected.dataset.i),isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;answered[lv][idx]=true;answered[lv][idx+'_sel']=si;
+  document.querySelectorAll('.q-opt').forEach(function(el,i){
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer)el.classList.add('correct');
+    else if(i===si&&!isCorrect)el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['\u2705 \u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3!','\u2705 \u05DE\u05E2\u05D5\u05DC\u05D4!','\u2705 \u05E0\u05DB\u05D5\u05DF!'])+' ':'\u274C ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+window.checkInput=function(){
+  var lv=state.level,idx=state.qIndex,q=questions[lv][idx];
+  var inp=document.getElementById('qInput'),val=inp.value.trim();if(!val)return;
+  var isCorrect=Math.abs(parseFloat(val)-q.answer)<0.01;
+  scores[lv][idx]=isCorrect?1:0;answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');inp.disabled=true;
+  var btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'\u2705 \u05E0\u05DB\u05D5\u05DF! ':'\u274C ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+function nextQuestion(){
+  var lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+function renderLevelComplete(){
+  var lv=state.level;
+  var correct=scores[lv].filter(function(s){return s===1}).length;
+  var total=LEVEL_COUNTS[lv],pct=Math.round(correct/total*100);
+  var scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  var emoji=pct>=80?'\uD83C\uDF89':pct>=50?'\uD83D\uDC4F':'\uD83D\uDCAA';
+  document.getElementById('questionArea').innerHTML='<div class="q-card"><div class="level-complete"><div class="big-emoji">'+emoji+'</div><h2>\u05E1\u05D9\u05D9\u05DE\u05EA\u05DD \u05D0\u05EA \u05E8\u05DE\u05EA "'+LEVEL_NAMES[lv]+'"!</h2><div class="score-display'+scoreClass+'">'+correct+' / '+total+'</div><p style="color:var(--text-light);margin-bottom:16px">'+pct+'% \u05D4\u05E6\u05DC\u05D7\u05D4</p><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="mini-btn" onclick="retryLevel()">\uD83D\uDD04 \u05E0\u05E1\u05D5 \u05E9\u05D5\u05D1</button>'+(lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">\u25B6 \u05DC\u05E8\u05DE\u05D4 \u05D4\u05D1\u05D0\u05D4</button>':'')+'</div></div></div>';
+  if(pct>=80)showConfetti();saveState();
+}
+window.retryLevel=function(){
+  var lv=state.level;scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);state.qIndex=0;renderLevelTabs();renderQuestion();saveState();
+};
+window.nextLevel=function(){
+  var order=['easy','medium','hard','challenge'];
+  var ci=order.indexOf(state.level);if(ci<order.length-1)switchLevel(order[ci+1]);
+};
+
+/* ===== SECTION SWITCHING ===== */
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(function(b){b.classList.toggle('active',b.dataset.section===sec)});
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level])questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length)scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length)answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+/* ===== CONFETTI ===== */
+function showConfetti(){
+  var box=document.getElementById('confettiBox');box.innerHTML='';
+  var colors=['#2563eb','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'];
+  for(var i=0;i<50;i++){
+    var c=document.createElement('div');c.className='confetti';
+    c.style.left=Math.random()*100+'%';c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(function(){box.innerHTML=''},5000);
+}
+
+/* ===== INIT ===== */
+function init(){
+  loadState();
+  ['easy','medium','hard','challenge'].forEach(function(lv){
+    if(!scores[lv]||!scores[lv].length)scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length)answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice')switchSection('practice');
+}
+init();
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

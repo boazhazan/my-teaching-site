@@ -1,0 +1,905 @@
+<!--
+  Title: כפל וחילוק מספרים מכוונים
+  Unit: מספרים מכוונים
+  Subject: מתמטיקה
+  Grade: ז׳
+  Lesson: 5
+  Tags: מספרים-מכוונים,כפל,חילוק,סימנים
+  Icon: ✖️
+  Description: כפל וחילוק מספרים מכוונים — כללי סימנים, כפל ב-0, חילוק
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>כפל וחילוק מכוונים | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+  --neg:#ef4444;--pos:#10b981;--zero:#2563eb;
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid var(--accent);padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card code{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:var(--primary);flex-shrink:0}
+.q-check-btn{padding:10px 32px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;display:block;margin:8px auto 0}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem}
+.q-feedback.correct{background:#ecfdf5;color:#065f46;border-right:4px solid var(--success)}
+.q-feedback.wrong{background:#fef2f2;color:#991b1b;border-right:4px solid var(--error)}
+.q-input-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.q-input{padding:10px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:1rem;font-weight:700;width:120px;text-align:center;direction:ltr}
+.q-input:focus{outline:none;border-color:var(--primary)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+.q-nav{display:flex;justify-content:space-between;margin-top:12px;gap:8px}
+.q-nav-btn{padding:8px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.level-complete{text-align:center;padding:24px}
+.level-complete .big-emoji{font-size:3.5rem;margin-bottom:12px}
+.level-complete h2{font-size:1.3rem;margin-bottom:8px;color:var(--primary-dark)}
+.score-display{font-size:2.5rem;font-weight:800;color:var(--success);margin:8px 0}
+.score-display.medium-score{color:var(--accent)}
+.score-display.low-score{color:var(--error)}
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media print{.topbar,.section-toggle,.step-nav,.q-nav,.mini-btn,.q-check-btn{display:none!important}.container{max-width:100%}body{background:#fff}}
+.print-btn{background:none;border:none;font-size:1.2rem;cursor:pointer;padding:4px 8px;border-radius:6px;transition:.2s}
+.print-btn:hover{background:var(--bg-soft)}
+.sign-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.sign-table th,.sign-table td{border:1px solid var(--border);padding:8px 14px;text-align:center;font-size:.95rem}
+.sign-table th{background:var(--primary-light);font-weight:700;color:var(--primary-dark)}
+.sign-table td.pos{color:var(--success);font-weight:700}
+.sign-table td.neg{color:var(--error);font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">✖️ כיתה ז׳ — כפל וחילוק מכוונים</span>
+  <div style="display:flex;align-items:center;gap:10px"><button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button><a href="../../../../materials.html">← חזרה לחומרי לימוד</a></div>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+<section id="learnSection">
+  <div class="step-progress"><div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div><div class="step-progress-text" id="stepText"></div></div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress"><div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div><div class="level-progress-text" id="levelText"></div></div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+</div>
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+var today=new Date(),dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+var rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(a){return a[Math.floor(R()*a.length)]}
+function shuffle(a){var c=[].concat(a);for(var i=c.length-1;i>0;i--){var j=Math.floor(R()*(i+1));var t=c[i];c[i]=c[j];c[j]=t}return c}
+var LETTERS=['\u05D0','\u05D1','\u05D2','\u05D3'];
+
+function fmtN(v){
+  if(v==null)return '?';
+  var n=typeof v==='number'?v:parseFloat(v);
+  if(Math.abs(n)<.0001)return '0';
+  if(n<0){var abs=Math.abs(n);var s=(abs===Math.floor(abs))?''+abs:parseFloat(abs.toFixed(4))+'';return s+'\u2212';}
+  return (n===Math.floor(n))?''+n:parseFloat(n.toFixed(4))+'';
+}
+
+/* ===== STATE ===== */
+var state={section:'learn',step:0,level:'easy',qIndex:0};
+var scores={easy:[],medium:[],hard:[],challenge:[]};
+var answered={easy:[],medium:[],hard:[],challenge:[]};
+var questions={easy:null,medium:null,hard:null,challenge:null};
+var LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+var LEVEL_NAMES={easy:'\u05E7\u05DC',medium:'\u05D1\u05D9\u05E0\u05D5\u05E0\u05D9',hard:'\u05E7\u05E9\u05D4',challenge:'\u05D0\u05EA\u05D2\u05E8'};
+var TOTAL_STEPS=7;
+var LS_KEY='bh_g7_mul_div_'+dateSeed;
+
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores:scores,answered:answered,state:state}))}catch(e){}}
+function loadState(){try{var d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+/* ===== TEACHING STEPS ===== */
+var steps=[
+/* Step 0 — Multiplication table with directed numbers */
+{title:'\uD83D\uDCCA \u05DC\u05D5\u05D7 \u05DB\u05E4\u05DC \u05E2\u05DD \u05DE\u05DB\u05D5\u05D5\u05E0\u05D9\u05DD',render:function(){return '\
+<p>\u05D1\u05D5\u05D0\u05D5 \u05E0\u05D1\u05D3\u05D5\u05E7 \u05DE\u05D4 \u05E7\u05D5\u05E8\u05D4 \u05DB\u05E9\u05DB\u05D5\u05E4\u05DC\u05D9\u05DD \u05DE\u05E1\u05E4\u05E8\u05D9\u05DD \u05DE\u05DB\u05D5\u05D5\u05E0\u05D9\u05DD:</p>\
+<table class="sign-table">\
+<tr><th>\u00D7</th><th>2\u2212</th><th>1\u2212</th><th>0</th><th>1</th><th>2</th></tr>\
+<tr><th>2\u2212</th><td class="pos">4</td><td class="pos">2</td><td>0</td><td class="neg">2\u2212</td><td class="neg">4\u2212</td></tr>\
+<tr><th>1\u2212</th><td class="pos">2</td><td class="pos">1</td><td>0</td><td class="neg">1\u2212</td><td class="neg">2\u2212</td></tr>\
+<tr><th>0</th><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>\
+<tr><th>1</th><td class="neg">2\u2212</td><td class="neg">1\u2212</td><td>0</td><td class="pos">1</td><td class="pos">2</td></tr>\
+<tr><th>2</th><td class="neg">4\u2212</td><td class="neg">2\u2212</td><td>0</td><td class="pos">2</td><td class="pos">4</td></tr>\
+</table>\
+<div class="rule-box">\u2728 \u05E9\u05D9\u05DE\u05D5 \u05DC\u05D1: \u05D0\u05D5\u05EA\u05D5 \u05E1\u05D9\u05DE\u05DF = \u05D7\u05D9\u05D5\u05D1\u05D9, \u05E1\u05D9\u05DE\u05DF \u05E9\u05D5\u05E0\u05D4 = \u05E9\u05DC\u05D9\u05DC\u05D9!</div>\
+<p><strong>\u2753 \u05E9\u05D0\u05DC\u05D4:</strong> \u05D0\u05D9\u05D6\u05D4 \u05D3\u05E4\u05D5\u05E1 \u05E8\u05D5\u05D0\u05D9\u05DD \u05D1\u05DC\u05D5\u05D7?</p>\
+<div class="quiz-options" id="s0quiz">\
+<div class="quiz-opt" onclick="pickOpt(this,0,\'s0quiz\',\'s0fb\',0)">\u05D0\u05D5\u05EA\u05D5 \u05E1\u05D9\u05DE\u05DF = \u05D7\u05D9\u05D5\u05D1\u05D9, \u05E1\u05D9\u05DE\u05DF \u05E9\u05D5\u05E0\u05D4 = \u05E9\u05DC\u05D9\u05DC\u05D9</div>\
+<div class="quiz-opt" onclick="pickOpt(this,1,\'s0quiz\',\'s0fb\',0)">\u05DB\u05DC \u05D4\u05EA\u05D5\u05E6\u05D0\u05D5\u05EA \u05D7\u05D9\u05D5\u05D1\u05D9\u05D5\u05EA</div>\
+<div class="quiz-opt" onclick="pickOpt(this,2,\'s0quiz\',\'s0fb\',0)">\u05DB\u05DC \u05D4\u05EA\u05D5\u05E6\u05D0\u05D5\u05EA \u05E9\u05DC\u05D9\u05DC\u05D9\u05D5\u05EA</div>\
+</div><div id="s0fb"></div>'}},
+
+/* Step 1 — Positive × Positive = Positive */
+{title:'\u2795 \u05D7\u05D9\u05D5\u05D1\u05D9 \u00D7 \u05D7\u05D9\u05D5\u05D1\u05D9 = \u05D7\u05D9\u05D5\u05D1\u05D9',render:function(){return '\
+<div class="rule-box">(+) \u00D7 (+) = (+)</div>\
+<p>\u05D6\u05D4 \u05D4\u05DB\u05DC\u05DC \u05D4\u05DB\u05D9 \u05DE\u05D5\u05DB\u05E8 \u2014 \u05DB\u05E4\u05DC \u05D7\u05D9\u05D5\u05D1\u05D9 \u05D1\u05D7\u05D9\u05D5\u05D1\u05D9 \u05E0\u05D5\u05EA\u05DF \u05D7\u05D9\u05D5\u05D1\u05D9.</p>\
+<div class="example">\
+<span class="math-expr">6 \u00B7 4 = 24</span> &emsp;\
+<span class="math-expr">3 \u00B7 7 = 21</span> &emsp;\
+<span class="math-expr">5 \u00B7 9 = 45</span>\
+</div>\
+<p><strong>\u2753 \u05EA\u05E8\u05D2\u05D9\u05DC:</strong> <span class="math-expr">4 \u00B7 5 = ?</span></p>\
+<div class="quiz-options" id="s1quiz">\
+<div class="quiz-opt" onclick="pickOpt(this,0,\'s1quiz\',\'s1fb\',0)">20</div>\
+<div class="quiz-opt" onclick="pickOpt(this,1,\'s1quiz\',\'s1fb\',0)">20\u2212</div>\
+<div class="quiz-opt" onclick="pickOpt(this,2,\'s1quiz\',\'s1fb\',0)">9</div>\
+</div><div id="s1fb"></div>'}},
+
+/* Step 2 — Positive × Negative = Negative */
+{title:'\u2796 \u05D7\u05D9\u05D5\u05D1\u05D9 \u00D7 \u05E9\u05DC\u05D9\u05DC\u05D9 = \u05E9\u05DC\u05D9\u05DC\u05D9',render:function(){return '\
+<div class="rule-box">(+) \u00D7 (\u2212) = (\u2212) &emsp; \u05D5\u05D2\u05DD &emsp; (\u2212) \u00D7 (+) = (\u2212)</div>\
+<p>\u05D3\u05DE\u05D9\u05D9\u05E0\u05D5: \u05D0\u05DD \u05DC\u05DE\u05D9\u05E9\u05D4\u05D5 \u05D9\u05E9 \u05D7\u05D5\u05D1 \u05E9\u05DC 4 \u05E9"\u05D7, \u05D5\u05D4\u05D5\u05D0 \u05DC\u05D5\u05E7\u05D7 6 \u05E4\u05E2\u05DE\u05D9\u05DD:</p>\
+<div class="example">\
+<span class="math-expr">6 \u00B7 (4\u2212) = 24\u2212</span> \u2014 "6 \u05E4\u05E2\u05DE\u05D9\u05DD \u05D7\u05D5\u05D1 \u05E9\u05DC 4 = \u05D7\u05D5\u05D1 \u05E9\u05DC 24"<br>\
+<span class="math-expr">(2\u2212) \u00B7 3 = 6\u2212</span> &emsp;\
+<span class="math-expr">5 \u00B7 (3\u2212) = 15\u2212</span>\
+</div>\
+<div class="highlight">\u05E1\u05D9\u05DE\u05E0\u05D9\u05DD \u05E9\u05D5\u05E0\u05D9\u05DD \u2192 \u05D4\u05EA\u05D5\u05E6\u05D0\u05D4 \u05E9\u05DC\u05D9\u05DC\u05D9\u05EA!</div>\
+<p><strong>\u2753 \u05EA\u05E8\u05D2\u05D9\u05DC:</strong> <span class="math-expr">5 \u00B7 (3\u2212) = ?</span></p>\
+<div class="quiz-options" id="s2quiz">\
+<div class="quiz-opt" onclick="pickOpt(this,0,\'s2quiz\',\'s2fb\',0)">15\u2212</div>\
+<div class="quiz-opt" onclick="pickOpt(this,1,\'s2quiz\',\'s2fb\',0)">15</div>\
+<div class="quiz-opt" onclick="pickOpt(this,2,\'s2quiz\',\'s2fb\',0)">8\u2212</div>\
+</div><div id="s2fb"></div>'}},
+
+/* Step 3 — Negative × Negative = Positive */
+{title:'\u2705 \u05E9\u05DC\u05D9\u05DC\u05D9 \u00D7 \u05E9\u05DC\u05D9\u05DC\u05D9 = \u05D7\u05D9\u05D5\u05D1\u05D9!',render:function(){return '\
+<div class="rule-box">(\u2212) \u00D7 (\u2212) = (+) \uD83C\uDF89</div>\
+<p>\u05D3\u05DE\u05D9\u05D9\u05E0\u05D5: "\u05DC\u05D4\u05E1\u05D9\u05E8 \u05D7\u05D5\u05D1 \u2014 \u05D6\u05D4 \u05D3\u05D1\u05E8 \u05D8\u05D5\u05D1!" \u05DE\u05D9\u05E0\u05D5\u05E1 \u05E9\u05DC \u05DE\u05D9\u05E0\u05D5\u05E1 = \u05E4\u05DC\u05D5\u05E1.</p>\
+<div class="example">\
+<span class="math-expr">(10\u2212) \u00B7 (7\u2212) = 70</span><br>\
+<span class="math-expr">(4\u2212) \u00B7 (6\u2212) = 24</span> &emsp;\
+<span class="math-expr">(3\u2212) \u00B7 (5\u2212) = 15</span>\
+</div>\
+<p><strong>\u2753 \u05EA\u05E8\u05D2\u05D9\u05DC:</strong> <span class="math-expr">(4\u2212) \u00B7 (3\u2212) = ?</span></p>\
+<div class="quiz-options" id="s3quiz">\
+<div class="quiz-opt" onclick="pickOpt(this,0,\'s3quiz\',\'s3fb\',0)">12</div>\
+<div class="quiz-opt" onclick="pickOpt(this,1,\'s3quiz\',\'s3fb\',0)">12\u2212</div>\
+<div class="quiz-opt" onclick="pickOpt(this,2,\'s3quiz\',\'s3fb\',0)">7\u2212</div>\
+</div><div id="s3fb"></div>'}},
+
+/* Step 4 — Multiplication by 0 and division of 0 */
+{title:'\u0030\uFE0F\u20E3 \u05DB\u05E4\u05DC \u05D1-0 \u05D5\u05D7\u05D9\u05DC\u05D5\u05E7 0',render:function(){return '\
+<div class="rule-box">\
+a \u00B7 0 = 0 &emsp; 0 \u00B7 a = 0 &emsp; 0 \u00F7 a = 0<br>\
+<span style="color:var(--error)">a \u00F7 0 = \u05DC\u05D0 \u05DE\u05D5\u05D2\u05D3\u05E8!</span>\
+</div>\
+<div class="example">\
+<span class="math-expr">5 \u00B7 0 = 0</span> &emsp;\
+<span class="math-expr">0 \u00B7 (5\u2212) = 0</span> &emsp;\
+<span class="math-expr">0 \u00F7 3 = 0</span><br>\
+<span class="math-expr" style="color:var(--error)">7 \u00F7 0 = </span> <strong style="color:var(--error)">\u05DC\u05D0 \u05DE\u05D5\u05D2\u05D3\u05E8!</strong>\
+</div>\
+<div class="warning">\u26A0\uFE0F \u05D7\u05D9\u05DC\u05D5\u05E7 \u05D1-0 \u05DC\u05D0 \u05DE\u05D5\u05D2\u05D3\u05E8 \u2014 \u05D0\u05E3 \u05E4\u05E2\u05DD!</div>\
+<p><strong>\u2753 \u05EA\u05E8\u05D2\u05D9\u05DC:</strong> <span class="math-expr">0 \u00B7 (7\u2212) = ?</span></p>\
+<div class="quiz-options" id="s4quiz">\
+<div class="quiz-opt" onclick="pickOpt(this,0,\'s4quiz\',\'s4fb\',0)">0</div>\
+<div class="quiz-opt" onclick="pickOpt(this,1,\'s4quiz\',\'s4fb\',0)">7\u2212</div>\
+<div class="quiz-opt" onclick="pickOpt(this,2,\'s4quiz\',\'s4fb\',0)">7</div>\
+<div class="quiz-opt" onclick="pickOpt(this,3,\'s4quiz\',\'s4fb\',0)">\u05DC\u05D0 \u05DE\u05D5\u05D2\u05D3\u05E8</div>\
+</div><div id="s4fb"></div>'}},
+
+/* Step 5 — Sign rules for division */
+{title:'\u00F7 \u05DB\u05DC\u05DC\u05D9 \u05E1\u05D9\u05DE\u05E0\u05D9\u05DD \u05D1\u05D7\u05D9\u05DC\u05D5\u05E7',render:function(){return '\
+<div class="highlight">\u05DB\u05DC\u05DC\u05D9 \u05D4\u05E1\u05D9\u05DE\u05E0\u05D9\u05DD \u05D1\u05D7\u05D9\u05DC\u05D5\u05E7 \u2014 \u05D1\u05D3\u05D9\u05D5\u05E7 \u05DB\u05DE\u05D5 \u05D1\u05DB\u05E4\u05DC!</div>\
+<table class="sign-table">\
+<tr><th>\u05E4\u05E2\u05D5\u05DC\u05D4</th><th>\u05DB\u05DC\u05DC</th><th>\u05D3\u05D5\u05D2\u05DE\u05D4</th></tr>\
+<tr><td>(+) \u00F7 (+)</td><td class="pos">(+)</td><td><span class="math-expr">15 \u00F7 3 = 5</span></td></tr>\
+<tr><td>(+) \u00F7 (\u2212)</td><td class="neg">(\u2212)</td><td><span class="math-expr">15 \u00F7 (3\u2212) = 5\u2212</span></td></tr>\
+<tr><td>(\u2212) \u00F7 (+)</td><td class="neg">(\u2212)</td><td><span class="math-expr">(15\u2212) \u00F7 3 = 5\u2212</span></td></tr>\
+<tr><td>(\u2212) \u00F7 (\u2212)</td><td class="pos">(+)</td><td><span class="math-expr">(15\u2212) \u00F7 (3\u2212) = 5</span></td></tr>\
+</table>\
+<div class="rule-box">\u2B50 \u05D0\u05D5\u05EA\u05D5 \u05E1\u05D9\u05DE\u05DF = \u05D7\u05D9\u05D5\u05D1\u05D9 &emsp; \u05E1\u05D9\u05DE\u05DF \u05E9\u05D5\u05E0\u05D4 = \u05E9\u05DC\u05D9\u05DC\u05D9</div>\
+<p><strong>\u2753 \u05EA\u05E8\u05D2\u05D9\u05DC:</strong> <span class="math-expr">(15\u2212) \u00F7 (3\u2212) = ?</span></p>\
+<div class="quiz-options" id="s5quiz">\
+<div class="quiz-opt" onclick="pickOpt(this,0,\'s5quiz\',\'s5fb\',0)">5</div>\
+<div class="quiz-opt" onclick="pickOpt(this,1,\'s5quiz\',\'s5fb\',0)">5\u2212</div>\
+<div class="quiz-opt" onclick="pickOpt(this,2,\'s5quiz\',\'s5fb\',0)">12\u2212</div>\
+</div><div id="s5fb"></div>'}},
+
+/* Step 6 — Summary */
+{title:'\uD83C\uDFAF \u05E1\u05D9\u05DB\u05D5\u05DD',render:function(){return '\
+<div class="step-summary-grid">\
+<div class="summary-item"><div class="s-icon">\u2705</div><div class="s-title">\u05D0\u05D5\u05EA\u05D5 \u05E1\u05D9\u05DE\u05DF = \u05D7\u05D9\u05D5\u05D1\u05D9</div><div class="s-text">(+)\u00D7(+) = (+)<br>(\u2212)\u00D7(\u2212) = (+)</div></div>\
+<div class="summary-item"><div class="s-icon">\u274C</div><div class="s-title">\u05E1\u05D9\u05DE\u05DF \u05E9\u05D5\u05E0\u05D4 = \u05E9\u05DC\u05D9\u05DC\u05D9</div><div class="s-text">(+)\u00D7(\u2212) = (\u2212)<br>(\u2212)\u00D7(+) = (\u2212)</div></div>\
+<div class="summary-item"><div class="s-icon">0\uFE0F\u20E3</div><div class="s-title">\u05DB\u05E4\u05DC \u05D1-0</div><div class="s-text">a \u00B7 0 = 0<br>0 \u00F7 a = 0</div></div>\
+<div class="summary-item"><div class="s-icon">\u26A0\uFE0F</div><div class="s-title">\u05D7\u05D9\u05DC\u05D5\u05E7 \u05D1-0</div><div class="s-text">a \u00F7 0 = \u05DC\u05D0 \u05DE\u05D5\u05D2\u05D3\u05E8!</div></div>\
+</div>\
+<div class="highlight">\u05DB\u05DC\u05DC\u05D9 \u05D4\u05E1\u05D9\u05DE\u05E0\u05D9\u05DD \u05D6\u05D4\u05D9\u05DD \u05D2\u05DD \u05DC\u05DB\u05E4\u05DC \u05D5\u05D2\u05DD \u05DC\u05D7\u05D9\u05DC\u05D5\u05E7!</div>\
+<div class="success-box">\uD83C\uDFAF \u05DE\u05D5\u05DB\u05E0\u05D9\u05DD \u05DC\u05EA\u05E8\u05D2\u05D5\u05DC? \u05DC\u05D7\u05E6\u05D5 \u05E2\u05DC <strong>"\u05EA\u05E8\u05D2\u05D5\u05DC"</strong> \u05DC\u05DE\u05E2\u05DC\u05D4!</div>'}}
+];
+
+/* ===== TEACHING HELPERS ===== */
+window.pickOpt=function(el,elIdx,quizId,fbId,correctIdx){
+  var opts=document.querySelectorAll('#'+quizId+' .quiz-opt');
+  var ci=0;
+  opts.forEach(function(o,i){if(o===el)ci=i;o.onclick=null;o.style.cursor='default'});
+  if(ci===correctIdx){
+    el.classList.add('correct-answer');
+    document.getElementById(fbId).innerHTML='<div class="feedback-inline ok">\u2705 \u05E0\u05DB\u05D5\u05DF!</div>';
+  } else {
+    el.classList.add('wrong-answer');
+    opts[correctIdx].classList.add('correct-answer');
+    var explanations={
+      0:'\u05D0\u05D5\u05EA\u05D5 \u05E1\u05D9\u05DE\u05DF = \u05D7\u05D9\u05D5\u05D1\u05D9, \u05E1\u05D9\u05DE\u05DF \u05E9\u05D5\u05E0\u05D4 = \u05E9\u05DC\u05D9\u05DC\u05D9',
+      1:'(+) \u00D7 (+) = (+), \u05D5\u05DC\u05DB\u05DF 4\u00B75 = 20',
+      2:'(+) \u00D7 (\u2212) = (\u2212), \u05D5\u05DC\u05DB\u05DF 5\u00B7(3\u2212) = 15\u2212',
+      3:'(\u2212) \u00D7 (\u2212) = (+), \u05D5\u05DC\u05DB\u05DF (4\u2212)\u00B7(3\u2212) = 12',
+      4:'0 \u05DB\u05E4\u05D5\u05DC \u05D1\u05DB\u05DC \u05DE\u05E1\u05E4\u05E8 = 0',
+      5:'(\u2212) \u00F7 (\u2212) = (+), \u05D5\u05DC\u05DB\u05DF (15\u2212)\u00F7(3\u2212) = 5'
+    };
+    document.getElementById(fbId).innerHTML='<div class="feedback-inline err">\u274C '+explanations[state.step]+'</div>';
+  }
+};
+
+/* ===== STEP RENDERING ===== */
+function renderStep(idx){
+  state.step=idx;
+  document.getElementById('stepFill').style.width=((idx+1)/TOTAL_STEPS*100)+'%';
+  document.getElementById('stepText').textContent=(idx+1)+' / '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+steps[idx].title+'</div>'+steps[idx].render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'\u05DC\u05EA\u05E8\u05D2\u05D5\u05DC \u2190':'\u05D4\u05D1\u05D0 \u2190';
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+/* ===== QUESTION GENERATORS ===== */
+/* helper: wrap LTR math */
+function L(s){return '<span dir="ltr" style="unicode-bidi:embed">'+s+'</span>';}
+
+/* ===== EASY (20) ===== */
+function genEasy(){
+  var rng2=mulberry32(dateSeed+100),R2=function(){return rng2()},RI2=function(a,b){return a+Math.floor(R2()*(b-a+1))};
+  var qs=[];
+
+  /* Q1-5: Is the result positive or negative? */
+  for(var i=0;i<5;i++){
+    var a=RI2(1,9)*(R2()>0.5?1:-1);
+    var b=RI2(1,9)*(R2()>0.5?1:-1);
+    while(a===0)a=RI2(1,9)*(R2()>0.5?1:-1);
+    while(b===0)b=RI2(1,9)*(R2()>0.5?1:-1);
+    var op=R2()>0.5?'\u00B7':'\u00F7';
+    var result=a*b;
+    if(op==='\u00F7'){
+      /* make sure division is clean */
+      var d=RI2(2,9)*(R2()>0.5?1:-1);
+      var q2=RI2(1,9)*(R2()>0.5?1:-1);
+      while(d===0)d=RI2(2,9)*(R2()>0.5?1:-1);
+      while(q2===0)q2=RI2(1,9)*(R2()>0.5?1:-1);
+      a=d*q2;b=d;
+      result=q2;
+    }
+    var isPos=result>0;
+    var opts=[isPos?'\u05D7\u05D9\u05D5\u05D1\u05D9':'\u05E9\u05DC\u05D9\u05DC\u05D9',
+              isPos?'\u05E9\u05DC\u05D9\u05DC\u05D9':'\u05D7\u05D9\u05D5\u05D1\u05D9',
+              '0',
+              '\u05DC\u05D0 \u05DE\u05D5\u05D2\u05D3\u05E8'];
+    var signA=(a>0?'+':'\u2212'),signB=(b>0?'+':'\u2212');
+    qs.push({type:'mc',stem:'\u05D4\u05D0\u05DD \u05D4\u05EA\u05D5\u05E6\u05D0\u05D4 \u05D7\u05D9\u05D5\u05D1\u05D9\u05EA \u05D0\u05D5 \u05E9\u05DC\u05D9\u05DC\u05D9\u05EA? '+L(fmtN(a)+' '+op+' '+fmtN(b)),
+      options:opts,answer:0,
+      explanation:'('+signA+') '+op+' ('+signB+') = '+(isPos?'(+) \u2014 \u05D0\u05D5\u05EA\u05D5 \u05E1\u05D9\u05DE\u05DF':'(\u2212) \u2014 \u05E1\u05D9\u05DE\u05DF \u05E9\u05D5\u05E0\u05D4')});
+  }
+
+  /* Q6-10: simple multiplication a · (b−) = ? */
+  for(var i=0;i<5;i++){
+    var a2=RI2(2,9),b2=RI2(2,9);
+    var result2=a2*(-b2);
+    var w1=a2*b2,w2=-(a2*b2)-RI2(1,3),w3=a2+b2;
+    var opts2=[L(fmtN(result2)),L(fmtN(w1)),L(fmtN(w2)),L(fmtN(w3))];
+    qs.push({type:'mc',stem:'\u05D7\u05E9\u05D1\u05D5: '+L(a2+' \u00B7 ('+fmtN(-b2)+') = ?'),
+      options:opts2,answer:0,
+      explanation:a2+' \u00B7 ('+fmtN(-b2)+') = '+fmtN(result2)+' \u2014 (+)\u00D7(\u2212) = (\u2212)'});
+  }
+
+  /* Q11-15: simple division (a−) ÷ b = ? */
+  for(var i=0;i<5;i++){
+    var d3=RI2(2,9),q3=RI2(2,9);
+    var a3=-(d3*q3);/* negative */
+    var result3=a3/d3;/* negative quotient */
+    var w1b=Math.abs(result3),w2b=-result3-RI2(1,2),w3b=a3+d3;
+    var opts3=[L(fmtN(result3)),L(fmtN(w1b)),L(fmtN(w2b)),L(fmtN(w3b))];
+    qs.push({type:'mc',stem:'\u05D7\u05E9\u05D1\u05D5: '+L('('+fmtN(a3)+') \u00F7 '+d3+' = ?'),
+      options:opts3,answer:0,
+      explanation:'('+fmtN(a3)+') \u00F7 '+d3+' = '+fmtN(result3)+' \u2014 (\u2212)\u00F7(+) = (\u2212)'});
+  }
+
+  /* Q16-20: (a−) · (b−) = ? (result positive!) */
+  for(var i=0;i<5;i++){
+    var a4=RI2(2,9),b4=RI2(2,9);
+    var result4=a4*b4;/* positive! */
+    var w1c=-(a4*b4),w2c=a4*b4+RI2(1,3),w3c=-(a4+b4);
+    var opts4=[L(fmtN(result4)),L(fmtN(w1c)),L(fmtN(w2c)),L(fmtN(w3c))];
+    qs.push({type:'mc',stem:'\u05D7\u05E9\u05D1\u05D5: '+L('('+fmtN(-a4)+') \u00B7 ('+fmtN(-b4)+') = ?'),
+      options:opts4,answer:0,
+      explanation:'('+fmtN(-a4)+') \u00B7 ('+fmtN(-b4)+') = '+fmtN(result4)+' \u2014 (\u2212)\u00D7(\u2212) = (+)'});
+  }
+
+  return qs;
+}
+
+/* ===== MEDIUM (20) ===== */
+function genMedium(){
+  var rng2=mulberry32(dateSeed+200),R2=function(){return rng2()},RI2=function(a,b){return a+Math.floor(R2()*(b-a+1))};
+  var qs=[];
+
+  /* Q1-5: Given a·b=c, compute variants */
+  for(var i=0;i<5;i++){
+    var a=RI2(11,19),b=RI2(11,19);
+    var c=a*b;
+    var variant=RI2(0,2);
+    var stem,ans,exp;
+    if(variant===0){
+      stem='\u05E0\u05EA\u05D5\u05DF \u05E9-'+L(a+' \u00B7 '+b+' = '+c)+'. \u05D7\u05E9\u05D1\u05D5: '+L('('+fmtN(-a)+') \u00B7 '+b+' = ?');
+      ans=-(a*b);exp='('+fmtN(-a)+') \u00B7 '+b+' = '+fmtN(-c)+' \u2014 (\u2212)\u00D7(+) = (\u2212)';
+    } else if(variant===1){
+      stem='\u05E0\u05EA\u05D5\u05DF \u05E9-'+L(a+' \u00B7 '+b+' = '+c)+'. \u05D7\u05E9\u05D1\u05D5: '+L(a+' \u00B7 ('+fmtN(-b)+') = ?');
+      ans=-(a*b);exp=a+' \u00B7 ('+fmtN(-b)+') = '+fmtN(-c)+' \u2014 (+)\u00D7(\u2212) = (\u2212)';
+    } else {
+      stem='\u05E0\u05EA\u05D5\u05DF \u05E9-'+L(a+' \u00B7 '+b+' = '+c)+'. \u05D7\u05E9\u05D1\u05D5: '+L('('+fmtN(-a)+') \u00B7 ('+fmtN(-b)+') = ?');
+      ans=a*b;exp='('+fmtN(-a)+') \u00B7 ('+fmtN(-b)+') = '+c+' \u2014 (\u2212)\u00D7(\u2212) = (+)';
+    }
+    var w1=-ans,w2=ans+RI2(1,5)*(R2()>0.5?1:-1),w3=0;
+    if(w2===ans)w2=ans+7;
+    var opts=[L(fmtN(ans)),L(fmtN(w1)),L(fmtN(w2)),L('0')];
+    qs.push({type:'mc',stem:stem,options:opts,answer:0,explanation:exp});
+  }
+
+  /* Q6-10: division with larger numbers */
+  for(var i=0;i<5;i++){
+    var divisor=RI2(3,9)*(R2()>0.5?1:-1);
+    while(divisor===0)divisor=RI2(3,9)*(R2()>0.5?1:-1);
+    var quotient=RI2(3,12)*(R2()>0.5?1:-1);
+    while(quotient===0)quotient=RI2(3,12)*(R2()>0.5?1:-1);
+    var dividend=divisor*quotient;
+    var w1=-quotient,w2=quotient+RI2(1,4)*(R2()>0.5?1:-1),w3=divisor;
+    if(w2===quotient)w2=quotient+5;
+    var opts2=[L(fmtN(quotient)),L(fmtN(w1)),L(fmtN(w2)),L(fmtN(w3))];
+    qs.push({type:'mc',stem:'\u05D7\u05E9\u05D1\u05D5: '+L('('+fmtN(dividend)+') \u00F7 ('+fmtN(divisor)+') = ?'),
+      options:opts2,answer:0,
+      explanation:'('+fmtN(dividend)+') \u00F7 ('+fmtN(divisor)+') = '+fmtN(quotient)});
+  }
+
+  /* Q11-15: Without computing: positive, negative, or 0? */
+  for(var i=0;i<5;i++){
+    var hasZero=R2()>0.7;
+    var numFactors=RI2(2,4);
+    var factors=[];
+    var negCount=0;
+    for(var j=0;j<numFactors;j++){
+      var f=RI2(2,12)*(R2()>0.5?1:-1);
+      while(f===0)f=RI2(2,12)*(R2()>0.5?1:-1);
+      if(f<0)negCount++;
+      factors.push(f);
+    }
+    if(hasZero){factors.push(0);negCount=0;}/* product is 0 */
+    var product=1;for(var j=0;j<factors.length;j++)product*=factors[j];
+    var isZero=product===0,isPos2=product>0;
+    var correctAns=isZero?'0':isPos2?'\u05D7\u05D9\u05D5\u05D1\u05D9':'\u05E9\u05DC\u05D9\u05DC\u05D9';
+    var allOpts=['\u05D7\u05D9\u05D5\u05D1\u05D9','\u05E9\u05DC\u05D9\u05DC\u05D9','0'];
+    var ci=allOpts.indexOf(correctAns);
+    /* move correct to index 0 */
+    var tmp=allOpts[0];allOpts[0]=allOpts[ci];allOpts[ci]=tmp;
+    var factorStr=factors.map(function(f){return fmtN(f)}).join(' \u00B7 ');
+    qs.push({type:'mc',stem:'\u05D1\u05DC\u05D9 \u05DC\u05D7\u05E9\u05D1: \u05D4\u05D0\u05DD \u05D4\u05EA\u05D5\u05E6\u05D0\u05D4 \u05D7\u05D9\u05D5\u05D1\u05D9\u05EA, \u05E9\u05DC\u05D9\u05DC\u05D9\u05EA \u05D0\u05D5 0? '+L(factorStr),
+      options:allOpts,answer:0,
+      explanation:isZero?'\u05D9\u05E9 0 \u05D1\u05DE\u05DB\u05E4\u05DC\u05D4 \u2014 \u05D4\u05EA\u05D5\u05E6\u05D0\u05D4 0!':'\u05DE\u05E1\u05E4\u05E8 \u05D4\u05DE\u05D9\u05E0\u05D5\u05E1\u05D9\u05DD: '+negCount+'. '+(negCount%2===0?'\u05D6\u05D5\u05D2\u05D9 \u2192 \u05D7\u05D9\u05D5\u05D1\u05D9':'\u05D0\u05D9-\u05D6\u05D5\u05D2\u05D9 \u2192 \u05E9\u05DC\u05D9\u05DC\u05D9')});
+  }
+
+  /* Q16-20: Find missing: ___·(−5)=−15, (−3)·___=15 */
+  for(var i=0;i<5;i++){
+    var known=RI2(2,9)*(R2()>0.5?1:-1);
+    while(known===0)known=RI2(2,9)*(R2()>0.5?1:-1);
+    var missing=RI2(2,9)*(R2()>0.5?1:-1);
+    while(missing===0)missing=RI2(2,9)*(R2()>0.5?1:-1);
+    var product2=known*missing;
+    var isFirst=R2()>0.5;/* missing is first or second factor */
+    var stemStr;
+    if(isFirst){
+      stemStr='\u05DE\u05E6\u05D0\u05D5 \u05D0\u05EA \u05D4\u05D7\u05E1\u05E8: '+L('___ \u00B7 ('+fmtN(known)+') = '+fmtN(product2));
+    } else {
+      stemStr='\u05DE\u05E6\u05D0\u05D5 \u05D0\u05EA \u05D4\u05D7\u05E1\u05E8: '+L('('+fmtN(known)+') \u00B7 ___ = '+fmtN(product2));
+    }
+    var w1m=-missing,w2m=missing+RI2(1,3)*(R2()>0.5?1:-1),w3m=known;
+    if(w2m===missing)w2m=missing+4;
+    var opts3=[L(fmtN(missing)),L(fmtN(w1m)),L(fmtN(w2m)),L(fmtN(w3m))];
+    qs.push({type:'mc',stem:stemStr,options:opts3,answer:0,
+      explanation:fmtN(missing)+' \u00B7 ('+fmtN(known)+') = '+fmtN(product2)});
+  }
+
+  return qs;
+}
+
+/* ===== HARD (20) ===== */
+function genHard(){
+  var rng2=mulberry32(dateSeed+300),R2=function(){return rng2()},RI2=function(a,b){return a+Math.floor(R2()*(b-a+1))};
+  var qs=[];
+
+  /* Q1-5: mixed expressions with order of operations: 5 − 3·(−2) = ? */
+  for(var i=0;i<5;i++){
+    var a=RI2(1,10)*(R2()>0.5?1:-1);
+    var b=RI2(2,6);
+    var c=RI2(2,6)*(R2()>0.5?1:-1);
+    while(c===0)c=RI2(2,6)*(R2()>0.5?1:-1);
+    var product3=b*c;
+    var result=a-product3;
+    var stemStr=L(fmtN(a)+' \u2212 '+b+' \u00B7 ('+fmtN(c)+') = ?');
+    var w1=a-b*Math.abs(c),w2=(a-b)*c,w3=a+product3+RI2(1,3);
+    if(w1===result)w1=result+RI2(2,5);
+    if(w2===result)w2=result-RI2(2,5);
+    if(w3===result)w3=result+7;
+    var opts=[L(fmtN(result)),L(fmtN(w1)),L(fmtN(w2)),L(fmtN(w3))];
+    qs.push({type:'mc',stem:'\u05D7\u05E9\u05D1\u05D5 (\u05E1\u05D3\u05E8 \u05E4\u05E2\u05D5\u05DC\u05D5\u05EA!): '+stemStr,
+      options:opts,answer:0,
+      explanation:'\u05E7\u05D5\u05D3\u05DD \u05DB\u05E4\u05DC: '+b+'\u00B7('+fmtN(c)+') = '+fmtN(product3)+'. \u05D0\u05D7\u05E8 \u05DB\u05DA: '+fmtN(a)+' \u2212 ('+fmtN(product3)+') = '+fmtN(result)});
+  }
+
+  /* Q6-10: combined: a·b + c·d = ? */
+  for(var i=0;i<5;i++){
+    var a2=RI2(2,6)*(R2()>0.5?1:-1);
+    var b2=RI2(2,6)*(R2()>0.5?1:-1);
+    while(a2===0)a2=RI2(2,6)*(R2()>0.5?1:-1);
+    while(b2===0)b2=RI2(2,6)*(R2()>0.5?1:-1);
+    var c2=RI2(2,6)*(R2()>0.5?1:-1);
+    var d2=RI2(0,6)*(R2()>0.5?1:-1);/* d2 can be 0 */
+    var p1=a2*b2,p2=c2*d2;
+    var result2=p1+p2;
+    var stemStr2=L(fmtN(a2)+' \u00B7 ('+fmtN(b2)+') + ('+fmtN(c2)+') \u00B7 '+fmtN(d2)+' = ?');
+    var w1b=p1-p2,w2b=-(p1+p2),w3b=result2+RI2(2,8)*(R2()>0.5?1:-1);
+    if(w1b===result2)w1b=result2+3;
+    if(w2b===result2)w2b=result2-3;
+    if(w3b===result2)w3b=result2+5;
+    var opts2=[L(fmtN(result2)),L(fmtN(w1b)),L(fmtN(w2b)),L(fmtN(w3b))];
+    qs.push({type:'mc',stem:'\u05D7\u05E9\u05D1\u05D5: '+stemStr2,
+      options:opts2,answer:0,
+      explanation:fmtN(a2)+'\u00B7('+fmtN(b2)+') = '+fmtN(p1)+', ('+fmtN(c2)+')\u00B7'+fmtN(d2)+' = '+fmtN(p2)+'. \u05E1\u05D4"\u05DB: '+fmtN(p1)+' + ('+fmtN(p2)+') = '+fmtN(result2)});
+  }
+
+  /* Q11-15: sign determination without calculation (counting minuses) */
+  for(var i=0;i<5;i++){
+    var numF=RI2(3,6);
+    var factors2=[];
+    var negCount2=0;
+    for(var j=0;j<numF;j++){
+      var f2=RI2(2,20)*(R2()>0.5?1:-1);
+      while(f2===0)f2=RI2(2,20)*(R2()>0.5?1:-1);
+      if(f2<0)negCount2++;
+      factors2.push(f2);
+    }
+    var isPos3=negCount2%2===0;
+    var opts3=[
+      isPos3?'\u05D7\u05D9\u05D5\u05D1\u05D9 \u2014 '+negCount2+' \u05DE\u05D9\u05E0\u05D5\u05E1\u05D9\u05DD (\u05D6\u05D5\u05D2\u05D9)':'\u05E9\u05DC\u05D9\u05DC\u05D9 \u2014 '+negCount2+' \u05DE\u05D9\u05E0\u05D5\u05E1\u05D9\u05DD (\u05D0\u05D9-\u05D6\u05D5\u05D2\u05D9)',
+      isPos3?'\u05E9\u05DC\u05D9\u05DC\u05D9':'\u05D7\u05D9\u05D5\u05D1\u05D9',
+      '0',
+      '\u05DC\u05D0 \u05E0\u05D9\u05EA\u05DF \u05DC\u05D3\u05E2\u05EA'
+    ];
+    var factorStr2=factors2.map(function(f){return '('+fmtN(f)+')'}).join(' \u00B7 ');
+    qs.push({type:'mc',stem:'\u05D1\u05DC\u05D9 \u05DC\u05D7\u05E9\u05D1: \u05D4\u05D0\u05DD \u05D4\u05EA\u05D5\u05E6\u05D0\u05D4 \u05D7\u05D9\u05D5\u05D1\u05D9\u05EA \u05D0\u05D5 \u05E9\u05DC\u05D9\u05DC\u05D9\u05EA? '+L(factorStr2),
+      options:opts3,answer:0,
+      explanation:negCount2+' \u05D2\u05D5\u05E8\u05DE\u05D9\u05DD \u05E9\u05DC\u05D9\u05DC\u05D9\u05D9\u05DD. '+(negCount2%2===0?'\u05D6\u05D5\u05D2\u05D9 \u2192 \u05D7\u05D9\u05D5\u05D1\u05D9':'\u05D0\u05D9-\u05D6\u05D5\u05D2\u05D9 \u2192 \u05E9\u05DC\u05D9\u05DC\u05D9')});
+  }
+
+  /* Q16-20: Without computing: positive/negative/0 for longer products */
+  for(var i=0;i<5;i++){
+    var numF2=RI2(4,7);
+    var factors3=[];
+    var negCount3=0;
+    var hasZero2=R2()>0.7;
+    for(var j=0;j<numF2;j++){
+      var f3=RI2(2,15)*(R2()>0.5?1:-1);
+      while(f3===0)f3=RI2(2,15)*(R2()>0.5?1:-1);
+      if(f3<0)negCount3++;
+      factors3.push(f3);
+    }
+    if(hasZero2){factors3[RI2(0,factors3.length-1)]=0;}
+    var product4=1;for(var j=0;j<factors3.length;j++)product4*=factors3[j];
+    var isZero2=product4===0,isPos4=product4>0;
+    var correctAns2=isZero2?'0':isPos4?'\u05D7\u05D9\u05D5\u05D1\u05D9':'\u05E9\u05DC\u05D9\u05DC\u05D9';
+    var allOpts2=['\u05D7\u05D9\u05D5\u05D1\u05D9','\u05E9\u05DC\u05D9\u05DC\u05D9','0'];
+    var ci2=allOpts2.indexOf(correctAns2);
+    var tmp2=allOpts2[0];allOpts2[0]=allOpts2[ci2];allOpts2[ci2]=tmp2;
+    var factorStr3=factors3.map(function(f){return '('+fmtN(f)+')'}).join(' \u00B7 ');
+    qs.push({type:'mc',stem:'\u05D1\u05DC\u05D9 \u05DC\u05D7\u05E9\u05D1: \u05D7\u05D9\u05D5\u05D1\u05D9, \u05E9\u05DC\u05D9\u05DC\u05D9 \u05D0\u05D5 0? '+L(factorStr3),
+      options:allOpts2,answer:0,
+      explanation:isZero2?'\u05D9\u05E9 0 \u05D1\u05DE\u05DB\u05E4\u05DC\u05D4 \u2014 \u05D4\u05EA\u05D5\u05E6\u05D0\u05D4 0!':'\u05E1\u05D5\u05E4\u05E8\u05D9\u05DD \u05DE\u05D9\u05E0\u05D5\u05E1\u05D9\u05DD \u2014 \u05DE\u05E1\u05E4\u05E8 '+(isPos4?'\u05D6\u05D5\u05D2\u05D9 \u2192 \u05D7\u05D9\u05D5\u05D1\u05D9':'\u05D0\u05D9-\u05D6\u05D5\u05D2\u05D9 \u2192 \u05E9\u05DC\u05D9\u05DC\u05D9')});
+  }
+
+  return qs;
+}
+
+/* ===== CHALLENGE (15) ===== */
+function genChallenge(){
+  var rng2=mulberry32(dateSeed+400),R2=function(){return rng2()},RI2=function(a,b){return a+Math.floor(R2()*(b-a+1))};
+  var qs=[];
+
+  /* Q1-3: (−1)^n */
+  var pows=[
+    {n:RI2(10,30)*2,ans:1},    /* even → 1 */
+    {n:RI2(10,30)*2+1,ans:-1}, /* odd → −1 */
+    {n:RI2(10,30)*2,ans:1}     /* even → 1 */
+  ];
+  for(var i=0;i<3;i++){
+    var pw=pows[i];
+    var opts=[L(fmtN(pw.ans)),L(fmtN(-pw.ans)),L('0'),'\u05DC\u05D0 \u05DE\u05D5\u05D2\u05D3\u05E8'];
+    qs.push({type:'mc',stem:'\u05D7\u05E9\u05D1\u05D5: '+L('(1\u2212)^'+pw.n+' = ?'),
+      options:opts,answer:0,
+      explanation:'(1\u2212) \u05D1\u05D7\u05D6\u05E7\u05EA '+pw.n+'. '+pw.n+(pw.ans===1?' \u05D6\u05D5\u05D2\u05D9 \u2192 \u05EA\u05D5\u05E6\u05D0\u05D4 \u05D7\u05D9\u05D5\u05D1\u05D9\u05EA: 1':' \u05D0\u05D9-\u05D6\u05D5\u05D2\u05D9 \u2192 \u05EA\u05D5\u05E6\u05D0\u05D4 \u05E9\u05DC\u05D9\u05DC\u05D9\u05EA: 1\u2212')});
+  }
+
+  /* Q4-6: (−1) repeated products with different counts */
+  for(var i=0;i<3;i++){
+    var cnt=RI2(3,8);
+    var factors4=[];
+    for(var j=0;j<cnt;j++)factors4.push('(1\u2212)');
+    var result5=(cnt%2===0)?1:-1;
+    var opts2=[L(fmtN(result5)),L(fmtN(-result5)),L('0'),'\u05DC\u05D0 \u05DE\u05D5\u05D2\u05D3\u05E8'];
+    qs.push({type:'mc',stem:'\u05D7\u05E9\u05D1\u05D5: '+L(factors4.join(' \u00B7 ')+' = ?'),
+      options:opts2,answer:0,
+      explanation:cnt+' \u05E4\u05E2\u05DE\u05D9\u05DD (1\u2212). '+(cnt%2===0?'\u05D6\u05D5\u05D2\u05D9 \u2192 1':'\u05D0\u05D9-\u05D6\u05D5\u05D2\u05D9 \u2192 1\u2212')});
+  }
+
+  /* Q7-9: test scoring word problems */
+  var testQs=[
+    {total:25,correct:RI2(12,20),plus:4,minus:1},
+    {total:30,correct:RI2(15,25),plus:5,minus:2},
+    {total:20,correct:RI2(8,16),plus:3,minus:1}
+  ];
+  for(var i=0;i<3;i++){
+    var tq=testQs[i];
+    var wrong3=tq.total-tq.correct;
+    var score3=tq.correct*tq.plus+wrong3*(-tq.minus);
+    var w1t=tq.correct*tq.plus-wrong3*tq.minus+RI2(1,5),w2t=tq.correct*tq.plus,w3t=(tq.correct-wrong3)*tq.plus;
+    if(w1t===score3)w1t=score3+3;
+    if(w2t===score3)w2t=score3+tq.minus*wrong3+1;
+    if(w3t===score3)w3t=score3-2;
+    var opts3=[L(fmtN(score3)),L(fmtN(w1t)),L(fmtN(w2t)),L(fmtN(w3t))];
+    qs.push({type:'mc',stem:'\u05D1\u05DE\u05D1\u05D7\u05DF \u05E9\u05DC '+tq.total+' \u05E9\u05D0\u05DC\u05D5\u05EA: +'+tq.plus+' \u05E2\u05DC \u05EA\u05E9\u05D5\u05D1\u05D4 \u05E0\u05DB\u05D5\u05E0\u05D4, '+fmtN(-tq.minus)+' \u05E2\u05DC \u05E9\u05D2\u05D5\u05D9\u05D4. \u05EA\u05DC\u05DE\u05D9\u05D3 \u05E2\u05E0\u05D4 \u05E0\u05DB\u05D5\u05DF \u05E2\u05DC '+tq.correct+' \u05D5\u05D8\u05E2\u05D4 \u05D1-'+wrong3+'. \u05DE\u05D4 \u05D4\u05E6\u05D9\u05D5\u05DF?',
+      options:opts3,answer:0,
+      explanation:tq.correct+'\u00B7'+tq.plus+' + '+wrong3+'\u00B7('+fmtN(-tq.minus)+') = '+fmtN(tq.correct*tq.plus)+' + ('+fmtN(wrong3*(-tq.minus))+') = '+fmtN(score3)});
+  }
+
+  /* Q10-12: order of operations: [a+(b−)]÷(c−) = ? */
+  for(var i=0;i<3;i++){
+    var c3=RI2(2,6)*(R2()>0.5?1:-1);
+    while(c3===0)c3=RI2(2,6)*(R2()>0.5?1:-1);
+    var quotient2=RI2(2,8)*(R2()>0.5?1:-1);
+    while(quotient2===0)quotient2=RI2(2,8)*(R2()>0.5?1:-1);
+    var sum3=c3*quotient2;/* this is a+b */
+    var a3=RI2(1,20);
+    var b3=sum3-a3;
+    var result6=quotient2;
+    var stemStr3=L('['+fmtN(a3)+' + ('+fmtN(b3)+')] \u00F7 ('+fmtN(c3)+') = ?');
+    var w1o=-result6,w2o=sum3,w3o=result6+RI2(2,5)*(R2()>0.5?1:-1);
+    if(w2o===result6)w2o=result6+4;
+    if(w3o===result6)w3o=result6+6;
+    var opts4=[L(fmtN(result6)),L(fmtN(w1o)),L(fmtN(w2o)),L(fmtN(w3o))];
+    qs.push({type:'mc',stem:'\u05D7\u05E9\u05D1\u05D5: '+stemStr3,
+      options:opts4,answer:0,
+      explanation:'\u05E7\u05D5\u05D3\u05DD \u05E1\u05D5\u05D2\u05E8\u05D9\u05D9\u05DD: '+fmtN(a3)+' + ('+fmtN(b3)+') = '+fmtN(sum3)+'. \u05D0\u05D7\u05E8 \u05DB\u05DA: '+fmtN(sum3)+' \u00F7 ('+fmtN(c3)+') = '+fmtN(result6)});
+  }
+
+  /* Q13-15: compare without computing */
+  var compQs2=[
+    function(){
+      var a4=RI2(3,12),b4=RI2(2,9);
+      /* −(a·b) vs a·(−b) — they're equal */
+      return {stem:L(fmtN(-(a4*b4)))+' \u2610 '+L(a4+' \u00B7 ('+fmtN(-b4)+')'),sign:'=',
+        exp:fmtN(-(a4*b4))+' = '+fmtN(a4*(-b4))+' \u2014 \u05E9\u05E0\u05D9\u05D4\u05DD \u05E9\u05D5\u05D5\u05D9\u05DD!'};
+    },
+    function(){
+      var a4=RI2(2,8),b4=RI2(2,8);
+      /* a·b vs (−a)·b */
+      return {stem:L(a4+' \u00B7 '+b4)+' \u2610 '+L('('+fmtN(-a4)+') \u00B7 '+b4),sign:'>',
+        exp:a4*b4+' > '+fmtN((-a4)*b4)+' \u2014 \u05D7\u05D9\u05D5\u05D1\u05D9 \u05D2\u05D3\u05D5\u05DC \u05DE\u05E9\u05DC\u05D9\u05DC\u05D9'};
+    },
+    function(){
+      var a4=RI2(3,9),b4=RI2(2,7);
+      /* (−a)÷b vs a÷(−b) — they're equal (both negative) */
+      return {stem:L('('+fmtN(-a4*b4)+') \u00F7 '+b4)+' \u2610 '+L(a4*b4+' \u00F7 ('+fmtN(-b4)+')'),sign:'=',
+        exp:'\u05E9\u05E0\u05D9\u05D4\u05DD \u05E9\u05D5\u05D5\u05D9\u05DD: '+fmtN(-a4)+' = '+fmtN(-a4)};
+    }
+  ];
+  for(var i=0;i<3;i++){
+    var cq2=compQs2[i]();
+    var allSigns=['<','=','>'];
+    var ci3=allSigns.indexOf(cq2.sign);
+    var tmp3=allSigns[0];allSigns[0]=allSigns[ci3];allSigns[ci3]=tmp3;
+    qs.push({type:'mc',stem:'\u05D4\u05E9\u05DC\u05D9\u05DE\u05D5 (<, = \u05D0\u05D5 >): '+cq2.stem,
+      options:allSigns,answer:0,explanation:cq2.exp});
+  }
+
+  return qs;
+}
+
+function generateQuestions(level){
+  if(level==='easy')return genEasy();
+  if(level==='medium')return genMedium();
+  if(level==='hard')return genHard();
+  return genChallenge();
+}
+
+/* ===== PRACTICE RENDERING ===== */
+function renderLevelTabs(){
+  var container=document.getElementById('levelTabs');container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(function(lv){
+    var btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    var done=scores[lv].filter(function(s){return s===1}).length;
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+LEVEL_COUNTS[lv]+')</span>':'');
+    btn.onclick=function(){switchLevel(lv)};
+    container.appendChild(btn);
+  });
+}
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv])questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length)scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length)answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+function updateLevelProgress(){
+  var lv=state.level,total=LEVEL_COUNTS[lv];
+  var done=answered[lv].filter(function(a){return a}).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+function renderQuestion(){
+  var lv=state.level,idx=state.qIndex,qs=questions[lv];
+  if(!qs)return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  if(idx>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    var la=document.getElementById('questionArea');
+    la.innerHTML='<div class="q-card" style="text-align:center;padding:40px 20px"><div class="q-number">\u05E9\u05D0\u05DC\u05D4 '+(idx+1)+' \u05DE\u05EA\u05D5\u05DA '+qs.length+'</div><div style="font-size:3.5rem;margin:24px 0">\uD83D\uDD12</div><div style="font-size:1.15rem;font-weight:700;margin-bottom:12px">\u05EA\u05D5\u05DB\u05DF \u05D6\u05DE\u05D9\u05DF \u05DC\u05DE\u05E0\u05D5\u05D9\u05D9\u05DD</div><div style="color:var(--text-light);margin-bottom:20px">\u05E9\u05D0\u05DC\u05D4 1 \u05E4\u05EA\u05D5\u05D7\u05D4 \u05DC\u05D4\u05EA\u05E0\u05E1\u05D5\u05EA \u2014 \u05DC\u05D4\u05DE\u05E9\u05DA \u05EA\u05E8\u05D2\u05D5\u05DC \u05D9\u05E9 \u05DC\u05D4\u05D9\u05E8\u05E9\u05DD</div><button class="q-check-btn" onclick="if(typeof showAuthModal===\'function\')showAuthModal()">\u05DC\u05E4\u05EA\u05D9\u05D7\u05EA \u05D2\u05D9\u05E9\u05D4 \u05DE\u05DC\u05D0\u05D4</button></div>';
+    document.getElementById('qPrev').disabled=idx===0;
+    document.getElementById('qNext').textContent=idx>=qs.length-1?'\u05E1\u05D9\u05D5\u05DD':'\u05D4\u05D1\u05D0 \u2190';
+    updateLevelProgress();return;
+  }
+  var q=qs[idx],area=document.getElementById('questionArea'),isAnswered=answered[lv][idx];
+  var html='<div class="q-card"><div class="q-number">\u05E9\u05D0\u05DC\u05D4 '+(idx+1)+' \u05DE\u05EA\u05D5\u05DA '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach(function(opt,i){
+      var letter=LETTERS[i],cls='q-opt';
+      if(isAnswered){cls+=' disabled';if(i===q.answer)cls+=' correct';else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel'])cls+=' wrong'}
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span>'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered)html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>\u05D1\u05D3\u05E7\u05D5</button>';
+  } else if(q.type==='input'){
+    html+='<div class="q-input-row"><input type="number" class="q-input" id="qInput" placeholder="\u05EA\u05E9\u05D5\u05D1\u05D4" dir="ltr">';
+    if(!isAnswered)html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">\u05D1\u05D3\u05E7\u05D5</button>';
+    html+='</div>';
+    if(isAnswered)html+='<div style="margin-top:4px;font-weight:700;direction:ltr">\u05EA\u05E9\u05D5\u05D1\u05D4: '+fmtN(q.answer)+'</div>';
+  }
+  if(isAnswered){
+    var ic=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(ic?'correct':'wrong')+'">'+(ic?'\u2705 \u05E0\u05DB\u05D5\u05DF! ':'\u274C ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(function(el){
+      el.onclick=function(){
+        area.querySelectorAll('.q-opt').forEach(function(o){o.classList.remove('selected')});
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+  var inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){inp.focus();inp.addEventListener('keydown',function(e){if(e.key==='Enter')checkInput()})}
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'\u05E1\u05D9\u05D5\u05DD':'\u05D4\u05D1\u05D0 \u2190';
+}
+
+window.checkMC=function(){
+  var lv=state.level,idx=state.qIndex,q=questions[lv][idx];
+  var selected=document.querySelector('.q-opt.selected');if(!selected)return;
+  var si=parseInt(selected.dataset.i),isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;answered[lv][idx]=true;answered[lv][idx+'_sel']=si;
+  document.querySelectorAll('.q-opt').forEach(function(el,i){
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer)el.classList.add('correct');
+    else if(i===si&&!isCorrect)el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['\u2705 \u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3!','\u2705 \u05DE\u05E2\u05D5\u05DC\u05D4!','\u2705 \u05E0\u05DB\u05D5\u05DF!'])+' ':'\u274C ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+window.checkInput=function(){
+  var lv=state.level,idx=state.qIndex,q=questions[lv][idx];
+  var inp=document.getElementById('qInput'),val=inp.value.trim();if(!val)return;
+  var isCorrect=Math.abs(parseFloat(val)-q.answer)<0.01;
+  scores[lv][idx]=isCorrect?1:0;answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');inp.disabled=true;
+  var btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'\u2705 \u05E0\u05DB\u05D5\u05DF! ':'\u274C ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+function nextQuestion(){
+  var lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+function renderLevelComplete(){
+  var lv=state.level;
+  var correct=scores[lv].filter(function(s){return s===1}).length;
+  var total=LEVEL_COUNTS[lv],pct=Math.round(correct/total*100);
+  var scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  var emoji=pct>=80?'\uD83C\uDF89':pct>=50?'\uD83D\uDC4F':'\uD83D\uDCAA';
+  document.getElementById('questionArea').innerHTML='<div class="q-card"><div class="level-complete"><div class="big-emoji">'+emoji+'</div><h2>\u05E1\u05D9\u05D9\u05DE\u05EA\u05DD \u05D0\u05EA \u05E8\u05DE\u05EA "'+LEVEL_NAMES[lv]+'"!</h2><div class="score-display'+scoreClass+'">'+correct+' / '+total+'</div><p style="color:var(--text-light);margin-bottom:16px">'+pct+'% \u05D4\u05E6\u05DC\u05D7\u05D4</p><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="mini-btn" onclick="retryLevel()">\uD83D\uDD04 \u05E0\u05E1\u05D5 \u05E9\u05D5\u05D1</button>'+(lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">\u25B6 \u05DC\u05E8\u05DE\u05D4 \u05D4\u05D1\u05D0\u05D4</button>':'')+'</div></div></div>';
+  if(pct>=80)showConfetti();saveState();
+}
+window.retryLevel=function(){
+  var lv=state.level;scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);state.qIndex=0;renderLevelTabs();renderQuestion();saveState();
+};
+window.nextLevel=function(){
+  var order=['easy','medium','hard','challenge'];
+  var ci=order.indexOf(state.level);if(ci<order.length-1)switchLevel(order[ci+1]);
+};
+
+/* ===== SECTION SWITCHING ===== */
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(function(b){b.classList.toggle('active',b.dataset.section===sec)});
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level])questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length)scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length)answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+/* ===== CONFETTI ===== */
+function showConfetti(){
+  var box=document.getElementById('confettiBox');box.innerHTML='';
+  var colors=['#2563eb','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'];
+  for(var i=0;i<50;i++){
+    var c=document.createElement('div');c.className='confetti';
+    c.style.left=Math.random()*100+'%';c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(function(){box.innerHTML=''},5000);
+}
+
+/* ===== INIT ===== */
+function init(){
+  loadState();
+  ['easy','medium','hard','challenge'].forEach(function(lv){
+    if(!scores[lv]||!scores[lv].length)scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length)answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice')switchSection('practice');
+}
+init();
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

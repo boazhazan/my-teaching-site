@@ -635,23 +635,23 @@ function genEasy(){
     if(i<2){
       const b=RI(2,10);const val=RI(1,10);const ans=val+b;
       const correct=''+ans;
-      const opts=shuffle([correct,''+(val*b),''+(val-b),''+(b-val)]);
+      const opts=shuffle([correct,''+(val*b),''+(ans+1),''+(ans+2)]);
       qs.push({type:'mc',stem:'מה הערך של <code>'+vr+' + '+b+'</code> כאשר <code>'+vr+' = '+val+'</code>?',options:opts,answer:opts.indexOf(correct),explanation:vr+' + '+b+' = '+val+' + '+b+' = <strong>'+ans+'</strong>'});
     } else {
       const m=RI(2,5);const val=RI(2,8);const ans=m*val;
       const correct=''+ans;
-      const opts=shuffle([correct,''+(m+val),''+(val-m),''+(ans+1)]);
+      const opts=shuffle([correct,''+(m+val),''+(ans+1),''+(ans-1)]);
       qs.push({type:'mc',stem:'מה הערך של <code>'+m+vr+'</code> כאשר <code>'+vr+' = '+val+'</code>?',options:opts,answer:opts.indexOf(correct),explanation:m+vr+' = '+m+' · '+val+' = <strong>'+ans+'</strong>'});
     }
   }
   /* Q17-20: story with substitution */
   for(let i=0;i<4;i++){
     const n1=boyName(),n2=girlName();
-    const base=RI(5,20);const diff=RI(3,10);const xv=RI(3,10);
+    const xv=RI(3,10);const base=RI(xv+3,xv+15);
     if(i%2===0){
       const ans=base+xv;
       const correct=''+ans;
-      const opts=shuffle([correct,''+(base-xv),''+(base*xv),''+(xv-base)]);
+      const opts=shuffle([correct,''+(base-xv),''+(base*xv),''+(ans+1)]);
       qs.push({type:'mc',stem:'ל'+n1+' יש '+base+' מדבקות. ל'+n2+' יש <span class="math-expr">x</span> מדבקות יותר מ'+n1+'. אם <code>x = '+xv+'</code>, כמה מדבקות יש ל'+n2+'?',options:opts,answer:opts.indexOf(correct),explanation:'ל'+n2+' יש '+base+' + '+xv+' = <strong>'+ans+'</strong> מדבקות'});
     } else {
       const ans=base-xv;
@@ -703,8 +703,11 @@ function genMedium(){
   }
   /* Q13-16: substitution two operations */
   for(let i=0;i<4;i++){
-    const m=RI(2,5);const b=RI(1,9);const vr=pick(['x','a','n']);
+    const m=RI(2,5);const vr=pick(['x','a','n']);
     const val=RI(2,8);const isSub=R()>.5;
+    /* ensure non-negative answer: if subtracting, cap b so m*val - b >= 1 */
+    const maxB=isSub?Math.max(1,Math.min(9,m*val-1)):9;
+    const b=RI(1,maxB);
     const expr=isSub?m+vr+' - '+b:m+vr+' + '+b;
     const ans=isSub?m*val-b:m*val+b;
     qs.push({type:'input',stem:'חשבו את הערך של <code>'+expr+'</code> כאשר <code>'+vr+' = '+val+'</code>',answer:ans,explanation:expr+' = '+m+'·'+val+(isSub?' - ':' + ')+b+' = '+(m*val)+(isSub?' - ':' + ')+b+' = <strong>'+ans+'</strong>'});

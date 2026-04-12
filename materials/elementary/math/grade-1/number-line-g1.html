@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>יְשַׁר הַמִּסְפָּרִים — כִּתָּה א' | בּוֹעַז חָזָן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#4f46e5;--primary-dark:#4338ca;--primary-light:#e0e7ff;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#4f46e5 0%,#6366f1 50%,#818cf8 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(79,70,229,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.1rem;font-weight:700;text-align:center;margin-bottom:14px;color:var(--primary);line-height:1.6}
+.answer-options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}.answer-options.cols-2{grid-template-columns:repeat(2,1fr)}
+.answer-btn{height:52px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.3rem;font-weight:800;color:var(--text);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.04)}.answer-btn:active:not(.disabled){transform:scale(.96)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+/* Number line styles */
+.nl-container{direction:ltr;overflow-x:auto;padding:12px 0;margin:10px 0;text-align:center}
+.nl-container svg{display:inline-block;max-width:100%}
+.nl-mystery{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;border:3px solid #fbbf24;border-radius:50%;width:32px;height:32px;font-size:1.1rem;font-weight:800}
+.hop-container{direction:ltr;overflow-x:auto;padding:12px 0;margin:10px 0;text-align:center}
+.hop-container svg{display:inline-block;max-width:100%}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{height:48px;font-size:1.1rem}.question-card{padding:18px 14px}.header-title h1{font-size:1.1rem}.nl-mystery{width:26px;height:26px;font-size:.9rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">📏</div><div><h1>יְשַׁר הַמִּסְפָּרִים</h1><div class="subtitle">כִּתָּה א' — מִיקוּם מִסְפָּרִים עַל הַיָּשָׁר</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רָמָה 1 מִתּוֹךְ 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">יְשַׁר הַמִּסְפָּרִים — כִּתָּה א' | בּוֹעַז חָזָן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רָמָה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טִיפ</span><span class="tip-toggle" id="tipToggle">▲ הַסְתֵּר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נָכוֹן</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שָׁגוּי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הָרָמָה הַבָּאָה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נַסּוּ שׁוּב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>❓ אֵיךְ מְשַׂחֲקִים?</h2><p>יְשַׁר הַמִּסְפָּרִים הוּא קַו יָשָׁר שֶׁעָלָיו כְּתוּבִים מִסְפָּרִים בְּסֵדֶר עוֹלֶה — מֵהַקָּטָן לַגָּדוֹל.</p><p>כְּדֵי לִמְצֹא מִסְפָּר חָסֵר, הִסְתַּכְּלוּ עַל הַמִּסְפָּרִים מִשְּׁנֵי הַצְּדָדִים. הַמִּסְפָּר הֶחָסֵר תָּמִיד נִמְצָא בֵּין הַשְּׁכֵנִים שֶׁלּוֹ!</p><p>קְפִיצָה קָדִימָה = לְהוֹסִיף. קְפִיצָה אָחוֹרָה = לְהוֹרִיד. סִפְרוּ אֶת הַקְּפִיצוֹת!</p><p>15 רָמוֹת — מִיָּשָׁר פָּשׁוּט וְעַד אֶתְגָּרִים!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הֵבַנְתִּי!</button></div></div>
+
+<script>
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function genD4(ans,min,max){const s=new Set([ans]);while(s.size<4){const d=rr(min,max);if(d>=0&&d!==ans)s.add(d)}return shuffle([...s])}
+
+/* ========== Number Line SVG Builder ========== */
+function buildNL(start,end,step,hideVal){
+  var nums=[];for(var i=start;i<=end;i+=step)nums.push(i);
+  var n=nums.length;
+  var tickGap=50,padX=30,padTop=10,padBot=36;
+  var w=padX*2+tickGap*(n-1);
+  var h=padTop+padBot+10;
+  var y=padTop+6;
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'">';
+  /* arrow heads */
+  svg+='<defs><marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f46e5"/></marker>';
+  svg+='<marker id="ahL" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto"><polygon points="8 0, 0 3, 8 6" fill="#4f46e5"/></marker></defs>';
+  /* main line */
+  svg+='<line x1="6" y1="'+y+'" x2="'+(w-6)+'" y2="'+y+'" stroke="#4f46e5" stroke-width="3" marker-start="url(#ahL)" marker-end="url(#ah)"/>';
+  /* ticks and labels */
+  for(var t=0;t<n;t++){
+    var x=padX+t*tickGap;
+    svg+='<line x1="'+x+'" y1="'+(y-6)+'" x2="'+x+'" y2="'+(y+6)+'" stroke="#4f46e5" stroke-width="2"/>';
+    if(nums[t]===hideVal){
+      svg+='<circle cx="'+x+'" cy="'+(y+22)+'" r="14" fill="#f59e0b" stroke="#fbbf24" stroke-width="3"/>';
+      svg+='<text x="'+x+'" y="'+(y+27)+'" text-anchor="middle" fill="#fff" font-size="14" font-weight="800" font-family="Heebo,sans-serif">?</text>';
+    }else{
+      svg+='<text x="'+x+'" y="'+(y+24)+'" text-anchor="middle" fill="#1e293b" font-size="13" font-weight="700" font-family="Heebo,sans-serif">'+nums[t]+'</text>';
+    }
+  }
+  svg+='</svg>';
+  return '<div class="nl-container">'+svg+'</div>';
+}
+
+/* ========== Hop diagram builder ========== */
+function buildHop(start,step,count,hideIdx){
+  var nums=[];for(var i=0;i<count;i++)nums.push(start+step*i);
+  var n=nums.length;
+  var tickGap=60,padX=30,padTop=36,padBot=36;
+  var w=padX*2+tickGap*(n-1);
+  var h=padTop+padBot+20;
+  var y=padTop+16;
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'">';
+  /* line */
+  svg+='<line x1="'+padX+'" y1="'+y+'" x2="'+(padX+tickGap*(n-1))+'" y2="'+y+'" stroke="#4f46e5" stroke-width="2"/>';
+  /* ticks, labels, arcs */
+  for(var t=0;t<n;t++){
+    var x=padX+t*tickGap;
+    svg+='<line x1="'+x+'" y1="'+(y-5)+'" x2="'+x+'" y2="'+(y+5)+'" stroke="#4f46e5" stroke-width="2"/>';
+    if(t===hideIdx){
+      svg+='<circle cx="'+x+'" cy="'+(y+20)+'" r="14" fill="#f59e0b" stroke="#fbbf24" stroke-width="3"/>';
+      svg+='<text x="'+x+'" y="'+(y+25)+'" text-anchor="middle" fill="#fff" font-size="14" font-weight="800" font-family="Heebo,sans-serif">?</text>';
+    }else{
+      svg+='<text x="'+x+'" y="'+(y+22)+'" text-anchor="middle" fill="#1e293b" font-size="13" font-weight="700" font-family="Heebo,sans-serif">'+nums[t]+'</text>';
+    }
+    /* arc to next */
+    if(t<n-1){
+      var x1=x,x2=x+tickGap;
+      var mx=(x1+x2)/2;
+      var arcY=y-24;
+      svg+='<path d="M '+x1+' '+(y-5)+' Q '+mx+' '+arcY+' '+x2+' '+(y-5)+'" fill="none" stroke="#818cf8" stroke-width="2" stroke-dasharray="4,3"/>';
+      svg+='<text x="'+mx+'" y="'+(arcY-2)+'" text-anchor="middle" fill="#818cf8" font-size="10" font-weight="700" font-family="Heebo,sans-serif">+'+step+'</text>';
+    }
+  }
+  svg+='</svg>';
+  return '<div class="hop-container">'+svg+'</div>';
+}
+
+/* ========== Jump diagram builder ========== */
+function buildJump(startN,jumpK,forward){
+  var endN=forward?startN+jumpK:startN-jumpK;
+  var lo=Math.min(startN,endN);var hi=Math.max(startN,endN);
+  var rangeStart=Math.max(0,lo-1);var rangeEnd=hi+1;
+  var nums=[];for(var i=rangeStart;i<=rangeEnd;i++)nums.push(i);
+  var n=nums.length;
+  var tickGap=42,padX=30,padTop=40,padBot=36;
+  var w=padX*2+tickGap*(n-1);
+  var h=padTop+padBot+20;
+  var y=padTop+16;
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'">';
+  svg+='<defs><marker id="jah" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#10b981"/></marker>';
+  svg+='<marker id="jahB" markerWidth="6" markerHeight="5" refX="0" refY="2.5" orient="auto"><polygon points="6 0, 0 2.5, 6 5" fill="#ef4444"/></marker></defs>';
+  /* line */
+  svg+='<line x1="'+padX+'" y1="'+y+'" x2="'+(padX+tickGap*(n-1))+'" y2="'+y+'" stroke="#4f46e5" stroke-width="2"/>';
+  for(var t=0;t<n;t++){
+    var x=padX+t*tickGap;
+    svg+='<line x1="'+x+'" y1="'+(y-5)+'" x2="'+x+'" y2="'+(y+5)+'" stroke="#4f46e5" stroke-width="2"/>';
+    var val=nums[t];
+    var isStart=val===startN;
+    var isEnd=val===endN;
+    if(isStart){
+      svg+='<circle cx="'+x+'" cy="'+(y+20)+'" r="14" fill="#4f46e5" stroke="#4f46e5" stroke-width="2"/>';
+      svg+='<text x="'+x+'" y="'+(y+25)+'" text-anchor="middle" fill="#fff" font-size="13" font-weight="800" font-family="Heebo,sans-serif">'+val+'</text>';
+    }else if(isEnd){
+      svg+='<circle cx="'+x+'" cy="'+(y+20)+'" r="14" fill="#f59e0b" stroke="#fbbf24" stroke-width="3"/>';
+      svg+='<text x="'+x+'" y="'+(y+25)+'" text-anchor="middle" fill="#fff" font-size="14" font-weight="800" font-family="Heebo,sans-serif">?</text>';
+    }else{
+      svg+='<text x="'+x+'" y="'+(y+22)+'" text-anchor="middle" fill="#1e293b" font-size="12" font-weight="600" font-family="Heebo,sans-serif">'+val+'</text>';
+    }
+  }
+  /* arc for jump */
+  var sIdx=nums.indexOf(startN);var eIdx=nums.indexOf(endN);
+  var sx=padX+sIdx*tickGap;var ex=padX+eIdx*tickGap;
+  var mx=(sx+ex)/2;
+  var arcH=y-30-Math.min(jumpK*4,28);
+  var color=forward?'#10b981':'#ef4444';
+  var marker=forward?'url(#jah)':'url(#jahB)';
+  svg+='<path d="M '+sx+' '+(y-5)+' Q '+mx+' '+arcH+' '+ex+' '+(y-5)+'" fill="none" stroke="'+color+'" stroke-width="2.5" marker-end="'+marker+'"/>';
+  var label=forward?'+'+jumpK:'-'+jumpK;
+  svg+='<text x="'+mx+'" y="'+(arcH-3)+'" text-anchor="middle" fill="'+color+'" font-size="12" font-weight="800" font-family="Heebo,sans-serif">'+label+'</text>';
+  svg+='</svg>';
+  return '<div class="nl-container">'+svg+'</div>';
+}
+
+/* ========== Two-missing number line builder ========== */
+function buildNL2(start,end,step,hide1,hide2){
+  var nums=[];for(var i=start;i<=end;i+=step)nums.push(i);
+  var n=nums.length;
+  var tickGap=50,padX=30,padTop=10,padBot=36;
+  var w=padX*2+tickGap*(n-1);
+  var h=padTop+padBot+10;
+  var y=padTop+6;
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'">';
+  svg+='<defs><marker id="ah2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f46e5"/></marker>';
+  svg+='<marker id="ahL2" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto"><polygon points="8 0, 0 3, 8 6" fill="#4f46e5"/></marker></defs>';
+  svg+='<line x1="6" y1="'+y+'" x2="'+(w-6)+'" y2="'+y+'" stroke="#4f46e5" stroke-width="3" marker-start="url(#ahL2)" marker-end="url(#ah2)"/>';
+  for(var t=0;t<n;t++){
+    var x=padX+t*tickGap;
+    svg+='<line x1="'+x+'" y1="'+(y-6)+'" x2="'+x+'" y2="'+(y+6)+'" stroke="#4f46e5" stroke-width="2"/>';
+    if(nums[t]===hide1||nums[t]===hide2){
+      svg+='<circle cx="'+x+'" cy="'+(y+22)+'" r="14" fill="#f59e0b" stroke="#fbbf24" stroke-width="3"/>';
+      svg+='<text x="'+x+'" y="'+(y+27)+'" text-anchor="middle" fill="#fff" font-size="14" font-weight="800" font-family="Heebo,sans-serif">?</text>';
+    }else{
+      svg+='<text x="'+x+'" y="'+(y+24)+'" text-anchor="middle" fill="#1e293b" font-size="13" font-weight="700" font-family="Heebo,sans-serif">'+nums[t]+'</text>';
+    }
+  }
+  svg+='</svg>';
+  return '<div class="nl-container">'+svg+'</div>';
+}
+
+/* ========== Question Generators ========== */
+
+/* 1. Number line 0-10, one hidden */
+function qNL_0_10(){
+  var hideVal=rr(0,10);
+  return{qText:'אֵיזֶה מִסְפָּר חָסֵר עַל הַיָּשָׁר?',display:buildNL(0,10,1,hideVal),answer:hideVal,options:genD4(hideVal,0,10)};
+}
+
+/* 2. Number line 0-20 by 2, one hidden */
+function qNL_0_20_by2(){
+  var idx=rr(0,10);var hideVal=idx*2;
+  return{qText:'אֵיזֶה מִסְפָּר חָסֵר? (קְפִיצוֹת שֶׁל 2)',display:buildNL(0,20,2,hideVal),answer:hideVal,options:genD4(hideVal,0,20).map(function(v){return Math.round(v/2)*2}).filter(function(v,i,a){return a.indexOf(v)===i})};
+}
+
+/* 3. Number line 0-50 by 5, one hidden */
+function qNL_0_50_by5(){
+  var idx=rr(0,10);var hideVal=idx*5;
+  return{qText:'אֵיזֶה מִסְפָּר חָסֵר? (קְפִיצוֹת שֶׁל 5)',display:buildNL(0,50,5,hideVal),answer:hideVal,options:genD4(hideVal,0,50).map(function(v){return Math.round(v/5)*5}).filter(function(v,i,a){return a.indexOf(v)===i})};
+}
+
+/* 4. Number line 0-100 by 10, one hidden */
+function qNL_0_100_by10(){
+  var idx=rr(0,10);var hideVal=idx*10;
+  return{qText:'אֵיזֶה מִסְפָּר חָסֵר? (קְפִיצוֹת שֶׁל 10)',display:buildNL(0,100,10,hideVal),answer:hideVal,options:genD4(hideVal,0,100).map(function(v){return Math.round(v/10)*10}).filter(function(v,i,a){return a.indexOf(v)===i})};
+}
+
+/* 5. Small range (random start, 5-8 consecutive), one hidden */
+function qNL_range(){
+  var len=rr(5,8);var st=rr(0,20-len);var end=st+len-1;
+  var hideVal=rr(st,end);
+  return{qText:'אֵיזֶה מִסְפָּר חָסֵר עַל הַיָּשָׁר?',display:buildNL(st,end,1,hideVal),answer:hideVal,options:genD4(hideVal,Math.max(0,st-2),end+2)};
+}
+
+/* 6. Hop — circles with arrows, random step */
+function qHop(){
+  var step=rr(2,5);var count=rr(4,6);var st=rr(0,Math.max(0,30-step*count));
+  var hideIdx=rr(0,count-1);
+  var ans=st+step*hideIdx;
+  return{qText:'אֵיזֶה מִסְפָּר חָסֵר בַּסִּדְרָה?',display:buildHop(st,step,count,hideIdx),answer:ans,options:genD4(ans,Math.max(0,ans-step*2),ans+step*2)};
+}
+
+/* 7. Jump forward */
+function qJumpForward(){
+  var n=rr(1,15);var k=rr(1,Math.min(5,20-n));
+  var ans=n+k;
+  return{qText:'מַתְחִילִים בְּ-<span class="math">'+n+'</span>, קוֹפְצִים <span class="math">'+k+'</span> קָדִימָה. לְאָן מַגִּיעִים?',display:buildJump(n,k,true),answer:ans,options:genD4(ans,Math.max(0,ans-4),ans+4)};
+}
+
+/* 8. Jump backward — always positive result */
+function qJumpBack(){
+  var k=rr(1,5);var n=rr(k+1,20);
+  var ans=n-k;
+  return{qText:'מַתְחִילִים בְּ-<span class="math">'+n+'</span>, קוֹפְצִים <span class="math">'+k+'</span> אָחוֹרָה. לְאָן מַגִּיעִים?',display:buildJump(n,k,false),answer:ans,options:genD4(ans,Math.max(0,ans-4),ans+4)};
+}
+
+/* 9. Two missing numbers on number line */
+function qNL_twoMissing(){
+  var len=rr(6,9);var st=rr(0,15-len);var end=st+len-1;
+  var nums=[];for(var i=st;i<=end;i++)nums.push(i);
+  var idx1=rr(0,nums.length-1);var idx2;
+  do{idx2=rr(0,nums.length-1)}while(idx2===idx1);
+  var hide1=nums[idx1];var hide2=nums[idx2];
+  /* ask about one of them */
+  var askAbout=rr(0,1)?hide1:hide2;
+  var ordinal=(askAbout===Math.min(hide1,hide2))?'הָרִאשׁוֹן':'הַשֵּׁנִי';
+  return{qText:'שְׁנֵי מִסְפָּרִים חֲסֵרִים! מַה הַמִּסְפָּר הֶחָסֵר '+ordinal+'?',display:buildNL2(st,end,1,hide1,hide2),answer:askAbout,options:genD4(askAbout,Math.max(0,st-2),end+2)};
+}
+
+/* ========== Fix qNL_0_20_by2 / by5 / by10 to always produce 4 options ========== */
+(function(){
+  var orig2=qNL_0_20_by2;
+  qNL_0_20_by2=function(){var q=orig2();while(q.options.length<4){var extra=rr(0,10)*2;if(q.options.indexOf(extra)===-1)q.options.push(extra)}q.options=shuffle(q.options.slice(0,4));return q};
+  var orig5=qNL_0_50_by5;
+  qNL_0_50_by5=function(){var q=orig5();while(q.options.length<4){var extra=rr(0,10)*5;if(q.options.indexOf(extra)===-1)q.options.push(extra)}q.options=shuffle(q.options.slice(0,4));return q};
+  var orig10=qNL_0_100_by10;
+  qNL_0_100_by10=function(){var q=orig10();while(q.options.length<4){var extra=rr(0,10)*10;if(q.options.indexOf(extra)===-1)q.options.push(extra)}q.options=shuffle(q.options.slice(0,4));return q};
+})();
+
+/* ========== Levels ========== */
+const levels=[
+  {title:'יָשָׁר 0-5',instruction:'מִצְאוּ אֶת הַמִּסְפָּר הֶחָסֵר עַל הַיָּשָׁר',tip:'💡 טִיפ: הַמִּסְפָּרִים עוֹלִים בְּ-1. הִסְתַּכְּלוּ מִי לִפְנֵי וּמִי אַחֲרֵי!',example:'<span class="math">0, 1, 2, ?, 4, 5</span> → הֶחָסֵר הוּא <span class="math">3</span>!',gen:function(){var h=rr(0,5);return{qText:'אֵיזֶה מִסְפָּר חָסֵר עַל הַיָּשָׁר?',display:buildNL(0,5,1,h),answer:h,options:genD4(h,0,5)}}},
+  {title:'יָשָׁר 0-10',instruction:'מִצְאוּ אֶת הַמִּסְפָּר הֶחָסֵר',tip:'💡 טִיפ: סִפְרוּ קָדִימָה: 0, 1, 2, 3... אֵיפֹה יֵשׁ חוֹר?',example:'<span class="math">5, 6, ?, 8</span> → הֶחָסֵר הוּא <span class="math">7</span>!',gen:qNL_0_10},
+  {title:'יָשָׁר 0-10 — תִּרְגּוּל',instruction:'עוֹד תִּרְגּוּל עַל יָשָׁר 0 עַד 10',tip:'💡 טִיפ: הַמִּסְפָּר הֶחָסֵר תָּמִיד בֵּין הַשְּׁכֵנִים שֶׁלּוֹ!',example:'<span class="math">3</span> נִמְצָא בֵּין <span class="math">2</span> לְבֵין <span class="math">4</span>',gen:qNL_0_10},
+  {title:'טְוָוח קָטָן',instruction:'יָשָׁר עִם כַּמָּה מִסְפָּרִים — מִצְאוּ אֶת הֶחָסֵר',tip:'💡 טִיפ: הִסְתַּכְּלוּ עַל הַמִּסְפָּר שֶׁלִּפְנֵי וְהַמִּסְפָּר שֶׁאַחֲרֵי!',example:'<span class="math">8, ?, 10</span> → הֶחָסֵר הוּא <span class="math">9</span>!',gen:qNL_range},
+  {title:'טְוָוח קָטָן — תִּרְגּוּל',instruction:'עוֹד תִּרְגּוּל עַל טְוָוחִים קְטַנִּים',tip:'💡 טִיפ: סִפְרוּ בְּרֶצֶף — אֵיזֶה מִסְפָּר דִּלַּגְתֶּם?',example:'<span class="math">12, 13, ?, 15</span> → <span class="math">14</span>!',gen:qNL_range},
+  {title:'קְפִיצוֹת שֶׁל 2',instruction:'הַמִּסְפָּרִים קוֹפְצִים בְּ-2 — מִצְאוּ אֶת הֶחָסֵר',tip:'💡 טִיפ: סִפְרוּ בִּקְפִיצוֹת: 0, 2, 4, 6, 8, 10...',example:'<span class="math">0, 2, ?, 6, 8</span> → הֶחָסֵר הוּא <span class="math">4</span>!',gen:qNL_0_20_by2},
+  {title:'קְפִיצוֹת שֶׁל 5',instruction:'הַמִּסְפָּרִים קוֹפְצִים בְּ-5',tip:'💡 טִיפ: סִפְרוּ בִּקְפִיצוֹת: 0, 5, 10, 15, 20...',example:'<span class="math">10, 15, ?, 25</span> → הֶחָסֵר הוּא <span class="math">20</span>!',gen:qNL_0_50_by5},
+  {title:'קְפִיצוֹת שֶׁל 10',instruction:'הַמִּסְפָּרִים קוֹפְצִים בְּ-10',tip:'💡 טִיפ: סִפְרוּ: 0, 10, 20, 30...',example:'<span class="math">20, 30, ?, 50</span> → הֶחָסֵר הוּא <span class="math">40</span>!',gen:qNL_0_100_by10},
+  {title:'סִדְרוֹת — מִסְפָּר חָסֵר',instruction:'מִצְאוּ אֶת הַמִּסְפָּר הֶחָסֵר בַּסִּדְרָה',tip:'💡 טִיפ: הִסְתַּכְּלוּ עַל הַחִצִּים — כַּמָּה מוֹסִיפִים בְּכָל קְפִיצָה?',example:'<span class="math">3, 6, ?, 12</span> (קְפִיצוֹת שֶׁל 3) → <span class="math">9</span>!',gen:qHop},
+  {title:'קְפִיצָה קָדִימָה',instruction:'קִפְצוּ קָדִימָה עַל הַיָּשָׁר!',tip:'💡 טִיפ: קְפִיצָה קָדִימָה = לְהוֹסִיף! מַתְחִילִים בַּמִּסְפָּר, סוֹפְרִים קָדִימָה.',example:'מַתְחִילִים בְּ-<span class="math">3</span>, קוֹפְצִים <span class="math">4</span> קָדִימָה: <span class="math">3→4→5→6→7</span> = <span class="math">7</span>!',gen:qJumpForward},
+  {title:'קְפִיצָה אָחוֹרָה',instruction:'קִפְצוּ אָחוֹרָה עַל הַיָּשָׁר!',tip:'💡 טִיפ: קְפִיצָה אָחוֹרָה = לְהוֹרִיד! מַתְחִילִים בַּמִּסְפָּר, סוֹפְרִים אָחוֹרָה.',example:'מַתְחִילִים בְּ-<span class="math">8</span>, קוֹפְצִים <span class="math">3</span> אָחוֹרָה: <span class="math">8→7→6→5</span> = <span class="math">5</span>!',gen:qJumpBack},
+  {title:'קָדִימָה וְאָחוֹרָה — מְעֹרָב',instruction:'קְפִיצוֹת קָדִימָה וְגַם אָחוֹרָה!',tip:'💡 טִיפ: שִׂימוּ לֵב אִם כָּתוּב "קָדִימָה" (לְהוֹסִיף) אוֹ "אָחוֹרָה" (לְהוֹרִיד)!',example:'קָדִימָה = +, אָחוֹרָה = −',gen:function(){return rr(0,1)?qJumpForward():qJumpBack()}},
+  {title:'שְׁנֵי מִסְפָּרִים חֲסֵרִים',instruction:'שְׁנֵי סִימְנֵי שְׁאֵלָה! מִצְאוּ אֶחָד מֵהֶם.',tip:'💡 טִיפ: הִסְתַּכְּלוּ עַל הַשְּׁכֵנִים שֶׁל כָּל סִימַן שְׁאֵלָה!',example:'<span class="math">5, ?, 7, ?, 9</span> → הָרִאשׁוֹן <span class="math">6</span>, הַשֵּׁנִי <span class="math">8</span>!',gen:qNL_twoMissing},
+  {title:'אֶתְגָּר',instruction:'שְׁאֵלוֹת מִכָּל הַסּוּגִים!',tip:'🏆 טִיפ: שִׂימוּ לֵב מָה שׁוֹאֲלִים — יָשָׁר, קְפִיצָה אוֹ סִדְרָה!',example:'כָּל שְׁאֵלָה הִיא הַפְתָּעָה!',gen:function(){return[qNL_0_10,qNL_range,qNL_0_20_by2,qHop,qJumpForward,qJumpBack][rr(0,5)]()}},
+  {title:'סוּפֶּר-אֶתְגָּר!',instruction:'הָרָמָה הֲכִי קָשָׁה!',tip:'🏆 טִיפ: בְּהַצְלָחָה! 💪',example:'💪',gen:function(){return[qNL_0_50_by5,qNL_0_100_by10,qHop,qJumpForward,qJumpBack,qNL_twoMissing][rr(0,5)]()}},
+];
+
+let currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+const QPL=5;
+
+function renderTabs(){const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());const row=document.getElementById('tabsRow');row.innerHTML='';levels.forEach((_,i)=>{const t=document.createElement('button');t.className='tab';t.textContent=(i+1)+(lk&&i>0?' 🔒':'');if(i===currentLevel)t.classList.add('active');if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}t.onclick=()=>goLevel(i);row.appendChild(t)});const at=row.querySelector('.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רָמָה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רָמָה '+(currentLevel+1)+' מִתּוֹךְ '+levels.length;
+  const lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הַסְתֵּר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  const seen=new Set();
+  for(let i=0;i<QPL;i++){let q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(String(q.answer)+q.qText));seen.add(String(q.answer)+q.qText);currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  const list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach((q,idx)=>{
+    const card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    let h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    const cols=q.cols||4;
+    h+='<div class="answer-options'+(cols===2?' cols-2':'')+'" id="opts-'+idx+'">';
+    q.options.forEach(opt=>{
+      const escaped=String(opt).replace(/'/g,"\\'");
+      h+='<button class="answer-btn" onclick="checkA('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+    });
+    h+='</div><div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkA(idx,chosen,btn){
+  const q=currentQuestions[idx];const card=document.getElementById('q-'+idx);const fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(String(chosen)===String(q.answer)){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(b=>b.classList.add('disabled'));
+    fb.textContent=['מְצוּיָן! ⭐','נָכוֹן! 🎯','יוֹפִי! ✨','מַדְהִים! 🌟'][rr(0,3)];fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לֹא נָכוֹן, נַסּוּ שׁוּב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(()=>{btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מוּשְׁלָם!';document.getElementById('lcSub').textContent='כָּל הַתְּשׁוּבוֹת נְכוֹנוֹת!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כָּל הַכָּבוֹד!';document.getElementById('lcSub').textContent='כִּמְעַט מוּשְׁלָם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סִיַּמְתֶּם!';document.getElementById('lcSub').textContent='כְּדַאי לְנַסּוֹת שׁוּב'}
+  const lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function nextLevel(){if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הַצֵּג טִיפ':'▲ הַסְתֵּר'}
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs();});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

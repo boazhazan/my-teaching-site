@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>מְדִידוֹת אֹרֶךְ — כִּתָּה א' | בּוֹעַז חָזָן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#92400e;--primary-dark:#78350f;--primary-light:#fef3c7;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#78350f 0%,#92400e 50%,#b45309 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(120,53,15,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.1rem;font-weight:700;text-align:center;margin-bottom:14px;color:var(--primary);line-height:1.6}
+.answer-options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}.answer-options.cols-2{grid-template-columns:repeat(2,1fr)}
+.answer-btn{height:52px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.3rem;font-weight:800;color:var(--text);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.04)}.answer-btn:active:not(.disabled){transform:scale(.96)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+/* Measuring visuals */
+.bar-compare{display:flex;flex-direction:column;gap:12px;align-items:flex-start;margin:16px auto;max-width:400px;direction:ltr}
+.bar-item{display:flex;align-items:center;gap:10px;width:100%}
+.bar-label{font-size:1.2rem;font-weight:800;min-width:28px;text-align:center}
+.bar-rect{height:32px;border-radius:8px;transition:width .3s}
+.ruler-display{position:relative;margin:16px auto;direction:ltr;max-width:380px}
+.ruler-track{position:relative;height:44px;background:linear-gradient(to bottom,#fef3c7,#fde68a);border:2px solid #b45309;border-radius:4px;overflow:hidden}
+.ruler-mark{position:absolute;bottom:0;width:2px;background:#78350f}.ruler-mark.big{height:20px}.ruler-mark.small{height:10px}
+.ruler-num{position:absolute;top:2px;font-size:.65rem;font-weight:700;color:#78350f;transform:translateX(-50%)}
+.ruler-line{position:absolute;bottom:46px;height:6px;background:var(--primary);border-radius:3px;left:0}
+.unit-row{display:flex;align-items:center;justify-content:center;gap:0;margin:12px auto;direction:ltr;position:relative;max-width:400px}
+.unit-icon{font-size:1.6rem;border:1px dashed var(--border);border-radius:4px;width:36px;height:36px;display:flex;align-items:center;justify-content:center}
+.measure-line{height:4px;background:var(--primary);border-radius:2px;margin:8px auto 4px;max-width:400px;direction:ltr}
+.shape-perimeter{display:flex;align-items:center;justify-content:center;margin:16px auto;direction:ltr}
+.shape-perimeter svg{max-width:220px;max-height:180px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{height:48px;font-size:1.1rem}.question-card{padding:18px 14px}.header-title h1{font-size:1.1rem}.unit-icon{width:30px;height:30px;font-size:1.3rem}.bar-rect{height:26px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">📏</div><div><h1>מְדִידוֹת אֹרֶךְ</h1><div class="subtitle">כִּתָּה א' — הַשְׁוָאָה, אֹמְדָּן וּמְדִידָה</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רָמָה 1 מִתּוֹךְ 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">מְדִידוֹת אֹרֶךְ — כִּתָּה א' | בּוֹעַז חָזָן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רָמָה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טִיפ</span><span class="tip-toggle" id="tipToggle">▲ הַסְתֵּר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נָכוֹן</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שָׁגוּי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הָרָמָה הַבָּאָה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נַסּוּ שׁוּב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>❓ אֵיךְ מְשַׂחֲקִים?</h2><p>לִמְדוּ לִמְדֹּד אֹרֶךְ!</p><p>הַשְׁווּ אֹרְכִים — מִי אָרוֹךְ יוֹתֵר? מִדְדוּ עִם סִיכּוֹת מַהְדֵּק, כַּפּוֹת יָד וְסֶנְטִימֶטְרִים.</p><p>הֵיקֵף = סְכוּם כָּל הַצְּלָעוֹת. קַו יָשָׁר הוּא הַדֶּרֶךְ הֲכִי קְצָרָה!</p><p>15 רָמוֹת — מֵהַשְׁוָאָה פְּשׁוּטָה וְעַד חִישׁוּב הֵיקֵף!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הֵבַנְתִּי!</button></div></div>
+
+<script>
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function genD4(ans,min,max){const s=new Set([ans]);while(s.size<4){const d=rr(min,max);if(d!==ans)s.add(d)}return shuffle([...s])}
+function genD2(ans,other){return shuffle([ans,other])}
+
+const barColors=['#ef4444','#3b82f6','#10b981','#f59e0b','#8b5cf6','#ec4899'];
+
+// Q1: Compare length — who is longer / shorter
+function qCompareLength(askShorter){
+  let wA=rr(60,260),wB=rr(60,260);
+  while(Math.abs(wA-wB)<30){wB=rr(60,260)}
+  const cA=barColors[rr(0,barColors.length-1)];
+  let cB=barColors[rr(0,barColors.length-1)];while(cB===cA)cB=barColors[rr(0,barColors.length-1)];
+  const display='<div class="bar-compare">'
+    +'<div class="bar-item"><span class="bar-label">א</span><div class="bar-rect" style="width:'+wA+'px;background:'+cA+'"></div></div>'
+    +'<div class="bar-item"><span class="bar-label">ב</span><div class="bar-rect" style="width:'+wB+'px;background:'+cB+'"></div></div>'
+    +'</div>';
+  let answer,qText;
+  if(askShorter){
+    qText='מִי קָצָר יוֹתֵר?';
+    answer=wA<wB?'א':'ב';
+  }else{
+    qText='מִי אָרוֹךְ יוֹתֵר?';
+    answer=wA>wB?'א':'ב';
+  }
+  return{qText,display,answer,options:['א','ב'],cols:2};
+}
+
+// Q2: Measure with units (clips or hands)
+function qMeasureUnits(icon){
+  const unit=icon||'📎';
+  const count=rr(3,9);
+  let display='<div class="measure-line" style="width:'+(count*36)+'px"></div>';
+  display+='<div class="unit-row" style="width:'+(count*36)+'px">';
+  for(let i=0;i<count;i++) display+='<div class="unit-icon">'+unit+'</div>';
+  display+='</div>';
+  return{qText:'כַּמָּה '+unit+' נִכְנָסִים לְאֹרֶךְ הַקַּו?',display,answer:count,options:genD4(count,Math.max(1,count-2),count+3)};
+}
+
+// Q3: Measure CM — ruler display
+function qMeasureCM(){
+  const cm=rr(2,12);
+  const pxPerCm=24;
+  const totalCm=14;
+  let rulerMarks='';
+  for(let i=0;i<=totalCm;i++){
+    const x=i*pxPerCm;
+    rulerMarks+='<div class="ruler-mark '+(i%1===0?'big':'small')+'" style="left:'+x+'px;height:'+(i%5===0?'22':'14')+'px"></div>';
+    if(i<=totalCm) rulerMarks+='<div class="ruler-num" style="left:'+x+'px">'+i+'</div>';
+  }
+  const lineW=cm*pxPerCm;
+  const display='<div class="ruler-display" style="width:'+(totalCm*pxPerCm+4)+'px">'
+    +'<div class="ruler-line" style="width:'+lineW+'px"></div>'
+    +'<div class="ruler-track">'+rulerMarks+'</div>'
+    +'</div>';
+  return{qText:'כַּמָּה סָ&quot;מ אֹרֶךְ הַקַּו?',display,answer:cm,options:genD4(cm,Math.max(1,cm-3),Math.min(14,cm+3))};
+}
+
+// Q4: Which unit is bigger (fewer = bigger)
+function qWhichFits(){
+  const scenarios=[
+    {unitA:'צְעָדִים',unitB:'כַּפּוֹת יָד',countA:rr(3,6),emojiA:'🦶',emojiB:'✋'},
+    {unitA:'צְעָדִים',unitB:'סִיכּוֹת מַהְדֵּק',countA:rr(3,6),emojiA:'🦶',emojiB:'📎'},
+    {unitA:'כַּפּוֹת יָד',unitB:'סִיכּוֹת מַהְדֵּק',countA:rr(4,7),emojiA:'✋',emojiB:'📎'},
+  ];
+  const s=scenarios[rr(0,scenarios.length-1)];
+  const countB=s.countA+rr(3,6);
+  const display='<div style="text-align:center;margin:12px 0;font-size:1.05rem;line-height:2">'
+    +'<div>מָדַדְנוּ אֹרֶךְ שֻׁלְחָן:</div>'
+    +'<div>בְּ'+s.unitA+' '+s.emojiA+' — יָצָא <strong>'+s.countA+'</strong></div>'
+    +'<div>בְּ'+s.unitB+' '+s.emojiB+' — יָצָא <strong>'+countB+'</strong></div>'
+    +'</div>';
+  // fewer units means the unit is bigger
+  return{qText:'אֵיזוֹ יְחִידָה גְּדוֹלָה יוֹתֵר?',display,answer:s.emojiA+' '+s.unitA,options:[s.emojiA+' '+s.unitA,s.emojiB+' '+s.unitB],cols:2};
+}
+
+// Q5: Estimate length
+function qEstimate(){
+  const items=[
+    {emoji:'✏️',name:'עִפָּרוֹן',realCm:18,range:[8,12,18,25]},
+    {emoji:'📏',name:'סַרְגֵּל קָטָן',realCm:15,range:[7,10,15,22]},
+    {emoji:'📖',name:'סֵפֶר',realCm:25,range:[10,17,25,35]},
+    {emoji:'🖍️',name:'צִבְעוֹנִי',realCm:10,range:[4,7,10,16]},
+    {emoji:'🧹',name:'מַטְאֲטֵא',realCm:100,range:[50,75,100,150]},
+    {emoji:'🥄',name:'כַּף',realCm:15,range:[6,10,15,22]},
+    {emoji:'📱',name:'טֵלֵפוֹן',realCm:14,range:[6,9,14,20]},
+  ];
+  const item=items[rr(0,items.length-1)];
+  const display='<div style="text-align:center;margin:16px 0;font-size:3.5rem">'+item.emoji+'</div>'
+    +'<div style="text-align:center;font-size:1rem;color:var(--text-light)">'+item.name+'</div>';
+  return{qText:'שַׁעֲרוּ: כַּמָּה סָ&quot;מ אֹרֶךְ הַ'+item.name+'?',display,answer:item.realCm,options:shuffle([...item.range])};
+}
+
+// Q6: Perimeter
+function qPerimeter(shapeType){
+  const type=shapeType||(['square','rectangle'][rr(0,1)]);
+  let sides,answer,svgW,svgH,svgContent,qText;
+  if(type==='square'){
+    const s=rr(2,10);
+    sides=[s,s,s,s];answer=s*4;
+    svgW=160;svgH=160;
+    const pad=20,sz=120;
+    svgContent='<rect x="'+pad+'" y="'+pad+'" width="'+sz+'" height="'+sz+'" fill="'+barColors[rr(0,barColors.length-1)]+'22" stroke="'+barColors[rr(0,barColors.length-1)]+'" stroke-width="3" rx="4"/>'
+      +'<text x="'+(pad+sz/2)+'" y="'+(pad-6)+'" text-anchor="middle" font-size="14" font-weight="700" fill="var(--primary)">'+s+' סָ&quot;מ</text>'
+      +'<text x="'+(pad+sz+8)+'" y="'+(pad+sz/2+4)+'" font-size="14" font-weight="700" fill="var(--primary)">'+s+'</text>';
+    qText='מַה הֵיקֵף הָרִיבּוּעַ?';
+  }else{
+    const w=rr(3,10),h=rr(2,w-1>1?w-1:2);
+    sides=[w,h,w,h];answer=2*(w+h);
+    svgW=200;svgH=160;
+    const pad=25,rw=150,rh=100;
+    const c=barColors[rr(0,barColors.length-1)];
+    svgContent='<rect x="'+pad+'" y="'+pad+'" width="'+rw+'" height="'+rh+'" fill="'+c+'22" stroke="'+c+'" stroke-width="3" rx="4"/>'
+      +'<text x="'+(pad+rw/2)+'" y="'+(pad-6)+'" text-anchor="middle" font-size="14" font-weight="700" fill="var(--primary)">'+w+' סָ&quot;מ</text>'
+      +'<text x="'+(pad+rw+8)+'" y="'+(pad+rh/2+4)+'" font-size="14" font-weight="700" fill="var(--primary)">'+h+'</text>';
+    qText='מַה הֵיקֵף הַמַּלְבֵּן?';
+  }
+  const display='<div class="shape-perimeter"><svg width="'+svgW+'" height="'+svgH+'" viewBox="0 0 '+svgW+' '+svgH+'">'+svgContent+'</svg></div>';
+  return{qText,display,answer,options:genD4(answer,Math.max(4,answer-6),answer+6)};
+}
+
+// Q7: Straight = shortest
+function qShortest(){
+  const straightLen=rr(80,200);
+  const curveExtra=rr(40,80);
+  const display='<div style="text-align:center;margin:16px 0;direction:ltr">'
+    +'<div style="margin-bottom:8px"><span style="font-weight:700;color:var(--primary)">א — קַו יָשָׁר:</span></div>'
+    +'<div style="margin:0 auto;width:'+straightLen+'px;height:4px;background:var(--primary);border-radius:2px"></div>'
+    +'<div style="margin-top:14px;margin-bottom:8px"><span style="font-weight:700;color:#e11d48">ב — קַו מְעֻקָּל:</span></div>'
+    +'<svg width="'+(straightLen+curveExtra)+'" height="50" style="display:block;margin:0 auto"><path d="M0,25 Q'+(straightLen*0.25)+',0 '+(straightLen*0.5)+',25 Q'+(straightLen*0.75)+',50 '+(straightLen+curveExtra)+',25" stroke="#e11d48" stroke-width="4" fill="none" stroke-linecap="round"/></svg>'
+    +'</div>';
+  return{qText:'אֵיזֶה קַו קָצָר יוֹתֵר?',display,answer:'א — קַו יָשָׁר',options:['א — קַו יָשָׁר','ב — קַו מְעֻקָּל'],cols:2};
+}
+
+const levels=[
+  {title:'מִי אָרוֹךְ יוֹתֵר?',instruction:'הִסְתַּכְּלוּ עַל שְׁנֵי הַפַּסִים וּבִחְרוּ מִי אָרוֹךְ יוֹתֵר',tip:'💡 טִיפ: הַפָּס הָאָרוֹךְ יוֹתֵר הוּא זֶה שֶׁמַּגִּיעַ יוֹתֵר רָחוֹק!',example:'פָּס אָרוֹךְ = מַגִּיעַ רָחוֹק. פָּס קָצָר = נִגְמָר מַהֵר.',gen:()=>qCompareLength(false)},
+  {title:'מִי קָצָר יוֹתֵר?',instruction:'מִצְאוּ אֶת הַפָּס הַקָּצָר יוֹתֵר',tip:'💡 טִיפ: הַקָּצָר יוֹתֵר הוּא זֶה שֶׁנִּגְמָר רִאשׁוֹן!',example:'אִם א\' נִגְמָר לִפְנֵי ב\' — אָז א\' קָצָר יוֹתֵר!',gen:()=>qCompareLength(true)},
+  {title:'מְדִידָה בְּסִיכּוֹת מַהְדֵּק',instruction:'סִפְרוּ כַּמָּה 📎 נִכְנָסִים לְאֹרֶךְ הַקַּו',tip:'💡 טִיפ: סִפְרוּ אֶת הַסִּיכּוֹת אַחַת-אַחַת!',example:'📎📎📎 = אֹרֶךְ שֶׁל <span class="math">3</span> סִיכּוֹת!',gen:()=>qMeasureUnits('📎')},
+  {title:'מְדִידָה בִּמְרַוְּחֵי יָד',instruction:'סִפְרוּ כַּמָּה ✋ נִכְנָסוֹת לְאֹרֶךְ הַקַּו',tip:'💡 טִיפ: כָּל ✋ הִיא יְחִידַת מְדִידָה אַחַת!',example:'✋✋✋✋ = אֹרֶךְ שֶׁל <span class="math">4</span> כַּפּוֹת יָד!',gen:()=>qMeasureUnits('✋')},
+  {title:'יְחִידָה גְּדוֹלָה = מִסְפָּר קָטָן',instruction:'יְחִידָה גְּדוֹלָה יוֹתֵר → צְרִיכִים פָּחוֹת מִמֶּנָּה',tip:'💡 טִיפ: אִם צָרִיךְ פָּחוֹת מִיְּחִידָה מְסֻיֶּמֶת — הִיא גְּדוֹלָה יוֹתֵר!',example:'5 צְעָדִים = 10 כַּפּוֹת יָד → הַצַּעַד גָּדוֹל מִכַּף הַיָּד!',gen:()=>qWhichFits()},
+  {title:'מְדִידָה בְּסָ&quot;מ',instruction:'קִרְאוּ אֶת הַסַּרְגֵּל — כַּמָּה סָ&quot;מ?',tip:'💡 טִיפ: הַסְתַּכְּלוּ הֵיכָן הַקַּו נִגְמָר עַל הַסַּרְגֵּל!',example:'קַו שֶׁנִּגְמָר עַל 5 = אָרְכּוֹ <span class="math">5</span> סָ&quot;מ!',gen:()=>qMeasureCM()},
+  {title:'מְדִידָה בְּסָ&quot;מ — תִּרְגּוּל',instruction:'הִתְאַמְּנוּ עוֹד בִּקְרִיאַת סַרְגֵּל',tip:'💡 טִיפ: שִׂימוּ לֵב — מַתְחִילִים מִ-0!',example:'הַקַּו מַתְחִיל בְּ-0 וְנִגְמָר בְּ-8 → אָרְכּוֹ <span class="math">8</span> סָ&quot;מ',gen:()=>qMeasureCM()},
+  {title:'אֹמְדָּן — שַׁעֲרוּ וּבִדְקוּ',instruction:'שַׁעֲרוּ כַּמָּה סָ&quot;מ אֹרֶךְ הַחֵפֶץ',tip:'💡 טִיפ: עִפָּרוֹן רָגִיל — כְּ-18 סָ&quot;מ. הָשְׁווּ אֵלָיו!',example:'✏️ ≈ 18 סָ&quot;מ, 📱 ≈ 14 סָ&quot;מ',gen:()=>qEstimate()},
+  {title:'יָשָׁר = הֲכִי קָצָר',instruction:'הַקַּו הַיָּשָׁר הוּא תָּמִיד הַדֶּרֶךְ הַקְּצָרָה בֵּיוֹתֵר!',tip:'💡 טִיפ: דֶּרֶךְ מְעֻקֶּלֶת תָּמִיד אֲרֻכָּה יוֹתֵר מִדֶּרֶךְ יְשָׁרָה!',example:'מִנְּקֻדָּה א\' לִנְקֻדָּה ב\' — קַו יָשָׁר = הֲכִי קָצָר!',gen:()=>qShortest()},
+  {title:'הֵיקֵף רִיבּוּעַ',instruction:'חַשְּׁבוּ אֶת הֵיקֵף הָרִיבּוּעַ — סְכוּם כָּל הַצְּלָעוֹת',tip:'💡 טִיפ: בְּרִיבּוּעַ כָּל 4 הַצְּלָעוֹת שָׁווֹת! הֵיקֵף = צֶלַע × 4',example:'רִיבּוּעַ עִם צֶלַע <span class="math">3</span> סָ&quot;מ → הֵיקֵף = <span class="math">3+3+3+3 = 12</span> סָ&quot;מ',gen:()=>qPerimeter('square')},
+  {title:'הֵיקֵף מַלְבֵּן',instruction:'חַשְּׁבוּ אֶת הֵיקֵף הַמַּלְבֵּן',tip:'💡 טִיפ: בְּמַלְבֵּן יֵשׁ 2 זוּגוֹת צְלָעוֹת שָׁווֹת. חַבְּרוּ אֶת כֻּלָּן!',example:'מַלְבֵּן <span class="math">4</span> וְ-<span class="math">2</span> → הֵיקֵף = <span class="math">4+2+4+2 = 12</span> סָ&quot;מ',gen:()=>qPerimeter('rectangle')},
+  {title:'הֵיקֵף — מְעֹרָב',instruction:'רִיבּוּעַ אוֹ מַלְבֵּן — חַשְּׁבוּ הֵיקֵף!',tip:'💡 טִיפ: חַבְּרוּ אֶת כָּל הַצְּלָעוֹת!',example:'הֵיקֵף = סְכוּם כָּל הַצְּלָעוֹת!',gen:()=>qPerimeter()},
+  {title:'כָּל הַסּוּגִים',instruction:'שְׁאֵלוֹת מִכָּל מָה שֶׁלָּמַדְנוּ!',tip:'🏆 טִיפ: שִׂימוּ לֵב מָה שׁוֹאֲלִים!',example:'כָּל שְׁאֵלָה הִיא הַפְתָּעָה!',gen:()=>[()=>qCompareLength(rr(0,1)),()=>qMeasureUnits(['📎','✋'][rr(0,1)]),()=>qMeasureCM(),()=>qWhichFits(),()=>qShortest(),()=>qPerimeter()][rr(0,5)]()},
+  {title:'אֶתְגָּר',instruction:'שְׁאֵלוֹת קָשׁוֹת מְעֹרָבוֹת!',tip:'🏆 טִיפ: קִרְאוּ בְּעִיּוּן וְחִשְׁבוּ!',example:'💪 בְּהַצְלָחָה!',gen:()=>[()=>qMeasureCM(),()=>qEstimate(),()=>qPerimeter(),()=>qWhichFits()][rr(0,3)]()},
+  {title:'סוּפֶּר-אֶתְגָּר!',instruction:'הָרָמָה הֲכִי קָשָׁה!',tip:'🏆 טִיפ: בְּהַצְלָחָה! 💪',example:'💪',gen:()=>[()=>qPerimeter(),()=>qEstimate(),()=>qMeasureCM(),()=>qWhichFits(),()=>qShortest()][rr(0,4)]()},
+];
+
+let currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+const QPL=5;
+
+function renderTabs(){const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());const row=document.getElementById('tabsRow');row.innerHTML='';levels.forEach((_,i)=>{const t=document.createElement('button');t.className='tab';t.textContent=(i+1)+(lk&&i>0?' 🔒':'');if(i===currentLevel)t.classList.add('active');if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}t.onclick=()=>goLevel(i);row.appendChild(t)});const at=row.querySelector('.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רָמָה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רָמָה '+(currentLevel+1)+' מִתּוֹךְ '+levels.length;
+  const lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הַסְתֵּר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  const seen=new Set();
+  for(let i=0;i<QPL;i++){let q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(String(q.answer)+q.qText));seen.add(String(q.answer)+q.qText);currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  const list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach((q,idx)=>{
+    const card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    let h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    const cols=q.cols||4;
+    h+='<div class="answer-options'+(cols===2?' cols-2':'')+'" id="opts-'+idx+'">';
+    q.options.forEach(opt=>{
+      const escaped=String(opt).replace(/'/g,"\\'");
+      h+='<button class="answer-btn" onclick="checkA('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+    });
+    h+='</div><div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkA(idx,chosen,btn){
+  const q=currentQuestions[idx];const card=document.getElementById('q-'+idx);const fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(String(chosen)===String(q.answer)){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(b=>b.classList.add('disabled'));
+    fb.textContent=['מְצוּיָן! ⭐','נָכוֹן! 🎯','יוֹפִי! ✨','מַדְהִים! 🌟'][rr(0,3)];fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לֹא נָכוֹן, נַסּוּ שׁוּב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(()=>{btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מוּשְׁלָם!';document.getElementById('lcSub').textContent='כָּל הַתְּשׁוּבוֹת נְכוֹנוֹת!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כָּל הַכָּבוֹד!';document.getElementById('lcSub').textContent='כִּמְעַט מוּשְׁלָם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סִיַּמְתֶּם!';document.getElementById('lcSub').textContent='כְּדַאי לְנַסּוֹת שׁוּב'}
+  const lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function nextLevel(){if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הַצֵּג טִיפ':'▲ הַסְתֵּר'}
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs();});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

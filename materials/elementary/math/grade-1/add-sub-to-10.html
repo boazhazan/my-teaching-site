@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>חִיבּוּר וְחִיסּוּר עַד 10 — כִּתָּה א' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#ea580c;--primary-dark:#c2410c;--primary-light:#fff7ed;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#c2410c 0%,#ea580c 50%,#f97316 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(194,65,12,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.1rem;font-weight:700;text-align:center;margin-bottom:14px;color:var(--primary);line-height:1.6}
+.visual-display{text-align:center;margin:16px 0}
+.exercise-display{text-align:center;margin:16px 0;direction:ltr}.exercise-row{display:flex;align-items:center;justify-content:center;gap:8px}.exercise-num{font-size:2.2rem;font-weight:900;color:var(--text)}.exercise-op{font-size:2rem;font-weight:700;color:var(--primary)}.exercise-equals{font-size:2rem;font-weight:700;color:var(--text-light)}.exercise-answer-box{min-width:60px;height:52px;border:3px dashed var(--primary);border-radius:12px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:2.2rem;font-weight:900;color:var(--primary)}.exercise-answer-box.correct-answer{background:var(--success);border-color:var(--success);color:#fff;border-style:solid}.exercise-answer-box.wrong-answer{background:var(--error);border-color:var(--error);color:#fff;border-style:solid}
+.emoji-visual{text-align:center;margin:12px 0;font-size:1.8rem;letter-spacing:4px;line-height:1.8;direction:ltr}.emoji-visual .struck{text-decoration:line-through;opacity:.4}
+.answer-options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}.answer-options.cols-2{grid-template-columns:repeat(2,1fr)}.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{height:52px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.3rem;font-weight:800;color:var(--text);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.04)}.answer-btn:active:not(.disabled){transform:scale(.96)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{height:48px;font-size:1.1rem}.question-card{padding:18px 14px}.header-title h1{font-size:1.1rem}.exercise-num{font-size:1.8rem}.emoji-visual{font-size:1.4rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">➕</div><div><h1>חִיבּוּר וְחִיסּוּר עַד 10</h1><div class="subtitle">כִּתָּה א' — פְּעֻלּוֹת חֶשְׁבּוֹן רִאשׁוֹנוֹת</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רָמָה 1 מִתּוֹךְ 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">חִיבּוּר וְחִיסּוּר עַד 10 — כִּתָּה א' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רָמָה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טִיפ</span><span class="tip-toggle" id="tipToggle">▲ הַסְתֵּר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נָכוֹן</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שָׁגוּי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הָרָמָה הַבָּאָה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נַסּוּ שׁוּב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>❓ חִיבּוּר וְחִיסּוּר</h2><p><strong>חִיבּוּר (+)</strong> אוֹמֵר: לְהוֹסִיף! כְּשֶׁיֵּשׁ 3 🍎 וּמוֹסִיפִים עוֹד 2 🍎, מְקַבְּלִים 5 🍎.<br><span class="math">3 + 2 = 5</span></p><p><strong>חִיסּוּר (−)</strong> אוֹמֵר: לְהוֹרִיד! כְּשֶׁיֵּשׁ 5 🍎 וְאוֹכְלִים 2, נִשְׁאָרוֹת 3 🍎.<br><span class="math">5 − 2 = 3</span></p><p>כְּשֶׁמְּחַבְּרִים 0 — שׁוּם דָּבָר לֹא מִשְׁתַּנֶּה: <span class="math">4 + 0 = 4</span></p><p>כְּשֶׁמַּחְסִירִים מִסְפָּר מֵעַצְמוֹ — מְקַבְּלִים 0: <span class="math">3 − 3 = 0</span></p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הֵבַנְתִּי!</button></div></div>
+
+<script>
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function genD4(ans,min,max){const s=new Set([ans]);while(s.size<4){const d=rr(min,max);if(d!==ans)s.add(d)}return shuffle([...s])}
+
+const emojis=['🍎','🍊','🍋','🍌','🍇','🍓','🍑','🥝','⭐','🌸'];
+
+/* ── QUESTION GENERATORS ── */
+
+// 1. Addition: a+b=?, sum up to maxSum
+function qAdd(maxSum,showEmoji){
+  const sum=rr(1,maxSum);
+  const a=rr(0,sum);
+  const b=sum-a;
+  const em=emojis[rr(0,emojis.length-1)];
+  let display='<div class="exercise-display"><div class="exercise-row"><span class="exercise-num">'+a+'</span><span class="exercise-op">+</span><span class="exercise-num">'+b+'</span><span class="exercise-equals">=</span><div class="exercise-answer-box" id="AX">?</div></div></div>';
+  if(showEmoji){
+    let vis='<div class="emoji-visual">';
+    for(let i=0;i<a;i++)vis+=em;
+    vis+=' + ';
+    for(let i=0;i<b;i++)vis+=em;
+    vis+='</div>';
+    display=vis+display;
+  }
+  return{qText:'חִשְׁבוּ:',display:display,answer:sum,options:genD4(sum,0,maxSum),boxId:'AX'};
+}
+
+// 2. Subtraction: a-b=?, a up to max, b<=a
+function qSub(max,showEmoji){
+  const a=rr(1,max);
+  const b=rr(0,a);
+  const ans=a-b;
+  const em=emojis[rr(0,emojis.length-1)];
+  let display='<div class="exercise-display"><div class="exercise-row"><span class="exercise-num">'+a+'</span><span class="exercise-op">−</span><span class="exercise-num">'+b+'</span><span class="exercise-equals">=</span><div class="exercise-answer-box" id="AX">?</div></div></div>';
+  if(showEmoji){
+    let vis='<div class="emoji-visual">';
+    for(let i=0;i<a;i++){
+      if(i<b)vis+='<span class="struck">'+em+'</span>';
+      else vis+=em;
+    }
+    vis+='</div>';
+    display=vis+display;
+  }
+  return{qText:'חִשְׁבוּ:',display:display,answer:ans,options:genD4(ans,0,max),boxId:'AX'};
+}
+
+// 3. Addition with zero: n+0 or 0+n
+function qAddWithZero(){
+  const n=rr(1,10);
+  const zeroFirst=rr(0,1);
+  const a=zeroFirst?0:n;
+  const b=zeroFirst?n:0;
+  return{qText:'חִשְׁבוּ:',display:'<div class="exercise-display"><div class="exercise-row"><span class="exercise-num">'+a+'</span><span class="exercise-op">+</span><span class="exercise-num">'+b+'</span><span class="exercise-equals">=</span><div class="exercise-answer-box" id="AX">?</div></div></div>',answer:n,options:genD4(n,0,10),boxId:'AX'};
+}
+
+// 4. Subtraction with zero: n-0
+function qSubWithZero(){
+  const n=rr(1,10);
+  return{qText:'חִשְׁבוּ:',display:'<div class="exercise-display"><div class="exercise-row"><span class="exercise-num">'+n+'</span><span class="exercise-op">−</span><span class="exercise-num">0</span><span class="exercise-equals">=</span><div class="exercise-answer-box" id="AX">?</div></div></div>',answer:n,options:genD4(n,0,10),boxId:'AX'};
+}
+
+// 5. Subtraction to zero: n-n=0
+function qSubToZero(){
+  const n=rr(1,10);
+  return{qText:'חִשְׁבוּ:',display:'<div class="exercise-display"><div class="exercise-row"><span class="exercise-num">'+n+'</span><span class="exercise-op">−</span><span class="exercise-num">'+n+'</span><span class="exercise-equals">=</span><div class="exercise-answer-box" id="AX">?</div></div></div>',answer:0,options:shuffle([0,1,n,n+1]),boxId:'AX'};
+}
+
+// 6. Missing addend: ?+b=c or a+?=c
+function qMissingAdd(){
+  const c=rr(2,10);
+  const a=rr(0,c);
+  const b=c-a;
+  const missingFirst=rr(0,1);
+  let display,answer;
+  if(missingFirst){
+    answer=a;
+    display='<div class="exercise-display"><div class="exercise-row"><div class="exercise-answer-box" id="AX">?</div><span class="exercise-op">+</span><span class="exercise-num">'+b+'</span><span class="exercise-equals">=</span><span class="exercise-num">'+c+'</span></div></div>';
+  }else{
+    answer=b;
+    display='<div class="exercise-display"><div class="exercise-row"><span class="exercise-num">'+a+'</span><span class="exercise-op">+</span><div class="exercise-answer-box" id="AX">?</div><span class="exercise-equals">=</span><span class="exercise-num">'+c+'</span></div></div>';
+  }
+  return{qText:'מִצְאוּ אֶת הַמִּסְפָּר הֶחָסֵר:',display:display,answer:answer,options:genD4(answer,0,10),boxId:'AX'};
+}
+
+// 7. Missing subtrahend: a-?=c
+function qMissingSub(){
+  const a=rr(2,10);
+  const c=rr(0,a-1);
+  const answer=a-c;
+  const display='<div class="exercise-display"><div class="exercise-row"><span class="exercise-num">'+a+'</span><span class="exercise-op">−</span><div class="exercise-answer-box" id="AX">?</div><span class="exercise-equals">=</span><span class="exercise-num">'+c+'</span></div></div>';
+  return{qText:'מִצְאוּ אֶת הַמִּסְפָּר הֶחָסֵר:',display:display,answer:answer,options:genD4(answer,0,10),boxId:'AX'};
+}
+
+// 8. Build sum: find two numbers that sum to target
+function qBuildSum(){
+  const target=rr(3,10);
+  // Generate correct pair
+  const ca=rr(1,target-1);
+  const cb=target-ca;
+  const correctStr=ca+' + '+cb;
+  // Generate 3 wrong pairs
+  const wrongs=[];
+  const seen=new Set([correctStr]);
+  let attempts=0;
+  while(wrongs.length<3&&attempts<50){
+    const wa=rr(0,10);
+    const wb=rr(0,10);
+    const ws=wa+' + '+wb;
+    if(wa+wb!==target&&!seen.has(ws)){wrongs.push(ws);seen.add(ws)}
+    attempts++;
+  }
+  return{qText:'אֵיזֶה זוּג מִסְפָּרִים נוֹתֵן '+target+'?',display:'',answer:correctStr,options:shuffle([correctStr,...wrongs])};
+}
+
+// 9. Chain calculation: a+b-c=? or a-b+c=?
+function qChainCalc(){
+  const type=rr(0,1);
+  let a,b,c,ans,opStr;
+  if(type===0){
+    // a+b-c
+    a=rr(1,5);b=rr(1,5);
+    const mid=a+b;
+    c=rr(0,mid);
+    ans=mid-c;
+    opStr='<span class="exercise-num">'+a+'</span><span class="exercise-op">+</span><span class="exercise-num">'+b+'</span><span class="exercise-op">−</span><span class="exercise-num">'+c+'</span>';
+  }else{
+    // a-b+c
+    a=rr(3,10);b=rr(0,a);
+    const mid=a-b;
+    c=rr(0,10-mid);
+    ans=mid+c;
+    opStr='<span class="exercise-num">'+a+'</span><span class="exercise-op">−</span><span class="exercise-num">'+b+'</span><span class="exercise-op">+</span><span class="exercise-num">'+c+'</span>';
+  }
+  const display='<div class="exercise-display"><div class="exercise-row">'+opStr+'<span class="exercise-equals">=</span><div class="exercise-answer-box" id="AX">?</div></div></div>';
+  return{qText:'חִשְׁבוּ:',display:display,answer:ans,options:genD4(ans,0,10),boxId:'AX'};
+}
+
+/* ── LEVELS ── */
+const levels=[
+  {title:'חִיבּוּר עַד 5',instruction:'חַבְּרוּ שְׁנֵי מִסְפָּרִים — הַתּוֹצָאָה עַד 5',tip:'💡 טִיפ: חִיבּוּר אוֹמֵר <strong>לְהוֹסִיף</strong>! סִפְרוּ הַכֹּל בְּיַחַד.',example:'<span class="math">2 + 1 = 3</span>\nיֵשׁ 🍎🍎, מוֹסִיפִים 🍎 → 🍎🍎🍎 = 3!',gen:()=>qAdd(5,true)},
+  {title:'חִיבּוּר עַד 10',instruction:'חַבְּרוּ שְׁנֵי מִסְפָּרִים — הַתּוֹצָאָה עַד 10',tip:'💡 טִיפ: סִפְרוּ אֶת הַכֹּל בְּיַחַד. אֶפְשָׁר לִסְפֹּר עַל הָאֶצְבָּעוֹת!',example:'<span class="math">4 + 3 = 7</span>\n🍊🍊🍊🍊 + 🍊🍊🍊 = 7!',gen:()=>qAdd(10,true)},
+  {title:'חִיסּוּר עַד 5',instruction:'הַחְסִירוּ — הַתּוֹצָאָה עַד 5',tip:'💡 טִיפ: חִיסּוּר אוֹמֵר <strong>לְהוֹרִיד</strong>! הוֹרִידוּ פֵּרוֹת וְסִפְרוּ מָה נִשְׁאַר.',example:'<span class="math">4 − 1 = 3</span>\n🍓🍓🍓🍓, אוֹכְלִים 1 → נִשְׁאֲרוּ 🍓🍓🍓 = 3!',gen:()=>qSub(5,true)},
+  {title:'חִיסּוּר עַד 10',instruction:'הַחְסִירוּ — מִסְפָּרִים עַד 10',tip:'💡 טִיפ: דִּמְיְנוּ שֶׁיֵּשׁ לָכֶם חֲפָצִים וּמוֹרִידִים חֵלֶק. כַּמָּה נִשְׁאַר?',example:'<span class="math">7 − 3 = 4</span>\n🍇🍇🍇🍇🍇🍇🍇, הוֹרִידוּ 3 → נִשְׁאֲרוּ 4!',gen:()=>qSub(10,true)},
+  {title:'חִיבּוּר וְחִיסּוּר מְעֹרָב',instruction:'פַּעַם חִיבּוּר, פַּעַם חִיסּוּר — שִׂימוּ לֵב לַסִּימָן!',tip:'💡 טִיפ: הִסְתַּכְּלוּ עַל הַסִּימָן! <span class="math">+</span> = לְהוֹסִיף, <span class="math">−</span> = לְהוֹרִיד.',example:'<span class="math">3 + 4 = 7</span> (חִיבּוּר)\n<span class="math">8 − 2 = 6</span> (חִיסּוּר)',gen:()=>rr(0,1)?qAdd(10,true):qSub(10,true)},
+  {title:'חֶשְׁבּוֹן עִם 0',instruction:'מָה קוֹרֶה כְּשֶׁמְּחַבְּרִים אוֹ מַחְסִירִים 0?',tip:'💡 טִיפ: <span class="math">+0</span> = אוֹתוֹ דָּבָר! <span class="math">−0</span> = אוֹתוֹ דָּבָר! <span class="math">n−n</span> = 0!',example:'<span class="math">5 + 0 = 5</span>\n<span class="math">7 − 0 = 7</span>\n<span class="math">3 − 3 = 0</span>',gen:()=>[qAddWithZero,qSubWithZero,qSubToZero][rr(0,2)]()},
+  {title:'חִיבּוּר — בְּלִי וִיזוּאָל',instruction:'חַבְּרוּ בְּלִי עֶזְרָה שֶׁל תְּמוּנוֹת!',tip:'💡 טִיפ: נַסּוּ לְחַשֵּׁב בָּרֹאשׁ! אֶפְשָׁר לִסְפֹּר עַל הָאֶצְבָּעוֹת.',example:'<span class="math">6 + 3 = ?</span>\nהַתְחִילוּ מ-6, סִפְרוּ 3: 7, 8, 9!',gen:()=>qAdd(10,false)},
+  {title:'חִיסּוּר — בְּלִי וִיזוּאָל',instruction:'הַחְסִירוּ בְּלִי עֶזְרָה שֶׁל תְּמוּנוֹת!',tip:'💡 טִיפ: נַסּוּ לְחַשֵּׁב בָּרֹאשׁ! הַתְחִילוּ מֵהַמִּסְפָּר הַגָּדוֹל וְרִדוּ לְמַטָּה.',example:'<span class="math">9 − 4 = ?</span>\nהַתְחִילוּ מ-9, רִדוּ 4: 8, 7, 6, 5!',gen:()=>qSub(10,false)},
+  {title:'מִצְאוּ אֶת הֶחָסֵר (חִיבּוּר)',instruction:'אֵיזֶה מִסְפָּר חָסֵר בַּתִּרְגִּיל?',tip:'💡 טִיפ: אִם <span class="math">? + 3 = 7</span>, חִשְׁבוּ: כַּמָּה צָרִיךְ לְהוֹסִיף ל-3 כְּדֵי לְקַבֵּל 7?',example:'<span class="math">? + 3 = 7</span> → ? = <span class="math">4</span>\nכִּי <span class="math">4 + 3 = 7</span>!',gen:()=>qMissingAdd()},
+  {title:'מִצְאוּ אֶת הֶחָסֵר (חִיסּוּר)',instruction:'אֵיזֶה מִסְפָּר חָסֵר בַּתִּרְגִּיל?',tip:'💡 טִיפ: אִם <span class="math">8 − ? = 5</span>, חִשְׁבוּ: כַּמָּה הוֹרַדְנוּ מ-8 כְּדֵי לְקַבֵּל 5?',example:'<span class="math">8 − ? = 5</span> → ? = <span class="math">3</span>\nכִּי <span class="math">8 − 3 = 5</span>!',gen:()=>qMissingSub()},
+  {title:'בִּנוּ תִּרְגִּיל לַתּוֹצָאָה',instruction:'מִצְאוּ שְׁנֵי מִסְפָּרִים שֶׁנּוֹתְנִים אֶת הַתּוֹצָאָה!',tip:'💡 טִיפ: חִפְשׂוּ שְׁנֵי מִסְפָּרִים שֶׁבְּיַחַד נוֹתְנִים אֶת הַמִּסְפָּר הַמְּבֻקָּשׁ.',example:'הַתּוֹצָאָה 6:\n<span class="math">2 + 4 = 6</span> ✓\n<span class="math">1 + 5 = 6</span> ✓',gen:()=>qBuildSum()},
+  {title:'תִּרְגִּילִים אֲרֻכִּים',instruction:'תִּרְגִּיל עִם שְׁלוֹשָׁה מִסְפָּרִים!',tip:'💡 טִיפ: חִשְׁבוּ צַעַד אַחַר צַעַד — קֹדֶם אֶת הַפְּעֻלָּה הָרִאשׁוֹנָה, אָחַ"כ אֶת הַשְּׁנִיָּה.',example:'<span class="math">3 + 4 − 2 = ?</span>\nצַעַד 1: <span class="math">3 + 4 = 7</span>\nצַעַד 2: <span class="math">7 − 2 = 5</span>',gen:()=>qChainCalc()},
+  {title:'מְעֹרָב — כָּל הַסּוּגִים',instruction:'שְׁאֵלוֹת מִכָּל מָה שֶׁלָּמַדְנוּ!',tip:'🏆 טִיפ: הִשְׁתַּמְּשׁוּ בְּכָל מָה שֶׁלְּמַדְתֶּם עַד עַכְשָׁו!',example:'חִיבּוּר, חִיסּוּר, חָסֵר, וּבְנִיַּת תִּרְגִּיל!',gen:()=>[()=>qAdd(10,false),()=>qSub(10,false),qMissingAdd,qMissingSub,qBuildSum][rr(0,4)]()},
+  {title:'אֶתְגָּר',instruction:'שְׁאֵלוֹת קָשׁוֹת יוֹתֵר — מוּכָנִים?',tip:'🏆 טִיפ: קִרְאוּ בְּעִיּוּן! יֵשׁ פֹּה תִּרְגִּילִים עִם חָסֵר, שַׁרְשְׁרָאוֹת וּבְנִיַּת תִּרְגִּיל.',example:'הַכֹּל מָה שֶׁלָּמַדְנוּ — בְּדֶרֶךְ קָשָׁה יוֹתֵר!',gen:()=>[()=>qSub(10,false),qMissingAdd,qMissingSub,qChainCalc,qBuildSum][rr(0,4)]()},
+  {title:'סוּפֶּר-אֶתְגָּר!',instruction:'הָרָמָה הֲכִי קָשָׁה — בְּהַצְלָחָה!',tip:'🏆 טִיפ: הָרָמָה הָאַחֲרוֹנָה! הַרְאוּ מָה אַתֶּם יוֹדְעִים!',example:'💪 אַתֶּם אַלּוּפִים!',gen:()=>[qMissingAdd,qMissingSub,qChainCalc,qBuildSum,()=>qAdd(10,false),()=>qSub(10,false)][rr(0,5)]()},
+];
+
+let currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+const QPL=6;
+
+function renderTabs(){const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());const row=document.getElementById('tabsRow');row.innerHTML='';levels.forEach((_,i)=>{const t=document.createElement('button');t.className='tab';t.textContent=(i+1)+(lk&&i>0?' 🔒':'');if(i===currentLevel)t.classList.add('active');if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}t.onclick=()=>goLevel(i);row.appendChild(t)});const at=row.querySelector('.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רָמָה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רָמָה '+(currentLevel+1)+' מִתּוֹךְ '+levels.length;
+  const lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הַסְתֵּר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  const seen=new Set();
+  for(let i=0;i<QPL;i++){let q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(String(q.answer)+q.qText+(q.display||'')));seen.add(String(q.answer)+q.qText+(q.display||''));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  const list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach((q,idx)=>{
+    const card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    let h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display.replace(/id="AX"/g,'id="ansBox-'+idx+'"');
+    const cols=q.cols||4;
+    h+='<div class="answer-options'+(cols===2?' cols-2':cols===3?' cols-3':'')+'" id="opts-'+idx+'">';
+    q.options.forEach(opt=>{
+      const escaped=String(opt).replace(/'/g,"\\'");
+      h+='<button class="answer-btn" onclick="checkA('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+    });
+    h+='</div><div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkA(idx,chosen,btn){
+  const q=currentQuestions[idx];const card=document.getElementById('q-'+idx);const fb=document.getElementById('fb-'+idx);
+  const ab=document.getElementById('ansBox-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(String(chosen)===String(q.answer)){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    if(ab){ab.textContent=q.answer;ab.classList.add('correct-answer')}
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(b=>b.classList.add('disabled'));
+    fb.textContent=['מְצוּיָן! ⭐','נָכוֹן! 🎯','יוֹפִי! ✨','מַדְהִים! 🌟'][rr(0,3)];fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');
+    if(ab){ab.textContent=chosen;ab.classList.add('wrong-answer')}
+    fb.textContent='לֹא נָכוֹן, נַסּוּ שׁוּב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(()=>{btn.classList.remove('wrong-choice');if(ab){ab.textContent='?';ab.classList.remove('wrong-answer')}fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מוּשְׁלָם!';document.getElementById('lcSub').textContent='כָּל הַתְּשׁוּבוֹת נְכוֹנוֹת!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כָּל הַכָּבוֹד!';document.getElementById('lcSub').textContent='כִּמְעַט מוּשְׁלָם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סִיַּמְתֶּם!';document.getElementById('lcSub').textContent='כְּדַאי לְנַסּוֹת שׁוּב'}
+  const lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function nextLevel(){if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הַצֵּג טִיפ':'▲ הַסְתֵּר'}
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs();});
+</script>
+  <script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

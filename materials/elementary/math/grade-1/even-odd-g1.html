@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>זוּגִי וְאִי-זוּגִי — כִּתָּה א' | בּוֹעַז חָזָן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#059669;--primary-dark:#047857;--primary-light:#d1fae5;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#047857 0%,#059669 50%,#10b981 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(5,150,105,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.1rem;font-weight:700;text-align:center;margin-bottom:14px;color:var(--primary);line-height:1.6}
+.pairs-row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:12px 0;direction:ltr}.pair-box{display:flex;gap:4px;background:var(--primary-light);border:2px solid var(--primary);border-radius:12px;padding:8px 12px;font-size:1.8rem}.lonely-item{display:flex;align-items:center;justify-content:center;background:#fef3c7;border:2px dashed var(--accent);border-radius:12px;padding:8px 12px;font-size:1.8rem}
+.seq-row{display:flex;justify-content:center;gap:6px;margin:12px 0;direction:ltr;flex-wrap:wrap}.num-box{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800}.num-box.filled{background:var(--primary-light);color:var(--primary);border:2px solid var(--primary)}.num-box.mystery{background:#fef3c7;color:var(--accent);border:2px dashed var(--accent);font-size:1.3rem}
+.num-display{text-align:center;margin:12px 0}.big-num{font-size:3.5rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary)}
+.answer-options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}.answer-options.cols-2{grid-template-columns:repeat(2,1fr)}
+.answer-btn{height:52px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.3rem;font-weight:800;color:var(--text);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.04)}.answer-btn:active:not(.disabled){transform:scale(.96)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{height:48px;font-size:1.1rem}.question-card{padding:18px 14px}.header-title h1{font-size:1.1rem}.big-num{font-size:2.5rem;padding:6px 20px}.pair-box{font-size:1.4rem;padding:6px 8px}.lonely-item{font-size:1.4rem;padding:6px 8px}.num-box{width:34px;height:34px;font-size:.95rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🔢</div><div><h1>זוּגִי וְאִי-זוּגִי</h1><div class="subtitle">כִּתָּה א' — מִסְפָּרִים זוּגִיִּים וְאִי-זוּגִיִּים</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רָמָה 1 מִתּוֹךְ 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">זוּגִי וְאִי-זוּגִי — כִּתָּה א' | בּוֹעַז חָזָן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רָמָה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טִיפ</span><span class="tip-toggle" id="tipToggle">▲ הַסְתֵּר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נָכוֹן</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שָׁגוּי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הָרָמָה הַבָּאָה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נַסּוּ שׁוּב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>❓ אֵיךְ מְשַׂחֲקִים?</h2><p>מִסְפָּר <strong>זוּגִי</strong> — אֶפְשָׁר לְסַדֵּר אוֹתוֹ בִּזְוּגוֹת, וְלֹא נִשְׁאָר אַף אֶחָד לְבַד!</p><p>מִסְפָּר <strong>אִי-זוּגִי</strong> — כְּשֶׁמְּסַדְּרִים בִּזְוּגוֹת, נִשְׁאָר אֶחָד בְּלִי בֶּן-זוּג 😢</p><p>מִסְפָּרִים זוּגִיִּים: <span class="math">2, 4, 6, 8, 10, 12...</span></p><p>מִסְפָּרִים אִי-זוּגִיִּים: <span class="math">1, 3, 5, 7, 9, 11...</span></p><p>15 רָמוֹת — מִסִּדּוּר בִּזְוּגוֹת וְעַד אֶתְגָּרִים!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הֵבַנְתִּי!</button></div></div>
+
+<script>
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const emojis=['🍎','🌟','🐟','🦋','🌺','🍊','🎈','🐝','🍓','🐢','🌻','🍋','🐞','🍌','🐸','🧁','🍇','🪲','🌈','🎀'];
+
+function genD4(ans,min,max){const s=new Set([ans]);while(s.size<4){const d=rr(min,max);if(d!==ans)s.add(d)}return shuffle([...s])}
+
+// --- QUESTION GENERATORS ---
+
+// 1. qPairUp — arrange n objects in pairs, ask if everyone has a partner
+function qPairUp(max){
+  const n=rr(2,max);
+  const e=emojis[rr(0,emojis.length-1)];
+  const isEven=(n%2===0);
+  const pairs=Math.floor(n/2);
+  let display='<div class="pairs-row">';
+  for(let i=0;i<pairs;i++){
+    display+='<div class="pair-box">'+e+e+'</div>';
+  }
+  if(!isEven){
+    display+='<div class="lonely-item">'+e+'</div>';
+  }
+  display+='</div>';
+  const answer=isEven?'כֵּן':'לֹא';
+  return{qText:'יֵשׁ '+n+' '+e+'. סִדַּרְנוּ בִּזְוּגוֹת — הַאִם לְכָל אֶחָד יֵשׁ בֶּן-זוּג?',display,answer,options:['כֵּן','לֹא'],cols:2};
+}
+
+// 2. qIdentify — is this number even or odd?
+function qIdentify(max){
+  const n=rr(1,max);
+  const isEven=(n%2===0);
+  const answer=isEven?'זוּגִי':'אִי-זוּגִי';
+  return{qText:'הַמִּסְפָּר '+n+' — זוּגִי אוֹ אִי-זוּגִי?',display:'<div class="num-display"><span class="big-num">'+n+'</span></div>',answer,options:['זוּגִי','אִי-זוּגִי'],cols:2};
+}
+
+// 3. qFindEven — 4 numbers, find the even one
+function qFindEven(){
+  const even=rr(1,10)*2;
+  const odds=new Set();
+  while(odds.size<3){const o=rr(1,19);if(o%2!==0&&o!==even)odds.add(o)}
+  const options=shuffle([even,...odds]);
+  return{qText:'מִצְאוּ אֶת הַמִּסְפָּר הַזּוּגִי!',display:'',answer:even,options};
+}
+
+// 4. qFindOdd — 4 numbers, find the odd one
+function qFindOdd(){
+  const odd=rr(0,9)*2+1;
+  const evens=new Set();
+  while(evens.size<3){const e=rr(1,10)*2;if(e!==odd)evens.add(e)}
+  const options=shuffle([odd,...evens]);
+  return{qText:'מִצְאוּ אֶת הַמִּסְפָּר הָאִי-זוּגִי!',display:'',answer:odd,options};
+}
+
+// 5. qNextEven — what is the next even number after n?
+function qNextEven(max){
+  const n=rr(1,max-2);
+  let next=n+1;
+  while(next%2!==0)next++;
+  return{qText:'מָהוּ הַמִּסְפָּר הַזּוּגִי הַבָּא אַחֲרֵי '+n+'?',display:'<div class="num-display"><span class="big-num">'+n+'</span> <span style="font-size:2rem;color:var(--accent)">→ ?</span></div>',answer:next,options:genD4(next,Math.max(2,next-4),Math.min(20,next+4))};
+}
+
+// 6. qEvenSequence — even sequence with a missing number
+function qEvenSequence(){
+  const start=rr(0,3)*2+2; // 2,4,6,8
+  const seq=[];for(let i=0;i<5;i++)seq.push(start+i*2);
+  const hideIdx=rr(1,3);
+  const ans=seq[hideIdx];
+  let display='<div class="seq-row">';
+  for(let i=0;i<5;i++){
+    if(i===hideIdx)display+='<div class="num-box mystery">?</div>';
+    else display+='<div class="num-box filled">'+seq[i]+'</div>';
+  }
+  display+='</div>';
+  return{qText:'מָהוּ הַמִּסְפָּר הַזּוּגִי הֶחָסֵר?',display,answer:ans,options:genD4(ans,Math.max(2,ans-6),Math.min(20,ans+6))};
+}
+
+// 7. qOddSequence — odd sequence with a missing number
+function qOddSequence(){
+  const start=rr(0,3)*2+1; // 1,3,5,7
+  const seq=[];for(let i=0;i<5;i++)seq.push(start+i*2);
+  const hideIdx=rr(1,3);
+  const ans=seq[hideIdx];
+  let display='<div class="seq-row">';
+  for(let i=0;i<5;i++){
+    if(i===hideIdx)display+='<div class="num-box mystery">?</div>';
+    else display+='<div class="num-box filled">'+seq[i]+'</div>';
+  }
+  display+='</div>';
+  return{qText:'מָהוּ הַמִּסְפָּר הָאִי-זוּגִי הֶחָסֵר?',display,answer:ans,options:genD4(ans,Math.max(1,ans-6),Math.min(19,ans+6))};
+}
+
+// 8. qSumOfTwo — even+even or odd+odd → always even!
+function qSumOfTwo(type){
+  let a,b;
+  if(type==='even'){
+    a=rr(1,5)*2;b=rr(1,5)*2;
+  }else{
+    a=rr(0,4)*2+1;b=rr(0,4)*2+1;
+  }
+  const sum=a+b;
+  const label=type==='even'?'זוּגִי + זוּגִי':'אִי-זוּגִי + אִי-זוּגִי';
+  return{qText:label+': '+a+' + '+b+' = '+sum+'. הַתּוֹצָאָה זוּגִית אוֹ אִי-זוּגִית?',display:'<div class="num-display" style="direction:ltr;text-align:center"><span class="big-num" style="font-size:2rem">'+a+' + '+b+' = '+sum+'</span></div>',answer:'זוּגִי',options:['זוּגִי','אִי-זוּגִי'],cols:2};
+}
+
+// --- LEVELS ---
+const levels=[
+  {title:'סִדּוּר בִּזְוּגוֹת (1-6)',instruction:'סַדְּרוּ בִּזְוּגוֹת — הַאִם לְכֻלָּם יֵשׁ בֶּן-זוּג?',tip:'💡 טִיפ: סַדְּרוּ אֶת הָעֲצָמִים בִּזְוּגוֹת. אִם נִשְׁאָר אֶחָד לְבַד — הַמִּסְפָּר אִי-זוּגִי!',example:'🍎🍎 🍎🍎 — לְכֻלָּם יֵשׁ בֶּן-זוּג → <span class="math">4</span> זוּגִי!\n🍎🍎 🍎🍎 🍎 — נִשְׁאָר אֶחָד → <span class="math">5</span> אִי-זוּגִי!',gen:()=>qPairUp(6)},
+  {title:'סִדּוּר בִּזְוּגוֹת (1-10)',instruction:'סַדְּרוּ בִּזְוּגוֹת — הַאִם לְכֻלָּם יֵשׁ בֶּן-זוּג?',tip:'💡 טִיפ: עַכְשָׁו יֵשׁ יוֹתֵר עֲצָמִים — סִפְרוּ אֶת הַזּוּגוֹת!',example:'🌟🌟 🌟🌟 🌟🌟 — כֻּלָּם בִּזְוּגוֹת → <span class="math">6</span> זוּגִי!',gen:()=>qPairUp(10)},
+  {title:'זוּגִי אוֹ אִי-זוּגִי? (1-10)',instruction:'הַאִם הַמִּסְפָּר זוּגִי אוֹ אִי-זוּגִי?',tip:'💡 טִיפ: מִסְפָּרִים זוּגִיִּים: <span class="math">2, 4, 6, 8, 10</span>. אִי-זוּגִיִּים: <span class="math">1, 3, 5, 7, 9</span>.',example:'<span class="math">6</span> → זוּגִי! <span class="math">7</span> → אִי-זוּגִי!',gen:()=>qIdentify(10)},
+  {title:'זוּגִי אוֹ אִי-זוּגִי? (1-20)',instruction:'גַּם עַד 20!',tip:'💡 טִיפ: הִסְתַּכְּלוּ עַל הַסִּפְרָה הָאַחֲרוֹנָה — אִם הִיא <span class="math">0, 2, 4, 6, 8</span> → זוּגִי!',example:'<span class="math">14</span> → מִסְתַּיֵּם בְּ-<span class="math">4</span> → זוּגִי!',gen:()=>qIdentify(20)},
+  {title:'מִצְאוּ אֶת הַזּוּגִי',instruction:'אֵיזֶה מִסְפָּר הוּא הַזּוּגִי?',tip:'💡 טִיפ: זוּגִי = אֶפְשָׁר לְחַלֵּק לִשְׁנַיִם בְּדִיּוּק!',example:'בֵּין <span class="math">3, 7, 8, 5</span> — רַק <span class="math">8</span> זוּגִי!',gen:()=>qFindEven()},
+  {title:'מִצְאוּ אֶת הָאִי-זוּגִי',instruction:'אֵיזֶה מִסְפָּר הוּא הָאִי-זוּגִי?',tip:'💡 טִיפ: אִי-זוּגִי = נִשְׁאָר אֶחָד כְּשֶׁמְּחַלְּקִים לִשְׁנַיִם!',example:'בֵּין <span class="math">4, 6, 9, 2</span> — רַק <span class="math">9</span> אִי-זוּגִי!',gen:()=>qFindOdd()},
+  {title:'הַזּוּגִי הַבָּא',instruction:'מָהוּ הַמִּסְפָּר הַזּוּגִי הַבָּא?',tip:'💡 טִיפ: מִצְאוּ אֶת הַזּוּגִי הַקָּרוֹב שֶׁבָּא אַחֲרֵי הַמִּסְפָּר!',example:'אַחֲרֵי <span class="math">5</span> → הַזּוּגִי הַבָּא הוּא <span class="math">6</span>!',gen:()=>qNextEven(18)},
+  {title:'סִדְרַת זוּגִיִּים — חָסֵר',instruction:'מָהוּ הַמִּסְפָּר הַזּוּגִי הֶחָסֵר בַּסִּדְרָה?',tip:'💡 טִיפ: מִסְפָּרִים זוּגִיִּים מְדַלְּגִים בְּ-<span class="math">2</span>: 2, 4, 6, 8...',example:'<span class="math">2, 4, ?, 8, 10</span> → הֶחָסֵר הוּא <span class="math">6</span>!',gen:()=>qEvenSequence()},
+  {title:'סִדְרַת אִי-זוּגִיִּים — חָסֵר',instruction:'מָהוּ הַמִּסְפָּר הָאִי-זוּגִי הֶחָסֵר בַּסִּדְרָה?',tip:'💡 טִיפ: מִסְפָּרִים אִי-זוּגִיִּים גַּם מְדַלְּגִים בְּ-<span class="math">2</span>: 1, 3, 5, 7...',example:'<span class="math">1, 3, 5, ?, 9</span> → הֶחָסֵר הוּא <span class="math">7</span>!',gen:()=>qOddSequence()},
+  {title:'זוּגִיִּים עַד 20',instruction:'זוּגִי אוֹ אִי-זוּגִי? — עַד 20!',tip:'💡 טִיפ: זִכְרוּ — הַסִּפְרָה הָאַחֲרוֹנָה קוֹבַעַת!',example:'<span class="math">17</span> → מִסְתַּיֵּם בְּ-<span class="math">7</span> → אִי-זוּגִי!',gen:()=>qIdentify(20)},
+  {title:'סְכוּם זוּגִיִּים',instruction:'זוּגִי + זוּגִי = ?',tip:'💡 טִיפ: כְּשֶׁמְּחַבְּרִים שְׁנֵי מִסְפָּרִים זוּגִיִּים — הַתּוֹצָאָה תָּמִיד זוּגִית!',example:'<span class="math">4 + 6 = 10</span> → זוּגִי!',gen:()=>qSumOfTwo('even')},
+  {title:'סְכוּם אִי-זוּגִיִּים',instruction:'אִי-זוּגִי + אִי-זוּגִי = ?',tip:'💡 טִיפ: כְּשֶׁמְּחַבְּרִים שְׁנֵי אִי-זוּגִיִּים — הַתּוֹצָאָה תָּמִיד זוּגִית!',example:'<span class="math">3 + 5 = 8</span> → זוּגִי!',gen:()=>qSumOfTwo('odd')},
+  {title:'כָּל הַסּוּגִים',instruction:'שְׁאֵלוֹת מְעוֹרָבוֹת — מִכָּל מָה שֶׁלָּמַדְנוּ!',tip:'🏆 טִיפ: שִׂימוּ לֵב מָה שׁוֹאֲלִים!',example:'כָּל שְׁאֵלָה הִיא הַפְתָּעָה!',gen:()=>[()=>qPairUp(10),()=>qIdentify(20),()=>qFindEven(),()=>qFindOdd(),()=>qNextEven(18),()=>qEvenSequence()][rr(0,5)]()},
+  {title:'אֶתְגָּר',instruction:'שְׁאֵלוֹת קָשׁוֹת יוֹתֵר!',tip:'🏆 טִיפ: הִשְׁתַּמְּשׁוּ בְּכָל מָה שֶׁלָּמַדְתֶּם!',example:'💪',gen:()=>[()=>qIdentify(20),()=>qFindEven(),()=>qFindOdd(),()=>qNextEven(18),()=>qEvenSequence(),()=>qOddSequence(),()=>qSumOfTwo(rr(0,1)?'even':'odd')][rr(0,6)]()},
+  {title:'סוּפֶּר-אֶתְגָּר!',instruction:'הָרָמָה הֲכִי קָשָׁה!',tip:'🏆 טִיפ: בְּהַצְלָחָה! 💪',example:'💪',gen:()=>[()=>qIdentify(20),()=>qNextEven(18),()=>qEvenSequence(),()=>qOddSequence(),()=>qSumOfTwo(rr(0,1)?'even':'odd')][rr(0,4)]()},
+];
+
+let currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+const QPL=6;
+
+function renderTabs(){const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());const row=document.getElementById('tabsRow');row.innerHTML='';levels.forEach((_,i)=>{const t=document.createElement('button');t.className='tab';t.textContent=(i+1)+(lk&&i>0?' 🔒':'');if(i===currentLevel)t.classList.add('active');if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}t.onclick=()=>goLevel(i);row.appendChild(t)});const at=row.querySelector('.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'})}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רָמָה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רָמָה '+(currentLevel+1)+' מִתּוֹךְ '+levels.length;
+  const lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הַסְתֵּר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  const seen=new Set();
+  for(let i=0;i<QPL;i++){let q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(String(q.answer)+q.qText));seen.add(String(q.answer)+q.qText);currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  const list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach((q,idx)=>{
+    const card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    let h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    const cols=q.cols||4;
+    h+='<div class="answer-options'+(cols===2?' cols-2':'')+'" id="opts-'+idx+'">';
+    q.options.forEach(opt=>{
+      const escaped=String(opt).replace(/'/g,"\\'");
+      h+='<button class="answer-btn" onclick="checkA('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+    });
+    h+='</div><div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkA(idx,chosen,btn){
+  const q=currentQuestions[idx];const card=document.getElementById('q-'+idx);const fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(String(chosen)===String(q.answer)){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(b=>b.classList.add('disabled'));
+    fb.textContent=['מְצוּיָן! ⭐','נָכוֹן! 🎯','יוֹפִי! ✨','מַדְהִים! 🌟'][rr(0,3)];fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לֹא נָכוֹן, נַסּוּ שׁוּב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(()=>{btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מוּשְׁלָם!';document.getElementById('lcSub').textContent='כָּל הַתְּשׁוּבוֹת נְכוֹנוֹת!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כָּל הַכָּבוֹד!';document.getElementById('lcSub').textContent='כִּמְעַט מוּשְׁלָם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סִיַּמְתֶּם!';document.getElementById('lcSub').textContent='כְּדַאי לְנַסּוֹת שׁוּב'}
+  const lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function nextLevel(){if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הַצֵּג טִיפ':'▲ הַסְתֵּר'}
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs();});
+</script>
+  <script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

@@ -56,7 +56,7 @@ function qWhichBiggerEmoji(max){
   const e=emojis[rr(0,emojis.length-1)];
   let a=rr(1,max),b=rr(1,max);while(a===b)b=rr(1,max);
   let dA='',dB='';for(let i=0;i<a;i++)dA+=e;for(let i=0;i<b;i++)dB+=e;
-  return{qText:'בְּאֵיזֶה צַד יֵשׁ יוֹתֵר?',display:'<div class="compare-display"><div class="compare-side"><div class="compare-emoji">'+dA+'</div></div><div class="compare-mystery">?</div><div class="compare-side"><div class="compare-emoji">'+dB+'</div></div></div>',answer:a>b?'שְׂמֹאל':a<b?'יָמִין':'שָׁוֶה',options:['שְׂמֹאל','יָמִין'],cols:2};
+  return{qText:'בְּאֵיזֶה צַד יֵשׁ יוֹתֵר?',display:'<div class="compare-display" dir="ltr"><div class="compare-side"><div class="compare-emoji">'+dA+'</div></div><div class="compare-mystery">?</div><div class="compare-side"><div class="compare-emoji">'+dB+'</div></div></div>',answer:a>b?'שְׂמֹאל':a<b?'יָמִין':'שָׁוֶה',options:['שְׂמֹאל','יָמִין'],cols:2};
 }
 
 // Pick the sign between two numbers
@@ -65,7 +65,7 @@ function qPickSign(max){
   // Sometimes make equal
   if(rr(0,4)===0)b=a;
   const sign=a>b?'>':a<b?'<':'=';
-  return{qText:'בִּחְרוּ אֶת הַסִּימָן הַנָּכוֹן:',display:'<div class="compare-display"><div class="compare-side"><div class="compare-num">'+a+'</div></div><div class="compare-mystery">?</div><div class="compare-side"><div class="compare-num">'+b+'</div></div></div><div class="croc-hint">🐊 הַתַּנִּין פּוֹתֵחַ פֶּה לְכִיוּוּן הַגָּדוֹל!</div>',answer:sign,options:['<','=','>']};
+  return{qText:'בִּחְרוּ אֶת הַסִּימָן הַנָּכוֹן:',display:'<div class="compare-display" dir="ltr"><div class="compare-side"><div class="compare-num">'+a+'</div></div><div class="compare-mystery">?</div><div class="compare-side"><div class="compare-num">'+b+'</div></div></div><div class="croc-hint">🐊 הַתַּנִּין פּוֹתֵחַ פֶּה לְכִיוּוּן הַגָּדוֹל!</div>',answer:sign,options:['<','=','>']};
 }
 
 // True or false comparison
@@ -74,7 +74,7 @@ function qTrueFalse(max){
   const signs=['<','>','='];
   const sign=signs[rr(0,2)];
   const correct=(sign==='<'&&a<b)||(sign==='>'&&a>b)||(sign==='='&&a===b);
-  return{qText:'נָכוֹן אוֹ לֹא נָכוֹן?',display:'<div class="compare-display"><div class="compare-side"><div class="compare-num">'+a+'</div></div><div class="compare-sign">'+sign+'</div><div class="compare-side"><div class="compare-num">'+b+'</div></div></div>',answer:correct?'נָכוֹן':'לֹא נָכוֹן',options:['נָכוֹן','לֹא נָכוֹן'],cols:2};
+  return{qText:'נָכוֹן אוֹ לֹא נָכוֹן?',display:'<div class="compare-display" dir="ltr"><div class="compare-side"><div class="compare-num">'+a+'</div></div><div class="compare-sign">'+sign+'</div><div class="compare-side"><div class="compare-num">'+b+'</div></div></div>',answer:correct?'נָכוֹן':'לֹא נָכוֹן',options:['נָכוֹן','לֹא נָכוֹן'],cols:2};
 }
 
 // What number makes it true: _ > 5
@@ -85,12 +85,12 @@ function qFillNumber(max){
     const ans=rr(target+1,Math.min(max,target+5));
     const opts=new Set([ans]);
     while(opts.size<4){opts.add(rr(Math.max(0,target-5),target))}
-    return{qText:'מִצְאוּ מִסְפָּר שֶׁמַּתְאִים:',display:'<div class="compare-display"><div class="compare-mystery">?</div><div class="compare-sign">&gt;</div><div class="compare-side"><div class="compare-num">'+target+'</div></div></div><div class="croc-hint">מִסְפָּר שֶׁגָּדוֹל מ-'+target+'!</div>',answer:ans,options:shuffle([...opts]),cols:4};
+    return{qText:'מִצְאוּ מִסְפָּר שֶׁמַּתְאִים:',display:'<div class="compare-display" dir="ltr"><div class="compare-mystery">?</div><div class="compare-sign">&gt;</div><div class="compare-side"><div class="compare-num">'+target+'</div></div></div><div class="croc-hint">מִסְפָּר שֶׁגָּדוֹל מ-'+target+'!</div>',answer:ans,options:shuffle([...opts]),cols:4};
   }else{
     const ans=rr(Math.max(0,target-5),target-1);
     const opts=new Set([ans]);
     while(opts.size<4){opts.add(rr(target,Math.min(max,target+5)))}
-    return{qText:'מִצְאוּ מִסְפָּר שֶׁמַּתְאִים:',display:'<div class="compare-display"><div class="compare-mystery">?</div><div class="compare-sign">&lt;</div><div class="compare-side"><div class="compare-num">'+target+'</div></div></div><div class="croc-hint">מִסְפָּר שֶׁקָּטָן מ-'+target+'!</div>',answer:ans,options:shuffle([...opts]),cols:4};
+    return{qText:'מִצְאוּ מִסְפָּר שֶׁמַּתְאִים:',display:'<div class="compare-display" dir="ltr"><div class="compare-mystery">?</div><div class="compare-sign">&lt;</div><div class="compare-side"><div class="compare-num">'+target+'</div></div></div><div class="croc-hint">מִסְפָּר שֶׁקָּטָן מ-'+target+'!</div>',answer:ans,options:shuffle([...opts]),cols:4};
   }
 }
 
@@ -100,7 +100,7 @@ function qCompareEmojiNum(max){
   const count=rr(1,max);const num=rr(1,max);
   let emojiStr='';for(let i=0;i<count;i++)emojiStr+=e;
   const sign=count>num?'>':count<num?'<':'=';
-  return{qText:'סִפְרוּ וְסַמְּנוּ אֶת הַסִּימָן הַנָּכוֹן:',display:'<div class="compare-display"><div class="compare-side"><div class="compare-emoji">'+emojiStr+'</div></div><div class="compare-mystery">?</div><div class="compare-side"><div class="compare-num">'+num+'</div></div></div>',answer:sign,options:['<','=','>']};
+  return{qText:'סִפְרוּ וְסַמְּנוּ אֶת הַסִּימָן הַנָּכוֹן:',display:'<div class="compare-display" dir="ltr"><div class="compare-side"><div class="compare-emoji">'+emojiStr+'</div></div><div class="compare-mystery">?</div><div class="compare-side"><div class="compare-num">'+num+'</div></div></div>',answer:sign,options:['<','=','>']};
 }
 
 // Compare two expressions
@@ -108,7 +108,7 @@ function qCompareExpr(){
   const a1=rr(1,8),a2=rr(1,8);const sumA=a1+a2;
   const b1=rr(1,8),b2=rr(1,8);const sumB=b1+b2;
   const sign=sumA>sumB?'>':sumA<sumB?'<':'=';
-  return{qText:'בִּחְרוּ אֶת הַסִּימָן הַנָּכוֹן:',display:'<div class="compare-display"><div class="compare-side"><div class="compare-num" style="font-size:1.5rem;direction:ltr">'+a1+'+'+a2+'</div></div><div class="compare-mystery">?</div><div class="compare-side"><div class="compare-num" style="font-size:1.5rem;direction:ltr">'+b1+'+'+b2+'</div></div></div><div class="croc-hint">חִשְׁבוּ כָּל צַד וְאָז הַשְׁווּ!</div>',answer:sign,options:['<','=','>']};
+  return{qText:'בִּחְרוּ אֶת הַסִּימָן הַנָּכוֹן:',display:'<div class="compare-display" dir="ltr"><div class="compare-side"><div class="compare-num" style="font-size:1.5rem;direction:ltr">'+a1+'+'+a2+'</div></div><div class="compare-mystery">?</div><div class="compare-side"><div class="compare-num" style="font-size:1.5rem;direction:ltr">'+b1+'+'+b2+'</div></div></div><div class="croc-hint">חִשְׁבוּ כָּל צַד וְאָז הַשְׁווּ!</div>',answer:sign,options:['<','=','>']};
 }
 
 // Order 3 numbers
@@ -123,7 +123,7 @@ function qOrder3(max){
     const s=shuffle([...arr]);
     options.add(s.join(', '));
   }
-  return{qText:'סַדְּרוּ מֵהַקָּטָן לַגָּדוֹל:',display:'<div class="compare-display" style="direction:ltr">'+arr.map(n=>'<div class="compare-side"><div class="compare-num">'+n+'</div></div>').join('')+'</div>',answer:ans,options:shuffle([...options]),optLtr:true};
+  return{qText:'סַדְּרוּ מֵהַקָּטָן לַגָּדוֹל:',display:'<div class="compare-display" dir="ltr" style="direction:ltr">'+arr.map(n=>'<div class="compare-side"><div class="compare-num">'+n+'</div></div>').join('')+'</div>',answer:ans,options:shuffle([...options]),optLtr:true};
 }
 
 // Compare with subtraction
@@ -131,7 +131,7 @@ function qCompareWithSub(){
   const a=rr(5,15);const b1=rr(1,a);const result=a-b1;
   const c=rr(0,20);
   const sign=result>c?'>':result<c?'<':'=';
-  return{qText:'בִּחְרוּ אֶת הַסִּימָן הַנָּכוֹן:',display:'<div class="compare-display"><div class="compare-side"><div class="compare-num" style="font-size:1.5rem;direction:ltr">'+a+'−'+b1+'</div></div><div class="compare-mystery">?</div><div class="compare-side"><div class="compare-num">'+c+'</div></div></div><div class="croc-hint">חִשְׁבוּ אֶת הַתַּרְגִּיל וְאָז הַשְׁווּ!</div>',answer:sign,options:['<','=','>']};
+  return{qText:'בִּחְרוּ אֶת הַסִּימָן הַנָּכוֹן:',display:'<div class="compare-display" dir="ltr"><div class="compare-side"><div class="compare-num" style="font-size:1.5rem;direction:ltr">'+a+'−'+b1+'</div></div><div class="compare-mystery">?</div><div class="compare-side"><div class="compare-num">'+c+'</div></div></div><div class="croc-hint">חִשְׁבוּ אֶת הַתַּרְגִּיל וְאָז הַשְׁווּ!</div>',answer:sign,options:['<','=','>']};
 }
 
 const levels=[

@@ -182,21 +182,21 @@ function renderQuestions(){
     h+='<div class="q-text">'+q.qText+'</div>';
     if(q.display)h+=q.display;
     const cols=q.cols||3;
-    h+='<div class="answer-options'+(cols===2?' cols-2':cols===4?' cols-4':'')+'" id="opts-'+idx+'">';
-    q.options.forEach(opt=>{
-      const escaped=String(opt).replace(/'/g,"\\'");
+    h+='<div class="answer-options'+(cols===2?' cols-2':cols===4?' cols-4':'')+'" dir="ltr" id="opts-'+idx+'">';
+    q.options.forEach((opt,oi)=>{
+      const display=String(opt).replace(/</g,'&lt;').replace(/>/g,'&gt;');
       const ltrStyle=q.optLtr?' style="direction:ltr"':'';
-      h+='<button class="answer-btn"'+ltrStyle+' onclick="checkA('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      h+='<button class="answer-btn"'+ltrStyle+' onclick="checkA('+idx+','+oi+',this)">'+display+'</button>';
     });
     h+='</div><div class="feedback" id="fb-'+idx+'"></div>';
     card.innerHTML=h;list.appendChild(card);
   });
 }
 
-function checkA(idx,chosen,btn){
-  const q=currentQuestions[idx];const card=document.getElementById('q-'+idx);const fb=document.getElementById('fb-'+idx);
+function checkA(idx,oi,btn){
+  const q=currentQuestions[idx];const chosen=String(q.options[oi]);const card=document.getElementById('q-'+idx);const fb=document.getElementById('fb-'+idx);
   if(card.classList.contains('correct'))return;
-  if(String(chosen)===String(q.answer)){
+  if(chosen===String(q.answer)){
     card.classList.add('correct');btn.classList.add('correct-choice');
     document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(b=>b.classList.add('disabled'));
     fb.textContent=['מְצוּיָן! ⭐','נָכוֹן! 🎯','יוֹפִי! ✨','מַדְהִים! 🌟'][rr(0,3)];fb.className='feedback show correct-fb';

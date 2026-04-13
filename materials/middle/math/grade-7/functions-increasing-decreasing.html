@@ -1,0 +1,1281 @@
+<!--
+  Title: עלייה וירידה של פונקציה
+  Unit: פונקציות
+  Subject: מתמטיקה
+  Grade: ז׳
+  Tags: פונקציות, עלייה, ירידה, מינימום, מקסימום, גרף
+  Ages: 12-13
+  Icon: 📈
+  Description: מתי פונקציה עולה ומתי יורדת? נקודות קיצון, זיהוי מגרף ומטבלה — תרגול ב-4 רמות קושי
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>עלייה וירידה של פונקציה | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+
+/* Top bar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Section toggle */
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+
+/* Container */
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+
+/* ===== TEACHING SECTION ===== */
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid var(--accent);padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
+.step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+
+/* Interactive elements inside steps */
+.mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.mini-table th,.mini-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:1rem}
+.mini-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.mini-table td{background:var(--bg)}
+.mini-input{width:60px;padding:6px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:1rem;font-family:inherit;font-weight:700;transition:.3s}
+.mini-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.mini-input.correct{border-color:var(--success);background:#ecfdf5}
+.mini-input.wrong{border-color:var(--error);background:#fef2f2}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.reveal{display:none;animation:fadeIn .5s ease}
+.reveal.show{display:block}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+
+/* Step nav */
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== PRACTICE SECTION ===== */
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-stem code,.q-stem .expr{font-size:1.1em}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;transition:.25s}
+.q-opt.selected .q-opt-letter{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-opt.correct .q-opt-letter{background:var(--success);color:#fff;border-color:var(--success)}
+.q-opt.wrong .q-opt-letter{background:var(--error);color:#fff;border-color:var(--error)}
+
+.q-input-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-input{width:120px;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1.1rem;font-family:inherit;font-weight:700;text-align:center;transition:.3s;direction:ltr}
+.q-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+
+.q-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.q-table th,.q-table td{border:2px solid var(--border);padding:8px 14px;text-align:center;font-size:1rem;min-width:60px}
+.q-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.q-table input{width:55px;padding:5px;border:2px solid var(--border);border-radius:4px;text-align:center;font-size:1rem;font-family:inherit;font-weight:700}
+.q-table input:focus{border-color:var(--primary);outline:none}
+.q-table input.correct{border-color:var(--success);background:#ecfdf5}
+.q-table input.wrong{border-color:var(--error);background:#fef2f2}
+
+.q-check-btn{padding:10px 28px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;box-shadow:var(--shadow)}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.92rem;animation:fadeIn .3s}
+.q-feedback.correct{background:#ecfdf5;border-right:4px solid var(--success);color:#065f46}
+.q-feedback.wrong{background:#fef2f2;border-right:4px solid var(--error);color:#991b1b}
+
+.q-nav{display:flex;justify-content:space-between;margin-top:16px}
+.q-nav-btn{padding:10px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Level complete */
+.level-complete{text-align:center;padding:24px;animation:fadeIn .5s}
+.level-complete .big-emoji{font-size:4rem;margin-bottom:12px}
+.level-complete h2{font-size:1.4rem;color:var(--primary-dark);margin-bottom:8px}
+.level-complete .score-display{font-size:1.8rem;font-weight:800;color:var(--success);margin-bottom:16px}
+.level-complete .score-display.medium-score{color:var(--accent)}
+.level-complete .score-display.low-score{color:var(--error)}
+
+/* Celebration confetti */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{
+  0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}
+  100%{transform:translateY(105vh) rotate(720deg) scale(.3);opacity:0}
+}
+
+/* Print button */
+.print-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer;font-size:1rem;box-shadow:var(--shadow);transition:.25s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.print-btn:hover{background:var(--primary-dark);transform:scale(1.1)}
+
+/* SVG graphs */
+.graph-svg{display:block;margin:12px auto;max-width:100%}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+/* Responsive */
+@media(max-width:600px){
+  .container{padding:0 10px 30px}
+  .step-card,.q-card{padding:18px 14px}
+  .step-title{font-size:1.15rem}
+  .step-summary-grid{grid-template-columns:1fr}
+  .section-toggle{max-width:280px;margin:12px auto}
+  .section-btn{font-size:.88rem;padding:8px 14px}
+  .q-opt{padding:10px 12px;font-size:.9rem}
+  .topbar-title{font-size:.9rem}
+}
+
+/* Print */
+@media print{
+  .topbar,.section-toggle,.step-nav,.q-nav,.print-btn,.level-tabs,.confetti-container,.q-check-btn{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .step-card,.q-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+  .container{max-width:100%}
+  .q-feedback{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">📈 כיתה ז׳ — עלייה וירידה של פונקציה</span>
+  <div style="display:flex;align-items:center;gap:10px"><button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button><a href="../../../../materials.html">← חזרה לדף החומרים</a></div>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+
+<!-- ===== LEARNING SECTION ===== -->
+<section id="learnSection">
+  <div class="step-progress">
+    <div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div>
+    <div class="step-progress-text" id="stepText"></div>
+  </div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+
+<!-- ===== PRACTICE SECTION ===== -->
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress">
+    <div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div>
+    <div class="level-progress-text" id="levelText"></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+
+</div>
+
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const today=new Date();const dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+let rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(arr){return arr[Math.floor(R()*arr.length)]}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const LETTERS=['א','ב','ג','ד'];
+
+/* ===== STATE ===== */
+let state={section:'learn',step:0,level:'easy',qIndex:0};
+let scores={easy:[],medium:[],hard:[],challenge:[]};
+let answered={easy:[],medium:[],hard:[],challenge:[]};
+let questions={easy:null,medium:null,hard:null,challenge:null};
+const LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+const LEVEL_NAMES={easy:'קל',medium:'בינוני',hard:'קשה',challenge:'אתגר'};
+const TOTAL_STEPS=7;
+
+/* ===== LOCAL STORAGE ===== */
+const LS_KEY='bh_grade7_functions_increasing_decreasing_'+dateSeed;
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores,answered,state}))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+/* ===== SVG HELPERS ===== */
+function svgStart(w,h,id){return '<svg class="graph-svg" id="'+(id||'')+'" viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg" style="background:#fafbfc;border:1px solid var(--border);border-radius:8px">'}
+function svgAxis(w,h,ox,oy){
+  var s='';
+  s+='<line x1="'+ox+'" y1="10" x2="'+ox+'" y2="'+(h-10)+'" stroke="#94a3b8" stroke-width="1.5"/>';
+  s+='<line x1="10" y1="'+oy+'" x2="'+(w-10)+'" y2="'+oy+'" stroke="#94a3b8" stroke-width="1.5"/>';
+  s+='<text x="'+(w-8)+'" y="'+(oy-6)+'" font-size="12" fill="#64748b" font-family="Rubik" text-anchor="end">x</text>';
+  s+='<text x="'+(ox+8)+'" y="18" font-size="12" fill="#64748b" font-family="Rubik">y</text>';
+  return s;
+}
+
+/* ===== TEACHING SECTION ===== */
+const steps=[
+/* Step 0: What is increasing/decreasing/constant */
+{title:'📈 פונקציה עולה, יורדת וקבועה', render(){return `
+<div class="rule-box">📌 כש-<span class="math-expr">x</span> גדל — מה קורה ל-<span class="math-expr">y</span>?</div>
+<p>כשמסתכלים על גרף של פונקציה <strong>משמאל לימין</strong>:</p>
+<div class="highlight">
+• <strong style="color:#10b981">פונקציה עולה</strong> — כש-<span class="math-expr">x</span> גדל, גם <span class="math-expr">y</span> גדל (הגרף "עולה" ימינה) ↗<br>
+• <strong style="color:#ef4444">פונקציה יורדת</strong> — כש-<span class="math-expr">x</span> גדל, <span class="math-expr">y</span> קטן (הגרף "יורד" ימינה) ↘<br>
+• <strong style="color:#2563eb">פונקציה קבועה</strong> — <span class="math-expr">y</span> נשאר אותו דבר (קו ישר אופקי) →
+</div>
+`+svgStart(400,220,'svg0')
++svgAxis(400,220,40,180)
+/* increasing green line */
++'<line x1="60" y1="160" x2="170" y2="60" stroke="#10b981" stroke-width="3"/>'
++'<text x="115" y="50" font-size="12" fill="#10b981" font-weight="700" text-anchor="middle" font-family="Heebo">עולה ↗</text>'
+/* decreasing red line */
++'<line x1="190" y1="60" x2="300" y2="160" stroke="#ef4444" stroke-width="3"/>'
++'<text x="245" y="50" font-size="12" fill="#ef4444" font-weight="700" text-anchor="middle" font-family="Heebo">יורדת ↘</text>'
+/* constant blue line */
++'<line x1="310" y1="120" x2="380" y2="120" stroke="#2563eb" stroke-width="3"/>'
++'<text x="345" y="108" font-size="12" fill="#2563eb" font-weight="700" text-anchor="middle" font-family="Heebo">קבועה →</text>'
++'</svg>'
++`
+<p><strong>שאלה:</strong> הגרף הירוק — האם <span class="math-expr">y</span> גדל או קטן כש-<span class="math-expr">x</span> גדל?</p>
+<div class="quiz-options" id="s0opts"></div>
+<div id="s0fb"></div>
+`},init(){
+  const opts=shuffle([
+    {text:'<span class="math-expr">y</span> גדל — פונקציה עולה',correct:true},
+    {text:'<span class="math-expr">y</span> קטן — פונקציה יורדת',correct:false},
+    {text:'<span class="math-expr">y</span> נשאר קבוע',correct:false}
+  ]);
+  const c=document.getElementById('s0opts');c.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');d.className='quiz-opt';d.innerHTML=o.text;
+    d.onclick=()=>{
+      c.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s0fb').innerHTML='<div class="feedback-inline ok">✅ נכון! כשהגרף עולה ימינה — הפונקציה עולה</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s0fb').innerHTML='<div class="feedback-inline err">❌ הסתכלו על הקו הירוק — הוא עולה משמאל לימין</div>'}
+    };c.appendChild(d);
+  });
+}},
+
+/* Step 1: Increasing/decreasing intervals */
+{title:'📐 תחום עלייה ותחום ירידה', render(){return `
+<p>פונקציה לא חייבת להיות תמיד עולה או תמיד יורדת — היא יכולה <strong>להשתנות</strong>!</p>
+<div class="rule-box">📌 תחום עלייה = הקטע של ציר <span class="math-expr">x</span> שבו הגרף <strong>עולה</strong><br>תחום ירידה = הקטע שבו הגרף <strong>יורד</strong></div>
+`+svgStart(400,220,'svg1')
++svgAxis(400,220,40,180)
+/* wavy hill and valley */
++'<path d="M60,160 Q110,40 180,100 Q240,155 280,60 Q320,155 370,140" fill="none" stroke="var(--primary)" stroke-width="3"/>'
+/* interval markers */
++'<line x1="60" y1="190" x2="180" y2="190" stroke="#10b981" stroke-width="4"/>'
++'<text x="120" y="210" font-size="11" fill="#10b981" font-weight="700" text-anchor="middle" font-family="Heebo">עולה</text>'
++'<line x1="180" y1="190" x2="240" y2="190" stroke="#ef4444" stroke-width="4"/>'
++'<text x="210" y="210" font-size="11" fill="#ef4444" font-weight="700" text-anchor="middle" font-family="Heebo">יורדת</text>'
++'<line x1="240" y1="190" x2="370" y2="190" stroke="#10b981" stroke-width="4"/>'
++'<text x="305" y="210" font-size="11" fill="#10b981" font-weight="700" text-anchor="middle" font-family="Heebo">עולה</text>'
++'</svg>'
++`
+<div class="example">
+<strong>דוגמה:</strong> הגרף למעלה <strong>עולה</strong> מ-<span class="math-expr">x=1</span> עד <span class="math-expr">x=3</span>, <strong>יורד</strong> מ-<span class="math-expr">x=3</span> עד <span class="math-expr">x=5</span>, ו<strong>עולה</strong> שוב מ-<span class="math-expr">x=5</span> עד <span class="math-expr">x=8</span>.<br><br>
+חשבו על זה כמו <strong>נסיעה ברכבת הרים</strong> 🎢 — פעם עולים ופעם יורדים!
+</div>
+<div class="highlight">💡 <strong>שימו לב:</strong> תחום עלייה/ירידה נמדד תמיד לפי ציר <span class="math-expr">x</span> (ציר האופקי), לא לפי <span class="math-expr">y</span>!</div>
+`}},
+
+/* Step 2: Identifying intervals from graph */
+{title:'🔍 זיהוי תחומים מגרף', render(){return `
+<p>איך מזהים תחומי עלייה וירידה?</p>
+<div class="highlight">
+1. הסתכלו על הגרף <strong>משמאל לימין</strong><br>
+2. סמנו את הנקודות שבהן הגרף <strong>משנה כיוון</strong> (מעולה ליורד או להפך)<br>
+3. כתבו את <strong>ערכי <span class="math-expr">x</span></strong> של אותן נקודות
+</div>
+`+svgStart(400,240,'svg2')
++svgAxis(400,240,40,200)
+/* inverted parabola */
++'<path d="M60,180 Q120,20 200,40 Q280,60 340,180" fill="none" stroke="var(--primary)" stroke-width="3"/>'
+/* peak point */
++'<circle cx="185" cy="35" r="5" fill="var(--accent)"/>'
++'<text x="185" y="25" font-size="11" fill="var(--accent-dark)" font-weight="700" text-anchor="middle" font-family="Heebo">שיא</text>'
+/* intervals */
++'<line x1="60" y1="210" x2="185" y2="210" stroke="#10b981" stroke-width="4"/>'
++'<text x="122" y="232" font-size="11" fill="#10b981" font-weight="700" text-anchor="middle" font-family="Heebo">עולה</text>'
++'<line x1="185" y1="210" x2="340" y2="210" stroke="#ef4444" stroke-width="4"/>'
++'<text x="262" y="232" font-size="11" fill="#ef4444" font-weight="700" text-anchor="middle" font-family="Heebo">יורדת</text>'
+/* x labels */
++'<text x="60" y="198" font-size="10" fill="#64748b" text-anchor="middle" font-family="Rubik">-3</text>'
++'<text x="185" y="198" font-size="10" fill="var(--accent-dark)" font-weight="700" text-anchor="middle" font-family="Rubik">2</text>'
++'<text x="340" y="198" font-size="10" fill="#64748b" text-anchor="middle" font-family="Rubik">7</text>'
++'</svg>'
++`
+<div class="example">
+<strong>דוגמה מהגרף:</strong><br>
+• הפונקציה <strong>עולה</strong> בתחום <span class="math-expr">-3 &lt; x &lt; 2</span><br>
+• הפונקציה <strong>יורדת</strong> בתחום <span class="math-expr">2 &lt; x &lt; 7</span><br>
+• בנקודה <span class="math-expr">x = 2</span> הפונקציה מגיעה ל<strong>שיא</strong> (מקסימום)
+</div>
+<p><strong>שאלה:</strong> בגרף למעלה, באיזה תחום הפונקציה <strong>יורדת</strong>?</p>
+<div class="quiz-options" id="s2opts"></div>
+<div id="s2fb"></div>
+`},init(){
+  const opts=shuffle([
+    {text:'<span dir="ltr" style="unicode-bidi:embed">2 &lt; x &lt; 7</span>',correct:true},
+    {text:'<span dir="ltr" style="unicode-bidi:embed">-3 &lt; x &lt; 2</span>',correct:false},
+    {text:'<span dir="ltr" style="unicode-bidi:embed">-3 &lt; x &lt; 7</span>',correct:false}
+  ]);
+  const c=document.getElementById('s2opts');c.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');d.className='quiz-opt';d.innerHTML=o.text;
+    d.onclick=()=>{
+      c.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s2fb').innerHTML='<div class="feedback-inline ok">✅ נכון! אחרי השיא (x=2) הגרף יורד עד x=7</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s2fb').innerHTML='<div class="feedback-inline err">❌ שימו לב: הגרף יורד אחרי נקודת השיא (x=2)</div>'}
+    };c.appendChild(d);
+  });
+}},
+
+/* Step 3: Identifying from table */
+{title:'📊 זיהוי עלייה/ירידה מטבלה', render(){return `
+<div class="rule-box">📌 אם <span class="math-expr">x</span> גדל וגם <span class="math-expr">y</span> גדל → <strong>עולה</strong><br>אם <span class="math-expr">x</span> גדל ו-<span class="math-expr">y</span> קטן → <strong>יורדת</strong></div>
+<div class="example">
+<strong>טבלה 1 — פונקציה עולה:</strong>
+<table class="mini-table">
+<tr><th>x</th><th>y</th></tr>
+<tr><td>1</td><td>3</td></tr>
+<tr><td>2</td><td>5</td></tr>
+<tr><td>3</td><td>7</td></tr>
+<tr><td>4</td><td>9</td></tr>
+</table>
+<span class="math-expr">x</span> גדל → <span class="math-expr">y</span> גדל → <strong style="color:#10b981">עולה ✓</strong>
+</div>
+<div class="example">
+<strong>טבלה 2 — פונקציה יורדת:</strong>
+<table class="mini-table">
+<tr><th>x</th><th>y</th></tr>
+<tr><td>1</td><td>10</td></tr>
+<tr><td>2</td><td>8</td></tr>
+<tr><td>3</td><td>6</td></tr>
+<tr><td>4</td><td>4</td></tr>
+</table>
+<span class="math-expr">x</span> גדל → <span class="math-expr">y</span> קטן → <strong style="color:#ef4444">יורדת ✓</strong>
+</div>
+<div class="example">
+<strong>טבלה 3 — פונקציה מעורבת:</strong>
+<table class="mini-table">
+<tr><th>x</th><th>y</th></tr>
+<tr><td>0</td><td>5</td></tr>
+<tr><td>1</td><td>2</td></tr>
+<tr><td>2</td><td>1</td></tr>
+<tr><td>3</td><td>2</td></tr>
+<tr><td>4</td><td>5</td></tr>
+</table>
+בין <span class="math-expr">x=0</span> ל-<span class="math-expr">x=2</span>: <span class="math-expr">y</span> קטן → <strong style="color:#ef4444">יורדת</strong><br>
+בין <span class="math-expr">x=2</span> ל-<span class="math-expr">x=4</span>: <span class="math-expr">y</span> גדל → <strong style="color:#10b981">עולה</strong>
+</div>
+<p><strong>שאלה:</strong> בטבלה הבאה, האם הפונקציה עולה, יורדת, או מעורבת?</p>
+<table class="mini-table">
+<tr><th>x</th><th>y</th></tr>
+<tr><td>1</td><td>4</td></tr>
+<tr><td>2</td><td>7</td></tr>
+<tr><td>3</td><td>6</td></tr>
+<tr><td>4</td><td>3</td></tr>
+</table>
+<div class="quiz-options" id="s3opts"></div>
+<div id="s3fb"></div>
+`},init(){
+  const opts=shuffle([
+    {text:'מעורבת — קודם עולה, אחר כך יורדת',correct:true},
+    {text:'עולה בכל התחום',correct:false},
+    {text:'יורדת בכל התחום',correct:false}
+  ]);
+  const c=document.getElementById('s3opts');c.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');d.className='quiz-opt';d.innerHTML=o.text;
+    d.onclick=()=>{
+      c.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s3fb').innerHTML='<div class="feedback-inline ok">✅ נכון! מ-x=1 ל-x=2 עולה (4→7), ומ-x=2 ל-x=4 יורדת (7→6→3)</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s3fb').innerHTML='<div class="feedback-inline err">❌ בדקו: מ-x=1 ל-x=2 ה-y עולה (4→7), אבל אחר כך יורד (7→6→3)</div>'}
+    };c.appendChild(d);
+  });
+}},
+
+/* Step 4: Extrema - max and min */
+{title:'🏔️ נקודות קיצון — מינימום ומקסימום', render(){return `
+<div class="rule-box">📌 <strong>מקסימום</strong> (שיא) = הנקודה הגבוהה ביותר — מעבר מעלייה לירידה<br><strong>מינימום</strong> (שפל) = הנקודה הנמוכה ביותר — מעבר מירידה לעלייה</div>
+`+svgStart(400,240,'svg4')
++svgAxis(400,240,40,200)
+/* curve with peak and valley */
++'<path d="M60,160 Q100,40 160,80 Q200,120 240,160 Q280,40 340,100" fill="none" stroke="var(--primary)" stroke-width="3"/>'
+/* peak */
++'<circle cx="130" cy="55" r="6" fill="#ef4444" stroke="#fff" stroke-width="2"/>'
++'<text x="130" y="42" font-size="11" fill="#ef4444" font-weight="700" text-anchor="middle" font-family="Heebo">מקסימום 🏔️</text>'
+/* valley */
++'<circle cx="240" cy="160" r="6" fill="#2563eb" stroke="#fff" stroke-width="2"/>'
++'<text x="240" y="178" font-size="11" fill="#2563eb" font-weight="700" text-anchor="middle" font-family="Heebo">מינימום 🏜️</text>'
+/* second peak */
++'<circle cx="310" cy="58" r="6" fill="#ef4444" stroke="#fff" stroke-width="2"/>'
++'<text x="310" y="42" font-size="11" fill="#ef4444" font-weight="700" text-anchor="middle" font-family="Heebo">מקסימום 🏔️</text>'
++'</svg>'
++`
+<div class="example">
+<strong>דמיינו נסיעה בדרך הררית:</strong><br>
+• 🏔️ <strong>מקסימום</strong> = פסגת ההר — הגעתם לגובה המרבי ומכאן יורדים<br>
+• 🏜️ <strong>מינימום</strong> = תחתית העמק — הגעתם לנקודה הנמוכה ביותר ומכאן עולים
+</div>
+<div class="warning">⚠️ <strong>שימו לב:</strong> בנקודת מקסימום/מינימום הפונקציה <strong>משנה כיוון</strong>!<br>
+• לפני מקסימום: עולה. אחרי: יורדת.<br>
+• לפני מינימום: יורדת. אחרי: עולה.</div>
+<p><strong>שאלה:</strong> מהגרף למעלה — כמה נקודות מקסימום וכמה מינימום יש?</p>
+<div class="quiz-options" id="s4opts"></div>
+<div id="s4fb"></div>
+`},init(){
+  const opts=shuffle([
+    {text:'2 מקסימום, 1 מינימום',correct:true},
+    {text:'1 מקסימום, 2 מינימום',correct:false},
+    {text:'1 מקסימום, 1 מינימום',correct:false},
+    {text:'3 מקסימום, 0 מינימום',correct:false}
+  ]);
+  const c=document.getElementById('s4opts');c.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');d.className='quiz-opt';d.innerHTML=o.text;
+    d.onclick=()=>{
+      c.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s4fb').innerHTML='<div class="feedback-inline ok">✅ נכון! 2 פסגות (מקסימום) ועמק אחד (מינימום) ביניהן</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s4fb').innerHTML='<div class="feedback-inline err">❌ ספרו: יש 2 נקודות אדומות (מקסימום) ו-1 נקודה כחולה (מינימום)</div>'}
+    };c.appendChild(d);
+  });
+}},
+
+/* Step 5: Slope and increasing/decreasing (linear) */
+{title:'📏 השפעת שיפוע על עלייה/ירידה', render(){return `
+<p>בפונקציה לינארית (ישרית) <code>f(x) = mx + b</code>, המספר <span class="math-expr">m</span> (השיפוע) קובע הכל:</p>
+<div class="highlight">
+• <strong style="color:#10b981"><span class="math-expr">m &gt; 0</span></strong> → פונקציה <strong>עולה</strong> (הישר עולה ימינה)<br>
+• <strong style="color:#ef4444"><span class="math-expr">m &lt; 0</span></strong> → פונקציה <strong>יורדת</strong> (הישר יורד ימינה)<br>
+• <strong style="color:#2563eb"><span class="math-expr">m = 0</span></strong> → פונקציה <strong>קבועה</strong> (ישר אופקי)
+</div>
+`+svgStart(400,220,'svg5')
++svgAxis(400,220,200,180)
+/* m>0: green */
++'<line x1="50" y1="160" x2="350" y2="40" stroke="#10b981" stroke-width="2.5"/>'
++'<text x="355" y="38" font-size="11" fill="#10b981" font-weight="700" font-family="Rubik">m=2</text>'
+/* m<0: red */
++'<line x1="50" y1="40" x2="350" y2="160" stroke="#ef4444" stroke-width="2.5"/>'
++'<text x="355" y="162" font-size="11" fill="#ef4444" font-weight="700" font-family="Rubik">m=-2</text>'
+/* m=0: blue */
++'<line x1="50" y1="110" x2="350" y2="110" stroke="#2563eb" stroke-width="2.5"/>'
++'<text x="355" y="108" font-size="11" fill="#2563eb" font-weight="700" font-family="Rubik">m=0</text>'
++'</svg>'
++`
+<div class="example">
+<strong>דוגמאות:</strong><br>
+• <code>f(x) = 3x + 1</code> → <span class="math-expr">m = 3 &gt; 0</span> → <strong style="color:#10b981">עולה</strong><br>
+• <code>f(x) = -2x + 5</code> → <span class="math-expr">m = -2 &lt; 0</span> → <strong style="color:#ef4444">יורדת</strong><br>
+• <code>f(x) = 7</code> → <span class="math-expr">m = 0</span> → <strong style="color:#2563eb">קבועה</strong>
+</div>
+<p><strong>שאלה:</strong> <code>f(x) = -5x + 3</code> — האם הפונקציה עולה, יורדת או קבועה?</p>
+<div class="quiz-options" id="s5opts"></div>
+<div id="s5fb"></div>
+`},init(){
+  const opts=shuffle([
+    {text:'יורדת (כי m = -5 < 0)',correct:true},
+    {text:'עולה (כי m = -5)',correct:false},
+    {text:'קבועה (כי b = 3)',correct:false}
+  ]);
+  const c=document.getElementById('s5opts');c.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');d.className='quiz-opt';d.innerHTML=o.text;
+    d.onclick=()=>{
+      c.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s5fb').innerHTML='<div class="feedback-inline ok">✅ מצוין! m = -5 שלילי, לכן הפונקציה יורדת</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s5fb').innerHTML='<div class="feedback-inline err">❌ בדקו את הסימן של m: הוא -5, כלומר שלילי → יורדת</div>'}
+    };c.appendChild(d);
+  });
+}},
+
+/* Step 6: Summary */
+{title:'🏆 סיכום', render(){return `
+<p style="font-size:1.1rem;text-align:center;margin-bottom:20px">בשיעור הזה למדנו 6 דברים חשובים:</p>
+<div class="step-summary-grid">
+  <div class="summary-item">
+    <div class="s-icon">📈</div>
+    <div class="s-title">פונקציה עולה</div>
+    <div class="s-text">כש-x גדל, גם y גדל</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">📉</div>
+    <div class="s-title">פונקציה יורדת</div>
+    <div class="s-text">כש-x גדל, y קטן</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🏔️</div>
+    <div class="s-title">מקסימום</div>
+    <div class="s-text">שיא — מעבר מעלייה לירידה</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🏜️</div>
+    <div class="s-title">מינימום</div>
+    <div class="s-text">שפל — מעבר מירידה לעלייה</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">📊</div>
+    <div class="s-title">זיהוי מטבלה</div>
+    <div class="s-text">y גדל → עולה, y קטן → יורדת</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">📏</div>
+    <div class="s-title">שיפוע</div>
+    <div class="s-text">m>0 עולה, m<0 יורדת, m=0 קבועה</div>
+  </div>
+</div>
+<div class="success-box" style="text-align:center;font-size:1.1rem;margin-top:20px">
+  <p>🌟 עכשיו אתם מוכנים לתרגול!</p>
+  <p>4 רמות קושי מחכות לכם</p>
+  <button class="mini-btn accent" style="margin-top:12px;font-size:1rem;padding:12px 32px" onclick="switchSection('practice')">מוכנים לתרגול ←</button>
+</div>
+`}}
+];
+
+function renderStep(idx){
+  state.step=idx;
+  const s=steps[idx];
+  const fill=((idx+1)/TOTAL_STEPS*100).toFixed(0);
+  document.getElementById('stepFill').style.width=fill+'%';
+  document.getElementById('stepText').textContent='שלב '+(idx+1)+' מתוך '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+s.title+'</div>'+s.render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'לתרגול ←':'הבא ←';
+  if(s.init) s.init();
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+/* ===== SVG GRAPH GENERATORS FOR QUESTIONS ===== */
+function makeGraphSVG(type,seed){
+  /* type: 'inc','dec','const','hill','valley','wave' */
+  var w=340,h=180,ox=30,oy=150;
+  var s=svgStart(w,h,'');
+  s+=svgAxis(w,h,ox,oy);
+  var r2=mulberry32(seed);
+  function ri(a,b){return a+Math.floor(r2()*(b-a+1))}
+  if(type==='inc'){
+    var y1=ri(100,130),y2=ri(30,60);
+    s+='<line x1="50" y1="'+y1+'" x2="310" y2="'+y2+'" stroke="var(--primary)" stroke-width="3"/>';
+  } else if(type==='dec'){
+    var y1b=ri(30,60),y2b=ri(100,130);
+    s+='<line x1="50" y1="'+y1b+'" x2="310" y2="'+y2b+'" stroke="var(--primary)" stroke-width="3"/>';
+  } else if(type==='const'){
+    var yc=ri(60,110);
+    s+='<line x1="50" y1="'+yc+'" x2="310" y2="'+yc+'" stroke="var(--primary)" stroke-width="3"/>';
+  } else if(type==='hill'){
+    var pk=ri(130,200);
+    s+='<path d="M50,140 Q'+pk+',20 310,140" fill="none" stroke="var(--primary)" stroke-width="3"/>';
+  } else if(type==='valley'){
+    var vl=ri(130,200);
+    s+='<path d="M50,40 Q'+vl+',160 310,40" fill="none" stroke="var(--primary)" stroke-width="3"/>';
+  } else if(type==='wave'){
+    var p1=ri(100,140),p2=ri(180,220);
+    s+='<path d="M50,120 Q'+p1+',20 170,80 Q'+p2+',160 310,60" fill="none" stroke="var(--primary)" stroke-width="3"/>';
+  }
+  s+='</svg>';
+  return s;
+}
+
+function makeIntervalGraphSVG(intervals,xLabels,seed){
+  /* intervals: array of {x1,x2,type:'inc'|'dec'} for marking */
+  var w=360,h=200,ox=30,oy=160;
+  var s=svgStart(w,h,'');
+  s+=svgAxis(w,h,ox,oy);
+  /* draw a curve that matches the intervals */
+  var pts=[];var curY=120;
+  var xStep=(w-80)/(xLabels.length-1);
+  for(var i=0;i<xLabels.length;i++){
+    var px=50+i*xStep;
+    pts.push({x:px,y:curY});
+    if(i<intervals.length){
+      if(intervals[i].type==='inc') curY=Math.max(30,curY-50);
+      else curY=Math.min(145,curY+50);
+    }
+  }
+  pts.push({x:50+(xLabels.length-1)*xStep,y:curY});
+  /* draw path */
+  var path='M'+pts[0].x+','+pts[0].y;
+  for(var j=1;j<pts.length;j++){
+    var cx=(pts[j-1].x+pts[j].x)/2;
+    path+=' Q'+cx+','+(pts[j].y)+' '+pts[j].x+','+pts[j].y;
+  }
+  s+='<path d="'+path+'" fill="none" stroke="var(--primary)" stroke-width="3"/>';
+  /* x labels */
+  for(var k=0;k<xLabels.length;k++){
+    var lx=50+k*xStep;
+    s+='<text x="'+lx+'" y="'+(oy+16)+'" font-size="10" fill="#64748b" text-anchor="middle" font-family="Rubik">'+xLabels[k]+'</text>';
+  }
+  s+='</svg>';
+  return s;
+}
+
+function makeLinearGraphSVG(m,b,seed){
+  var w=300,h=180,ox=150,oy=90;
+  var s=svgStart(w,h,'');
+  s+=svgAxis(w,h,ox,oy);
+  var x1=-4,x2=4;
+  var scaleX=25,scaleY=15;
+  var px1=ox+x1*scaleX,py1=oy-(m*x1+b)*scaleY;
+  var px2=ox+x2*scaleX,py2=oy-(m*x2+b)*scaleY;
+  py1=Math.max(10,Math.min(h-10,py1));
+  py2=Math.max(10,Math.min(h-10,py2));
+  s+='<line x1="'+px1+'" y1="'+py1+'" x2="'+px2+'" y2="'+py2+'" stroke="var(--primary)" stroke-width="2.5"/>';
+  s+='</svg>';
+  return s;
+}
+
+function makeTableHTML(xs,ys){
+  var h='<table class="q-table"><tr><th>x</th><th>y</th></tr>';
+  for(var i=0;i<xs.length;i++){
+    h+='<tr><td>'+xs[i]+'</td><td>'+ys[i]+'</td></tr>';
+  }
+  h+='</table>';
+  return h;
+}
+
+/* ===== QUESTION GENERATORS ===== */
+/* PLACEHOLDER — generators inserted via Edit */
+function genEasy(){rng=mulberry32(dateSeed+100);var qs=[];
+  /* Q1-5: SVG graph — increasing/decreasing/constant */
+  var types=['inc','dec','const','inc','dec'];
+  var labels=['עולה','יורדת','קבועה','עולה','יורדת'];
+  for(var i=0;i<5;i++){
+    var gtype=types[i];
+    var correct=labels[i];
+    var opts=shuffle(['עולה','יורדת','קבועה',i<3?'לא ניתן לדעת':'מעורבת']);
+    qs.push({type:'mc',stem:'הסתכלו על הגרף — האם הפונקציה עולה, יורדת או קבועה?<br>'+makeGraphSVG(gtype,dateSeed+i*7),options:opts,answer:opts.indexOf(correct),explanation:'הגרף '+( gtype==='inc'?'עולה משמאל לימין → פונקציה עולה':gtype==='dec'?'יורד משמאל לימין → פונקציה יורדת':'אופקי → פונקציה קבועה')});
+  }
+  /* Q6-10: table — increasing or decreasing */
+  for(var j=0;j<5;j++){
+    var isInc=j<3;
+    var startV=RI(1,5);var step2=RI(2,5);
+    var xs2=[1,2,3,4,5];
+    var ys2=xs2.map(function(x){return isInc?startV+(x-1)*step2:startV+20-(x-1)*step2});
+    var correct2=isInc?'עולה':'יורדת';
+    var opts2=shuffle(['עולה','יורדת','קבועה','לא ניתן לדעת']);
+    qs.push({type:'mc',stem:'לפי הטבלה — האם הפונקציה עולה, יורדת או קבועה?<br>'+makeTableHTML(xs2,ys2),options:opts2,answer:opts2.indexOf(correct2),explanation:isInc?'ערכי y עולים ('+ys2.join(', ')+') → פונקציה עולה':'ערכי y יורדים ('+ys2.join(', ')+') → פונקציה יורדת'});
+  }
+  /* Q11-15: f(x)=mx+b — increasing/decreasing/constant */
+  for(var k=0;k<5;k++){
+    var m3,correct3;
+    if(k<2){m3=RI(1,6);correct3='עולה'}
+    else if(k<4){m3=-RI(1,6);correct3='יורדת'}
+    else{m3=0;correct3='קבועה'}
+    var b3=RI(-5,5);
+    var exprStr=m3===0?'f(x) = '+b3:(m3===1?'f(x) = x':(m3===-1?'f(x) = -x':'f(x) = '+m3+'x'))+(b3>0?' + '+b3:b3<0?' - '+(-b3):'');
+    var opts3=shuffle(['עולה','יורדת','קבועה','לא ניתן לדעת']);
+    qs.push({type:'mc',stem:'<code>'+exprStr+'</code> — האם הפונקציה עולה, יורדת או קבועה?',options:opts3,answer:opts3.indexOf(correct3),explanation:'השיפוע m = '+m3+(m3>0?' > 0 → עולה':m3<0?' < 0 → יורדת':' = 0 → קבועה')});
+  }
+  /* Q16-20: SVG with marked interval */
+  for(var n=0;n<5;n++){
+    var gtype2=n%2===0?'hill':'valley';
+    var correct4=gtype2==='hill'?(n%3===0?'עולה':'יורדת'):(n%3===0?'יורדת':'עולה');
+    var side=correct4==='עולה'?'הצד השמאלי':'הצד הימני';
+    if(gtype2==='valley') side=correct4==='יורדת'?'הצד השמאלי':'הצד הימני';
+    var opts4=shuffle(['עולה','יורדת','קבועה','לא ניתן לדעת']);
+    qs.push({type:'mc',stem:'הסתכלו על <strong>'+side+'</strong> של הגרף — האם הפונקציה שם עולה או יורדת?<br>'+makeGraphSVG(gtype2,dateSeed+100+n*13),options:opts4,answer:opts4.indexOf(correct4),explanation:'ב'+side+' הגרף '+correct4});
+  }
+  return qs;
+}
+
+function genMedium(){rng=mulberry32(dateSeed+200);var qs=[];
+  /* Q1-5: SVG — write increasing and decreasing intervals (MC about intervals) */
+  for(var i=0;i<5;i++){
+    var peakX=RI(1,5);
+    var xMin=-RI(1,3);var xMax=peakX+RI(2,5);
+    var correctInc=xMin+' < x < '+peakX;
+    var correctDec=peakX+' < x < '+xMax;
+    var isAskInc=i<3;
+    var correctAns=isAskInc?correctInc:correctDec;
+    var d1=isAskInc?correctDec:correctInc;
+    var d2=xMin+' < x < '+xMax;
+    var d3=(peakX-1)+' < x < '+(peakX+1);
+    var opts=shuffle([correctAns,d1,d2,d3]);
+    var svg='';
+    svg+=svgStart(340,180,'');
+    svg+=svgAxis(340,180,30,150);
+    /* inverted parabola-ish */
+    var scX=(280)/(xMax-xMin);
+    var pkPx=40+(peakX-xMin)*scX;
+    svg+='<path d="M40,140 Q'+pkPx+',20 '+(40+(xMax-xMin)*scX)+',140" fill="none" stroke="var(--primary)" stroke-width="3"/>';
+    svg+='<circle cx="'+pkPx+'" cy="24" r="4" fill="var(--accent)"/>';
+    svg+='<text x="'+pkPx+'" y="16" font-size="10" fill="var(--accent-dark)" text-anchor="middle" font-family="Rubik">x='+peakX+'</text>';
+    /* x axis labels */
+    svg+='<text x="40" y="166" font-size="10" fill="#64748b" text-anchor="middle" font-family="Rubik">'+xMin+'</text>';
+    svg+='<text x="'+(40+(xMax-xMin)*scX)+'" y="166" font-size="10" fill="#64748b" text-anchor="middle" font-family="Rubik">'+xMax+'</text>';
+    svg+='</svg>';
+    qs.push({type:'mc',stem:'באיזה תחום הפונקציה <strong>'+(isAskInc?'עולה':'יורדת')+'</strong>?<br>'+svg,options:opts.map(function(o){return '<span dir="ltr" style="unicode-bidi:embed">'+o+'</span>'}),answer:opts.indexOf(correctAns),explanation:'הפונקציה עולה ב-<span class="math-expr">'+correctInc+'</span> ויורדת ב-<span class="math-expr">'+correctDec+'</span>'});
+  }
+  /* Q6-10: Find max/min points */
+  for(var j=0;j<5;j++){
+    var isMax=j<3;
+    var px=RI(-2,4);var py=RI(2,8);
+    var leftX=px-RI(2,4);var rightX=px+RI(2,4);
+    var leftY=py-RI(2,4);var rightY=py-RI(2,4);
+    if(!isMax){leftY=py+RI(2,4);rightY=py+RI(2,4)}
+    var correctPt='('+px+', '+py+')';
+    var d1b='('+leftX+', '+leftY+')';
+    var d2b='('+rightX+', '+rightY+')';
+    var d3b='('+(px+1)+', '+(py+(isMax?-1:1))+')';
+    var opts2=shuffle([correctPt,d1b,d2b,d3b]);
+    /* build SVG */
+    var svgM=svgStart(340,180,'');
+    svgM+=svgAxis(340,180,30,150);
+    var mapX=function(v){return 30+(v-leftX)*(280/(rightX-leftX))};
+    var mapY=function(v){return 150-(v-Math.min(leftY,rightY,py-1))*(120/(Math.max(leftY,rightY,py+1)-Math.min(leftY,rightY,py-1)))};
+    svgM+='<path d="M'+mapX(leftX)+','+mapY(leftY)+' Q'+mapX(px)+','+mapY(py+(isMax?2:-2))+' '+mapX(rightX)+','+mapY(rightY)+'" fill="none" stroke="var(--primary)" stroke-width="3"/>';
+    svgM+='<circle cx="'+mapX(px)+'" cy="'+mapY(py)+'" r="5" fill="'+(isMax?'#ef4444':'#2563eb')+'"/>';
+    svgM+='</svg>';
+    qs.push({type:'mc',stem:'מהי נקודת ה<strong>'+(isMax?'מקסימום':'מינימום')+'</strong> של הפונקציה?<br>'+svgM,options:opts2.map(function(o){return '<span dir="ltr" style="unicode-bidi:embed">'+o+'</span>'}),answer:opts2.indexOf(correctPt),explanation:'נקודת ה'+(isMax?'מקסימום':'מינימום')+' היא <span class="math-expr">'+correctPt+'</span>'});
+  }
+  /* Q11-15: Mixed table — identify where function increases */
+  for(var k=0;k<5;k++){
+    var xs3=[0,1,2,3,4,5];
+    var turnPt=RI(1,4);
+    var startY=RI(5,15);var stepUp=RI(1,4);var stepDown=RI(1,4);
+    var ys3=[];
+    for(var t=0;t<xs3.length;t++){
+      if(t<=turnPt) ys3.push(startY+t*stepUp);
+      else ys3.push(ys3[turnPt]-(t-turnPt)*stepDown);
+    }
+    var correctRange='0 < x < '+turnPt;
+    var d1c=turnPt+' < x < 5';
+    var d2c='0 < x < 5';
+    var d3c='2 < x < 4';
+    var opts3=shuffle([correctRange,d1c,d2c,d3c]);
+    qs.push({type:'mc',stem:'באיזה תחום הפונקציה <strong>עולה</strong>?<br>'+makeTableHTML(xs3,ys3),options:opts3.map(function(o){return '<span dir="ltr" style="unicode-bidi:embed">'+o+'</span>'}),answer:opts3.indexOf(correctRange),explanation:'ערכי y עולים מ-x=0 עד x='+turnPt+' ('+ys3.slice(0,turnPt+1).join(', ')+'), ואז יורדים'});
+  }
+  /* Q16-20: f(x) — build table, find if increasing/decreasing (quadratic) */
+  for(var n=0;n<5;n++){
+    var a2=n<3?1:-1;
+    var b2=RI(-3,3)*2;/* even, so vertex is integer */
+    var vertexX=-b2/(2*a2);
+    var testX=RI(Math.floor(vertexX)+1,Math.floor(vertexX)+4);
+    var fTest=a2*testX*testX+b2*testX;
+    var fTest2=a2*(testX+1)*(testX+1)+b2*(testX+1);
+    var correctBeh=fTest2>fTest?'עולה':'יורדת';
+    var opts4=shuffle(['עולה','יורדת','קבועה','לא ניתן לדעת']);
+    var exprQ=a2===1?'f(x) = x²':(a2===-1?'f(x) = -x²':'f(x) = '+a2+'x²');
+    exprQ+=b2>0?' + '+b2+'x':b2<0?' - '+(-b2)+'x':'';
+    qs.push({type:'mc',stem:'נתונה <code>'+exprQ+'</code>.<br>חשבו: <code>f('+testX+') = '+fTest+'</code> ו-<code>f('+(testX+1)+') = '+fTest2+'</code>.<br>האם הפונקציה <strong>עולה</strong> או <strong>יורדת</strong> בין <span class="math-expr">x = '+testX+'</span> ל-<span class="math-expr">x = '+(testX+1)+'</span>?',options:opts4,answer:opts4.indexOf(correctBeh),explanation:'<span class="math-expr">f('+(testX+1)+') = '+fTest2+(fTest2>fTest?' > ':' < ')+fTest+' = f('+testX+')</span> → הפונקציה '+correctBeh});
+  }
+  return qs;
+}
+
+function genHard(){rng=mulberry32(dateSeed+300);var qs=[];
+  /* Q1-5: SVG with 2 graphs — between which x is graph A > graph B */
+  for(var i=0;i<5;i++){
+    var m1=RI(1,3);var b1=RI(0,3);
+    var m2=-RI(1,3);var b2=RI(8,14);
+    /* intersection: m1*x+b1 = m2*x+b2 → x = (b2-b1)/(m1-m2) */
+    var intX=Math.round((b2-b1)/(m1-m2));
+    if(intX<1) intX=2;
+    if(intX>6) intX=5;
+    /* recalc b2 to force integer intersection */
+    b2=(m1-m2)*intX+b1;
+    var intY=m1*intX+b1;
+    var askAgtB=i<3;
+    var correctR, explain;
+    if(askAgtB){
+      /* A > B when m1*x+b1 > m2*x+b2, i.e. x > intX (since m1>m2) */
+      correctR='x > '+intX;
+      explain='הישרים נחתכים ב-x='+intX+'. מימין לנקודה, A (עולה) גבוה מ-B (יורד)';
+    } else {
+      correctR='x < '+intX;
+      explain='הישרים נחתכים ב-x='+intX+'. משמאל לנקודה, B גבוה מ-A';
+    }
+    var d1d=askAgtB?'x < '+intX:'x > '+intX;
+    var d2d='x = '+intX;
+    var d3d='תמיד';
+    var opts=shuffle([correctR,d1d,d2d,d3d]);
+    /* SVG */
+    var sg=svgStart(340,180,'');
+    sg+=svgAxis(340,180,30,150);
+    var sX=function(v){return 30+v*40};
+    var sY=function(v){return 150-v*12};
+    sg+='<line x1="'+sX(0)+'" y1="'+sY(b1)+'" x2="'+sX(7)+'" y2="'+sY(m1*7+b1)+'" stroke="#10b981" stroke-width="2.5"/>';
+    sg+='<text x="'+sX(7)+'" y="'+(sY(m1*7+b1)-6)+'" font-size="10" fill="#10b981" font-weight="700" font-family="Heebo">A</text>';
+    sg+='<line x1="'+sX(0)+'" y1="'+sY(b2)+'" x2="'+sX(7)+'" y2="'+sY(m2*7+b2)+'" stroke="#ef4444" stroke-width="2.5"/>';
+    sg+='<text x="'+sX(7)+'" y="'+(sY(m2*7+b2)-6)+'" font-size="10" fill="#ef4444" font-weight="700" font-family="Heebo">B</text>';
+    sg+='<circle cx="'+sX(intX)+'" cy="'+sY(intY)+'" r="4" fill="var(--accent)"/>';
+    sg+='</svg>';
+    qs.push({type:'mc',stem:'באיזה תחום '+(askAgtB?'<strong style="color:#10b981">A</strong> גבוה מ-<strong style="color:#ef4444">B</strong>':'<strong style="color:#ef4444">B</strong> גבוה מ-<strong style="color:#10b981">A</strong>')+'?<br>'+sg,options:opts.map(function(o){return '<span dir="ltr" style="unicode-bidi:embed">'+o+'</span>'}),answer:opts.indexOf(correctR),explanation:explain});
+  }
+  /* Q6-10: function description — write intervals */
+  for(var j=0;j<5;j++){
+    var x1r=RI(-3,0);var x2r=RI(2,5);var x3r=RI(x2r+2,x2r+5);
+    var y1r=RI(0,3);var y2r=RI(5,9);var y3r=RI(0,3);
+    var correctInt;
+    var askWhat=j%3;
+    if(askWhat===0){
+      correctInt=x1r+' < x < '+x2r;
+      var question='באיזה תחום הפונקציה <strong>עולה</strong>?';
+      var exp2='הפונקציה עולה מ-('+x1r+','+y1r+') ל-('+x2r+','+y2r+') כלומר ב-<span class="math-expr">'+correctInt+'</span>';
+    } else if(askWhat===1){
+      correctInt=x2r+' < x < '+x3r;
+      var question='באיזה תחום הפונקציה <strong>יורדת</strong>?';
+      var exp2='הפונקציה יורדת מ-('+x2r+','+y2r+') ל-('+x3r+','+y3r+') כלומר ב-<span class="math-expr">'+correctInt+'</span>';
+    } else {
+      correctInt='('+x2r+', '+y2r+')';
+      var question='מהי נקודת ה<strong>מקסימום</strong>?';
+      var exp2='הפונקציה עולה עד ('+x2r+','+y2r+') ואז יורדת — זו נקודת המקסימום';
+    }
+    var d1e=askWhat===2?'('+x1r+', '+y1r+')':x1r+' < x < '+x3r;
+    var d2e=askWhat===2?'('+x3r+', '+y3r+')':x2r+' < x < '+x3r;
+    var d3e=askWhat===2?'('+x2r+', '+y3r+')':x1r+' < x < '+x2r;
+    if(askWhat===0) d3e=x2r+' < x < '+x3r;
+    if(askWhat===1) d3e=x1r+' < x < '+x2r;
+    var opts2b=shuffle([correctInt,d1e,d2e,d3e]);
+    qs.push({type:'mc',stem:'פונקציה <strong>עולה</strong> מ-<span class="math-expr">('+x1r+', '+y1r+')</span> ל-<span class="math-expr">('+x2r+', '+y2r+')</span>, ו<strong>יורדת</strong> מ-<span class="math-expr">('+x2r+', '+y2r+')</span> ל-<span class="math-expr">('+x3r+', '+y3r+')</span>.<br>'+question,options:opts2b.map(function(o){return '<span dir="ltr" style="unicode-bidi:embed">'+o+'</span>'}),answer:opts2b.indexOf(correctInt),explanation:exp2});
+  }
+  /* Q11-15: Formula for function decreasing/increasing by slope */
+  for(var k=0;k<5;k++){
+    var askType=k%3;/* 0=always inc, 1=always dec, 2=conditional */
+    if(askType===0){
+      var mVal=RI(1,5);var bVal=RI(-3,3);
+      var fStr=mVal===1?'x + '+bVal:mVal+'x + '+bVal;
+      if(bVal===0) fStr=mVal===1?'x':mVal+'x';
+      if(bVal<0) fStr=(mVal===1?'x':mVal+'x')+' - '+(-bVal);
+      var correct5='עולה בכל התחום';
+      var opts5=shuffle([correct5,'יורדת בכל התחום','עולה כש-x > 0 בלבד','קבועה']);
+      qs.push({type:'mc',stem:'<code>f(x) = '+fStr+'</code> — מתי הפונקציה עולה?',options:opts5,answer:opts5.indexOf(correct5),explanation:'השיפוע m = '+mVal+' > 0, לכן הפונקציה עולה בכל התחום'});
+    } else if(askType===1){
+      var mVal2=-RI(1,5);var bVal2=RI(-3,5);
+      var fStr2=mVal2===-1?'-x':mVal2+'x';
+      fStr2+=bVal2>0?' + '+bVal2:bVal2<0?' - '+(-bVal2):'';
+      var correct5b='יורדת בכל התחום';
+      var opts5b=shuffle([correct5b,'עולה בכל התחום','יורדת כש-x > 0 בלבד','קבועה']);
+      qs.push({type:'mc',stem:'<code>f(x) = '+fStr2+'</code> — מתי הפונקציה יורדת?',options:opts5b,answer:opts5b.indexOf(correct5b),explanation:'השיפוע m = '+mVal2+' < 0, לכן הפונקציה יורדת בכל התחום'});
+    } else {
+      var a3=pick([1,-1]);var vertX3=RI(-2,3);
+      var vertY3=RI(-2,5);
+      var incRange,decRange;
+      if(a3===1){incRange='x > '+vertX3;decRange='x < '+vertX3}
+      else{incRange='x < '+vertX3;decRange='x > '+vertX3}
+      var correctC=incRange;
+      var optsC=shuffle([correctC,decRange,'בכל התחום','אף פעם']);
+      qs.push({type:'mc',stem:'פונקציה ריבועית עם קודקוד ב-<span class="math-expr">('+vertX3+', '+vertY3+')</span>'+(a3===1?' ומקדם חיובי (פרבולה "חיוכית" ∪)':' ומקדם שלילי (פרבולה "עצובה" ∩)')+'.<br>באיזה תחום הפונקציה <strong>עולה</strong>?',options:optsC.map(function(o){return '<span dir="ltr" style="unicode-bidi:embed">'+o+'</span>'}),answer:optsC.indexOf(correctC),explanation:(a3===1?'פרבולה חיוכית (∪) עולה מימין לקודקוד: ':'פרבולה עצובה (∩) עולה משמאל לקודקוד: ')+'<span class="math-expr">'+correctC+'</span>'});
+    }
+  }
+  /* Q16-20: Graph with multiple extrema — count/identify */
+  for(var n=0;n<5;n++){
+    var numMax=RI(1,3);var numMin=RI(1,2);
+    var totalExtrema=numMax+numMin;
+    var askMax=n<3;
+    var correctCount=askMax?numMax:numMin;
+    var opts6=shuffle([''+correctCount,''+(correctCount+1),''+(correctCount-1<0?0:correctCount-1),''+totalExtrema]);
+    /* make sure unique */
+    opts6=[...new Set(opts6)];
+    while(opts6.length<4) opts6.push(''+(totalExtrema+1));
+    var sg2=svgStart(360,180,'');
+    sg2+=svgAxis(360,180,30,150);
+    /* generate wave path with correct number of peaks/valleys */
+    var segs=numMax+numMin;var segW=280/(segs+1);
+    var pathStr='M40,100';
+    var isUp=true;
+    for(var s=0;s<segs;s++){
+      var cx2=40+(s+0.5)*segW+segW/2;
+      var ty=isUp?30:140;
+      pathStr+=' Q'+cx2+','+ty+' '+(40+(s+1)*segW)+','+(isUp?80:120);
+      isUp=!isUp;
+    }
+    pathStr+=' L320,110';
+    sg2+='<path d="'+pathStr+'" fill="none" stroke="var(--primary)" stroke-width="3"/>';
+    sg2+='</svg>';
+    qs.push({type:'mc',stem:'כמה נקודות <strong>'+(askMax?'מקסימום':'מינימום')+'</strong> יש בגרף?<br>'+sg2,options:opts6,answer:opts6.indexOf(''+correctCount),explanation:'בגרף יש '+numMax+' נקודות מקסימום ו-'+numMin+' נקודות מינימום'});
+  }
+  return qs;
+}
+
+function genChallenge(){rng=mulberry32(dateSeed+400);var qs=[];
+  /* Q1-3: f(x)=x²+bx+c — build table, find min/max and intervals */
+  for(var i=0;i<3;i++){
+    var a4=pick([1,-1]);
+    var b4=-2*RI(1,4)*a4;/* ensures integer vertex */
+    var c4=RI(-3,5);
+    var vx4=-b4/(2*a4);
+    var vy4=a4*vx4*vx4+b4*vx4+c4;
+    var extremeType=a4>0?'מינימום':'מקסימום';
+    var correctPt2='('+vx4+', '+vy4+')';
+    var d1f='('+(vx4+1)+', '+(vy4+a4)+')';
+    var d2f='('+(vx4-1)+', '+(vy4+a4)+')';
+    var d3f='('+(-vx4)+', '+vy4+')';
+    var opts7=shuffle([correctPt2,d1f,d2f,d3f]);
+    var exprC='f(x) = '+(a4===-1?'-':'')+'x²'+(b4>0?' + '+b4+'x':b4<0?' - '+(-b4)+'x':'')+(c4>0?' + '+c4:c4<0?' - '+(-c4):'');
+    /* build table for context */
+    var xs4=[vx4-2,vx4-1,vx4,vx4+1,vx4+2];
+    var ys4=xs4.map(function(x){return a4*x*x+b4*x+c4});
+    qs.push({type:'mc',stem:'<code>'+exprC+'</code><br>'+makeTableHTML(xs4,ys4)+'<br>מהי נקודת ה<strong>'+extremeType+'</strong> של הפונקציה?',options:opts7.map(function(o){return '<span dir="ltr" style="unicode-bidi:embed">'+o+'</span>'}),answer:opts7.indexOf(correctPt2),explanation:'הקודקוד (נקודת '+extremeType+') הוא <span class="math-expr">'+correctPt2+'</span>. בטבלה רואים שזה הערך ה'+(a4>0?'קטן':'גדול')+' ביותר של y'});
+  }
+  /* Q4-6: Function increasing when x>a, decreasing when x<a — what at x=a? */
+  for(var j=0;j<3;j++){
+    var aVal=RI(-2,4);
+    var correctAns='מינימום';
+    if(j===2) correctAns='מקסימום';
+    var desc=j<2?'עולה כש-<span class="math-expr">x > '+aVal+'</span> ויורדת כש-<span class="math-expr">x < '+aVal+'</span>':'יורדת כש-<span class="math-expr">x > '+aVal+'</span> ועולה כש-<span class="math-expr">x < '+aVal+'</span>';
+    var opts8=shuffle([correctAns,'מקסימום','מינימום','לא יודעים','הפונקציה עולה']);
+    /* remove dups */
+    opts8=[...new Set(opts8)];while(opts8.length<4)opts8.push('נקודת פיתול');
+    qs.push({type:'mc',stem:'פונקציה '+desc+'.<br>מה קורה בנקודה <span class="math-expr">x = '+aVal+'</span>?',options:opts8,answer:opts8.indexOf(correctAns),explanation:(correctAns==='מינימום'?'הפונקציה יורדת לפני ועולה אחרי — זו נקודת <strong>מינימום</strong>':'הפונקציה עולה לפני ויורדת אחרי — זו נקודת <strong>מקסימום</strong>')});
+  }
+  /* Q7-9: Sketch constraints — how many extrema */
+  for(var k=0;k<3;k++){
+    var numMaxReq=RI(1,2);var numMinReq=RI(1,2);
+    var totalDir=numMaxReq+numMinReq;
+    var correctSeg=totalDir+1;
+    var opts9=shuffle([''+correctSeg,''+(correctSeg-1),''+(correctSeg+1),''+totalDir]);
+    opts9=[...new Set(opts9)];while(opts9.length<4)opts9.push(''+(correctSeg+2));
+    qs.push({type:'mc',stem:'פונקציה עם <strong>'+numMaxReq+' נקודות מקסימום</strong> ו-<strong>'+numMinReq+' נקודות מינימום</strong>.<br>לכמה <strong>קטעים</strong> (של עלייה או ירידה) מתחלק הגרף?',options:opts9,answer:opts9.indexOf(''+correctSeg),explanation:'כל נקודת קיצון מפרידה בין 2 קטעים. '+totalDir+' נקודות קיצון → <strong>'+correctSeg+'</strong> קטעים (של עלייה/ירידה לסירוגין)'});
+  }
+  /* Q10-12: Compare f(x)=2x vs g(x)=x² — who grows faster */
+  for(var n=0;n<3;n++){
+    var mLin=RI(2,4);var xComp=RI(3,6);
+    var fLin=mLin*xComp;
+    var gQuad=xComp*xComp;
+    var correctWho=gQuad>fLin?'g(x) = x²':'f(x) = '+mLin+'x';
+    var d1g=gQuad>fLin?'f(x) = '+mLin+'x':'g(x) = x²';
+    var d2g='שוות';
+    var d3g='לא ניתן לדעת';
+    var opts10=shuffle([correctWho,d1g,d2g,d3g]);
+    qs.push({type:'mc',stem:'<code>f(x) = '+mLin+'x</code> ו-<code>g(x) = x²</code>.<br>מי גדולה יותר כש-<span class="math-expr">x = '+xComp+'</span>?<br>(רמז: <span class="math-expr">f('+xComp+') = '+fLin+'</span>, <span class="math-expr">g('+xComp+') = '+gQuad+'</span>)',options:opts10,answer:opts10.indexOf(correctWho),explanation:'<span class="math-expr">f('+xComp+') = '+fLin+'</span>, <span class="math-expr">g('+xComp+') = '+gQuad+'</span> → '+(gQuad>fLin?'g(x) גדולה יותר':'f(x) גדולה יותר')});
+  }
+  /* Q13-15: Function with extrema — solutions to f(x)=k */
+  for(var p=0;p<3;p++){
+    var minY=RI(-2,1);var maxY=RI(4,8);
+    var kVal;
+    if(p===0) kVal=RI(minY+1,maxY-1);/* between → 2 solutions */
+    else if(p===1) kVal=minY;/* at min → 1 solution */
+    else kVal=maxY+RI(1,3);/* above max → 0 solutions */
+    var correctNum;
+    if(kVal>maxY||kVal<minY) correctNum='0';
+    else if(kVal===minY||kVal===maxY) correctNum='1';
+    else correctNum='2';
+    var opts11=shuffle(['0','1','2','3']);
+    qs.push({type:'mc',stem:'פונקציה עם <strong>מינימום</strong> <span class="math-expr">y = '+minY+'</span> ו<strong>מקסימום</strong> <span class="math-expr">y = '+maxY+'</span>.<br>כמה פתרונות יש למשוואה <code>f(x) = '+kVal+'</code>?',options:opts11,answer:opts11.indexOf(correctNum),explanation:(correctNum==='0'?'הערך '+kVal+' מחוץ לתחום ['+minY+', '+maxY+'] — אין פתרונות':correctNum==='1'?'הערך '+kVal+' שווה בדיוק ל'+(kVal===minY?'מינימום':'מקסימום')+' — פתרון יחיד':'הערך '+kVal+' בתוך התחום ['+minY+', '+maxY+'] — בדרך כלל 2 פתרונות (אחד בעלייה ואחד בירידה)')});
+  }
+  return qs;
+}
+
+function generateQuestions(level){
+  if(level==='easy') return genEasy();
+  if(level==='medium') return genMedium();
+  if(level==='hard') return genHard();
+  return genChallenge();
+}
+
+/* ===== PRACTICE RENDERING ===== */
+function renderLevelTabs(){
+  const container=document.getElementById('levelTabs');
+  container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(lv=>{
+    const btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    const done=scores[lv].filter(s=>s===1).length;
+    const total=LEVEL_COUNTS[lv];
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+total+')</span>':'');
+    btn.onclick=()=>switchLevel(lv);
+    container.appendChild(btn);
+  });
+}
+
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv]) questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+
+function updateLevelProgress(){
+  const lv=state.level;const total=LEVEL_COUNTS[lv];
+  const done=answered[lv].filter(a=>a).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+
+function renderQuestion(){
+  const lv=state.level;const idx=state.qIndex;
+  const qs=questions[lv];
+  if(!qs) return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  const q=qs[idx];
+  const area=document.getElementById('questionArea');
+  const isAnswered=answered[lv][idx];
+
+  let html='<div class="q-card"><div class="q-number">שאלה '+(idx+1)+' מתוך '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach((opt,i)=>{
+      const letter=LETTERS[i];
+      let cls='q-opt';
+      if(isAnswered){
+        cls+=' disabled';
+        if(i===q.answer) cls+=' correct';
+        else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel']) cls+=' wrong';
+      }
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span>'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>בדקו</button>';
+  } else if(q.type==='input'){
+    html+='<div class="q-input-row"><input type="number" class="q-input" id="qInput" placeholder="תשובה" dir="ltr" aria-label="תשובה">';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">בדקו</button>';
+    html+='</div>';
+    if(isAnswered){
+      html+='<div style="margin-top:4px;font-weight:700;direction:ltr">תשובה: '+q.answer+'</div>';
+    }
+  }
+
+  if(isAnswered){
+    const isCorrect=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'✅ נכון! ':'❌ ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+
+  /* Set up MC click handlers */
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(el=>{
+      el.onclick=()=>{
+        area.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+  /* Set up input enter key */
+  const inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){
+    inp.focus();
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkInput()});
+  }
+
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'סיום':'הבא ←';
+}
+
+window.checkMC=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const selected=document.querySelector('.q-opt.selected');
+  if(!selected) return;
+  const si=parseInt(selected.dataset.i);
+  const isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  answered[lv][idx+'_sel']=si;
+
+  document.querySelectorAll('.q-opt').forEach((el,i)=>{
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer) el.classList.add('correct');
+    else if(i===si&&!isCorrect) el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון מאוד!','✅ יפה!'])+' ':'❌ לא נכון. ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkInput=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inp=document.getElementById('qInput');
+  const val=inp.value.trim();
+  if(!val) return;
+  const isCorrect=parseFloat(val)===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');
+  inp.disabled=true;
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון!'])+' ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+function nextQuestion(){
+  const lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function')showAuthModal();
+    return;
+  }
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+
+function renderLevelComplete(){
+  const lv=state.level;
+  const correct=scores[lv].filter(s=>s===1).length;
+  const total=LEVEL_COUNTS[lv];
+  const pct=Math.round(correct/total*100);
+  const scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  const emoji=pct>=80?'🎉':pct>=50?'👏':'💪';
+
+  document.getElementById('questionArea').innerHTML=`
+    <div class="q-card"><div class="level-complete">
+      <div class="big-emoji">${emoji}</div>
+      <h2>סיימתם את רמת "${LEVEL_NAMES[lv]}"!</h2>
+      <div class="score-display${scoreClass}">${correct} / ${total}</div>
+      <p style="color:var(--text-light);margin-bottom:16px">${pct}% הצלחה</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="mini-btn" onclick="retryLevel()">🔄 נסו שוב</button>
+        ${lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">▶ לרמה הבאה</button>':''}
+      </div>
+    </div></div>`;
+
+  if(pct>=80) showConfetti();
+  saveState();
+}
+
+window.retryLevel=function(){
+  const lv=state.level;
+  scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);
+  state.qIndex=0;
+  renderLevelTabs();renderQuestion();saveState();
+};
+
+window.nextLevel=function(){
+  const order=['easy','medium','hard','challenge'];
+  const ci=order.indexOf(state.level);
+  if(ci<order.length-1) switchLevel(order[ci+1]);
+};
+
+/* ===== SECTION SWITCHING ===== */
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.section===sec);
+  });
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+/* ===== CONFETTI ===== */
+function showConfetti(){
+  const box=document.getElementById('confettiBox');
+  box.innerHTML='';
+  const colors=['#2563eb','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';
+    c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(()=>box.innerHTML='',5000);
+}
+
+/* ===== INIT ===== */
+function init(){
+  loadState();
+  Object.keys(LEVEL_COUNTS).forEach(lv=>{
+    if(!scores[lv]||!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice') switchSection('practice');
+}
+init();
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

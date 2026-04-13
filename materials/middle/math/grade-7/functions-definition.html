@@ -1,0 +1,1079 @@
+<!--
+  Title: מהי פונקציה
+  Unit: ממספרים למשתנים
+  Subject: מתמטיקה
+  Grade: ז׳
+  Tags: פונקציה, גרף, טבלה, מבחן קו אנכי, הצבה
+  Ages: 12-13
+  Icon: 🔢
+  Description: מהי פונקציה? ייצוגים שונים, מבחן הקו האנכי, הצבת ערכים — תרגול ב-4 רמות קושי עם משוב מיידי
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>מהי פונקציה | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+
+/* Top bar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Section toggle */
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+
+/* Container */
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+
+/* ===== TEACHING SECTION ===== */
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid var(--accent);padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
+.step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+
+/* Interactive elements inside steps */
+.mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.mini-table th,.mini-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:1rem}
+.mini-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.mini-table td{background:var(--bg)}
+.mini-input{width:60px;padding:6px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:1rem;font-family:inherit;font-weight:700;transition:.3s}
+.mini-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.mini-input.correct{border-color:var(--success);background:#ecfdf5}
+.mini-input.wrong{border-color:var(--error);background:#fef2f2}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.reveal{display:none;animation:fadeIn .5s ease}
+.reveal.show{display:block}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+
+/* Step nav */
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== PRACTICE SECTION ===== */
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-stem code,.q-stem .expr{font-size:1.1em}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;transition:.25s}
+.q-opt.selected .q-opt-letter{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-opt.correct .q-opt-letter{background:var(--success);color:#fff;border-color:var(--success)}
+.q-opt.wrong .q-opt-letter{background:var(--error);color:#fff;border-color:var(--error)}
+
+.q-input-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-input{width:120px;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1.1rem;font-family:inherit;font-weight:700;text-align:center;transition:.3s;direction:ltr}
+.q-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+
+.q-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.q-table th,.q-table td{border:2px solid var(--border);padding:8px 14px;text-align:center;font-size:1rem;min-width:60px}
+.q-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.q-table input{width:55px;padding:5px;border:2px solid var(--border);border-radius:4px;text-align:center;font-size:1rem;font-family:inherit;font-weight:700}
+.q-table input:focus{border-color:var(--primary);outline:none}
+.q-table input.correct{border-color:var(--success);background:#ecfdf5}
+.q-table input.wrong{border-color:var(--error);background:#fef2f2}
+
+.q-check-btn{padding:10px 28px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;box-shadow:var(--shadow)}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.92rem;animation:fadeIn .3s}
+.q-feedback.correct{background:#ecfdf5;border-right:4px solid var(--success);color:#065f46}
+.q-feedback.wrong{background:#fef2f2;border-right:4px solid var(--error);color:#991b1b}
+
+.q-nav{display:flex;justify-content:space-between;margin-top:16px}
+.q-nav-btn{padding:10px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Level complete */
+.level-complete{text-align:center;padding:24px;animation:fadeIn .5s}
+.level-complete .big-emoji{font-size:4rem;margin-bottom:12px}
+.level-complete h2{font-size:1.4rem;color:var(--primary-dark);margin-bottom:8px}
+.level-complete .score-display{font-size:1.8rem;font-weight:800;color:var(--success);margin-bottom:16px}
+.level-complete .score-display.medium-score{color:var(--accent)}
+.level-complete .score-display.low-score{color:var(--error)}
+
+/* Celebration confetti */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{
+  0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}
+  100%{transform:translateY(105vh) rotate(720deg) scale(.3);opacity:0}
+}
+
+/* Print button */
+.print-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer;font-size:1rem;box-shadow:var(--shadow);transition:.25s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.print-btn:hover{background:var(--primary-dark);transform:scale(1.1)}
+
+/* SVG styles */
+.func-svg{display:block;margin:12px auto;max-width:100%}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+/* Responsive */
+@media(max-width:600px){
+  .container{padding:0 10px 30px}
+  .step-card,.q-card{padding:18px 14px}
+  .step-title{font-size:1.15rem}
+  .step-summary-grid{grid-template-columns:1fr}
+  .section-toggle{max-width:280px;margin:12px auto}
+  .section-btn{font-size:.88rem;padding:8px 14px}
+  .q-opt{padding:10px 12px;font-size:.9rem}
+  .topbar-title{font-size:.9rem}
+}
+
+/* Print */
+@media print{
+  .topbar,.section-toggle,.step-nav,.q-nav,.print-btn,.level-tabs,.confetti-container,.q-check-btn{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .step-card,.q-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+  .container{max-width:100%}
+  .q-feedback{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">🔢 כיתה ז׳ — מהי פונקציה</span>
+  <div style="display:flex;align-items:center;gap:10px"><button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button><a href="../../../../materials.html">← חזרה לדף החומרים</a></div>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+
+<!-- ===== LEARNING SECTION ===== -->
+<section id="learnSection">
+  <div class="step-progress">
+    <div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div>
+    <div class="step-progress-text" id="stepText"></div>
+  </div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+
+<!-- ===== PRACTICE SECTION ===== -->
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress">
+    <div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div>
+    <div class="level-progress-text" id="levelText"></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+
+</div>
+
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const today=new Date();const dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+let rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(arr){return arr[Math.floor(R()*arr.length)]}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const LETTERS=['א','ב','ג','ד'];
+
+/* ===== STATE ===== */
+let state={section:'learn',step:0,level:'easy',qIndex:0};
+let scores={easy:[],medium:[],hard:[],challenge:[]};
+let answered={easy:[],medium:[],hard:[],challenge:[]};
+let questions={easy:null,medium:null,hard:null,challenge:null};
+const LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+const LEVEL_NAMES={easy:'קל',medium:'בינוני',hard:'קשה',challenge:'אתגר'};
+const TOTAL_STEPS=7;
+
+/* ===== LOCAL STORAGE ===== */
+const LS_KEY='bh_grade7_functions_definition_'+dateSeed;
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores,answered,state}))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+/* ===== SVG HELPERS ===== */
+function svgArrowDiagram(mapping, isFunc, w, h){
+  /* mapping: [{from:label, to:label}, ...], isFunc: boolean */
+  w=w||280;h=h||160;
+  const leftX=60,rightX=w-60,cy=h/2;
+  const fromSet=[...new Set(mapping.map(m=>m.from))];
+  const toSet=[...new Set(mapping.map(m=>m.to))];
+  const fSpacing=Math.min(30,((h-40)/Math.max(fromSet.length-1,1)));
+  const tSpacing=Math.min(30,((h-40)/Math.max(toSet.length-1,1)));
+  const fStart=cy-(fromSet.length-1)*fSpacing/2;
+  const tStart=cy-(toSet.length-1)*tSpacing/2;
+  let svg='<svg class="func-svg" viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg">';
+  svg+='<defs><marker id="ah'+(isFunc?'f':'n')+'" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="'+(isFunc?'#2563eb':'#ef4444')+'"/></marker></defs>';
+  /* ellipses */
+  svg+='<ellipse cx="'+leftX+'" cy="'+cy+'" rx="35" ry="'+(h/2-10)+'" fill="none" stroke="'+(!isFunc?'#ef4444':'#2563eb')+'" stroke-width="2"/>';
+  svg+='<ellipse cx="'+rightX+'" cy="'+cy+'" rx="35" ry="'+(h/2-10)+'" fill="none" stroke="'+(!isFunc?'#ef4444':'#2563eb')+'" stroke-width="2"/>';
+  /* labels */
+  fromSet.forEach((f,i)=>{
+    const y=fStart+i*fSpacing;
+    svg+='<text x="'+leftX+'" y="'+(y+4)+'" text-anchor="middle" font-size="13" font-weight="700" fill="var(--text)">'+f+'</text>';
+  });
+  toSet.forEach((t,i)=>{
+    const y=tStart+i*tSpacing;
+    svg+='<text x="'+rightX+'" y="'+(y+4)+'" text-anchor="middle" font-size="13" font-weight="700" fill="var(--text)">'+t+'</text>';
+  });
+  /* arrows */
+  mapping.forEach(m=>{
+    const fi=fromSet.indexOf(m.from);
+    const ti=toSet.indexOf(m.to);
+    const y1=fStart+fi*fSpacing;
+    const y2=tStart+ti*tSpacing;
+    svg+='<line x1="'+(leftX+35)+'" y1="'+y1+'" x2="'+(rightX-35)+'" y2="'+y2+'" stroke="'+(isFunc?'#2563eb':'#ef4444')+'" stroke-width="1.5" marker-end="url(#ah'+(isFunc?'f':'n')+')"/>';
+  });
+  /* title */
+  svg+='<text x="'+(w/2)+'" y="'+(h-4)+'" text-anchor="middle" font-size="12" font-weight="700" fill="'+(isFunc?'#065f46':'#991b1b')+'">'+(isFunc?'פונקציה ✓':'לא פונקציה ✗')+'</text>';
+  svg+='</svg>';
+  return svg;
+}
+
+function svgGraph(points, isFunc, w, h, label){
+  w=w||200;h=h||160;
+  const pad=25;
+  let svg='<svg class="func-svg" viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:top">';
+  /* axes */
+  svg+='<line x1="'+pad+'" y1="'+(h-pad)+'" x2="'+(w-10)+'" y2="'+(h-pad)+'" stroke="#64748b" stroke-width="1.5" marker-end="url(#axArr)"/>';
+  svg+='<line x1="'+pad+'" y1="'+(h-pad)+'" x2="'+pad+'" y2="10" stroke="#64748b" stroke-width="1.5" marker-end="url(#axArr)"/>';
+  svg+='<defs><marker id="axArr" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 6 2.5, 0 5" fill="#64748b"/></marker></defs>';
+  /* draw shape */
+  if(typeof points==='string'){
+    svg+=points; /* raw path */
+  } else {
+    const path=points.map((p,i)=>(i===0?'M':'L')+' '+(pad+p[0]*(w-pad-15)/10)+' '+((h-pad)-p[1]*(h-pad-15)/10)).join(' ');
+    svg+='<path d="'+path+'" fill="none" stroke="'+(isFunc?'#2563eb':'#ef4444')+'" stroke-width="2.5"/>';
+  }
+  /* labels */
+  svg+='<text x="'+(w-8)+'" y="'+(h-pad+14)+'" font-size="11" fill="#64748b">x</text>';
+  svg+='<text x="'+(pad-14)+'" y="14" font-size="11" fill="#64748b">y</text>';
+  if(label)svg+='<text x="'+(w/2)+'" y="'+(h-2)+'" text-anchor="middle" font-size="11" font-weight="700" fill="'+(isFunc?'#065f46':'#991b1b')+'">'+label+'</text>';
+  svg+='</svg>';
+  return svg;
+}
+
+/* ===== TEACHING SECTION ===== */
+const steps=[
+/* Step 0: Introduction */
+{title:'🏠 המושג פונקציה — מבוא', render(){return `
+<p>חשבו על <strong>מכונת ממתקים</strong>: מכניסים מטבע, ומקבלים ממתק אחד. לכל מטבע — ממתק אחד בדיוק.</p>
+<div class="rule-box">📌 פונקציה = כלל שמתאים <strong>לכל ערך</strong> של <span class="math-expr">x</span> ערך <strong>יחיד</strong> של <span class="math-expr">y</span></div>
+<p><strong>דוגמה מהחיים:</strong> מחיר = <span class="math-expr">5</span> כפול מספר פריטים. אם קניתם 3 פריטים — המחיר הוא 15 ש"ח. לא 15 ועוד 20 — רק 15!</p>
+
+${svgArrowDiagram([{from:'1',to:'5'},{from:'2',to:'10'},{from:'3',to:'15'},{from:'4',to:'20'}],true,280,170)}
+
+<p>ה"מכונה" שלנו: <code>y = 5x</code>. נכניס <span class="math-expr">x</span> — נקבל <span class="math-expr">y</span>.</p>
+<p><strong>שאלה:</strong> אם <span class="math-expr">x = 3</span> והכלל הוא <code>y = 5x</code>, כמה שווה <span class="math-expr">y</span>?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s0input" placeholder="?" aria-label="y כאשר x שווה 3">
+  <button class="mini-btn" onclick="checkS0()">בדקו</button>
+</div>
+<div id="s0fb"></div>
+<div class="reveal" id="s0reveal">
+  <div class="success-box">💡 נכון! <span class="math-expr">y = 5 &middot; 3 = 15</span>. לכל <span class="math-expr">x</span> מתקבל <span class="math-expr">y</span> אחד בדיוק — זוהי פונקציה!</div>
+</div>
+`}},
+
+/* Step 1: Formal definition */
+{title:'📐 הגדרה פורמלית', render(){return `
+<div class="rule-box">📌 פונקציה: לכל ערך <span class="math-expr">x</span> יש <strong>ערך אחד ויחיד</strong> של <span class="math-expr">y</span></div>
+<p><strong>מתי זה לא פונקציה?</strong> כשלאותו <span class="math-expr">x</span> יש <strong>שני ערכי</strong> <span class="math-expr">y</span> שונים.</p>
+
+<div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:16px 0">
+${svgArrowDiagram([{from:'1',to:'a'},{from:'2',to:'b'},{from:'3',to:'c'}],true,220,140)}
+${svgArrowDiagram([{from:'1',to:'a'},{from:'1',to:'b'},{from:'2',to:'c'}],false,220,140)}
+</div>
+
+<p>בתרשים השמאלי: לכל <span class="math-expr">x</span> יש חץ אחד בדיוק — <strong>פונקציה</strong>.</p>
+<p>בתרשים הימני: ל-<span class="math-expr">x = 1</span> יש שני חצים (ל-a ול-b) — <strong>לא פונקציה</strong>!</p>
+
+<div class="highlight">🤔 שימו לב: מותר לשני ערכי <span class="math-expr">x</span> שונים להצביע לאותו <span class="math-expr">y</span>. מה שאסור — שאותו <span class="math-expr">x</span> יצביע לשני <span class="math-expr">y</span> שונים!</div>
+
+<p><strong>שאלה:</strong> התרשים הבא מייצג פונקציה?</p>
+${svgArrowDiagram([{from:'1',to:'5'},{from:'2',to:'5'},{from:'3',to:'7'}],true,240,140)}
+<div class="quiz-options" id="s1opts"></div>
+<div id="s1fb"></div>
+`},init(){
+  const opts=shuffle([
+    {text:'כן — לכל x יש y אחד בדיוק',correct:true},
+    {text:'לא — שני ערכי x מצביעים לאותו y',correct:false}
+  ]);
+  const container=document.getElementById('s1opts');
+  container.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');d.className='quiz-opt';d.textContent=o.text;
+    d.onclick=()=>{
+      container.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s1fb').innerHTML='<div class="feedback-inline ok">✅ נכון! מותר לשני x שונים להגיע לאותו y. כל עוד לכל x יש y אחד — זו פונקציה!</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s1fb').innerHTML='<div class="feedback-inline err">❌ לא נכון. מותר לשני x שונים להצביע על אותו y. השאלה היא: האם לאותו x יש שני y שונים?</div>'}
+    };
+    container.appendChild(d);
+  });
+}},
+
+/* Step 2: Function from table */
+{title:'📊 פונקציה מטבלה', render(){return `
+<p>טבלה מייצגת פונקציה אם <strong>אין ערך <span class="math-expr">x</span> שמופיע פעמיים עם ערכי <span class="math-expr">y</span> שונים</strong>.</p>
+<div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin:16px 0">
+<div>
+<table class="mini-table"><tr><th>x</th><th>y</th></tr><tr><td>1</td><td>3</td></tr><tr><td>2</td><td>5</td></tr><tr><td>3</td><td>7</td></tr><tr><td>4</td><td>9</td></tr></table>
+<div style="text-align:center;font-weight:700;color:#065f46">פונקציה ✓</div>
+</div>
+<div>
+<table class="mini-table"><tr><th>x</th><th>y</th></tr><tr><td>1</td><td>3</td></tr><tr><td>2</td><td>5</td></tr><tr><td style="color:var(--error);font-weight:800">2</td><td style="color:var(--error);font-weight:800">8</td></tr><tr><td>4</td><td>9</td></tr></table>
+<div style="text-align:center;font-weight:700;color:#991b1b">לא פונקציה ✗</div>
+</div>
+</div>
+<p>בטבלה הימנית: <span class="math-expr">x = 2</span> מופיע פעמיים עם <span class="math-expr">y = 5</span> ו-<span class="math-expr">y = 8</span>!</p>
+
+<div class="highlight">💡 <strong>בדיקה:</strong> סרקו את עמודת <span class="math-expr">x</span> — אם אין <span class="math-expr">x</span> חוזר עם <span class="math-expr">y</span> שונה = פונקציה!</div>
+
+<p><strong>שאלה:</strong> האם הטבלה הבאה מייצגת פונקציה?</p>
+<table class="mini-table"><tr><th>x</th><th>y</th></tr><tr><td>1</td><td>4</td></tr><tr><td>3</td><td>4</td></tr><tr><td>5</td><td>6</td></tr><tr><td>7</td><td>8</td></tr></table>
+<div class="quiz-options" id="s2opts"></div>
+<div id="s2fb"></div>
+`},init(){
+  const opts=shuffle([{text:'כן — כל ערכי x שונים זה מזה',correct:true},{text:'לא — יש שני y זהים (4 ו-4)',correct:false}]);
+  const container=document.getElementById('s2opts');container.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');d.className='quiz-opt';d.textContent=o.text;
+    d.onclick=()=>{
+      container.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s2fb').innerHTML='<div class="feedback-inline ok">✅ נכון! כל ערכי x שונים, ולכן זו פונקציה. שני y זהים זה בסדר — הבעיה היא רק כשלאותו x יש y שונה!</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s2fb').innerHTML='<div class="feedback-inline err">❌ שני y זהים זה מותר! הבעיה היא רק כשאותו x נותן שני y שונים. כאן כל x מופיע פעם אחת.</div>'}
+    };
+    container.appendChild(d);
+  });
+}},
+
+/* Step 3: Vertical Line Test */
+{title:'📏 מבחן הקו האנכי', render(){
+  const pad=25,w=200,h=160;
+  /* Straight line y=x */
+  const linePts=[];for(let i=0;i<=10;i+=0.5)linePts.push([i,i]);
+  /* Parabola y=x^2/10 */
+  const parPts=[];for(let i=0;i<=10;i+=0.5)parPts.push([i,i*i/10]);
+  /* Circle: x^2+y^2=25 scaled */
+  const circlePath='<circle cx="'+(pad+5*(w-pad-15)/10)+'" cy="'+((h-pad)-5*(h-pad-15)/10)+'" r="'+Math.min((w-pad-15)/10*4,(h-pad-15)/10*4)+'" fill="none" stroke="#ef4444" stroke-width="2.5"/>';
+  /* S-curve */
+  const sPath='<path d="M '+(pad+1*(w-pad-15)/10)+' '+((h-pad)-2*(h-pad-15)/10)+' C '+(pad+3*(w-pad-15)/10)+' '+((h-pad)-8*(h-pad-15)/10)+' '+(pad+7*(w-pad-15)/10)+' '+((h-pad)-1*(h-pad-15)/10)+' '+(pad+9*(w-pad-15)/10)+' '+((h-pad)-8*(h-pad-15)/10)+'" fill="none" stroke="#ef4444" stroke-width="2.5"/>';
+
+  return `
+<div class="rule-box">📌 מבחן הקו האנכי: כל קו אנכי חותך את הגרף <strong>לכל היותר בנקודה אחת</strong> = פונקציה</div>
+<p>אם קו אנכי חותך את הגרף <strong>בשתי נקודות או יותר</strong> — לאותו <span class="math-expr">x</span> יש שני <span class="math-expr">y</span>, ולכן <strong>לא פונקציה</strong>!</p>
+
+<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:16px 0">
+${svgGraph(linePts,true,w,h,'קו ישר ✓')}
+${svgGraph(parPts,true,w,h,'פרבולה ✓')}
+${svgGraph(circlePath,false,w,h,'מעגל ✗')}
+${svgGraph(sPath,false,w,h,'S ✗')}
+</div>
+
+<p><strong>למה מעגל לא פונקציה?</strong> כי קו אנכי באמצע חותך אותו <strong>בשתי נקודות</strong> — כלומר לאותו <span class="math-expr">x</span> יש שני <span class="math-expr">y</span>!</p>
+
+<div class="highlight">🎯 <strong>כלל אצבע:</strong> קו ישר (שאינו אנכי) ופרבולה "רגילה" — תמיד פונקציה. מעגל ואליפסה — לא!</div>
+
+<p><strong>שאלה:</strong> קו אנכי (כמו <span class="math-expr">x = 3</span>) — האם הוא פונקציה?</p>
+<div class="quiz-options" id="s3opts"></div>
+<div id="s3fb"></div>
+`},init(){
+  const opts=shuffle([{text:'לא — כי יש לו אינסוף ערכי y לכל x',correct:true},{text:'כן — כי הוא קו ישר',correct:false}]);
+  const container=document.getElementById('s3opts');container.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');d.className='quiz-opt';d.textContent=o.text;
+    d.onclick=()=>{
+      container.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s3fb').innerHTML='<div class="feedback-inline ok">✅ נכון! קו אנכי כמו x=3 נותן אינסוף ערכי y לאותו x — לא פונקציה!</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s3fb').innerHTML='<div class="feedback-inline err">❌ לא כל קו ישר הוא פונקציה. קו אנכי נותן אינסוף y לאותו x!</div>'}
+    };
+    container.appendChild(d);
+  });
+}},
+
+/* Step 4: Four representations */
+{title:'🔄 ייצוגים שונים של פונקציה', render(){return `
+<p>אפשר לתאר אותה פונקציה <strong>ב-4 דרכים שונות</strong>:</p>
+<div class="step-summary-grid" style="grid-template-columns:1fr 1fr">
+  <div class="summary-item"><div class="s-icon">💬</div><div class="s-title">מילולי</div><div class="s-text">"כפול 2 ועוד 1"</div></div>
+  <div class="summary-item"><div class="s-icon">📊</div><div class="s-title">טבלה</div><div class="s-text">
+    <table class="mini-table" style="font-size:.8rem;margin:4px auto"><tr><th>x</th><td>1</td><td>2</td><td>3</td></tr><tr><th>y</th><td>3</td><td>5</td><td>7</td></tr></table>
+  </div></div>
+  <div class="summary-item"><div class="s-icon">📈</div><div class="s-title">גרף</div><div class="s-text">קו ישר עולה</div></div>
+  <div class="summary-item"><div class="s-icon">📝</div><div class="s-title">נוסחה</div><div class="s-text"><code>y = 2x + 1</code></div></div>
+</div>
+<p>כל 4 הייצוגים מתארים <strong>את אותה פונקציה!</strong> <code>y = 2x + 1</code></p>
+<div class="example">
+<strong>בדקו:</strong><br>
+• מילולי: "כפול 2 ועוד 1" → כש-<span class="math-expr">x = 1</span>: <span class="math-expr">2 &middot; 1 + 1 = 3</span> ✓<br>
+• טבלה: כש-<span class="math-expr">x = 2</span>, <span class="math-expr">y = 5</span> → <span class="math-expr">2 &middot; 2 + 1 = 5</span> ✓<br>
+• נוסחה: <code>y = 2x + 1</code> → כש-<span class="math-expr">x = 3</span>: <span class="math-expr">2 &middot; 3 + 1 = 7</span> ✓
+</div>
+<div class="highlight">🌟 היכולת לעבור בין ייצוגים היא מיומנות מרכזית — נתרגל אותה בהמשך!</div>
+`}},
+
+/* Step 5: Substitution in functions */
+{title:'🔢 הצבת ערכים בפונקציה', render(){return `
+<div class="rule-box">📌 הסימון <span class="math-expr">f(x)</span> פירושו: "הפונקציה <span class="math-expr">f</span> בנקודה <span class="math-expr">x</span>"</div>
+<p><strong>דוגמה:</strong> נתונה <code>f(x) = 3x - 2</code></p>
+<div class="example">
+• <span class="math-expr">f(4) = 3 &middot; 4 - 2 = 12 - 2 = 10</span><br>
+• <span class="math-expr">f(0) = 3 &middot; 0 - 2 = 0 - 2 = -2</span><br>
+• <span class="math-expr">f(-1) = 3 &middot; (-1) - 2 = -3 - 2 = -5</span>
+</div>
+<p><strong>תורכם:</strong> נתונה <code>f(x) = 2x + 4</code>. חשבו את <span class="math-expr">f(3)</span>:</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s5input1" placeholder="?" aria-label="f(3) כאשר f(x)=2x+4">
+  <button class="mini-btn" onclick="checkS5a()">בדקו</button>
+</div>
+<div id="s5fb1"></div>
+<div class="reveal" id="s5reveal1">
+<p>עכשיו חשבו את <span class="math-expr">f(-2)</span>:</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s5input2" placeholder="?" aria-label="f(-2) כאשר f(x)=2x+4">
+  <button class="mini-btn" onclick="checkS5b()">בדקו</button>
+</div>
+<div id="s5fb2"></div>
+</div>
+<div class="reveal" id="s5reveal2">
+  <div class="success-box">🌟 שימו לב: <span class="math-expr">f(-2) = 0</span>. הנקודה שבה <span class="math-expr">f(x) = 0</span> נקראת <strong>"שורש הפונקציה"</strong> או <strong>"נקודת אפס"</strong>!</div>
+</div>
+`}},
+
+/* Step 6: Summary */
+{title:'🏆 סיכום', render(){return `
+<p style="font-size:1.1rem;text-align:center;margin-bottom:20px">בשיעור הזה למדנו:</p>
+<div class="step-summary-grid">
+  <div class="summary-item">
+    <div class="s-icon">📌</div>
+    <div class="s-title">הגדרה</div>
+    <div class="s-text">לכל x — ערך y אחד ויחיד</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">📊</div>
+    <div class="s-title">טבלה</div>
+    <div class="s-text">אין x חוזר עם y שונה</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">📏</div>
+    <div class="s-title">מבחן קו אנכי</div>
+    <div class="s-text">קו אנכי חותך לכל היותר בנקודה אחת</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🔄</div>
+    <div class="s-title">4 ייצוגים</div>
+    <div class="s-text">מילולי, טבלה, גרף, נוסחה</div>
+  </div>
+</div>
+<div class="success-box" style="text-align:center;font-size:1.1rem;margin-top:20px">
+  <p>🌟 עכשיו אתם מוכנים לתרגול!</p>
+  <p>4 רמות קושי מחכות לכם</p>
+  <button class="mini-btn accent" style="margin-top:12px;font-size:1rem;padding:12px 32px" onclick="switchSection('practice')">!מוכנים לתרגול ←</button>
+</div>
+`}}
+];
+
+function renderStep(idx){
+  state.step=idx;
+  const s=steps[idx];
+  const fill=((idx+1)/TOTAL_STEPS*100).toFixed(0);
+  document.getElementById('stepFill').style.width=fill+'%';
+  document.getElementById('stepText').textContent='שלב '+(idx+1)+' מתוך '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+s.title+'</div>'+s.render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'לתרגול ←':'הבא ←';
+  if(s.init) s.init();
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+/* Step interactive handlers */
+window.checkS0=function(){
+  const v=parseInt(document.getElementById('s0input').value);
+  const fb=document.getElementById('s0fb');
+  if(v===15){fb.innerHTML='<div class="feedback-inline ok">✅ מעולה! 5 &middot; 3 = 15</div>';document.getElementById('s0reveal').classList.add('show')}
+  else if(isNaN(v)){fb.innerHTML='<div class="feedback-inline err">הקלידו מספר</div>'}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. y = 5 &middot; 3 = ?</div>'}
+};
+window.checkS5a=function(){
+  const v=parseInt(document.getElementById('s5input1').value);
+  if(v===10){document.getElementById('s5fb1').innerHTML='<div class="feedback-inline ok">✅ נכון! f(3) = 2&middot;3 + 4 = 10</div>';document.getElementById('s5input1').classList.add('correct');document.getElementById('s5reveal1').classList.add('show')}
+  else{document.getElementById('s5fb1').innerHTML='<div class="feedback-inline err">❌ נסו שוב. f(3) = 2&middot;3 + 4 = ?</div>'}
+};
+window.checkS5b=function(){
+  const v=parseInt(document.getElementById('s5input2').value);
+  if(v===0){document.getElementById('s5fb2').innerHTML='<div class="feedback-inline ok">✅ מעולה! f(-2) = 2&middot;(-2) + 4 = -4 + 4 = 0</div>';document.getElementById('s5input2').classList.add('correct');document.getElementById('s5reveal2').classList.add('show')}
+  else{document.getElementById('s5fb2').innerHTML='<div class="feedback-inline err">❌ נסו שוב. f(-2) = 2&middot;(-2) + 4 = -4 + 4 = ?</div>'}
+};
+
+/* ===== SVG HELPERS FOR QUESTIONS ===== */
+function makeTableHTML(rows,highlight){
+  let h='<table class="q-table"><tr><th>x</th><th>y</th></tr>';
+  rows.forEach((r,i)=>{
+    const hl=highlight&&highlight.includes(i);
+    h+='<tr><td'+(hl?' style="color:var(--error);font-weight:800"':'')+'>'+r[0]+'</td><td'+(hl?' style="color:var(--error);font-weight:800"':'')+'>'+r[1]+'</td></tr>';
+  });
+  h+='</table>';return h;
+}
+
+function makeSmallGraphSVG(shape,isFunc,w,h){
+  w=w||180;h=h||140;
+  const pad=22;
+  let svg='<svg class="func-svg" viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:top;margin:4px">';
+  svg+='<line x1="'+pad+'" y1="'+(h-pad)+'" x2="'+(w-8)+'" y2="'+(h-pad)+'" stroke="#94a3b8" stroke-width="1"/>';
+  svg+='<line x1="'+pad+'" y1="'+(h-pad)+'" x2="'+pad+'" y2="8" stroke="#94a3b8" stroke-width="1"/>';
+  const sx=(w-pad-12)/10,sy=(h-pad-12)/10;
+  if(shape==='line'){
+    const m=RI(1,3),b=RI(0,3);
+    let pts=[];for(let i=0;i<=10;i+=0.5){const y2=m*i/2+b;if(y2<=10)pts.push([i/2,y2]);}
+    if(pts.length>1){const d=pts.map((p,j)=>(j===0?'M':'L')+' '+(pad+p[0]*2*sx)+' '+((h-pad)-p[1]*sy)).join(' ');svg+='<path d="'+d+'" fill="none" stroke="#2563eb" stroke-width="2.5"/>';}
+  } else if(shape==='parabola'){
+    let pts=[];for(let i=-5;i<=5;i+=0.5){const y2=i*i/3;if(y2<=10)pts.push([i+5,y2]);}
+    const d=pts.map((p,j)=>(j===0?'M':'L')+' '+(pad+p[0]*sx)+' '+((h-pad)-p[1]*sy)).join(' ');
+    svg+='<path d="'+d+'" fill="none" stroke="#2563eb" stroke-width="2.5"/>';
+  } else if(shape==='circle'){
+    const cx2=pad+5*sx,cy2=(h-pad)-5*sy,r=3.5*Math.min(sx,sy);
+    svg+='<circle cx="'+cx2+'" cy="'+cy2+'" r="'+r+'" fill="none" stroke="#ef4444" stroke-width="2.5"/>';
+  } else if(shape==='horizontal'){
+    const y2=RI(3,7);
+    svg+='<line x1="'+pad+'" y1="'+((h-pad)-y2*sy)+'" x2="'+(w-12)+'" y2="'+((h-pad)-y2*sy)+'" stroke="#2563eb" stroke-width="2.5"/>';
+  } else if(shape==='vertical'){
+    const x2=RI(3,7);
+    svg+='<line x1="'+(pad+x2*sx)+'" y1="12" x2="'+(pad+x2*sx)+'" y2="'+(h-pad)+'" stroke="#ef4444" stroke-width="2.5"/>';
+  } else if(shape==='ellipseH'){
+    const cx2=pad+5*sx,cy2=(h-pad)-5*sy;
+    svg+='<ellipse cx="'+cx2+'" cy="'+cy2+'" rx="'+(4*sx)+'" ry="'+(2.5*sy)+'" fill="none" stroke="#ef4444" stroke-width="2.5"/>';
+  } else if(shape==='absval'){
+    const cx2=5,cy2=0;
+    let pts=[];for(let i=0;i<=10;i+=0.5){pts.push([i,Math.abs(i-5)]);}
+    const d=pts.map((p,j)=>(j===0?'M':'L')+' '+(pad+p[0]*sx)+' '+((h-pad)-p[1]*sy)).join(' ');
+    svg+='<path d="'+d+'" fill="none" stroke="#2563eb" stroke-width="2.5"/>';
+  } else if(shape==='cubic'){
+    let pts=[];for(let i=0;i<=10;i+=0.25){const t=(i-5)/3;const y2=t*t*t/2+5;if(y2>=0&&y2<=10)pts.push([i,y2]);}
+    if(pts.length>1){const d=pts.map((p,j)=>(j===0?'M':'L')+' '+(pad+p[0]*sx)+' '+((h-pad)-p[1]*sy)).join(' ');svg+='<path d="'+d+'" fill="none" stroke="#2563eb" stroke-width="2.5"/>';}
+  }
+  const color=isFunc?'#065f46':'#991b1b';
+  svg+='<text x="'+(w/2)+'" y="'+(h-2)+'" text-anchor="middle" font-size="11" font-weight="700" fill="'+color+'">'+(isFunc?'✓':'✗')+'</text>';
+  svg+='</svg>';
+  return svg;
+}
+
+/* ===== QUESTION GENERATORS ===== */
+function genEasy(){
+  rng=mulberry32(dateSeed+100);
+  const qs=[];
+
+  /* Q1-5: "Is this table a function?" */
+  for(let i=0;i<5;i++){
+    const isFunc=i<3;
+    let rows=[];
+    if(isFunc){
+      const xs=shuffle([1,2,3,4,5,6,7,8]).slice(0,4).sort((a,b)=>a-b);
+      const m=RI(1,4),b=RI(0,5);
+      rows=xs.map(x=>[x,m*x+b]);
+    } else {
+      const xs=[RI(1,3),RI(4,6),RI(7,9),RI(1,3)];
+      xs[3]=xs[0]; /* duplicate x */
+      const ys=xs.map(()=>RI(1,15));
+      ys[3]=ys[0]+RI(1,5); /* different y */
+      rows=xs.map((x,j)=>[x,ys[j]]);
+    }
+    const correct=isFunc?'כן — לכל x יש y אחד':'לא — יש x שחוזר עם y שונה';
+    const wrong=isFunc?'לא — יש x שחוזר עם y שונה':'כן — לכל x יש y אחד';
+    const d1=isFunc?'לא — אין מספיק ערכים':'כן — כל הערכים שונים';
+    const d2=isFunc?'לא — הערכים לא עולים':'כן — הערכים עולים';
+    const opts=shuffle([correct,wrong,d1,d2]);
+    qs.push({type:'mc',stem:'האם הטבלה הבאה מייצגת פונקציה?<br>'+makeTableHTML(rows,isFunc?null:[rows.length-1]),options:opts,answer:opts.indexOf(correct),
+      explanation:isFunc?'כן! כל ערכי x שונים זה מזה — לכל x יש y אחד בדיוק.':'לא! x='+rows[rows.length-1][0]+' מופיע פעמיים עם ערכי y שונים ('+rows[0][1]+' ו-'+rows[rows.length-1][1]+').'});
+  }
+
+  /* Q6-10: "Calculate f(x) for given value" (simple formulas) */
+  for(let i=0;i<5;i++){
+    const formulas=[
+      {expr:'2x',calc:x=>2*x,display:'2x'},
+      {expr:'x + 3',calc:x=>x+3,display:'x + 3'},
+      {expr:'3x',calc:x=>3*x,display:'3x'},
+      {expr:'x + 5',calc:x=>x+5,display:'x + 5'},
+      {expr:'4x',calc:x=>4*x,display:'4x'},
+      {expr:'x - 1',calc:x=>x-1,display:'x - 1'},
+      {expr:'2x + 1',calc:x=>2*x+1,display:'2x + 1'},
+      {expr:'x + 7',calc:x=>x+7,display:'x + 7'}
+    ];
+    const f=pick(formulas);
+    const xv=RI(1,8);
+    const ans=f.calc(xv);
+    const correct=''+ans;
+    const w1=''+(ans+RI(1,3));
+    const w2=''+(ans-RI(1,3));
+    const w3=''+(ans+RI(4,7));
+    const opts=shuffle([correct,w1,w2,w3]);
+    qs.push({type:'mc',stem:'נתונה <code>f(x) = '+f.display+'</code>. חשבו את <span class="math-expr">f('+xv+')</span>.',options:opts,answer:opts.indexOf(correct),
+      explanation:'f('+xv+') = '+f.display.replace(/x/g,xv)+' = <strong>'+ans+'</strong>'});
+  }
+
+  /* Q11-15: "Is this graph a function?" */
+  for(let i=0;i<5;i++){
+    const funcShapes=['line','parabola','horizontal','absval','cubic'];
+    const nonFuncShapes=['circle','vertical','ellipseH'];
+    const isFunc=i<3;
+    const shape=isFunc?pick(funcShapes):pick(nonFuncShapes);
+    const graphSVG=makeSmallGraphSVG(shape,isFunc,200,150);
+    const correct=isFunc?'כן — כל קו אנכי חותך בנקודה אחת':'לא — קו אנכי חותך ביותר מנקודה אחת';
+    const wrong=isFunc?'לא — קו אנכי חותך ביותר מנקודה אחת':'כן — כל קו אנכי חותך בנקודה אחת';
+    const d1='לא ניתן לדעת מהגרף';
+    const d2=isFunc?'לא — הגרף לא ישר':'כן — הגרף סימטרי';
+    const opts=shuffle([correct,wrong,d1,d2]);
+    qs.push({type:'mc',stem:'האם הגרף הבא מייצג פונקציה? (השתמשו במבחן הקו האנכי)<br>'+graphSVG,options:opts,answer:opts.indexOf(correct),
+      explanation:isFunc?'כן! כל קו אנכי חותך את הגרף בנקודה אחת לכל היותר — פונקציה.':'לא! ניתן למצוא קו אנכי שחותך את הגרף ביותר מנקודה אחת — לא פונקציה.'});
+  }
+
+  /* Q16-20: "Given f(x)=ax+b, what is f(c)?" */
+  for(let i=0;i<5;i++){
+    const a=RI(2,6);const b=RI(0,5);const xv=RI(1,8);
+    const expr=b===0?a+'x':a+'x + '+b;
+    const ans=a*xv+b;
+    const correct=''+ans;
+    const w1=''+(a+xv+b);
+    const w2=''+(ans+RI(1,4));
+    const w3=''+(ans-RI(1,3));
+    const opts=shuffle([correct,w1,w2,w3]);
+    qs.push({type:'mc',stem:'נתונה <code>f(x) = '+expr+'</code>. מהו <span class="math-expr">f('+xv+')</span>?',options:opts,answer:opts.indexOf(correct),
+      explanation:'f('+xv+') = '+a+' &middot; '+xv+(b>0?' + '+b:'')+' = '+(a*xv)+(b>0?' + '+b:'')+' = <strong>'+ans+'</strong>'});
+  }
+
+  return qs;
+}
+
+function genMedium(){
+  rng=mulberry32(dateSeed+200);
+  const qs=[];
+
+  /* Q1-5: "Complete table based on formula" */
+  for(let i=0;i<5;i++){
+    const m=RI(2,5);const b=RI(0,6);
+    const expr=b===0?m+'x':m+'x + '+b;
+    const xs=[1,2,3,4,5];
+    const results=xs.map(x=>m*x+b);
+    const blanks=shuffle([0,1,2,3,4]).slice(0,3);
+    qs.push({type:'table',stem:'השלימו את הטבלה עבור <code>f(x) = '+expr+'</code>',expression:'f(x) = '+expr,rows:xs.map((x,j)=>({x,result:results[j],blank:blanks.includes(j)})),
+      explanation:'הציבו כל ערך של <span class="math-expr">x</span> בנוסחה <code>f(x) = '+expr+'</code>'});
+  }
+
+  /* Q6-10: "Which representation matches the verbal description?" */
+  for(let i=0;i<5;i++){
+    const m=RI(2,5);const b=RI(1,6);
+    const verbal='"כפול '+m+' ועוד '+b+'"';
+    const correctExpr=m+'x + '+b;
+    const w1=m+'x - '+b;
+    const w2=(m+1)+'x + '+(b-1);
+    const w3=b+'x + '+m;
+    const opts=shuffle([correctExpr,w1,w2,w3]);
+    qs.push({type:'mc',stem:'איזו נוסחה מתאימה לתיאור המילולי '+verbal+'?',options:opts,answer:opts.indexOf(correctExpr),
+      explanation:verbal+' = <code>'+correctExpr+'</code>: קודם כופלים ב-'+m+' ואז מוסיפים '+b});
+  }
+
+  /* Q11-15: "f(x)=mx+b. Find x when f(x)=target" */
+  for(let i=0;i<5;i++){
+    const m=RI(2,5);const b=RI(1,6);
+    const xAns=RI(2,8);
+    const target=m*xAns+b;
+    const expr=m+'x + '+b;
+    const correct=''+xAns;
+    const w1=''+(xAns+1);
+    const w2=''+(xAns-1);
+    const w3=''+Math.round(target/m);
+    const opts=shuffle([correct,w1,w2,w3]);
+    qs.push({type:'mc',stem:'נתונה <code>f(x) = '+expr+'</code>. מצאו את <span class="math-expr">x</span> כאשר <span class="math-expr">f(x) = '+target+'</span>.',options:opts,answer:opts.indexOf(correct),
+      explanation:'<span class="math-expr">'+expr+' = '+target+'</span> &rarr; <span class="math-expr">'+m+'x = '+(target-b)+'</span> &rarr; <span class="math-expr">x = '+xAns+'</span>'});
+  }
+
+  /* Q16-20: "For each table: function? Justify" with arrow diagrams */
+  for(let i=0;i<5;i++){
+    const isFunc=i<3;
+    let mapping=[];
+    if(isFunc){
+      const from=shuffle([1,2,3,4]).slice(0,3);
+      const to=['a','b','c','d'];
+      mapping=from.map((f,j)=>({from:''+f,to:to[j%to.length]}));
+    } else {
+      mapping=[{from:'1',to:'a'},{from:'1',to:'b'},{from:'2',to:'c'}];
+      if(i===4) mapping=[{from:'3',to:'x'},{from:'3',to:'y'},{from:'4',to:'z'}];
+    }
+    const diag=svgArrowDiagram(mapping,isFunc,260,150);
+    const correct=isFunc?'כן — לכל x חץ אחד בלבד':'לא — יש x עם שני חצים';
+    const wrong=isFunc?'לא — יש x עם שני חצים':'כן — לכל x חץ אחד בלבד';
+    const d1=isFunc?'לא — חסרים ערכים':'כן — כל החצים שונים';
+    const d2=isFunc?'לא — שני x מגיעים לאותו y':'כן — יש 3 חצים';
+    const opts=shuffle([correct,wrong,d1,d2]);
+    qs.push({type:'mc',stem:'האם תרשים החצים הבא מייצג פונקציה?<br>'+diag,options:opts,answer:opts.indexOf(correct),
+      explanation:isFunc?'כן! מכל ערך בצד שמאל יוצא חץ אחד בלבד — פונקציה.':'לא! מהערך '+mapping[0].from+' יוצאים שני חצים (ל-'+mapping[0].to+' ול-'+mapping[1].to+') — לא פונקציה!'});
+  }
+
+  return qs;
+}
+
+function generateQuestions(level){
+  if(level==='easy') return genEasy();
+  if(level==='medium') return genMedium();
+  if(level==='hard') return genHard();
+  return genChallenge();
+}
+
+/* ===== PRACTICE RENDERING ===== */
+function renderLevelTabs(){
+  const container=document.getElementById('levelTabs');
+  container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(lv=>{
+    const btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    const done=scores[lv].filter(s=>s===1).length;
+    const total=LEVEL_COUNTS[lv];
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+total+')</span>':'');
+    btn.onclick=()=>switchLevel(lv);
+    container.appendChild(btn);
+  });
+}
+
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv]) questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+
+function updateLevelProgress(){
+  const lv=state.level;const total=LEVEL_COUNTS[lv];
+  const done=answered[lv].filter(a=>a).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+
+function renderQuestion(){
+  const lv=state.level;const idx=state.qIndex;
+  const qs=questions[lv];
+  if(!qs) return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  const q=qs[idx];
+  const area=document.getElementById('questionArea');
+  const isAnswered=answered[lv][idx];
+
+  let html='<div class="q-card"><div class="q-number">שאלה '+(idx+1)+' מתוך '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach((opt,i)=>{
+      const letter=LETTERS[i];
+      let cls='q-opt';
+      if(isAnswered){
+        cls+=' disabled';
+        if(i===q.answer) cls+=' correct';
+        else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel']) cls+=' wrong';
+      }
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>בדקו</button>';
+  } else if(q.type==='input'||q.type==='input-text'){
+    html+='<div class="q-input-row"><input type="'+(q.type==='input'?'number':'text')+'" class="q-input" id="qInput" placeholder="תשובה" dir="ltr" aria-label="תשובה">';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">בדקו</button>';
+    html+='</div>';
+    if(isAnswered){
+      const inp=q.type==='input'?q.answer:(q.display||q.answer[0]);
+      html+='<div style="margin-top:4px;font-weight:700;direction:ltr">תשובה: '+inp+'</div>';
+    }
+  } else if(q.type==='table'){
+    html+='<table class="q-table"><tr><th style="direction:ltr">x</th><th style="direction:ltr">'+q.expression+'</th></tr>';
+    q.rows.forEach((row,ri)=>{
+      html+='<tr><td>'+row.x+'</td><td>';
+      if(row.blank&&!isAnswered) html+='<input type="number" class="q-table-input" data-ri="'+ri+'" data-ans="'+row.result+'">';
+      else html+=row.result;
+      html+='</td></tr>';
+    });
+    html+='</table>';
+    if(!isAnswered) html+='<div style="text-align:center;margin-top:8px"><button class="q-check-btn" id="qCheckBtn" onclick="checkTable2()">בדקו</button></div>';
+  }
+
+  if(isAnswered){
+    const isCorrect=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'✅ נכון! ':'❌ ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+
+  /* Set up MC click handlers */
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(el=>{
+      el.onclick=()=>{
+        area.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+  /* Set up input enter key */
+  const inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){
+    inp.focus();
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkInput()});
+  }
+
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'סיום':'הבא ←';
+}
+
+window.checkMC=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const selected=document.querySelector('.q-opt.selected');
+  if(!selected) return;
+  const si=parseInt(selected.dataset.i);
+  const isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  answered[lv][idx+'_sel']=si;
+
+  document.querySelectorAll('.q-opt').forEach((el,i)=>{
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer) el.classList.add('correct');
+    else if(i===si&&!isCorrect) el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון מאוד!','✅ יפה!'])+' ':'❌ לא נכון. ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkInput=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inp=document.getElementById('qInput');
+  const val=inp.value.trim();
+  if(!val) return;
+  let isCorrect=false;
+  if(q.type==='input'){
+    isCorrect=parseFloat(val)===q.answer;
+  } else {
+    const norm=val.replace(/\s+/g,'').toLowerCase();
+    isCorrect=q.answer.some(a=>a.replace(/\s+/g,'').toLowerCase()===norm);
+  }
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');
+  inp.disabled=true;
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון!'])+' ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkTable2=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inputs=document.querySelectorAll('.q-table-input');
+  let allCorrect=true;
+  inputs.forEach(inp=>{
+    const ans=parseInt(inp.dataset.ans);
+    const val=parseInt(inp.value);
+    if(val===ans){inp.classList.add('correct')}
+    else{inp.classList.add('wrong');allCorrect=false}
+  });
+  scores[lv][idx]=allCorrect?1:0;
+  answered[lv][idx]=true;
+  inputs.forEach(inp=>inp.disabled=true);
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(allCorrect?'correct':'wrong')+'">'+(allCorrect?'✅ מעולה! ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+function nextQuestion(){
+  const lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function')showAuthModal();
+    return;
+  }
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+
+function renderLevelComplete(){
+  const lv=state.level;
+  const correct=scores[lv].filter(s=>s===1).length;
+  const total=LEVEL_COUNTS[lv];
+  const pct=Math.round(correct/total*100);
+  const scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  const emoji=pct>=80?'🎉':pct>=50?'👏':'💪';
+
+  document.getElementById('questionArea').innerHTML=`
+    <div class="q-card"><div class="level-complete">
+      <div class="big-emoji">${emoji}</div>
+      <h2>סיימתם את רמת "${LEVEL_NAMES[lv]}"!</h2>
+      <div class="score-display${scoreClass}">${correct} / ${total}</div>
+      <p style="color:var(--text-light);margin-bottom:16px">${pct}% הצלחה</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="mini-btn" onclick="retryLevel()">🔄 נסו שוב</button>
+        ${lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">▶ לרמה הבאה</button>':''}
+      </div>
+    </div></div>`;
+
+  if(pct>=80) showConfetti();
+  saveState();
+}
+
+window.retryLevel=function(){
+  const lv=state.level;
+  scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);
+  state.qIndex=0;
+  renderLevelTabs();renderQuestion();saveState();
+};
+
+window.nextLevel=function(){
+  const order=['easy','medium','hard','challenge'];
+  const ci=order.indexOf(state.level);
+  if(ci<order.length-1) switchLevel(order[ci+1]);
+};
+
+/* ===== SECTION SWITCHING ===== */
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.section===sec);
+  });
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+/* ===== CONFETTI ===== */
+function showConfetti(){
+  const box=document.getElementById('confettiBox');
+  box.innerHTML='';
+  const colors=['#2563eb','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';
+    c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(()=>box.innerHTML='',5000);
+}
+
+/* ===== INIT ===== */
+function init(){
+  loadState();
+  Object.keys(LEVEL_COUNTS).forEach(lv=>{
+    if(!scores[lv]||!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice') switchSection('practice');
+}
+init();
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

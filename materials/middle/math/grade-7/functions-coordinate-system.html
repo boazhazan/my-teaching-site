@@ -1,0 +1,1227 @@
+<!--
+  Title: נקודות במערכת צירים
+  Unit: פונקציות ומערכת צירים
+  Subject: מתמטיקה
+  Grade: ז׳
+  Tags: מערכת צירים, נקודות, רביעים, קואורדינטות
+  Ages: 12-13
+  Icon: 📍
+  Description: מהי מערכת צירים? איך מסמנים נקודות? רביעים, נקודות על הצירים ותרגול ב-4 רמות קושי
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>נקודות במערכת צירים | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+
+/* Top bar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Section toggle */
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+
+/* Container */
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+
+/* ===== TEACHING SECTION ===== */
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid var(--accent);padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
+.step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+
+/* Interactive elements inside steps */
+.mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.mini-table th,.mini-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:1rem}
+.mini-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.mini-table td{background:var(--bg)}
+.mini-input{width:60px;padding:6px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:1rem;font-family:inherit;font-weight:700;transition:.3s}
+.mini-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.mini-input.correct{border-color:var(--success);background:#ecfdf5}
+.mini-input.wrong{border-color:var(--error);background:#fef2f2}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.reveal{display:none;animation:fadeIn .5s ease}
+.reveal.show{display:block}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+
+/* Step nav */
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== PRACTICE SECTION ===== */
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-stem code,.q-stem .expr{font-size:1.1em}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;transition:.25s}
+.q-opt.selected .q-opt-letter{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-opt.correct .q-opt-letter{background:var(--success);color:#fff;border-color:var(--success)}
+.q-opt.wrong .q-opt-letter{background:var(--error);color:#fff;border-color:var(--error)}
+
+.q-check-btn{padding:10px 28px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;box-shadow:var(--shadow)}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.92rem;animation:fadeIn .3s}
+.q-feedback.correct{background:#ecfdf5;border-right:4px solid var(--success);color:#065f46}
+.q-feedback.wrong{background:#fef2f2;border-right:4px solid var(--error);color:#991b1b}
+
+.q-nav{display:flex;justify-content:space-between;margin-top:16px}
+.q-nav-btn{padding:10px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Level complete */
+.level-complete{text-align:center;padding:24px;animation:fadeIn .5s}
+.level-complete .big-emoji{font-size:4rem;margin-bottom:12px}
+.level-complete h2{font-size:1.4rem;color:var(--primary-dark);margin-bottom:8px}
+.level-complete .score-display{font-size:1.8rem;font-weight:800;color:var(--success);margin-bottom:16px}
+.level-complete .score-display.medium-score{color:var(--accent)}
+.level-complete .score-display.low-score{color:var(--error)}
+
+/* Celebration confetti */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{
+  0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}
+  100%{transform:translateY(105vh) rotate(720deg) scale(.3);opacity:0}
+}
+
+/* Print button */
+.print-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer;font-size:1rem;box-shadow:var(--shadow);transition:.25s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.print-btn:hover{background:var(--primary-dark);transform:scale(1.1)}
+
+/* SVG coordinate system */
+.coord-svg{display:block;margin:16px auto;max-width:100%}
+.coord-svg text{font-family:'Rubik',sans-serif;font-size:12px;fill:#1e293b}
+.coord-svg .axis{stroke:#1e293b;stroke-width:2}
+.coord-svg .grid{stroke:#e2e8f0;stroke-width:0.5}
+.coord-svg .point{fill:var(--primary);stroke:#fff;stroke-width:2}
+.coord-svg .dashed{stroke:var(--primary);stroke-width:1;stroke-dasharray:4,3;opacity:.6}
+.quadrant-label{font-family:'Rubik',sans-serif;font-size:18px;font-weight:700;fill-opacity:.35}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+/* Responsive */
+@media(max-width:600px){
+  .container{padding:0 10px 30px}
+  .step-card,.q-card{padding:18px 14px}
+  .step-title{font-size:1.15rem}
+  .step-summary-grid{grid-template-columns:1fr}
+  .section-toggle{max-width:280px;margin:12px auto}
+  .section-btn{font-size:.88rem;padding:8px 14px}
+  .q-opt{padding:10px 12px;font-size:.9rem}
+  .topbar-title{font-size:.9rem}
+}
+
+/* Print */
+@media print{
+  .topbar,.section-toggle,.step-nav,.q-nav,.print-btn,.level-tabs,.confetti-container,.q-check-btn{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .step-card,.q-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+  .container{max-width:100%}
+  .q-feedback{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">📍 כיתה ז׳ — נקודות במערכת צירים</span>
+  <div style="display:flex;align-items:center;gap:10px"><button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button><a href="../../../../materials.html">← חזרה לדף החומרים</a></div>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+
+<!-- ===== LEARNING SECTION ===== -->
+<section id="learnSection">
+  <div class="step-progress">
+    <div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div>
+    <div class="step-progress-text" id="stepText"></div>
+  </div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+
+<!-- ===== PRACTICE SECTION ===== -->
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress">
+    <div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div>
+    <div class="level-progress-text" id="levelText"></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+
+</div>
+
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const today=new Date();const dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+let rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(arr){return arr[Math.floor(R()*arr.length)]}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const LETTERS=['א','ב','ג','ד'];
+
+/* ===== SVG HELPER ===== */
+var _svgId=0;
+function coordSVG(opts){
+  _svgId++;
+  var mid='ah'+_svgId;
+  const W=opts.w||320,H=opts.h||320,range=opts.range||5,pad=35;
+  const cx=W/2,cy=H/2;
+  const scale=(W-2*pad)/(2*range);
+  function tx(x){return cx+x*scale}
+  function ty(y){return cy-y*scale}
+  let svg='<svg class="coord-svg" viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'">';
+  svg+='<defs><marker id="'+mid+'" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#1e293b"/></marker></defs>';
+  /* quadrant fills (background layer) */
+  if(opts.quadrantFills){
+    var lx0=tx(0),ly0=ty(0),lxR=tx(range),lyR=ty(range),lxL=tx(-range),lyL=ty(-range);
+    svg+='<rect x="'+lx0+'" y="'+lyR+'" width="'+(lxR-lx0)+'" height="'+(ly0-lyR)+'" fill="#bbf7d0" opacity=".2"/>';
+    svg+='<rect x="'+lxL+'" y="'+lyR+'" width="'+(lx0-lxL)+'" height="'+(ly0-lyR)+'" fill="#bfdbfe" opacity=".2"/>';
+    svg+='<rect x="'+lxL+'" y="'+ly0+'" width="'+(lx0-lxL)+'" height="'+(lyL-ly0)+'" fill="#fed7aa" opacity=".2"/>';
+    svg+='<rect x="'+lx0+'" y="'+ly0+'" width="'+(lxR-lx0)+'" height="'+(lyL-ly0)+'" fill="#fecaca" opacity=".2"/>';
+  }
+  /* quadrant labels */
+  if(opts.quadrants){
+    var qr=range*0.55;
+    svg+='<text class="quadrant-label" x="'+tx(qr)+'" y="'+ty(qr)+'" text-anchor="middle">I</text>';
+    svg+='<text class="quadrant-label" x="'+tx(-qr)+'" y="'+ty(qr)+'" text-anchor="middle">II</text>';
+    svg+='<text class="quadrant-label" x="'+tx(-qr)+'" y="'+ty(-qr)+'" text-anchor="middle">III</text>';
+    svg+='<text class="quadrant-label" x="'+tx(qr)+'" y="'+ty(-qr)+'" text-anchor="middle">IV</text>';
+  }
+  /* grid */
+  for(let i=-range;i<=range;i++){
+    svg+='<line class="grid" x1="'+tx(i)+'" y1="'+pad+'" x2="'+tx(i)+'" y2="'+(H-pad)+'"/>';
+    svg+='<line class="grid" x1="'+pad+'" y1="'+ty(i)+'" x2="'+(W-pad)+'" y2="'+ty(i)+'"/>';
+  }
+  /* axes */
+  svg+='<line class="axis" x1="'+pad+'" y1="'+cy+'" x2="'+(W-pad)+'" y2="'+cy+'" marker-end="url(#'+mid+')"/>';
+  svg+='<line class="axis" x1="'+cx+'" y1="'+(H-pad)+'" x2="'+cx+'" y2="'+pad+'" marker-end="url(#'+mid+')"/>';
+  /* tick labels */
+  for(let i=-range;i<=range;i++){
+    if(i===0) continue;
+    svg+='<text x="'+tx(i)+'" y="'+(cy+16)+'" text-anchor="middle" style="font-size:11px">'+i+'</text>';
+    svg+='<text x="'+(cx-12)+'" y="'+(ty(i)+4)+'" text-anchor="end" style="font-size:11px">'+i+'</text>';
+  }
+  svg+='<text x="'+(W-pad+8)+'" y="'+(cy+4)+'" style="font-size:13px;font-weight:700">x</text>';
+  svg+='<text x="'+(cx+8)+'" y="'+(pad-6)+'" style="font-size:13px;font-weight:700">y</text>';
+  svg+='<text x="'+(cx-12)+'" y="'+(cy+16)+'" text-anchor="end" style="font-size:11px">0</text>';
+  /* dashed guide lines */
+  if(opts.guides){
+    opts.guides.forEach(function(g){
+      svg+='<line class="dashed" x1="'+tx(g.x1)+'" y1="'+ty(g.y1)+'" x2="'+tx(g.x2)+'" y2="'+ty(g.y2)+'"/>';
+    });
+  }
+  /* points */
+  if(opts.points){
+    opts.points.forEach(function(p){
+      const color=p.color||'#2563eb';
+      svg+='<circle cx="'+tx(p.x)+'" cy="'+ty(p.y)+'" r="6" fill="'+color+'" stroke="#fff" stroke-width="2"/>';
+      if(p.label){
+        var lx=tx(p.x)+(p.labelDx||8), ly=ty(p.y)+(p.labelDy||-10);
+        svg+='<text x="'+lx+'" y="'+ly+'" style="font-size:13px;font-weight:700;fill:'+color+'">'+p.label+'</text>';
+      }
+    });
+  }
+  /* custom extra svg */
+  if(opts.extra) svg+=opts.extra;
+  svg+='</svg>';
+  return svg;
+}
+/* small SVG for practice questions */
+function qCoordSVG(pts,opts){
+  opts=opts||{};
+  opts.w=opts.w||280;opts.h=opts.h||280;opts.range=opts.range||5;
+  opts.points=pts;
+  return coordSVG(opts);
+}
+
+/* ===== STATE ===== */
+let state={section:'learn',step:0,level:'easy',qIndex:0};
+let scores={easy:[],medium:[],hard:[],challenge:[]};
+let answered={easy:[],medium:[],hard:[],challenge:[]};
+let questions={easy:null,medium:null,hard:null,challenge:null};
+const LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+const LEVEL_NAMES={easy:'קל',medium:'בינוני',hard:'קשה',challenge:'אתגר'};
+const TOTAL_STEPS=7;
+
+/* ===== LOCAL STORAGE ===== */
+const LS_KEY='bh_grade7_func_coord_system_'+dateSeed;
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores,answered,state}))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+/* ===== TEACHING STEPS ===== */
+const steps=[
+/* Step 0: What is a coordinate system */
+{title:'📐 מהי מערכת הצירים?', render(){return `
+<p>מערכת צירים היא <strong>שני קווים ישרים המאונכים זה לזה</strong>:</p>
+<div class="highlight">
+  <strong>ציר x</strong> — ציר אופקי (שמאל ↔ ימין)<br>
+  <strong>ציר y</strong> — ציר אנכי (למעלה ↕ למטה)<br>
+  <strong>ראשית הצירים</strong> — נקודת החיתוך, מסומנת <span class="math-expr">O(0,0)</span>
+</div>
+`+coordSVG({range:4,points:[{x:0,y:0,label:'O(0,0)',color:'#ef4444',labelDx:8,labelDy:18}]})+`
+<p><strong>שאלה:</strong> היכן נמצאת ראשית הצירים?</p>
+<div class="quiz-options" id="s0opts"></div>
+<div id="s0fb"></div>
+`},init(){
+  const opts=shuffle([
+    {text:'בנקודת החיתוך של שני הצירים',correct:true},
+    {text:'בקצה הימני של ציר x',correct:false},
+    {text:'בקצה העליון של ציר y',correct:false},
+    {text:'מחוץ למערכת הצירים',correct:false}
+  ]);
+  const c=document.getElementById('s0opts');c.innerHTML='';
+  opts.forEach(function(o){
+    const d=document.createElement('div');d.className='quiz-opt';d.textContent=o.text;
+    d.onclick=function(){
+      c.querySelectorAll('.quiz-opt').forEach(function(el){el.classList.remove('selected','correct-answer','wrong-answer')});
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s0fb').innerHTML='<div class="feedback-inline ok">נכון! ראשית הצירים O נמצאת בנקודת החיתוך, בקואורדינטות (0,0)</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s0fb').innerHTML='<div class="feedback-inline err">לא מדויק. ראשית הצירים היא נקודת החיתוך של שני הצירים.</div>'}
+    };
+    c.appendChild(d);
+  });
+}},
+
+/* Step 1: Coordinates */
+{title:'🔢 קואורדינטות — שיעורי הנקודה', render(){return `
+<div class="rule-box">לכל נקודה במישור יש שתי קואורדינטות: <span class="math-expr">(x, y)</span></div>
+<p><span class="math-expr">x</span> — המרחק <strong>אופקי</strong> מראשית הצירים (ימינה = חיובי, שמאלה = שלילי)</p>
+<p><span class="math-expr">y</span> — המרחק <strong>אנכי</strong> מראשית הצירים (למעלה = חיובי, למטה = שלילי)</p>
+`+coordSVG({range:4,points:[{x:3,y:2,label:'A(3,2)',color:'#2563eb'}],
+  guides:[{x1:3,y1:0,x2:3,y2:2},{x1:0,y1:2,x2:3,y2:2}]})+`
+<p>הנקודה <span class="math-expr">A</span> נמצאת ב-<span class="math-expr">x = 3</span> (3 ימינה) ו-<span class="math-expr">y = 2</span> (2 למעלה).</p>
+<p><strong>שאלה:</strong> מהן הקואורדינטות של הנקודה המסומנת?</p>
+`+coordSVG({w:280,h:280,range:4,points:[{x:-2,y:3,label:'?',color:'#8b5cf6'}],
+  guides:[{x1:-2,y1:0,x2:-2,y2:3},{x1:0,y1:3,x2:-2,y2:3}]})+`
+<div class="quiz-options" id="s1opts"></div>
+<div id="s1fb"></div>
+`},init(){
+  const opts=shuffle([
+    {text:'(−2, 3)',correct:true},
+    {text:'(3, −2)',correct:false},
+    {text:'(2, 3)',correct:false},
+    {text:'(−3, 2)',correct:false}
+  ]);
+  const c=document.getElementById('s1opts');c.innerHTML='';
+  opts.forEach(function(o){
+    const d=document.createElement('div');d.className='quiz-opt';d.innerHTML=o.text;
+    d.onclick=function(){
+      c.querySelectorAll('.quiz-opt').forEach(function(el){el.classList.remove('selected','correct-answer','wrong-answer')});
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s1fb').innerHTML='<div class="feedback-inline ok">נכון! הנקודה נמצאת ב-x = −2 (שמאלה) ו-y = 3 (למעלה).</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s1fb').innerHTML='<div class="feedback-inline err">לא נכון. שימו לב: קודם x (אופקי, −2 שמאלה), אחר כך y (אנכי, 3 למעלה).</div>'}
+    };
+    c.appendChild(d);
+  });
+}},
+
+/* Step 2: Marking points */
+{title:'✏️ סימון נקודות על מערכת הצירים', render(){return `
+<div class="rule-box">סדר הפעולות: קודם <strong>x</strong> (ימינה/שמאלה), אחר כך <strong>y</strong> (למעלה/למטה)</div>
+<p><strong>דוגמה:</strong> נסמן את הנקודה <span class="math-expr">B(3, 2)</span></p>
+<div class="example">
+  1. מתחילים בראשית הצירים <span class="math-expr">O</span><br>
+  2. הולכים <strong>3 ימינה</strong> על ציר x<br>
+  3. הולכים <strong>2 למעלה</strong> במקביל לציר y<br>
+  4. מסמנים נקודה!
+</div>
+`+coordSVG({range:4,
+  points:[{x:0,y:0,label:'O',color:'#64748b',labelDx:-16,labelDy:16},{x:3,y:2,label:'B(3,2)',color:'#10b981'}],
+  guides:[{x1:0,y1:0,x2:3,y2:0},{x1:3,y1:0,x2:3,y2:2}],
+  extra:'<text x="'+(160+1.5*31.25)+'" y="'+(160+14)+'" style="font-size:11px;fill:#10b981;font-weight:600">3 ימינה</text><text x="'+(160+3*31.25+6)+'" y="'+(160-1*31.25)+'" style="font-size:11px;fill:#10b981;font-weight:600">2 למעלה</text>'
+})+`
+<p><strong>שאלה:</strong> קודם <span class="math-expr">x = −1</span> (שמאלה 1), אחר כך <span class="math-expr">y = 3</span> (למעלה 3). לאיזו נקודה מגיעים?</p>
+<div class="quiz-options" id="s2opts"></div>
+<div id="s2fb"></div>
+`},init(){
+  const opts=shuffle([
+    {text:'(−1, 3)',correct:true},
+    {text:'(3, −1)',correct:false},
+    {text:'(1, 3)',correct:false},
+    {text:'(−1, −3)',correct:false}
+  ]);
+  const c=document.getElementById('s2opts');c.innerHTML='';
+  opts.forEach(function(o){
+    const d=document.createElement('div');d.className='quiz-opt';d.innerHTML=o.text;
+    d.onclick=function(){
+      c.querySelectorAll('.quiz-opt').forEach(function(el){el.classList.remove('selected','correct-answer','wrong-answer')});
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s2fb').innerHTML='<div class="feedback-inline ok">מצוין! x = −1 ו-y = 3, כלומר הנקודה היא (−1, 3).</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s2fb').innerHTML='<div class="feedback-inline err">שימו לב לסדר: (x, y). כאן x = −1 ו-y = 3.</div>'}
+    };
+    c.appendChild(d);
+  });
+}},
+
+/* Step 3: Quadrants */
+{title:'🧭 הרביעים', render(){return `
+<p>מערכת הצירים מתחלקת ל-<strong>4 רביעים</strong>:</p>
+`+coordSVG({range:4,quadrants:true,quadrantFills:true,
+  points:[
+    {x:2,y:3,label:'(+,+)',color:'#10b981',labelDx:-10,labelDy:-12},
+    {x:-3,y:2,label:'(−,+)',color:'#3b82f6',labelDx:-10,labelDy:-12},
+    {x:-2,y:-3,label:'(−,−)',color:'#f97316',labelDx:-10,labelDy:18},
+    {x:3,y:-2,label:'(+,−)',color:'#ef4444',labelDx:-10,labelDy:18}
+  ]
+})+`
+<table class="mini-table">
+<tr><th>רביע</th><th>סימן x</th><th>סימן y</th><th>דוגמה</th></tr>
+<tr><td>I</td><td>+</td><td>+</td><td>(3, 2)</td></tr>
+<tr><td>II</td><td>−</td><td>+</td><td>(−3, 2)</td></tr>
+<tr><td>III</td><td>−</td><td>−</td><td>(−2, −3)</td></tr>
+<tr><td>IV</td><td>+</td><td>−</td><td>(3, −2)</td></tr>
+</table>
+<p><strong>שאלה:</strong> הנקודה <span class="math-expr">(−3, 5)</span> נמצאת ברביע?</p>
+<div class="quiz-options" id="s3opts"></div>
+<div id="s3fb"></div>
+`},init(){
+  const opts=shuffle([
+    {text:'רביע I',correct:false},
+    {text:'רביע II',correct:true},
+    {text:'רביע III',correct:false},
+    {text:'רביע IV',correct:false}
+  ]);
+  const c=document.getElementById('s3opts');c.innerHTML='';
+  opts.forEach(function(o){
+    const d=document.createElement('div');d.className='quiz-opt';d.textContent=o.text;
+    d.onclick=function(){
+      c.querySelectorAll('.quiz-opt').forEach(function(el){el.classList.remove('selected','correct-answer','wrong-answer')});
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s3fb').innerHTML='<div class="feedback-inline ok">נכון! x שלילי ו-y חיובי → רביע II.</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s3fb').innerHTML='<div class="feedback-inline err">לא נכון. x = −3 (שלילי), y = 5 (חיובי) → רביע II.</div>'}
+    };
+    c.appendChild(d);
+  });
+}},
+
+/* Step 4: Points on axes */
+{title:'📏 נקודות על הצירים', render(){return `
+<div class="rule-box">
+  נקודה על <strong>ציר x</strong> → <span class="math-expr">y = 0</span><br>
+  נקודה על <strong>ציר y</strong> → <span class="math-expr">x = 0</span><br>
+  <strong>ראשית הצירים</strong> → <span class="math-expr">(0, 0)</span>
+</div>
+`+coordSVG({range:4,
+  points:[
+    {x:3,y:0,label:'(3,0)',color:'#ef4444',labelDy:18},
+    {x:-2,y:0,label:'(−2,0)',color:'#ef4444',labelDy:18},
+    {x:0,y:4,label:'(0,4)',color:'#8b5cf6',labelDx:10},
+    {x:0,y:-3,label:'(0,−3)',color:'#8b5cf6',labelDx:10}
+  ]
+})+`
+<div class="example">
+  <strong>נקודות על ציר x</strong> (בצבע אדום): תמיד <span class="math-expr">y = 0</span><br>
+  <strong>נקודות על ציר y</strong> (בצבע סגול): תמיד <span class="math-expr">x = 0</span>
+</div>
+<p><strong>שאלה:</strong> הנקודה <span class="math-expr">(0, 7)</span> נמצאת על איזה ציר?</p>
+<div class="quiz-options" id="s4opts"></div>
+<div id="s4fb"></div>
+`},init(){
+  const opts=shuffle([
+    {text:'על ציר x',correct:false},
+    {text:'על ציר y',correct:true},
+    {text:'בראשית הצירים',correct:false},
+    {text:'לא על אף ציר',correct:false}
+  ]);
+  const c=document.getElementById('s4opts');c.innerHTML='';
+  opts.forEach(function(o){
+    const d=document.createElement('div');d.className='quiz-opt';d.textContent=o.text;
+    d.onclick=function(){
+      c.querySelectorAll('.quiz-opt').forEach(function(el){el.classList.remove('selected','correct-answer','wrong-answer')});
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s4fb').innerHTML='<div class="feedback-inline ok">נכון! x = 0 → הנקודה על ציר y.</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s4fb').innerHTML='<div class="feedback-inline err">לא נכון. כש-x = 0, הנקודה נמצאת על ציר y.</div>'}
+    };
+    c.appendChild(d);
+  });
+}},
+
+/* Step 5: Reading points from graph */
+{title:'👀 קריאת נקודות מגרף', render(){return `
+<p>בגרף הבא מסומנות 5 נקודות. <strong>קראו את הקואורדינטות שלהן:</strong></p>
+`+coordSVG({range:4,
+  points:[
+    {x:3,y:2,label:'A',color:'#2563eb',labelDx:8,labelDy:-8},
+    {x:-1,y:4,label:'B',color:'#ef4444',labelDx:8,labelDy:-8},
+    {x:-3,y:-2,label:'C',color:'#10b981',labelDx:8,labelDy:14},
+    {x:4,y:-3,label:'D',color:'#f59e0b',labelDx:8,labelDy:14},
+    {x:0,y:-1,label:'E',color:'#8b5cf6',labelDx:10,labelDy:4}
+  ]
+})+`
+<p><strong>שאלה:</strong> מהן הקואורדינטות של הנקודה <span style="color:#2563eb;font-weight:700">A</span>?</p>
+<div class="quiz-options" id="s5opts"></div>
+<div id="s5fb"></div>
+<div class="reveal" id="s5reveal">
+  <div class="highlight">
+    <strong>כל הנקודות:</strong><br>
+    <span style="color:#2563eb;font-weight:700">A</span> = (3, 2) &nbsp;|&nbsp;
+    <span style="color:#ef4444;font-weight:700">B</span> = (−1, 4) &nbsp;|&nbsp;
+    <span style="color:#10b981;font-weight:700">C</span> = (−3, −2) &nbsp;|&nbsp;
+    <span style="color:#f59e0b;font-weight:700">D</span> = (4, −3) &nbsp;|&nbsp;
+    <span style="color:#8b5cf6;font-weight:700">E</span> = (0, −1)
+  </div>
+  <div class="warning">חשוב לזכור: <span class="math-expr">(3, 2) ≠ (2, 3)</span> — אלו שתי נקודות שונות לחלוטין!</div>
+</div>
+`},init(){
+  const opts=shuffle([
+    {text:'(3, 2)',correct:true},
+    {text:'(2, 3)',correct:false},
+    {text:'(3, −2)',correct:false},
+    {text:'(−3, 2)',correct:false}
+  ]);
+  const c=document.getElementById('s5opts');c.innerHTML='';
+  opts.forEach(function(o){
+    const d=document.createElement('div');d.className='quiz-opt';d.innerHTML=o.text;
+    d.onclick=function(){
+      c.querySelectorAll('.quiz-opt').forEach(function(el){el.classList.remove('selected','correct-answer','wrong-answer')});
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s5fb').innerHTML='<div class="feedback-inline ok">נכון! A נמצאת ב-(3, 2).</div>';document.getElementById('s5reveal').classList.add('show')}
+      else{d.classList.add('wrong-answer');document.getElementById('s5fb').innerHTML='<div class="feedback-inline err">לא נכון. A: 3 ימינה ו-2 למעלה → (3, 2).</div>'}
+    };
+    c.appendChild(d);
+  });
+}},
+
+/* Step 6: Summary */
+{title:'🏆 סיכום — כרטיס שיעור', render(){return `
+<p style="font-size:1.1rem;text-align:center;margin-bottom:20px">בשיעור הזה למדנו:</p>
+<div class="step-summary-grid">
+  <div class="summary-item">
+    <div class="s-icon">📐</div>
+    <div class="s-title">מערכת צירים</div>
+    <div class="s-text">ציר x (אופקי) וציר y (אנכי) הנחתכים בראשית O(0,0)</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🔢</div>
+    <div class="s-title">קואורדינטות</div>
+    <div class="s-text">כל נקודה מיוצגת ע״י (x, y) — קודם אופקי, אחר כך אנכי</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🧭</div>
+    <div class="s-title">4 רביעים</div>
+    <div class="s-text">I:(+,+) &nbsp; II:(−,+) &nbsp; III:(−,−) &nbsp; IV:(+,−)</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">📏</div>
+    <div class="s-title">על הצירים</div>
+    <div class="s-text">ציר x: y=0 &nbsp;|&nbsp; ציר y: x=0 &nbsp;|&nbsp; ראשית: (0,0)</div>
+  </div>
+</div>
+`+coordSVG({range:4,quadrants:true,quadrantFills:true,
+  points:[
+    {x:2,y:3,label:'(2,3)',color:'#10b981',labelDx:-6,labelDy:-10},
+    {x:-3,y:1,label:'(−3,1)',color:'#3b82f6',labelDx:-10,labelDy:-10},
+    {x:-1,y:-2,label:'(−1,−2)',color:'#f97316',labelDx:-10,labelDy:16},
+    {x:4,y:0,label:'(4,0)',color:'#ef4444',labelDy:16},
+    {x:0,y:-3,label:'(0,−3)',color:'#8b5cf6',labelDx:10}
+  ]
+})+`
+<div class="success-box" style="text-align:center;font-size:1.1rem;margin-top:20px">
+  <p>עכשיו אתם מוכנים לתרגול!</p>
+  <p>4 רמות קושי מחכות לכם</p>
+  <button class="mini-btn accent" style="margin-top:12px;font-size:1rem;padding:12px 32px" onclick="switchSection('practice')">מוכנים לתרגול ←</button>
+</div>
+`}}
+];
+
+/* ===== QUESTION GENERATORS ===== */
+function quadrantOf(x,y){
+  if(x>0&&y>0) return 'I';
+  if(x<0&&y>0) return 'II';
+  if(x<0&&y<0) return 'III';
+  if(x>0&&y<0) return 'IV';
+  return 'ציר';
+}
+function quadrantHeb(q){return{I:'רביע I',II:'רביע II',III:'רביע III',IV:'רביע IV'}[q]||q}
+function signWord(n){return n>0?'חיובי':n<0?'שלילי':'אפס'}
+function ptStr(x,y){return '('+x+', '+y+')'}
+function randNonZero(a,b){var v=RI(a,b);while(v===0) v=RI(a,b);return v}
+
+function genEasy(){
+  rng=mulberry32(dateSeed+100);
+  var qs=[];
+  /* Q1-5: which quadrant is this point in */
+  for(var i=0;i<5;i++){
+    var x=randNonZero(-5,5),y=randNonZero(-5,5);
+    var correct=quadrantHeb(quadrantOf(x,y));
+    var opts=shuffle(['רביע I','רביע II','רביע III','רביע IV']);
+    qs.push({type:'mc',stem:'הנקודה <span class="math-expr">'+ptStr(x,y)+'</span> נמצאת ב:',
+      options:opts,answer:opts.indexOf(correct),
+      explanation:'x = '+x+' ('+signWord(x)+'), y = '+y+' ('+signWord(y)+') → '+correct});
+  }
+  /* Q6-10: read coordinates from SVG */
+  for(var i=0;i<5;i++){
+    var x=RI(-4,4),y=RI(-4,4);
+    while(x===0&&y===0){x=RI(-4,4);y=RI(-4,4)}
+    var correct=ptStr(x,y);
+    var d1=ptStr(y,x),d2=ptStr(-x,y),d3=ptStr(x,-y);
+    var opts=shuffle([correct,d1,d2,d3]);
+    /* ensure 4 unique options */
+    var unique={};opts.forEach(function(o){unique[o]=true});
+    while(Object.keys(unique).length<4){
+      var nx=RI(-4,4),ny=RI(-4,4);
+      var ns=ptStr(nx,ny);
+      if(!unique[ns]){unique[ns]=true;opts.push(ns)}
+    }
+    opts=shuffle(Object.keys(unique)).slice(0,4);
+    qs.push({type:'mc',
+      stem:'מהן הקואורדינטות של הנקודה המסומנת?<br>'+qCoordSVG([{x:x,y:y,label:'?',color:'#8b5cf6'}],{range:5}),
+      options:opts,answer:opts.indexOf(correct),
+      explanation:'הנקודה נמצאת ב-x = '+x+' ו-y = '+y+', כלומר '+correct});
+  }
+  /* Q11-15: on which axis */
+  for(var i=0;i<5;i++){
+    var type=i%4;/* 0=x-axis, 1=y-axis, 2=origin, 3=not on axis */
+    var x,y,correct;
+    if(type===0){x=randNonZero(-5,5);y=0;correct='על ציר x'}
+    else if(type===1){x=0;y=randNonZero(-5,5);correct='על ציר y'}
+    else if(type===2){x=0;y=0;correct='בראשית הצירים'}
+    else{x=randNonZero(-5,5);y=randNonZero(-5,5);correct='לא על אף ציר'}
+    var opts=shuffle(['על ציר x','על ציר y','בראשית הצירים','לא על אף ציר']);
+    qs.push({type:'mc',stem:'הנקודה <span class="math-expr">'+ptStr(x,y)+'</span> נמצאת:',
+      options:opts,answer:opts.indexOf(correct),
+      explanation:'x = '+x+', y = '+y+'. '+(y===0&&x===0?'שתי הקואורדינטות אפס → ראשית הצירים':y===0?'y = 0 → על ציר x':x===0?'x = 0 → על ציר y':'שתי הקואורדינטות שונות מ-0 → לא על ציר')});
+  }
+  /* Q16-20: what is true about a point on axis */
+  for(var i=0;i<5;i++){
+    var isXAxis=R()>0.5;
+    var v=randNonZero(-5,5);
+    if(isXAxis){
+      var correct='y = 0';
+      var opts=shuffle(['y = 0','x = 0','x = y','x > 0']);
+      qs.push({type:'mc',stem:'הנקודה <span class="math-expr">'+ptStr(v,0)+'</span> נמצאת על ציר x. מה נכון לגביה?',
+        options:opts,answer:opts.indexOf(correct),
+        explanation:'נקודה על ציר x → שיעור ה-y שלה הוא 0'});
+    } else {
+      var correct='x = 0';
+      var opts=shuffle(['x = 0','y = 0','x = y','y > 0']);
+      qs.push({type:'mc',stem:'הנקודה <span class="math-expr">'+ptStr(0,v)+'</span> נמצאת על ציר y. מה נכון לגביה?',
+        options:opts,answer:opts.indexOf(correct),
+        explanation:'נקודה על ציר y → שיעור ה-x שלה הוא 0'});
+    }
+  }
+  return qs;
+}
+
+function genMedium(){
+  rng=mulberry32(dateSeed+200);
+  var qs=[];
+  /* Q1-4: which points from a list are in quadrant X */
+  for(var i=0;i<4;i++){
+    var targetQ=['I','II','III','IV'][i];
+    var pts=[];
+    for(var j=0;j<6;j++){
+      var x=randNonZero(-5,5),y=randNonZero(-5,5);
+      pts.push({x:x,y:y,q:quadrantOf(x,y)});
+    }
+    var inTarget=pts.filter(function(p){return p.q===targetQ});
+    while(inTarget.length<2){var x2=targetQ==='I'||targetQ==='IV'?RI(1,5):RI(-5,-1);var y2=targetQ==='I'||targetQ==='II'?RI(1,5):RI(-5,-1);pts.push({x:x2,y:y2,q:targetQ});inTarget=pts.filter(function(p){return p.q===targetQ})}
+    pts=shuffle(pts).slice(0,5);
+    inTarget=pts.filter(function(p){return p.q===targetQ});
+    var correctList=inTarget.map(function(p){return ptStr(p.x,p.y)}).join(', ');
+    var allPtStr=pts.map(function(p){return ptStr(p.x,p.y)}).join(' &nbsp; ');
+    /* build 4 MC options */
+    var wrongOpts=[];
+    var notInTarget=pts.filter(function(p){return p.q!==targetQ});
+    wrongOpts.push(notInTarget.slice(0,inTarget.length).map(function(p){return ptStr(p.x,p.y)}).join(', '));
+    wrongOpts.push(pts.slice(0,inTarget.length+1).map(function(p){return ptStr(p.x,p.y)}).join(', '));
+    wrongOpts.push(shuffle(pts).slice(0,inTarget.length).map(function(p){return ptStr(p.x,p.y)}).join(', '));
+    /* ensure unique and no dupes with correct */
+    var allOpts=[correctList];
+    wrongOpts.forEach(function(w){if(allOpts.indexOf(w)===-1 && w!==correctList) allOpts.push(w)});
+    while(allOpts.length<4){var rPts=shuffle(pts).slice(0,RI(1,3)).map(function(p){return ptStr(p.x,p.y)}).join(', ');if(allOpts.indexOf(rPts)===-1) allOpts.push(rPts)}
+    allOpts=shuffle(allOpts.slice(0,4));
+    qs.push({type:'mc',stem:'מהנקודות הבאות, אילו נמצאות ב<strong>'+quadrantHeb(targetQ)+'</strong>?<br><div style="direction:ltr;text-align:center;margin:8px 0;font-weight:600">'+allPtStr+'</div>',
+      options:allOpts,answer:allOpts.indexOf(correctList),
+      explanation:'ב'+quadrantHeb(targetQ)+' הסימנים הם '+(targetQ==='I'?'(+,+)':targetQ==='II'?'(−,+)':targetQ==='III'?'(−,−)':'(+,−)')+'. הנקודות: '+correctList});
+  }
+  /* Q5-8: signs in quadrant */
+  for(var i=0;i<4;i++){
+    var qd=['I','II','III','IV'][i];
+    var sx=qd==='I'||qd==='IV'?'חיובי':'שלילי';
+    var sy=qd==='I'||qd==='II'?'חיובי':'שלילי';
+    var correct='x '+sx+', y '+sy;
+    var opts=shuffle([
+      'x חיובי, y חיובי',
+      'x שלילי, y חיובי',
+      'x שלילי, y שלילי',
+      'x חיובי, y שלילי'
+    ]);
+    qs.push({type:'mc',stem:'מה הסימנים של הקואורדינטות ב<strong>'+quadrantHeb(qd)+'</strong>?',
+      options:opts,answer:opts.indexOf(correct),
+      explanation:quadrantHeb(qd)+': x '+sx+' ו-y '+sy});
+  }
+  /* Q9-12: movement on grid — word problems */
+  for(var i=0;i<4;i++){
+    var sx=RI(-4,4),sy=RI(-4,4);
+    var dx=RI(1,3)*(R()>0.5?1:-1),dy=RI(1,3)*(R()>0.5?1:-1);
+    var ex=sx+dx,ey=sy+dy;
+    var moveX=dx>0?dx+' ימינה':(-dx)+' שמאלה';
+    var moveY=dy>0?dy+' למעלה':(-dy)+' למטה';
+    var correct=ptStr(ex,ey);
+    var opts=shuffle([correct,ptStr(ex,-ey),ptStr(-ex,ey),ptStr(sx,sy)]);
+    var unique2={};opts.forEach(function(o){unique2[o]=true});
+    while(Object.keys(unique2).length<4){unique2[ptStr(RI(-5,5),RI(-5,5))]=true}
+    opts=shuffle(Object.keys(unique2)).slice(0,4);
+    qs.push({type:'mc',stem:'מתחילים בנקודה <span class="math-expr">'+ptStr(sx,sy)+'</span>. זזים <strong>'+moveX+'</strong> ואחר כך <strong>'+moveY+'</strong>. איפה מגיעים?',
+      options:opts,answer:opts.indexOf(correct),
+      explanation:ptStr(sx,sy)+': x: '+sx+(dx>0?' + ':' − ')+Math.abs(dx)+' = '+ex+', y: '+sy+(dy>0?' + ':' − ')+Math.abs(dy)+' = '+ey+' → '+correct});
+  }
+  /* Q13-16: identify coordinates of multiple points from SVG */
+  for(var i=0;i<4;i++){
+    var labels=['P','Q','R','S'];
+    var colors=['#2563eb','#ef4444','#10b981','#f59e0b'];
+    var px=randNonZero(-4,4),py=randNonZero(-4,4);
+    var target=RI(0,0);/* always first point for simplicity */
+    var allPts=[{x:px,y:py,label:labels[0],color:colors[0]}];
+    for(var j=1;j<3;j++){
+      var nx=randNonZero(-4,4),ny=randNonZero(-4,4);
+      while(nx===px&&ny===py){nx=randNonZero(-4,4);ny=randNonZero(-4,4)}
+      allPts.push({x:nx,y:ny,label:labels[j],color:colors[j]});
+    }
+    var correct=ptStr(px,py);
+    var opts=shuffle([correct,ptStr(py,px),ptStr(-px,py),ptStr(px,-py)]);
+    var u3={};opts.forEach(function(o){u3[o]=true});
+    while(Object.keys(u3).length<4){u3[ptStr(RI(-4,4),RI(-4,4))]=true}
+    opts=shuffle(Object.keys(u3)).slice(0,4);
+    qs.push({type:'mc',
+      stem:'מהן הקואורדינטות של הנקודה <span style="color:'+colors[0]+';font-weight:700">'+labels[0]+'</span>?<br>'+qCoordSVG(allPts,{range:5}),
+      options:opts,answer:opts.indexOf(correct),
+      explanation:labels[0]+' נמצאת ב-x = '+px+' ו-y = '+py+' → '+correct});
+  }
+  /* Q17-20: point on axis - which coordinate is zero */
+  for(var i=0;i<4;i++){
+    var onX=i<2;
+    var v=randNonZero(-5,5);
+    var pt=onX?ptStr(v,0):ptStr(0,v);
+    var qText='הנקודה <span class="math-expr">'+pt+'</span> נמצאת על '+(onX?'ציר x':'ציר y')+'. מה ערך ה-'+(onX?'y':'x')+'?';
+    var correct='0';
+    var opts=shuffle(['0',''+v,''+(-v),''+Math.abs(v)]);
+    var u4={};opts.forEach(function(o){u4[o]=true});
+    while(Object.keys(u4).length<4){u4[''+RI(-5,5)]=true}
+    opts=shuffle(Object.keys(u4)).slice(0,4);
+    qs.push({type:'mc',stem:qText,options:opts,answer:opts.indexOf(correct),
+      explanation:'נקודה על '+(onX?'ציר x → y = 0':'ציר y → x = 0')});
+  }
+  return qs;
+}
+
+function genHard(){
+  rng=mulberry32(dateSeed+300);
+  var qs=[];
+  /* Q1-4: symmetry to x-axis */
+  for(var i=0;i<4;i++){
+    var x=randNonZero(-5,5),y=randNonZero(-5,5);
+    var isXAxis=i<2;
+    var symX=isXAxis?x:-x, symY=isXAxis?-y:y;
+    var axisName=isXAxis?'ציר x':'ציר y';
+    var correct=ptStr(symX,symY);
+    var opts=shuffle([correct,ptStr(-x,-y),ptStr(y,x),ptStr(-x,y)]);
+    var u={};opts.forEach(function(o){u[o]=true});
+    while(Object.keys(u).length<4){u[ptStr(RI(-5,5),RI(-5,5))]=true}
+    opts=shuffle(Object.keys(u)).slice(0,4);
+    qs.push({type:'mc',stem:'הנקודה <span class="math-expr">A'+ptStr(x,y)+'</span>. הנקודה הסימטרית ל-A <strong>ביחס ל'+axisName+'</strong> היא:',
+      options:opts,answer:opts.indexOf(correct),
+      explanation:'שיקוף ביחס ל'+axisName+': '+(isXAxis?'x נשאר, y מתהפך':'x מתהפך, y נשאר')+' → '+correct});
+  }
+  /* Q5-8: reflection — which quadrant */
+  for(var i=0;i<4;i++){
+    var srcQ=['I','II','III','IV'][i];
+    var x=srcQ==='I'||srcQ==='IV'?RI(1,5):RI(-5,-1);
+    var y=srcQ==='I'||srcQ==='II'?RI(1,5):RI(-5,-1);
+    var reflectAxis=R()>0.5?'x':'y';
+    var rx=reflectAxis==='y'?-x:x, ry=reflectAxis==='x'?-y:y;
+    var resQ=quadrantOf(rx,ry);
+    var correct=quadrantHeb(resQ);
+    var opts=shuffle(['רביע I','רביע II','רביע III','רביע IV']);
+    qs.push({type:'mc',stem:'P נמצאת ב'+quadrantHeb(srcQ)+'. Q היא שיקוף של P ביחס ל<strong>ציר '+reflectAxis+'</strong>. באיזה רביע נמצאת Q?',
+      options:opts,answer:opts.indexOf(correct),
+      explanation:'שיקוף ביחס לציר '+reflectAxis+': '+(reflectAxis==='x'?'y מתהפך':'x מתהפך')+'. מ'+quadrantHeb(srcQ)+' → '+correct});
+  }
+  /* Q9-12: identify collinear points — same x or same y */
+  for(var i=0;i<4;i++){
+    var isVertical=R()>0.5;
+    var fixedVal=randNonZero(-4,4);
+    var collinear=[];
+    for(var j=0;j<3;j++){
+      var v=randNonZero(-4,4);
+      while(collinear.some(function(p){return isVertical?p.y===v:p.x===v})) v=randNonZero(-4,4);
+      collinear.push(isVertical?{x:fixedVal,y:v}:{x:v,y:fixedVal});
+    }
+    var outlier=isVertical?{x:fixedVal+(R()>0.5?1:-1),y:RI(-4,4)}:{x:RI(-4,4),y:fixedVal+(R()>0.5?1:-1)};
+    var allPts=shuffle(collinear.concat([outlier]));
+    var colors2=['#2563eb','#ef4444','#10b981','#f59e0b'];
+    var lbs=['A','B','C','D'];
+    var svgPts=allPts.map(function(p,idx){return{x:p.x,y:p.y,label:lbs[idx],color:colors2[idx]}});
+    var outlierIdx=allPts.indexOf(outlier);
+    var correct=lbs[outlierIdx];
+    var opts=shuffle(lbs.slice());
+    qs.push({type:'mc',
+      stem:'איזו נקודה <strong>לא</strong> נמצאת על אותו קו '+(isVertical?'אנכי':'אופקי')+' כמו שאר הנקודות?<br>'+qCoordSVG(svgPts,{range:5}),
+      options:opts,answer:opts.indexOf(correct),
+      explanation:correct+' = '+ptStr(outlier.x,outlier.y)+' — '+(isVertical?'x שונה':'y שונה')+' מהשאר'});
+  }
+  /* Q13-16: find missing vertex of rectangle */
+  for(var i=0;i<4;i++){
+    var x1=RI(-4,-1),x2=RI(1,4);
+    var y1=RI(-4,-1),y2=RI(1,4);
+    var corners=[{x:x1,y:y1},{x:x2,y:y1},{x:x2,y:y2},{x:x1,y:y2}];
+    var missing=i%4;
+    var given=corners.filter(function(_,idx){return idx!==missing});
+    var correct=ptStr(corners[missing].x,corners[missing].y);
+    var opts=shuffle([correct,ptStr(corners[missing].y,corners[missing].x),ptStr(-corners[missing].x,corners[missing].y),ptStr(corners[missing].x,-corners[missing].y)]);
+    var u5={};opts.forEach(function(o){u5[o]=true});
+    while(Object.keys(u5).length<4){u5[ptStr(RI(-4,4),RI(-4,4))]=true}
+    opts=shuffle(Object.keys(u5)).slice(0,4);
+    var givenStr=given.map(function(p){return ptStr(p.x,p.y)}).join(', ');
+    qs.push({type:'mc',stem:'שלוש קודקודים של מלבן: <span class="math-expr">'+givenStr+'</span>. מהו הקודקוד הרביעי?',
+      options:opts,answer:opts.indexOf(correct),
+      explanation:'הקודקוד החסר הוא '+correct+'. במלבן, הצלעות מקבילות לצירים.'});
+  }
+  /* Q17-20: distance between points on same axis */
+  for(var i=0;i<4;i++){
+    var isHoriz=R()>0.5;
+    var a=RI(-5,5),b=RI(-5,5);
+    while(a===b) b=RI(-5,5);
+    var p1,p2;
+    if(isHoriz){p1={x:a,y:0};p2={x:b,y:0}}
+    else{p1={x:0,y:a};p2={x:0,y:b}}
+    var dist=Math.abs(a-b);
+    var correct=''+dist;
+    var opts=shuffle([correct,''+(a+b),''+Math.abs(a+b),''+(dist+1)]);
+    var u6={};opts.forEach(function(o){u6[o]=true});
+    while(Object.keys(u6).length<4){u6[''+RI(1,10)]=true}
+    opts=shuffle(Object.keys(u6)).slice(0,4);
+    qs.push({type:'mc',stem:'מה המרחק בין הנקודות <span class="math-expr">'+ptStr(p1.x,p1.y)+'</span> ו-<span class="math-expr">'+ptStr(p2.x,p2.y)+'</span>?',
+      options:opts,answer:opts.indexOf(correct),
+      explanation:'המרחק = |'+a+' − '+b+'| = |'+(a-b)+'| = '+dist});
+  }
+  return qs;
+}
+
+function genChallenge(){
+  rng=mulberry32(dateSeed+400);
+  var qs=[];
+  /* Q1-3: complete the rectangle + find area */
+  for(var i=0;i<3;i++){
+    var x1=RI(-4,-1),x2=RI(1,4);
+    var y1=RI(-4,-1),y2=RI(1,4);
+    var corners=[{x:x1,y:y2},{x:x2,y:y2},{x:x2,y:y1}];
+    var missing={x:x1,y:y1};
+    var correct=ptStr(missing.x,missing.y);
+    var opts=shuffle([correct,ptStr(missing.y,missing.x),ptStr(-missing.x,missing.y),ptStr(missing.x,-missing.y)]);
+    var u7={};opts.forEach(function(o){u7[o]=true});
+    while(Object.keys(u7).length<4){u7[ptStr(RI(-4,4),RI(-4,4))]=true}
+    opts=shuffle(Object.keys(u7)).slice(0,4);
+    qs.push({type:'mc',stem:'A'+ptStr(corners[0].x,corners[0].y)+', B'+ptStr(corners[1].x,corners[1].y)+', C'+ptStr(corners[2].x,corners[2].y)+' הם שלושה קודקודים של מלבן. מהו D?',
+      options:opts,answer:opts.indexOf(correct),
+      explanation:'D = '+correct+'. במלבן ABCD הצלעות מקבילות לצירים.'});
+  }
+  /* Q4-6: calculate rectangle area from coordinates */
+  for(var i=0;i<3;i++){
+    var x1=RI(-5,-1),x2=RI(1,5);
+    var y1=RI(-5,-1),y2=RI(1,5);
+    var w=x2-x1,h=y2-y1;
+    var area=w*h;
+    var correct=''+area;
+    var opts=shuffle([correct,''+(w+h),''+(2*(w+h)),''+(w*h+1)]);
+    var u8={};opts.forEach(function(o){u8[o]=true});
+    while(Object.keys(u8).length<4){u8[''+RI(1,50)]=true}
+    opts=shuffle(Object.keys(u8)).slice(0,4);
+    qs.push({type:'mc',stem:'מלבן ABCD: A'+ptStr(x1,y1)+', B'+ptStr(x2,y1)+', C'+ptStr(x2,y2)+', D'+ptStr(x1,y2)+'.<br>מהו <strong>שטח</strong> המלבן?',
+      options:opts,answer:opts.indexOf(correct),
+      explanation:'אורך = |'+x2+' − ('+x1+')| = '+w+', רוחב = |'+y2+' − ('+y1+')| = '+h+'. שטח = '+w+' × '+h+' = '+area});
+  }
+  /* Q7-9: count integer points inside a rectangle */
+  for(var i=0;i<3;i++){
+    var x1=RI(-3,0),x2=x1+RI(2,4);
+    var y1=RI(-3,0),y2=y1+RI(2,4);
+    var count=(x2-x1+1)*(y2-y1+1);
+    var correct=''+count;
+    var opts=shuffle([correct,''+(count-1),''+(count+1),''+((x2-x1)*(y2-y1))]);
+    var u9={};opts.forEach(function(o){u9[o]=true});
+    while(Object.keys(u9).length<4){u9[''+RI(1,40)]=true}
+    opts=shuffle(Object.keys(u9)).slice(0,4);
+    qs.push({type:'mc',stem:'כמה <strong>נקודות שלמות</strong> (עם קואורדינטות שלמות) נמצאות בתוך או על גבולות המלבן שקודקודיו '+ptStr(x1,y1)+', '+ptStr(x2,y1)+', '+ptStr(x2,y2)+', '+ptStr(x1,y2)+'?',
+      options:opts,answer:opts.indexOf(correct),
+      explanation:'x מ-'+x1+' עד '+x2+' = '+(x2-x1+1)+' ערכים. y מ-'+y1+' עד '+y2+' = '+(y2-y1+1)+' ערכים. סה"כ '+(x2-x1+1)+' × '+(y2-y1+1)+' = '+count});
+  }
+  /* Q10-12: abstract — P(a,b) in quadrant, find quadrant of transformed point */
+  for(var i=0;i<3;i++){
+    var srcQ=['II','III','IV'][i];
+    var transforms=[
+      {label:'(−b, a)',fn:function(a,b){return[-b,a]}},
+      {label:'(−a, −b)',fn:function(a,b){return[-a,-b]}},
+      {label:'(b, −a)',fn:function(a,b){return[b,-a]}}
+    ];
+    var tr=transforms[i];
+    /* pick concrete values to determine */
+    var a2=srcQ==='II'||srcQ==='III'?-3:3;
+    var b2=srcQ==='II'||srcQ==='I'?2:-2;
+    var res=tr.fn(a2,b2);
+    var resQ=quadrantHeb(quadrantOf(res[0],res[1]));
+    var opts=shuffle(['רביע I','רביע II','רביע III','רביע IV']);
+    qs.push({type:'mc',stem:'הנקודה <span class="math-expr">P(a, b)</span> נמצאת ב'+quadrantHeb(srcQ)+'. באיזה רביע נמצאת <span class="math-expr">Q'+tr.label+'</span>?',
+      options:opts,answer:opts.indexOf(resQ),
+      explanation:'ב'+quadrantHeb(srcQ)+' למשל a = '+a2+', b = '+b2+'. אז Q = '+(tr.label.replace('a','('+a2+')').replace('b','('+b2+')'))+' = '+ptStr(res[0],res[1])+' → '+resQ});
+  }
+  /* Q13-15: point equidistant / midpoint */
+  for(var i=0;i<3;i++){
+    if(i===0){
+      /* equidistant from (a,0) and (-a,0) on y-axis */
+      var a=RI(1,5);
+      var correct='כל נקודה על ציר y';
+      var opts=shuffle([correct,'רק (0, 0)','רק (0, '+a+')','אין נקודה כזו']);
+      qs.push({type:'mc',stem:'מצאו נקודה <strong>על ציר y</strong> שמרחקה שווה מ-<span class="math-expr">('+a+', 0)</span> ומ-<span class="math-expr">(−'+a+', 0)</span>.',
+        options:opts,answer:opts.indexOf(correct),
+        explanation:'כל נקודה על ציר y מרוחקת '+a+' מ-('+a+',0) ומ-(−'+a+',0), כי x = 0 נמצא באמצע.'});
+    } else if(i===1){
+      /* midpoint */
+      var x1=RI(-4,0)*2,y1=RI(-4,0)*2,x2=RI(0,4)*2,y2=RI(0,4)*2;
+      var mx=(x1+x2)/2,my=(y1+y2)/2;
+      var correct=ptStr(mx,my);
+      var opts=shuffle([correct,ptStr(mx+1,my),ptStr(mx,my+1),ptStr(x2-x1,y2-y1)]);
+      var u10={};opts.forEach(function(o){u10[o]=true});
+      while(Object.keys(u10).length<4){u10[ptStr(RI(-4,4),RI(-4,4))]=true}
+      opts=shuffle(Object.keys(u10)).slice(0,4);
+      qs.push({type:'mc',stem:'מהי <strong>נקודת האמצע</strong> של הקטע שקצותיו <span class="math-expr">'+ptStr(x1,y1)+'</span> ו-<span class="math-expr">'+ptStr(x2,y2)+'</span>?',
+        options:opts,answer:opts.indexOf(correct),
+        explanation:'נקודת אמצע: ((' +x1+'+'+x2+')/2, ('+y1+'+'+y2+')/2) = '+correct});
+    } else {
+      /* perimeter of rectangle */
+      var x1=RI(-4,-1),x2=RI(1,4),y1=RI(-4,-1),y2=RI(1,4);
+      var w=x2-x1,h=y2-y1,perim=2*(w+h);
+      var correct=''+perim;
+      var opts=shuffle([correct,''+(w*h),''+(w+h),''+(perim+2)]);
+      var u11={};opts.forEach(function(o){u11[o]=true});
+      while(Object.keys(u11).length<4){u11[''+RI(1,40)]=true}
+      opts=shuffle(Object.keys(u11)).slice(0,4);
+      qs.push({type:'mc',stem:'מלבן שקודקודיו '+ptStr(x1,y1)+', '+ptStr(x2,y1)+', '+ptStr(x2,y2)+', '+ptStr(x1,y2)+'. מהו <strong>היקף</strong> המלבן?',
+        options:opts,answer:opts.indexOf(correct),
+        explanation:'אורך = '+w+', רוחב = '+h+'. היקף = 2('+w+' + '+h+') = '+perim});
+    }
+  }
+  return qs;
+}
+
+function generateQuestions(lv){
+  if(lv==='easy') return genEasy();
+  if(lv==='medium') return genMedium();
+  if(lv==='hard') return genHard();
+  if(lv==='challenge') return genChallenge();
+}
+
+/* ===== RENDER STEP ===== */
+function renderStep(idx){
+  state.step=idx;
+  var s=steps[idx];
+  var fill=((idx+1)/TOTAL_STEPS*100).toFixed(0);
+  document.getElementById('stepFill').style.width=fill+'%';
+  document.getElementById('stepText').textContent='שלב '+(idx+1)+' מתוך '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+s.title+'</div>'+s.render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'לתרגול ←':'הבא ←';
+  if(s.init) s.init();
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+/* ===== RENDER LEVEL TABS ===== */
+function renderLevelTabs(){
+  var html='';
+  ['easy','medium','hard','challenge'].forEach(function(lv){
+    var done=answered[lv]?answered[lv].filter(function(a){return a}).length:0;
+    var total=LEVEL_COUNTS[lv];
+    var correct=scores[lv]?scores[lv].filter(function(s){return s===1}).length:0;
+    var cls='level-tab'+(state.level===lv?' active':'');
+    html+='<button class="'+cls+'" onclick="switchLevel(\''+lv+'\')">'+LEVEL_NAMES[lv];
+    if(done>0) html+=' <span class="tab-score">'+correct+'/'+total+'</span>';
+    html+='</button>';
+  });
+  document.getElementById('levelTabs').innerHTML=html;
+}
+
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv]) questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+
+function updateLevelProgress(){
+  var lv=state.level;var total=LEVEL_COUNTS[lv];
+  var done=answered[lv].filter(function(a){return a}).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+
+function renderQuestion(){
+  var lv=state.level;var idx=state.qIndex;
+  var qs=questions[lv];
+  if(!qs) return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  var q=qs[idx];
+  var area=document.getElementById('questionArea');
+  var isAnswered=answered[lv][idx];
+
+  var html='<div class="q-card"><div class="q-number">שאלה '+(idx+1)+' מתוך '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach(function(opt,i){
+      var letter=LETTERS[i];
+      var cls='q-opt';
+      if(isAnswered){
+        cls+=' disabled';
+        if(i===q.answer) cls+=' correct';
+        else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel']) cls+=' wrong';
+      }
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>בדקו</button>';
+  }
+
+  if(isAnswered){
+    var isCorrect=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'נכון! ':'לא נכון. ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+
+  /* Set up MC click handlers */
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(function(el){
+      el.onclick=function(){
+        area.querySelectorAll('.q-opt').forEach(function(o){o.classList.remove('selected')});
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'סיום':'הבא ←';
+}
+
+window.checkMC=function(){
+  var lv=state.level;var idx=state.qIndex;var q=questions[lv][idx];
+  var selected=document.querySelector('.q-opt.selected');
+  if(!selected) return;
+  var si=parseInt(selected.dataset.i);
+  var isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  answered[lv][idx+'_sel']=si;
+
+  document.querySelectorAll('.q-opt').forEach(function(el,i){
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer) el.classList.add('correct');
+    else if(i===si&&!isCorrect) el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  var fb=isCorrect?pick(['נכון!','מעולה!','נכון מאוד!','יפה!'])+' ':'לא נכון. ';
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+fb+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+function nextQuestion(){
+  var lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function')showAuthModal();
+    return;
+  }
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+
+function renderLevelComplete(){
+  var lv=state.level;
+  var correct=scores[lv].filter(function(s){return s===1}).length;
+  var total=LEVEL_COUNTS[lv];
+  var pct=Math.round(correct/total*100);
+  var scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  var emoji=pct>=80?'🎉':pct>=50?'👏':'💪';
+
+  document.getElementById('questionArea').innerHTML=
+    '<div class="q-card"><div class="level-complete">'+
+    '<div class="big-emoji">'+emoji+'</div>'+
+    '<h2>סיימתם את רמת "'+LEVEL_NAMES[lv]+'"!</h2>'+
+    '<div class="score-display'+scoreClass+'">'+correct+' / '+total+'</div>'+
+    '<p style="color:var(--text-light);margin-bottom:16px">'+pct+'% הצלחה</p>'+
+    '<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'+
+    '<button class="mini-btn" onclick="retryLevel()">נסו שוב</button>'+
+    (lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">לרמה הבאה</button>':'')+
+    '</div></div></div>';
+
+  if(pct>=80) showConfetti();
+  saveState();
+}
+
+window.retryLevel=function(){
+  var lv=state.level;
+  scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);
+  state.qIndex=0;
+  renderLevelTabs();renderQuestion();saveState();
+};
+
+window.nextLevel=function(){
+  var order=['easy','medium','hard','challenge'];
+  var ci=order.indexOf(state.level);
+  if(ci<order.length-1) switchLevel(order[ci+1]);
+};
+
+/* ===== SECTION SWITCHING ===== */
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(function(b){
+    b.classList.toggle('active',b.dataset.section===sec);
+  });
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+/* ===== CONFETTI ===== */
+function showConfetti(){
+  var box=document.getElementById('confettiBox');
+  box.innerHTML='';
+  var colors=['#2563eb','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'];
+  for(var i=0;i<50;i++){
+    var c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';
+    c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>0.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(function(){box.innerHTML=''},5000);
+}
+
+/* ===== INIT ===== */
+function init(){
+  loadState();
+  Object.keys(LEVEL_COUNTS).forEach(function(lv){
+    if(!scores[lv]||!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice') switchSection('practice');
+}
+init();
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

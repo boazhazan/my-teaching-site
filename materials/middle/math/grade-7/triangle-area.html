@@ -1,0 +1,1098 @@
+<!--
+  Title: שטח משולש
+  Unit: גיאומטריה
+  Subject: מתמטיקה
+  Grade: ז׳
+  Tags: גיאומטריה, שטח, משולש, בסיס, גובה
+  Ages: 12-13
+  Icon: 📐
+  Description: מהו שטח משולש? פיתוח הנוסחה S=(a×h)÷2, דוגמאות ותרגול ב-4 רמות קושי עם משוב מיידי
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>שטח משולש | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+
+/* Top bar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Section toggle */
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+
+/* Container */
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+
+/* ===== TEACHING SECTION ===== */
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid var(--accent);padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
+.step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+
+/* Interactive elements inside steps */
+.mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.mini-table th,.mini-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:1rem}
+.mini-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.mini-table td{background:var(--bg)}
+.mini-input{width:80px;padding:6px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:1rem;font-family:inherit;font-weight:700;transition:.3s}
+.mini-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.mini-input.correct{border-color:var(--success);background:#ecfdf5}
+.mini-input.wrong{border-color:var(--error);background:#fef2f2}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.reveal{display:none;animation:fadeIn .5s ease}
+.reveal.show{display:block}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+
+/* Step nav */
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== PRACTICE SECTION ===== */
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-stem code,.q-stem .expr{font-size:1.1em}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;transition:.25s}
+.q-opt.selected .q-opt-letter{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-opt.correct .q-opt-letter{background:var(--success);color:#fff;border-color:var(--success)}
+.q-opt.wrong .q-opt-letter{background:var(--error);color:#fff;border-color:var(--error)}
+
+.q-input-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-input{width:120px;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1.1rem;font-family:inherit;font-weight:700;text-align:center;transition:.3s;direction:ltr}
+.q-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(37,99,235,.15)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+
+.q-check-btn{padding:10px 28px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;box-shadow:var(--shadow)}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.92rem;animation:fadeIn .3s}
+.q-feedback.correct{background:#ecfdf5;border-right:4px solid var(--success);color:#065f46}
+.q-feedback.wrong{background:#fef2f2;border-right:4px solid var(--error);color:#991b1b}
+
+.q-nav{display:flex;justify-content:space-between;margin-top:16px}
+.q-nav-btn{padding:10px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Level complete */
+.level-complete{text-align:center;padding:24px;animation:fadeIn .5s}
+.level-complete .big-emoji{font-size:4rem;margin-bottom:12px}
+.level-complete h2{font-size:1.4rem;color:var(--primary-dark);margin-bottom:8px}
+.level-complete .score-display{font-size:1.8rem;font-weight:800;color:var(--success);margin-bottom:16px}
+.level-complete .score-display.medium-score{color:var(--accent)}
+.level-complete .score-display.low-score{color:var(--error)}
+
+/* Celebration confetti */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{
+  0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}
+  100%{transform:translateY(105vh) rotate(720deg) scale(.3);opacity:0}
+}
+
+/* SVG diagrams */
+.diagram-wrap{text-align:center;margin:16px 0}
+.diagram-wrap svg{max-width:100%;height:auto}
+
+/* step-by-step reveal */
+.step-reveal-item{opacity:0;transform:translateY(8px);transition:all .4s ease}
+.step-reveal-item.visible{opacity:1;transform:translateY(0)}
+
+/* formula card */
+.formula-card{background:linear-gradient(135deg,#1a2f5a,#2563eb);color:#fff;padding:20px;border-radius:var(--radius);text-align:center;margin:16px 0;font-size:1.3rem;font-weight:700;box-shadow:var(--shadow-lg)}
+.formula-card .formula-big{font-size:1.8rem;font-family:'Rubik',sans-serif;margin:8px 0;direction:ltr;unicode-bidi:embed}
+
+/* Print button */
+.print-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer;font-size:1rem;box-shadow:var(--shadow);transition:.25s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.print-btn:hover{background:var(--primary-dark);transform:scale(1.1)}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+/* Responsive */
+@media(max-width:600px){
+  .container{padding:0 10px 30px}
+  .step-card,.q-card{padding:18px 14px}
+  .step-title{font-size:1.15rem}
+  .step-summary-grid{grid-template-columns:1fr}
+  .section-toggle{max-width:280px;margin:12px auto}
+  .section-btn{font-size:.88rem;padding:8px 14px}
+  .q-opt{padding:10px 12px;font-size:.9rem}
+  .topbar-title{font-size:.9rem}
+}
+
+/* Print */
+@media print{
+  .topbar,.section-toggle,.step-nav,.q-nav,.print-btn,.level-tabs,.confetti-container,.q-check-btn{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .step-card,.q-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+  .container{max-width:100%}
+  .q-feedback{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">📐 כיתה ז׳ — שטח משולש</span>
+  <div style="display:flex;align-items:center;gap:10px"><button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button><a href="../../../../materials.html">← חזרה לדף החומרים</a></div>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+
+<!-- ===== LEARNING SECTION ===== -->
+<section id="learnSection">
+  <div class="step-progress">
+    <div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div>
+    <div class="step-progress-text" id="stepText"></div>
+  </div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+
+<!-- ===== PRACTICE SECTION ===== -->
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress">
+    <div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div>
+    <div class="level-progress-text" id="levelText"></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+
+</div>
+
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const today=new Date();const dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+let rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(arr){return arr[Math.floor(R()*arr.length)]}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const boyNames=["דני","יואב","עמית","אורי","נועם","גיא","איתי","רון","תומר","עידו"];
+const girlNames=["מיכל","נועה","שירה","תמר","רונית","יעל","דנה","אורית","הילה","ליאת"];
+function boyName(){return pick(boyNames)}
+function girlName(){return pick(girlNames)}
+function anyName(){return R()>.5?boyName():girlName()}
+
+const LETTERS=['א','ב','ג','ד'];
+
+/* ===== STATE ===== */
+let state={section:'learn',step:0,level:'easy',qIndex:0};
+let scores={easy:[],medium:[],hard:[],challenge:[]};
+let answered={easy:[],medium:[],hard:[],challenge:[]};
+let questions={easy:null,medium:null,hard:null,challenge:null};
+const LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+const LEVEL_NAMES={easy:'קל',medium:'בינוני',hard:'קשה',challenge:'אתגר'};
+const TOTAL_STEPS=7;
+
+/* ===== LOCAL STORAGE ===== */
+const LS_KEY='bh_grade7_triangle_area_'+dateSeed;
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores,answered,state}))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+/* ===== SVG HELPERS ===== */
+function svgTriangle(opts){
+  const w=opts.w||280,h=opts.h||200,pad=40;
+  const bx1=pad,by1=h-pad,bx2=w-pad,by2=h-pad;
+  const tx=opts.tx||(w*0.45),ty=pad;
+  const showHeight=opts.showHeight!==false;
+  const base=opts.base||'a';const height=opts.height||'h';
+  const baseVal=opts.baseVal;const heightVal=opts.heightVal;
+  const hFootX=opts.hFootX||tx;
+  let svg='<svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" style="max-width:100%">';
+  /* triangle fill */
+  svg+='<polygon points="'+bx1+','+by1+' '+bx2+','+by2+' '+tx+','+ty+'" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/>';
+  /* base label */
+  const baseMid=((bx1+bx2)/2);
+  svg+='<text x="'+baseMid+'" y="'+(by1+22)+'" text-anchor="middle" font-family="Rubik,Heebo,sans-serif" font-size="14" font-weight="700" fill="#1d4ed8">'+(baseVal?baseVal+' ס"מ':base)+'</text>';
+  /* height */
+  if(showHeight){
+    svg+='<line x1="'+hFootX+'" y1="'+ty+'" x2="'+hFootX+'" y2="'+by1+'" stroke="#ef4444" stroke-width="2" stroke-dasharray="6,4"/>';
+    /* right angle mark */
+    const sq=8;
+    svg+='<polyline points="'+(hFootX-sq)+','+by1+' '+(hFootX-sq)+','+(by1-sq)+' '+hFootX+','+(by1-sq)+'" fill="none" stroke="#ef4444" stroke-width="1.5"/>';
+    /* height label */
+    svg+='<text x="'+(hFootX-14)+'" y="'+((ty+by1)/2)+'" text-anchor="middle" font-family="Rubik,Heebo,sans-serif" font-size="14" font-weight="700" fill="#ef4444">'+(heightVal?heightVal+' ס"מ':height)+'</text>';
+  }
+  svg+='</svg>';
+  return svg;
+}
+
+/* ===== TEACHING STEPS ===== */
+const steps=[
+/* Step 0: What is area? */
+{title:'📏 מהו שטח?', render(){return `
+<p><strong>שטח</strong> הוא מידת הגודל של משטח — כמה "ריבועי יחידה" נכנסים בתוכו.</p>
+<div class="diagram-wrap">
+<svg viewBox="0 0 320 220" width="320" style="max-width:100%">
+  <!-- grid -->
+  <defs><pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M 30 0 L 0 0 0 30" fill="none" stroke="#cbd5e1" stroke-width="1"/></pattern></defs>
+  <rect x="10" y="10" width="300" height="180" fill="url(#grid)" stroke="#cbd5e1" stroke-width="1"/>
+  <!-- triangle through grid points -->
+  <polygon points="10,190 250,190 130,10" fill="rgba(37,99,235,0.15)" stroke="#2563eb" stroke-width="2.5"/>
+  <!-- filled unit squares inside -->
+  <rect x="40" y="160" width="30" height="30" fill="rgba(37,99,235,0.25)" stroke="#2563eb" stroke-width=".5"/>
+  <rect x="70" y="160" width="30" height="30" fill="rgba(37,99,235,0.25)" stroke="#2563eb" stroke-width=".5"/>
+  <rect x="100" y="160" width="30" height="30" fill="rgba(37,99,235,0.25)" stroke="#2563eb" stroke-width=".5"/>
+  <rect x="130" y="160" width="30" height="30" fill="rgba(37,99,235,0.25)" stroke="#2563eb" stroke-width=".5"/>
+  <rect x="160" y="160" width="30" height="30" fill="rgba(37,99,235,0.25)" stroke="#2563eb" stroke-width=".5"/>
+  <rect x="190" y="160" width="30" height="30" fill="rgba(37,99,235,0.25)" stroke="#2563eb" stroke-width=".5"/>
+  <rect x="70" y="130" width="30" height="30" fill="rgba(37,99,235,0.25)" stroke="#2563eb" stroke-width=".5"/>
+  <rect x="100" y="130" width="30" height="30" fill="rgba(37,99,235,0.25)" stroke="#2563eb" stroke-width=".5"/>
+  <rect x="130" y="130" width="30" height="30" fill="rgba(37,99,235,0.25)" stroke="#2563eb" stroke-width=".5"/>
+  <rect x="160" y="130" width="30" height="30" fill="rgba(37,99,235,0.25)" stroke="#2563eb" stroke-width=".5"/>
+  <rect x="100" y="100" width="30" height="30" fill="rgba(37,99,235,0.25)" stroke="#2563eb" stroke-width=".5"/>
+  <rect x="130" y="100" width="30" height="30" fill="rgba(37,99,235,0.25)" stroke="#2563eb" stroke-width=".5"/>
+  <!-- base label -->
+  <text x="130" y="210" text-anchor="middle" font-family="Rubik,sans-serif" font-size="13" fill="#1d4ed8" font-weight="700">בסיס = 8</text>
+  <!-- height label -->
+  <text x="265" y="105" text-anchor="start" font-family="Rubik,sans-serif" font-size="13" fill="#ef4444" font-weight="700">גובה = 6</text>
+</svg>
+</div>
+<p>המלבן שמקיף את המשולש הזה הוא <span class="math-expr">8 × 6 = 48</span> ריבועים.<br>המשולש תופס <strong>בדיוק חצי</strong> מהמלבן.</p>
+<p><strong>שאלה:</strong> כמה ריבועי יחידה (בערך) נכנסים בתוך המשולש?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="areaGuess" placeholder="?" aria-label="ריבועי יחידה במשולש">
+  <button class="mini-btn" onclick="checkAreaGuess()">בדקו</button>
+</div>
+<div id="areaGuessFb"></div>
+<div class="reveal" id="areaGuessReveal">
+  <div class="success-box">💡 בדיוק! <strong>24 ריבועי יחידה</strong> — חצי מ-48. זו בדיוק הנוסחה שנלמד!</div>
+</div>
+`}},
+
+/* Step 1: Base and height */
+{title:'📐 מהו בסיס ומהו גובה?', render(){return `
+<div class="rule-box">📌 <strong>הגובה</strong> הוא הקטע <strong>המאונך</strong> מקודקוד אל הבסיס (או הארכתו)</div>
+<p>הגובה תמיד יוצר <strong>זווית ישרה (90°)</strong> עם הבסיס — מסומנת בריבוע קטן.</p>
+<div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin:16px 0">
+  <!-- Right triangle -->
+  <div style="text-align:center">
+    <svg viewBox="0 0 180 150" width="170">
+      <polygon points="20,130 160,130 20,20" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+      <line x1="20" y1="20" x2="20" y2="130" stroke="#ef4444" stroke-width="2" stroke-dasharray="6,4"/>
+      <polyline points="28,130 28,122 20,122" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+      <text x="90" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#1d4ed8" font-family="Rubik,sans-serif">בסיס</text>
+      <text x="8" y="78" text-anchor="middle" font-size="12" font-weight="700" fill="#ef4444" font-family="Rubik,sans-serif" transform="rotate(-90,8,78)">גובה</text>
+    </svg>
+    <div style="font-size:.8rem;color:var(--text-light)">משולש ישר-זווית</div>
+  </div>
+  <!-- Acute triangle -->
+  <div style="text-align:center">
+    <svg viewBox="0 0 180 150" width="170">
+      <polygon points="20,130 160,130 90,20" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+      <line x1="90" y1="20" x2="90" y2="130" stroke="#ef4444" stroke-width="2" stroke-dasharray="6,4"/>
+      <polyline points="82,130 82,122 90,122" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+      <text x="90" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#1d4ed8" font-family="Rubik,sans-serif">בסיס</text>
+      <text x="78" y="78" text-anchor="middle" font-size="12" font-weight="700" fill="#ef4444" font-family="Rubik,sans-serif">h</text>
+    </svg>
+    <div style="font-size:.8rem;color:var(--text-light)">משולש שווה-שוקיים</div>
+  </div>
+  <!-- Obtuse triangle -->
+  <div style="text-align:center">
+    <svg viewBox="0 0 200 150" width="180">
+      <polygon points="20,130 170,130 150,25" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+      <line x1="150" y1="25" x2="150" y2="130" stroke="#ef4444" stroke-width="2" stroke-dasharray="6,4"/>
+      <polyline points="142,130 142,122 150,122" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+      <text x="95" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#1d4ed8" font-family="Rubik,sans-serif">בסיס</text>
+      <text x="138" y="80" text-anchor="middle" font-size="12" font-weight="700" fill="#ef4444" font-family="Rubik,sans-serif">h</text>
+    </svg>
+    <div style="font-size:.8rem;color:var(--text-light)">משולש קהה-זווית</div>
+  </div>
+</div>
+<div class="highlight">⚠️ <strong>שימו לב:</strong> הגובה לא חייב להיות צלע של המשולש! הוא הקטע <strong>המאונך</strong> מהקודקוד שמול הבסיס — אל הבסיס (או הארכתו).</div>
+`}},
+
+/* Step 2: Developing the formula */
+{title:'🔬 פיתוח הנוסחה', render(){return `
+<p>איך מחשבים שטח של משולש? בואו נבנה את הנוסחה צעד אחר צעד:</p>
+<div class="diagram-wrap">
+<svg viewBox="0 0 340 180" width="340" style="max-width:100%">
+  <!-- Rectangle -->
+  <rect x="20" y="20" width="140" height="100" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <!-- Triangle 1 (our triangle) -->
+  <polygon points="20,120 160,120 90,20" fill="rgba(37,99,235,0.25)" stroke="#2563eb" stroke-width="2"/>
+  <!-- Triangle 2 (complement) -->
+  <polygon points="20,20 160,20 90,20" fill="none" stroke="none"/>
+  <path d="M20,20 L90,20 L20,120 Z" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <path d="M160,20 L90,20 L160,120 Z" fill="rgba(239,68,68,0.15)" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <!-- Labels -->
+  <text x="90" y="140" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8" font-family="Rubik,sans-serif">a (בסיס)</text>
+  <text x="8" y="72" text-anchor="middle" font-size="13" font-weight="700" fill="#ef4444" font-family="Rubik,sans-serif" transform="rotate(-90,8,72)">h (גובה)</text>
+  <!-- Arrow -->
+  <text x="195" y="75" font-size="28" fill="#64748b">→</text>
+  <!-- Result -->
+  <rect x="220" y="20" width="100" height="100" fill="rgba(37,99,235,0.1)" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="270" y="70" text-anchor="middle" font-size="12" font-weight="700" fill="#2563eb" font-family="Heebo,sans-serif">שטח המלבן</text>
+  <text x="270" y="88" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8" font-family="Rubik,sans-serif" direction="ltr">a × h</text>
+</svg>
+</div>
+<div class="example">
+<p>🔹 שטח המלבן = <span class="math-expr">a × h</span></p>
+<p>🔹 המשולש תופס <strong>בדיוק חצי</strong> מהמלבן</p>
+<p>🔹 לכן: <strong>שטח המשולש = חצי משטח המלבן</strong></p>
+</div>
+<div class="formula-card">
+  <div>נוסחת שטח משולש</div>
+  <div class="formula-big">S = (a × h) ÷ 2</div>
+  <div style="font-size:.85rem;opacity:.85">a = בסיס &nbsp;|&nbsp; h = גובה</div>
+</div>
+`}},
+
+/* Step 3: First example */
+{title:'✏️ דוגמה ראשונה', render(){return `
+<div class="diagram-wrap">
+<svg viewBox="0 0 280 200" width="280" style="max-width:100%">
+  <polygon points="30,170 250,170 140,30" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/>
+  <line x1="140" y1="30" x2="140" y2="170" stroke="#ef4444" stroke-width="2" stroke-dasharray="6,4"/>
+  <polyline points="132,170 132,162 140,162" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="140" y="192" text-anchor="middle" font-size="14" font-weight="700" fill="#1d4ed8" font-family="Rubik,sans-serif">8 ס"מ</text>
+  <text x="122" y="105" text-anchor="middle" font-size="14" font-weight="700" fill="#ef4444" font-family="Rubik,sans-serif">5 ס"מ</text>
+</svg>
+</div>
+<p><strong>נתון:</strong> בסיס = <span class="math-expr">8</span> ס"מ, גובה = <span class="math-expr">5</span> ס"מ</p>
+<p><strong>מצא:</strong> את שטח המשולש</p>
+<div id="example1Steps">
+  <button class="mini-btn accent" onclick="showExample1()">▶ הראו פתרון צעד אחר צעד</button>
+</div>
+<div class="reveal" id="ex1reveal">
+  <div class="example" style="direction:ltr;text-align:center;font-size:1.1rem;line-height:2.2">
+    <div class="step-reveal-item" id="ex1s1"><strong>S = (a × h) ÷ 2</strong></div>
+    <div class="step-reveal-item" id="ex1s2">S = (8 × 5) ÷ 2</div>
+    <div class="step-reveal-item" id="ex1s3">S = 40 ÷ 2</div>
+    <div class="step-reveal-item" id="ex1s4" style="font-size:1.3rem;color:var(--success)"><strong>S = 20 סמ"ר</strong> ✅</div>
+  </div>
+</div>
+`}},
+
+/* Step 4: Finding height from area */
+{title:'🔍 מציאת הגובה מהשטח', render(){return `
+<p>לפעמים נתון השטח ואנחנו צריכים למצוא את הגובה (או הבסיס).</p>
+<div class="diagram-wrap">
+<svg viewBox="0 0 280 200" width="280" style="max-width:100%">
+  <polygon points="30,170 230,170 120,30" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/>
+  <line x1="120" y1="30" x2="120" y2="170" stroke="#ef4444" stroke-width="2" stroke-dasharray="6,4"/>
+  <polyline points="112,170 112,162 120,162" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="130" y="192" text-anchor="middle" font-size="14" font-weight="700" fill="#1d4ed8" font-family="Rubik,sans-serif">10 ס"מ</text>
+  <text x="104" y="105" text-anchor="middle" font-size="16" font-weight="700" fill="#ef4444" font-family="Rubik,sans-serif">h = ?</text>
+  <text x="80" y="130" font-size="13" font-weight="700" fill="#2563eb" font-family="Heebo,sans-serif">S = 30</text>
+</svg>
+</div>
+<p><strong>נתון:</strong> שטח = <span class="math-expr">30</span> סמ"ר, בסיס = <span class="math-expr">10</span> ס"מ</p>
+<p><strong>מצא:</strong> גובה = ?</p>
+<div class="example" style="direction:ltr;text-align:center;font-size:1.05rem;line-height:2">
+  <div>30 = (10 × h) ÷ 2</div>
+  <div>30 × 2 = 10 × h</div>
+  <div>60 = 10h</div>
+  <div>h = 60 ÷ 10</div>
+  <div style="font-size:1.2rem;color:var(--success)"><strong>h = 6 ס"מ</strong> ✅</div>
+</div>
+<div class="highlight">💡 <strong>כלל:</strong> כדי למצוא את הגובה: <span class="math-expr">h = (2 × S) ÷ a</span><br>כדי למצוא את הבסיס: <span class="math-expr">a = (2 × S) ÷ h</span></div>
+<p><strong>תורכם:</strong> שטח משולש הוא <span class="math-expr">24</span> סמ"ר והבסיס <span class="math-expr">6</span> ס"מ. מהו הגובה?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="findH" placeholder="h=?" aria-label="מצאו את הגובה">
+  <button class="mini-btn" onclick="checkFindH()">בדקו</button>
+</div>
+<div id="findHfb"></div>
+`}},
+
+/* Step 5: External height */
+{title:'⚡ גובה חיצוני', render(){return `
+<p>במשולש <strong>קהה-זווית</strong>, הגובה יכול ליפול <strong>מחוץ</strong> למשולש! במקרה כזה מאריכים את הבסיס בקו מקווקו.</p>
+<div class="diagram-wrap">
+<svg viewBox="0 0 320 200" width="320" style="max-width:100%">
+  <!-- Extended base (dashed) -->
+  <line x1="20" y1="160" x2="100" y2="160" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <!-- Triangle -->
+  <polygon points="100,160 280,160 60,30" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5"/>
+  <!-- External height from top vertex down to extended base -->
+  <line x1="60" y1="30" x2="60" y2="160" stroke="#ef4444" stroke-width="2" stroke-dasharray="6,4"/>
+  <!-- Right angle mark -->
+  <polyline points="68,160 68,152 60,152" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+  <!-- Labels -->
+  <text x="190" y="178" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8" font-family="Rubik,sans-serif">a (בסיס)</text>
+  <text x="44" y="100" text-anchor="middle" font-size="13" font-weight="700" fill="#ef4444" font-family="Rubik,sans-serif">h</text>
+  <text x="60" y="178" text-anchor="middle" font-size="11" fill="#94a3b8" font-family="Heebo,sans-serif">הארכת הבסיס</text>
+</svg>
+</div>
+<div class="success-box">✅ <strong>הנוסחה לא משתנה!</strong> גם כשהגובה חיצוני:<br><span class="math-expr">S = (a × h) ÷ 2</span></div>
+<p><strong>דוגמה:</strong> במשולש קהה-זווית, הבסיס = <span class="math-expr">12</span> ס"מ והגובה החיצוני = <span class="math-expr">5</span> ס"מ.</p>
+<p>מהו השטח?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="extH" placeholder="S=?" aria-label="שטח המשולש">
+  <button class="mini-btn" onclick="checkExtH()">בדקו</button>
+</div>
+<div id="extHfb"></div>
+`}},
+
+/* Step 6: Summary */
+{title:'🏆 סיכום', render(){return `
+<p style="font-size:1.1rem;text-align:center;margin-bottom:20px">בשיעור הזה למדנו:</p>
+<div class="step-summary-grid">
+  <div class="summary-item">
+    <div class="s-icon">📏</div>
+    <div class="s-title">שטח</div>
+    <div class="s-text">כמה ריבועי יחידה נכנסים בצורה</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">📐</div>
+    <div class="s-title">בסיס וגובה</div>
+    <div class="s-text">הגובה מאונך לבסיס — תמיד!</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🔬</div>
+    <div class="s-title">הנוסחה</div>
+    <div class="s-text">שטח = חצי משטח המלבן</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">⚡</div>
+    <div class="s-title">גובה חיצוני</div>
+    <div class="s-text">גם מחוץ למשולש — אותה נוסחה</div>
+  </div>
+</div>
+<table class="mini-table" style="margin:16px auto">
+  <tr><th>בסיס (a)</th><th>גובה (h)</th><th>שטח (S)</th></tr>
+  <tr><td style="direction:ltr">8</td><td style="direction:ltr">5</td><td style="direction:ltr">20</td></tr>
+  <tr><td style="direction:ltr">10</td><td style="direction:ltr">6</td><td style="direction:ltr">30</td></tr>
+  <tr><td style="direction:ltr">12</td><td style="direction:ltr">7</td><td style="direction:ltr">42</td></tr>
+</table>
+<div class="formula-card">
+  <div>נוסחת שטח משולש</div>
+  <div class="formula-big">S = (a × h) ÷ 2</div>
+  <div style="font-size:.85rem;opacity:.85">a = בסיס &nbsp;|&nbsp; h = גובה לבסיס</div>
+</div>
+<div class="success-box" style="text-align:center;font-size:1.1rem;margin-top:20px">
+  <p>🌟 עכשיו אתם מוכנים לתרגול!</p>
+  <p>4 רמות קושי מחכות לכם</p>
+  <button class="mini-btn accent" style="margin-top:12px;font-size:1rem;padding:12px 32px" onclick="switchSection('practice')">מוכנים לתרגול ←</button>
+</div>
+`}}
+];
+
+function renderStep(idx){
+  state.step=idx;
+  const s=steps[idx];
+  const fill=((idx+1)/TOTAL_STEPS*100).toFixed(0);
+  document.getElementById('stepFill').style.width=fill+'%';
+  document.getElementById('stepText').textContent='שלב '+(idx+1)+' מתוך '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+s.title+'</div>'+s.render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'לתרגול ←':'הבא ←';
+  if(s.init) s.init();
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+/* Step interactive handlers */
+window.checkAreaGuess=function(){
+  const v=parseInt(document.getElementById('areaGuess').value);
+  const fb=document.getElementById('areaGuessFb');
+  if(v===24){fb.innerHTML='<div class="feedback-inline ok">✅ מעולה! 48 ÷ 2 = 24</div>';document.getElementById('areaGuessReveal').classList.add('show')}
+  else if(isNaN(v)){fb.innerHTML='<div class="feedback-inline err">הקלידו מספר</div>'}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. רמז: המשולש הוא חצי מהמלבן שמקיף אותו (8×6=48)</div>'}
+};
+window.showExample1=function(){
+  document.getElementById('ex1reveal').classList.add('show');
+  ['ex1s1','ex1s2','ex1s3','ex1s4'].forEach(function(id,i){
+    setTimeout(function(){document.getElementById(id).classList.add('visible')},i*500);
+  });
+};
+window.checkFindH=function(){
+  const v=parseInt(document.getElementById('findH').value);
+  const fb=document.getElementById('findHfb');
+  if(v===8){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! h = (2 × 24) ÷ 6 = 48 ÷ 6 = 8 ס"מ</div>';document.getElementById('findH').classList.add('correct')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. h = (2 × S) ÷ a = (2 × 24) ÷ 6 = ?</div>'}
+};
+window.checkExtH=function(){
+  const v=parseInt(document.getElementById('extH').value);
+  const fb=document.getElementById('extHfb');
+  if(v===30){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! S = (12 × 5) ÷ 2 = 60 ÷ 2 = 30 סמ"ר</div>';document.getElementById('extH').classList.add('correct')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. S = (a × h) ÷ 2 = (12 × 5) ÷ 2 = ?</div>'}
+};
+
+/* ===== QUESTION GENERATORS ===== */
+
+function makeTriSvg(base,height,w,h){
+  w=w||220;h=h||160;
+  var pad=30,bx1=pad,by1=h-pad,bx2=w-pad,by2=h-pad;
+  var tx=pad+Math.floor((w-2*pad)*0.45),ty=pad;
+  var hx=tx;
+  var s='<svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" style="max-width:100%">';
+  s+='<polygon points="'+bx1+','+by1+' '+bx2+','+by2+' '+tx+','+ty+'" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>';
+  s+='<line x1="'+hx+'" y1="'+ty+'" x2="'+hx+'" y2="'+by1+'" stroke="#ef4444" stroke-width="2" stroke-dasharray="6,4"/>';
+  var sq=7;
+  s+='<polyline points="'+(hx-sq)+','+by1+' '+(hx-sq)+','+(by1-sq)+' '+hx+','+(by1-sq)+'" fill="none" stroke="#ef4444" stroke-width="1.5"/>';
+  s+='<text x="'+((bx1+bx2)/2)+'" y="'+(by1+18)+'" text-anchor="middle" font-family="Rubik,sans-serif" font-size="13" font-weight="700" fill="#1d4ed8">'+base+' ס"מ</text>';
+  s+='<text x="'+(hx-12)+'" y="'+((ty+by1)/2)+'" text-anchor="middle" font-family="Rubik,sans-serif" font-size="13" font-weight="700" fill="#ef4444">'+height+' ס"מ</text>';
+  s+='</svg>';
+  return s;
+}
+
+function genEasy(){
+  rng=mulberry32(dateSeed+100);
+  var qs=[];
+  /* Q1-10: compute area, whole result */
+  for(var i=0;i<10;i++){
+    var b=RI(2,12);var h=RI(2,10);
+    /* ensure whole area */
+    if((b*h)%2!==0){b%2===1?b++:h++}
+    var area=(b*h)/2;
+    var correct=''+area;
+    var d1=''+(b*h);var d2=''+(area+b);var d3=''+Math.max(1,area-h);
+    var opts=shuffle([correct,d1,d2,d3]);
+    /* remove duplicates */
+    var unique=[correct];[d1,d2,d3].forEach(function(v){if(unique.indexOf(v)===-1)unique.push(v)});
+    while(unique.length<4)unique.push(''+(area+unique.length));
+    opts=shuffle(unique.slice(0,4));
+    qs.push({type:'mc',stem:'<div style="text-align:center">'+makeTriSvg(b,h)+'</div>חשבו את שטח המשולש (בסמ"ר):',options:opts,answer:opts.indexOf(correct),explanation:'S = ('+b+' × '+h+') ÷ 2 = '+(b*h)+' ÷ 2 = <strong>'+area+' סמ"ר</strong>'});
+  }
+  /* Q11-16: compute area, text only */
+  for(var i=0;i<6;i++){
+    var b=RI(4,14);var h=RI(4,12);
+    if((b*h)%2!==0)b++;
+    var area=(b*h)/2;
+    var correct=''+area;
+    var d1=''+(b*h);var d2=''+(b+h);var d3=''+Math.max(1,area-RI(1,5));
+    var unique=[correct];[d1,d2,d3].forEach(function(v){if(unique.indexOf(v)===-1)unique.push(v)});
+    while(unique.length<4)unique.push(''+(area+unique.length+1));
+    var opts=shuffle(unique.slice(0,4));
+    qs.push({type:'mc',stem:'בסיס המשולש הוא <span class="math-expr">'+b+'</span> ס"מ וגובהו <span class="math-expr">'+h+'</span> ס"מ. מהו שטחו?',options:opts,answer:opts.indexOf(correct),explanation:'S = ('+b+' × '+h+') ÷ 2 = '+(b*h)+' ÷ 2 = <strong>'+area+' סמ"ר</strong>'});
+  }
+  /* Q17-20: which formula is correct */
+  for(var i=0;i<4;i++){
+    var correct='(a × h) ÷ 2';
+    var wrong1='a × h';var wrong2='(a + h) ÷ 2';var wrong3='a × h × 2';
+    if(i===1){correct='(a × h) ÷ 2';wrong1='a + h';wrong2='2 × a × h';wrong3='(a × h) + 2'}
+    if(i===2){var bb=RI(6,12);var hh=RI(4,10);if((bb*hh)%2!==0)bb++;var aa=(bb*hh)/2;correct=''+aa;wrong1=''+(bb*hh);wrong2=''+(bb+hh);wrong3=''+(aa*2+1);
+      var uq=[correct];[wrong1,wrong2,wrong3].forEach(function(v){if(uq.indexOf(v)===-1)uq.push(v)});while(uq.length<4)uq.push(''+(aa+uq.length));var op=shuffle(uq.slice(0,4));
+      qs.push({type:'mc',stem:'שטח משולש עם בסיס <span class="math-expr">'+bb+'</span> ס"מ וגובה <span class="math-expr">'+hh+'</span> ס"מ הוא:',options:op,answer:op.indexOf(correct),explanation:'S = ('+bb+' × '+hh+') ÷ 2 = '+(bb*hh)+' ÷ 2 = <strong>'+aa+' סמ"ר</strong>'});continue}
+    if(i===3){var bb=RI(4,10);var hh=RI(4,8);if((bb*hh)%2!==0)hh++;var aa=(bb*hh)/2;correct=''+aa;wrong1=''+(bb*hh);wrong2=''+(bb+hh);wrong3=''+Math.max(1,aa-3);
+      var uq=[correct];[wrong1,wrong2,wrong3].forEach(function(v){if(uq.indexOf(v)===-1)uq.push(v)});while(uq.length<4)uq.push(''+(aa+uq.length));var op=shuffle(uq.slice(0,4));
+      qs.push({type:'mc',stem:'<div style="text-align:center">'+makeTriSvg(bb,hh,200,140)+'</div>שטח המשולש הוא:',options:op,answer:op.indexOf(correct),explanation:'S = ('+bb+' × '+hh+') ÷ 2 = <strong>'+aa+' סמ"ר</strong>'});continue}
+    var opts=shuffle([correct,wrong1,wrong2,wrong3]);
+    qs.push({type:'mc',stem:'מהי הנוסחה הנכונה לחישוב שטח משולש?',options:opts,answer:opts.indexOf(correct),explanation:'נוסחת שטח משולש: <strong>S = (a × h) ÷ 2</strong>'});
+  }
+  return qs;
+}
+
+function genMedium(){
+  rng=mulberry32(dateSeed+200);
+  var qs=[];
+  /* Q1-5: area with decimal results */
+  for(var i=0;i<5;i++){
+    var b=RI(3,13);var h=RI(3,11);
+    /* allow odd product => .5 result */
+    if((b*h)%2===0){if(b%2===0)b++;else h++}
+    var area=(b*h)/2;
+    var areaStr=area%1===0?''+area:area.toFixed(1);
+    qs.push({type:'input',stem:'בסיס המשולש הוא <span class="math-expr">'+b+'</span> ס"מ וגובהו <span class="math-expr">'+h+'</span> ס"מ.<br>מהו שטח המשולש? (בסמ"ר)',answer:area,explanation:'S = ('+b+' × '+h+') ÷ 2 = '+(b*h)+' ÷ 2 = <strong>'+areaStr+' סמ"ר</strong>'});
+  }
+  /* Q6-10: find height given area and base */
+  for(var i=0;i<5;i++){
+    var b=RI(4,12);var h=RI(3,10);
+    if((b*h)%2!==0)b++;
+    var area=(b*h)/2;
+    qs.push({type:'input',stem:'שטח משולש הוא <span class="math-expr">'+area+'</span> סמ"ר והבסיס <span class="math-expr">'+b+'</span> ס"מ.<br>מהו הגובה? (בס"מ)',answer:h,explanation:'h = (2 × '+area+') ÷ '+b+' = '+(2*area)+' ÷ '+b+' = <strong>'+h+' ס"מ</strong>'});
+  }
+  /* Q11-15: find base given area and height */
+  for(var i=0;i<5;i++){
+    var b=RI(4,14);var h=RI(3,10);
+    if((b*h)%2!==0)h++;
+    var area=(b*h)/2;
+    qs.push({type:'input',stem:'שטח משולש הוא <span class="math-expr">'+area+'</span> סמ"ר והגובה <span class="math-expr">'+h+'</span> ס"מ.<br>מהו הבסיס? (בס"מ)',answer:b,explanation:'a = (2 × '+area+') ÷ '+h+' = '+(2*area)+' ÷ '+h+' = <strong>'+b+' ס"מ</strong>'});
+  }
+  /* Q16-20: word problems */
+  for(var i=0;i<5;i++){
+    var b=RI(6,16);var h=RI(4,12);
+    if((b*h)%2!==0)b++;
+    var area=(b*h)/2;
+    var names=[anyName(),anyName()];
+    var contexts=[
+      'שלט בצורת משולש עם בסיס '+b+' ס"מ וגובה '+h+' ס"מ. מהו שטח השלט?',
+      'מפרש של סירה בצורת משולש. הבסיס '+b+' ס"מ והגובה '+h+' ס"מ. מהו שטח המפרש?',
+      'גינה בצורת משולש עם בסיס '+b+' מ\' וגובה '+h+' מ\'. מהו שטח הגינה? (במ"ר)',
+      names[0]+' גזר/ה סנדוויץ\' בצורת משולש. הבסיס '+b+' ס"מ והגובה '+h+' ס"מ. מהו שטח הסנדוויץ\'?',
+      'דגל בצורת משולש. בסיסו '+b+' ס"מ וגובהו '+h+' ס"מ. מהו שטחו?'
+    ];
+    qs.push({type:'input',stem:contexts[i],answer:area,explanation:'S = ('+b+' × '+h+') ÷ 2 = '+(b*h)+' ÷ 2 = <strong>'+area+'</strong>'});
+  }
+  return qs;
+}
+
+function genHard(){
+  rng=mulberry32(dateSeed+300);
+  var qs=[];
+  /* Q1-5: rectangle with triangle inside — find shaded area */
+  for(var i=0;i<5;i++){
+    var rw=RI(8,16);var rh=RI(6,12);
+    var tb=rw;var th=rh;
+    var rectArea=rw*rh;var triArea=(tb*th)/2;
+    var shaded=rectArea-triArea;
+    qs.push({type:'input',stem:'בתוך מלבן בגודל <span class="math-expr">'+rw+' × '+rh+'</span> ס"מ מצויר משולש שבסיסו שווה לרוחב המלבן (<span class="math-expr">'+tb+'</span> ס"מ) וגובהו שווה לגובה המלבן (<span class="math-expr">'+th+'</span> ס"מ).<br>מהו השטח המוצלל (השטח <strong>שמחוץ</strong> למשולש אך בתוך המלבן)?',answer:shaded,explanation:'שטח המלבן = '+rw+' × '+rh+' = '+rectArea+'<br>שטח המשולש = ('+tb+' × '+th+') ÷ 2 = '+triArea+'<br>השטח המוצלל = '+rectArea+' − '+triArea+' = <strong>'+shaded+' סמ"ר</strong>'});
+  }
+  /* Q6-10: two triangles sharing a base — compare areas / find area of composite */
+  for(var i=0;i<5;i++){
+    var base=RI(6,14);
+    var h1=RI(4,10);var h2=RI(4,10);
+    while(h2===h1)h2=RI(4,10);
+    if((base*h1)%2!==0)base++;
+    var a1=(base*h1)/2;var a2=(base*h2)/2;
+    if(i<3){
+      /* total area of both triangles on opposite sides of base */
+      var total=a1+a2;
+      var totalStr=total%1===0?''+total:total.toFixed(1);
+      qs.push({type:'input',stem:'שני משולשים חולקים בסיס משותף באורך <span class="math-expr">'+base+'</span> ס"מ. גובה משולש אחד <span class="math-expr">'+h1+'</span> ס"מ וגובה השני <span class="math-expr">'+h2+'</span> ס"מ.<br>מהו השטח <strong>הכולל</strong> של שני המשולשים?',answer:total,explanation:'שטח ראשון = ('+base+' × '+h1+') ÷ 2 = '+a1+'<br>שטח שני = ('+base+' × '+h2+') ÷ 2 = '+a2+'<br>סה"כ = '+a1+' + '+a2+' = <strong>'+totalStr+' סמ"ר</strong>'});
+    } else {
+      /* ratio */
+      var bigger=Math.max(h1,h2);var smaller=Math.min(h1,h2);
+      /* ask: how many times bigger is the bigger triangle */
+      /* Since same base, ratio = h1/h2 -- we need integer ratios */
+      var mult=RI(2,4);
+      h2=h1*mult;
+      a2=(base*h2)/2;
+      var correct=''+mult;
+      var d1=''+(mult+1);var d2=''+(mult-1>0?mult-1:mult+2);var d3=''+(mult*2);
+      var opts=shuffle([correct,d1,d2,d3]);
+      /* remove dups */
+      var uq=[correct];[d1,d2,d3].forEach(function(v){if(uq.indexOf(v)===-1)uq.push(v)});while(uq.length<4)uq.push(''+(mult+uq.length));opts=shuffle(uq.slice(0,4));
+      qs.push({type:'mc',stem:'לשני משולשים בסיס זהה. גובה משולש א\' הוא <span class="math-expr">'+h1+'</span> ס"מ וגובה משולש ב\' הוא <span class="math-expr">'+h2+'</span> ס"מ.<br>פי כמה שטח משולש ב\' גדול משטח משולש א\'?',options:opts,answer:opts.indexOf(correct),explanation:'היחס = '+h2+' ÷ '+h1+' = <strong>'+mult+'</strong> (כשהבסיס זהה, היחס בין השטחים = היחס בין הגבהים)'});
+    }
+  }
+  /* Q11-15: word problems */
+  for(var i=0;i<5;i++){
+    var b=RI(6,20);var h=RI(4,14);
+    if((b*h)%2!==0)b++;
+    var area=(b*h)/2;
+    var n=anyName();
+    var stories=[
+      n+' רוצה לצבוע קיר בצורת משולש. בסיס הקיר '+b+' מ\' וגובהו '+h+' מ\'. כל ליטר צבע מספיק ל-5 מ"ר.<br>כמה ליטרים צבע צריך '+n+'?',
+      'חלקת אדמה משולשת. בסיסה '+b+' מ\' וגובהה '+h+' מ\'. מחיר מ"ר קרקע הוא 100 ש"ח.<br>מה מחיר החלקה כולה?',
+      'מגרש משולש. הבסיס '+b+' מ\' והגובה '+h+' מ\'. '+n+' רוצה לשתול דשא. עלות שתילה: 8 ש"ח למ"ר.<br>מהי העלות הכוללת?',
+      'גג בצורת משולש. הבסיס '+b+' מ\' והגובה '+h+' מ\'. מחיר רעפים: 12 ש"ח למ"ר.<br>כמה יעלו הרעפים?',
+      n+' בונה עפיפון בצורת משולש. הבסיס '+b+' ס"מ והגובה '+h+' ס"מ.<br>כמה ס"מ מרובעים של בד צריך '+n+'?'
+    ];
+    var answers=[Math.ceil(area/5),area*100,area*8,area*12,area];
+    qs.push({type:'input',stem:stories[i],answer:answers[i],explanation:'שטח המשולש = ('+b+' × '+h+') ÷ 2 = '+area+
+      (i===0?' מ"ר. צבע: '+area+' ÷ 5 = <strong>'+answers[i]+' ליטרים</strong>':
+       i===1?' מ"ר. מחיר: '+area+' × 100 = <strong>'+answers[i]+' ש"ח</strong>':
+       i===2?' מ"ר. עלות: '+area+' × 8 = <strong>'+answers[i]+' ש"ח</strong>':
+       i===3?' מ"ר. רעפים: '+area+' × 12 = <strong>'+answers[i]+' ש"ח</strong>':
+       ' סמ"ר = <strong>'+answers[i]+' סמ"ר</strong>')
+    });
+  }
+  /* Q16-20: composite shapes */
+  for(var i=0;i<5;i++){
+    var rw=RI(8,16);var rh=RI(6,12);
+    var rectA=rw*rh;
+    /* triangle cut from corner: base=rw, height=some portion of rh */
+    var cutH=RI(2,rh-1);var cutB=RI(2,rw-1);
+    var cutArea=(cutB*cutH)/2;
+    if((cutB*cutH)%2!==0)cutB++;
+    cutArea=(cutB*cutH)/2;
+    var remaining=rectA-cutArea;
+    qs.push({type:'input',stem:'ממלבן בגודל <span class="math-expr">'+rw+' × '+rh+'</span> ס"מ חתכו משולש ישר-זווית שניצביו <span class="math-expr">'+cutB+'</span> ס"מ ו-<span class="math-expr">'+cutH+'</span> ס"מ.<br>מהו השטח שנותר?',answer:remaining,explanation:'שטח המלבן = '+rw+' × '+rh+' = '+rectA+'<br>שטח המשולש שנחתך = ('+cutB+' × '+cutH+') ÷ 2 = '+cutArea+'<br>שטח שנותר = '+rectA+' − '+cutArea+' = <strong>'+remaining+' סמ"ר</strong>'});
+  }
+  return qs;
+}
+
+function genChallenge(){
+  rng=mulberry32(dateSeed+400);
+  var qs=[];
+  /* Q1-3: Triangle with point on side creating sub-triangles */
+  for(var i=0;i<3;i++){
+    var totalBase=RI(10,20);var h=RI(6,14);
+    if((totalBase*h)%2!==0)totalBase++;
+    var totalArea=(totalBase*h)/2;
+    /* point divides base into ratio */
+    var part1=RI(2,totalBase-2);var part2=totalBase-part1;
+    var area1=(part1*h)/2;var area2=(part2*h)/2;
+    var a1Str=area1%1===0?''+area1:area1.toFixed(1);
+    qs.push({type:'input',stem:'משולש ABC: הבסיס BC = <span class="math-expr">'+totalBase+'</span> ס"מ, הגובה = <span class="math-expr">'+h+'</span> ס"מ.<br>נקודה D נמצאת על BC כך ש-BD = <span class="math-expr">'+part1+'</span> ס"מ.<br>מהו שטח משולש ABD?',answer:area1,explanation:'שטח ABD = (BD × h) ÷ 2 = ('+part1+' × '+h+') ÷ 2 = <strong>'+a1Str+' סמ"ר</strong><br>(הגובה של ABD מ-A הוא אותו גובה של ABC!)'});
+  }
+  /* Q4-6: Algebraic base/height */
+  for(var i=0;i<3;i++){
+    var coef=RI(2,5);var xVal=RI(2,6);
+    var base=coef*xVal;var h=RI(4,10);
+    if((base*h)%2!==0)h++;
+    var area=(base*h)/2;
+    qs.push({type:'input',stem:'בסיס משולש הוא <span class="math-expr">'+coef+'x</span> ס"מ וגובהו <span class="math-expr">'+h+'</span> ס"מ.<br>אם <span class="math-expr">x = '+xVal+'</span>, מהו שטח המשולש?',answer:area,explanation:'בסיס = '+coef+' × '+xVal+' = '+base+' ס"מ<br>S = ('+base+' × '+h+') ÷ 2 = '+(base*h)+' ÷ 2 = <strong>'+area+' סמ"ר</strong>'});
+  }
+  /* Q7-9: Base divided into equal parts — ratio of sub-triangle areas */
+  for(var i=0;i<3;i++){
+    var parts=RI(3,5);
+    var subParts=RI(1,parts-1);
+    var correct=''+subParts;var d1=''+parts;var d2=''+(subParts+1);var d3='1';
+    var uq=[correct];[d1,d2,d3].forEach(function(v){if(uq.indexOf(v)===-1)uq.push(v)});while(uq.length<4)uq.push(''+(subParts+uq.length));var opts=shuffle(uq.slice(0,4));
+    qs.push({type:'mc',stem:'בסיס משולש חולק ל-<span class="math-expr">'+parts+'</span> חלקים שווים. נבחר <span class="math-expr">'+subParts+'</span> חלקים רצופים כבסיס למשולש קטן (עם אותו גובה).<br>פי כמה שטח המשולש הקטן מתוך <span class="math-expr">'+parts+'</span> חלקי השטח של המשולש הגדול?',options:opts,answer:opts.indexOf(correct),explanation:'כשהבסיס מחולק ל-'+parts+' חלקים שווים, כל חלק = 1/'+parts+' מהבסיס.<br>'+subParts+' חלקים = '+subParts+'/'+parts+' מהבסיס → שטח = '+subParts+'/'+parts+' מהשטח הכולל → <strong>'+subParts+'</strong> מתוך '+parts+' חלקים'});
+  }
+  /* Q10-12: find missing value in composed figure */
+  for(var i=0;i<3;i++){
+    var sqSide=RI(6,14);var sqArea=sqSide*sqSide;
+    var triH=RI(3,sqSide-1);
+    var triArea=(sqSide*triH)/2;
+    if((sqSide*triH)%2!==0)triH++;
+    triArea=(sqSide*triH)/2;
+    var totalArea=sqArea+triArea;
+    qs.push({type:'input',stem:'צורה מורכבת מריבוע שצלעו <span class="math-expr">'+sqSide+'</span> ס"מ ומשולש שבסיסו על צלע הריבוע (בסיס = <span class="math-expr">'+sqSide+'</span> ס"מ) וגובהו <span class="math-expr">'+triH+'</span> ס"מ.<br>מהו השטח הכולל של הצורה?',answer:totalArea,explanation:'שטח הריבוע = '+sqSide+'² = '+sqArea+'<br>שטח המשולש = ('+sqSide+' × '+triH+') ÷ 2 = '+triArea+'<br>סה"כ = '+sqArea+' + '+triArea+' = <strong>'+totalArea+' סמ"ר</strong>'});
+  }
+  /* Q13-15: inverse word problems */
+  for(var i=0;i<3;i++){
+    var area=RI(20,80);var b=RI(4,12);
+    /* ensure h is whole: h = 2*area/b => need b to divide 2*area */
+    while((2*area)%b!==0){area++}
+    var h=(2*area)/b;
+    var n=anyName();
+    var stories=[
+      n+' יודע/ת ששטח מפרש המשולש הוא <span class="math-expr">'+area+'</span> סמ"ר ובסיס המפרש <span class="math-expr">'+b+'</span> ס"מ.<br>'+n+' צריך/ה למדוד את הגובה. מהו?',
+      'שטח גג משולש הוא <span class="math-expr">'+area+'</span> מ"ר. הגובה הוא <span class="math-expr">'+h+'</span> מ\'.<br>מהו אורך הבסיס?',
+      'לוח משולש: שטחו <span class="math-expr">'+area+'</span> סמ"ר, הבסיס <span class="math-expr">'+b+'</span> ס"מ. מהו הגובה?'
+    ];
+    var answers=[h,(i===1?b:h),h];
+    qs.push({type:'input',stem:stories[i],answer:answers[i],explanation:(i===1?
+      'a = (2 × '+area+') ÷ '+h+' = '+(2*area)+' ÷ '+h+' = <strong>'+b+'</strong>':
+      'h = (2 × '+area+') ÷ '+b+' = '+(2*area)+' ÷ '+b+' = <strong>'+h+'</strong>')
+    });
+  }
+  return qs;
+}
+
+function generateQuestions(level){
+  if(level==='easy') return genEasy();
+  if(level==='medium') return genMedium();
+  if(level==='hard') return genHard();
+  return genChallenge();
+}
+
+/* ===== PRACTICE RENDERING ===== */
+function renderLevelTabs(){
+  var container=document.getElementById('levelTabs');
+  container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(function(lv){
+    var btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    var done=scores[lv].filter(function(s){return s===1}).length;
+    var total=LEVEL_COUNTS[lv];
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+total+')</span>':'');
+    btn.onclick=function(){switchLevel(lv)};
+    container.appendChild(btn);
+  });
+}
+
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv]) questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+
+function updateLevelProgress(){
+  var lv=state.level;var total=LEVEL_COUNTS[lv];
+  var done=answered[lv].filter(function(a){return a}).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+
+function renderQuestion(){
+  var lv=state.level;var idx=state.qIndex;
+  var qs=questions[lv];
+  if(!qs) return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  var q=qs[idx];
+  var area=document.getElementById('questionArea');
+  var isAnswered=answered[lv][idx];
+
+  var html='<div class="q-card"><div class="q-number">שאלה '+(idx+1)+' מתוך '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach(function(opt,i){
+      var letter=LETTERS[i];
+      var cls='q-opt';
+      if(isAnswered){
+        cls+=' disabled';
+        if(i===q.answer) cls+=' correct';
+        else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel']) cls+=' wrong';
+      }
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>בדקו</button>';
+  } else if(q.type==='input'){
+    html+='<div class="q-input-row"><input type="number" class="q-input" id="qInput" placeholder="תשובה" dir="ltr" aria-label="תשובה" step="any">';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">בדקו</button>';
+    html+='</div>';
+    if(isAnswered){
+      html+='<div style="margin-top:4px;font-weight:700;direction:ltr">תשובה: '+q.answer+'</div>';
+    }
+  }
+
+  if(isAnswered){
+    var isCorrect=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'✅ נכון! ':'❌ ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+
+  /* Set up MC click handlers */
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(function(el){
+      el.onclick=function(){
+        area.querySelectorAll('.q-opt').forEach(function(o){o.classList.remove('selected')});
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+  /* Set up input enter key */
+  var inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){
+    inp.focus();
+    inp.addEventListener('keydown',function(e){if(e.key==='Enter')checkInput()});
+  }
+
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'סיום':'הבא ←';
+}
+
+window.checkMC=function(){
+  var lv=state.level;var idx=state.qIndex;var q=questions[lv][idx];
+  var selected=document.querySelector('.q-opt.selected');
+  if(!selected) return;
+  var si=parseInt(selected.dataset.i);
+  var isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  answered[lv][idx+'_sel']=si;
+
+  document.querySelectorAll('.q-opt').forEach(function(el,i){
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer) el.classList.add('correct');
+    else if(i===si&&!isCorrect) el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון מאוד!','✅ יפה!'])+' ':'❌ לא נכון. ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkInput=function(){
+  var lv=state.level;var idx=state.qIndex;var q=questions[lv][idx];
+  var inp=document.getElementById('qInput');
+  var val=inp.value.trim();
+  if(!val) return;
+  var isCorrect=false;
+  var numVal=parseFloat(val);
+  isCorrect=Math.abs(numVal-q.answer)<0.01;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');
+  inp.disabled=true;
+  var btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון!'])+' ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+function nextQuestion(){
+  var lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function')showAuthModal();
+    return;
+  }
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+
+function renderLevelComplete(){
+  var lv=state.level;
+  var correct=scores[lv].filter(function(s){return s===1}).length;
+  var total=LEVEL_COUNTS[lv];
+  var pct=Math.round(correct/total*100);
+  var scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  var emoji=pct>=80?'🎉':pct>=50?'👏':'💪';
+
+  document.getElementById('questionArea').innerHTML=
+    '<div class="q-card"><div class="level-complete">'+
+    '<div class="big-emoji">'+emoji+'</div>'+
+    '<h2>סיימתם את רמת "'+LEVEL_NAMES[lv]+'"!</h2>'+
+    '<div class="score-display'+scoreClass+'">'+correct+' / '+total+'</div>'+
+    '<p style="color:var(--text-light);margin-bottom:16px">'+pct+'% הצלחה</p>'+
+    '<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'+
+    '<button class="mini-btn" onclick="retryLevel()">🔄 נסו שוב</button>'+
+    (lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">▶ לרמה הבאה</button>':'')+
+    '</div></div></div>';
+
+  if(pct>=80) showConfetti();
+  saveState();
+}
+
+window.retryLevel=function(){
+  var lv=state.level;
+  scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);
+  state.qIndex=0;
+  renderLevelTabs();renderQuestion();saveState();
+};
+
+window.nextLevel=function(){
+  var order=['easy','medium','hard','challenge'];
+  var ci=order.indexOf(state.level);
+  if(ci<order.length-1) switchLevel(order[ci+1]);
+};
+
+/* ===== SECTION SWITCHING ===== */
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(function(b){
+    b.classList.toggle('active',b.dataset.section===sec);
+  });
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+/* ===== CONFETTI ===== */
+function showConfetti(){
+  var box=document.getElementById('confettiBox');
+  box.innerHTML='';
+  var colors=['#2563eb','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899'];
+  for(var i=0;i<50;i++){
+    var c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';
+    c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(function(){box.innerHTML=''},5000);
+}
+
+/* ===== INIT ===== */
+function init(){
+  loadState();
+  Object.keys(LEVEL_COUNTS).forEach(function(lv){
+    if(!scores[lv]||!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice') switchSection('practice');
+}
+init();
+
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

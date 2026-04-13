@@ -46,7 +46,9 @@ my-teaching-site/
 │   ├── middle/
 │   │   ├── math/grade-7..9/
 │   │   └── cs/grade-7..9/
-│   ├── high/{math, cs}/
+│   ├── high/
+│   │   ├── math/grade-10..12/
+│   │   └── cs/grade-10..12/{course-name}/   ← קורסים: כל קורס בתיקייה משלו
 │   └── bagrut/{math, cs}/
 └── .github/workflows/deploy.yml
 ```
@@ -56,6 +58,9 @@ my-teaching-site/
   דוגמה: `materials/middle/math/grade-7/variables-and-expressions.html`
 - **preschool מחולק אחרת**: `materials/preschool/{age-3-4|age-4-5|age-5-6|prep}/{topic}/{lesson}.html`
 - **back link מתוך שיעור**: `../../../../materials.html` (4 רמות מעלה ברוב המקרים)
+- **קורס תיכון**: `materials/high/{subject}/grade-{N}/{course-name}/course.html` (דף ראשי) + `lesson-X-Y.html` (שיעורים)
+  דוגמה: `materials/high/cs/grade-10/fullstack/course.html`, `materials/high/cs/grade-10/fullstack/lesson-1-1.html`
+  עומק 5 — סקריפטים: `../../../../../js/auth-gate.js`
 - **שמות קבצים**: אנגלית kebab-case בלבד. `find-differences.html`, `compare-numbers.html`. **לא** עברית בשמות קבצים.
 - **flat structure בתוך תיקיית כיתה** — אין תת-תיקיות לפי נושא בתוך grade-N.
 
@@ -178,7 +183,14 @@ if (typeof AuthState !== 'undefined' && !AuthState.isLoggedIn() && level > 1) {
 </div>
 ```
 
-#### תיכון + בגרות
+#### תיכון (קורסים)
+מבנה: קורסים עם יחידות, כל יחידה מכילה מספר שיעורים.
+- **שיעור ראשון בכל יחידה** — פתוח, **בלי** `data-premium`
+- **שיעור 2+ בכל יחידה** — `data-premium`
+
+דף קורס ראשי (`course.html`) — פתוח לכולם, מציג את עץ היחידות והשיעורים. הנעילה היא על קישורי השיעורים הנעולים בלבד.
+
+#### בגרות
 **אל תוסיף נעילה.** הספציפיקציה עוד לא נסגרה — להשאיר פתוח לחלוטין עד הוראה מפורשת.
 
 #### דף materials.html

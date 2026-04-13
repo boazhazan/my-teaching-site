@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>שיעור 4.1 — שפת SQL | Full-Stack Development</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06)}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+.code-block{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.6;white-space:pre}
+.code-block .keyword{color:#818cf8}
+.code-block .string{color:#fbbf24}
+.code-block .function{color:#38bdf8}
+.code-block .comment{color:#64748b;font-style:italic}
+.code-block .number{color:#34d399}
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+.data-table{width:100%;border-collapse:collapse;margin:16px 0;direction:ltr;text-align:left}
+.data-table th{background:#059669;color:#fff;padding:10px 16px;font-weight:600}
+.data-table td{padding:10px 16px;border-bottom:1px solid var(--border)}
+.data-table tr:nth-child(even){background:var(--bg-soft)}
+.data-table tr:hover{background:#d1fae5}
+.data-table .pk-col{background:#ecfdf5;font-weight:700;color:#059669}
+.sql-simulator{background:var(--bg);border:2px solid var(--border);border-radius:12px;padding:24px;margin:24px 0}
+.sql-simulator h3{margin-bottom:16px;color:#059669;font-size:1.2rem;font-weight:800}
+.sql-sim-table-wrap{overflow-x:auto;margin-bottom:16px}
+.sql-input{width:100%;min-height:70px;padding:12px;font-family:'Courier New',monospace;font-size:.95rem;border:2px solid var(--border);border-radius:8px;direction:ltr;text-align:left;resize:vertical;line-height:1.5}
+.sql-input:focus{outline:none;border-color:#059669}
+.sql-controls{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.sql-run-btn{padding:10px 24px;background:#059669;color:#fff;border:none;border-radius:8px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.95rem;display:flex;align-items:center;gap:6px}
+.sql-run-btn:hover{background:#047857}
+.sql-reset-btn{padding:10px 18px;background:transparent;color:var(--text-light);border:2px solid var(--border);border-radius:8px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.9rem}
+.sql-reset-btn:hover{background:var(--bg-soft);color:var(--text)}
+.sql-examples{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.sql-example-btn{padding:4px 12px;background:var(--bg-soft);border:1px solid var(--border);border-radius:6px;font-family:'Courier New',monospace;font-size:.75rem;cursor:pointer;direction:ltr;color:var(--text-light)}
+.sql-example-btn:hover{border-color:#059669;color:#059669;background:#ecfdf5}
+.sql-result{margin-top:16px;padding:16px;background:var(--bg-soft);border-radius:8px;border:1px solid var(--border);min-height:40px;direction:ltr;text-align:left}
+.sql-result table{width:100%;border-collapse:collapse}
+.sql-result th{background:#1e293b;color:#e2e8f0;padding:8px 12px;font-weight:600;font-size:.85rem}
+.sql-result td{padding:8px 12px;border-bottom:1px solid var(--border);font-size:.9rem}
+.sql-result tr:nth-child(even){background:#fff}
+.sql-success{color:#059669;font-weight:600;padding:8px 0}
+.sql-error{color:var(--error);font-weight:600}
+.sql-info{color:var(--text-light);font-size:.85rem;margin-top:4px}
+.sql-row-count{color:var(--text-light);font-size:.8rem;margin-top:8px}
+.quiz-container{background:var(--bg-soft);border:2px solid var(--border);border-radius:12px;padding:24px;margin:20px 0}
+.quiz-question{font-weight:700;font-size:1.05rem;margin-bottom:16px}
+.quiz-question code{background:#1e293b;color:#e2e8f0;padding:2px 8px;border-radius:4px;font-size:.9rem;direction:ltr;display:inline;unicode-bidi:embed}
+.quiz-options label{display:block;padding:10px 16px;margin:6px 0;background:#fff;border:2px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s}
+.quiz-options label:hover{border-color:var(--primary)}
+.quiz-options input[type="radio"]{margin-left:8px}
+.quiz-options label.correct{background:#d1fae5;border-color:#10b981}
+.quiz-options label.incorrect{background:#fee2e2;border-color:#ef4444}
+.quiz-check-btn{margin-top:12px;padding:10px 24px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-family:inherit;font-weight:600;cursor:pointer}
+.quiz-check-btn:hover{background:var(--primary-dark)}
+.quiz-feedback{margin-top:12px;padding:12px 16px;border-radius:8px;font-weight:600;display:none}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#d1fae5;color:#065f46}
+.quiz-feedback.incorrect{background:#fee2e2;color:#991b1b}
+.fill-input-container{margin:16px 0}
+.fill-code-area{background:#1e293b;border-radius:8px;padding:16px;margin:12px 0;direction:ltr;text-align:left}
+.fill-code-input{width:100%;padding:10px 12px;font-family:'Courier New',monospace;font-size:.9rem;border:2px dashed #f59e0b;border-radius:6px;background:#334155;color:#fbbf24;direction:ltr;text-align:left}
+.fill-code-input:focus{outline:none;border-color:#059669}
+.fill-check-btn{margin-top:8px;padding:8px 20px;background:#059669;color:#fff;border:none;border-radius:6px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.9rem}
+.fill-check-btn:hover{background:#047857}
+.fill-feedback{margin-top:8px;padding:8px 12px;border-radius:6px;font-weight:600;display:none;font-size:.9rem}
+.fill-feedback.show{display:block}
+.fill-feedback.correct{background:#d1fae5;color:#065f46}
+.fill-feedback.incorrect{background:#fee2e2;color:#991b1b}
+.crud-card{background:var(--bg);border:2px solid var(--border);border-radius:12px;padding:20px;margin:16px 0;transition:box-shadow .2s}
+.crud-card:hover{box-shadow:var(--shadow-md)}
+.crud-card h3{margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.crud-badge{display:inline-block;padding:2px 10px;border-radius:6px;font-size:.75rem;font-weight:700;color:#fff}
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--primary);color:var(--primary)}
+@media(max-width:768px){.lesson-title{font-size:1.5rem}.lesson-nav{flex-direction:column}.code-block{font-size:.8rem;padding:12px}.data-table{font-size:.85rem}.sql-input{font-size:.85rem}.sql-controls{flex-direction:column;align-items:stretch}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">Full-Stack Development</div>
+  <a href="course.html">&larr; חזרה לקורס</a>
+</div>
+
+<div class="lesson-container">
+
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#059669">יחידה 4: SQL &amp; ADO.NET</span>
+    <h1 class="lesson-title">שיעור 4.1 &mdash; שפת SQL</h1>
+    <p class="lesson-subtitle">בסיסי נתונים, פקודות CRUD, שאילתות ומחרוזת חיבור</p>
+  </div>
+
+  <!-- Section 1: What is a Database? -->
+  <div class="lesson-section">
+    <h2>1. מה זה בסיס נתונים?</h2>
+
+    <p>
+      <strong>בסיס נתונים</strong> (Database) הוא <strong>אוסף מאורגן של נתונים</strong> שנשמר בצורה מובנית, כך שקל לאחזר, לעדכן ולנהל אותם.
+      בסיס נתונים <strong>רלציוני</strong> (Relational Database) מאחסן את המידע ב<strong>טבלאות</strong>.
+    </p>
+
+    <h3>מבנה טבלה</h3>
+    <ul>
+      <li><strong>שורות</strong> (Rows) = <strong>רשומות</strong> (Records) &mdash; כל שורה מייצגת פריט נתונים אחד</li>
+      <li><strong>עמודות</strong> (Columns) = <strong>שדות</strong> (Fields) &mdash; כל עמודה מייצגת מאפיין של הנתונים</li>
+      <li><strong>מפתח ראשי</strong> (Primary Key) &mdash; עמודה עם ערך ייחודי שמזהה כל שורה באופן חד-משמעי</li>
+    </ul>
+
+    <div class="lesson-tip">
+      <strong>💡 למה צריך מפתח ראשי?</strong>
+      <p>כדי שנוכל לזהות כל שורה באופן ייחודי. למשל, אם יש שני תלמידים ששניהם "דני" &mdash; ה-Id הייחודי מבדיל ביניהם.</p>
+    </div>
+
+    <p>הנה דוגמה לטבלה <code style="direction:ltr;unicode-bidi:embed">Users</code>:</p>
+
+    <table class="data-table">
+      <thead>
+        <tr><th>Id 🔑</th><th>Name</th><th>Age</th><th>City</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="pk-col">1</td><td>דני</td><td>16</td><td>תל אביב</td></tr>
+        <tr><td class="pk-col">2</td><td>מאיה</td><td>17</td><td>חיפה</td></tr>
+        <tr><td class="pk-col">3</td><td>עומר</td><td>15</td><td>ירושלים</td></tr>
+        <tr><td class="pk-col">4</td><td>נועה</td><td>16</td><td>באר שבע</td></tr>
+        <tr><td class="pk-col">5</td><td>יובל</td><td>18</td><td>תל אביב</td></tr>
+      </tbody>
+    </table>
+
+    <div class="lesson-tip success">
+      <strong>🧩 הטבלה הזאת תשמש אותנו לאורך כל השיעור!</strong>
+      <p>כל הדוגמאות, השאילתות והסימולטור האינטראקטיבי עובדים מול הטבלה הזאת.</p>
+    </div>
+  </div>
+
+  <!-- Section 2: CRUD Commands -->
+  <div class="lesson-section">
+    <h2>2. פקודות CRUD</h2>
+
+    <p>
+      <strong>SQL</strong> (Structured Query Language) היא שפה לניהול בסיסי נתונים. ארבע הפעולות הבסיסיות נקראות <strong>CRUD</strong>:
+    </p>
+
+    <ul>
+      <li><strong>C</strong>reate &mdash; יצירה (INSERT)</li>
+      <li><strong>R</strong>ead &mdash; קריאה (SELECT)</li>
+      <li><strong>U</strong>pdate &mdash; עדכון (UPDATE)</li>
+      <li><strong>D</strong>elete &mdash; מחיקה (DELETE)</li>
+    </ul>
+
+    <!-- SELECT -->
+    <div class="crud-card">
+      <h3><span class="crud-badge" style="background:#2563eb">R</span> SELECT &mdash; קריאת נתונים</h3>
+
+      <p>הפקודה הנפוצה ביותר. מחזירה נתונים מהטבלה לפי תנאים.</p>
+
+      <h3>שליפת כל הנתונים:</h3>
+      <div class="code-block"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Users</div>
+      <p>הכוכבית (<code style="direction:ltr;unicode-bidi:embed">*</code>) אומרת "כל העמודות".</p>
+
+      <h3>שליפת עמודות ספציפיות עם תנאי:</h3>
+      <div class="code-block"><span class="keyword">SELECT</span> Name, Age <span class="keyword">FROM</span> Users <span class="keyword">WHERE</span> Age > <span class="number">16</span></div>
+      <p>מחזיר רק את השם והגיל של מי שגילו מעל 16.</p>
+
+      <h3>מיון תוצאות:</h3>
+      <div class="code-block"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Users <span class="keyword">ORDER BY</span> Age <span class="keyword">DESC</span></div>
+      <p><code style="direction:ltr;unicode-bidi:embed">ORDER BY</code> ממיין &mdash; <code style="direction:ltr;unicode-bidi:embed">ASC</code> מהקטן לגדול (ברירת מחדל), <code style="direction:ltr;unicode-bidi:embed">DESC</code> מהגדול לקטן.</p>
+
+      <h3>פונקציות צבירה (Aggregate):</h3>
+      <div class="code-block"><span class="keyword">SELECT</span> <span class="function">COUNT</span>(*) <span class="keyword">FROM</span> Users</div>
+      <p>סופר את מספר השורות. מחזיר <strong>5</strong>.</p>
+
+      <div class="code-block"><span class="keyword">SELECT</span> City, <span class="function">COUNT</span>(*) <span class="keyword">AS</span> Total <span class="keyword">FROM</span> Users <span class="keyword">GROUP BY</span> City</div>
+      <p><code style="direction:ltr;unicode-bidi:embed">GROUP BY</code> מקבץ לפי עמודה, ו-<code style="direction:ltr;unicode-bidi:embed">COUNT(*)</code> סופר כמה שורות בכל קבוצה.</p>
+
+      <div class="code-block"><span class="keyword">SELECT</span> <span class="function">AVG</span>(Age) <span class="keyword">FROM</span> Users</div>
+      <p>מחשב את הגיל הממוצע.</p>
+    </div>
+
+    <!-- INSERT -->
+    <div class="crud-card">
+      <h3><span class="crud-badge" style="background:#059669">C</span> INSERT &mdash; הוספת שורה</h3>
+
+      <p>מוסיפה רשומה חדשה לטבלה:</p>
+
+      <div class="code-block"><span class="keyword">INSERT INTO</span> Users (Name, Age, City)
+<span class="keyword">VALUES</span> (<span class="string">'שרה'</span>, <span class="number">17</span>, <span class="string">'אילת'</span>)</div>
+
+      <p>שימו לב: לא צריך לציין את <code style="direction:ltr;unicode-bidi:embed">Id</code> &mdash; הוא <strong>אוטומטי</strong> (Auto-Increment).</p>
+
+      <div class="lesson-tip warning">
+        <strong>⚠️ שימו לב לתחביר</strong>
+        <p>מחרוזות ב-SQL עטופות בגרשיים בודדים (<code>'</code>), לא כפולים (<code>"</code>). מספרים נכתבים בלי גרשיים.</p>
+      </div>
+    </div>
+
+    <!-- UPDATE -->
+    <div class="crud-card">
+      <h3><span class="crud-badge" style="background:#d97706">U</span> UPDATE &mdash; עדכון נתונים</h3>
+
+      <p>משנה ערכים קיימים בטבלה:</p>
+
+      <div class="code-block"><span class="keyword">UPDATE</span> Users <span class="keyword">SET</span> Age = <span class="number">17</span> <span class="keyword">WHERE</span> Name = <span class="string">'דני'</span></div>
+
+      <p>מעדכן את הגיל של דני ל-17.</p>
+
+      <div class="lesson-tip warning">
+        <strong>⚠️ אזהרה חשובה!</strong>
+        <p>בלי <code style="direction:ltr;unicode-bidi:embed">WHERE</code>, הפקודה תעדכן <strong>את כל השורות</strong>! תמיד תוודאו שיש תנאי.</p>
+      </div>
+    </div>
+
+    <!-- DELETE -->
+    <div class="crud-card">
+      <h3><span class="crud-badge" style="background:#ef4444">D</span> DELETE &mdash; מחיקת שורה</h3>
+
+      <p>מסירה רשומה מהטבלה:</p>
+
+      <div class="code-block"><span class="keyword">DELETE FROM</span> Users <span class="keyword">WHERE</span> Id = <span class="number">5</span></div>
+
+      <p>מוחקת את השורה שבה <code style="direction:ltr;unicode-bidi:embed">Id</code> שווה 5 (יובל).</p>
+
+      <div class="lesson-tip warning">
+        <strong>⚠️ זהירות כפולה!</strong>
+        <p>בלי <code style="direction:ltr;unicode-bidi:embed">WHERE</code>, הפקודה תמחק <strong>את כל השורות בטבלה</strong>! אין Undo.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Connection String -->
+  <div class="lesson-section">
+    <h2>3. Connection String &mdash; מחרוזת חיבור</h2>
+
+    <p>
+      כדי שהאפליקציה שלנו (C# / ASP.NET) תוכל לתקשר עם בסיס הנתונים, היא צריכה <strong>מחרוזת חיבור</strong> (Connection String) &mdash; כתובת שמכילה את כל הפרטים לחיבור.
+    </p>
+
+    <h3>מה מכילה מחרוזת חיבור?</h3>
+    <ul>
+      <li><strong>Server</strong> &mdash; שם השרת (למשל <code style="direction:ltr;unicode-bidi:embed">localhost</code> בזמן פיתוח)</li>
+      <li><strong>Database</strong> &mdash; שם בסיס הנתונים</li>
+      <li><strong>Authentication</strong> &mdash; שם משתמש וסיסמה (או Windows Authentication)</li>
+    </ul>
+
+    <div class="code-block"><span class="string">"Server=localhost;Database=MySchoolDB;Trusted_Connection=True;"</span></div>
+
+    <div class="lesson-tip">
+      <strong>💡 Trusted_Connection=True</strong>
+      <p>אומר לשרת להשתמש באימות Windows &mdash; לא צריך שם משתמש וסיסמה נפרדים. מאוד נוח בסביבת פיתוח.</p>
+    </div>
+
+    <p>
+      בשיעור הבא (4.2) נלמד איך להשתמש במחרוזת החיבור מתוך קוד C# עם <strong>ADO.NET</strong> כדי לשלוח שאילתות SQL מהאפליקציה.
+    </p>
+  </div>
+
+  <!-- SQL Simulator -->
+  <div class="lesson-section">
+    <h2>🧪 סימולטור SQL אינטראקטיבי</h2>
+    <p>נסו לכתוב שאילתות SQL מול טבלת <code style="direction:ltr;unicode-bidi:embed">Users</code> וראו את התוצאות בזמן אמת!</p>
+
+    <div class="sql-simulator">
+      <h3>🗄️ טבלת Users</h3>
+      <div class="sql-sim-table-wrap">
+        <table class="data-table" id="liveTable">
+          <thead><tr><th>Id 🔑</th><th>Name</th><th>Age</th><th>City</th></tr></thead>
+          <tbody id="liveTableBody"></tbody>
+        </table>
+      </div>
+
+      <label for="sqlInput" style="font-weight:700;display:block;margin-bottom:8px">✍️ כתבו שאילתת SQL:</label>
+      <textarea id="sqlInput" class="sql-input" placeholder="SELECT * FROM Users" spellcheck="false"></textarea>
+
+      <div class="sql-controls">
+        <button class="sql-run-btn" onclick="runSQL()">▶ הרץ שאילתה</button>
+        <button class="sql-reset-btn" onclick="resetData()">🔄 אפס נתונים</button>
+      </div>
+
+      <div class="sql-examples">
+        <span style="font-size:.8rem;color:var(--text-light);font-weight:600">דוגמאות:</span>
+        <button class="sql-example-btn" onclick="setExample(this)">SELECT * FROM Users</button>
+        <button class="sql-example-btn" onclick="setExample(this)">SELECT Name, Age FROM Users WHERE Age > 16</button>
+        <button class="sql-example-btn" onclick="setExample(this)">SELECT * FROM Users ORDER BY Age DESC</button>
+        <button class="sql-example-btn" onclick="setExample(this)">SELECT COUNT(*) FROM Users</button>
+        <button class="sql-example-btn" onclick="setExample(this)">INSERT INTO Users (Name, Age, City) VALUES ('שרה', 17, 'אילת')</button>
+        <button class="sql-example-btn" onclick="setExample(this)">UPDATE Users SET Age = 17 WHERE Name = 'דני'</button>
+        <button class="sql-example-btn" onclick="setExample(this)">DELETE FROM Users WHERE Id = 5</button>
+      </div>
+
+      <div id="sqlResult" class="sql-result">
+        <span style="color:var(--text-light)">התוצאות יופיעו כאן...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quizzes -->
+  <div class="lesson-section">
+    <h2>📝 בדקו את עצמכם</h2>
+
+    <!-- Quiz 1 - MC -->
+    <div class="quiz-container" id="quiz1">
+      <div class="quiz-question">שאלה 1: מה תחזיר השאילתה <code>SELECT Name FROM Users WHERE Age >= 17</code>?</div>
+      <div class="quiz-options">
+        <label><input type="radio" name="q1" value="a"> דני, מאיה, עומר</label>
+        <label><input type="radio" name="q1" value="b"> מאיה, יובל</label>
+        <label><input type="radio" name="q1" value="c"> כל המשתמשים</label>
+        <label><input type="radio" name="q1" value="d"> מאיה, עומר, נועה</label>
+      </div>
+      <button class="quiz-check-btn" onclick="checkQuiz('quiz1','b')">בדוק תשובה</button>
+      <div class="quiz-feedback" id="quiz1-feedback"></div>
+    </div>
+
+    <!-- Quiz 2 - Fill-in -->
+    <div class="quiz-container" id="quiz2">
+      <div class="quiz-question">שאלה 2: כתבו שאילתת SELECT שמחזירה את כל המשתמשים מתל אביב:</div>
+      <div class="fill-input-container">
+        <div class="fill-code-area">
+          <input type="text" id="quiz2-input" class="fill-code-input" placeholder="SELECT ..." autocomplete="off" spellcheck="false">
+        </div>
+      </div>
+      <button class="fill-check-btn" onclick="checkFill('quiz2')">בדוק תשובה</button>
+      <div class="fill-feedback" id="quiz2-feedback"></div>
+    </div>
+
+    <!-- Quiz 3 - Fill-in -->
+    <div class="quiz-container" id="quiz3">
+      <div class="quiz-question">שאלה 3: כתבו פקודת INSERT שמוסיפה משתמש חדש: שרה, גיל 17, מאילת:</div>
+      <div class="fill-input-container">
+        <div class="fill-code-area">
+          <input type="text" id="quiz3-input" class="fill-code-input" placeholder="INSERT INTO ..." autocomplete="off" spellcheck="false">
+        </div>
+      </div>
+      <button class="fill-check-btn" onclick="checkFill('quiz3')">בדוק תשובה</button>
+      <div class="fill-feedback" id="quiz3-feedback"></div>
+    </div>
+
+    <!-- Quiz 4 - MC -->
+    <div class="quiz-container" id="quiz4">
+      <div class="quiz-question">שאלה 4: מה עושה הפקודה <code>DELETE FROM Users WHERE Id = 3</code>?</div>
+      <div class="quiz-options">
+        <label><input type="radio" name="q4" value="a"> מוחקת את כל הטבלה</label>
+        <label><input type="radio" name="q4" value="b"> מוחקת את השורה של עומר</label>
+        <label><input type="radio" name="q4" value="c"> מוחקת את העמודה Id</label>
+        <label><input type="radio" name="q4" value="d"> מוחקת את כל המשתמשים עם Id גדול מ-3</label>
+      </div>
+      <button class="quiz-check-btn" onclick="checkQuiz('quiz4','b')">בדוק תשובה</button>
+      <div class="quiz-feedback" id="quiz4-feedback"></div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="lesson-nav">
+    <a href="lesson-3-2.html">&rarr; שיעור קודם: 3.2</a>
+    <a href="lesson-4-2.html">שיעור הבא: 4.2 ADO.NET &larr;</a>
+  </div>
+
+</div>
+
+<script>
+/* =============================================
+   SQL Simulator + Quiz Logic
+   ============================================= */
+
+// ---- Sample Data ----
+const INITIAL_DATA = [
+  {Id:1, Name:'דני',  Age:16, City:'תל אביב'},
+  {Id:2, Name:'מאיה', Age:17, City:'חיפה'},
+  {Id:3, Name:'עומר', Age:15, City:'ירושלים'},
+  {Id:4, Name:'נועה', Age:16, City:'באר שבע'},
+  {Id:5, Name:'יובל', Age:18, City:'תל אביב'}
+];
+
+let data = JSON.parse(JSON.stringify(INITIAL_DATA));
+let nextId = 6;
+
+// ---- Render live table ----
+function renderLiveTable(){
+  const tb = document.getElementById('liveTableBody');
+  if(!data.length){ tb.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text-light)">הטבלה ריקה</td></tr>'; return; }
+  tb.innerHTML = data.map(r =>
+    '<tr><td class="pk-col">'+r.Id+'</td><td>'+r.Name+'</td><td>'+r.Age+'</td><td>'+r.City+'</td></tr>'
+  ).join('');
+}
+
+function resetData(){
+  data = JSON.parse(JSON.stringify(INITIAL_DATA));
+  nextId = 6;
+  renderLiveTable();
+  document.getElementById('sqlResult').innerHTML='<span style="color:var(--text-light)">הנתונים אופסו בהצלחה ✓</span>';
+}
+
+function setExample(btn){
+  document.getElementById('sqlInput').value = btn.textContent;
+  document.getElementById('sqlInput').focus();
+}
+
+// ---- SQL Parser ----
+function runSQL(){
+  const raw = document.getElementById('sqlInput').value.trim();
+  const resultDiv = document.getElementById('sqlResult');
+  if(!raw){ resultDiv.innerHTML='<span class="sql-error">אנא הכניסו שאילתה</span>'; return; }
+
+  const sql = raw.replace(/\s+/g,' ').trim();
+  const upper = sql.toUpperCase();
+
+  try {
+    if(upper.startsWith('SELECT')){
+      handleSelect(sql, upper, resultDiv);
+    } else if(upper.startsWith('INSERT')){
+      handleInsert(sql, upper, resultDiv);
+    } else if(upper.startsWith('UPDATE')){
+      handleUpdate(sql, upper, resultDiv);
+    } else if(upper.startsWith('DELETE')){
+      handleDelete(sql, upper, resultDiv);
+    } else {
+      resultDiv.innerHTML='<span class="sql-error">❌ שגיאה בתחביר — הסימולטור תומך ב-SELECT, INSERT, UPDATE, DELETE</span>';
+    }
+  } catch(e){
+    resultDiv.innerHTML='<span class="sql-error">❌ שגיאה בתחביר: '+escHtml(e.message)+'</span>';
+  }
+}
+
+// ---- SELECT ----
+function handleSelect(sql, upper, resultDiv){
+  // Check for aggregate: COUNT(*) or AVG(col)
+  const countMatch = upper.match(/^SELECT\s+COUNT\s*\(\s*\*\s*\)\s+FROM\s+USERS\s*(WHERE\s+.+)?$/i);
+  if(countMatch){
+    let rows = data;
+    if(countMatch[1]){
+      const wc = countMatch[1].replace(/^WHERE\s+/i,'');
+      rows = applyWhere(rows, wc, sql);
+    }
+    resultDiv.innerHTML = renderResultTable(['COUNT(*)'],[{'COUNT(*)':rows.length}]) + rowCount(1);
+    return;
+  }
+
+  const avgMatch = upper.match(/^SELECT\s+AVG\s*\(\s*(\w+)\s*\)\s+FROM\s+USERS\s*(WHERE\s+.+)?$/i);
+  if(avgMatch){
+    const col = findCol(avgMatch[1]);
+    let rows = data;
+    if(avgMatch[2]){
+      const wc = avgMatch[2].replace(/^WHERE\s+/i,'');
+      rows = applyWhere(rows, wc, sql);
+    }
+    if(!rows.length){ resultDiv.innerHTML='<span class="sql-info">אין שורות תואמות</span>'; return; }
+    const avg = rows.reduce((s,r)=>s+Number(r[col]),0)/rows.length;
+    const display = Number.isInteger(avg) ? avg : avg.toFixed(2);
+    resultDiv.innerHTML = renderResultTable(['AVG('+col+')'],[{'AVG('+col+')':display}]) + rowCount(1);
+    return;
+  }
+
+  // GROUP BY with COUNT
+  const groupMatch = upper.match(/^SELECT\s+(\w+)\s*,\s*COUNT\s*\(\s*\*\s*\)\s*(AS\s+(\w+))?\s+FROM\s+USERS\s+GROUP\s+BY\s+(\w+)\s*$/i);
+  if(groupMatch){
+    const selCol = findCol(groupMatch[1]);
+    const alias = groupMatch[3] || 'COUNT(*)';
+    const grpCol = findCol(groupMatch[4]);
+    if(selCol.toUpperCase() !== grpCol.toUpperCase()) throw new Error('עמודת SELECT חייבת להתאים ל-GROUP BY');
+    const groups = {};
+    data.forEach(r => {
+      const key = r[grpCol];
+      groups[key] = (groups[key]||0) + 1;
+    });
+    const cols = [grpCol, alias];
+    const rows = Object.keys(groups).map(k => {const o={}; o[grpCol]=k; o[alias]=groups[k]; return o;});
+    resultDiv.innerHTML = renderResultTable(cols, rows) + rowCount(rows.length);
+    return;
+  }
+
+  // Standard SELECT
+  const selMatch = sql.match(/^SELECT\s+(.+?)\s+FROM\s+USERS\s*(.*)/i);
+  if(!selMatch) throw new Error('תחביר SELECT לא תקין');
+
+  const colsPart = selMatch[1].trim();
+  const restPart = selMatch[2] ? selMatch[2].trim() : '';
+
+  // Determine columns
+  let selectedCols;
+  if(colsPart === '*'){
+    selectedCols = ['Id','Name','Age','City'];
+  } else {
+    selectedCols = colsPart.split(',').map(c => findCol(c.trim()));
+  }
+
+  let rows = data.slice();
+
+  // Parse WHERE
+  const restUpper = restPart.toUpperCase();
+  let afterWhere = restPart;
+  if(restUpper.startsWith('WHERE ')){
+    // Find where ORDER BY starts (if any)
+    const orderIdx = restUpper.indexOf('ORDER BY');
+    let wherePart;
+    if(orderIdx > -1){
+      wherePart = restPart.substring(6, orderIdx).trim();
+      afterWhere = restPart.substring(orderIdx);
+    } else {
+      wherePart = restPart.substring(6).trim();
+      afterWhere = '';
+    }
+    rows = applyWhere(rows, wherePart, sql);
+  } else {
+    afterWhere = restPart;
+  }
+
+  // Parse ORDER BY
+  const orderMatch = afterWhere.match(/ORDER\s+BY\s+(\w+)\s*(ASC|DESC)?\s*$/i);
+  if(orderMatch){
+    const oCol = findCol(orderMatch[1]);
+    const desc = orderMatch[2] && orderMatch[2].toUpperCase() === 'DESC';
+    rows.sort((a,b) => {
+      const va = a[oCol], vb = b[oCol];
+      if(typeof va === 'number' && typeof vb === 'number') return desc ? vb-va : va-vb;
+      return desc ? String(vb).localeCompare(String(va)) : String(va).localeCompare(String(vb));
+    });
+  }
+
+  // Project columns
+  const projected = rows.map(r => {
+    const o = {};
+    selectedCols.forEach(c => o[c] = r[c]);
+    return o;
+  });
+
+  if(!projected.length){
+    resultDiv.innerHTML='<span class="sql-info">אין שורות תואמות (0 results)</span>';
+    return;
+  }
+  resultDiv.innerHTML = renderResultTable(selectedCols, projected) + rowCount(projected.length);
+}
+
+// ---- INSERT ----
+function handleInsert(sql, upper, resultDiv){
+  const m = sql.match(/INSERT\s+INTO\s+USERS\s*\(\s*(.+?)\s*\)\s*VALUES\s*\(\s*(.+?)\s*\)/i);
+  if(!m) throw new Error('תחביר INSERT לא תקין. שימוש: INSERT INTO Users (Name, Age, City) VALUES (...)');
+
+  const cols = m[1].split(',').map(c => findCol(c.trim()));
+  const vals = parseValues(m[2]);
+
+  if(cols.length !== vals.length) throw new Error('מספר העמודות לא תואם למספר הערכים');
+
+  const newRow = {Id: nextId++};
+  cols.forEach((c,i) => {
+    if(c === 'Id') throw new Error('אין להכניס Id — הוא אוטומטי');
+    newRow[c] = vals[i];
+  });
+  // Fill missing cols
+  if(!newRow.Name) newRow.Name = '';
+  if(newRow.Age === undefined) newRow.Age = 0;
+  if(!newRow.City) newRow.City = '';
+
+  data.push(newRow);
+  renderLiveTable();
+  resultDiv.innerHTML='<span class="sql-success">✅ שורה חדשה נוספה (Id = '+newRow.Id+')</span>';
+}
+
+// ---- UPDATE ----
+function handleUpdate(sql, upper, resultDiv){
+  const m = sql.match(/UPDATE\s+USERS\s+SET\s+(.+?)\s+WHERE\s+(.+)/i);
+  if(!m) throw new Error('תחביר UPDATE לא תקין. שימוש: UPDATE Users SET col = val WHERE condition');
+
+  const setParts = m[1].split(',').map(s => {
+    const eq = s.match(/^\s*(\w+)\s*=\s*(.+?)\s*$/);
+    if(!eq) throw new Error('תחביר SET לא תקין: '+s);
+    return {col: findCol(eq[1]), val: parseSingleValue(eq[2])};
+  });
+
+  const rows = applyWhere(data, m[2], sql);
+  if(!rows.length){
+    resultDiv.innerHTML='<span class="sql-info">אין שורות תואמות לעדכון (0 rows affected)</span>';
+    return;
+  }
+
+  const ids = new Set(rows.map(r => r.Id));
+  let count = 0;
+  data.forEach(r => {
+    if(ids.has(r.Id)){
+      setParts.forEach(sp => { r[sp.col] = sp.val; });
+      count++;
+    }
+  });
+
+  renderLiveTable();
+  resultDiv.innerHTML='<span class="sql-success">✅ עודכנו '+count+' שורות</span>';
+}
+
+// ---- DELETE ----
+function handleDelete(sql, upper, resultDiv){
+  const m = sql.match(/DELETE\s+FROM\s+USERS\s+WHERE\s+(.+)/i);
+  if(!m) throw new Error('תחביר DELETE לא תקין. שימוש: DELETE FROM Users WHERE condition');
+
+  const rows = applyWhere(data, m[1], sql);
+  if(!rows.length){
+    resultDiv.innerHTML='<span class="sql-info">אין שורות תואמות למחיקה (0 rows affected)</span>';
+    return;
+  }
+
+  const ids = new Set(rows.map(r => r.Id));
+  const before = data.length;
+  data = data.filter(r => !ids.has(r.Id));
+  const removed = before - data.length;
+
+  renderLiveTable();
+  resultDiv.innerHTML='<span class="sql-success">✅ נמחקו '+removed+' שורות</span>';
+}
+
+// ---- WHERE parser ----
+function applyWhere(rows, whereStr, fullSql){
+  const w = whereStr.trim();
+
+  // Handle AND
+  if(/\sAND\s/i.test(w)){
+    const parts = w.split(/\sAND\s/i);
+    let result = rows;
+    parts.forEach(p => { result = applyWhere(result, p.trim(), fullSql); });
+    return result;
+  }
+
+  // Handle OR
+  if(/\sOR\s/i.test(w)){
+    const parts = w.split(/\sOR\s/i);
+    const sets = parts.map(p => applyWhere(rows, p.trim(), fullSql));
+    const ids = new Set();
+    const result = [];
+    sets.forEach(s => s.forEach(r => {
+      if(!ids.has(r.Id)){ ids.add(r.Id); result.push(r); }
+    }));
+    return result;
+  }
+
+  // Single condition
+  const m = w.match(/^(\w+)\s*(>=|<=|!=|<>|=|>|<|LIKE)\s*(.+)$/i);
+  if(!m) throw new Error('תנאי WHERE לא תקין: '+w);
+
+  const col = findCol(m[1]);
+  const op = m[2].toUpperCase();
+  const val = parseSingleValue(m[3]);
+
+  return rows.filter(r => {
+    const rv = r[col];
+    switch(op){
+      case '=':  return typeof rv==='number' ? rv===Number(val) : String(rv)===String(val);
+      case '!=': case '<>': return typeof rv==='number' ? rv!==Number(val) : String(rv)!==String(val);
+      case '>':  return Number(rv) > Number(val);
+      case '<':  return Number(rv) < Number(val);
+      case '>=': return Number(rv) >= Number(val);
+      case '<=': return Number(rv) <= Number(val);
+      case 'LIKE':
+        const pattern = String(val).replace(/%/g,'.*').replace(/_/g,'.');
+        return new RegExp('^'+pattern+'$','i').test(String(rv));
+      default: return false;
+    }
+  });
+}
+
+// ---- Helpers ----
+const COL_MAP = {id:'Id',name:'Name',age:'Age',city:'City'};
+function findCol(name){
+  const low = name.toLowerCase();
+  if(COL_MAP[low]) return COL_MAP[low];
+  throw new Error('עמודה לא מוכרת: '+name+'. עמודות זמינות: Id, Name, Age, City');
+}
+
+function parseSingleValue(s){
+  s = s.trim();
+  // String in quotes
+  const strMatch = s.match(/^['"](.*)['"]$/);
+  if(strMatch) return strMatch[1];
+  // Number
+  if(!isNaN(s)) return Number(s);
+  return s;
+}
+
+function parseValues(s){
+  const vals = [];
+  let current = '';
+  let inStr = false;
+  let strChar = '';
+  for(let i=0;i<s.length;i++){
+    const c = s[i];
+    if(inStr){
+      if(c === strChar){ inStr=false; }
+      else { current+=c; }
+    } else {
+      if(c==="'" || c==='"'){ inStr=true; strChar=c; }
+      else if(c===','){ vals.push(parseSingleValue(current.trim() || "'"+ "'"));  current=''; }
+      else { current+=c; }
+    }
+  }
+  if(current.trim()) vals.push(parseSingleValue(current.trim()));
+  return vals;
+}
+
+function renderResultTable(cols, rows){
+  let h = '<table><thead><tr>';
+  cols.forEach(c => h+='<th>'+escHtml(String(c))+'</th>');
+  h += '</tr></thead><tbody>';
+  rows.forEach(r => {
+    h += '<tr>';
+    cols.forEach(c => h+='<td>'+escHtml(String(r[c] !== undefined ? r[c] : ''))+'</td>');
+    h += '</tr>';
+  });
+  h += '</tbody></table>';
+  return h;
+}
+
+function rowCount(n){ return '<div class="sql-row-count">'+n+' שורות הוחזרו</div>'; }
+
+function escHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ---- Keyboard shortcut ----
+document.getElementById('sqlInput').addEventListener('keydown', function(e){
+  if((e.ctrlKey || e.metaKey) && e.key === 'Enter'){
+    e.preventDefault();
+    runSQL();
+  }
+});
+
+// ---- Quiz Logic ----
+function checkQuiz(quizId, correctVal){
+  const container = document.getElementById(quizId);
+  const selected = container.querySelector('input[type="radio"]:checked');
+  const feedback = document.getElementById(quizId+'-feedback');
+
+  // Reset styles
+  container.querySelectorAll('label').forEach(l => l.classList.remove('correct','incorrect'));
+
+  if(!selected){
+    feedback.textContent = 'אנא בחרו תשובה';
+    feedback.className = 'quiz-feedback show incorrect';
+    return;
+  }
+
+  const label = selected.parentElement;
+  if(selected.value === correctVal){
+    label.classList.add('correct');
+    feedback.textContent = '✅ נכון מאוד!';
+    feedback.className = 'quiz-feedback show correct';
+  } else {
+    label.classList.add('incorrect');
+    // Highlight correct
+    container.querySelectorAll('input[type="radio"]').forEach(inp => {
+      if(inp.value === correctVal) inp.parentElement.classList.add('correct');
+    });
+    feedback.textContent = '❌ לא נכון — נסו שוב!';
+    feedback.className = 'quiz-feedback show incorrect';
+  }
+}
+
+// ---- Fill-in Quiz Logic ----
+const FILL_ANSWERS = {
+  quiz2: [
+    "SELECT * FROM Users WHERE City = 'תל אביב'",
+    'SELECT * FROM Users WHERE City = \'תל אביב\'',
+    "select * from users where city = 'תל אביב'",
+    "SELECT * FROM Users WHERE City='תל אביב'",
+    "select * from users where city='תל אביב'"
+  ],
+  quiz3: [
+    "INSERT INTO Users (Name, Age, City) VALUES ('שרה', 17, 'אילת')",
+    'INSERT INTO Users (Name, Age, City) VALUES (\'שרה\', 17, \'אילת\')',
+    "insert into users (name, age, city) values ('שרה', 17, 'אילת')",
+    "INSERT INTO Users (Name,Age,City) VALUES ('שרה',17,'אילת')",
+    "insert into users (name,age,city) values ('שרה',17,'אילת')"
+  ]
+};
+
+function checkFill(quizId){
+  const input = document.getElementById(quizId+'-input');
+  const feedback = document.getElementById(quizId+'-feedback');
+  const userVal = input.value.trim();
+
+  if(!userVal){
+    feedback.textContent = 'אנא כתבו את השאילתה';
+    feedback.className = 'fill-feedback show incorrect';
+    return;
+  }
+
+  // Normalize for comparison: collapse spaces, lowercase, trim
+  const normalize = s => s.replace(/\s+/g,' ').trim().toLowerCase();
+  const userNorm = normalize(userVal);
+  const answers = FILL_ANSWERS[quizId];
+  const isCorrect = answers.some(a => normalize(a) === userNorm);
+
+  if(isCorrect){
+    feedback.textContent = '✅ מצוין! התשובה נכונה!';
+    feedback.className = 'fill-feedback show correct';
+    input.style.borderColor = '#10b981';
+  } else {
+    const hint = quizId === 'quiz2'
+      ? "SELECT * FROM Users WHERE City = 'תל אביב'"
+      : "INSERT INTO Users (Name, Age, City) VALUES ('שרה', 17, 'אילת')";
+    feedback.innerHTML = '❌ לא בדיוק. התשובה הנכונה: <br><code style="direction:ltr;display:inline-block;background:#1e293b;color:#e2e8f0;padding:4px 10px;border-radius:4px;margin-top:4px">'+escHtml(hint)+'</code>';
+    feedback.className = 'fill-feedback show incorrect';
+    input.style.borderColor = '#ef4444';
+  }
+}
+
+// ---- Init ----
+renderLiveTable();
+</script>
+
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

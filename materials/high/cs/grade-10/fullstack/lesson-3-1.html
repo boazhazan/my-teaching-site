@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>מודל שרת-לקוח וניתוב | Full-Stack Development</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --unit-color:#7c3aed;
+}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+
+/* Topbar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Lesson layout */
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+
+/* Sections */
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+
+/* Code blocks */
+.code-block{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.6;white-space:pre}
+.code-block .tag{color:#f472b6}
+.code-block .attr{color:#a78bfa}
+.code-block .value{color:#34d399}
+.code-block .comment{color:#64748b;font-style:italic}
+.code-block .keyword{color:#818cf8}
+.code-block .string{color:#fbbf24}
+.code-block .function{color:#38bdf8}
+.code-block .type{color:#f472b6}
+.code-block .prop{color:#34d399}
+.code-block .razor{color:#f59e0b;font-weight:700}
+
+/* Tip boxes */
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+
+/* Diagram — Client-Server */
+.diagram{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;margin:24px 0;padding:32px 16px;background:var(--bg);border-radius:12px;border:1px solid var(--border);overflow-x:auto}
+.diagram-box{padding:18px 24px;border-radius:12px;font-weight:700;text-align:center;color:#fff;min-width:110px;position:relative;box-shadow:var(--shadow)}
+.diagram-box small{display:block;font-weight:400;font-size:.75rem;margin-top:4px;opacity:.9}
+.diagram-arrow-group{display:flex;flex-direction:column;align-items:center;gap:2px;padding:0 6px;min-width:60px}
+.diagram-arrow{font-size:.85rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.diagram-arrow.req{color:var(--primary)}
+.diagram-arrow.res{color:var(--success)}
+.arrow-line{width:40px;height:2px;background:var(--border);position:relative}
+
+/* Routing diagram */
+.routing-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.95rem}
+.routing-table th{background:var(--primary-light);color:var(--primary-dark);padding:10px 16px;text-align:right;font-weight:700}
+.routing-table td{padding:10px 16px;border-bottom:1px solid var(--border)}
+.routing-table tr:last-child td{border-bottom:none}
+.routing-table code{background:#f1f5f9;padding:2px 8px;border-radius:4px;font-size:.85rem;direction:ltr;unicode-bidi:embed}
+
+/* Folder tree */
+.folder-tree{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;line-height:1.8}
+.folder-tree .folder{color:#fbbf24}
+.folder-tree .file{color:#38bdf8}
+.folder-tree .arrow-map{color:#10b981;font-weight:700}
+
+/* Quiz styles */
+.quiz-container{background:var(--bg);border:2px solid var(--border);border-radius:12px;padding:24px;margin:24px 0}
+.quiz-container h3{font-size:1.1rem;font-weight:800;color:var(--unit-color);margin-bottom:4px}
+.quiz-label{font-size:.85rem;color:var(--text-light);margin-bottom:16px}
+.quiz-question{font-weight:700;font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.quiz-options label{display:block;padding:10px 16px;margin:6px 0;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;line-height:1.6}
+.quiz-options label:hover{border-color:var(--primary);background:#fff}
+.quiz-options input[type="radio"]{margin-left:8px;accent-color:var(--primary)}
+.quiz-options label.correct{background:#d1fae5;border-color:#10b981}
+.quiz-options label.incorrect{background:#fee2e2;border-color:#ef4444}
+.quiz-options label.show-correct{background:#d1fae5;border-color:#10b981}
+.quiz-check-btn{margin-top:16px;padding:10px 28px;background:var(--unit-color);color:#fff;border:none;border-radius:8px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.95rem;transition:background .2s}
+.quiz-check-btn:hover{background:#6d28d9}
+.quiz-check-btn:disabled{opacity:.5;cursor:not-allowed}
+.quiz-feedback{margin-top:12px;padding:12px 16px;border-radius:8px;font-weight:600;display:none;line-height:1.6}
+.quiz-feedback.correct{display:block;background:#d1fae5;color:#065f46}
+.quiz-feedback.incorrect{display:block;background:#fee2e2;color:#991b1b}
+
+/* Fill-in exercise */
+.fill-code-container{background:#1e293b;border-radius:8px;padding:20px;margin:16px 0;direction:ltr;text-align:left;font-family:'Courier New',monospace;font-size:.9rem;color:#e2e8f0;line-height:2}
+.fill-code-input{background:#334155;border:2px dashed var(--accent);color:#fbbf24;padding:4px 10px;border-radius:4px;font-family:inherit;font-size:inherit;width:200px;text-align:center}
+.fill-code-input:focus{outline:none;border-color:#fbbf24;box-shadow:0 0 0 2px rgba(251,191,36,.3)}
+.fill-code-input.correct{border-color:#10b981;background:#064e3b;color:#34d399}
+.fill-code-input.incorrect{border-color:#ef4444;background:#450a0a;color:#fca5a5}
+
+/* Quiz code blocks */
+.quiz-code{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:16px;margin:12px 0;font-family:'Courier New',monospace;font-size:.85rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.6;white-space:pre}
+
+/* Nav */
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--primary);color:var(--primary)}
+
+@media(max-width:768px){
+  .lesson-title{font-size:1.5rem}
+  .lesson-nav{flex-direction:column}
+  .code-block,.quiz-code{font-size:.8rem;padding:12px}
+  .diagram{flex-direction:column;gap:8px;padding:20px 12px}
+  .diagram-arrow-group{flex-direction:row;gap:8px}
+  .arrow-line{width:2px;height:24px}
+  .diagram-box{min-width:auto;width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <span class="topbar-title">Full-Stack Development</span>
+  <a href="course.html">&larr; חזרה לקורס</a>
+</div>
+
+<!-- Lesson Content -->
+<div class="lesson-container">
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#7c3aed">יחידה 3: ASP.NET Core Razor Pages</span>
+    <h1 class="lesson-title">מודל שרת-לקוח וניתוב</h1>
+    <p class="lesson-subtitle">Client-Server, HTTP, Razor Pages, Routing ו-Handlers</p>
+  </div>
+
+  <!-- ===== Section 1: Client-Server ===== -->
+  <div class="lesson-section">
+    <h2>1. מודל Client-Server</h2>
+
+    <p>
+      עד עכשיו בנינו דפי HTML שנפתחים ישירות בדפדפן — קבצים סטטיים שלא משתנים.
+      אבל רוב האתרים שאנחנו מכירים (יוטיוב, אינסטגרם, גוגל) עובדים אחרת לגמרי:
+      התוכן <strong>נבנה דינמית בשרת</strong> לפי הבקשה של המשתמש.
+    </p>
+
+    <h3>השחקנים במשחק</h3>
+    <ul>
+      <li><strong>לקוח (Client)</strong> — הדפדפן שלכם (Chrome, Edge, Firefox). הוא שולח <strong>בקשות</strong> (Requests) ומציג את התוצאה.</li>
+      <li><strong>שרת (Server)</strong> — מחשב חזק שרץ 24/7 ומחכה לבקשות. כשמגיעה בקשה, הוא מעבד אותה ומחזיר <strong>תשובה</strong> (Response) — בדרך כלל HTML, CSS ו-JS.</li>
+      <li><strong>פרוטוקול HTTP</strong> — "שפת התקשורת" בין הלקוח לשרת. כל בקשה ותשובה עוברות דרך HTTP (או HTTPS מוצפן).</li>
+    </ul>
+
+    <h3>איך זה עובד?</h3>
+    <ol>
+      <li>המשתמש מקליד כתובת URL בדפדפן (למשל <code dir="ltr" style="unicode-bidi:embed">www.example.com/about</code>)</li>
+      <li>הדפדפן שולח <strong>HTTP Request</strong> לשרת</li>
+      <li>השרת מעבד את הבקשה (מריץ קוד, קורא ממסד נתונים...)</li>
+      <li>השרת בונה דף HTML עם הנתונים ומחזיר <strong>HTTP Response</strong></li>
+      <li>הדפדפן מקבל את ה-HTML ומציג אותו על המסך</li>
+    </ol>
+
+    <!-- Client-Server Diagram -->
+    <div class="diagram">
+      <div class="diagram-box" style="background:#2563eb">
+        <span style="font-size:1.5rem">🖥️</span><br>
+        לקוח<br>(Client)
+        <small>דפדפן</small>
+      </div>
+
+      <div class="diagram-arrow-group">
+        <div class="diagram-arrow req">Request &rarr;</div>
+        <div class="arrow-line" style="background:var(--primary)"></div>
+        <div class="arrow-line" style="background:var(--success)"></div>
+        <div class="diagram-arrow res">&larr; Response</div>
+      </div>
+
+      <div class="diagram-box" style="background:#64748b">
+        <span style="font-size:1.5rem">🌐</span><br>
+        אינטרנט
+        <small>HTTP / HTTPS</small>
+      </div>
+
+      <div class="diagram-arrow-group">
+        <div class="diagram-arrow req">Request &rarr;</div>
+        <div class="arrow-line" style="background:var(--primary)"></div>
+        <div class="arrow-line" style="background:var(--success)"></div>
+        <div class="diagram-arrow res">&larr; Response</div>
+      </div>
+
+      <div class="diagram-box" style="background:#7c3aed">
+        <span style="font-size:1.5rem">⚙️</span><br>
+        שרת<br>(Server)
+        <small>ASP.NET Core</small>
+      </div>
+
+      <div class="diagram-arrow-group">
+        <div class="diagram-arrow req" style="font-size:.75rem">שאילתה &rarr;</div>
+        <div class="arrow-line" style="background:#f59e0b"></div>
+        <div class="arrow-line" style="background:#f59e0b"></div>
+        <div class="diagram-arrow res" style="font-size:.75rem">&larr; נתונים</div>
+      </div>
+
+      <div class="diagram-box" style="background:#059669">
+        <span style="font-size:1.5rem">🗄️</span><br>
+        מסד נתונים
+        <small>Database</small>
+      </div>
+    </div>
+
+    <div class="lesson-tip">
+      <strong>דוגמה מהחיים:</strong>
+      <p>
+        כשאתם גולשים ליוטיוב, הדפדפן שולח בקשה לשרתים של גוגל.
+        השרת בודק מי אתם, מה ההמלצות שלכם, ובונה דף HTML מותאם אישית — עם סרטונים שונים לכל משתמש.
+        זה ההבדל מ-HTML סטטי: התוכן <strong>נבנה תוך כדי</strong> ולא קבוע מראש.
+      </p>
+    </div>
+
+    <h3>סוגי בקשות HTTP נפוצים</h3>
+    <ul>
+      <li><strong>GET</strong> — "תן לי מידע" (כניסה לדף, חיפוש). הנפוצה ביותר.</li>
+      <li><strong>POST</strong> — "קבל ממני מידע" (שליחת טופס, העלאת קובץ).</li>
+    </ul>
+  </div>
+
+  <!-- ===== Section 2: Razor Pages ===== -->
+  <div class="lesson-section">
+    <h2>2. מה זה Razor Pages?</h2>
+
+    <p>
+      <strong>Razor Pages</strong> היא טכנולוגיה של Microsoft לבניית אתרים דינמיים,
+      חלק מ-ASP.NET Core — הפלטפורמה המודרנית של מיקרוסופט לפיתוח Web.
+    </p>
+
+    <p>
+      הרעיון המרכזי: כל דף באתר מורכב מ<strong>שני קבצים</strong> שעובדים יחד:
+    </p>
+
+    <table class="routing-table">
+      <thead>
+        <tr>
+          <th>קובץ</th>
+          <th>תפקיד</th>
+          <th>שפה</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>.cshtml</code></td>
+          <td>העיצוב — HTML עם קוד C# מוטמע בעזרת <code>@</code></td>
+          <td>HTML + C# (Razor)</td>
+        </tr>
+        <tr>
+          <td><code>.cshtml.cs</code></td>
+          <td>הלוגיקה — Code-behind שמריץ את הפעולות</td>
+          <td>C#</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>דוגמה: קובץ Index.cshtml (העיצוב)</h3>
+    <div class="code-block"><span class="razor">@page</span>
+<span class="razor">@model</span> IndexModel
+
+<span class="tag">&lt;h1&gt;</span><span class="razor">@Model.Message</span><span class="tag">&lt;/h1&gt;</span>
+<span class="tag">&lt;p&gt;</span>היום: <span class="razor">@DateTime.Now.ToShortDateString()</span><span class="tag">&lt;/p&gt;</span></div>
+
+    <h3>דוגמה: קובץ Index.cshtml.cs (הלוגיקה)</h3>
+    <div class="code-block"><span class="keyword">public class</span> <span class="type">IndexModel</span> : <span class="type">PageModel</span>
+{
+    <span class="keyword">public</span> <span class="type">string</span> <span class="prop">Message</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+    <span class="keyword">public void</span> <span class="function">OnGet</span>()
+    {
+        Message = <span class="string">"ברוכים הבאים לאתר!"</span>;
+    }
+}</div>
+
+    <div class="lesson-tip warning">
+      <strong>שימו לב! C# רצה בשרת, לא בדפדפן</strong>
+      <p>
+        הקוד שכותבים ב-Razor Pages רץ <strong>בצד השרת</strong>.
+        הדפדפן מקבל רק HTML רגיל — הוא לא רואה את קוד ה-C# בכלל.
+        זה שונה מ-JavaScript שרצה בתוך הדפדפן (צד הלקוח).
+      </p>
+    </div>
+
+    <h3>ההבדל: HTML סטטי מול Razor Pages</h3>
+    <table class="routing-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>HTML סטטי</th>
+          <th>Razor Pages</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>תוכן</strong></td>
+          <td>קבוע — אותו דבר לכולם</td>
+          <td>דינמי — נבנה בשרת לפי נתונים</td>
+        </tr>
+        <tr>
+          <td><strong>שפה</strong></td>
+          <td>HTML + CSS + JS</td>
+          <td>HTML + CSS + JS + <strong>C#</strong></td>
+        </tr>
+        <tr>
+          <td><strong>מסד נתונים</strong></td>
+          <td>אין גישה</td>
+          <td>יש גישה דרך C#</td>
+        </tr>
+        <tr>
+          <td><strong>דוגמה</strong></td>
+          <td>דף "אודות" פשוט</td>
+          <td>פרופיל משתמש, חנות, פורום</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="lesson-tip success">
+      <strong>הסימן @ — הכוכב של Razor</strong>
+      <p>
+        בקובץ <code>.cshtml</code>, הסימן <code>@</code> מסמן מעבר מ-HTML לקוד C#.
+        <br>
+        <code dir="ltr" style="unicode-bidi:embed">@Model.Name</code> — הצגת ערך של משתנה.
+        <br>
+        <code dir="ltr" style="unicode-bidi:embed">@DateTime.Now</code> — הרצת פקודת C# ישירות.
+        <br>
+        <code dir="ltr" style="unicode-bidi:embed">@{ ... }</code> — בלוק קוד C# שלם.
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== Section 3: Routing ===== -->
+  <div class="lesson-section">
+    <h2>3. ניתוב (Routing)</h2>
+
+    <p>
+      <strong>ניתוב (Routing)</strong> זה הקשר בין ה-URL שהמשתמש מקליד לבין הקובץ שהשרת מפעיל.
+      ב-Razor Pages הניתוב הוא <strong>אוטומטי לפי מיקום הקובץ</strong> בפרויקט — לא צריך להגדיר כלום ידנית!
+    </p>
+
+    <h3>הכלל פשוט</h3>
+    <p>
+      הנתיב של הקובץ בתוך תיקיית <code>Pages</code> הופך ל-URL:
+    </p>
+
+    <!-- Folder structure diagram -->
+    <div class="folder-tree"><span class="folder">Pages/</span>
+├── <span class="file">Index.cshtml</span>        <span class="arrow-map">→  www.site.com/</span>
+├── <span class="file">About.cshtml</span>        <span class="arrow-map">→  www.site.com/About</span>
+├── <span class="file">Contact.cshtml</span>      <span class="arrow-map">→  www.site.com/Contact</span>
+└── <span class="folder">Admin/</span>
+    ├── <span class="file">Dashboard.cshtml</span> <span class="arrow-map">→  www.site.com/Admin/Dashboard</span>
+    └── <span class="file">Users.cshtml</span>     <span class="arrow-map">→  www.site.com/Admin/Users</span></div>
+
+    <table class="routing-table">
+      <thead>
+        <tr>
+          <th>מיקום הקובץ</th>
+          <th>URL</th>
+          <th>הערה</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>Pages/Index.cshtml</code></td>
+          <td><code>/</code></td>
+          <td>דף הבית — Index הוא ברירת מחדל</td>
+        </tr>
+        <tr>
+          <td><code>Pages/About.cshtml</code></td>
+          <td><code>/About</code></td>
+          <td>שם הקובץ = נתיב ה-URL</td>
+        </tr>
+        <tr>
+          <td><code>Pages/Admin/Dashboard.cshtml</code></td>
+          <td><code>/Admin/Dashboard</code></td>
+          <td>תת-תיקייה = נתיב מקונן</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="lesson-tip">
+      <strong>למה זה נוח?</strong>
+      <p>
+        בטכנולוגיות אחרות צריך להגדיר טבלת ניתוב מסובכת.
+        ב-Razor Pages פשוט יוצרים קובץ במקום הנכון, וה-URL נוצר אוטומטית.
+        רוצים דף חדש? יוצרים קובץ חדש בתיקייה.
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== Section 4: Handlers ===== -->
+  <div class="lesson-section">
+    <h2>4. Handlers — טיפול בבקשות</h2>
+
+    <p>
+      בכל דף Razor Pages יש <strong>Handlers</strong> — פונקציות שמטפלות בסוגי בקשות שונים.
+      שני ה-Handlers הנפוצים:
+    </p>
+
+    <ul>
+      <li><strong><code dir="ltr" style="unicode-bidi:embed">OnGet()</code></strong> — מופעל כשהמשתמש <strong>נכנס לדף</strong> (בקשת GET). כאן מכינים את הנתונים לתצוגה.</li>
+      <li><strong><code dir="ltr" style="unicode-bidi:embed">OnPost()</code></strong> — מופעל כשנשלח <strong>טופס</strong> (בקשת POST). כאן מעבדים את הנתונים שהמשתמש שלח.</li>
+    </ul>
+
+    <h3>דוגמה מלאה: דף ברכה</h3>
+
+    <p>קובץ <code>Greeting.cshtml.cs</code> (הלוגיקה):</p>
+    <div class="code-block"><span class="keyword">public class</span> <span class="type">GreetingModel</span> : <span class="type">PageModel</span>
+{
+    <span class="keyword">public</span> <span class="type">string</span> <span class="prop">Message</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    <span class="keyword">public</span> <span class="type">int</span> <span class="prop">VisitCount</span> { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+    <span class="keyword">public void</span> <span class="function">OnGet</span>()
+    {
+        Message = <span class="string">"ברוכים הבאים!"</span>;
+        VisitCount = <span class="string">42</span>;  <span class="comment">// בפועל נקרא ממסד נתונים</span>
+    }
+
+    <span class="keyword">public void</span> <span class="function">OnPost</span>()
+    {
+        <span class="comment">// עיבוד נתוני הטופס</span>
+        Message = <span class="string">"הטופס נשלח בהצלחה!"</span>;
+    }
+}</div>
+
+    <p>קובץ <code>Greeting.cshtml</code> (העיצוב):</p>
+    <div class="code-block"><span class="razor">@page</span>
+<span class="razor">@model</span> GreetingModel
+
+<span class="tag">&lt;h1&gt;</span><span class="razor">@Model.Message</span><span class="tag">&lt;/h1&gt;</span>
+<span class="tag">&lt;p&gt;</span>מספר ביקורים: <span class="razor">@Model.VisitCount</span><span class="tag">&lt;/p&gt;</span>
+
+<span class="tag">&lt;form</span> <span class="attr">method</span>=<span class="value">"post"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"text"</span> <span class="attr">name</span>=<span class="value">"userName"</span> <span class="tag">/&gt;</span>
+    <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="value">"submit"</span><span class="tag">&gt;</span>שלח<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span></div>
+
+    <h3>מה קורה כשמשתמש נכנס לדף?</h3>
+    <ol>
+      <li>המשתמש מקליד <code dir="ltr" style="unicode-bidi:embed">www.site.com/Greeting</code></li>
+      <li>השרת מזהה שזו בקשת <strong>GET</strong> ומפעיל את <code dir="ltr" style="unicode-bidi:embed">OnGet()</code></li>
+      <li><code dir="ltr" style="unicode-bidi:embed">OnGet()</code> מגדיר <code dir="ltr" style="unicode-bidi:embed">Message = "ברוכים הבאים!"</code></li>
+      <li>השרת לוקח את קובץ ה-<code>.cshtml</code>, מחליף את <code dir="ltr" style="unicode-bidi:embed">@Model.Message</code> בערך האמיתי, ובונה HTML</li>
+      <li>ה-HTML נשלח ללקוח — הדפדפן מציג "ברוכים הבאים!"</li>
+    </ol>
+
+    <h3>מה קורה כשנשלח טופס?</h3>
+    <ol>
+      <li>המשתמש ממלא את הטופס ולוחץ "שלח"</li>
+      <li>הדפדפן שולח בקשת <strong>POST</strong> עם הנתונים</li>
+      <li>השרת מפעיל את <code dir="ltr" style="unicode-bidi:embed">OnPost()</code></li>
+      <li>הלוגיקה מעבדת את הנתונים ומעדכנת את <code dir="ltr" style="unicode-bidi:embed">Message</code></li>
+      <li>הדף נבנה מחדש ונשלח — עכשיו מציג "הטופס נשלח בהצלחה!"</li>
+    </ol>
+
+    <div class="lesson-tip warning">
+      <strong>PageModel — מחלקת הבסיס</strong>
+      <p>
+        כל מחלקת Code-behind יורשת מ-<code>PageModel</code>.
+        המאפיינים (Properties) שמגדירים במחלקה (כמו <code>Message</code>, <code>VisitCount</code>)
+        זמינים בקובץ ה-<code>.cshtml</code> דרך <code dir="ltr" style="unicode-bidi:embed">@Model.PropertyName</code>.
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== Comprehension Quizzes ===== -->
+  <div class="lesson-section">
+    <h2>בדיקת הבנה</h2>
+
+    <!-- Quiz 1: Multiple Choice -->
+    <div class="quiz-container" id="quiz1">
+      <h3>שאלה 1</h3>
+      <div class="quiz-label">בחירה מרובה</div>
+      <div class="quiz-question">מה ההבדל בין קובץ <code>.cshtml</code> לקובץ <code>.cshtml.cs</code>?</div>
+      <div class="quiz-options" id="quiz1-options">
+        <label>
+          <input type="radio" name="quiz1" value="0">
+          אין הבדל — שניהם מכילים HTML
+        </label>
+        <label>
+          <input type="radio" name="quiz1" value="1">
+          <code>.cshtml</code> מכיל את העיצוב (HTML + C# מוטמע), <code>.cshtml.cs</code> מכיל את הלוגיקה
+        </label>
+        <label>
+          <input type="radio" name="quiz1" value="2">
+          <code>.cshtml.cs</code> מכיל CSS, <code>.cshtml</code> מכיל JavaScript
+        </label>
+        <label>
+          <input type="radio" name="quiz1" value="3">
+          <code>.cshtml.cs</code> הוא קובץ תצוגה, <code>.cshtml</code> הוא קובץ לוגיקה
+        </label>
+      </div>
+      <button class="quiz-check-btn" onclick="checkQuiz('quiz1',1)">בדיקה</button>
+      <div class="quiz-feedback" id="quiz1-feedback"></div>
+    </div>
+
+    <!-- Quiz 2: What will display -->
+    <div class="quiz-container" id="quiz2">
+      <h3>שאלה 2</h3>
+      <div class="quiz-label">מה יוצג בדף?</div>
+      <div class="quiz-question">נתון הקוד הבא. מה יוצג בדף כשנכנסים אליו?</div>
+
+      <p style="font-weight:700;font-size:.9rem;margin-bottom:4px">Code-behind (<code>About.cshtml.cs</code>):</p>
+      <div class="quiz-code"><span style="color:#818cf8">public class</span> <span style="color:#f472b6">AboutModel</span> : <span style="color:#f472b6">PageModel</span>
+{
+    <span style="color:#818cf8">public</span> <span style="color:#f472b6">string</span> <span style="color:#34d399">Title</span> { <span style="color:#818cf8">get</span>; <span style="color:#818cf8">set</span>; }
+    <span style="color:#818cf8">public</span> <span style="color:#f472b6">int</span> <span style="color:#34d399">Year</span> { <span style="color:#818cf8">get</span>; <span style="color:#818cf8">set</span>; }
+
+    <span style="color:#818cf8">public void</span> <span style="color:#38bdf8">OnGet</span>()
+    {
+        Title = <span style="color:#fbbf24">"אודות"</span>;
+        Year = <span style="color:#fbbf24">DateTime</span>.Now.Year;
+    }
+}</div>
+
+      <p style="font-weight:700;font-size:.9rem;margin-bottom:4px">תצוגה (<code>About.cshtml</code>):</p>
+      <div class="quiz-code"><span style="color:#f59e0b;font-weight:700">@page</span>
+<span style="color:#f59e0b;font-weight:700">@model</span> AboutModel
+
+<span style="color:#f472b6">&lt;h1&gt;</span><span style="color:#f59e0b;font-weight:700">@Model.Title</span><span style="color:#f472b6">&lt;/h1&gt;</span>
+<span style="color:#f472b6">&lt;p&gt;</span>שנת <span style="color:#f59e0b;font-weight:700">@Model.Year</span><span style="color:#f472b6">&lt;/p&gt;</span></div>
+
+      <div class="quiz-options" id="quiz2-options">
+        <label>
+          <input type="radio" name="quiz2" value="0">
+          כותרת "@Model.Title" ופסקה "שנת @Model.Year" (הטקסט כמו שהוא)
+        </label>
+        <label>
+          <input type="radio" name="quiz2" value="1">
+          כותרת "אודות" ופסקה "שנת 2026"
+        </label>
+        <label>
+          <input type="radio" name="quiz2" value="2">
+          שגיאת קומפילציה — אי אפשר לערבב HTML ו-C#
+        </label>
+        <label>
+          <input type="radio" name="quiz2" value="3">
+          דף ריק — OnGet לא מחזיר ערך
+        </label>
+      </div>
+      <button class="quiz-check-btn" onclick="checkQuiz('quiz2',1)">בדיקה</button>
+      <div class="quiz-feedback" id="quiz2-feedback"></div>
+    </div>
+
+    <!-- Quiz 3: Fill in the code -->
+    <div class="quiz-container" id="quiz3">
+      <h3>שאלה 3</h3>
+      <div class="quiz-label">השלמת קוד</div>
+      <div class="quiz-question">
+        השלימו את ה-<code dir="ltr" style="unicode-bidi:embed">OnGet</code> handler כך שיציג את התאריך והשעה הנוכחיים:
+      </div>
+
+      <div class="fill-code-container">
+<span style="color:#818cf8">public</span> <span style="color:#f472b6">string</span> <span style="color:#34d399">CurrentDate</span> { <span style="color:#818cf8">get</span>; <span style="color:#818cf8">set</span>; }
+
+<span style="color:#818cf8">public void</span> <span style="color:#38bdf8">OnGet</span>()
+{
+    CurrentDate = <input type="text" id="fill1" class="fill-code-input" placeholder="?________?" autocomplete="off">;
+}</div>
+
+      <button class="quiz-check-btn" onclick="checkFill('fill1',['DateTime.Now','DateTime.Now.ToString()','DateTime.Now.ToString(&quot;d&quot;)'])">בדיקה</button>
+      <div class="quiz-feedback" id="fill1-feedback"></div>
+    </div>
+
+    <!-- Quiz 4: Order the steps -->
+    <div class="quiz-container" id="quiz4">
+      <h3>שאלה 4</h3>
+      <div class="quiz-label">סדר שלבים</div>
+      <div class="quiz-question">מהו הסדר הנכון של שלבי בקשת HTTP (Request-Response)?</div>
+      <div class="quiz-options" id="quiz4-options">
+        <label>
+          <input type="radio" name="quiz4" value="0">
+          <span dir="ltr" style="unicode-bidi:embed">1.</span> URL בדפדפן
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">2.</span> HTTP Request
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">3.</span> OnGet()
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">4.</span> בניית HTML
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">5.</span> Response
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">6.</span> הצגה בדפדפן
+        </label>
+        <label>
+          <input type="radio" name="quiz4" value="1">
+          <span dir="ltr" style="unicode-bidi:embed">1.</span> OnGet()
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">2.</span> URL בדפדפן
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">3.</span> HTTP Request
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">4.</span> Response
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">5.</span> בניית HTML
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">6.</span> הצגה בדפדפן
+        </label>
+        <label>
+          <input type="radio" name="quiz4" value="2">
+          <span dir="ltr" style="unicode-bidi:embed">1.</span> HTTP Request
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">2.</span> URL בדפדפן
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">3.</span> בניית HTML
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">4.</span> OnGet()
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">5.</span> הצגה בדפדפן
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">6.</span> Response
+        </label>
+        <label>
+          <input type="radio" name="quiz4" value="3">
+          <span dir="ltr" style="unicode-bidi:embed">1.</span> URL בדפדפן
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">2.</span> הצגה בדפדפן
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">3.</span> HTTP Request
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">4.</span> OnGet()
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">5.</span> בניית HTML
+          &rarr; <span dir="ltr" style="unicode-bidi:embed">6.</span> Response
+        </label>
+      </div>
+      <button class="quiz-check-btn" onclick="checkQuiz('quiz4',0)">בדיקה</button>
+      <div class="quiz-feedback" id="quiz4-feedback"></div>
+    </div>
+
+  </div>
+
+  <!-- Lesson Navigation -->
+  <div class="lesson-nav">
+    <a href="lesson-2-3.html">השיעור הקודם &rarr;</a>
+    <a href="lesson-3-2.html">השיעור הבא &larr;</a>
+  </div>
+
+</div>
+
+<script>
+/* ===== Quiz Checking ===== */
+
+var feedbackMessages={
+  quiz1:{
+    correct:'נכון! קובץ .cshtml מכיל את התצוגה (HTML + קוד Razor), וקובץ .cshtml.cs מכיל את הלוגיקה (C# בלבד).',
+    incorrect:'לא נכון. חשבו: באיזה קובץ כותבים HTML ובאיזה קובץ כותבים את הלוגיקה?'
+  },
+  quiz2:{
+    correct:'נכון! OnGet() מגדיר Title = "אודות" ו-Year = השנה הנוכחית. הסימן @ ב-cshtml מחליף את הערכים האלה ב-HTML.',
+    incorrect:'לא נכון. הסימן @ ב-Razor אומר לשרת "תחליף את זה בערך האמיתי". OnGet() קובע את הערכים לפני שהדף נבנה.'
+  },
+  quiz4:{
+    correct:'מצוין! זה בדיוק הסדר: המשתמש מקליד URL → הדפדפן שולח Request → השרת מריץ OnGet() → בונה HTML → שולח Response → הדפדפן מציג.',
+    incorrect:'לא נכון. חשבו מה קורה קודם: מה גורם לבקשה להישלח? ומה קורה אחרי שהשרת מקבל אותה?'
+  }
+};
+
+function checkQuiz(quizId,correctIndex){
+  var options=document.getElementById(quizId+'-options');
+  var feedback=document.getElementById(quizId+'-feedback');
+  var selected=options.querySelector('input[type="radio"]:checked');
+  var labels=options.querySelectorAll('label');
+  var btn=options.parentElement.querySelector('.quiz-check-btn');
+
+  if(!selected){
+    feedback.className='quiz-feedback incorrect';
+    feedback.textContent='יש לבחור תשובה!';
+    feedback.style.display='block';
+    return;
+  }
+
+  var selectedIndex=parseInt(selected.value);
+
+  // Reset all labels
+  for(var i=0;i<labels.length;i++){
+    labels[i].classList.remove('correct','incorrect','show-correct');
+  }
+
+  if(selectedIndex===correctIndex){
+    selected.parentElement.classList.add('correct');
+    feedback.className='quiz-feedback correct';
+    feedback.textContent=feedbackMessages[quizId]?feedbackMessages[quizId].correct:'נכון!';
+  }else{
+    selected.parentElement.classList.add('incorrect');
+    labels[correctIndex].classList.add('show-correct');
+    feedback.className='quiz-feedback incorrect';
+    feedback.textContent=feedbackMessages[quizId]?feedbackMessages[quizId].incorrect:'לא נכון, נסו שוב.';
+  }
+  feedback.style.display='block';
+
+  // Disable after answering
+  var radios=options.querySelectorAll('input[type="radio"]');
+  for(var j=0;j<radios.length;j++){radios[j].disabled=true;}
+  btn.disabled=true;
+}
+
+function checkFill(inputId,correctAnswers){
+  var input=document.getElementById(inputId);
+  var feedback=document.getElementById(inputId+'-feedback');
+  var btn=input.closest('.quiz-container').querySelector('.quiz-check-btn');
+  var val=input.value.trim().replace(/\s+/g,'');
+
+  if(!val){
+    feedback.className='quiz-feedback incorrect';
+    feedback.textContent='יש למלא את התשובה!';
+    feedback.style.display='block';
+    return;
+  }
+
+  var isCorrect=false;
+  for(var i=0;i<correctAnswers.length;i++){
+    if(val.replace(/\s+/g,'')===correctAnswers[i].replace(/\s+/g,'')){
+      isCorrect=true;
+      break;
+    }
+  }
+
+  if(isCorrect){
+    input.classList.remove('incorrect');
+    input.classList.add('correct');
+    feedback.className='quiz-feedback correct';
+    feedback.textContent='נכון! DateTime.Now מחזיר את התאריך והשעה הנוכחיים בשרת.';
+  }else{
+    input.classList.remove('correct');
+    input.classList.add('incorrect');
+    feedback.className='quiz-feedback incorrect';
+    feedback.textContent='לא נכון. רמז: באיזה מחלקה ב-C# מקבלים את התאריך הנוכחי? (DateTime._____)';
+  }
+  feedback.style.display='block';
+
+  if(isCorrect){
+    input.readOnly=true;
+    btn.disabled=true;
+  }
+}
+</script>
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

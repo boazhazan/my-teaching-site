@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>לוגיקה, לולאות ואירועים | Full-Stack Development</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --unit-color:#d97706;
+}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+
+/* Topbar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--unit-color)}
+.topbar a{color:var(--unit-color);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Lesson layout */
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+
+/* Sections */
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+
+/* Code blocks */
+.code-block{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.6;white-space:pre}
+.code-block .kw{color:#c084fc}
+.code-block .str{color:#34d399}
+.code-block .num{color:#fbbf24}
+.code-block .comment{color:#64748b;font-style:italic}
+.code-block .func{color:#60a5fa}
+.code-block .tag{color:#f472b6}
+.code-block .attr{color:#a78bfa}
+.code-block .value{color:#34d399}
+
+/* Tip boxes */
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+
+/* Code editor */
+.code-editor-container{border:2px solid var(--border);border-radius:12px;overflow:hidden;margin:20px 0}
+.code-editor-header{background:#1e293b;color:#fff;padding:10px 16px;font-size:.85rem;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.code-editor-textarea{width:100%;min-height:300px;padding:16px;font-family:'Courier New',monospace;font-size:.9rem;border:none;resize:vertical;direction:ltr;text-align:left;background:#0f172a;color:#e2e8f0;line-height:1.6;tab-size:2}
+.code-editor-textarea:focus{outline:none}
+.code-editor-preview{border-top:2px solid var(--border);min-height:150px;background:#fff}
+.code-editor-preview iframe{width:100%;min-height:150px;border:none}
+.code-editor-run{padding:8px 20px;background:#10b981;color:#fff;border:none;border-radius:6px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.85rem}
+.code-editor-run:hover{background:#059669}
+.code-editor-clear{padding:8px 16px;background:#64748b;color:#fff;border:none;border-radius:6px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.85rem;margin-inline-start:8px}
+.code-editor-clear:hover{background:#475569}
+
+/* Console panel */
+.console-panel{border-top:2px solid var(--border);background:#0f172a;max-height:160px;overflow-y:auto;padding:12px 16px;font-family:'Courier New',monospace;font-size:.82rem;direction:ltr;text-align:left;color:#94a3b8}
+.console-panel-header{background:#1e293b;color:#94a3b8;padding:6px 16px;font-size:.78rem;font-weight:600;display:flex;justify-content:space-between;align-items:center;border-top:2px solid var(--border)}
+.console-line{padding:2px 0;border-bottom:1px solid rgba(148,163,184,.1)}
+.console-line.log{color:#e2e8f0}
+.console-line.warn{color:#fbbf24}
+.console-line.error{color:#f87171}
+
+/* Exercise box */
+.exercise-box{background:var(--bg);border:2px solid var(--unit-color);border-radius:12px;padding:24px;margin:24px 0}
+.exercise-box h3{color:var(--unit-color);margin-bottom:12px}
+
+/* Nav */
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--unit-color);color:var(--unit-color)}
+
+/* Inline code */
+code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:.88em;direction:ltr;unicode-bidi:embed}
+
+@media(max-width:768px){
+  .lesson-title{font-size:1.5rem}
+  .lesson-nav{flex-direction:column}
+  .code-block{font-size:.8rem;padding:12px}
+  .code-editor-textarea{min-height:220px;font-size:.82rem}
+}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <span class="topbar-title">Full-Stack Development</span>
+  <a href="course.html">&larr; חזרה לקורס</a>
+</div>
+
+<!-- Lesson Content -->
+<div class="lesson-container">
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#d97706">יחידה 2: JavaScript</span>
+    <h1 class="lesson-title">לוגיקה, לולאות ואירועים</h1>
+    <p class="lesson-subtitle">תנאים, לולאות, פונקציות ואירועי DOM</p>
+  </div>
+
+  <!-- Premium wrapper: everything after the header is premium -->
+  <div data-premium>
+
+  <!-- Section 1: Conditions -->
+  <div class="lesson-section">
+    <h2>1. תנאים (Conditions)</h2>
+
+    <p>בשיעור הקודם למדנו להגדיר משתנים ולשנות תוכן בדף. אבל תוכנית אמיתית צריכה לקבל <strong>החלטות</strong> — לעשות דבר אחד אם התנאי מתקיים, ודבר אחר אם לא. לזה בדיוק משמשת פקודת <code>if</code>.</p>
+
+    <h3>if / else if / else</h3>
+    <p>המבנה הבסיסי ביותר לבדיקת תנאי:</p>
+
+    <div class="code-block"><span class="kw">let</span> grade = <span class="num">85</span>;
+
+<span class="kw">if</span> (grade >= <span class="num">90</span>) {
+  <span class="func">console.log</span>(<span class="str">"מעולה! ציון גבוה מאוד"</span>);
+} <span class="kw">else if</span> (grade >= <span class="num">70</span>) {
+  <span class="func">console.log</span>(<span class="str">"טוב מאוד!"</span>);
+} <span class="kw">else if</span> (grade >= <span class="num">56</span>) {
+  <span class="func">console.log</span>(<span class="str">"עברת, אבל אפשר להשתפר"</span>);
+} <span class="kw">else</span> {
+  <span class="func">console.log</span>(<span class="str">"נכשלת. נסה שוב!"</span>);
+}</div>
+
+    <p>איך זה עובד?</p>
+    <ul>
+      <li>הדפדפן בודק את התנאי הראשון (<code>grade >= 90</code>). אם הוא <strong>אמת</strong> (true) — מריץ את הבלוק שלו ומדלג על כל השאר.</li>
+      <li>אם הראשון <strong>שקר</strong> (false) — עובר לבדוק את ה-<code>else if</code> הבא.</li>
+      <li>אם אף תנאי לא התקיים — מריץ את בלוק ה-<code>else</code> (אם קיים).</li>
+    </ul>
+
+    <div class="lesson-tip">
+      <strong>💡 אופרטורי השוואה</strong>
+      <p><code>===</code> שווה (השוואה מדויקת), <code>!==</code> לא שווה, <code>></code> גדול מ-, <code><</code> קטן מ-, <code>>=</code> גדול-שווה, <code><=</code> קטן-שווה. תמיד עדיף <code>===</code> על <code>==</code> כי הוא בודק גם סוג נתונים.</p>
+    </div>
+
+    <h3>switch-case</h3>
+    <p>כשאנחנו רוצים להשוות משתנה לכמה <strong>ערכים קבועים</strong>, <code>switch</code> הוא נקי יותר מ-<code>if</code>:</p>
+
+    <div class="code-block"><span class="kw">let</span> day = <span class="str">"שני"</span>;
+
+<span class="kw">switch</span>(day) {
+  <span class="kw">case</span> <span class="str">"ראשון"</span>:
+    <span class="func">console.log</span>(<span class="str">"תחילת השבוע"</span>);
+    <span class="kw">break</span>;
+  <span class="kw">case</span> <span class="str">"שישי"</span>:
+    <span class="func">console.log</span>(<span class="str">"סוף שבוע!"</span>);
+    <span class="kw">break</span>;
+  <span class="kw">case</span> <span class="str">"שבת"</span>:
+    <span class="func">console.log</span>(<span class="str">"יום מנוחה"</span>);
+    <span class="kw">break</span>;
+  <span class="kw">default</span>:
+    <span class="func">console.log</span>(<span class="str">"יום רגיל בשבוע"</span>);
+}</div>
+
+    <p>שימו לב:</p>
+    <ul>
+      <li>כל <code>case</code> בודק אם הערך שווה למשתנה.</li>
+      <li><code>break</code> עוצר את הבדיקה — בלעדיו, הקוד ימשיך ל-case הבא! (זו שגיאה נפוצה)</li>
+      <li><code>default</code> — כמו <code>else</code>, מופעל כשאף case לא תאם.</li>
+    </ul>
+
+    <div class="lesson-tip warning">
+      <strong>⚠️ שכחתם break?</strong>
+      <p>אם תשכחו לכתוב <code>break</code> אחרי case, הקוד "ייפול" (fall-through) ל-case הבא ויריץ גם אותו. זו שגיאה קלאסית ב-JavaScript — תמיד לסיים כל case ב-<code>break</code>.</p>
+    </div>
+  </div>
+
+  <!-- Section 2: Loops -->
+  <div class="lesson-section">
+    <h2>2. לולאות (Loops)</h2>
+
+    <p>לולאה מאפשרת לנו להריץ קוד <strong>שוב ושוב</strong> בלי לכתוב אותו כמה פעמים. למשל, אם רוצים להדפיס את המספרים 1 עד 100 — לא נכתוב 100 שורות <code>console.log</code>, אלא לולאה אחת.</p>
+
+    <h3>לולאת for — כשיודעים כמה פעמים</h3>
+    <p>לולאת <code>for</code> מתאימה כשאנחנו יודעים מראש כמה חזרות אנחנו רוצים:</p>
+
+    <div class="code-block"><span class="comment">// מבנה: for (אתחול; תנאי; קידום)</span>
+<span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">1</span>; i <= <span class="num">10</span>; i++) {
+  <span class="func">console.log</span>(<span class="str">"מספר: "</span> + i);
+}</div>
+
+    <p>שלושה חלקים בסוגריים, מופרדים בנקודה-פסיק:</p>
+    <ol>
+      <li><strong>אתחול</strong> (<code>let i = 1</code>) — רץ פעם אחת בהתחלה. מגדיר את מונה הלולאה.</li>
+      <li><strong>תנאי</strong> (<code>i <= 10</code>) — נבדק <em>לפני</em> כל חזרה. כל עוד true — הלולאה ממשיכה.</li>
+      <li><strong>קידום</strong> (<code>i++</code>) — רץ <em>אחרי</em> כל חזרה. בדרך כלל מגדיל את המונה.</li>
+    </ol>
+
+    <p><strong>דוגמה — לוח הכפל של 7:</strong></p>
+    <div class="code-block"><span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">1</span>; i <= <span class="num">10</span>; i++) {
+  <span class="kw">let</span> result = <span class="num">7</span> * i;
+  <span class="func">console.log</span>(<span class="num">7</span> + <span class="str">" x "</span> + i + <span class="str">" = "</span> + result);
+}
+<span class="comment">// 7 x 1 = 7</span>
+<span class="comment">// 7 x 2 = 14</span>
+<span class="comment">// ...</span>
+<span class="comment">// 7 x 10 = 70</span></div>
+
+    <h3>לולאת while — כשלא יודעים כמה פעמים</h3>
+    <p>לולאת <code>while</code> ממשיכה כל עוד התנאי מתקיים, בלי מונה מוגדר מראש:</p>
+
+    <div class="code-block"><span class="kw">let</span> num = <span class="num">1</span>;
+
+<span class="kw">while</span> (num <= <span class="num">100</span>) {
+  <span class="func">console.log</span>(num);
+  num = num * <span class="num">2</span>;  <span class="comment">// כפול 2 בכל פעם</span>
+}
+<span class="comment">// 1, 2, 4, 8, 16, 32, 64</span></div>
+
+    <div class="lesson-tip warning">
+      <strong>⚠️ זהירות מלולאה אינסופית!</strong>
+      <p>אם שוכחים לעדכן את המשתנה בתוך הלולאה (או שהתנאי תמיד true), הלולאה תרוץ לנצח והדפדפן ייתקע. תמיד וודאו שהתנאי יהפוך ל-false בשלב כלשהו.</p>
+    </div>
+
+    <h3>break ו-continue</h3>
+    <p>שתי פקודות שליטה שימושיות בתוך לולאות:</p>
+
+    <div class="code-block"><span class="comment">// break — עוצר את הלולאה לחלוטין</span>
+<span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">1</span>; i <= <span class="num">100</span>; i++) {
+  <span class="kw">if</span> (i === <span class="num">5</span>) {
+    <span class="kw">break</span>;  <span class="comment">// יוצאים מהלולאה כשi=5</span>
+  }
+  <span class="func">console.log</span>(i);
+}
+<span class="comment">// ידפיס: 1, 2, 3, 4</span>
+
+<span class="comment">// continue — מדלג על החזרה הנוכחית</span>
+<span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">1</span>; i <= <span class="num">10</span>; i++) {
+  <span class="kw">if</span> (i % <span class="num">2</span> === <span class="num">0</span>) {
+    <span class="kw">continue</span>;  <span class="comment">// מדלג על מספרים זוגיים</span>
+  }
+  <span class="func">console.log</span>(i);
+}
+<span class="comment">// ידפיס: 1, 3, 5, 7, 9 (רק אי-זוגיים)</span></div>
+
+    <div class="lesson-tip success">
+      <strong>✅ מתי להשתמש במה?</strong>
+      <p><code>for</code> — כשיודעים מראש כמה חזרות (מספרים 1 עד 10, רשימה בגודל ידוע). <code>while</code> — כשלא יודעים (חכה עד שהמשתמש מזין ערך נכון, חפש עד שתמצא).</p>
+    </div>
+  </div>
+
+  <!-- Section 3: Functions -->
+  <div class="lesson-section">
+    <h2>3. פונקציות (Functions)</h2>
+
+    <p>פונקציה היא <strong>בלוק קוד עם שם</strong> שאפשר להפעיל (לקרוא לו) כמה פעמים שרוצים. במקום לכתוב את אותו קוד שוב ושוב, כותבים אותו פעם אחת בפונקציה וקוראים לה בכל פעם שצריך.</p>
+
+    <h3>הגדרת פונקציה</h3>
+    <div class="code-block"><span class="comment">// הגדרה: function שם(פרמטרים) { קוד }</span>
+<span class="kw">function</span> <span class="func">greet</span>(name) {
+  <span class="func">console.log</span>(<span class="str">"שלום, "</span> + name + <span class="str">"!"</span>);
+}
+
+<span class="comment">// קריאה (הפעלה):</span>
+<span class="func">greet</span>(<span class="str">"יוסי"</span>);   <span class="comment">// "שלום, יוסי!"</span>
+<span class="func">greet</span>(<span class="str">"דנה"</span>);   <span class="comment">// "שלום, דנה!"</span>
+<span class="func">greet</span>(<span class="str">"עומר"</span>);   <span class="comment">// "שלום, עומר!"</span></div>
+
+    <ul>
+      <li><strong>פרמטר</strong> (<code>name</code>) — משתנה שהפונקציה מקבלת מבחוץ. אפשר כמה פרמטרים, מופרדים בפסיקים.</li>
+      <li><strong>קריאה</strong> — שם הפונקציה + סוגריים עם הערכים (ארגומנטים).</li>
+    </ul>
+
+    <h3>ערך החזרה — return</h3>
+    <p>פונקציה יכולה גם <strong>להחזיר ערך</strong> למי שקרא לה:</p>
+
+    <div class="code-block"><span class="kw">function</span> <span class="func">calcArea</span>(width, height) {
+  <span class="kw">let</span> area = width * height;
+  <span class="kw">return</span> area;
+}
+
+<span class="kw">let</span> result = <span class="func">calcArea</span>(<span class="num">5</span>, <span class="num">3</span>);
+<span class="func">console.log</span>(<span class="str">"השטח: "</span> + result);  <span class="comment">// "השטח: 15"</span>
+
+<span class="comment">// אפשר גם ישירות:</span>
+<span class="func">console.log</span>(<span class="str">"שטח: "</span> + <span class="func">calcArea</span>(<span class="num">10</span>, <span class="num">7</span>));  <span class="comment">// "שטח: 70"</span></div>
+
+    <p><code>return</code> עושה שני דברים: <strong>מחזיר ערך</strong> ו<strong>יוצא מהפונקציה</strong>. כל קוד שאחרי return לא ירוץ.</p>
+
+    <h3>למה פונקציות?</h3>
+    <ul>
+      <li><strong>מניעת כפילות</strong> — כותבים קוד פעם אחת, קוראים לו מכל מקום.</li>
+      <li><strong>סדר וארגון</strong> — כל פונקציה עושה דבר אחד מוגדר, קל לקרוא ולתחזק.</li>
+      <li><strong>בדיקות קלות</strong> — אפשר לבדוק כל פונקציה בנפרד.</li>
+    </ul>
+
+    <h3>Arrow Functions (אזכור קצר)</h3>
+    <p>ב-JavaScript מודרני יש גם תחביר מקוצר לפונקציות, נקרא <strong>Arrow Function</strong>:</p>
+
+    <div class="code-block"><span class="comment">// פונקציה רגילה:</span>
+<span class="kw">function</span> <span class="func">double</span>(x) {
+  <span class="kw">return</span> x * <span class="num">2</span>;
+}
+
+<span class="comment">// Arrow function — אותו דבר בדיוק, רק קצר יותר:</span>
+<span class="kw">const</span> <span class="func">double</span> = (x) => x * <span class="num">2</span>;
+
+<span class="comment">// דוגמה נוספת:</span>
+<span class="kw">const</span> <span class="func">add</span> = (a, b) => a + b;
+<span class="func">console.log</span>(<span class="func">add</span>(<span class="num">3</span>, <span class="num">4</span>));  <span class="comment">// 7</span></div>
+
+    <div class="lesson-tip">
+      <strong>💡 טיפ</strong>
+      <p>Arrow functions נפוצות מאוד בקוד מודרני. אין חובה להשתמש בהן עכשיו — אבל כדאי להכיר את התחביר כי תראו אותו הרבה בפרויקטים אמיתיים.</p>
+    </div>
+  </div>
+
+  <!-- Section 4: Events -->
+  <div class="lesson-section">
+    <h2>4. אירועים (Events)</h2>
+
+    <p>אירוע (Event) הוא כל דבר שקורה בדף — המשתמש לוחץ על כפתור, מזיז את העכבר, משנה ערך בשדה, שולח טופס. <strong>JavaScript מאפשר לנו "להאזין" לאירועים ולהגיב אליהם</strong> — וזה מה שהופך דף סטטי לאפליקציה אינטראקטיבית.</p>
+
+    <h3>onclick — לחיצה</h3>
+    <p>האירוע הנפוץ ביותר. מופעל כשלוחצים על אלמנט:</p>
+
+    <div class="code-block"><span class="tag">&lt;button</span> <span class="attr">onclick</span>=<span class="value">"sayHello()"</span><span class="tag">&gt;</span>לחץ עליי<span class="tag">&lt;/button&gt;</span>
+
+<span class="tag">&lt;script&gt;</span>
+<span class="kw">function</span> <span class="func">sayHello</span>() {
+  <span class="func">alert</span>(<span class="str">"שלום! לחצת על הכפתור"</span>);
+}
+<span class="tag">&lt;/script&gt;</span></div>
+
+    <p>כשהמשתמש לוחץ על הכפתור, הדפדפן קורא לפונקציה <code>sayHello()</code>. זה חיבור ישיר בין אירוע (לחיצה) לפעולה (הפונקציה).</p>
+
+    <h3>onchange — שינוי ערך</h3>
+    <p>מופעל כשהמשתמש משנה ערך ב-<code>select</code>, <code>input</code>, או <code>textarea</code>:</p>
+
+    <div class="code-block"><span class="tag">&lt;select</span> <span class="attr">onchange</span>=<span class="value">"colorChanged(this.value)"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="value">"red"</span><span class="tag">&gt;</span>אדום<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="value">"blue"</span><span class="tag">&gt;</span>כחול<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="value">"green"</span><span class="tag">&gt;</span>ירוק<span class="tag">&lt;/option&gt;</span>
+<span class="tag">&lt;/select&gt;</span>
+
+<span class="tag">&lt;script&gt;</span>
+<span class="kw">function</span> <span class="func">colorChanged</span>(color) {
+  document.body.style.backgroundColor = color;
+  <span class="func">console.log</span>(<span class="str">"צבע הרקע שונה ל: "</span> + color);
+}
+<span class="tag">&lt;/script&gt;</span></div>
+
+    <p><code>this.value</code> מעביר את הערך הנבחר ישירות לפונקציה. כך הפונקציה יודעת איזה צבע נבחר.</p>
+
+    <h3>onsubmit — שליחת טופס</h3>
+    <p>מופעל כשהמשתמש שולח טופס. חשוב במיוחד כי מאפשר לנו <strong>לבדוק את הנתונים לפני השליחה</strong>:</p>
+
+    <div class="code-block"><span class="tag">&lt;form</span> <span class="attr">onsubmit</span>=<span class="value">"return validateForm()"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"text"</span> <span class="attr">id</span>=<span class="value">"username"</span> <span class="attr">placeholder</span>=<span class="value">"שם משתמש"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="value">"submit"</span><span class="tag">&gt;</span>שלח<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span>
+
+<span class="tag">&lt;script&gt;</span>
+<span class="kw">function</span> <span class="func">validateForm</span>() {
+  <span class="kw">let</span> name = document.getElementById(<span class="str">"username"</span>).value;
+  <span class="kw">if</span> (name === <span class="str">""</span>) {
+    <span class="func">alert</span>(<span class="str">"אנא הזן שם משתמש!"</span>);
+    <span class="kw">return false</span>;  <span class="comment">// מונע שליחה</span>
+  }
+  <span class="kw">return true</span>;  <span class="comment">// מאפשר שליחה</span>
+}
+<span class="tag">&lt;/script&gt;</span></div>
+
+    <p>שימו לב ל-<code>return</code> ב-<code>onsubmit</code> — אם הפונקציה מחזירה <code>false</code>, הטופס לא יישלח. כך אפשר לבדוק שכל השדות תקינים.</p>
+
+    <h3>onmouseover / onmouseout — ריחוף עכבר</h3>
+    <p><code>onmouseover</code> מופעל כשהעכבר נכנס לאלמנט, ו-<code>onmouseout</code> כשהוא עוזב:</p>
+
+    <div class="code-block"><span class="tag">&lt;div</span> <span class="attr">id</span>=<span class="value">"box"</span>
+     <span class="attr">onmouseover</span>=<span class="value">"this.style.background='yellow'"</span>
+     <span class="attr">onmouseout</span>=<span class="value">"this.style.background='lightgray'"</span>
+     <span class="attr">style</span>=<span class="value">"padding:40px;text-align:center;background:lightgray"</span><span class="tag">&gt;</span>
+  רחף עליי!
+<span class="tag">&lt;/div&gt;</span></div>
+
+    <h3>addEventListener — הדרך המתקדמת</h3>
+    <p>בדוגמאות למעלה השתמשנו ב-<strong>inline events</strong> (כתבנו את האירוע ישירות ב-HTML). בפרויקטים גדולים, עדיף להפריד את ה-JavaScript מה-HTML באמצעות <code>addEventListener</code>:</p>
+
+    <div class="code-block"><span class="tag">&lt;button</span> <span class="attr">id</span>=<span class="value">"myBtn"</span><span class="tag">&gt;</span>לחץ<span class="tag">&lt;/button&gt;</span>
+
+<span class="tag">&lt;script&gt;</span>
+<span class="comment">// במקום onclick="..." ב-HTML:</span>
+<span class="kw">let</span> btn = document.getElementById(<span class="str">"myBtn"</span>);
+btn.<span class="func">addEventListener</span>(<span class="str">"click"</span>, <span class="kw">function</span>() {
+  <span class="func">alert</span>(<span class="str">"לחצת!"</span>);
+});
+<span class="tag">&lt;/script&gt;</span></div>
+
+    <p>היתרון: אפשר להוסיף <strong>כמה מאזינים</strong> לאותו אלמנט, וה-HTML נשאר נקי. זו השיטה המומלצת בפרויקטים אמיתיים.</p>
+
+    <div class="lesson-tip success">
+      <strong>✅ סיכום אירועים</strong>
+      <p><code>onclick</code> — לחיצה, <code>onchange</code> — שינוי ערך, <code>onsubmit</code> — שליחת טופס, <code>onmouseover</code>/<code>onmouseout</code> — ריחוף. בכל המקרים: מחברים אירוע לפונקציה שתרוץ כשהאירוע קורה.</p>
+    </div>
+  </div>
+
+  <!-- Live Code Editor -->
+  <div class="lesson-section">
+    <h2>&#128421; עורך קוד חי</h2>
+    <p>הזמן שלכם לנסות! הקוד למטה מכיל מחשבון פשוט שמשתמש בתנאים, פונקציות ואירועים. ערכו אותו ולחצו "הרץ" — פלט <code>console.log</code> יופיע בחלונית הקונסול למטה:</p>
+
+    <div class="code-editor-container">
+      <div class="code-editor-header">
+        <span>calculator.html</span>
+        <div>
+          <button class="code-editor-run" onclick="runCode()">&#9654; הרץ</button>
+          <button class="code-editor-clear" onclick="clearConsole()">&#128465; נקה קונסול</button>
+        </div>
+      </div>
+      <textarea id="codeEditor" class="code-editor-textarea">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+  &lt;h2&gt;מחשבון&lt;/h2&gt;
+  &lt;input type="number" id="num1" placeholder="מספר 1"&gt;
+  &lt;input type="number" id="num2" placeholder="מספר 2"&gt;
+  &lt;select id="op"&gt;
+    &lt;option value="+"&gt;+&lt;/option&gt;
+    &lt;option value="-"&gt;-&lt;/option&gt;
+    &lt;option value="*"&gt;*&lt;/option&gt;
+    &lt;option value="/"&gt;/&lt;/option&gt;
+  &lt;/select&gt;
+  &lt;button onclick="calculate()"&gt;חשב&lt;/button&gt;
+  &lt;h3 id="result"&gt;&lt;/h3&gt;
+
+  &lt;script&gt;
+    function calculate() {
+      let a = parseFloat(document.getElementById("num1").value);
+      let b = parseFloat(document.getElementById("num2").value);
+      let op = document.getElementById("op").value;
+      let result;
+
+      switch(op) {
+        case "+": result = a + b; break;
+        case "-": result = a - b; break;
+        case "*": result = a * b; break;
+        case "/": result = a / b; break;
+      }
+
+      document.getElementById("result").innerHTML = "תוצאה: " + result;
+      console.log(a + " " + op + " " + b + " = " + result);
+    }
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+      <div class="code-editor-preview">
+        <iframe id="previewFrame" title="תצוגה מקדימה"></iframe>
+      </div>
+      <div class="console-panel-header">
+        <span>Console</span>
+      </div>
+      <div id="consoleOutput" class="console-panel"></div>
+    </div>
+  </div>
+
+  <!-- Exercise -->
+  <div class="lesson-section">
+    <div class="exercise-box">
+      <h3>&#128221; תרגיל: בניית מחשבון מתקדם</h3>
+      <p>השתמשו בעורך הקוד למעלה ובנו מחשבון פונקציונלי עם הדרישות הבאות:</p>
+      <ol>
+        <li><strong>תצוגת מסך</strong> — שדה שמציג את הביטוי הנוכחי ואת התוצאה (כמו מחשבון אמיתי)</li>
+        <li><strong>כפתורי ספרות</strong> — כפתורים 0-9 שמוסיפים את הספרה לתצוגה (השתמשו ב-<code>onclick</code>)</li>
+        <li><strong>כפתורי פעולות</strong> — כפתורים ל- <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code></li>
+        <li><strong>כפתור "="</strong> — מחשב את התוצאה (רמז: אפשר להשתמש ב-<code>eval()</code> או לבנות לוגיקה עם switch)</li>
+        <li><strong>כפתור "C"</strong> — מנקה את התצוגה</li>
+        <li><strong>פריסה בטבלת HTML</strong> — סדרו את הכפתורים בטבלה (4 עמודות כמו מחשבון אמיתי)</li>
+      </ol>
+      <p style="margin-top:12px;color:var(--text-light);font-size:.9rem"><strong>בונוס:</strong> הוסיפו כפתור נקודה עשרונית, כפתור +/- להפיכת סימן, ו-CSS לעיצוב (צבעי כפתורים שונים לספרות ולפעולות).</p>
+    </div>
+  </div>
+
+  <!-- Lesson Navigation -->
+  <div class="lesson-nav">
+    <a href="lesson-2-1.html">&rarr; השיעור הקודם</a>
+    <a href="lesson-2-3.html">השיעור הבא &larr;</a>
+  </div>
+
+  </div><!-- /data-premium -->
+
+</div>
+
+<script>
+/* Console interception: capture console.log/warn/error from iframe */
+function runCode(){
+  var code=document.getElementById('codeEditor').value;
+  var iframe=document.getElementById('previewFrame');
+
+  /* Inject console override into user code */
+  var consoleOverride='\n<script>\n'+
+    '(function(){\n'+
+    '  var _orig=window.console;\n'+
+    '  function send(type,args){\n'+
+    '    var msg="";\n'+
+    '    for(var i=0;i<args.length;i++){\n'+
+    '      if(i>0) msg+=" ";\n'+
+    '      if(typeof args[i]==="object") try{msg+=JSON.stringify(args[i])}catch(e){msg+=String(args[i])}\n'+
+    '      else msg+=String(args[i]);\n'+
+    '    }\n'+
+    '    parent.postMessage({type:"console",level:type,text:msg},"*");\n'+
+    '  }\n'+
+    '  console.log=function(){send("log",arguments);_orig.log.apply(_orig,arguments)};\n'+
+    '  console.warn=function(){send("warn",arguments);_orig.warn.apply(_orig,arguments)};\n'+
+    '  console.error=function(){send("error",arguments);_orig.error.apply(_orig,arguments)};\n'+
+    '  window.onerror=function(m){send("error",[m])};\n'+
+    '})();\n'+
+    '<\/script>\n';
+
+  /* Insert override right after <body> or at the top */
+  var injected;
+  if(code.indexOf('<body')!==-1){
+    injected=code.replace(/(<body[^>]*>)/i,'$1'+consoleOverride);
+  } else if(code.indexOf('<head')!==-1){
+    injected=code.replace(/(<head[^>]*>)/i,'$1'+consoleOverride);
+  } else {
+    injected=consoleOverride+code;
+  }
+
+  iframe.srcdoc=injected;
+}
+
+function clearConsole(){
+  document.getElementById('consoleOutput').innerHTML='';
+}
+
+/* Listen for console messages from iframe */
+window.addEventListener('message',function(e){
+  if(e.data && e.data.type==='console'){
+    var panel=document.getElementById('consoleOutput');
+    var div=document.createElement('div');
+    div.className='console-line '+e.data.level;
+    div.textContent=(e.data.level==='log'?'> ':'['+e.data.level+'] ')+e.data.text;
+    panel.appendChild(div);
+    panel.scrollTop=panel.scrollHeight;
+  }
+});
+
+/* Tab key support in textarea */
+document.getElementById('codeEditor').addEventListener('keydown',function(e){
+  if(e.key==='Tab'){
+    e.preventDefault();
+    var start=this.selectionStart;
+    var end=this.selectionEnd;
+    this.value=this.value.substring(0,start)+'  '+this.value.substring(end);
+    this.selectionStart=this.selectionEnd=start+2;
+  }
+});
+
+/* Auto-run on load */
+document.addEventListener('DOMContentLoaded',function(){
+  runCode();
+});
+</script>
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

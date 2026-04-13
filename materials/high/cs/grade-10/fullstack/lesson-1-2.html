@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>עיצוב ב-CSS ומודל הקופסה | Full-Stack Development | בועז חזן</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06)}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+
+/* Topbar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Lesson layout */
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+
+/* Sections */
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+
+/* Code blocks */
+.code-block{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.6;white-space:pre}
+.code-block .tag{color:#f472b6}
+.code-block .attr{color:#a78bfa}
+.code-block .value{color:#34d399}
+.code-block .comment{color:#64748b;font-style:italic}
+.code-block .keyword{color:#818cf8}
+.code-block .string{color:#fbbf24}
+.code-block .prop{color:#67e8f9}
+.code-block .sel{color:#f472b6}
+
+/* Tips */
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+
+/* Code editor */
+.code-editor-container{border:2px solid var(--border);border-radius:12px;overflow:hidden;margin:20px 0}
+.code-editor-header{background:#1e293b;color:#fff;padding:10px 16px;font-size:.85rem;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.code-editor-textarea{width:100%;min-height:280px;padding:16px;font-family:'Courier New',monospace;font-size:.9rem;border:none;resize:vertical;direction:ltr;text-align:left;background:#0f172a;color:#e2e8f0;line-height:1.6;tab-size:2}
+.code-editor-textarea:focus{outline:none}
+.code-editor-preview{border-top:2px solid var(--border);min-height:120px;background:#fff}
+.code-editor-preview iframe{width:100%;min-height:200px;border:none}
+.code-editor-run{padding:8px 20px;background:#10b981;color:#fff;border:none;border-radius:6px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.85rem}
+.code-editor-run:hover{background:#059669}
+
+/* Exercise boxes */
+.exercise-box{background:var(--bg);border:2px solid var(--primary);border-radius:12px;padding:24px;margin:24px 0}
+.exercise-box h3{color:var(--primary);margin-bottom:12px}
+.exercise-box ol{margin:8px 0 0 24px;line-height:2.2}
+
+/* Box Model Diagram */
+.box-model-diagram{display:flex;justify-content:center;margin:24px 0}
+.box-model-outer{background:#fed7aa;border:2px dashed #f97316;border-radius:8px;padding:20px;text-align:center;position:relative;min-width:320px}
+.box-model-outer-label{position:absolute;top:4px;right:8px;font-size:.7rem;font-weight:700;color:#c2410c}
+.box-model-border-layer{background:#475569;border-radius:6px;padding:16px;position:relative}
+.box-model-border-label{position:absolute;top:4px;right:8px;font-size:.7rem;font-weight:700;color:#e2e8f0}
+.box-model-padding-layer{background:#bbf7d0;border-radius:4px;padding:20px;position:relative}
+.box-model-padding-label{position:absolute;top:4px;right:8px;font-size:.7rem;font-weight:700;color:#166534}
+.box-model-content{background:#fff;border-radius:4px;padding:24px 20px;font-weight:700;color:var(--text);border:1px solid var(--border)}
+
+/* Properties reference table */
+.props-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.9rem}
+.props-table th{background:var(--primary);color:#fff;padding:10px 14px;text-align:right;font-weight:700}
+.props-table td{padding:10px 14px;border-bottom:1px solid var(--border)}
+.props-table tr:nth-child(even){background:var(--bg-soft)}
+.props-table code{direction:ltr;unicode-bidi:embed;background:#f1f5f9;padding:2px 8px;border-radius:4px;font-size:.85rem;font-family:'Courier New',monospace;color:var(--primary-dark)}
+
+/* Method comparison */
+.method-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0}
+.method-card{background:var(--bg);border:2px solid var(--border);border-radius:var(--radius-sm);padding:16px;text-align:center}
+.method-card h4{font-size:.95rem;margin-bottom:8px;color:var(--primary)}
+.method-card p{font-size:.8rem;color:var(--text-light);margin-bottom:8px}
+.method-card.recommended{border-color:var(--success);background:#f0fdf4}
+.method-card.recommended h4{color:var(--success)}
+
+/* Nav */
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--primary);color:var(--primary)}
+
+/* Responsive */
+@media(max-width:768px){
+  .lesson-title{font-size:1.5rem}
+  .lesson-nav{flex-direction:column}
+  .code-block{font-size:.8rem;padding:12px}
+  .method-grid{grid-template-columns:1fr}
+  .box-model-outer{min-width:auto}
+  .props-table{font-size:.8rem}
+  .props-table th,.props-table td{padding:8px 10px}
+}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <div class="topbar-title">Full-Stack Development</div>
+  <a href="course.html">← חזרה לקורס</a>
+</div>
+
+<!-- Lesson Header -->
+<div class="lesson-container">
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#2563eb">יחידה 1: Frontend</span>
+    <h1 class="lesson-title">עיצוב ב-CSS ומודל הקופסה</h1>
+    <p class="lesson-subtitle">סלקטורים, Box Model, צבעים, פונטים ותכונות נפוצות</p>
+  </div>
+
+  <!-- Premium content wrapper -->
+  <div data-premium>
+
+    <!-- Section 1: What is CSS? -->
+    <div class="lesson-section">
+      <h2>1. מה זה CSS?</h2>
+      <p><strong>CSS</strong> הוא קיצור של <strong>Cascading Style Sheets</strong> — שפת עיצוב שמגדירה איך אלמנטי HTML נראים על המסך.</p>
+      <p>בעוד HTML מגדיר את <strong>המבנה</strong> של הדף (כותרות, פסקאות, תמונות), CSS אחראי על <strong>המראה</strong>: צבעים, גדלים, מרווחים, פונטים, פריסה ועוד.</p>
+      <p>בלי CSS, כל דפי האינטרנט היו נראים כמו מסמכי טקסט פשוטים — בלי צבע, בלי עיצוב, בלי אישיות.</p>
+
+      <div class="lesson-tip">
+        <strong>💡 אנלוגיה שימושית</strong>
+        <p>HTML = השלד של הבניין, CSS = העיצוב והצבע של הקירות, JavaScript = החשמל והמעלית (ההתנהגות).</p>
+      </div>
+    </div>
+
+    <!-- Section 2: 3 Methods of Writing CSS -->
+    <div class="lesson-section">
+      <h2>2. שלוש שיטות לכתיבת CSS</h2>
+      <p>יש שלוש דרכים להוסיף CSS לדף HTML. לכל שיטה יתרונות וחסרונות:</p>
+
+      <div class="method-grid">
+        <div class="method-card">
+          <h4>Inline</h4>
+          <p>ישירות על התגית</p>
+        </div>
+        <div class="method-card">
+          <h4>Internal</h4>
+          <p>בתוך תגית &lt;style&gt;</p>
+        </div>
+        <div class="method-card recommended">
+          <h4>External ✓</h4>
+          <p>קובץ .css נפרד</p>
+        </div>
+      </div>
+
+      <h3>שיטה 1: Inline CSS</h3>
+      <p>כותבים את העיצוב ישירות בתוך מאפיין <code>style</code> של התגית:</p>
+      <div class="code-block"><span class="tag">&lt;p</span> <span class="attr">style</span>=<span class="string">"color: red; font-size: 20px;"</span><span class="tag">&gt;</span>טקסט אדום<span class="tag">&lt;/p&gt;</span></div>
+
+      <h3>שיטה 2: Internal CSS</h3>
+      <p>כותבים בלוק CSS בתוך תגית <code>&lt;style&gt;</code> בחלק ה-<code>&lt;head&gt;</code> של הדף:</p>
+      <div class="code-block"><span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;style&gt;</span>
+    <span class="sel">p</span> {
+      <span class="prop">color</span>: <span class="value">blue</span>;
+      <span class="prop">font-size</span>: <span class="value">18px</span>;
+    }
+  <span class="tag">&lt;/style&gt;</span>
+<span class="tag">&lt;/head&gt;</span></div>
+
+      <h3>שיטה 3: External CSS (מומלצת)</h3>
+      <p>כותבים את ה-CSS בקובץ נפרד (למשל <code>style.css</code>) ומקשרים אותו עם תגית <code>&lt;link&gt;</code>:</p>
+      <div class="code-block"><span class="comment">&lt;!-- בקובץ HTML --&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"style.css"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+
+<span class="comment">/* בקובץ style.css */</span>
+<span class="sel">p</span> {
+  <span class="prop">color</span>: <span class="value">green</span>;
+  <span class="prop">font-size</span>: <span class="value">16px</span>;
+}</div>
+
+      <div class="lesson-tip warning">
+        <strong>⚠️ שימו לב</strong>
+        <p>Inline CSS קשה לתחזוקה — כי העיצוב מפוזר בכל התגיות. עדיף להשתמש ב-Internal (לדפים בודדים) או External (לפרויקטים אמיתיים) כדי לשמור על קוד נקי ומסודר.</p>
+      </div>
+    </div>
+
+    <!-- Section 3: Selectors -->
+    <div class="lesson-section">
+      <h2>3. סלקטורים (Selectors)</h2>
+      <p>סלקטורים הם הדרך של CSS "לבחור" את האלמנטים שרוצים לעצב. שלושת הסלקטורים הבסיסיים:</p>
+
+      <h3>סלקטור תגית (Element Selector)</h3>
+      <p>בוחר את <strong>כל</strong> האלמנטים מאותו סוג:</p>
+      <div class="code-block"><span class="sel">p</span> {
+  <span class="prop">color</span>: <span class="value">blue</span>;
+}
+
+<span class="comment">/* כל הפסקאות בדף יהיו בצבע כחול */</span></div>
+
+      <h3>סלקטור מזהה (ID Selector)</h3>
+      <p>בוחר אלמנט <strong>ספציפי אחד</strong> לפי ה-ID שלו. מסומן ב-<code>#</code>:</p>
+      <div class="code-block"><span class="comment">&lt;!-- HTML --&gt;</span>
+<span class="tag">&lt;h1</span> <span class="attr">id</span>=<span class="string">"title"</span><span class="tag">&gt;</span>כותרת ראשית<span class="tag">&lt;/h1&gt;</span>
+
+<span class="comment">/* CSS */</span>
+<span class="sel">#title</span> {
+  <span class="prop">font-size</span>: <span class="value">32px</span>;
+  <span class="prop">color</span>: <span class="value">darkblue</span>;
+}</div>
+
+      <h3>סלקטור מחלקה (Class Selector)</h3>
+      <p>בוחר <strong>קבוצה של אלמנטים</strong> שחולקים את אותה מחלקה. מסומן ב-<code>.</code>:</p>
+      <div class="code-block"><span class="comment">&lt;!-- HTML --&gt;</span>
+<span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="string">"highlight"</span><span class="tag">&gt;</span>טקסט מודגש<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;p&gt;</span>טקסט רגיל<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;p</span> <span class="attr">class</span>=<span class="string">"highlight"</span><span class="tag">&gt;</span>גם זה מודגש<span class="tag">&lt;/p&gt;</span>
+
+<span class="comment">/* CSS */</span>
+<span class="sel">.highlight</span> {
+  <span class="prop">background-color</span>: <span class="value">yellow</span>;
+  <span class="prop">font-weight</span>: <span class="value">bold</span>;
+}</div>
+
+      <div class="lesson-tip success">
+        <strong>✅ כלל אצבע</strong>
+        <p><strong>ID</strong> — ייחודי, אלמנט אחד בלבד (כמו תעודת זהות). <strong>Class</strong> — משותף, הרבה אלמנטים יכולים לשתף אותה מחלקה (כמו חולצת קבוצה).</p>
+      </div>
+    </div>
+
+    <!-- Section 4: Box Model -->
+    <div class="lesson-section">
+      <h2>4. מודל הקופסה (Box Model)</h2>
+      <p>כל אלמנט HTML הוא בעצם <strong>קופסה מלבנית</strong>. מודל הקופסה מגדיר את ארבע השכבות של כל אלמנט:</p>
+
+      <div class="box-model-diagram">
+        <div class="box-model-outer">
+          <span class="box-model-outer-label">margin</span>
+          <div class="box-model-border-layer">
+            <span class="box-model-border-label">border</span>
+            <div class="box-model-padding-layer">
+              <span class="box-model-padding-label">padding</span>
+              <div class="box-model-content">Content<br>התוכן</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ul>
+        <li><strong>Content</strong> — התוכן עצמו: טקסט, תמונה וכו'</li>
+        <li><strong>Padding</strong> — ריפוד: המרווח בין התוכן לגבול (border). שקוף, אבל "דוחף" את התוכן פנימה</li>
+        <li><strong>Border</strong> — גבול: קו שמקיף את האלמנט. יכול להיות בצבע, עובי וסגנון שונים</li>
+        <li><strong>Margin</strong> — שוליים: המרווח <strong>מחוץ</strong> לגבול, בין האלמנט לשכנים שלו</li>
+      </ul>
+
+      <div class="code-block"><span class="sel">.card</span> {
+  <span class="prop">width</span>: <span class="value">300px</span>;            <span class="comment">/* רוחב התוכן */</span>
+  <span class="prop">padding</span>: <span class="value">20px</span>;           <span class="comment">/* ריפוד פנימי */</span>
+  <span class="prop">border</span>: <span class="value">2px solid #333</span>;  <span class="comment">/* גבול: עובי, סגנון, צבע */</span>
+  <span class="prop">margin</span>: <span class="value">16px auto</span>;       <span class="comment">/* שוליים: למעלה/למטה 16px, מרכוז אופקי */</span>
+}</div>
+
+      <div class="lesson-tip">
+        <strong>💡 טיפ חשוב: box-sizing</strong>
+        <p>כברירת מחדל, <code>width</code> מגדיר רק את רוחב התוכן — ה-padding וה-border נוספים מעליו. כדי שה-width יכלול הכל, הוסיפו: <code>box-sizing: border-box;</code></p>
+      </div>
+    </div>
+
+    <!-- Section 5: Common Properties -->
+    <div class="lesson-section">
+      <h2>5. תכונות CSS נפוצות</h2>
+      <p>הנה טבלת עזר מהיר עם התכונות הנפוצות ביותר:</p>
+
+      <table class="props-table">
+        <thead>
+          <tr>
+            <th>תכונה</th>
+            <th>תפקיד</th>
+            <th>דוגמה</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>color</code></td>
+            <td>צבע הטקסט</td>
+            <td><code>color: #2563eb;</code></td>
+          </tr>
+          <tr>
+            <td><code>background-color</code></td>
+            <td>צבע רקע</td>
+            <td><code>background-color: #f0f0f0;</code></td>
+          </tr>
+          <tr>
+            <td><code>font-size</code></td>
+            <td>גודל גופן</td>
+            <td><code>font-size: 18px;</code></td>
+          </tr>
+          <tr>
+            <td><code>font-family</code></td>
+            <td>סוג גופן</td>
+            <td><code>font-family: Arial, sans-serif;</code></td>
+          </tr>
+          <tr>
+            <td><code>text-align</code></td>
+            <td>יישור טקסט</td>
+            <td><code>text-align: center;</code></td>
+          </tr>
+          <tr>
+            <td><code>width</code> / <code>height</code></td>
+            <td>רוחב / גובה</td>
+            <td><code>width: 300px;</code></td>
+          </tr>
+          <tr>
+            <td><code>border-radius</code></td>
+            <td>עיגול פינות</td>
+            <td><code>border-radius: 12px;</code></td>
+          </tr>
+          <tr>
+            <td><code>padding</code></td>
+            <td>ריפוד פנימי</td>
+            <td><code>padding: 16px;</code></td>
+          </tr>
+          <tr>
+            <td><code>margin</code></td>
+            <td>שוליים חיצוניים</td>
+            <td><code>margin: 20px auto;</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Live Code Editor -->
+    <div class="lesson-section">
+      <h2>עורך קוד חי</h2>
+      <p>נסו לערוך את הקוד ולראות את התוצאה בזמן אמת:</p>
+
+      <div class="code-editor-container">
+        <div class="code-editor-header">
+          <span>🖥️ עורך קוד חי</span>
+          <button class="code-editor-run" onclick="runCode()">▶ הרץ</button>
+        </div>
+        <textarea id="codeEditor" class="code-editor-textarea">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;style&gt;
+    body {
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+      direction: rtl;
+    }
+    h1 {
+      color: #2563eb;
+      text-align: center;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      width: 300px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .card h2 {
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+    .card p {
+      color: #64748b;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;כרטיס ביקור&lt;/h1&gt;
+  &lt;div class="card"&gt;
+    &lt;h2&gt;השם שלי&lt;/h2&gt;
+    &lt;p&gt;מפתח/ת Full-Stack&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+        <div class="code-editor-preview">
+          <iframe id="previewFrame" title="תצוגה מקדימה"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exercises -->
+    <div class="lesson-section">
+      <div class="exercise-box">
+        <h3>📝 תרגילים</h3>
+        <p>נסו לבצע את התרגילים הבאים בעורך הקוד למעלה:</p>
+        <ol>
+          <li><strong>שנו את צבע הרקע</strong> — שנו את <code>background-color</code> של ה-<code>body</code> לצבע אחר (למשל <code>#e0f2fe</code> או <code>lightyellow</code>).</li>
+          <li><strong>צרו 3 קופסאות צבעוניות</strong> — הוסיפו עוד 2 div-ים עם class="card" ותנו לכל אחד <code>border</code>, <code>padding</code>, <code>margin</code> ו-<code>background-color</code> שונה.</li>
+          <li><strong>עצבו כרטיס ביקור דיגיטלי</strong> — הוסיפו לכרטיס: תמונה (עם <code>border-radius: 50%</code> לעיגול), שם, תפקיד, ופרטי קשר. עצבו אותו עם צבעים, פונטים ושוליים.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Lesson Navigation -->
+    <div class="lesson-nav">
+      <a href="lesson-1-1.html">→ הקודם: מבוא ל-HTML</a>
+      <a href="lesson-1-3.html">הבא: טבלאות ו-Bootstrap ←</a>
+    </div>
+
+  </div><!-- end data-premium -->
+</div><!-- end lesson-container -->
+
+<script>
+function runCode(){
+  var code=document.getElementById('codeEditor').value;
+  var iframe=document.getElementById('previewFrame');
+  var doc=iframe.contentDocument||iframe.contentWindow.document;
+  doc.open();
+  doc.write(code);
+  doc.close();
+  iframe.style.height='300px';
+}
+
+/* Tab key support in textarea */
+document.getElementById('codeEditor').addEventListener('keydown',function(e){
+  if(e.key==='Tab'){
+    e.preventDefault();
+    var start=this.selectionStart;
+    var end=this.selectionEnd;
+    this.value=this.value.substring(0,start)+'  '+this.value.substring(end);
+    this.selectionStart=this.selectionEnd=start+2;
+  }
+});
+
+/* Auto-run on load */
+window.addEventListener('DOMContentLoaded',function(){
+  runCode();
+});
+</script>
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>שיעור 4.2 — עבודה בשיטה הלא מקושרת (Disconnected) | Full-Stack Development | בועז חזן</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);--unit-color:#059669}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+
+/* Topbar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Lesson layout */
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+
+/* Sections */
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+
+/* Code blocks */
+.code-block{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.6;white-space:pre}
+.code-block .keyword{color:#818cf8}
+.code-block .string{color:#fbbf24}
+.code-block .function{color:#38bdf8}
+.code-block .comment{color:#64748b;font-style:italic}
+.code-block .tag{color:#f472b6}
+.code-block .attr{color:#a78bfa}
+.code-block .value{color:#34d399}
+.code-block .type{color:#67e8f9}
+
+/* Tips */
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+
+/* Diagram */
+.diagram{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:24px 0;padding:24px;background:var(--bg);border-radius:12px;border:1px solid var(--border)}
+.diagram-box{padding:12px 20px;border-radius:10px;font-weight:700;text-align:center;color:#fff;font-size:.9rem;min-width:100px}
+.diagram-arrow{font-size:1.3rem;color:var(--text-light);font-weight:700}
+
+/* Vertical diagram */
+.diagram-vertical{display:flex;flex-direction:column;align-items:center;gap:0;margin:24px auto;max-width:420px;padding:24px;background:var(--bg);border-radius:12px;border:1px solid var(--border)}
+.diagram-vertical .diagram-box{width:100%;max-width:340px}
+.diagram-vertical .diagram-arrow{transform:rotate(90deg);font-size:1.1rem;margin:4px 0}
+
+/* Analogy box */
+.analogy-box{background:#fef3c7;border:2px solid #fbbf24;border-radius:12px;padding:20px;margin:20px 0;display:flex;align-items:flex-start;gap:14px}
+.analogy-box .analogy-icon{font-size:2rem;flex-shrink:0}
+.analogy-box .analogy-text{font-size:.95rem;line-height:1.8}
+.analogy-box .analogy-text strong{color:#92400e}
+
+/* Inline code */
+.inline-code{direction:ltr;unicode-bidi:embed;background:#f1f5f9;padding:2px 8px;border-radius:4px;font-family:'Courier New',monospace;font-size:.88rem;color:var(--primary-dark);display:inline}
+
+/* Line-by-line explanation */
+.code-explain{margin:16px 0;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.code-explain-row{display:flex;align-items:stretch;border-bottom:1px solid var(--border)}
+.code-explain-row:last-child{border-bottom:none}
+.code-explain-code{flex:0 0 55%;background:#1e293b;color:#e2e8f0;padding:10px 14px;font-family:'Courier New',monospace;font-size:.82rem;direction:ltr;text-align:left;display:flex;align-items:center}
+.code-explain-desc{flex:1;padding:10px 14px;font-size:.88rem;background:var(--bg);display:flex;align-items:center;line-height:1.6}
+
+/* Quiz */
+.quiz-container{background:var(--bg-soft);border:2px solid var(--border);border-radius:12px;padding:24px;margin:20px 0}
+.quiz-container h3{font-size:1.1rem;font-weight:800;margin-bottom:16px;color:var(--unit-color)}
+.quiz-question{font-weight:700;font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.quiz-options label{display:block;padding:10px 16px;margin:6px 0;background:#fff;border:2px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;line-height:1.6}
+.quiz-options label:hover{border-color:var(--primary)}
+.quiz-options input[type="radio"]{margin-left:8px}
+.quiz-options label.correct{background:#d1fae5;border-color:#10b981}
+.quiz-options label.incorrect{background:#fee2e2;border-color:#ef4444}
+.quiz-check-btn{margin-top:12px;padding:10px 24px;background:var(--unit-color);color:#fff;border:none;border-radius:8px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.95rem}
+.quiz-check-btn:hover{opacity:.9}
+.quiz-feedback{margin-top:12px;padding:12px 16px;border-radius:8px;font-weight:600;display:none;line-height:1.7}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#d1fae5;color:#065f46}
+.quiz-feedback.incorrect{background:#fee2e2;color:#991b1b}
+
+/* Fill-in quiz */
+.fill-code-container{background:#1e293b;border-radius:8px;padding:20px;margin:16px 0;direction:ltr;text-align:left;font-family:'Courier New',monospace;font-size:.9rem;color:#e2e8f0;line-height:1.8}
+.fill-code-input{background:#334155;border:1px dashed #f59e0b;color:#fbbf24;padding:2px 8px;border-radius:4px;font-family:inherit;font-size:inherit;width:120px;text-align:center}
+.fill-code-input.correct{border-color:#10b981;background:#064e3b;color:#6ee7b7}
+.fill-code-input.incorrect{border-color:#ef4444;background:#450a0a;color:#fca5a5}
+
+/* Output preview box */
+.output-box{background:#0f172a;color:#10b981;border-radius:8px;padding:16px 20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;line-height:1.6}
+
+/* Data table example */
+.example-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.9rem}
+.example-table th{background:var(--unit-color);color:#fff;padding:10px 14px;text-align:right;font-weight:700}
+.example-table td{padding:10px 14px;border-bottom:1px solid var(--border);text-align:right}
+.example-table tr:nth-child(even){background:var(--bg-soft)}
+
+/* Nav */
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--primary);color:var(--primary)}
+
+/* Responsive */
+@media(max-width:768px){
+  .lesson-title{font-size:1.5rem}
+  .lesson-nav{flex-direction:column}
+  .code-block{font-size:.8rem;padding:12px}
+  .diagram{flex-direction:column}
+  .diagram-arrow{transform:rotate(90deg)}
+  .code-explain-row{flex-direction:column}
+  .code-explain-code{flex:none}
+  .analogy-box{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">Full-Stack Development</div>
+  <a href="course.html">&larr; חזרה לקורס</a>
+</div>
+
+<div class="lesson-container" data-premium>
+
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#059669">יחידה 4: SQL &amp; ADO.NET</span>
+    <h1 class="lesson-title">שיעור 4.2 — עבודה בשיטה הלא מקושרת (Disconnected)</h1>
+    <p class="lesson-subtitle">DataTable, מחלקת Helper ושליפת נתונים ב-Razor Pages</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 1: Disconnected Architecture       -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="lesson-section">
+    <h2>1. שיטת עבודה Disconnected</h2>
+
+    <p>
+      בשיעור הקודם למדנו איך להתחבר לבסיס נתונים באמצעות <span class="inline-code">SqlConnection</span>.
+      עכשיו נלמד את <strong>השיטה הלא מקושרת</strong> — הגישה המועדפת ברוב האפליקציות האמיתיות.
+    </p>
+
+    <h3>העיקרון: חיבור קצר ומהיר</h3>
+    <p>
+      במקום להחזיק חיבור פתוח לבסיס הנתונים לאורך כל חיי הדף, אנחנו פועלים בשלושה שלבים:
+    </p>
+    <ol>
+      <li><strong>מתחברים</strong> לבסיס הנתונים</li>
+      <li><strong>שולפים</strong> את הנתונים לזיכרון (לתוך <span class="inline-code">DataTable</span>)</li>
+      <li><strong>מנתקים</strong> את החיבור — וממשיכים לעבוד עם הנתונים בזיכרון</li>
+    </ol>
+
+    <h3>תרשים הזרימה</h3>
+    <div class="diagram-vertical">
+      <div class="diagram-box" style="background:#3b82f6">האפליקציה שלנו</div>
+      <div class="diagram-arrow">&darr;</div>
+      <div class="diagram-box" style="background:#059669">Open Connection</div>
+      <div class="diagram-arrow">&darr;</div>
+      <div class="diagram-box" style="background:#d97706">SqlDataAdapter.Fill(DataTable)</div>
+      <div class="diagram-arrow">&darr;</div>
+      <div class="diagram-box" style="background:#059669">Close Connection</div>
+      <div class="diagram-arrow">&darr;</div>
+      <div class="diagram-box" style="background:#7c3aed">עבודה עם DataTable בזיכרון</div>
+    </div>
+
+    <p>
+      שימו לב: החיבור לבסיס הנתונים פתוח רק לרגע קצר — רק בזמן שליפת הנתונים.
+      אחרי שהנתונים נמצאים בזיכרון (בתוך <span class="inline-code">DataTable</span>), אפשר לעבוד איתם חופשי
+      בלי שום תלות בחיבור.
+    </p>
+
+    <h3>למה זה טוב?</h3>
+    <ul>
+      <li><strong>פחות עומס על השרת</strong> — חיבור פתוח צורך משאבים. ככל שנסגור אותו מהר יותר, כך השרת יכול לשרת יותר משתמשים</li>
+      <li><strong>ביצועים טובים יותר</strong> — הנתונים כבר בזיכרון, אין צורך לפנות לדיסק בכל קריאה</li>
+      <li><strong>אמינות</strong> — אם החיבור נופל באמצע, הנתונים שכבר נשלפו עדיין זמינים</li>
+    </ul>
+
+    <div class="analogy-box">
+      <div class="analogy-icon">📚</div>
+      <div class="analogy-text">
+        <strong>אנלוגיה:</strong> חשבו על ספרייה ציבורית.
+        בשיטה <strong>המקושרת</strong> (Connected) — אתם יושבים בספרייה, קוראים את הספר, וכל עוד אתם קוראים — אתם תופסים כיסא ומקום.
+        בשיטה <strong>הלא מקושרת</strong> (Disconnected) — אתם לוקחים את הספר הביתה, מחזירים את הכיסא, וקוראים בנחת בבית.
+        הספרנית פנויה לשרת אנשים אחרים!
+      </div>
+    </div>
+
+    <h3>המחלקות המרכזיות</h3>
+    <ul>
+      <li><span class="inline-code">DataTable</span> — טבלה בזיכרון. מכילה שורות (<span class="inline-code">DataRow</span>) ועמודות (<span class="inline-code">DataColumn</span>), בדיוק כמו טבלה בבסיס נתונים</li>
+      <li><span class="inline-code">DataSet</span> — אוסף של כמה <span class="inline-code">DataTable</span> (שימושי כשצריך כמה טבלאות ביחד)</li>
+      <li><span class="inline-code">SqlDataAdapter</span> — ה"גשר" בין בסיס הנתונים ל-<span class="inline-code">DataTable</span>. הוא מבצע את השאילתה וממלא את הטבלה</li>
+    </ul>
+
+    <div class="lesson-tip success">
+      <strong>נקודת מפתח</strong>
+      <p>
+        <span class="inline-code">SqlDataAdapter</span> פותח וסוגר את החיבור <strong>אוטומטית</strong> בזמן הקריאה ל-<span class="inline-code">Fill()</span>. אנחנו לא חייבים לעשות <span class="inline-code">Open()</span> ו-<span class="inline-code">Close()</span> ידנית!
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 2: Helper Class                     -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="lesson-section">
+    <h2>2. מחלקת Helper</h2>
+
+    <p>
+      בפרויקט אמיתי, לא נרצה לכתוב את אותו קוד שליפה בכל דף מחדש.
+      במקום זה, ניצור <strong>מחלקה סטטית</strong> אחת שמרכזת את כל הגישה לבסיס הנתונים.
+      זו מחלקת <span class="inline-code">Helper</span>.
+    </p>
+
+    <h3>למה מחלקה סטטית?</h3>
+    <ul>
+      <li><strong>מניעת שכפול קוד</strong> — כותבים פעם אחת, משתמשים בכל הדפים</li>
+      <li><strong>תחזוקה קלה</strong> — אם צריך לשנות את מחרוזת ההתחברות, משנים במקום אחד</li>
+      <li><strong>קריאות</strong> — הקוד בדפים הופך פשוט ונקי</li>
+    </ul>
+
+    <h3>הקוד המלא</h3>
+    <div class="code-block"><span class="keyword">public static class</span> <span class="type">Helper</span>
+{
+    <span class="keyword">static string</span> connStr = <span class="string">"Data Source=...;Initial Catalog=...;Integrated Security=True"</span>;
+
+    <span class="keyword">public static</span> <span class="type">DataTable</span> <span class="function">GetData</span>(<span class="keyword">string</span> query)
+    {
+        <span class="type">DataTable</span> dt = <span class="keyword">new</span> <span class="type">DataTable</span>();
+        <span class="keyword">using</span> (<span class="type">SqlConnection</span> conn = <span class="keyword">new</span> <span class="type">SqlConnection</span>(connStr))
+        {
+            <span class="type">SqlDataAdapter</span> da = <span class="keyword">new</span> <span class="type">SqlDataAdapter</span>(query, conn);
+            da.<span class="function">Fill</span>(dt);
+        }
+        <span class="keyword">return</span> dt;
+    }
+}</div>
+
+    <h3>הסבר שורה אחר שורה</h3>
+    <div class="code-explain">
+      <div class="code-explain-row">
+        <div class="code-explain-code">public static class Helper</div>
+        <div class="code-explain-desc"><strong>מחלקה סטטית</strong> — לא צריך ליצור מופע (<span class="inline-code">new</span>). קוראים ישירות: <span class="inline-code">Helper.GetData(...)</span></div>
+      </div>
+      <div class="code-explain-row">
+        <div class="code-explain-code">static string connStr = "...";</div>
+        <div class="code-explain-desc"><strong>מחרוזת התחברות</strong> — כתובת השרת, שם בסיס הנתונים, ואופן ההזדהות. מוגדרת פעם אחת ומשמשת את כל המתודות</div>
+      </div>
+      <div class="code-explain-row">
+        <div class="code-explain-code">public static DataTable GetData(string query)</div>
+        <div class="code-explain-desc"><strong>המתודה הראשית</strong> — מקבלת שאילתת SQL כמחרוזת, מחזירה <span class="inline-code">DataTable</span> עם התוצאות</div>
+      </div>
+      <div class="code-explain-row">
+        <div class="code-explain-code">DataTable dt = new DataTable();</div>
+        <div class="code-explain-desc">יוצרים טבלה ריקה בזיכרון — היא תתמלא בנתונים</div>
+      </div>
+      <div class="code-explain-row">
+        <div class="code-explain-code">using (SqlConnection conn = ...)</div>
+        <div class="code-explain-desc"><strong>בלוק using</strong> — מבטיח שהחיבור ייסגר אוטומטית בסוף הבלוק, גם אם מתרחשת שגיאה!</div>
+      </div>
+      <div class="code-explain-row">
+        <div class="code-explain-code">SqlDataAdapter da = new ...(query, conn);</div>
+        <div class="code-explain-desc">יוצרים <strong>מתאם נתונים</strong> — הוא יודע איזו שאילתה להריץ ודרך איזה חיבור</div>
+      </div>
+      <div class="code-explain-row">
+        <div class="code-explain-code">da.Fill(dt);</div>
+        <div class="code-explain-desc">הפקודה המרכזית! <strong>מריצה את השאילתה</strong>, פותחת חיבור, שולפת נתונים, ממלאת את הטבלה, וסוגרת חיבור</div>
+      </div>
+      <div class="code-explain-row">
+        <div class="code-explain-code">return dt;</div>
+        <div class="code-explain-desc">מחזירים את הטבלה המלאה — עכשיו אפשר לעבוד עם הנתונים בלי חיבור פעיל</div>
+      </div>
+    </div>
+
+    <div class="lesson-tip warning">
+      <strong>חשוב לזכור!</strong>
+      <p>
+        <span class="inline-code">using</span> מבטיח שהחיבור ייסגר אוטומטית — גם אם נזרקת שגיאה באמצע הקוד.
+        בלי <span class="inline-code">using</span>, חיבור שלא נסגר עלול "לדלוף" ולגרום לבעיות ביצועים חמורות.
+        <strong>תמיד עטפו חיבורים ב-using!</strong>
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 3: Usage in Razor Page              -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="lesson-section">
+    <h2>3. שימוש בדף — Razor Pages</h2>
+
+    <p>
+      עכשיו שיש לנו מחלקת <span class="inline-code">Helper</span>, בואו נראה איך משתמשים בה בתוך דף Razor
+      כדי להציג נתונים מבסיס הנתונים בטבלת HTML.
+    </p>
+
+    <h3>הקוד בצד השרת (.cshtml.cs)</h3>
+    <div class="code-block"><span class="comment">// IndexModel.cshtml.cs</span>
+<span class="keyword">public</span> <span class="type">DataTable</span> UsersTable { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+<span class="keyword">public void</span> <span class="function">OnGet</span>()
+{
+    UsersTable = <span class="type">Helper</span>.<span class="function">GetData</span>(<span class="string">"SELECT * FROM Users"</span>);
+}</div>
+
+    <p>
+      <strong>מה קורה כאן?</strong> כשהמשתמש נכנס לדף (בקשת GET), המתודה <span class="inline-code">OnGet()</span>
+      נקראת אוטומטית. היא קוראת ל-<span class="inline-code">Helper.GetData</span> עם שאילתת SQL, ומקבלת
+      <span class="inline-code">DataTable</span> עם כל המשתמשים.
+    </p>
+
+    <h3>הקוד בצד הלקוח (.cshtml)</h3>
+    <div class="code-block"><span class="comment">&lt;!-- Index.cshtml --&gt;</span>
+<span class="tag">&lt;table&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+        <span class="tag">&lt;th&gt;</span>שם<span class="tag">&lt;/th&gt;</span>
+        <span class="tag">&lt;th&gt;</span>גיל<span class="tag">&lt;/th&gt;</span>
+        <span class="tag">&lt;th&gt;</span>עיר<span class="tag">&lt;/th&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+    <span class="keyword">@foreach</span> (<span class="type">DataRow</span> row <span class="keyword">in</span> Model.UsersTable.Rows)
+    {
+        <span class="tag">&lt;tr&gt;</span>
+            <span class="tag">&lt;td&gt;</span><span class="keyword">@</span>row[<span class="string">"Name"</span>]<span class="tag">&lt;/td&gt;</span>
+            <span class="tag">&lt;td&gt;</span><span class="keyword">@</span>row[<span class="string">"Age"</span>]<span class="tag">&lt;/td&gt;</span>
+            <span class="tag">&lt;td&gt;</span><span class="keyword">@</span>row[<span class="string">"City"</span>]<span class="tag">&lt;/td&gt;</span>
+        <span class="tag">&lt;/tr&gt;</span>
+    }
+<span class="tag">&lt;/table&gt;</span></div>
+
+    <p>
+      לולאת <span class="inline-code">@foreach</span> עוברת על כל שורה ב-<span class="inline-code">DataTable</span>
+      ויוצרת שורת HTML עבור כל משתמש. הסימן <span class="inline-code">@</span> מסמן ל-Razor שזהו קוד C# שצריך להריץ.
+    </p>
+
+    <h3>התוצאה בדפדפן</h3>
+    <p>נניח שטבלת Users בבסיס הנתונים נראית כך:</p>
+    <table class="example-table">
+      <tr><th>Name</th><th>Age</th><th>City</th></tr>
+      <tr><td>דני</td><td>25</td><td>תל אביב</td></tr>
+      <tr><td>מאיה</td><td>30</td><td>חיפה</td></tr>
+      <tr><td>עומר</td><td>22</td><td>ירושלים</td></tr>
+      <tr><td>רות</td><td>28</td><td>חיפה</td></tr>
+    </table>
+
+    <h3>שליפה עם סינון (WHERE)</h3>
+    <p>
+      אפשר לשלוף רק חלק מהנתונים באמצעות <span class="inline-code">WHERE</span>:
+    </p>
+    <div class="code-block"><span class="comment">// שליפת משתמשים מחיפה בלבד</span>
+UsersTable = <span class="type">Helper</span>.<span class="function">GetData</span>(<span class="string">"SELECT * FROM Users WHERE City = 'חיפה'"</span>);
+
+<span class="comment">// שליפת משתמשים מעל גיל 25</span>
+UsersTable = <span class="type">Helper</span>.<span class="function">GetData</span>(<span class="string">"SELECT * FROM Users WHERE Age &gt; 25"</span>);
+
+<span class="comment">// שליפה ממוינת לפי גיל</span>
+UsersTable = <span class="type">Helper</span>.<span class="function">GetData</span>(<span class="string">"SELECT * FROM Users ORDER BY Age"</span>);</div>
+
+    <h3>הזרימה המלאה</h3>
+    <div class="diagram">
+      <div class="diagram-box" style="background:#3b82f6">משתמש נכנס לדף</div>
+      <div class="diagram-arrow">&larr;</div>
+      <div class="diagram-box" style="background:#7c3aed">OnGet() נקראת</div>
+      <div class="diagram-arrow">&larr;</div>
+      <div class="diagram-box" style="background:#059669">Helper.GetData()</div>
+      <div class="diagram-arrow">&larr;</div>
+      <div class="diagram-box" style="background:#d97706">DB &rarr; DataTable</div>
+      <div class="diagram-arrow">&larr;</div>
+      <div class="diagram-box" style="background:#dc2626">HTML מוצג</div>
+    </div>
+
+    <div class="lesson-tip">
+      <strong>סיכום הזרימה</strong>
+      <p>
+        1. המשתמש גולש לדף &rarr;
+        2. <span class="inline-code">OnGet()</span> נקראת &rarr;
+        3. <span class="inline-code">Helper.GetData()</span> מתחברת ל-DB, שולפת ומנתקת &rarr;
+        4. הנתונים מוחזרים ב-<span class="inline-code">DataTable</span> &rarr;
+        5. Razor מציג אותם בטבלת HTML.
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- COMPREHENSION QUIZZES                       -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="lesson-section">
+    <h2>בדוק את עצמך</h2>
+
+    <!-- Quiz 1: What will print -->
+    <div class="quiz-container" id="quiz1">
+      <h3>שאלה 1 — מה יודפס?</h3>
+      <p class="quiz-question">נתונה טבלת Users בבסיס הנתונים:</p>
+      <table class="example-table" style="margin-bottom:16px">
+        <tr><th>Name</th><th>City</th></tr>
+        <tr><td>דני</td><td>תל אביב</td></tr>
+        <tr><td>מאיה</td><td>חיפה</td></tr>
+        <tr><td>עומר</td><td>ירושלים</td></tr>
+        <tr><td>רות</td><td>חיפה</td></tr>
+      </table>
+      <p class="quiz-question">מה יודפס כאשר נריץ את הקוד הבא?</p>
+      <div class="code-block" style="margin-bottom:16px"><span class="type">DataTable</span> dt = <span class="type">Helper</span>.<span class="function">GetData</span>(<span class="string">"SELECT Name FROM Users WHERE City = 'חיפה'"</span>);
+<span class="keyword">foreach</span> (<span class="type">DataRow</span> row <span class="keyword">in</span> dt.Rows)
+{
+    <span class="type">Console</span>.<span class="function">WriteLine</span>(row[<span class="string">"Name"</span>]);
+}</div>
+      <div class="quiz-options">
+        <label><input type="radio" name="q1" value="a"> דני, מאיה, עומר, רות</label>
+        <label><input type="radio" name="q1" value="b"> מאיה, רות</label>
+        <label><input type="radio" name="q1" value="c"> חיפה, חיפה</label>
+        <label><input type="radio" name="q1" value="d"> דני, עומר</label>
+      </div>
+      <button class="quiz-check-btn" onclick="checkQuiz('quiz1','b')">בדוק תשובה</button>
+      <div class="quiz-feedback" id="quiz1-feedback"></div>
+    </div>
+
+    <!-- Quiz 2: Fill-in -->
+    <div class="quiz-container" id="quiz2">
+      <h3>שאלה 2 — השלם את הקוד</h3>
+      <p class="quiz-question">השלם את המתודה כך שתחזיר את כל המשתמשים מעיר מסוימת:</p>
+      <div class="fill-code-container">
+<span style="color:#818cf8">public static</span> <span style="color:#67e8f9">DataTable</span> <span style="color:#38bdf8">GetUsersByCity</span>(<span style="color:#818cf8">string</span> city)
+{
+    <span style="color:#818cf8">return</span> <span style="color:#38bdf8">GetData</span>(<span style="color:#fbbf24">"SELECT * FROM Users WHERE City = '"</span> + <input type="text" class="fill-code-input" id="fill1" placeholder="???" autocomplete="off"> + <span style="color:#fbbf24">"'"</span>);
+}
+      </div>
+      <button class="quiz-check-btn" onclick="checkFill('fill1','city','quiz2')">בדוק תשובה</button>
+      <div class="quiz-feedback" id="quiz2-feedback"></div>
+    </div>
+
+    <!-- Quiz 3: MC -->
+    <div class="quiz-container" id="quiz3">
+      <h3>שאלה 3 — שאלת בחירה</h3>
+      <p class="quiz-question">מה ההבדל בין שיטה מקושרת (Connected) לשיטה לא מקושרת (Disconnected)?</p>
+      <div class="quiz-options">
+        <label><input type="radio" name="q3" value="a"> Connected עובדת רק עם SQL Server, ואילו Disconnected עובדת עם כל בסיס נתונים</label>
+        <label><input type="radio" name="q3" value="b"> Connected מחזיקה חיבור פתוח כל הזמן, ואילו Disconnected שולפת לזיכרון ומנתקת</label>
+        <label><input type="radio" name="q3" value="c"> Connected מהירה יותר תמיד</label>
+        <label><input type="radio" name="q3" value="d"> אין הבדל — זה אותו דבר</label>
+      </div>
+      <button class="quiz-check-btn" onclick="checkQuiz('quiz3','b')">בדוק תשובה</button>
+      <div class="quiz-feedback" id="quiz3-feedback"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- NAV                                         -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="lesson-nav">
+    <a href="lesson-4-3.html">שיעור 4.3 &larr;</a>
+    <a href="lesson-4-1.html">&rarr; שיעור 4.1</a>
+  </div>
+
+</div><!-- /lesson-container -->
+
+<script>
+function checkQuiz(quizId, correctValue) {
+  var container = document.getElementById(quizId);
+  var feedback = document.getElementById(quizId + '-feedback');
+  var selected = container.querySelector('input[type="radio"]:checked');
+
+  // Reset previous styling
+  var labels = container.querySelectorAll('.quiz-options label');
+  for (var i = 0; i < labels.length; i++) {
+    labels[i].classList.remove('correct', 'incorrect');
+  }
+
+  if (!selected) {
+    feedback.textContent = 'בחר/י תשובה תחילה!';
+    feedback.className = 'quiz-feedback show incorrect';
+    return;
+  }
+
+  var selectedLabel = selected.parentElement;
+
+  if (selected.value === correctValue) {
+    selectedLabel.classList.add('correct');
+    feedback.textContent = 'נכון! כל הכבוד! ✓';
+    feedback.className = 'quiz-feedback show correct';
+  } else {
+    selectedLabel.classList.add('incorrect');
+    // Highlight the correct answer
+    var allInputs = container.querySelectorAll('input[type="radio"]');
+    for (var j = 0; j < allInputs.length; j++) {
+      if (allInputs[j].value === correctValue) {
+        allInputs[j].parentElement.classList.add('correct');
+      }
+    }
+    feedback.textContent = 'לא נכון — התשובה הנכונה מסומנת בירוק.';
+    feedback.className = 'quiz-feedback show incorrect';
+  }
+}
+
+function checkFill(inputId, correctAnswer, quizId) {
+  var input = document.getElementById(inputId);
+  var feedback = document.getElementById(quizId + '-feedback');
+  var userAnswer = input.value.trim();
+
+  input.classList.remove('correct', 'incorrect');
+
+  if (!userAnswer) {
+    feedback.textContent = 'הקלד/י תשובה תחילה!';
+    feedback.className = 'quiz-feedback show incorrect';
+    return;
+  }
+
+  if (userAnswer === correctAnswer) {
+    input.classList.add('correct');
+    feedback.textContent = 'מצוין! ' + correctAnswer + ' — הפרמטר שמכיל את שם העיר. ✓';
+    feedback.className = 'quiz-feedback show correct';
+  } else {
+    input.classList.add('incorrect');
+    feedback.textContent = 'לא נכון. רמז: איזה פרמטר מכיל את שם העיר שקיבלנו?';
+    feedback.className = 'quiz-feedback show incorrect';
+  }
+}
+</script>
+
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

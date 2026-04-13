@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>שיעור 2.1 — יסודות השפה ומשתנים | Full-Stack Development</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06)}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+.code-block{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.6;white-space:pre}
+.code-block .tag{color:#f472b6}
+.code-block .attr{color:#a78bfa}
+.code-block .value{color:#34d399}
+.code-block .comment{color:#64748b;font-style:italic}
+.code-block .keyword{color:#818cf8}
+.code-block .string{color:#fbbf24}
+.code-block .function{color:#38bdf8}
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+.code-editor-container{border:2px solid var(--border);border-radius:12px;overflow:hidden;margin:20px 0}
+.code-editor-header{background:#1e293b;color:#fff;padding:10px 16px;font-size:.85rem;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.code-editor-textarea{width:100%;min-height:280px;padding:16px;font-family:'Courier New',monospace;font-size:.9rem;border:none;resize:vertical;direction:ltr;text-align:left;background:#0f172a;color:#e2e8f0;line-height:1.6;tab-size:2}
+.code-editor-textarea:focus{outline:none}
+.code-editor-preview{border-top:2px solid var(--border);min-height:120px;background:#fff}
+.code-editor-preview iframe{width:100%;min-height:120px;border:none}
+.code-editor-run{padding:8px 20px;background:#10b981;color:#fff;border:none;border-radius:6px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.85rem}
+.code-editor-run:hover{background:#059669}
+.code-editor-reset{padding:8px 16px;background:transparent;color:#94a3b8;border:1px solid #475569;border-radius:6px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.85rem;margin-inline-start:8px}
+.code-editor-reset:hover{background:#334155;color:#e2e8f0}
+.console-panel{background:#0f172a;color:#10b981;font-family:'Courier New',monospace;font-size:.85rem;padding:0;min-height:60px;max-height:150px;overflow-y:auto;border-top:2px solid var(--border);direction:ltr;text-align:left}
+.console-label{background:#1e293b;color:#64748b;padding:4px 12px;font-size:.75rem;font-weight:600;display:block;border-bottom:1px solid rgba(255,255,255,.05)}
+.console-output{padding:8px 16px;min-height:40px;background:#0f172a;color:#10b981;font-family:'Courier New',monospace;font-size:.85rem;direction:ltr;text-align:left}
+.console-line{padding:2px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.console-line.error{color:#ef4444}
+.output-panels{display:flex;flex-direction:column}
+.output-panels-row{display:grid;grid-template-columns:1fr 1fr;min-height:180px}
+.output-panel-label{background:#334155;color:#94a3b8;padding:4px 12px;font-size:.75rem;font-weight:600}
+.preview-panel{border-left:2px solid var(--border)}
+.exercise-box{background:var(--bg);border:2px solid #d97706;border-radius:12px;padding:24px;margin:24px 0}
+.exercise-box h3{color:#d97706;margin-bottom:12px}
+.exercise-box ol{margin:8px 0 0 24px;line-height:2.2}
+.comparison-table{width:100%;border-collapse:collapse;margin:16px 0;direction:ltr;text-align:left}
+.comparison-table th{background:var(--primary);color:#fff;padding:10px 16px;text-align:left;font-weight:700;font-size:.9rem}
+.comparison-table td{padding:10px 16px;border-bottom:1px solid var(--border);font-size:.9rem}
+.comparison-table tr:nth-child(even){background:var(--bg-soft)}
+.comparison-table code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:.85rem;color:var(--primary-dark)}
+.keyword-highlight{display:inline-block;background:var(--primary-light);color:var(--primary-dark);padding:2px 10px;border-radius:6px;font-weight:700;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr}
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--primary);color:var(--primary)}
+@media(max-width:768px){
+  .lesson-title{font-size:1.5rem}
+  .lesson-nav{flex-direction:column}
+  .code-block{font-size:.8rem;padding:12px}
+  .output-panels-row{grid-template-columns:1fr}
+  .preview-panel{border-left:none;border-top:2px solid var(--border)}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">Full-Stack Development</div>
+  <a href="course.html">← חזרה לקורס</a>
+</div>
+
+<div class="lesson-container">
+
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#d97706">יחידה 2: JavaScript</span>
+    <h1 class="lesson-title">שיעור 2.1 — יסודות השפה ומשתנים</h1>
+    <p class="lesson-subtitle">משתנים, סוגי נתונים, קלט/פלט, אופרטורים וגישה ל-DOM</p>
+  </div>
+
+  <!-- Section 1: What is JavaScript? -->
+  <div class="lesson-section">
+    <h2>1. מה זה JavaScript?</h2>
+
+    <p>
+      <strong>JavaScript</strong> (בקיצור JS) היא <strong>שפת תסריט</strong> (Scripting Language) שרצה בתוך הדפדפן.
+      בעוד ש-HTML מגדיר את <em>המבנה</em> של הדף ו-CSS מגדיר את <em>העיצוב</em>,
+      JavaScript אחראית על <em>ההתנהגות</em> — אינטראקטיביות, תגובה ללחיצות, שינוי תוכן בזמן אמת ועוד.
+    </p>
+
+    <h3>שלוש השכבות של דף אינטרנט</h3>
+    <ul>
+      <li><strong>HTML</strong> — מבנה (שלד הדף, תוכן, כותרות, טבלאות)</li>
+      <li><strong>CSS</strong> — עיצוב (צבעים, גדלים, מיקומים, אנימציות)</li>
+      <li><strong>JavaScript</strong> — התנהגות (לוגיקה, אירועים, מניפולציה של DOM)</li>
+    </ul>
+
+    <div class="lesson-tip">
+      <strong>💡 ידעת?</strong>
+      <p>
+        JavaScript היא אחת השפות הפופולריות בעולם — היא רצה בצד הלקוח (דפדפן)
+        וגם בצד השרת באמצעות <strong>Node.js</strong>.
+        כל דפדפן מודרני מכיל מנוע JavaScript מובנה (V8 ב-Chrome, SpiderMonkey ב-Firefox).
+      </p>
+    </div>
+
+    <h3>איך מוסיפים JavaScript לדף HTML?</h3>
+    <p>משתמשים בתגית <span class="keyword-highlight">&lt;script&gt;</span> — בדרך כלל לפני סגירת <code>&lt;/body&gt;</code>:</p>
+
+    <div class="code-block"><span class="tag">&lt;body&gt;</span>
+  <span class="tag">&lt;h1&gt;</span>הדף שלי<span class="tag">&lt;/h1&gt;</span>
+
+  <span class="tag">&lt;script&gt;</span>
+    <span class="comment">// כאן כותבים קוד JavaScript</span>
+    <span class="function">alert</span>(<span class="string">"שלום עולם!"</span>);
+  <span class="tag">&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;</span></div>
+
+    <p>
+      אפשר גם לקשר קובץ JS חיצוני:
+      <code>&lt;script src="app.js"&gt;&lt;/script&gt;</code>
+      — בקורס הזה נכתוב הכל inline בתוך תגית <code>&lt;script&gt;</code>.
+    </p>
+  </div>
+
+  <!-- Section 2: Variables -->
+  <div class="lesson-section">
+    <h2>2. משתנים (Variables)</h2>
+
+    <p>
+      <strong>משתנה</strong> הוא "קופסה" בזיכרון שמחזיקה ערך.
+      ב-JavaScript יש שלוש דרכים להכריז על משתנה:
+    </p>
+
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>מילת מפתח</th>
+          <th>תיאור</th>
+          <th>Scope</th>
+          <th>המלצה</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>var</code></td>
+          <td>הכרזה ישנה (ES5)</td>
+          <td>Function scope</td>
+          <td>❌ להימנע</td>
+        </tr>
+        <tr>
+          <td><code>let</code></td>
+          <td>הכרזה מודרנית (ES6)</td>
+          <td>Block scope</td>
+          <td>✅ מומלץ</td>
+        </tr>
+        <tr>
+          <td><code>const</code></td>
+          <td>ערך קבוע שלא משתנה</td>
+          <td>Block scope</td>
+          <td>✅ מומלץ לקבועים</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="code-block"><span class="comment">// var — הכרזה ישנה, פחות בטוחה</span>
+<span class="keyword">var</span> name = <span class="string">"בועז"</span>;
+
+<span class="comment">// let — הכרזה מודרנית, מומלץ!</span>
+<span class="keyword">let</span> age = 25;
+age = 26;  <span class="comment">// מותר לשנות ערך</span>
+
+<span class="comment">// const — ערך קבוע</span>
+<span class="keyword">const</span> PI = 3.14159;
+<span class="comment">// PI = 3; ← שגיאה! לא ניתן לשנות const</span></div>
+
+    <h3>סוגי נתונים (Data Types)</h3>
+    <p>JavaScript היא <strong>dynamically typed</strong> — לא צריך להכריז על סוג המשתנה, הוא נקבע אוטומטית:</p>
+
+    <div class="code-block"><span class="comment">// Number — מספר שלם או עשרוני</span>
+<span class="keyword">let</span> score = 100;
+<span class="keyword">let</span> temperature = 36.6;
+
+<span class="comment">// String — מחרוזת (טקסט)</span>
+<span class="keyword">let</span> greeting = <span class="string">"שלום עולם"</span>;
+<span class="keyword">let</span> city = <span class="string">'ירושלים'</span>;
+
+<span class="comment">// Boolean — ערך אמת/שקר</span>
+<span class="keyword">let</span> isLoggedIn = <span class="keyword">true</span>;
+<span class="keyword">let</span> isAdmin = <span class="keyword">false</span>;
+
+<span class="comment">// בדיקת סוג:</span>
+<span class="function">console.log</span>(<span class="keyword">typeof</span> score);      <span class="comment">// "number"</span>
+<span class="function">console.log</span>(<span class="keyword">typeof</span> greeting);   <span class="comment">// "string"</span>
+<span class="function">console.log</span>(<span class="keyword">typeof</span> isLoggedIn); <span class="comment">// "boolean"</span></div>
+
+    <div class="lesson-tip warning">
+      <strong>⚠️ var vs let — מה ההבדל?</strong>
+      <p>
+        <code>var</code> מוגדר ברמת הפונקציה (function scope) — אם תגדירו <code>var</code> בתוך <code>if</code>,
+        הוא יהיה נגיש גם מחוץ ל-<code>if</code>. <code>let</code> מוגדר ברמת הבלוק (block scope) —
+        נגיש רק בתוך הבלוק <code>{ }</code> שבו הוכרז. לכן <code>let</code> בטוח יותר ומומלץ.
+      </p>
+    </div>
+
+    <h3>שרשור מחרוזות (String Concatenation)</h3>
+    <div class="code-block"><span class="keyword">let</span> firstName = <span class="string">"בועז"</span>;
+<span class="keyword">let</span> lastName = <span class="string">"חזן"</span>;
+
+<span class="comment">// שרשור עם +</span>
+<span class="keyword">let</span> fullName = firstName + <span class="string">" "</span> + lastName;
+<span class="function">console.log</span>(fullName); <span class="comment">// "בועז חזן"</span>
+
+<span class="comment">// Template Literals (ES6) — מומלץ!</span>
+<span class="keyword">let</span> message = <span class="string">`שלום ${firstName}, ברוך הבא!`</span>;
+<span class="function">console.log</span>(message); <span class="comment">// "שלום בועז, ברוך הבא!"</span></div>
+  </div>
+
+  <!-- Section 3: Input/Output -->
+  <div class="lesson-section">
+    <h2>3. קלט / פלט (Input &amp; Output)</h2>
+
+    <p>JavaScript מספקת מספר דרכים לתקשר עם המשתמש:</p>
+
+    <h3>פלט — הצגת מידע</h3>
+
+    <div class="code-block"><span class="comment">// alert — חלונית קופצת</span>
+<span class="function">alert</span>(<span class="string">"שלום! זו הודעה חשובה"</span>);
+
+<span class="comment">// console.log — הדפסה לקונסול (לפיתוח)</span>
+<span class="function">console.log</span>(<span class="string">"ערך x הוא:"</span>, 42);
+
+<span class="comment">// document.write — כתיבה ישירה לדף</span>
+<span class="function">document.write</span>(<span class="string">"&lt;h2&gt;כותרת מ-JS&lt;/h2&gt;"</span>);</div>
+
+    <h3>קלט — קבלת מידע מהמשתמש</h3>
+
+    <div class="code-block"><span class="comment">// prompt — חלונית עם שדה קלט</span>
+<span class="keyword">let</span> name = <span class="function">prompt</span>(<span class="string">"מה השם שלך?"</span>);
+<span class="function">alert</span>(<span class="string">"שלום "</span> + name + <span class="string">"!"</span>);
+
+<span class="comment">// prompt מחזיר מחרוזת — צריך להמיר למספר:</span>
+<span class="keyword">let</span> ageStr = <span class="function">prompt</span>(<span class="string">"בן כמה אתה?"</span>);
+<span class="keyword">let</span> age = <span class="function">parseInt</span>(ageStr);        <span class="comment">// מחרוזת → מספר שלם</span>
+
+<span class="keyword">let</span> price = <span class="function">parseFloat</span>(<span class="string">"19.99"</span>);  <span class="comment">// מחרוזת → מספר עשרוני</span>
+
+<span class="comment">// דרך מקוצרת: Number()</span>
+<span class="keyword">let</span> num = <span class="function">Number</span>(<span class="function">prompt</span>(<span class="string">"הכנס מספר:"</span>));</div>
+
+    <div class="lesson-tip success">
+      <strong>✅ טיפ חשוב</strong>
+      <p>
+        <code>prompt()</code> תמיד מחזיר <strong>מחרוזת</strong> (string), גם אם המשתמש הקליד מספר.
+        אם רוצים לעשות חישובים — חובה להמיר עם <code>parseInt()</code>, <code>parseFloat()</code>
+        או <code>Number()</code>. בלי המרה, <code>"5" + "3"</code> ייתן <code>"53"</code> (שרשור!) ולא <code>8</code>.
+      </p>
+    </div>
+  </div>
+
+  <!-- Section 4: Operators -->
+  <div class="lesson-section">
+    <h2>4. אופרטורים (Operators)</h2>
+
+    <h3>אופרטורים אריתמטיים</h3>
+    <table class="comparison-table">
+      <thead>
+        <tr><th>אופרטור</th><th>פעולה</th><th>דוגמה</th><th>תוצאה</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>+</code></td><td>חיבור</td><td><code>10 + 3</code></td><td>13</td></tr>
+        <tr><td><code>-</code></td><td>חיסור</td><td><code>10 - 3</code></td><td>7</td></tr>
+        <tr><td><code>*</code></td><td>כפל</td><td><code>10 * 3</code></td><td>30</td></tr>
+        <tr><td><code>/</code></td><td>חילוק</td><td><code>10 / 3</code></td><td>3.333...</td></tr>
+        <tr><td><code>%</code></td><td>שארית</td><td><code>10 % 3</code></td><td>1</td></tr>
+        <tr><td><code>**</code></td><td>חזקה</td><td><code>2 ** 3</code></td><td>8</td></tr>
+      </tbody>
+    </table>
+
+    <h3>אופרטורי השוואה</h3>
+    <table class="comparison-table">
+      <thead>
+        <tr><th>אופרטור</th><th>משמעות</th><th>דוגמה</th><th>תוצאה</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>==</code></td><td>שווה (עם המרת סוג)</td><td><code>5 == "5"</code></td><td>true</td></tr>
+        <tr><td><code>===</code></td><td>שווה (ללא המרה) — <strong>מומלץ!</strong></td><td><code>5 === "5"</code></td><td>false</td></tr>
+        <tr><td><code>!=</code></td><td>לא שווה</td><td><code>5 != 3</code></td><td>true</td></tr>
+        <tr><td><code>!==</code></td><td>לא שווה (ללא המרה)</td><td><code>5 !== "5"</code></td><td>true</td></tr>
+        <tr><td><code>&gt;</code></td><td>גדול מ</td><td><code>10 &gt; 5</code></td><td>true</td></tr>
+        <tr><td><code>&lt;</code></td><td>קטן מ</td><td><code>3 &lt; 7</code></td><td>true</td></tr>
+        <tr><td><code>&gt;=</code></td><td>גדול או שווה</td><td><code>5 &gt;= 5</code></td><td>true</td></tr>
+        <tr><td><code>&lt;=</code></td><td>קטן או שווה</td><td><code>3 &lt;= 2</code></td><td>false</td></tr>
+      </tbody>
+    </table>
+
+    <div class="lesson-tip warning">
+      <strong>⚠️ == מול === — הבדל קריטי!</strong>
+      <p>
+        <code>==</code> (שוויון רופף) מבצע <strong>המרת סוג אוטומטית</strong> (Type Coercion) לפני ההשוואה,
+        לכן <code>5 == "5"</code> מחזיר <code>true</code>.
+        <code>===</code> (שוויון מוחלט) משווה גם ערך וגם סוג — <code>5 === "5"</code> מחזיר <code>false</code>.
+        <br><strong>תמיד השתמשו ב-<code>===</code></strong> כדי למנוע באגים מפתיעים!
+      </p>
+    </div>
+
+    <h3>אופרטורים לוגיים</h3>
+    <table class="comparison-table">
+      <thead>
+        <tr><th>אופרטור</th><th>שם</th><th>דוגמה</th><th>משמעות</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>&amp;&amp;</code></td><td>AND (וגם)</td><td><code>true &amp;&amp; false</code></td><td>שניהם חייבים להיות true</td></tr>
+        <tr><td><code>||</code></td><td>OR (או)</td><td><code>true || false</code></td><td>לפחות אחד true</td></tr>
+        <tr><td><code>!</code></td><td>NOT (שלילה)</td><td><code>!true</code></td><td>הופך את הערך</td></tr>
+      </tbody>
+    </table>
+
+    <div class="code-block"><span class="keyword">let</span> age = 25;
+<span class="keyword">let</span> hasLicense = <span class="keyword">true</span>;
+
+<span class="comment">// AND — שני התנאים חייבים להתקיים</span>
+<span class="function">console.log</span>(age >= 17 &amp;&amp; hasLicense);  <span class="comment">// true</span>
+
+<span class="comment">// OR — לפחות תנאי אחד</span>
+<span class="function">console.log</span>(age &lt; 10 || age > 60);      <span class="comment">// false</span>
+
+<span class="comment">// NOT — הפיכה</span>
+<span class="function">console.log</span>(!hasLicense);               <span class="comment">// false</span></div>
+  </div>
+
+  <!-- Section 5: DOM -->
+  <div class="lesson-section">
+    <h2>5. DOM — גישה לאלמנטים בדף</h2>
+
+    <p>
+      <strong>DOM</strong> (Document Object Model) הוא ייצוג עץ של דף ה-HTML בזיכרון.
+      JavaScript יכולה לגשת לכל אלמנט בדף, לשנות את תוכנו, עיצובו ואף להוסיף אלמנטים חדשים.
+    </p>
+
+    <h3>גישה לאלמנט לפי ID</h3>
+    <div class="code-block"><span class="comment">// בחירת אלמנט לפי id</span>
+<span class="keyword">let</span> title = <span class="function">document.getElementById</span>(<span class="string">"myTitle"</span>);
+
+<span class="comment">// שינוי תוכן</span>
+title.<span class="attr">innerHTML</span> = <span class="string">"כותרת חדשה!"</span>;
+
+<span class="comment">// שינוי עיצוב</span>
+title.<span class="attr">style</span>.<span class="attr">color</span> = <span class="string">"blue"</span>;
+title.<span class="attr">style</span>.<span class="attr">fontSize</span> = <span class="string">"2rem"</span>;
+title.<span class="attr">style</span>.<span class="attr">backgroundColor</span> = <span class="string">"#dbeafe"</span>;</div>
+
+    <h3>דוגמה: כפתור שמשנה תוכן</h3>
+    <div class="code-block"><span class="tag">&lt;h1</span> <span class="attr">id=</span><span class="value">"title"</span><span class="tag">&gt;</span>שלום!<span class="tag">&lt;/h1&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">onclick=</span><span class="value">"changeTitle()"</span><span class="tag">&gt;</span>לחץ עליי<span class="tag">&lt;/button&gt;</span>
+
+<span class="tag">&lt;script&gt;</span>
+  <span class="keyword">function</span> <span class="function">changeTitle</span>() {
+    <span class="keyword">let</span> el = <span class="function">document.getElementById</span>(<span class="string">"title"</span>);
+    el.<span class="attr">innerHTML</span> = <span class="string">"הכפתור נלחץ!"</span>;
+    el.<span class="attr">style</span>.<span class="attr">color</span> = <span class="string">"green"</span>;
+  }
+<span class="tag">&lt;/script&gt;</span></div>
+
+    <div class="lesson-tip">
+      <strong>💡 getElementById vs querySelector</strong>
+      <p>
+        <code>getElementById("id")</code> בוחר לפי <code>id</code> בלבד.
+        <code>querySelector(".class")</code> ו-<code>querySelector("#id")</code> יכולים לבחור לפי כל סלקטור CSS.
+        בשלב הזה נשתמש ב-<code>getElementById</code> — פשוט ויעיל.
+      </p>
+    </div>
+  </div>
+
+  <!-- Live Code Editor -->
+  <div class="lesson-section">
+    <h2>🖥️ עורך קוד חי — נסו בעצמכם!</h2>
+    <p>כתבו קוד HTML+JavaScript ולחצו "הרץ" כדי לראות את התוצאה. כל מה שמודפס עם <code>console.log</code> יופיע בפאנל הקונסול.</p>
+
+    <div class="code-editor-container">
+      <div class="code-editor-header">
+        <span>📝 עורך קוד</span>
+        <div>
+          <button class="code-editor-run" onclick="runCode()">▶ הרץ</button>
+          <button class="code-editor-reset" onclick="resetCode()">↺ אפס</button>
+        </div>
+      </div>
+      <textarea id="codeEditor" class="code-editor-textarea" spellcheck="false"></textarea>
+      <div class="output-panels">
+        <div class="output-panels-row">
+          <div>
+            <div class="output-panel-label">🖥️ תצוגה מקדימה</div>
+            <div class="code-editor-preview">
+              <iframe id="previewFrame" sandbox="allow-scripts allow-modals"></iframe>
+            </div>
+          </div>
+          <div class="preview-panel">
+            <div class="console-label">📟 Console</div>
+            <div id="consoleOutput" class="console-output"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exercises -->
+  <div class="lesson-section">
+    <h2>📝 תרגילים</h2>
+    <p>נסו לכתוב את התוכניות הבאות בעורך הקוד למעלה:</p>
+
+    <div class="exercise-box">
+      <h3>תרגיל 1 — שלום בהתאמה אישית</h3>
+      <p>כתבו תוכנית שקולטת שם מהמשתמש (באמצעות <code>prompt</code>) ומציגה הודעת <code>alert</code> עם הטקסט: <strong>"שלום [שם]!"</strong></p>
+      <p>💡 <em>רמז: השתמשו בשרשור מחרוזות (<code>+</code>) או ב-Template Literals (<code>`...${...}`</code>)</em></p>
+    </div>
+
+    <div class="exercise-box">
+      <h3>תרגיל 2 — מחשבון חיבור</h3>
+      <p>כתבו תוכנית שקולטת <strong>שני מספרים</strong> מהמשתמש ומציגה את <strong>הסכום</strong> שלהם.</p>
+      <p>💡 <em>רמז: אל תשכחו להמיר את הקלט למספר עם <code>parseInt()</code> או <code>Number()</code>! אחרת תקבלו שרשור במקום חיבור.</em></p>
+    </div>
+
+    <div class="exercise-box">
+      <h3>תרגיל 3 — שינוי צבע רקע</h3>
+      <p>צרו דף עם <code>&lt;div&gt;</code> שיש לו <code>id</code> וכפתור. בלחיצה על הכפתור, <strong>שנו את צבע הרקע</strong> של ה-div.</p>
+      <p>💡 <em>רמז: השתמשו ב-<code>document.getElementById("myDiv").style.backgroundColor = "צבע"</code></em></p>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="lesson-nav">
+    <a href="lesson-1-3.html">→ שיעור קודם: 1.3 טבלאות, רשימות ו-Bootstrap</a>
+    <a href="lesson-2-2.html">שיעור הבא: 2.2 לוגיקה, לולאות ואירועים ←</a>
+  </div>
+
+</div>
+
+<script>
+// --- Default code for the editor ---
+var DEFAULT_CODE = [
+  '<!DOCTYPE html>',
+  '<html>',
+  '<body>',
+  '  <h1 id="title">שלום!</h1>',
+  '  <button onclick="changeTitle()">לחץ עליי</button>',
+  '',
+  '  <script>',
+  '    let name = "עולם";',
+  '    console.log("שלום " + name);',
+  '',
+  '    function changeTitle() {',
+  '      document.getElementById("title").innerHTML = "שלום " + name + "!";',
+  '      document.getElementById("title").style.color = "blue";',
+  '    }',
+  '  <\/script>',
+  '</body>',
+  '</html>'
+].join('\n');
+
+var editor = document.getElementById('codeEditor');
+var consoleEl = document.getElementById('consoleOutput');
+var iframe = document.getElementById('previewFrame');
+
+// Set default code on load
+editor.value = DEFAULT_CODE;
+
+// Handle Tab key in textarea
+editor.addEventListener('keydown', function(e) {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    var start = this.selectionStart;
+    var end = this.selectionEnd;
+    this.value = this.value.substring(0, start) + '  ' + this.value.substring(end);
+    this.selectionStart = this.selectionEnd = start + 2;
+  }
+});
+
+// Listen for console messages from iframe
+window.addEventListener('message', function(e) {
+  if (!e.data || !e.data.type) return;
+  if (e.data.type === 'console') {
+    appendConsole(e.data.text, '');
+  } else if (e.data.type === 'console-error') {
+    appendConsole(e.data.text, 'error');
+  } else if (e.data.type === 'alert') {
+    appendConsole('[alert] ' + e.data.text, '');
+  }
+});
+
+function appendConsole(text, cls) {
+  var line = document.createElement('div');
+  line.className = 'console-line' + (cls ? ' ' + cls : '');
+  line.textContent = text;
+  consoleEl.appendChild(line);
+  consoleEl.scrollTop = consoleEl.scrollHeight;
+}
+
+function runCode() {
+  // Clear console
+  consoleEl.innerHTML = '';
+
+  var userCode = editor.value;
+
+  // Inject console interceptor before the closing </body> or at the end
+  var interceptor = '<script>\n' +
+    '(function(){\n' +
+    '  var _log = console.log;\n' +
+    '  console.log = function(){\n' +
+    '    var args = Array.from(arguments).map(function(a){\n' +
+    '      if(typeof a === "object") try{return JSON.stringify(a)}catch(e){return String(a)}\n' +
+    '      return String(a);\n' +
+    '    }).join(" ");\n' +
+    '    _log.apply(console, arguments);\n' +
+    '    parent.postMessage({type:"console",text:args},"*");\n' +
+    '  };\n' +
+    '  var _alert = window.alert;\n' +
+    '  window.alert = function(msg){\n' +
+    '    parent.postMessage({type:"alert",text:String(msg)},"*");\n' +
+    '  };\n' +
+    '  var _prompt = window.prompt;\n' +
+    '  window.prompt = function(msg, def){\n' +
+    '    return _prompt(msg, def);\n' +
+    '  };\n' +
+    '  window.onerror = function(msg, src, line){\n' +
+    '    parent.postMessage({type:"console-error",text:"Error (line " + line + "): " + msg},"*");\n' +
+    '  };\n' +
+    '})();\n' +
+    '<\/script>\n';
+
+  // Insert interceptor right after <body> or at the very beginning
+  var injected;
+  if (userCode.indexOf('<body') !== -1) {
+    // Insert after the <body...> tag
+    injected = userCode.replace(/(<body[^>]*>)/i, '$1\n' + interceptor);
+  } else {
+    // No body tag — wrap it
+    injected = interceptor + userCode;
+  }
+
+  // Write to iframe
+  var doc = iframe.contentDocument || iframe.contentWindow.document;
+  doc.open();
+  doc.write(injected);
+  doc.close();
+
+  // Auto-resize iframe
+  setTimeout(function() {
+    try {
+      var h = iframe.contentDocument.body.scrollHeight;
+      if (h > 50) iframe.style.height = Math.min(h + 20, 400) + 'px';
+    } catch(e) {}
+  }, 200);
+}
+
+function resetCode() {
+  editor.value = DEFAULT_CODE;
+  consoleEl.innerHTML = '';
+  var doc = iframe.contentDocument || iframe.contentWindow.document;
+  doc.open();
+  doc.write('');
+  doc.close();
+  iframe.style.height = '';
+}
+
+// Run default code on page load
+window.addEventListener('DOMContentLoaded', function() {
+  setTimeout(runCode, 300);
+});
+</script>
+
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

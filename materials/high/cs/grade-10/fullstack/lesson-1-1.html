@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>מבוא ומושגי יסוד ב-HTML | Full-Stack Development</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+
+/* Topbar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Lesson layout */
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+
+/* Sections */
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+
+/* Code blocks */
+.code-block{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.6;white-space:pre}
+.code-block .tag{color:#f472b6}
+.code-block .attr{color:#a78bfa}
+.code-block .value{color:#34d399}
+.code-block .comment{color:#64748b;font-style:italic}
+
+/* Tip boxes */
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+
+/* Code editor */
+.code-editor-container{border:2px solid var(--border);border-radius:12px;overflow:hidden;margin:20px 0}
+.code-editor-header{background:#1e293b;color:#fff;padding:10px 16px;font-size:.85rem;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.code-editor-textarea{width:100%;min-height:250px;padding:16px;font-family:'Courier New',monospace;font-size:.9rem;border:none;resize:vertical;direction:ltr;text-align:left;background:#0f172a;color:#e2e8f0;line-height:1.6;tab-size:2}
+.code-editor-textarea:focus{outline:none}
+.code-editor-preview{border-top:2px solid var(--border);min-height:120px;background:#fff}
+.code-editor-preview iframe{width:100%;min-height:120px;border:none}
+.code-editor-run{padding:8px 20px;background:#10b981;color:#fff;border:none;border-radius:6px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.85rem}
+.code-editor-run:hover{background:#059669}
+
+/* Exercise box */
+.exercise-box{background:var(--bg);border:2px solid var(--primary);border-radius:12px;padding:24px;margin:24px 0}
+.exercise-box h3{color:var(--primary);margin-bottom:12px}
+
+/* Nav */
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--primary);color:var(--primary)}
+
+@media(max-width:768px){
+  .lesson-title{font-size:1.5rem}
+  .lesson-nav{flex-direction:column}
+  .code-block{font-size:.8rem;padding:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <span class="topbar-title">Full-Stack Development</span>
+  <a href="course.html">&larr; חזרה לקורס</a>
+</div>
+
+<!-- Lesson Content -->
+<div class="lesson-container">
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#2563eb">יחידה 1: Frontend</span>
+    <h1 class="lesson-title">מבוא ומושגי יסוד ב-HTML</h1>
+    <p class="lesson-subtitle">תגיות, מבנה דף, כותרות, פסקאות, קישורים ותמונות</p>
+  </div>
+
+  <!-- Section 1: What is HTML? -->
+  <div class="lesson-section">
+    <h2>1. מה זה HTML?</h2>
+
+    <p><strong>HTML</strong> הוא קיצור של <strong dir="ltr" style="unicode-bidi:embed">HyperText Markup Language</strong> — שפת תגיות למסמכים היפרטקסטיים. חשוב להבין: HTML היא <strong>שפת תגיות</strong>, לא שפת תכנות! היא לא יודעת לחשב, להתנות או ליצור לולאות — היא יודעת דבר אחד: לתאר <strong>מבנה</strong>.</p>
+
+    <p>כשאנחנו בונים אתר אינטרנט, HTML משמשת לבניית השלד והמבנה של הדף. אפשר לחשוב על זה כמו שלד של בניין — הוא מגדיר איפה יש קירות, חלונות ודלתות, אבל לא את הצבע שלהם או מה קורה כשפותחים דלת.</p>
+
+    <p>הדפדפן (Chrome, Firefox, Edge וכו') קורא את קובץ ה-HTML, מפענח את התגיות שבו, ומציג את התוכן בצורה ויזואלית על המסך. כל תגית אומרת לדפדפן: "הנה כותרת", "הנה פסקה", "הנה תמונה" — והדפדפן יודע איך להציג כל אחד מהם.</p>
+
+    <div class="lesson-tip">
+      <strong>💡 שלושת עמודי הווב</strong>
+      <p>HTML מגדיר את <strong>המבנה</strong> (מה מופיע בדף), CSS מגדיר את <strong>העיצוב</strong> (איך זה נראה), ו-JavaScript מוסיף <strong>אינטראקטיביות</strong> (מה קורה כשלוחצים). שלושתם עובדים יחד כדי ליצור את חוויית האינטרנט שאנחנו מכירים.</p>
+    </div>
+
+    <h3>איך עובדות תגיות?</h3>
+    <p>תגית (Tag) היא הוראה לדפדפן, עטופה בסוגריים משולשים <code>&lt; &gt;</code>. רוב התגיות מגיעות בזוגות — <strong>תגית פותחת</strong> ו<strong>תגית סוגרת</strong>:</p>
+
+    <div class="code-block"><span class="tag">&lt;p&gt;</span>זו פסקה<span class="tag">&lt;/p&gt;</span>
+
+<span class="comment">&lt;!-- תגית פותחת: &lt;p&gt;    --&gt;</span>
+<span class="comment">&lt;!-- תגית סוגרת: &lt;/p&gt;   --&gt;</span>
+<span class="comment">&lt;!-- שימו לב ל-/ בתגית הסוגרת --&gt;</span></div>
+
+    <p>התוכן שבין התגית הפותחת לסוגרת הוא מה שמופיע על המסך. התגיות עצמן לא מוצגות — הן רק הוראות לדפדפן.</p>
+  </div>
+
+  <!-- Section 2: Basic Structure -->
+  <div class="lesson-section">
+    <h2>2. מבנה בסיסי של דף HTML</h2>
+
+    <p>כל דף HTML בנוי לפי מבנה קבוע. בואו נראה את השלד הבסיסי ביותר:</p>
+
+    <div class="code-block"><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;title&gt;</span>הדף שלי<span class="tag">&lt;/title&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+  <span class="tag">&lt;h1&gt;</span>שלום עולם!<span class="tag">&lt;/h1&gt;</span>
+  <span class="tag">&lt;p&gt;</span>זו הפסקה הראשונה שלי<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></div>
+
+    <p>בואו נפרק את המבנה הזה חלק אחרי חלק:</p>
+
+    <h3><code>&lt;!DOCTYPE html&gt;</code></h3>
+    <p>שורה ראשונה בכל דף HTML. היא אומרת לדפדפן: "המסמך הזה כתוב ב-HTML5" (הגרסה העדכנית). זו לא באמת תגית — זו הצהרה. תמיד שמים אותה בשורה הראשונה.</p>
+
+    <h3><code>&lt;html&gt;</code></h3>
+    <p>תגית השורש — כל מה שבדף עטוף בתוכה. זו "הקופסה הגדולה" שמכילה הכול.</p>
+
+    <h3><code>&lt;head&gt;</code></h3>
+    <p>ה"ראש" של הדף — מכיל <strong>מטא-דאטה</strong>, כלומר מידע <em>על</em> הדף שלא מוצג על המסך. למשל:</p>
+    <ul>
+      <li><strong><code>&lt;title&gt;</code></strong> — הכותרת שמופיעה בלשונית (Tab) של הדפדפן</li>
+      <li>קישורים לקבצי עיצוב (CSS)</li>
+      <li>הגדרות קידוד תווים, תיאור לגוגל, ועוד</li>
+    </ul>
+
+    <h3><code>&lt;body&gt;</code></h3>
+    <p>ה"גוף" של הדף — <strong>כל מה שהמשתמש רואה על המסך</strong> נמצא כאן. כותרות, טקסט, תמונות, טבלאות, סרטונים — הכול בתוך ה-body.</p>
+
+    <div class="lesson-tip warning">
+      <strong>⚠️ שגיאה נפוצה</strong>
+      <p>מתחילים לפעמים שמים תוכן ב-<code>&lt;head&gt;</code> ומתפלאים שהוא לא מופיע. זכרו: <code>&lt;head&gt;</code> = מידע נסתר, <code>&lt;body&gt;</code> = תוכן גלוי!</p>
+    </div>
+  </div>
+
+  <!-- Section 3: Basic Tags -->
+  <div class="lesson-section">
+    <h2>3. תגיות בסיסיות</h2>
+
+    <h3>כותרות (Headings)</h3>
+    <p>ב-HTML יש 6 רמות כותרת, מ-<code>h1</code> (הגדולה ביותר) עד <code>h6</code> (הקטנה ביותר):</p>
+
+    <div class="code-block"><span class="tag">&lt;h1&gt;</span>כותרת ראשית (הגדולה ביותר)<span class="tag">&lt;/h1&gt;</span>
+<span class="tag">&lt;h2&gt;</span>כותרת משנית<span class="tag">&lt;/h2&gt;</span>
+<span class="tag">&lt;h3&gt;</span>כותרת רמה 3<span class="tag">&lt;/h3&gt;</span>
+<span class="tag">&lt;h4&gt;</span>כותרת רמה 4<span class="tag">&lt;/h4&gt;</span>
+<span class="tag">&lt;h5&gt;</span>כותרת רמה 5<span class="tag">&lt;/h5&gt;</span>
+<span class="tag">&lt;h6&gt;</span>כותרת רמה 6 (הקטנה ביותר)<span class="tag">&lt;/h6&gt;</span></div>
+
+    <p>בפועל, <code>h1</code> משמש בדרך כלל לכותרת הראשית של הדף (רצוי רק פעם אחת), <code>h2</code> לכותרות משנה, <code>h3</code> לתת-סעיפים, וכן הלאה. מומלץ לשמור על היררכיה — לא לקפוץ מ-<code>h1</code> ישר ל-<code>h4</code>.</p>
+
+    <h3>פסקאות (Paragraphs)</h3>
+    <p>תגית <code>&lt;p&gt;</code> מגדירה פסקה. הדפדפן מוסיף אוטומטית רווח (מרווח) לפני ואחרי כל פסקה:</p>
+
+    <div class="code-block"><span class="tag">&lt;p&gt;</span>זו הפסקה הראשונה. היא מכילה טקסט שמוצג בדף.<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;p&gt;</span>זו הפסקה השנייה. שימו לב לרווח האוטומטי בין הפסקאות.<span class="tag">&lt;/p&gt;</span></div>
+
+    <div class="lesson-tip">
+      <strong>💡 ירידת שורה בתוך פסקה</strong>
+      <p>אם רוצים לרדת שורה בלי להתחיל פסקה חדשה, משתמשים בתגית <code>&lt;br&gt;</code>. זו תגית מיוחדת — אין לה תגית סוגרת! (היא "ריקה")</p>
+    </div>
+
+    <h3>ירידת שורה ו-קו אופקי</h3>
+    <p>שתי תגיות שימושיות שאין להן תגית סוגרת:</p>
+
+    <div class="code-block"><span class="comment">&lt;!-- ירידת שורה (line break) --&gt;</span>
+<span class="tag">&lt;p&gt;</span>שורה ראשונה<span class="tag">&lt;br&gt;</span>שורה שנייה באותה פסקה<span class="tag">&lt;/p&gt;</span>
+
+<span class="comment">&lt;!-- קו אופקי (horizontal rule) — מפריד ויזואלי --&gt;</span>
+<span class="tag">&lt;hr&gt;</span></div>
+
+    <p>תגיות כמו <code>&lt;br&gt;</code> ו-<code>&lt;hr&gt;</code> נקראות <strong>תגיות ריקות</strong> (void elements) — אין להן תוכן ולכן אין להן תגית סוגרת.</p>
+
+    <h3>טקסט מודגש ונטוי</h3>
+    <p>להדגשת טקסט משתמשים ב:</p>
+
+    <div class="code-block"><span class="tag">&lt;strong&gt;</span>טקסט מודגש (bold)<span class="tag">&lt;/strong&gt;</span>
+<span class="tag">&lt;em&gt;</span>טקסט נטוי (italic)<span class="tag">&lt;/em&gt;</span></div>
+  </div>
+
+  <!-- Section 4: Links and Images -->
+  <div class="lesson-section">
+    <h2>4. קישורים ותמונות</h2>
+
+    <h3>קישורים (Links)</h3>
+    <p>תגית <code>&lt;a&gt;</code> (anchor) יוצרת קישור לדף אחר:</p>
+
+    <div class="code-block"><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"https://www.google.com"</span><span class="tag">&gt;</span>לחצו כאן למעבר לגוגל<span class="tag">&lt;/a&gt;</span></div>
+
+    <p>ה-<strong>attribute</strong> (מאפיין) <code>href</code> מגדיר לאן הקישור מוביל. הטקסט שבין התגיות הוא מה שהמשתמש רואה ויכול ללחוץ עליו.</p>
+
+    <p>מאפיינים נוספים שימושיים:</p>
+    <ul>
+      <li><code dir="ltr" style="unicode-bidi:embed">target="_blank"</code> — פותח את הקישור בלשונית חדשה</li>
+      <li><code dir="ltr" style="unicode-bidi:embed">title="הסבר"</code> — טקסט שמופיע כשעוברים עם העכבר מעל הקישור</li>
+    </ul>
+
+    <div class="code-block"><span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="value">"https://www.google.com"</span> <span class="attr">target</span>=<span class="value">"_blank"</span> <span class="attr">title</span>=<span class="value">"מעבר לגוגל"</span><span class="tag">&gt;</span>
+  גוגל (נפתח בלשונית חדשה)
+<span class="tag">&lt;/a&gt;</span></div>
+
+    <h3>תמונות (Images)</h3>
+    <p>תגית <code>&lt;img&gt;</code> מציגה תמונה בדף. כמו <code>&lt;br&gt;</code>, זו תגית ריקה — אין לה תגית סוגרת:</p>
+
+    <div class="code-block"><span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="value">"photo.jpg"</span> <span class="attr">alt</span>=<span class="value">"תיאור התמונה"</span><span class="tag">&gt;</span></div>
+
+    <p>שני מאפיינים חשובים:</p>
+    <ul>
+      <li><strong><code>src</code></strong> — הנתיב לקובץ התמונה (יכול להיות נתיב מקומי או כתובת URL מלאה)</li>
+      <li><strong><code>alt</code></strong> — טקסט חלופי שמוצג אם התמונה לא נטענת, וגם משמש קוראי מסך לנגישות. <strong>תמיד לכלול!</strong></li>
+    </ul>
+
+    <div class="code-block"><span class="comment">&lt;!-- תמונה מקומית (באותה תיקייה) --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="value">"cat.jpg"</span> <span class="attr">alt</span>=<span class="value">"חתול חמוד"</span><span class="tag">&gt;</span>
+
+<span class="comment">&lt;!-- תמונה מהאינטרנט (URL מלא) --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="value">"https://placekitten.com/300/200"</span> <span class="attr">alt</span>=<span class="value">"חתול אקראי"</span><span class="tag">&gt;</span>
+
+<span class="comment">&lt;!-- עם גודל מוגדר --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="value">"cat.jpg"</span> <span class="attr">alt</span>=<span class="value">"חתול חמוד"</span> <span class="attr">width</span>=<span class="value">"300"</span> <span class="attr">height</span>=<span class="value">"200"</span><span class="tag">&gt;</span></div>
+
+    <h3>נתיבים: יחסיים לעומת מוחלטים</h3>
+    <p>כשמפנים לקובץ (בקישור או בתמונה), יש שני סוגי נתיבים:</p>
+    <ul>
+      <li><strong>נתיב מוחלט (Absolute)</strong> — כתובת מלאה: <code dir="ltr" style="unicode-bidi:embed">https://www.example.com/image.jpg</code></li>
+      <li><strong>נתיב יחסי (Relative)</strong> — יחסית למיקום הקובץ הנוכחי: <code dir="ltr" style="unicode-bidi:embed">images/photo.jpg</code> או <code dir="ltr" style="unicode-bidi:embed">../other-page.html</code></li>
+    </ul>
+
+    <div class="lesson-tip success">
+      <strong>✅ טיפ מקצועי</strong>
+      <p>השתמשו בנתיבים יחסיים לקבצים באתר שלכם, ובנתיבים מוחלטים לקישורים לאתרים חיצוניים. כך אם תעבירו את האתר לדומיין אחר — הקישורים הפנימיים לא יישברו.</p>
+    </div>
+  </div>
+
+  <!-- Live Code Editor -->
+  <div class="lesson-section">
+    <h2>🖥️ עורך קוד חי</h2>
+    <p>הזמן שלכם לנסות! ערכו את הקוד למטה ולחצו "הרץ" כדי לראות את התוצאה בזמן אמת:</p>
+
+    <div class="code-editor-container">
+      <div class="code-editor-header">
+        <span>index.html</span>
+        <button class="code-editor-run" onclick="runCode()">&#9654; הרץ</button>
+      </div>
+      <textarea id="codeEditor" class="code-editor-textarea">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;הדף שלי&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;שלום עולם!&lt;/h1&gt;
+  &lt;p&gt;זו הפסקה הראשונה שלי&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+      <div class="code-editor-preview">
+        <iframe id="previewFrame" title="תצוגה מקדימה"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exercise -->
+  <div class="lesson-section">
+    <div class="exercise-box">
+      <h3>📝 תרגיל: בנה את הדף הראשון שלך</h3>
+      <p>השתמשו בעורך הקוד למעלה וכתבו דף HTML שמכיל את כל האלמנטים הבאים:</p>
+      <ol>
+        <li><strong>כותרת <code>&lt;h1&gt;</code></strong> עם השם שלכם</li>
+        <li><strong>פסקה <code>&lt;p&gt;</code></strong> שמספרת קצת עליכם (תחביבים, בית ספר, מה שבא לכם)</li>
+        <li><strong>תמונה <code>&lt;img&gt;</code></strong> — אפשר להשתמש ב-URL של תמונה כלשהי מהאינטרנט (למשל <code dir="ltr" style="unicode-bidi:embed">https://placekitten.com/400/300</code>)</li>
+        <li><strong>קישור <code>&lt;a&gt;</code></strong> לאתר שאתם אוהבים</li>
+      </ol>
+      <p style="margin-top:12px;color:var(--text-light);font-size:.9rem"><strong>בונוס:</strong> הוסיפו כותרת משנה <code>&lt;h2&gt;</code>, קו אופקי <code>&lt;hr&gt;</code>, וטקסט מודגש <code>&lt;strong&gt;</code>.</p>
+    </div>
+  </div>
+
+  <!-- Lesson Navigation -->
+  <div class="lesson-nav">
+    <div></div>
+    <a href="lesson-1-2.html">השיעור הבא &larr;</a>
+  </div>
+
+</div>
+
+<script>
+function runCode(){
+  var code=document.getElementById('codeEditor').value;
+  var iframe=document.getElementById('previewFrame');
+  iframe.srcdoc=code;
+}
+
+// Tab key support in textarea
+document.getElementById('codeEditor').addEventListener('keydown',function(e){
+  if(e.key==='Tab'){
+    e.preventDefault();
+    var start=this.selectionStart;
+    var end=this.selectionEnd;
+    this.value=this.value.substring(0,start)+'  '+this.value.substring(end);
+    this.selectionStart=this.selectionEnd=start+2;
+  }
+});
+
+// Auto-run on load
+document.addEventListener('DOMContentLoaded',function(){
+  runCode();
+});
+</script>
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

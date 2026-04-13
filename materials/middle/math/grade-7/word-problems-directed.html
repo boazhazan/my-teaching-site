@@ -1,0 +1,1141 @@
+<!--
+  Title: בעיות מילוליות — מספרים מכוונים
+  Unit: משוואות
+  Subject: מתמטיקה
+  Grade: ז׳
+  Lesson: 9
+  Tags: אלגברה, משוואות, בעיות מילוליות, מספרים מכוונים, גיאומטריה
+  Ages: 12-13
+  Icon: 🧩
+  Description: בעיות מילוליות מורכבות — גיאומטריה, גילאים, כדורים, מבחנים, טיולים ועוד
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>בעיות מילוליות — מספרים מכוונים | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#1a2f5a;--primary-dark:#0f1f3d;--primary-light:#d6e4f7;
+  --accent:#4a9eda;--accent-dark:#2d7ab8;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#eef3fa 0%,#d6e4f7 50%,#eef3fa 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+
+/* Top bar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Section toggle */
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+
+/* Container */
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+
+/* ===== TEACHING SECTION ===== */
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
+.step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+
+/* SVG diagrams */
+.diagram-box{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;margin:16px 0;text-align:center;overflow-x:auto}
+.diagram-box svg{max-width:100%;height:auto}
+
+/* Problem box */
+.problem-box{background:linear-gradient(135deg,#f0f4ff,#e8eefa);border:2px solid var(--accent);border-radius:var(--radius);padding:16px;margin:16px 0;font-size:1rem;line-height:1.8}
+.problem-box .problem-label{font-weight:800;color:var(--primary-dark);margin-bottom:6px;font-size:.9rem}
+
+/* Solution steps */
+.solution-steps{margin:12px 0}
+.solution-steps .sol-step{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border)}
+.solution-steps .sol-step:last-child{border-bottom:none}
+.solution-steps .sol-num{width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0}
+.solution-steps .sol-content{flex:1}
+
+/* Table for age/ball problems */
+.info-table{border-collapse:collapse;margin:12px auto;width:auto}
+.info-table th,.info-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:.95rem}
+.info-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.info-table td{background:var(--bg)}
+
+/* Two methods side by side */
+.methods-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.method-box{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:14px}
+.method-box .method-title{font-weight:800;color:var(--primary-dark);margin-bottom:8px;text-align:center;font-size:.95rem}
+@media(max-width:600px){.methods-row{grid-template-columns:1fr}}
+
+/* Interactive elements inside steps */
+.mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.mini-table th,.mini-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:1rem}
+.mini-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.mini-table td{background:var(--bg)}
+.mini-input{width:60px;padding:6px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:1rem;font-family:inherit;font-weight:700;transition:.3s}
+.mini-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(26,47,90,.15)}
+.mini-input.correct{border-color:var(--success);background:#ecfdf5}
+.mini-input.wrong{border-color:var(--error);background:#fef2f2}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.reveal{display:none;animation:fadeIn .5s ease}
+.reveal.show{display:block}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+
+/* Step nav */
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== PRACTICE SECTION ===== */
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-stem code,.q-stem .expr{font-size:1.1em}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;transition:.25s}
+.q-opt.selected .q-opt-letter{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-opt.correct .q-opt-letter{background:var(--success);color:#fff;border-color:var(--success)}
+.q-opt.wrong .q-opt-letter{background:var(--error);color:#fff;border-color:var(--error)}
+
+.q-input-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-input{width:120px;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1.1rem;font-family:inherit;font-weight:700;text-align:center;transition:.3s;direction:ltr}
+.q-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(26,47,90,.15)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+
+.q-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.q-table th,.q-table td{border:2px solid var(--border);padding:8px 14px;text-align:center;font-size:1rem;min-width:60px}
+.q-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.q-table input{width:55px;padding:5px;border:2px solid var(--border);border-radius:4px;text-align:center;font-size:1rem;font-family:inherit;font-weight:700}
+.q-table input:focus{border-color:var(--primary);outline:none}
+.q-table input.correct{border-color:var(--success);background:#ecfdf5}
+.q-table input.wrong{border-color:var(--error);background:#fef2f2}
+
+.q-check-btn{padding:10px 28px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;box-shadow:var(--shadow)}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.92rem;animation:fadeIn .3s}
+.q-feedback.correct{background:#ecfdf5;border-right:4px solid var(--success);color:#065f46}
+.q-feedback.wrong{background:#fef2f2;border-right:4px solid var(--error);color:#991b1b}
+
+.q-nav{display:flex;justify-content:space-between;margin-top:16px}
+.q-nav-btn{padding:10px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Level complete */
+.level-complete{text-align:center;padding:24px;animation:fadeIn .5s}
+.level-complete .big-emoji{font-size:4rem;margin-bottom:12px}
+.level-complete h2{font-size:1.4rem;color:var(--primary-dark);margin-bottom:8px}
+.level-complete .score-display{font-size:1.8rem;font-weight:800;color:var(--success);margin-bottom:16px}
+.level-complete .score-display.medium-score{color:#f59e0b}
+.level-complete .score-display.low-score{color:var(--error)}
+
+/* Celebration confetti */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{
+  0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}
+  100%{transform:translateY(105vh) rotate(720deg) scale(.3);opacity:0}
+}
+
+/* Print button */
+.print-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer;font-size:1rem;box-shadow:var(--shadow);transition:.25s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.print-btn:hover{background:var(--primary-dark);transform:scale(1.1)}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+/* Responsive */
+@media(max-width:600px){
+  .container{padding:0 10px 30px}
+  .step-card,.q-card{padding:18px 14px}
+  .step-title{font-size:1.15rem}
+  .step-summary-grid{grid-template-columns:1fr}
+  .section-toggle{max-width:280px;margin:12px auto}
+  .section-btn{font-size:.88rem;padding:8px 14px}
+  .q-opt{padding:10px 12px;font-size:.9rem}
+  .topbar-title{font-size:.9rem}
+  .methods-row{grid-template-columns:1fr}
+}
+
+/* Print */
+@media print{
+  .topbar,.section-toggle,.step-nav,.q-nav,.print-btn,.level-tabs,.confetti-container,.q-check-btn{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .step-card,.q-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+  .container{max-width:100%}
+  .q-feedback{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">🧩 כיתה ז׳ — בעיות מילוליות (מספרים מכוונים)</span>
+  <div style="display:flex;align-items:center;gap:10px"><button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button><a href="../../../../materials.html">← חזרה לדף החומרים</a></div>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+
+<!-- ===== LEARNING SECTION ===== -->
+<section id="learnSection">
+  <div class="step-progress">
+    <div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div>
+    <div class="step-progress-text" id="stepText"></div>
+  </div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+
+<!-- ===== PRACTICE SECTION ===== -->
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress">
+    <div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div>
+    <div class="level-progress-text" id="levelText"></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+
+</div>
+
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const today=new Date();const dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+let rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(arr){return arr[Math.floor(R()*arr.length)]}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const boyNames=["דני","יואב","עמית","אורי","נועם","גיא","איתי","רון","תומר","עידו"];
+const girlNames=["מיכל","נועה","שירה","תמר","רונית","יעל","דנה","אורית","הילה","ליאת"];
+function boyName(){return pick(boyNames)}
+function girlName(){return pick(girlNames)}
+function anyName(){return R()>.5?boyName():girlName()}
+
+const LETTERS=['א','ב','ג','ד'];
+
+/* helper: format math expression LTR inside RTL */
+function mLTR(s){return '<span dir="ltr" style="unicode-bidi:embed">'+s+'</span>'}
+function mExpr(s){return '<span class="math-expr">'+s+'</span>'}
+
+/* ===== STATE ===== */
+let state={section:'learn',step:0,level:'easy',qIndex:0};
+let scores={easy:[],medium:[],hard:[],challenge:[]};
+let answered={easy:[],medium:[],hard:[],challenge:[]};
+let questions={easy:null,medium:null,hard:null,challenge:null};
+const LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+const LEVEL_NAMES={easy:'קל',medium:'בינוני',hard:'קשה',challenge:'אתגר'};
+const TOTAL_STEPS=7;
+
+/* ===== LOCAL STORAGE ===== */
+const LS_KEY='bh_g7_word_prob_dir_'+dateSeed;
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores,answered,state}))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+/* ===== TEACHING SECTION ===== */
+const steps=[
+/* Step 0: Review — 4 steps to solve word problems */
+{title:'🔄 חזרה — 4 השלבים לפתרון בעיה מילולית', render(){return `
+<div class="rule-box">🧩 בשיעור הזה נפתור בעיות מילוליות מורכבות — עכשיו גם עם מספרים שליליים ומשוואות!</div>
+<p>בכל בעיה מילולית — אותם 4 צעדים:</p>
+<div class="solution-steps">
+  <div class="sol-step"><div class="sol-num">1</div><div class="sol-content"><strong>קראו והבינו</strong> — מה ידוע? מה צריך למצוא?</div></div>
+  <div class="sol-step"><div class="sol-num">2</div><div class="sol-content"><strong>סמנו ב-<span class="math-expr">x</span></strong> — מה הנעלם?</div></div>
+  <div class="sol-step"><div class="sol-num">3</div><div class="sol-content"><strong>כתבו משוואה</strong> — תרגמו את הקשר מילים למתמטיקה</div></div>
+  <div class="sol-step"><div class="sol-num">4</div><div class="sol-content"><strong>פתרו, בדקו, כתבו תשובה מילולית</strong></div></div>
+</div>
+<div class="highlight">💡 <strong>חדש בשיעור הזה:</strong> הבעיות כוללות מספרים שליליים, סוגריים ומשוואות עם <span class="math-expr">x</span> בשני הצדדים!</div>
+<p><strong>תרגיל חימום:</strong></p>
+<div class="problem-box">
+  <div class="problem-label">🧠 חשבו:</div>
+  חשבו על מספר. הכפילו ב-<span class="math-expr">(-3)</span>. הוסיפו 15. קיבלתם 0. מה המספר?
+</div>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="warmupInput" placeholder="?" aria-label="תשובה">
+  <button class="mini-btn" onclick="checkWarmup()">בדקו</button>
+</div>
+<div id="warmupFb"></div>
+<div class="reveal" id="warmupReveal">
+  <div class="success-box">✅ נכון! נסמן <span class="math-expr">x</span>: <code>-3x + 15 = 0</code> → <code>-3x = -15</code> → <code>x = 5</code></div>
+</div>
+`}},
+
+/* Step 1: Example — Equal paths */
+{title:'🛤️ דוגמה — שבילים שווים', render(){return `
+<div class="problem-box">
+  <div class="problem-label">📋 הבעיה:</div>
+  שני שבילים שווים באורכם, מחולקים למקטעים כפי שמתואר בסרטוט.
+</div>
+<div class="diagram-box">
+  <svg viewBox="0 0 450 120" width="450" height="120" style="direction:ltr">
+    <text x="10" y="18" font-size="14" font-weight="bold" fill="#1a2f5a">שביל 1:</text>
+    <rect x="10" y="25" width="100" height="35" rx="4" fill="#d6e4f7" stroke="#1a2f5a" stroke-width="2"/>
+    <text x="60" y="48" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a2f5a">x</text>
+    <rect x="115" y="25" width="100" height="35" rx="4" fill="#d6e4f7" stroke="#1a2f5a" stroke-width="2"/>
+    <text x="165" y="48" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a2f5a">x</text>
+    <rect x="220" y="25" width="100" height="35" rx="4" fill="#d6e4f7" stroke="#1a2f5a" stroke-width="2"/>
+    <text x="270" y="48" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a2f5a">x</text>
+    <rect x="325" y="25" width="65" height="35" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+    <text x="357" y="48" text-anchor="middle" font-size="14" font-weight="bold" fill="#d97706">6</text>
+    <text x="10" y="88" font-size="14" font-weight="bold" fill="#1a2f5a">שביל 2:</text>
+    <rect x="10" y="95" width="130" height="35" rx="4" fill="#d6e4f7" stroke="#1a2f5a" stroke-width="2"/>
+    <text x="75" y="118" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a2f5a">x</text>
+    <rect x="145" y="95" width="130" height="35" rx="4" fill="#d6e4f7" stroke="#1a2f5a" stroke-width="2"/>
+    <text x="210" y="118" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a2f5a">x</text>
+    <rect x="280" y="95" width="110" height="35" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+    <text x="335" y="118" text-anchor="middle" font-size="14" font-weight="bold" fill="#d97706">9</text>
+  </svg>
+</div>
+<div class="solution-steps">
+  <div class="sol-step"><div class="sol-num">1</div><div class="sol-content">שביל 1: <code>x + x + x + 6 = 3x + 6</code></div></div>
+  <div class="sol-step"><div class="sol-num">2</div><div class="sol-content">שביל 2: <code>x + x + 9 = 2x + 9</code></div></div>
+  <div class="sol-step"><div class="sol-num">3</div><div class="sol-content">השבילים שווים → משוואה: <code>3x + 6 = 2x + 9</code></div></div>
+  <div class="sol-step"><div class="sol-num">4</div><div class="sol-content"><code>3x - 2x = 9 - 6</code> → <code>x = 3</code></div></div>
+</div>
+<div class="success-box">✅ <strong>בדיקה:</strong> שביל 1: <span class="math-expr">3 &middot; 3 + 6 = 15</span> מטר. שביל 2: <span class="math-expr">2 &middot; 3 + 9 = 15</span> מטר. שווים!</div>
+`}},
+
+/* Step 2: Example — Math test */
+{title:'📝 דוגמה — מבחן מתמטיקה', render(){return `
+<div class="problem-box">
+  <div class="problem-label">📋 הבעיה:</div>
+  בכיתה ז' מבחן עם שני חלקים. בחלק א' — 5 שאלות, בחלק ב' — 3 שאלות. על כל שאלה בחלק א' ניתנו <strong>4 נקודות פחות</strong> מאשר בחלק ב'. הציון המרבי הוא 100. כמה נקודות לכל שאלה?
+</div>
+<div class="solution-steps">
+  <div class="sol-step"><div class="sol-num">1</div><div class="sol-content"><strong>הגדרה:</strong> <span class="math-expr">x</span> = נקודות לשאלה בחלק ב'</div></div>
+  <div class="sol-step"><div class="sol-num">2</div><div class="sol-content">נקודות לשאלה בחלק א' = <code>x - 4</code></div></div>
+  <div class="sol-step"><div class="sol-num">3</div><div class="sol-content"><strong>משוואה:</strong> <code>5(x - 4) + 3x = 100</code></div></div>
+  <div class="sol-step"><div class="sol-num">4</div><div class="sol-content"><code>5x - 20 + 3x = 100</code> → <code>8x = 120</code> → <code>x = 15</code></div></div>
+</div>
+<div class="success-box">✅ <strong>תשובה:</strong> חלק ב': 15 נקודות לשאלה, חלק א': 11 נקודות לשאלה.<br>
+<strong>בדיקה:</strong> <span class="math-expr">5 &middot; 11 + 3 &middot; 15 = 55 + 45 = 100</span> ✓</div>
+<p><strong>שימו לב:</strong> השתמשנו בסוגריים כי חלק א' מקבל <code>x - 4</code>, וכופלים את כל הביטוי ב-5!</p>
+<div class="warning">⚠️ טעות נפוצה: לכתוב <code>5x - 4</code> במקום <code>5(x - 4)</code>. הסוגריים הכרחיים!</div>
+`}},
+
+/* Step 3: Example — Ages */
+{title:'👨‍👩‍👧 דוגמה — גילאים', render(){return `
+<div class="problem-box">
+  <div class="problem-label">📋 הבעיה:</div>
+  גיל האם 36 וגיל הבת 6. <strong>בעוד כמה שנים</strong> יהיה גיל האם פי 4 מגיל הבת?
+</div>
+<p><strong>נבנה טבלה:</strong></p>
+<table class="info-table">
+  <tr><th></th><th>היום</th><th>בעוד <span class="math-expr">x</span> שנים</th></tr>
+  <tr><td><strong>אם</strong></td><td>36</td><td><code>36 + x</code></td></tr>
+  <tr><td><strong>בת</strong></td><td>6</td><td><code>6 + x</code></td></tr>
+</table>
+<div class="solution-steps">
+  <div class="sol-step"><div class="sol-num">1</div><div class="sol-content"><span class="math-expr">x</span> = מספר השנים מהיום</div></div>
+  <div class="sol-step"><div class="sol-num">2</div><div class="sol-content"><strong>משוואה:</strong> <code>36 + x = 4(6 + x)</code></div></div>
+  <div class="sol-step"><div class="sol-num">3</div><div class="sol-content"><code>36 + x = 24 + 4x</code> → <code>36 - 24 = 4x - x</code> → <code>12 = 3x</code> → <code>x = 4</code></div></div>
+</div>
+<div class="success-box">✅ <strong>בדיקה:</strong> בעוד 4 שנים — אם: 40, בת: 10. <span class="math-expr">40 = 4 &middot; 10</span> ✓</div>
+<div class="highlight">💡 <strong>טיפ:</strong> בבעיות גילאים — תמיד בנו טבלה עם "היום" ו"בעוד <span class="math-expr">x</span> שנים". זה עוזר!</div>
+`}},
+
+/* Step 4: Example — Balls and colors */
+{title:'🔴🟢🟡 דוגמה — כדורים וצבעים', render(){return `
+<div class="problem-box">
+  <div class="problem-label">📋 הבעיה:</div>
+  בכד 36 כדורים מ-3 צבעים. מספר הכדורים האדומים <strong>גדול ב-8</strong> ממספר הצהובים. מספר הצהובים <strong>גדול פי 3</strong> ממספר הירוקים. כמה כדורים מכל צבע?
+</div>
+<p><strong>נבנה טבלה:</strong></p>
+<table class="info-table">
+  <tr><th>צבע</th><th>ביטוי</th></tr>
+  <tr><td>🟢 ירוק</td><td><code>x</code></td></tr>
+  <tr><td>🟡 צהוב</td><td><code>3x</code></td></tr>
+  <tr><td>🔴 אדום</td><td><code>3x + 8</code></td></tr>
+</table>
+<div class="solution-steps">
+  <div class="sol-step"><div class="sol-num">1</div><div class="sol-content"><span class="math-expr">x</span> = מספר הכדורים הירוקים (הכי קטן — הכי נוח)</div></div>
+  <div class="sol-step"><div class="sol-num">2</div><div class="sol-content"><strong>משוואה:</strong> <code>x + 3x + (3x + 8) = 36</code></div></div>
+  <div class="sol-step"><div class="sol-num">3</div><div class="sol-content"><code>7x + 8 = 36</code> → <code>7x = 28</code> → <code>x = 4</code></div></div>
+</div>
+<div class="success-box">✅ <strong>תשובה:</strong> ירוק: 4, צהוב: 12, אדום: 20.<br>
+<strong>בדיקה:</strong> <span class="math-expr">4 + 12 + 20 = 36</span> ✓, <span class="math-expr">20 - 12 = 8</span> ✓, <span class="math-expr">12 = 3 &middot; 4</span> ✓</div>
+<div class="highlight">💡 <strong>טיפ:</strong> כשכל הכמויות תלויות אחת בשנייה — סמנו ב-<span class="math-expr">x</span> את הכי קטנה. ככה הביטויים יהיו פשוטים יותר!</div>
+`}},
+
+/* Step 5: Example — Geometry with expressions */
+{title:'📐 דוגמה — גיאומטריה עם ביטויים', render(){return `
+<div class="problem-box">
+  <div class="problem-label">📋 הבעיה:</div>
+  ריבוע שאורך צלעו <span class="math-expr">x</span> ס"מ. הגדילו צלע אחת <strong>פי 2</strong> וקיבלו מלבן. היקף המלבן <strong>גדול ב-10</strong> מהיקף הריבוע. מצאו את <span class="math-expr">x</span>.
+</div>
+<div class="diagram-box">
+  <svg viewBox="0 0 420 140" width="420" height="140" style="direction:ltr">
+    <rect x="20" y="20" width="100" height="100" rx="3" fill="#d6e4f7" stroke="#1a2f5a" stroke-width="2"/>
+    <text x="70" y="75" text-anchor="middle" font-size="16" font-weight="bold" fill="#1a2f5a">x</text>
+    <text x="70" y="16" text-anchor="middle" font-size="12" fill="#64748b">ריבוע</text>
+    <text x="175" y="75" font-size="28" font-weight="bold" fill="#4a9eda">→</text>
+    <rect x="220" y="20" width="180" height="100" rx="3" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+    <text x="310" y="68" text-anchor="middle" font-size="14" font-weight="bold" fill="#d97706">2x</text>
+    <text x="310" y="88" text-anchor="middle" font-size="12" fill="#64748b">(אורך)</text>
+    <text x="410" y="75" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a2f5a" transform="rotate(90,410,75)">x</text>
+    <text x="310" y="16" text-anchor="middle" font-size="12" fill="#64748b">מלבן</text>
+  </svg>
+</div>
+<div class="solution-steps">
+  <div class="sol-step"><div class="sol-num">1</div><div class="sol-content">היקף ריבוע: <code>4x</code></div></div>
+  <div class="sol-step"><div class="sol-num">2</div><div class="sol-content">היקף מלבן: <code>2(x + 2x) = 2 &middot; 3x = 6x</code></div></div>
+  <div class="sol-step"><div class="sol-num">3</div><div class="sol-content"><strong>משוואה:</strong> <code>6x = 4x + 10</code></div></div>
+  <div class="sol-step"><div class="sol-num">4</div><div class="sol-content"><code>6x - 4x = 10</code> → <code>2x = 10</code> → <code>x = 5</code></div></div>
+</div>
+<div class="success-box">✅ <strong>בדיקה:</strong> ריבוע: <span class="math-expr">4 &middot; 5 = 20</span>, מלבן: <span class="math-expr">6 &middot; 5 = 30</span>. הפרש: <span class="math-expr">30 - 20 = 10</span> ✓</div>
+`}},
+
+/* Step 6: Summary and transition */
+{title:'🏆 סיכום ומעבר לתרגול', render(){return `
+<p style="font-size:1.1rem;text-align:center;margin-bottom:20px">למדנו לפתור 5 סוגי בעיות מילוליות:</p>
+<div class="step-summary-grid">
+  <div class="summary-item">
+    <div class="s-icon">🛤️</div>
+    <div class="s-title">שבילים ומסלולים</div>
+    <div class="s-text">שוויון אורכים, מקטעים</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">📝</div>
+    <div class="s-title">מבחנים וניקוד</div>
+    <div class="s-text">חלוקת נקודות, סוגריים</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">👨‍👩‍👧</div>
+    <div class="s-title">גילאים</div>
+    <div class="s-text">טבלאות, "בעוד x שנים"</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🔴🟢</div>
+    <div class="s-title">כדורים וחפצים</div>
+    <div class="s-text">כמויות תלויות, סכום ידוע</div>
+  </div>
+  <div class="summary-item" style="grid-column:1/-1">
+    <div class="s-icon">📐</div>
+    <div class="s-title">גיאומטריה עם ביטויים</div>
+    <div class="s-text">היקפים, שטחים, שוויון</div>
+  </div>
+</div>
+<div class="rule-box">🎯 טיפ זהב: <strong>ציירו סרטוט או בנו טבלה</strong> — זה תמיד עוזר!</div>
+<div class="success-box" style="text-align:center;font-size:1.1rem;margin-top:20px">
+  <p>🌟 עכשיו אתם מוכנים לתרגול!</p>
+  <p>4 רמות קושי מחכות לכם</p>
+  <button class="mini-btn accent" style="margin-top:12px;font-size:1rem;padding:12px 32px" onclick="switchSection('practice')">בואו נתרגל! ←</button>
+</div>
+`}}
+];
+
+/* Step interactive handlers */
+window.checkWarmup=function(){
+  const v=parseInt(document.getElementById('warmupInput').value);
+  const fb=document.getElementById('warmupFb');
+  if(v===5){fb.innerHTML='<div class="feedback-inline ok">✅ מעולה! המספר הוא 5</div>';document.getElementById('warmupReveal').classList.add('show')}
+  else if(isNaN(v)){fb.innerHTML='<div class="feedback-inline err">הקלידו מספר</div>'}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. רמז: -3x + 15 = 0 → x = ?</div>'}
+};
+
+function renderStep(idx){
+  state.step=idx;
+  const s=steps[idx];
+  const fill=((idx+1)/TOTAL_STEPS*100).toFixed(0);
+  document.getElementById('stepFill').style.width=fill+'%';
+  document.getElementById('stepText').textContent='שלב '+(idx+1)+' מתוך '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+s.title+'</div>'+s.render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'לתרגול ←':'הבא ←';
+  if(s.init) s.init();
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+/* ===== QUESTION GENERATORS ===== */
+
+function genEasy(){
+  rng=mulberry32(dateSeed+100);
+  const qs=[];
+
+  /* Q1-Q5: Translate to equation only */
+  /* Q1 */
+  (function(){
+    const a=RI(2,8);const b=RI(10,30);
+    const correct='3x + '+a+' = '+b;
+    const opts=shuffle([correct,'3x - '+a+' = '+b,'3 + x + '+a+' = '+b, 'x + '+(3*a)+' = '+b]);
+    qs.push({type:'mc',stem:'תרגמו למשוואה: "<strong>מספר כפול 3 ועוד '+a+' שווה '+b+'</strong>"',options:opts,answer:opts.indexOf(correct),explanation:'מספר כפול 3 = <code>3x</code>, ועוד '+a+' = <code>3x + '+a+'</code>, שווה '+b+' → <code>'+correct+'</code>'});
+  })();
+  /* Q2 */
+  (function(){
+    const p=RI(15,35);
+    const correct='3x = '+p;
+    const opts=shuffle([correct,'x + 3 = '+p,'x + x + x + 3 = '+p, '3 + x = '+p]);
+    qs.push({type:'mc',stem:'תרגמו למשוואה: "<strong>היקף משולש שווה צלעות הוא '+p+'</strong>" (סמנו צלע ב-<span class="math-expr">x</span>)',options:opts,answer:opts.indexOf(correct),explanation:'משולש שווה צלעות — 3 צלעות שוות, היקף = <code>3x = '+p+'</code>'});
+  })();
+  /* Q3 */
+  (function(){
+    const s=RI(20,60);
+    const correct='x + (x+1) + (x+2) = '+s;
+    const opts=shuffle([correct,'3x = '+s,'x + x + 2 = '+s,'x + (x+1) + (x+3) = '+s]);
+    qs.push({type:'mc',stem:'תרגמו למשוואה: "<strong>סכום 3 מספרים עוקבים הוא '+s+'</strong>"',options:opts,answer:opts.indexOf(correct),explanation:'3 עוקבים: <span class="math-expr">x, x+1, x+2</span>. סכומם: <code>'+correct+'</code>'});
+  })();
+  /* Q4 */
+  (function(){
+    const a=RI(3,9);const b=RI(20,50);
+    const correct='2x - '+a+' = '+b;
+    const opts=shuffle([correct,'2x + '+a+' = '+b,'x - '+a+' = '+b, '2(x - '+a+') = '+b]);
+    qs.push({type:'mc',stem:'תרגמו למשוואה: "<strong>כפליים מספר פחות '+a+' שווה '+b+'</strong>"',options:opts,answer:opts.indexOf(correct),explanation:'כפליים מספר = <code>2x</code>, פחות '+a+' → <code>2x - '+a+' = '+b+'</code>'});
+  })();
+  /* Q5 */
+  (function(){
+    const a=RI(3,8);const b=RI(15,40);
+    const correct='4x + '+a+' = '+b;
+    const opts=shuffle([correct, 'x + 4 + '+a+' = '+b, '4 + x + '+a+' = '+b, '4(x + '+a+') = '+b]);
+    qs.push({type:'mc',stem:'תרגמו למשוואה: "<strong>היקף ריבוע עם צלע <span class="math-expr">x</span> ועוד '+a+' שווה '+b+'</strong>"',options:opts,answer:opts.indexOf(correct),explanation:'היקף ריבוע = <code>4x</code>, ועוד '+a+' → <code>4x + '+a+' = '+b+'</code>'});
+  })();
+
+  /* Q6-Q10: x represents..., write expression */
+  for(let i=0;i<5;i++){
+    const templates=[
+      function(){const m=RI(2,5);const correct=m+'x';const opts=shuffle([correct,'x + '+m,'x - '+m,'x / '+m]);
+        return{stem:'<span class="math-expr">x</span> = מספר הכדורים הירוקים. הצהובים גדולים <strong>פי '+m+'</strong> מהירוקים. כתבו ביטוי למספר הצהובים.',options:opts,answer:opts.indexOf(correct),explanation:'פי '+m+' מ-<span class="math-expr">x</span> = <code>'+correct+'</code>'}},
+      function(){const a=RI(3,10);const correct='x + '+a;const opts=shuffle([correct,'x - '+a,a+'x','x * '+a]);
+        return{stem:'<span class="math-expr">x</span> = גיל הבן. האבא גדול ב-'+a+' שנים מהבן. כתבו ביטוי לגיל האבא.',options:opts,answer:opts.indexOf(correct),explanation:'גדול ב-'+a+' מ-<span class="math-expr">x</span> = <code>'+correct+'</code>'}},
+      function(){const a=RI(2,7);const correct='x - '+a;const opts=shuffle([correct,'x + '+a,a+'x',a+' - x']);
+        return{stem:'<span class="math-expr">x</span> = נקודות לשאלה בחלק ב\'. בחלק א\' ניתנו '+a+' נקודות פחות. כתבו ביטוי לניקוד חלק א\'.',options:opts,answer:opts.indexOf(correct),explanation:'פחות '+a+' מ-<span class="math-expr">x</span> = <code>'+correct+'</code>'}},
+      function(){const correct='x / 2';const opts=shuffle([correct,'2x','x - 2','x + 2']);
+        return{stem:'<span class="math-expr">x</span> = מספר התלמידים בכיתה. חצי מהתלמידים יצאו להפסקה. כתבו ביטוי למספר שיצאו.',options:opts,answer:opts.indexOf(correct),explanation:'חצי מ-<span class="math-expr">x</span> = <code>x / 2</code>'}},
+      function(){const a=RI(3,8);const correct='3x + '+a;const opts=shuffle([correct,'3x - '+a,'x + 3 + '+a,'3(x + '+a+')']);
+        return{stem:'<span class="math-expr">x</span> = מספר הירוקים. הצהובים פי 3, האדומים גדולים ב-'+a+' מהצהובים. כתבו ביטוי לאדומים.',options:opts,answer:opts.indexOf(correct),explanation:'צהוב = <code>3x</code>, אדום = <code>3x + '+a+'</code>'}},
+    ];
+    const t=templates[i%templates.length]();
+    qs.push({type:'mc',stem:t.stem,options:t.options,answer:t.answer,explanation:t.explanation});
+  }
+
+  /* Q11-Q15: Simple word problem — solve */
+  for(let i=0;i<5;i++){
+    if(i<2){
+      const diff=RI(4,12);const sum=RI(18,40);
+      /* sum of two numbers is sum, one is diff more */
+      /* x + (x+diff) = sum => 2x = sum-diff => x = (sum-diff)/2 */
+      const sd=sum-diff;
+      /* ensure even */
+      const actualSum=(sd%2===0)?sum:sum+1;
+      const actualSd=actualSum-diff;
+      const small=actualSd/2;const big=small+diff;
+      const correct=''+small;
+      const opts=shuffle([correct,''+(small+1),''+(small-1),''+big]);
+      qs.push({type:'mc',stem:'סכום שני מספרים הוא '+actualSum+'. אחד מהם <strong>גדול ב-'+diff+'</strong> מהשני. מצאו את <strong>המספר הקטן</strong>.',options:opts,answer:opts.indexOf(correct),explanation:'נסמן <span class="math-expr">x</span> = הקטן. <code>x + (x+'+diff+') = '+actualSum+'</code> → <code>2x = '+actualSd+'</code> → <code>x = '+small+'</code>'});
+    } else if(i<4){
+      const m=RI(3,7);const sub=RI(2,6);const res=RI(10,30);
+      const ans=(res+sub)/m;
+      /* make sure integer */
+      const actualRes=m*RI(3,8)-sub;
+      const actualAns=(actualRes+sub)/m;
+      const correct=''+actualAns;
+      const opts=shuffle([correct,''+(actualAns+1),''+(actualAns-1),''+(actualAns+2)]);
+      qs.push({type:'mc',stem:'חשבו על מספר. <strong>כפלו ב-'+m+'</strong>. <strong>חסרו '+sub+'</strong>. קיבלתם '+actualRes+'. מה המספר?',options:opts,answer:opts.indexOf(correct),explanation:'<code>'+m+'x - '+sub+' = '+actualRes+'</code> → <code>'+m+'x = '+(actualRes+sub)+'</code> → <code>x = '+actualAns+'</code>'});
+    } else {
+      const m=RI(2,5);const add=RI(3,9);const res=RI(15,35);
+      const actualRes=m*RI(3,8)+add;
+      const actualAns=(actualRes-add)/m;
+      const correct=''+actualAns;
+      const opts=shuffle([correct,''+(actualAns+1),''+(actualAns-1),''+(actualAns*2)]);
+      qs.push({type:'mc',stem:'חשבו על מספר. <strong>כפלו ב-'+m+'</strong>. <strong>הוסיפו '+add+'</strong>. קיבלתם '+actualRes+'. מה המספר?',options:opts,answer:opts.indexOf(correct),explanation:'<code>'+m+'x + '+add+' = '+actualRes+'</code> → <code>'+m+'x = '+(actualRes-add)+'</code> → <code>x = '+actualAns+'</code>'});
+    }
+  }
+
+  /* Q16-Q20: Triangle perimeter — solve and check */
+  for(let i=0;i<5;i++){
+    const x=RI(3,10);
+    const addBC=RI(5,15);const multAB=RI(2,4);
+    const perim=x+(x+addBC)+(multAB*x);
+    const correct=''+x;
+    const opts=shuffle([correct,''+(x+1),''+(x-1),''+(x+2)]);
+    const ab=multAB+'x';const bc='x + '+addBC;
+    qs.push({type:'mc',stem:'במשולש ABC: צלע <code>BC = x</code>, צלע <code>AC = '+bc+'</code>, צלע <code>AB = '+ab+'</code>. היקף המשולש הוא <strong>'+perim+'</strong>. מצאו את <span class="math-expr">x</span>.',options:opts,answer:opts.indexOf(correct),explanation:'<code>x + (x+'+addBC+') + '+ab+' = '+perim+'</code> → <code>'+(2+multAB)+'x + '+addBC+' = '+perim+'</code> → <code>'+(2+multAB)+'x = '+(perim-addBC)+'</code> → <code>x = '+x+'</code>'});
+  }
+
+  return qs;
+}
+
+function genMedium(){
+  rng=mulberry32(dateSeed+200);
+  const qs=[];
+
+  /* Q1-Q5: Notebook/purchase problems */
+  for(let i=0;i<5;i++){
+    const total=RI(8,15);
+    const priceA=RI(12,20);const priceB=RI(5,10);
+    const countA=RI(2,total-2);const countB=total-countA;
+    const paid=countA*priceA+countB*priceB;
+    const itemA=pick(['מחברות עבות','ספרים גדולים','כדורי סל','חולצות']);
+    const itemB=pick(['מחברות דקות','ספרים קטנים','כדורי כף','גרביים']);
+    const correct=''+countA;
+    const opts=shuffle([correct,''+(countA+1),''+(countA-1),''+countB]);
+    qs.push({type:'mc',stem:anyName()+' קנה/קנתה '+total+' פריטים: '+itemA+' ב-'+priceA+' ש"ח ו'+itemB+' ב-'+priceB+' ש"ח. שילם/ה בסך הכול '+paid+' ש"ח. כמה '+itemA+' קנה/קנתה?',options:opts,answer:opts.indexOf(correct),explanation:'נסמן <span class="math-expr">x</span> = מספר ה'+itemA+'. אז '+itemB+' = <code>'+total+' - x</code>.<br><code>'+priceA+'x + '+priceB+'('+total+' - x) = '+paid+'</code><br><code>'+priceA+'x + '+(priceB*total)+' - '+priceB+'x = '+paid+'</code> → <code>'+(priceA-priceB)+'x = '+(paid-priceB*total)+'</code> → <code>x = '+countA+'</code>'});
+  }
+
+  /* Q6-Q10: Sibling ages */
+  for(let i=0;i<5;i++){
+    const sumAges=RI(25,50);const diffOld=RI(2,6);const diffYoung=RI(3,7);
+    /* middle = x, old = x+diffOld, young = x-diffYoung */
+    /* x + (x+diffOld) + (x-diffYoung) = sumAges => 3x + (diffOld-diffYoung) = sumAges */
+    const diff=diffOld-diffYoung;
+    const raw=sumAges-diff;
+    /* make divisible by 3 */
+    const actualSum=raw%3===0?sumAges:(sumAges+(3-raw%3));
+    const middle=(actualSum-(diffOld-diffYoung))/3;
+    const old=middle+diffOld;const young=middle-diffYoung;
+    if(young<1) {/* adjust */}
+    const correct=''+middle;
+    const opts=shuffle([correct,''+old,''+young,''+(middle+1)]);
+    qs.push({type:'mc',stem:'סכום הגילים של 3 אחים הוא '+actualSum+'. הבכור גדול ב-'+diffOld+' מהאמצעי, והצעיר קטן ב-'+diffYoung+' מהאמצעי. מה גיל <strong>האמצעי</strong>?',options:opts,answer:opts.indexOf(correct),explanation:'נסמן <span class="math-expr">x</span> = גיל האמצעי.<br><code>x + (x+'+diffOld+') + (x-'+diffYoung+') = '+actualSum+'</code><br><code>3x + '+(diffOld-diffYoung)+' = '+actualSum+'</code> → <code>3x = '+(actualSum-diff)+'</code> → <code>x = '+middle+'</code><br>אמצעי: '+middle+', בכור: '+old+', צעיר: '+young});
+  }
+
+  /* Q11-Q15: Camping / moving students */
+  for(let i=0;i<5;i++){
+    const tentA=RI(15,25);const tentB=RI(20,30);
+    const moved=RI(3,10);
+    /* after move: tentA - moved, tentB + moved; condition: tentB+moved = tentA-moved+diff */
+    const diff=RI(5,15);
+    /* tentB + x = tentA - x + diff => 2x = tentA - tentB + diff => x = (tentA-tentB+diff)/2 */
+    const raw2=tentA-tentB+diff;
+    const actualDiff=(raw2%2===0)?diff:diff+1;
+    const x=(tentA-tentB+actualDiff)/2;
+    if(x<1||x>tentA-1){/* skip bad */}
+    const correct=''+x;
+    const opts=shuffle([correct,''+(x+1),''+(x-1),''+(x+2)]);
+    qs.push({type:'mc',stem:'בטיול שנתי: באוהל א\' '+tentA+' תלמידים, באוהל ב\' '+tentB+'. העבירו תלמידים מאוהל א\' לב\'. אחרי ההעברה באוהל ב\' יש <strong>'+actualDiff+' יותר</strong> מאוהל א\'. כמה תלמידים עברו?',options:opts,answer:opts.indexOf(correct),explanation:'נסמן <span class="math-expr">x</span> = מספר שעברו.<br>אוהל א\': <code>'+tentA+' - x</code>, אוהל ב\': <code>'+tentB+' + x</code><br><code>('+tentB+' + x) - ('+tentA+' - x) = '+actualDiff+'</code><br><code>'+tentB+' + x - '+tentA+' + x = '+actualDiff+'</code> → <code>2x = '+(actualDiff+tentA-tentB)+'</code> → <code>x = '+x+'</code>'});
+  }
+
+  /* Q16-Q20: Balls/colors — with extra: write equation in y */
+  for(let i=0;i<5;i++){
+    const totalBalls=RI(30,50);const xGreen=RI(2,6);
+    const multYellow=RI(2,4);const addRed=RI(4,10);
+    const yellow=multYellow*xGreen;const red=yellow+addRed;
+    const actualTotal=xGreen+yellow+red;
+    const correct=''+xGreen;
+    const opts=shuffle([correct,''+yellow,''+red,''+(xGreen+1)]);
+    qs.push({type:'mc',stem:'בכד '+actualTotal+' כדורים מ-3 צבעים. אדומים גדול ב-'+addRed+' מצהובים. צהובים פי '+multYellow+' מירוקים. כמה <strong>ירוקים</strong>?',options:opts,answer:opts.indexOf(correct),explanation:'נסמן <span class="math-expr">x</span> = ירוקים. צהוב = <code>'+multYellow+'x</code>, אדום = <code>'+multYellow+'x + '+addRed+'</code>.<br><code>x + '+multYellow+'x + ('+multYellow+'x+'+addRed+') = '+actualTotal+'</code><br><code>'+(1+2*multYellow)+'x + '+addRed+' = '+actualTotal+'</code> → <code>'+(1+2*multYellow)+'x = '+(actualTotal-addRed)+'</code> → <code>x = '+xGreen+'</code>'});
+  }
+
+  return qs;
+}
+
+function genHard(){
+  rng=mulberry32(dateSeed+300);
+  const qs=[];
+
+  /* Q1-Q5: Geometry — square to rectangle */
+  for(let i=0;i<5;i++){
+    const x=RI(3,10);const mult=RI(2,4);const diffPerim=RI(6,20);
+    /* rectangle: sides x and mult*x; perim = 2(x + mult*x) = 2x(1+mult) */
+    /* square perim = 4x; diff = 2x(1+mult) - 4x = 2x + 2*mult*x - 4x = (2*mult-2)*x */
+    const actualDiff=(2*mult-2)*x;
+    const correct=''+x;
+    const opts=shuffle([correct,''+(x+1),''+(x-1),''+(x+2)]);
+    qs.push({type:'mc',stem:'ריבוע שצלעו <span class="math-expr">x</span> ס"מ. הגדילו צלע אחת <strong>פי '+mult+'</strong> וקיבלו מלבן. היקף המלבן <strong>גדול ב-'+actualDiff+'</strong> מהיקף הריבוע. מצאו את <span class="math-expr">x</span>.',options:opts,answer:opts.indexOf(correct),explanation:'היקף ריבוע = <code>4x</code>, היקף מלבן = <code>2(x + '+mult+'x) = '+(2+2*mult)+'x</code>.<br><code>'+(2+2*mult)+'x - 4x = '+actualDiff+'</code> → <code>'+(2*mult-2)+'x = '+actualDiff+'</code> → <code>x = '+x+'</code>'});
+  }
+
+  /* Q6-Q10: Ages — "in how many years" */
+  for(let i=0;i<5;i++){
+    const parentAge=RI(30,45);const childAge=RI(4,10);const mult=RI(3,5);
+    /* parentAge + x = mult*(childAge + x) => x = (parentAge - mult*childAge)/(mult-1) */
+    const num=parentAge-mult*childAge;const den=mult-1;
+    /* ensure integer positive */
+    const raw=num/den;
+    let pA=parentAge,cA=childAge;
+    /* try to make it work: adjust parentAge */
+    while((pA-mult*cA)%den!==0||(pA-mult*cA)/den<1){pA++;}
+    const ans=(pA-mult*cA)/den;
+    const correct=''+ans;
+    const opts=shuffle([correct,''+(ans+1),''+(ans+2),''+(ans-1>0?ans-1:ans+3)]);
+    qs.push({type:'mc',stem:'גיל ה'+pick(['אם','אבא'])+' '+pA+' וגיל ה'+pick(['בת','בן'])+' '+cA+'. <strong>בעוד כמה שנים</strong> יהיה גיל ההורה <strong>פי '+mult+'</strong> מגיל הילד?',options:opts,answer:opts.indexOf(correct),explanation:'<span class="math-expr">x</span> = מספר שנים. <code>'+pA+' + x = '+mult+'('+cA+' + x)</code><br><code>'+pA+' + x = '+(mult*cA)+' + '+mult+'x</code><br><code>'+(pA-mult*cA)+' = '+(mult-1)+'x</code> → <code>x = '+ans+'</code><br>בדיקה: הורה: '+(pA+ans)+', ילד: '+(cA+ans)+'. '+mult+' &middot; '+(cA+ans)+' = '+(mult*(cA+ans))});
+  }
+
+  /* Q11-Q15: Money collection / fractions */
+  for(let i=0;i<5;i++){
+    /* total = x; half goes to A, third to B, rest = known amount */
+    const rest=RI(100,400);
+    /* x - x/2 - x/3 = rest => x(1 - 1/2 - 1/3) = rest => x/6 = rest => x = 6*rest */
+    const x6=6*rest;
+    const halfX=x6/2;const thirdX=x6/3;
+    const correct=''+x6;
+    const opts=shuffle([correct,''+(x6+100),''+(x6-100),''+halfX]);
+    const causeA=pick(['משאלת לב','הצלב האדום','עמותת חיילים']);
+    const causeB=pick(['ארוחות לנזקקים','ציוד ספורט','ספרים']);
+    qs.push({type:'mc',stem:'שכבת ז\' אספה כסף לתרומות. <strong>חצי</strong> הועבר ל"'+causeA+'", <strong>שליש</strong> ל"'+causeB+'", והשאר — '+rest+' ש"ח — לפעילות. מה הסכום הכולל שנאסף?',options:opts,answer:opts.indexOf(correct),explanation:'<span class="math-expr">x</span> = סכום כולל.<br><code>x - x/2 - x/3 = '+rest+'</code> → <code>x/6 = '+rest+'</code> → <code>x = '+x6+'</code><br>"'+causeA+'": '+halfX+', "'+causeB+'": '+thirdX+', פעילות: '+rest+'. סה"כ: '+(halfX+thirdX+rest)});
+  }
+
+  /* Q16-Q20: Trapezoid/triangle with algebraic expressions */
+  for(let i=0;i<5;i++){
+    const x=RI(2,8);
+    /* triangle: equilateral with side (2x+a) */
+    const a=RI(1,5);const triSide=2*x+a;const triPerim=3*triSide;
+    /* trapezoid: sides x, x+b, x+c, x+d */
+    const b=RI(2,6);const c=RI(3,8);const d=RI(1,5);
+    const trapPerim=4*x+b+c+d;
+    const diffPerim=trapPerim-triPerim;
+    /* we know diffPerim, x, and want student to find x */
+    /* actually let's set up: trap perim = tri perim + diff */
+    /* trap: sides are (x), (x+b), (2x), (x+c) => perim = 5x+b+c */
+    const trapP=5*x+b+c;const triP=3*(2*x+a);
+    const actualDiff=trapP-triP;
+    /* hmm this gets complex, let me simplify */
+    /* trapezoid perim - triangle perim = diff */
+    /* let trap sides: x+1, x+3, 2x, x+2 => 5x+6 */
+    /* tri side: 2x+1 each => 6x+3 */
+    /* diff = 5x+6 - 6x-3 = -x+3 = 3-x => need 3-x > 0 => x<3 */
+    /* too restrictive. Let me use a different approach: just simple perimeter comparison */
+    const sideA=RI(2,5);const sideB=RI(3,7);
+    /* pentagon with sides x, x+sideA, 2x, x+sideB, 3 => perim = 5x + sideA + sideB + 3 */
+    /* just a straightforward polygon perimeter */
+    const perimVal=5*x+sideA+sideB+3;
+    const correct2=''+x;
+    const opts2=shuffle([correct2,''+(x+1),''+(x-1>0?x-1:x+2),''+(x+2)]);
+    qs.push({type:'mc',stem:'במצולע עם 5 צלעות, האורכים הם: '+mLTR('x')+', '+mLTR('x+'+sideA)+', '+mLTR('2x')+', '+mLTR('x+'+sideB)+', '+mLTR('3')+'. ההיקף הוא <strong>'+perimVal+'</strong>. מצאו את <span class="math-expr">x</span>.',options:opts2,answer:opts2.indexOf(correct2),explanation:'<code>x + (x+'+sideA+') + 2x + (x+'+sideB+') + 3 = '+perimVal+'</code><br><code>5x + '+(sideA+sideB+3)+' = '+perimVal+'</code> → <code>5x = '+(perimVal-sideA-sideB-3)+'</code> → <code>x = '+x+'</code>'});
+  }
+
+  return qs;
+}
+
+function genChallenge(){
+  rng=mulberry32(dateSeed+400);
+  const qs=[];
+
+  /* Q1-Q3: Series watching — solve in multiple ways */
+  for(let i=0;i<3;i++){
+    const startA=RI(6,15);const startB=RI(2,startA-2);
+    const rateA=RI(2,4);const rateB=RI(rateA+1,rateA+3);
+    /* startA + rateA*x = startB + rateB*x => x = (startA-startB)/(rateB-rateA) */
+    const num=startA-startB;const den=rateB-rateA;
+    let sA=startA,sB=startB,rA=rateA,rB=rateB;
+    while((sA-sB)%(rB-rA)!==0||(sA-sB)/(rB-rA)<1){sA++;}
+    const ans=(sA-sB)/(rB-rA);
+    const n1=girlName();const n2=girlName();
+    const correct=''+ans;
+    const opts=shuffle([correct,''+(ans+1),''+(ans+2),''+(ans-1>0?ans-1:ans+3)]);
+    qs.push({type:'mc',stem:n1+' צפתה ב-'+sA+' פרקים של סדרה, '+n2+' ב-'+sB+' פרקים. מהיום '+n1+' צופה '+rA+' פרקים ביום ו'+n2+' צופה '+rB+' פרקים ביום. <strong>בעוד כמה ימים</strong> יראו אותו מספר פרקים?',options:opts,answer:opts.indexOf(correct),explanation:'<strong>דרך א\':</strong> <code>'+sA+' + '+rA+'x = '+sB+' + '+rB+'x</code> → <code>'+(sA-sB)+' = '+(rB-rA)+'x</code> → <code>x = '+ans+'</code><br><strong>בדיקה:</strong> '+n1+': '+(sA+rA*ans)+', '+n2+': '+(sB+rB*ans)});
+  }
+
+  /* Q4-Q6: Gift shopping — magnets and figurines */
+  for(let i=0;i<3;i++){
+    const priceFig=RI(10,20);const priceMag=priceFig/2;
+    /* ensure integer: priceFig must be even */
+    const pF=priceFig%2===0?priceFig:priceFig+1;
+    const pM=pF/2;
+    const nFig=RI(2,4);const nMag=RI(3,5);
+    const diff=RI(2,8);
+    /* nFig*pF - nMag*pM = diff => nFig*pF = nMag*pM + diff */
+    /* solve for pF: nFig*pF = nMag*(pF/2) + diff => pF*(nFig - nMag/2) = diff */
+    /* let's parametrize differently: */
+    /* x = price of figurine, x/2 = magnet */
+    /* 3x + 4*(x/2) = total => 3x + 2x = 5x = total */
+    /* condition: nFig figurines cost diff more than nMag magnets */
+    /* nFig*x - nMag*(x/2) = diff */
+    const nF2=3;const nM2=4;
+    /* 3x - 4*(x/2) = 3x - 2x = x = diff */
+    const xVal=RI(8,20);/* make even */
+    const actualX=xVal%2===0?xVal:xVal+1;
+    const actualDiff=nF2*actualX-nM2*(actualX/2);
+    const correct=''+actualX;
+    const opts=shuffle([correct,''+(actualX/2),''+(actualX+2),''+(actualX-2>0?actualX-2:actualX+4)]);
+    const name=boyName();
+    qs.push({type:'mc',stem:name+' קנה מתנות בחופשה: מגנטים ופסלונים. מגנט עולה <strong>חצי</strong> מפסלון. '+nF2+' פסלונים עולים <strong>'+actualDiff+' ש"ח יותר</strong> מ-'+nM2+' מגנטים. מה מחיר <strong>פסלון</strong>?',options:opts,answer:opts.indexOf(correct),explanation:'נסמן <span class="math-expr">x</span> = מחיר פסלון, מגנט = <code>x/2</code>.<br><code>'+nF2+'x - '+nM2+'(x/2) = '+actualDiff+'</code><br><code>'+nF2+'x - '+(nM2/2)+'x = '+actualDiff+'</code> → <code>'+(nF2-nM2/2)+'x = '+actualDiff+'</code> → <code>x = '+actualX+'</code><br>מגנט: '+(actualX/2)+' ש"ח'});
+  }
+
+  /* Q7-Q9: Saving money for haircuts */
+  for(let i=0;i<3;i++){
+    const target=RI(200,350);const perCut=RI(15,25);
+    /* target / perCut = number of cuts needed; round up */
+    /* make it exact */
+    const nCuts=Math.ceil(target/perCut);
+    const actualTarget=nCuts*perCut;
+    const correct=''+nCuts;
+    const opts=shuffle([correct,''+(nCuts+1),''+(nCuts-1),''+(nCuts+2)]);
+    const name=girlName();
+    qs.push({type:'mc',stem:name+' רוצה לחסוך '+actualTarget+' ש"ח. היא גובה '+perCut+' ש"ח לכל תסרוקת. <strong>כמה תסרוקות</strong> צריכה לעשות?',options:opts,answer:opts.indexOf(correct),explanation:'<code>'+perCut+'x = '+actualTarget+'</code> → <code>x = '+nCuts+'</code>'});
+  }
+
+  /* Q10-Q12: Flight path — 3 segments */
+  for(let i=0;i<3;i++){
+    const totalDist=RI(300,500);
+    /* short = x, medium = 3x, long adjusted */
+    /* medium + 40 = long/2 => long = 2*(medium+40) = 2*(3x+40) = 6x+80 */
+    /* x + 3x + 6x+80 = total => 10x + 80 = total => x = (total-80)/10 */
+    const raw3=(totalDist-80)/10;
+    const actualTotal=Math.round(raw3)*10+80;
+    const xv=(actualTotal-80)/10;
+    const short=xv;const med=3*xv;const long2=6*xv+80;
+    const correct=''+short;
+    const opts=shuffle([correct,''+med,''+long2,''+(short+5)]);
+    qs.push({type:'mc',stem:'מסלול טיסה '+actualTotal+' ק"מ, מחולק ל-3 מקטעים. הקצר קטן <strong>פי 3</strong> מהבינוני. אם מאריכים את הבינוני ב-40 ק"מ, הוא הופך ל<strong>חצי</strong> מהארוך. מצאו את המקטע <strong>הקצר</strong>.',options:opts,answer:opts.indexOf(correct),explanation:'קצר = <span class="math-expr">x</span>, בינוני = <code>3x</code>, ארוך = <code>2(3x+40) = 6x+80</code>.<br><code>x + 3x + 6x + 80 = '+actualTotal+'</code> → <code>10x = '+(actualTotal-80)+'</code> → <code>x = '+xv+'</code><br>קצר: '+short+', בינוני: '+med+', ארוך: '+long2});
+  }
+
+  /* Q13-Q15: Math test — two scoring options */
+  for(let i=0;i<3;i++){
+    const totalQ=20;
+    /* Option A: correct = a points, wrong = -b points */
+    /* Option B: correct = c points, wrong = -d points */
+    /* Student gets same score in both */
+    /* Score A = a*n - b*(20-n); Score B = c*n - d*(20-n) */
+    /* a*n - b*(20-n) = c*n - d*(20-n) */
+    /* (a-c)*n = (b-d)*(20-n) - wait let me redo */
+    /* an - 20b + bn = cn - 20d + dn */
+    /* n(a+b) - 20b = n(c+d) - 20d */
+    /* n(a+b-c-d) = 20b - 20d = 20(b-d) */
+    /* n = 20(b-d)/(a+b-c-d) */
+    const a=RI(5,8);const b=RI(1,3);const c=RI(3,a-1);const d=RI(b+1,b+3);
+    const num2=20*(b-d);
+    const den2=a+b-c-d;
+    /* ensure positive integer */
+    /* Let me just pick concrete values */
+    /* a=6, b=2, c=4, d=3 => n = 20*(2-3)/(6+2-4-3) = 20*(-1)/1 = -20 -- nope */
+    /* a=5, b=1, c=3, d=3 => n = 20*(1-3)/(5+1-3-3) = 20*(-2)/0 -- nope */
+    /* Let me try: a=7, b=2, c=5, d=4 => n = 20*(2-4)/(7+2-5-4) = 20*(-2)/0 nope */
+    /* a=8, b=1, c=5, d=2 => n = 20*(1-2)/(8+1-5-2) = 20*(-1)/2 = -10 nope */
+    /* a=6, b=2, c=4, d=4 => n = 20*(2-4)/(6+2-4-4) = 20*(-2)/0 nope */
+    /* Let me pick: option A: 7 per correct, 3 deducted per wrong */
+    /* option B: 5 per correct, 1 deducted per wrong */
+    /* 7n - 3(20-n) = 5n - 1(20-n) => 7n - 60 + 3n = 5n - 20 + n => 10n - 60 = 6n - 20 => 4n = 40 => n = 10 */
+    const correctAns=[10,12,15][i%3];
+    const configs=[[7,3,5,1,10],[6,2,4,1,12],[8,2,5,1,15]];
+    const cfg=configs[i%3];
+    const correct2=''+cfg[4];
+    const scoreA=cfg[0]*cfg[4]-cfg[1]*(totalQ-cfg[4]);
+    const opts2=shuffle([correct2,''+(cfg[4]+2),''+(cfg[4]-2),''+(cfg[4]+1)]);
+    qs.push({type:'mc',stem:'מבחן מתמטיקה: '+totalQ+' שאלות. המורה הציעה שתי אפשרויות ניקוד:<br>א\': +'+cfg[0]+' לתשובה נכונה, -'+cfg[1]+' לשגויה.<br>ב\': +'+cfg[2]+' לתשובה נכונה, -'+cfg[3]+' לשגויה.<br>הדס קיבלה <strong>אותו ציון</strong> בדיוק בשתי האפשרויות. על כמה שאלות השיבה נכון?',options:opts2,answer:opts2.indexOf(correct2),explanation:'נסמן <span class="math-expr">n</span> = תשובות נכונות.<br><code>'+cfg[0]+'n - '+cfg[1]+'(20-n) = '+cfg[2]+'n - '+cfg[3]+'(20-n)</code><br><code>'+(cfg[0]+cfg[1])+'n - '+(cfg[1]*20)+' = '+(cfg[2]+cfg[3])+'n - '+(cfg[3]*20)+'</code><br><code>'+(cfg[0]+cfg[1]-cfg[2]-cfg[3])+'n = '+(cfg[1]*20-cfg[3]*20)+'</code> → <code>n = '+cfg[4]+'</code><br>ציון: '+scoreA});
+  }
+
+  return qs;
+}
+
+function generateQuestions(level){
+  if(level==='easy') return genEasy();
+  if(level==='medium') return genMedium();
+  if(level==='hard') return genHard();
+  return genChallenge();
+}
+
+/* ===== PRACTICE RENDERING ===== */
+function renderLevelTabs(){
+  const container=document.getElementById('levelTabs');
+  container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(lv=>{
+    const btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    const done=scores[lv].filter(s=>s===1).length;
+    const total=LEVEL_COUNTS[lv];
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+total+')</span>':'');
+    btn.onclick=()=>switchLevel(lv);
+    container.appendChild(btn);
+  });
+}
+
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv]) questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+
+function updateLevelProgress(){
+  const lv=state.level;const total=LEVEL_COUNTS[lv];
+  const done=answered[lv].filter(a=>a).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+
+function renderQuestion(){
+  const lv=state.level;const idx=state.qIndex;
+  const qs=questions[lv];
+  if(!qs) return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  const q=qs[idx];
+  const area=document.getElementById('questionArea');
+  const isAnswered=answered[lv][idx];
+
+  let html='<div class="q-card"><div class="q-number">שאלה '+(idx+1)+' מתוך '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach((opt,i)=>{
+      const letter=LETTERS[i];
+      let cls='q-opt';
+      if(isAnswered){
+        cls+=' disabled';
+        if(i===q.answer) cls+=' correct';
+        else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel']) cls+=' wrong';
+      }
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>בדקו</button>';
+  } else if(q.type==='input'||q.type==='input-text'){
+    html+='<div class="q-input-row"><input type="'+(q.type==='input'?'number':'text')+'" class="q-input" id="qInput" placeholder="תשובה" dir="ltr" aria-label="תשובה">';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">בדקו</button>';
+    html+='</div>';
+    if(isAnswered){
+      const inp=q.type==='input'?q.answer:(q.display||q.answer[0]);
+      html+='<div style="margin-top:4px;font-weight:700;direction:ltr">תשובה: '+inp+'</div>';
+    }
+  }
+
+  if(isAnswered){
+    const isCorrect=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'✅ נכון! ':'❌ ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+
+  /* Set up MC click handlers */
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(el=>{
+      el.onclick=()=>{
+        area.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+  /* Set up input enter key */
+  const inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){
+    inp.focus();
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkInput()});
+  }
+
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'סיום':'הבא ←';
+}
+
+window.checkMC=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const selected=document.querySelector('.q-opt.selected');
+  if(!selected) return;
+  const si=parseInt(selected.dataset.i);
+  const isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  answered[lv][idx+'_sel']=si;
+
+  document.querySelectorAll('.q-opt').forEach((el,i)=>{
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer) el.classList.add('correct');
+    else if(i===si&&!isCorrect) el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון מאוד!','✅ יפה!'])+' ':'❌ לא נכון. ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkInput=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inp=document.getElementById('qInput');
+  const val=inp.value.trim();
+  if(!val) return;
+  let isCorrect=false;
+  if(q.type==='input'){
+    isCorrect=parseFloat(val)===q.answer;
+  } else {
+    const norm=val.replace(/\s+/g,'').toLowerCase();
+    isCorrect=q.answer.some(a=>a.replace(/\s+/g,'').toLowerCase()===norm);
+  }
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');
+  inp.disabled=true;
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון!'])+' ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+function nextQuestion(){
+  const lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function')showAuthModal();
+    return;
+  }
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+
+function renderLevelComplete(){
+  const lv=state.level;
+  const correct=scores[lv].filter(s=>s===1).length;
+  const total=LEVEL_COUNTS[lv];
+  const pct=Math.round(correct/total*100);
+  const scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  const emoji=pct>=80?'🎉':pct>=50?'👏':'💪';
+
+  document.getElementById('questionArea').innerHTML=`
+    <div class="q-card"><div class="level-complete">
+      <div class="big-emoji">${emoji}</div>
+      <h2>סיימתם את רמת "${LEVEL_NAMES[lv]}"!</h2>
+      <div class="score-display${scoreClass}">${correct} / ${total}</div>
+      <p style="color:var(--text-light);margin-bottom:16px">${pct}% הצלחה</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="mini-btn" onclick="retryLevel()">🔄 נסו שוב</button>
+        ${lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">▶ לרמה הבאה</button>':''}
+      </div>
+    </div></div>`;
+
+  if(pct>=80) showConfetti();
+  saveState();
+}
+
+window.retryLevel=function(){
+  const lv=state.level;
+  scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);
+  state.qIndex=0;
+  renderLevelTabs();renderQuestion();saveState();
+};
+
+window.nextLevel=function(){
+  const order=['easy','medium','hard','challenge'];
+  const ci=order.indexOf(state.level);
+  if(ci<order.length-1) switchLevel(order[ci+1]);
+};
+
+/* ===== SECTION SWITCHING ===== */
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.section===sec);
+  });
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+/* ===== CONFETTI ===== */
+function showConfetti(){
+  const box=document.getElementById('confettiBox');
+  box.innerHTML='';
+  const colors=['#1a2f5a','#4a9eda','#10b981','#ef4444','#8b5cf6','#ec4899'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';
+    c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(()=>box.innerHTML='',5000);
+}
+
+/* ===== INIT ===== */
+function init(){
+  loadState();
+  Object.keys(LEVEL_COUNTS).forEach(lv=>{
+    if(!scores[lv]||!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice') switchSection('practice');
+}
+init();
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

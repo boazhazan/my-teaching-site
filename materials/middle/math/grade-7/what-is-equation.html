@@ -1,0 +1,1348 @@
+<!--
+  Title: מהי משוואה? הצבה ובדיקה
+  Unit: משוואות
+  Subject: מתמטיקה
+  Grade: ז׳
+  Lesson: 1
+  Tags: אלגברה, משוואות, הצבה, בדיקה
+  Icon: ⚖️
+  Description: מהי משוואה? איך בודקים אם מספר הוא פתרון? תרגול הצבה ובדיקה ב-4 רמות קושי
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>מהי משוואה? הצבה ובדיקה | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#1a2f5a;--primary-dark:#0f1d3d;--primary-light:#dbeafe;
+  --accent:#4a9eda;--accent-dark:#2d7ab8;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+
+/* Top bar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--accent);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Section toggle */
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+
+/* Container */
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+
+/* ===== TEACHING SECTION ===== */
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
+.step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+
+/* Balance scale SVG */
+.scale-svg{display:block;margin:12px auto;max-width:320px}
+
+/* Interactive elements inside steps */
+.mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.mini-table th,.mini-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:1rem}
+.mini-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.mini-table td{background:var(--bg)}
+.mini-input{width:60px;padding:6px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:1rem;font-family:inherit;font-weight:700;transition:.3s}
+.mini-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(26,47,90,.15)}
+.mini-input.correct{border-color:var(--success);background:#ecfdf5}
+.mini-input.wrong{border-color:var(--error);background:#fef2f2}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.reveal{display:none;animation:fadeIn .5s ease}
+.reveal.show{display:block}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+
+/* Multi-select quiz */
+.quiz-multi{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-multi-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.quiz-multi-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-multi-opt.checked{border-color:var(--accent);background:#e0f2fe;font-weight:700}
+.quiz-multi-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-multi-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.quiz-multi-opt .checkbox{width:22px;height:22px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.8rem;transition:.25s}
+.quiz-multi-opt.checked .checkbox{background:var(--accent);border-color:var(--accent);color:#fff}
+
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+
+/* Step nav */
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== PRACTICE SECTION ===== */
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-stem code,.q-stem .expr{font-size:1.1em}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;transition:.25s}
+.q-opt.selected .q-opt-letter{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-opt.correct .q-opt-letter{background:var(--success);color:#fff;border-color:var(--success)}
+.q-opt.wrong .q-opt-letter{background:var(--error);color:#fff;border-color:var(--error)}
+
+/* Multi-select options in practice */
+.q-multi-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-multi-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-multi-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-multi-opt.checked{border-color:var(--accent);background:#e0f2fe;font-weight:700}
+.q-multi-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-multi-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-multi-opt.disabled{cursor:default;opacity:.85}
+.q-multi-opt .q-checkbox{width:22px;height:22px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.8rem;transition:.25s}
+.q-multi-opt.checked .q-checkbox{background:var(--accent);border-color:var(--accent);color:#fff}
+.q-multi-opt.correct .q-checkbox{background:var(--success);border-color:var(--success);color:#fff}
+
+.q-input-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-input{width:120px;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1.1rem;font-family:inherit;font-weight:700;text-align:center;transition:.3s;direction:ltr}
+.q-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(26,47,90,.15)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+
+.q-check-btn{padding:10px 28px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;box-shadow:var(--shadow)}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.92rem;animation:fadeIn .3s}
+.q-feedback.correct{background:#ecfdf5;border-right:4px solid var(--success);color:#065f46}
+.q-feedback.wrong{background:#fef2f2;border-right:4px solid var(--error);color:#991b1b}
+
+.q-nav{display:flex;justify-content:space-between;margin-top:16px}
+.q-nav-btn{padding:10px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Level complete */
+.level-complete{text-align:center;padding:24px;animation:fadeIn .5s}
+.level-complete .big-emoji{font-size:4rem;margin-bottom:12px}
+.level-complete h2{font-size:1.4rem;color:var(--primary-dark);margin-bottom:8px}
+.level-complete .score-display{font-size:1.8rem;font-weight:800;color:var(--success);margin-bottom:16px}
+.level-complete .score-display.medium-score{color:#f59e0b}
+.level-complete .score-display.low-score{color:var(--error)}
+
+/* Celebration confetti */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{
+  0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}
+  100%{transform:translateY(105vh) rotate(720deg) scale(.3);opacity:0}
+}
+
+/* Print button */
+.print-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer;font-size:1rem;box-shadow:var(--shadow);transition:.25s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.print-btn:hover{background:var(--primary-dark);transform:scale(1.1)}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+/* Responsive */
+@media(max-width:600px){
+  .container{padding:0 10px 30px}
+  .step-card,.q-card{padding:18px 14px}
+  .step-title{font-size:1.15rem}
+  .step-summary-grid{grid-template-columns:1fr}
+  .section-toggle{max-width:280px;margin:12px auto}
+  .section-btn{font-size:.88rem;padding:8px 14px}
+  .q-opt{padding:10px 12px;font-size:.9rem}
+  .topbar-title{font-size:.9rem}
+}
+
+/* Print */
+@media print{
+  .topbar,.section-toggle,.step-nav,.q-nav,.print-btn,.level-tabs,.confetti-container,.q-check-btn{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .step-card,.q-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+  .container{max-width:100%}
+  .q-feedback{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">⚖️ כיתה ז׳ — מהי משוואה? הצבה ובדיקה</span>
+  <div style="display:flex;align-items:center;gap:10px"><button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button><a href="../../../../materials.html">← חזרה לדף החומרים</a></div>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+
+<!-- ===== LEARNING SECTION ===== -->
+<section id="learnSection">
+  <div class="step-progress">
+    <div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div>
+    <div class="step-progress-text" id="stepText"></div>
+  </div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+
+<!-- ===== PRACTICE SECTION ===== -->
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress">
+    <div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div>
+    <div class="level-progress-text" id="levelText"></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+
+</div>
+
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const today=new Date();const dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+let rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(arr){return arr[Math.floor(R()*arr.length)]}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const boyNames=["דני","יואב","עמית","אורי","נועם","גיא","איתי","רון","תומר","עידו"];
+const girlNames=["מיכל","נועה","שירה","תמר","רונית","יעל","דנה","אורית","הילה","ליאת"];
+function boyName(){return pick(boyNames)}
+function girlName(){return pick(girlNames)}
+function anyName(){return R()>.5?boyName():girlName()}
+
+const LETTERS=['א','ב','ג','ד'];
+
+/* ===== STATE ===== */
+let state={section:'learn',step:0,level:'easy',qIndex:0};
+let scores={easy:[],medium:[],hard:[],challenge:[]};
+let answered={easy:[],medium:[],hard:[],challenge:[]};
+let questions={easy:null,medium:null,hard:null,challenge:null};
+const LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+const LEVEL_NAMES={easy:'קל',medium:'בינוני',hard:'קשה',challenge:'אתגר'};
+const TOTAL_STEPS=7;
+
+/* No localStorage for quiz state (stateless) — but use dateSeed PRNG */
+
+/* ===== TEACHING SECTION ===== */
+const steps=[
+/* Step 0: What is an equation? */
+{title:'⚖️ מהי משוואה?', render(){return `
+<div class="rule-box">📌 משוואה היא <strong>משפט מתמטי</strong> עם סימן <strong>שוויון (=)</strong> שבו יש <strong>נעלם</strong> (אות)</div>
+<p>בואו נבדוק — איזה מהביטויים הבאים הוא משוואה?</p>
+<div class="example">
+<p><span class="math-expr">3 + 5 = 8</span> — זו <strong>לא</strong> משוואה! אין כאן נעלם (אות).</p>
+<p><span class="math-expr">x + 5 = 8</span> — <strong>זו משוואה!</strong> יש סימן = ויש נעלם <span class="math-expr">x</span>.</p>
+<p><span class="math-expr">2x > 10</span> — זו <strong>לא</strong> משוואה! אין סימן = (יש סימן &gt;).</p>
+</div>
+<p>חשבו על <strong>מאזניים מאוזנים</strong> — צד שמאל שווה בדיוק לצד ימין:</p>
+<svg class="scale-svg" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
+  <line x1="160" y1="30" x2="160" y2="80" stroke="#1a2f5a" stroke-width="3"/>
+  <polygon points="160,25 155,35 165,35" fill="#1a2f5a"/>
+  <line x1="50" y1="80" x2="270" y2="80" stroke="#1a2f5a" stroke-width="3"/>
+  <rect x="30" y="80" width="100" height="50" rx="8" fill="#dbeafe" stroke="#1a2f5a" stroke-width="2"/>
+  <text x="80" y="112" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="700" font-size="18" fill="#1a2f5a" direction="ltr">x + 5</text>
+  <rect x="190" y="80" width="100" height="50" rx="8" fill="#dbeafe" stroke="#1a2f5a" stroke-width="2"/>
+  <text x="240" y="112" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="700" font-size="18" fill="#1a2f5a">8</text>
+  <text x="160" y="108" text-anchor="middle" font-family="Rubik,sans-serif" font-weight="800" font-size="24" fill="#4a9eda">=</text>
+  <rect x="110" y="140" width="100" height="20" rx="6" fill="#1a2f5a"/>
+  <polygon points="160,160 140,195 180,195" fill="#1a2f5a"/>
+</svg>
+<p><strong>תרגיל:</strong> סמנו אילו מהבאים הן <strong>משוואות</strong>:</p>
+<div class="quiz-multi" id="s0opts"></div>
+<div style="text-align:center;margin-top:8px"><button class="mini-btn" id="s0check" onclick="checkStep0()">בדקו</button></div>
+<div id="s0fb"></div>
+`},init(){
+  const items=[
+    {text:'<span class="math-expr">y + 3 = 10</span>',isEq:true},
+    {text:'<span class="math-expr">5 + 7 = 12</span>',isEq:false},
+    {text:'<span class="math-expr">3a - 1</span>',isEq:false},
+    {text:'<span class="math-expr">2x = 14</span>',isEq:true}
+  ];
+  const container=document.getElementById('s0opts');
+  container.innerHTML='';
+  items.forEach((item,i)=>{
+    const d=document.createElement('div');
+    d.className='quiz-multi-opt';
+    d.dataset.idx=i;
+    d.dataset.eq=item.isEq?'1':'0';
+    d.innerHTML='<span class="checkbox"></span><span>'+item.text+'</span>';
+    d.onclick=()=>{d.classList.toggle('checked');d.querySelector('.checkbox').textContent=d.classList.contains('checked')?'✓':''};
+    container.appendChild(d);
+  });
+}},
+
+/* Step 1: Basic concepts — sides, unknown, solution */
+{title:'📖 מושגים בסיסיים', render(){return `
+<p>לכל משוואה יש שלושה מרכיבים חשובים:</p>
+<div class="example" style="text-align:center;font-size:1.2rem;line-height:2.2">
+  <div style="position:relative;display:inline-block;direction:ltr">
+    <span style="color:var(--accent);font-weight:800;border-bottom:3px solid var(--accent)">x + 5</span>
+    <span style="font-weight:800;font-size:1.4rem;margin:0 12px">=</span>
+    <span style="color:var(--primary);font-weight:800;border-bottom:3px solid var(--primary)">12</span>
+  </div>
+  <div style="font-size:.85rem;margin-top:4px">
+    <span style="color:var(--accent);font-weight:700">↑ אגף ימין</span>
+    <span style="margin:0 20px"></span>
+    <span style="color:var(--primary);font-weight:700">↑ אגף שמאל</span>
+  </div>
+</div>
+<div class="highlight">
+<strong>אגף ימין:</strong> הביטוי שנמצא <strong>מימין</strong> לסימן השוויון<br>
+<strong>אגף שמאל:</strong> הביטוי שנמצא <strong>משמאל</strong> לסימן השוויון<br>
+<strong>הנעלם:</strong> האות שאנחנו מחפשים את ערכה (בדרך כלל <span class="math-expr">x</span>, אבל יכולה להיות כל אות)<br>
+<strong>פתרון:</strong> המספר שאם נציב אותו במקום הנעלם, נקבל משפט <strong>נכון</strong>
+</div>
+<p><strong>תרגיל:</strong> במשוואה <span class="math-expr">3a + 2 = 17</span> — מהו הנעלם?</p>
+<div class="quiz-options" id="s1opts"></div>
+<div id="s1fb"></div>
+`},init(){
+  const opts=shuffle([
+    {text:'<span class="math-expr">a</span>',correct:true},
+    {text:'<span class="math-expr">3</span>',correct:false},
+    {text:'<span class="math-expr">17</span>',correct:false},
+    {text:'<span class="math-expr">2</span>',correct:false}
+  ]);
+  const container=document.getElementById('s1opts');
+  container.innerHTML='';
+  opts.forEach((o,i)=>{
+    const d=document.createElement('div');
+    d.className='quiz-opt';
+    d.innerHTML=o.text;
+    d.onclick=()=>{
+      container.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){
+        d.classList.add('correct-answer');
+        document.getElementById('s1fb').innerHTML='<div class="feedback-inline ok">✅ נכון! הנעלם הוא האות <span class="math-expr">a</span> — זה מה שאנחנו מחפשים.</div>';
+      } else {
+        d.classList.add('wrong-answer');
+        document.getElementById('s1fb').innerHTML='<div class="feedback-inline err">❌ לא. הנעלם הוא <strong>האות</strong> שאנחנו מחפשים את ערכה.</div>';
+      }
+    };
+    container.appendChild(d);
+  });
+}},
+
+/* Step 2: Substitution — how to check if a number is a solution */
+{title:'🔍 הצבה — איך בודקים?', render(){return `
+<div class="rule-box">📌 כדי לבדוק אם מספר הוא <strong>פתרון</strong> — מציבים אותו במקום הנעלם ובודקים אם שני האגפים <strong>שווים</strong></div>
+<p><strong>דוגמה:</strong> האם <span class="math-expr">x = 3</span> פתרון של <span class="math-expr">x + 5 = 8</span>?</p>
+<div id="sub_demo">
+  <button class="mini-btn accent" onclick="showSubDemo()">▶ הראו צעד אחר צעד</button>
+</div>
+<div class="reveal" id="sub_demo_reveal">
+<div class="example" style="direction:ltr;text-align:center;font-size:1.1rem;line-height:2.2">
+  <div style="animation:fadeIn .5s"><code>x + 5 = 8</code></div>
+  <div style="animation:fadeIn .5s .3s both">↓ נציב <span class="math-expr">x = 3</span></div>
+  <div style="animation:fadeIn .5s .6s both"><code>3 + 5 = 8</code></div>
+  <div style="animation:fadeIn .5s .9s both">↓ נחשב את אגף ימין</div>
+  <div style="animation:fadeIn .5s 1.2s both"><code>8 = 8</code> ✅</div>
+</div>
+<div class="success-box">שני האגפים שווים! <span class="math-expr">x = 3</span> <strong>הוא</strong> פתרון.</div>
+</div>
+<p style="margin-top:16px"><strong>דוגמה נגדית:</strong> האם <span class="math-expr">x = 4</span> פתרון של <span class="math-expr">x + 5 = 8</span>?</p>
+<div class="example" style="direction:ltr;text-align:center;font-size:1.05rem;line-height:2">
+  <div><code>x + 5 = 8</code></div>
+  <div>↓ נציב <span class="math-expr">x = 4</span></div>
+  <div><code>4 + 5 = 9</code></div>
+  <div>אבל <code>9 ≠ 8</code> ❌</div>
+</div>
+<div class="warning">האגפים <strong>לא</strong> שווים! <span class="math-expr">x = 4</span> <strong>לא</strong> פתרון.</div>
+<p style="margin-top:16px"><strong>תורכם:</strong> האם <span class="math-expr">x = 2</span> פתרון של <span class="math-expr">3x + 1 = 7</span>?</p>
+<div class="quiz-options" id="s2opts"></div>
+<div id="s2fb"></div>
+`},init(){
+  const opts=[
+    {text:'כן — כי <span class="math-expr">3·2 + 1 = 7</span>',correct:true},
+    {text:'לא — כי <span class="math-expr">3·2 + 1 = 5</span>',correct:false},
+    {text:'לא — כי <span class="math-expr">3·2 + 1 = 8</span>',correct:false},
+    {text:'כן — כי <span class="math-expr">2 + 1 = 3</span>',correct:false}
+  ];
+  const container=document.getElementById('s2opts');
+  container.innerHTML='';
+  opts.forEach((o,i)=>{
+    const d=document.createElement('div');
+    d.className='quiz-opt';
+    d.innerHTML=o.text;
+    d.onclick=()=>{
+      container.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){
+        d.classList.add('correct-answer');
+        document.getElementById('s2fb').innerHTML='<div class="feedback-inline ok">✅ נכון! <span class="math-expr">3·2 + 1 = 6 + 1 = 7</span>, ו-<span class="math-expr">7 = 7</span> ✓</div>';
+      } else {
+        d.classList.add('wrong-answer');
+        document.getElementById('s2fb').innerHTML='<div class="feedback-inline err">❌ נסו שוב. הציבו <span class="math-expr">x = 2</span>: <span class="math-expr">3·2 + 1 = ?</span></div>';
+      }
+    };
+    container.appendChild(d);
+  });
+}},
+
+/* Step 3: Substitution with different operations */
+{title:'🧮 הצבה עם פעולות שונות', render(){return `
+<p>הצבה עובדת גם עם <strong>כפל, חילוק ושברים</strong>:</p>
+<div class="example">
+<p><strong>דוגמה 1:</strong> האם <span class="math-expr">x = 4</span> פתרון של <span class="math-expr">4x = 16</span>?</p>
+<p style="direction:ltr;text-align:center"><code>4 · 4 = 16</code> → <code>16 = 16</code> ✅ כן!</p>
+</div>
+<div class="example">
+<p><strong>דוגמה 2:</strong> האם <span class="math-expr">x = 10</span> פתרון של <span class="math-expr">x/2 = 5</span>?</p>
+<p style="direction:ltr;text-align:center"><code>10/2 = 5</code> → <code>5 = 5</code> ✅ כן!</p>
+</div>
+<div class="example">
+<p><strong>דוגמה 3:</strong> האם <span class="math-expr">a = 14</span> פתרון של <span class="math-expr">(a - 2)/3 = 4</span>?</p>
+<p style="direction:ltr;text-align:center"><code>(14 - 2)/3 = 12/3 = 4</code> → <code>4 = 4</code> ✅ כן!</p>
+</div>
+<p><strong>תורכם — 2 שאלות:</strong></p>
+<p>1. האם <span class="math-expr">x = 6</span> פתרון של <span class="math-expr">5x = 30</span>?</p>
+<div class="quiz-options" id="s3opts1"></div>
+<div id="s3fb1"></div>
+<div class="reveal" id="s3reveal1">
+<p style="margin-top:12px">2. האם <span class="math-expr">x = 9</span> פתרון של <span class="math-expr">x/3 = 4</span>?</p>
+<div class="quiz-options" id="s3opts2"></div>
+<div id="s3fb2"></div>
+</div>
+`},init(){
+  /* Q1 */
+  const opts1=[{text:'כן',correct:true},{text:'לא',correct:false}];
+  const c1=document.getElementById('s3opts1');c1.innerHTML='';
+  opts1.forEach(o=>{const d=document.createElement('div');d.className='quiz-opt';d.innerHTML=o.text;d.onclick=()=>{c1.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));if(o.correct){d.classList.add('correct-answer');document.getElementById('s3fb1').innerHTML='<div class="feedback-inline ok">✅ נכון! <span class="math-expr">5·6 = 30</span> ✓</div>';document.getElementById('s3reveal1').classList.add('show')}else{d.classList.add('wrong-answer');document.getElementById('s3fb1').innerHTML='<div class="feedback-inline err">❌ נסו: <span class="math-expr">5·6 = ?</span></div>'}};c1.appendChild(d)});
+  /* Q2 */
+  setTimeout(()=>{
+    const c2=document.getElementById('s3opts2');if(!c2)return;c2.innerHTML='';
+    const opts2=[{text:'לא',correct:true},{text:'כן',correct:false}];
+    opts2.forEach(o=>{const d=document.createElement('div');d.className='quiz-opt';d.innerHTML=o.text;d.onclick=()=>{c2.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));if(o.correct){d.classList.add('correct-answer');document.getElementById('s3fb2').innerHTML='<div class="feedback-inline ok">✅ נכון! <span class="math-expr">9/3 = 3 ≠ 4</span>, אז <span class="math-expr">x = 9</span> לא פתרון.</div>'}else{d.classList.add('wrong-answer');document.getElementById('s3fb2').innerHTML='<div class="feedback-inline err">❌ חשבו: <span class="math-expr">9/3 = ?</span> האם זה 4?</div>'}};c2.appendChild(d)});
+  },100);
+}},
+
+/* Step 4: Finding all solutions from a list */
+{title:'🔎 מציאת פתרונות מרשימה', render(){return `
+<p>לפעמים נותנים לנו <strong>רשימת מספרים</strong> ושואלים: אילו מהם פתרונות?</p>
+<div class="example">
+<p><strong>דוגמה:</strong> אילו מהמספרים <span class="math-expr">1, 3, 5, 9</span> הם פתרונות של <span class="math-expr">7 + 3y = 16</span>?</p>
+<table class="mini-table">
+<tr><th>y</th><th style="direction:ltr">7 + 3y</th><th>= 16?</th></tr>
+<tr><td>1</td><td style="direction:ltr">7 + 3 = 10</td><td>❌</td></tr>
+<tr><td>3</td><td style="direction:ltr">7 + 9 = 16</td><td>✅</td></tr>
+<tr><td>5</td><td style="direction:ltr">7 + 15 = 22</td><td>❌</td></tr>
+<tr><td>9</td><td style="direction:ltr">7 + 27 = 34</td><td>❌</td></tr>
+</table>
+<p>רק <span class="math-expr">y = 3</span> הוא פתרון!</p>
+</div>
+<div class="highlight">💡 <strong>שימו לב:</strong> למשוואה ממעלה ראשונה יש בדרך כלל <strong>פתרון אחד בלבד</strong>!</div>
+<p><strong>תרגיל:</strong> אילו מהמספרים <span class="math-expr">0, 3, 4, 5</span> הם פתרונות של <span class="math-expr">15 - 3b = 2b</span>?</p>
+<div class="quiz-multi" id="s4opts"></div>
+<div style="text-align:center;margin-top:8px"><button class="mini-btn" id="s4check" onclick="checkStep4()">בדקו</button></div>
+<div id="s4fb"></div>
+`},init(){
+  const items=[
+    {text:'<span class="math-expr">b = 0</span> → <span class="math-expr">15 - 0 = 0</span>?',isSol:false},
+    {text:'<span class="math-expr">b = 3</span> → <span class="math-expr">15 - 9 = 6</span>?',isSol:true},
+    {text:'<span class="math-expr">b = 4</span> → <span class="math-expr">15 - 12 = 8</span>?',isSol:false},
+    {text:'<span class="math-expr">b = 5</span> → <span class="math-expr">15 - 15 = 10</span>?',isSol:false}
+  ];
+  const container=document.getElementById('s4opts');container.innerHTML='';
+  items.forEach((item,i)=>{
+    const d=document.createElement('div');
+    d.className='quiz-multi-opt';
+    d.dataset.sol=item.isSol?'1':'0';
+    d.innerHTML='<span class="checkbox"></span><span>'+item.text+'</span>';
+    d.onclick=()=>{d.classList.toggle('checked');d.querySelector('.checkbox').textContent=d.classList.contains('checked')?'✓':''};
+    container.appendChild(d);
+  });
+}},
+
+/* Step 5: Equations with multiple / no solutions */
+{title:'🌀 כמה פתרונות יש?', render(){return `
+<p>לא כל המשוואות מתנהגות אותו דבר!</p>
+<div class="example">
+<p><strong>שני פתרונות:</strong> <span class="math-expr">x(2 - x) = 0</span></p>
+<p>→ <span class="math-expr">x = 0</span> או <span class="math-expr">x = 2</span> (שני מספרים מאפסים את המכפלה)</p>
+</div>
+<div class="example">
+<p><strong>אין פתרון:</strong> <span class="math-expr">5 + 3x - 3x = 8</span></p>
+<p>→ נפשט: <span class="math-expr">5 = 8</span> — זה אף פעם לא נכון! סימון: <strong style="font-size:1.3rem">Ø</strong></p>
+</div>
+<div class="example">
+<p><strong>כל מספר הוא פתרון:</strong> <span class="math-expr">x + 1 = x + 1</span></p>
+<p>→ זה תמיד נכון, לכל ערך של <span class="math-expr">x</span>! סימון: <strong style="font-size:1.3rem">ℝ</strong></p>
+</div>
+<p><strong>תרגיל:</strong> סווגו כל משוואה:</p>
+<div id="s5quiz"></div>
+<div id="s5fb"></div>
+`},init(){
+  const eqs=[
+    {eq:'<span class="math-expr">2x = 10</span>',type:'one',label:'פתרון אחד'},
+    {eq:'<span class="math-expr">x(x - 3) = 0</span>',type:'two',label:'שני פתרונות'},
+    {eq:'<span class="math-expr">x + 2 = x + 5</span>',type:'none',label:'אין פתרון (Ø)'}
+  ];
+  const container=document.getElementById('s5quiz');container.innerHTML='';
+  let correctCount=0;
+  eqs.forEach((e,i)=>{
+    const div=document.createElement('div');
+    div.style.cssText='margin-bottom:12px;padding:12px;background:var(--bg-soft);border-radius:var(--radius-sm);border:1px solid var(--border)';
+    div.innerHTML='<p style="margin-bottom:8px">'+e.eq+'</p><div class="quiz-options" id="s5q'+i+'"></div><div id="s5qfb'+i+'"></div>';
+    container.appendChild(div);
+    setTimeout(()=>{
+      const optsContainer=document.getElementById('s5q'+i);
+      const options=['פתרון אחד','שני פתרונות','אין פתרון (Ø)'];
+      options.forEach(opt=>{
+        const d=document.createElement('div');d.className='quiz-opt';d.style.padding='8px 12px';d.innerHTML=opt;
+        d.onclick=()=>{
+          optsContainer.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+          if(opt===e.label){d.classList.add('correct-answer');document.getElementById('s5qfb'+i).innerHTML='<div class="feedback-inline ok">✅ נכון!</div>';correctCount++;if(correctCount===3)document.getElementById('s5fb').innerHTML='<div class="success-box" style="margin-top:12px">🌟 מעולה! סיווגתם נכון את כל שלוש המשוואות!</div>'}
+          else{d.classList.add('wrong-answer');document.getElementById('s5qfb'+i).innerHTML='<div class="feedback-inline err">❌ נסו שוב</div>'}
+        };
+        optsContainer.appendChild(d);
+      });
+    },50);
+  });
+}},
+
+/* Step 6: Summary */
+{title:'🏆 סיכום ומעבר לתרגול', render(){return `
+<p style="font-size:1.1rem;text-align:center;margin-bottom:20px">בשיעור הזה למדנו:</p>
+<div class="step-summary-grid">
+  <div class="summary-item">
+    <div class="s-icon">⚖️</div>
+    <div class="s-title">משוואה</div>
+    <div class="s-text">משפט מתמטי עם = ונעלם</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">📖</div>
+    <div class="s-title">אגפים ונעלם</div>
+    <div class="s-text">אגף ימין, אגף שמאל, הנעלם הוא האות</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🔍</div>
+    <div class="s-title">הצבה ובדיקה</div>
+    <div class="s-text">מציבים מספר ובודקים אם האגפים שווים</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🌀</div>
+    <div class="s-title">סוגי פתרונות</div>
+    <div class="s-text">פתרון אחד, שניים, אין (Ø), כולם (ℝ)</div>
+  </div>
+</div>
+<table class="mini-table" style="margin-top:16px;font-size:.9rem">
+<tr><th>מושג</th><th>דוגמה</th></tr>
+<tr><td>משוואה</td><td style="direction:ltr"><code>x + 5 = 8</code></td></tr>
+<tr><td>אגף ימין</td><td style="direction:ltr"><code>x + 5</code></td></tr>
+<tr><td>אגף שמאל</td><td style="direction:ltr"><code>8</code></td></tr>
+<tr><td>נעלם</td><td style="direction:ltr"><code>x</code></td></tr>
+<tr><td>פתרון</td><td style="direction:ltr"><code>x = 3</code></td></tr>
+</table>
+<div class="success-box" style="text-align:center;font-size:1.1rem;margin-top:20px">
+  <p>🌟 עכשיו אתם מוכנים לתרגול!</p>
+  <p>4 רמות קושי — 75 שאלות מחכות לכם</p>
+  <button class="mini-btn accent" style="margin-top:12px;font-size:1rem;padding:12px 32px" onclick="switchSection('practice')">!בואו נתרגל ←</button>
+</div>
+`}}
+];
+
+function renderStep(idx){
+  state.step=idx;
+  const s=steps[idx];
+  const fill=((idx+1)/TOTAL_STEPS*100).toFixed(0);
+  document.getElementById('stepFill').style.width=fill+'%';
+  document.getElementById('stepText').textContent='שלב '+(idx+1)+' מתוך '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+s.title+'</div>'+s.render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'לתרגול ←':'הבא ←';
+  if(s.init) s.init();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+/* Step interactive handlers */
+window.showSubDemo=function(){document.getElementById('sub_demo').style.display='none';document.getElementById('sub_demo_reveal').classList.add('show')};
+
+window.checkStep0=function(){
+  const opts=document.querySelectorAll('#s0opts .quiz-multi-opt');
+  let allCorrect=true;
+  opts.forEach(d=>{
+    const isChecked=d.classList.contains('checked');
+    const shouldBe=d.dataset.eq==='1';
+    if(isChecked===shouldBe){d.classList.add('correct-answer');d.classList.remove('wrong-answer')}
+    else{d.classList.add('wrong-answer');d.classList.remove('correct-answer');allCorrect=false}
+    d.onclick=null;
+  });
+  document.getElementById('s0check').disabled=true;
+  document.getElementById('s0fb').innerHTML=allCorrect?'<div class="feedback-inline ok">✅ מצוין! זיהיתם נכון — משוואה דורשת סימן = <strong>ו</strong>נעלם.</div>':'<div class="feedback-inline err">❌ לא לגמרי. משוואה חייבת גם סימן <strong>=</strong> וגם <strong>נעלם</strong> (אות).</div>';
+};
+
+window.checkStep4=function(){
+  const opts=document.querySelectorAll('#s4opts .quiz-multi-opt');
+  let allCorrect=true;
+  opts.forEach(d=>{
+    const isChecked=d.classList.contains('checked');
+    const shouldBe=d.dataset.sol==='1';
+    if(isChecked===shouldBe){d.classList.add('correct-answer');d.classList.remove('wrong-answer')}
+    else{d.classList.add('wrong-answer');d.classList.remove('correct-answer');allCorrect=false}
+    d.onclick=null;
+  });
+  document.getElementById('s4check').disabled=true;
+  document.getElementById('s4fb').innerHTML=allCorrect?'<div class="feedback-inline ok">✅ מעולה! רק <span class="math-expr">b = 3</span> הוא פתרון: <span class="math-expr">15 - 9 = 6</span> ו-<span class="math-expr">2·3 = 6</span> ✓</div>':'<div class="feedback-inline err">❌ הציבו כל מספר. רק <span class="math-expr">b = 3</span> מקיים: <span class="math-expr">15 - 9 = 6 = 2·3</span></div>';
+};
+
+/* ===== QUESTION GENERATORS ===== */
+
+function genEasy(){
+  rng=mulberry32(dateSeed+100);
+  const qs=[];
+
+  /* Q1-Q5: "Is this an equation? Yes/No" */
+  const eqItems=[
+    {expr:'3 + 5 = 8',isEq:false,reason:'אין נעלם (אות)'},
+    {expr:'x + 5 = 8',isEq:true,reason:'יש סימן = ויש נעלם x'},
+    {expr:'2x - 3',isEq:false,reason:'אין סימן שוויון ='},
+    {expr:'7 = 7',isEq:false,reason:'אין נעלם (אות)'},
+    {expr:'y · 3 = 12',isEq:true,reason:'יש סימן = ויש נעלם y'},
+    {expr:'4a + 1 = 9',isEq:true,reason:'יש סימן = ויש נעלם a'},
+    {expr:'15 - 8 = 7',isEq:false,reason:'אין נעלם (אות)'},
+    {expr:'n / 2 = 6',isEq:true,reason:'יש סימן = ויש נעלם n'},
+    {expr:'3x > 10',isEq:false,reason:'אין סימן =, יש רק >'},
+    {expr:'b + b = 2b',isEq:true,reason:'יש סימן = ויש נעלם b'}
+  ];
+  const picked=shuffle(eqItems).slice(0,5);
+  picked.forEach(item=>{
+    const yes='כן, זו משוואה';
+    const no='לא, זו לא משוואה';
+    const correct=item.isEq?yes:no;
+    const opts=[yes,no];
+    qs.push({type:'mc',stem:'האם הביטוי הבא הוא <strong>משוואה</strong>?<br><div style="text-align:center;font-size:1.2rem;margin:12px 0"><span class="math-expr">'+item.expr+'</span></div>',options:opts,answer:opts.indexOf(correct),explanation:item.reason});
+  });
+
+  /* Q6-Q10: Identify variable / left side / right side */
+  for(let i=0;i<5;i++){
+    const vr=pick(['x','y','a','n','b']);
+    const a=RI(2,9);const b=RI(10,30);
+    const op=pick(['+','-']);
+    const leftSide=vr+' '+op+' '+a;
+    const rightSide=''+b;
+    const eq=leftSide+' = '+rightSide;
+    const qType=i%3; /* 0=variable, 1=right side, 2=left side */
+    if(qType===0){
+      const correct=vr;
+      const opts=shuffle([vr,''+a,''+b,op==='+'?''+a:'=']);
+      qs.push({type:'mc',stem:'במשוואה <span class="math-expr">'+eq+'</span> — מהו <strong>הנעלם</strong>?',options:opts,answer:opts.indexOf(correct),explanation:'הנעלם הוא האות <span class="math-expr">'+vr+'</span> — היא מייצגת את המספר שאנחנו מחפשים.'});
+    } else if(qType===1){
+      const correct=leftSide;
+      const opts=shuffle([leftSide,rightSide,vr,''+a]);
+      qs.push({type:'mc',stem:'במשוואה <span class="math-expr">'+eq+'</span> — מהו <strong>אגף ימין</strong>?',options:opts,answer:opts.indexOf(correct),explanation:'אגף ימין הוא <span class="math-expr">'+leftSide+'</span> (מה שנמצא מימין לסימן =).'});
+    } else {
+      const correct=rightSide;
+      const opts=shuffle([rightSide,leftSide,vr,op+' '+a]);
+      qs.push({type:'mc',stem:'במשוואה <span class="math-expr">'+eq+'</span> — מהו <strong>אגף שמאל</strong>?',options:opts,answer:opts.indexOf(correct),explanation:'אגף שמאל הוא <span class="math-expr">'+rightSide+'</span> (מה שנמצא משמאל לסימן =).'});
+    }
+  }
+
+  /* Q11-Q15: "Is x=N a solution of [simple equation]?" */
+  for(let i=0;i<5;i++){
+    const vr=pick(['x','a','n']);
+    if(i<3){
+      /* x + a = b type */
+      const a=RI(2,9);const sol=RI(1,10);const b=sol+a;
+      const testVal=R()>.5?sol:sol+RI(1,3);
+      const isSol=testVal===sol;
+      const leftResult=testVal+a;
+      const correct=isSol?'כן':'לא';
+      const opts=['כן','לא'];
+      qs.push({type:'mc',stem:'האם <span class="math-expr">'+vr+' = '+testVal+'</span> פתרון של <span class="math-expr">'+vr+' + '+a+' = '+b+'</span>?',options:opts,answer:opts.indexOf(correct),explanation:'נציב: <span class="math-expr">'+testVal+' + '+a+' = '+leftResult+'</span>. '+(isSol?'<span class="math-expr">'+leftResult+' = '+b+'</span> ✓ — כן, זה פתרון!':'<span class="math-expr">'+leftResult+' ≠ '+b+'</span> — לא, זה לא פתרון.')});
+    } else {
+      /* ax = b type */
+      const a=RI(2,6);const sol=RI(2,8);const b=a*sol;
+      const testVal=R()>.5?sol:sol+RI(1,3);
+      const isSol=testVal===sol;
+      const leftResult=a*testVal;
+      const correct=isSol?'כן':'לא';
+      const opts=['כן','לא'];
+      qs.push({type:'mc',stem:'האם <span class="math-expr">'+vr+' = '+testVal+'</span> פתרון של <span class="math-expr">'+a+vr+' = '+b+'</span>?',options:opts,answer:opts.indexOf(correct),explanation:'נציב: <span class="math-expr">'+a+' · '+testVal+' = '+leftResult+'</span>. '+(isSol?'<span class="math-expr">'+leftResult+' = '+b+'</span> ✓ — כן!':'<span class="math-expr">'+leftResult+' ≠ '+b+'</span> — לא!')});
+    }
+  }
+
+  /* Q16-Q20: "Fill in the blank: ___ + 8 = 12" etc. */
+  for(let i=0;i<5;i++){
+    let stem,answer,explanation;
+    if(i<2){
+      /* ___ + a = b */
+      const a=RI(3,9);const b=RI(a+2,a+12);const ans=b-a;
+      stem='השלימו: <span class="math-expr">___ + '+a+' = '+b+'</span>';
+      answer=ans;
+      explanation='<span class="math-expr">'+ans+' + '+a+' = '+b+'</span> ✓';
+    } else if(i<4){
+      /* a + ___ = b */
+      const a=RI(3,9);const b=RI(a+2,a+12);const ans=b-a;
+      stem='השלימו: <span class="math-expr">'+a+' + ___ = '+b+'</span>';
+      answer=ans;
+      explanation='<span class="math-expr">'+a+' + '+ans+' = '+b+'</span> ✓';
+    } else {
+      /* a + b = ___ + c */
+      const a=RI(3,8);const b=RI(2,6);const c=RI(1,a+b-1);const ans=a+b-c;
+      stem='השלימו: <span class="math-expr">'+a+' + '+b+' = ___ + '+c+'</span>';
+      answer=ans;
+      explanation='<span class="math-expr">'+a+' + '+b+' = '+(a+b)+'</span>, לכן <span class="math-expr">___ + '+c+' = '+(a+b)+'</span> → <span class="math-expr">___ = '+ans+'</span>';
+    }
+    qs.push({type:'input',stem:stem,answer:answer,explanation:explanation});
+  }
+
+  return qs;
+}
+
+function genMedium(){
+  rng=mulberry32(dateSeed+200);
+  const qs=[];
+
+  /* Q1-Q5: "Find the solution" (numeric input) */
+  const medEqs=[
+    ()=>{const a=RI(3,9);const sol=RI(2,12);const b=sol+a;return{stem:'מצאו את הפתרון: <span class="math-expr">x + '+a+' = '+b+'</span>',answer:sol,explanation:'<span class="math-expr">x = '+b+' - '+a+' = '+sol+'</span>'}},
+    ()=>{const a=RI(2,6);const sol=RI(2,10);const b=a*sol;return{stem:'מצאו את הפתרון: <span class="math-expr">'+a+'x = '+b+'</span>',answer:sol,explanation:'<span class="math-expr">x = '+b+' / '+a+' = '+sol+'</span>'}},
+    ()=>{const a=RI(10,30);const sol=RI(2,9);const b=a-sol;return{stem:'מצאו את הפתרון: <span class="math-expr">x - '+sol+' = '+b+'</span>',answer:a,explanation:'<span class="math-expr">x = '+b+' + '+sol+' = '+a+'</span>'}},
+    ()=>{const d=RI(2,5);const sol=d*RI(2,8);const b=sol/d;return{stem:'מצאו את הפתרון: <span class="math-expr">x : '+d+' = '+b+'</span>',answer:sol,explanation:'<span class="math-expr">x = '+b+' · '+d+' = '+sol+'</span>'}},
+    ()=>{const a=RI(5,15);const sol=RI(2,8);const b=a-sol;return{stem:'מצאו את הפתרון: <span class="math-expr">'+a+' - x = '+b+'</span>',answer:sol,explanation:'<span class="math-expr">x = '+a+' - '+b+' = '+sol+'</span>'}}
+  ];
+  shuffle(medEqs).slice(0,5).forEach(fn=>{const q=fn();qs.push({type:'input',stem:q.stem,answer:q.answer,explanation:q.explanation})});
+
+  /* Q6-Q10: "Is x=N solution?" with fractions/harder */
+  for(let i=0;i<5;i++){
+    const vr=pick(['a','x','n']);
+    if(i<2){
+      /* (a-b)/c = d */
+      const c=RI(2,5);const d=RI(2,6);const b=RI(1,5);const sol=c*d+b;
+      const testVal=R()>.5?sol:sol+RI(1,4);
+      const isSol=testVal===sol;
+      const numerator=testVal-b;const result=numerator/c;
+      const correct=isSol?'כן':'לא';
+      const opts=['כן','לא'];
+      qs.push({type:'mc',stem:'האם <span class="math-expr">'+vr+' = '+testVal+'</span> פתרון של <span class="math-expr">('+vr+' - '+b+') / '+c+' = '+d+'</span>?',options:opts,answer:opts.indexOf(correct),explanation:'נציב: <span class="math-expr">('+testVal+' - '+b+') / '+c+' = '+numerator+' / '+c+' = '+result+'</span>. '+(isSol?'<span class="math-expr">'+result+' = '+d+'</span> ✓':'<span class="math-expr">'+result+' ≠ '+d+'</span> ✗')});
+    } else if(i<4){
+      /* ax + b = c */
+      const a=RI(2,5);const b=RI(1,8);const sol=RI(2,8);const c=a*sol+b;
+      const testVal=R()>.5?sol:sol+RI(-2,2)||sol+1;
+      const isSol=testVal===sol;
+      const leftResult=a*testVal+b;
+      const correct=isSol?'כן':'לא';
+      const opts=['כן','לא'];
+      qs.push({type:'mc',stem:'האם <span class="math-expr">'+vr+' = '+testVal+'</span> פתרון של <span class="math-expr">'+a+vr+' + '+b+' = '+c+'</span>?',options:opts,answer:opts.indexOf(correct),explanation:'נציב: <span class="math-expr">'+a+' · '+testVal+' + '+b+' = '+(a*testVal)+' + '+b+' = '+leftResult+'</span>. '+(isSol?'<span class="math-expr">'+leftResult+' = '+c+'</span> ✓':'<span class="math-expr">'+leftResult+' ≠ '+c+'</span> ✗')});
+    } else {
+      /* x/a = b/c (integer solution) */
+      const a=RI(2,6);const sol=RI(2,8);
+      const testVal=R()>.5?sol:sol+RI(1,3);
+      const isSol=testVal===sol;
+      const leftResult=testVal;const rightVal=sol;
+      const correct=isSol?'כן':'לא';
+      const opts=['כן','לא'];
+      qs.push({type:'mc',stem:'האם <span class="math-expr">'+vr+' = '+testVal+'</span> פתרון של <span class="math-expr">'+vr+' / '+a+' = '+(sol/a)+'</span>?',options:opts,answer:opts.indexOf(correct),explanation:'נציב: <span class="math-expr">'+testVal+' / '+a+' = '+(testVal/a)+'</span>. '+(isSol?'✓ נכון!':'✗ לא שווה ל-<span class="math-expr">'+(sol/a)+'</span>')});
+    }
+  }
+
+  /* Q11-Q15: "Which numbers are solutions?" (multi-select from 4) */
+  for(let i=0;i<5;i++){
+    const vr=pick(['x','y','b']);
+    const a=RI(2,5);const b2=RI(3,10);
+    /* equation: a*vr + b2 = target, sol = (target-b2)/a */
+    const sol=RI(2,8);const target=a*sol+b2;
+    const candidates=shuffle([sol,sol+1,sol-1>0?sol-1:sol+2,sol+RI(2,4)]);
+    const correctIndices=[];
+    candidates.forEach((c,ci)=>{if(c===sol)correctIndices.push(ci)});
+    const options=candidates.map(c=>''+c);
+    const eq=a+vr+' + '+b2+' = '+target;
+    qs.push({type:'multi',stem:'אילו מהמספרים הם פתרונות של <span class="math-expr">'+eq+'</span>?<br>(בחרו את כל הנכונים)',options:options,correctIndices:correctIndices,explanation:'נציב כל מספר: <span class="math-expr">'+vr+' = '+sol+'</span> → <span class="math-expr">'+a+' · '+sol+' + '+b2+' = '+(a*sol)+' + '+b2+' = '+target+'</span> ✓. השאר לא מתאימים.'});
+  }
+
+  /* Q16-Q20: Word problems → equation */
+  const wordProblems=[
+    ()=>{const n=anyName();const mult=RI(2,4);const add=RI(1,5);const result=RI(15,30);return{stem:n+' חשב/ה על מספר, כפל/ה אותו ב-'+mult+' והוסיף/ה '+add+'. התוצאה היא '+result+'. מהו המספר?',answer:Math.floor((result-add)/mult),explanation:'המשוואה: <span class="math-expr">'+mult+'x + '+add+' = '+result+'</span> → <span class="math-expr">'+mult+'x = '+(result-add)+'</span> → <span class="math-expr">x = '+Math.floor((result-add)/mult)+'</span>',valid:(result-add)%mult===0}},
+    ()=>{const n=anyName();const per=RI(3,8);const result=per*RI(3,7);return{stem:n+' קנה/תה '+result/per+' מחברות במחיר זהה ושילמ/ה '+result+' ש"ח. כמה עולה כל מחברת?',answer:per,explanation:'המשוואה: <span class="math-expr">'+result/per+'x = '+result+'</span> → <span class="math-expr">x = '+per+'</span> ש"ח'}},
+    ()=>{const n=anyName();const sub=RI(5,15);const remain=RI(10,30);return{stem:'ל'+n+' היו כמה גולות. אחרי שנתנ/ה '+sub+' גולות לחבר/ה, נשארו ל'+n+' '+remain+' גולות. כמה גולות היו ל'+n+' בהתחלה?',answer:remain+sub,explanation:'המשוואה: <span class="math-expr">x - '+sub+' = '+remain+'</span> → <span class="math-expr">x = '+(remain+sub)+'</span>'}},
+    ()=>{const n=anyName();const add=RI(5,12);const total=RI(20,40);return{stem:n+' אסף/ה בולים. אחרי שקיבל/ה עוד '+add+' בולים, יש ל'+n+' '+total+' בולים. כמה בולים היו ל'+n+' לפני כן?',answer:total-add,explanation:'המשוואה: <span class="math-expr">x + '+add+' = '+total+'</span> → <span class="math-expr">x = '+(total-add)+'</span>'}},
+    ()=>{const n=anyName();const mult=2;const add=1;const result=mult*RI(4,10)+add;return{stem:'קבוצת ילדים קיבלה הנחיה: לבחור מספר, לכפול ב-'+mult+' ולהוסיף '+add+'. '+n+' קיבל/ה '+result+'. איזה מספר בחר/ה?',answer:(result-add)/mult,explanation:'המשוואה: <span class="math-expr">'+mult+'x + '+add+' = '+result+'</span> → <span class="math-expr">x = '+((result-add)/mult)+'</span>'}}
+  ];
+  shuffle(wordProblems).slice(0,5).forEach(fn=>{
+    let q=fn();
+    /* Retry if not integer answer */
+    let tries=0;
+    while(q.answer!==Math.floor(q.answer)&&tries<5){q=fn();tries++}
+    qs.push({type:'input',stem:q.stem,answer:q.answer,explanation:q.explanation});
+  });
+
+  return qs;
+}
+
+function genHard(){
+  rng=mulberry32(dateSeed+300);
+  const qs=[];
+
+  /* Q1-Q5: "Which equations have x=4 as solution?" (from list) */
+  for(let i=0;i<5;i++){
+    const sol=RI(2,6);
+    const eqList=shuffle([
+      {eq:'x + '+(15-sol)+' = 15',hasSol:true},
+      {eq:'x · '+(Math.floor(35/sol))+' = '+(Math.floor(35/sol)*sol),hasSol:Math.floor(35/sol)*sol===35},
+      {eq:sol+'x = '+(sol*sol),hasSol:true},
+      {eq:(sol+5)+' - x = 5',hasSol:true},
+      {eq:'x + x = '+(2*sol),hasSol:true},
+      {eq:'3x = '+(3*sol+1),hasSol:false},
+      {eq:'x + 1 = '+(sol-1),hasSol:false},
+      {eq:'2x + 1 = '+(2*sol+1),hasSol:true}
+    ]).slice(0,4);
+    const correctIndices=[];
+    eqList.forEach((e,ei)=>{if(e.hasSol)correctIndices.push(ei)});
+    const options=eqList.map(e=>e.eq);
+    qs.push({type:'multi',stem:'באילו מהמשוואות הבאות <span class="math-expr">x = '+sol+'</span> הוא <strong>פתרון</strong>?<br>(בחרו את כל הנכונים)',options:options,correctIndices:correctIndices,explanation:'מציבים <span class="math-expr">x = '+sol+'</span> בכל משוואה ובודקים אם שני האגפים שווים.'});
+  }
+
+  /* Q6-Q10: Solve fraction equations */
+  for(let i=0;i<5;i++){
+    let stem,answer,explanation;
+    if(i<2){
+      /* x/a = b */
+      const a=RI(2,8);const b=RI(1,6);const sol=a*b;
+      stem='פתרו: <span class="math-expr">x / '+a+' = '+b+'</span>';
+      answer=sol;
+      explanation='<span class="math-expr">x = '+b+' · '+a+' = '+sol+'</span>';
+    } else if(i<4){
+      /* x/a = b/c → x = a*b/c, ensure integer */
+      const a=RI(2,6);const c=RI(2,4);const mult=RI(1,3);const b=mult;const sol=a*mult;
+      stem='פתרו: <span class="math-expr">x / '+a+' = '+(b<c?b+'/'+c:b/c)+'</span>';
+      answer=sol/c*c===sol?a*b/c:a*b;
+      /* simplify */
+      const ans2=a*b/c;
+      if(ans2===Math.floor(ans2)){answer=ans2;explanation='<span class="math-expr">x = '+a+' · '+b+'/'+c+' = '+(a*b)+'/'+c+' = '+ans2+'</span>'}
+      else{answer=a*b;explanation='<span class="math-expr">x = '+a+' · '+b+' = '+(a*b)+'</span>'}
+    } else {
+      /* a/x = b, x = a/b */
+      const b=RI(2,5);const sol=RI(2,6);const a=b*sol;
+      stem='פתרו: <span class="math-expr">'+a+' / x = '+b+'</span>';
+      answer=sol;
+      explanation='<span class="math-expr">x = '+a+' / '+b+' = '+sol+'</span>';
+    }
+    qs.push({type:'input',stem:stem,answer:answer,explanation:explanation});
+  }
+
+  /* Q11-Q15: Geometry → equation */
+  for(let i=0;i<5;i++){
+    let stem,answer,explanation;
+    if(i<3){
+      /* Triangle with perimeter */
+      const p=RI(20,40);
+      const s1=RI(3,Math.floor(p/4));const s2=RI(3,Math.floor(p/4));const s3=p-s1-s2;
+      if(i===0){
+        /* one side is x */
+        stem='היקף משולש הוא <span class="math-expr">'+p+'</span> ס"מ. שתי צלעות הן <span class="math-expr">'+s1+'</span> ו-<span class="math-expr">'+s2+'</span> ס"מ. מהו אורך הצלע השלישית?';
+        answer=s3;
+        explanation='המשוואה: <span class="math-expr">'+s1+' + '+s2+' + x = '+p+'</span> → <span class="math-expr">x = '+p+' - '+(s1+s2)+' = '+s3+'</span>';
+      } else if(i===1){
+        /* equal-sided triangle with one different */
+        const side=RI(5,12);const perim=3*side;
+        stem='משולש שווה-צלעות שהיקפו <span class="math-expr">'+perim+'</span> ס"מ. מהו אורך כל צלע?';
+        answer=side;
+        explanation='המשוואה: <span class="math-expr">3x = '+perim+'</span> → <span class="math-expr">x = '+side+'</span>';
+      } else {
+        /* isosceles triangle */
+        const equalSide=RI(5,10);const base=RI(3,8);const perim=2*equalSide+base;
+        stem='משולש שווה-שוקיים שהיקפו <span class="math-expr">'+perim+'</span> ס"מ. הבסיס הוא <span class="math-expr">'+base+'</span> ס"מ. מהו אורך כל שוק?';
+        answer=equalSide;
+        explanation='המשוואה: <span class="math-expr">2x + '+base+' = '+perim+'</span> → <span class="math-expr">2x = '+(perim-base)+'</span> → <span class="math-expr">x = '+equalSide+'</span>';
+      }
+    } else {
+      /* Rectangle with area or perimeter */
+      const w=RI(3,8);const l=RI(w+1,15);
+      if(i===3){
+        const area=w*l;
+        stem='שטח מלבן הוא <span class="math-expr">'+area+'</span> סמ"ר. רוחבו <span class="math-expr">'+w+'</span> ס"מ. מהו אורכו?';
+        answer=l;
+        explanation='המשוואה: <span class="math-expr">'+w+' · x = '+area+'</span> → <span class="math-expr">x = '+area+' / '+w+' = '+l+'</span>';
+      } else {
+        const perim=2*(w+l);
+        stem='היקף מלבן הוא <span class="math-expr">'+perim+'</span> ס"מ. רוחבו <span class="math-expr">'+w+'</span> ס"מ. מהו אורכו?';
+        answer=l;
+        explanation='המשוואה: <span class="math-expr">2('+w+' + x) = '+perim+'</span> → <span class="math-expr">'+w+' + x = '+(perim/2)+'</span> → <span class="math-expr">x = '+l+'</span>';
+      }
+    }
+    qs.push({type:'input',stem:stem,answer:answer,explanation:explanation});
+  }
+
+  /* Q16-Q20: Word problem → equation + solve */
+  for(let i=0;i<5;i++){
+    const n=anyName();
+    let stem,answer,explanation;
+    if(i===0){
+      const mult=RI(2,5);const sub=RI(1,5);const result=RI(10,25);const sol=(result+sub)/mult;
+      if(sol===Math.floor(sol)){
+        stem=n+' חשב/ה על מספר, כפל/ה ב-'+mult+' וחיסר/ה '+sub+'. התוצאה: '+result+'. מהו המספר?';
+        answer=sol;
+        explanation='המשוואה: <span class="math-expr">'+mult+'x - '+sub+' = '+result+'</span> → <span class="math-expr">'+mult+'x = '+(result+sub)+'</span> → <span class="math-expr">x = '+sol+'</span>';
+      } else {
+        const sol2=RI(3,8);const result2=mult*sol2-sub;
+        stem=n+' חשב/ה על מספר, כפל/ה ב-'+mult+' וחיסר/ה '+sub+'. התוצאה: '+result2+'. מהו המספר?';
+        answer=sol2;
+        explanation='המשוואה: <span class="math-expr">'+mult+'x - '+sub+' = '+result2+'</span> → <span class="math-expr">x = '+sol2+'</span>';
+      }
+    } else if(i===1){
+      const age=RI(8,14);const diff=RI(3,8);
+      stem='גיל '+n+' הוא '+age+'. '+n+' גדול/ה מאחיו/ה ב-'+diff+' שנים. מה גיל האח/ות?';
+      answer=age-diff;
+      explanation='המשוואה: <span class="math-expr">x + '+diff+' = '+age+'</span> → <span class="math-expr">x = '+(age-diff)+'</span>';
+    } else if(i===2){
+      const total=RI(30,60);const price=RI(5,12);const sol=Math.floor(total/price);const spent=sol*price;
+      stem=n+' הלכ/ה לחנות עם '+spent+' ש"ח וקנתה עפרונות ב-'+price+' ש"ח כל אחד. כמה עפרונות קנתה?';
+      answer=sol;
+      explanation='המשוואה: <span class="math-expr">'+price+'x = '+spent+'</span> → <span class="math-expr">x = '+sol+'</span>';
+    } else if(i===3){
+      const perChild=RI(3,7);const numChildren=RI(4,8);const total=perChild*numChildren;
+      stem=n+' חילקה '+total+' ממתקים שווה בשווה בין '+numChildren+' ילדים. כמה ממתקים קיבל כל ילד?';
+      answer=perChild;
+      explanation='המשוואה: <span class="math-expr">'+numChildren+'x = '+total+'</span> → <span class="math-expr">x = '+perChild+'</span>';
+    } else {
+      const double=RI(3,8);const add=RI(2,6);const sol2=RI(5,12);const total2=2*sol2+add;
+      stem=n+' ובועז אספו ביחד '+total2+' מדבקות. לבועז יש '+add+' מדבקות יותר מ'+n+'. כמה מדבקות יש ל'+n+'?';
+      answer=sol2;
+      explanation='אם ל'+n+' יש <span class="math-expr">x</span> מדבקות, לבועז <span class="math-expr">x + '+add+'</span>. ביחד: <span class="math-expr">x + (x + '+add+') = '+total2+'</span> → <span class="math-expr">2x = '+(total2-add)+'</span> → <span class="math-expr">x = '+sol2+'</span>';
+    }
+    qs.push({type:'input',stem:stem,answer:answer,explanation:explanation});
+  }
+
+  return qs;
+}
+
+function genChallenge(){
+  rng=mulberry32(dateSeed+400);
+  const qs=[];
+
+  /* Q1-Q3: Special equations (multiple/no solutions, R, empty set) */
+  const specialEqs=[
+    {stem:'פתרו: <span class="math-expr">x(x - 2) = 0</span><br>כמה פתרונות יש?',options:['פתרון אחד: x = 0','פתרון אחד: x = 2','שני פתרונות: x = 0 או x = 2','אין פתרון'],answer:2,explanation:'מכפלה שווה 0 כאשר לפחות אחד מהגורמים שווה 0: <span class="math-expr">x = 0</span> או <span class="math-expr">x - 2 = 0</span> → <span class="math-expr">x = 2</span>. שני פתרונות.'},
+    {stem:'פתרו: <span class="math-expr">5 + 3x - 3x = 8</span><br>מה התשובה?',options:['x = 1','x = 3','אין פתרון (Ø)','כל מספר (ℝ)'],answer:2,explanation:'נפשט: <span class="math-expr">5 = 8</span> — זה אף פעם לא נכון! אין פתרון → Ø'},
+    {stem:'פתרו: <span class="math-expr">x + 1 = x + 1</span><br>מה התשובה?',options:['x = 0','x = 1','אין פתרון (Ø)','כל מספר (ℝ)'],answer:3,explanation:'זה תמיד נכון לכל <span class="math-expr">x</span>! הפתרון: ℝ (כל המספרים).'}
+  ];
+  specialEqs.forEach(q=>{qs.push({type:'mc',stem:q.stem,options:q.options,answer:q.answer,explanation:q.explanation})});
+
+  /* Q4-Q6: Complex word problems */
+  const n1=anyName(),n2=anyName(),n3=anyName();
+  qs.push({type:'input',stem:n1+' בחר/ה מספר, כפל/ה ב-4 וחיסר/ה 3. התוצאה 17. מהו המספר שבחר/ה?',answer:5,explanation:'המשוואה: <span class="math-expr">4x - 3 = 17</span> → <span class="math-expr">4x = 20</span> → <span class="math-expr">x = 5</span>'});
+  const pricePerKid=RI(30,50);const numKids=RI(15,25);const budget=pricePerKid*numKids;
+  qs.push({type:'input',stem:n2+' מארגנ/ת טיול. עלות ההסעה '+budget+' ש"ח, מתחלקת שווה בשווה. כל תלמיד/ה משלם/ת '+pricePerKid+' ש"ח. כמה תלמידים נוסעים?',answer:numKids,explanation:'המשוואה: <span class="math-expr">'+pricePerKid+'x = '+budget+'</span> → <span class="math-expr">x = '+numKids+'</span>'});
+  const ageN3=RI(12,15);const ageParent=RI(35,45);const yearsAgo=RI(2,6);
+  const sumBack=ageN3-yearsAgo+ageParent-yearsAgo;
+  qs.push({type:'input',stem:'גיל '+n3+' היום: '+ageN3+'. גיל ההורה היום: '+ageParent+'. מהו סכום הגילאים שלהם לפני '+yearsAgo+' שנים?',answer:sumBack,explanation:'לפני '+yearsAgo+' שנים: <span class="math-expr">('+ageN3+' - '+yearsAgo+') + ('+ageParent+' - '+yearsAgo+') = '+(ageN3-yearsAgo)+' + '+(ageParent-yearsAgo)+' = '+sumBack+'</span>'});
+
+  /* Q7-Q9: Card game matching — "which card gives same solution?" */
+  for(let i=0;i<3;i++){
+    const origSol=RI(2,8);
+    /* Original equation with solution origSol */
+    const a1=RI(2,5);const b1=a1*origSol;
+    const origEq=a1+'x = '+b1;
+    /* Create 4 candidate equations, some with same solution */
+    const candidates=shuffle([
+      {eq:'x + '+(15-origSol)+' = 15',sol:origSol},
+      {eq:'2x = '+(2*origSol),sol:origSol},
+      {eq:'x + 1 = '+(origSol+2),sol:origSol+1},
+      {eq:'3x = '+(3*(origSol+1)),sol:origSol+1}
+    ]);
+    const correctIndices=[];
+    candidates.forEach((c,ci)=>{if(c.sol===origSol)correctIndices.push(ci)});
+    qs.push({type:'multi',stem:'המשוואה המקורית: <span class="math-expr">'+origEq+'</span> (פתרון: <span class="math-expr">x = '+origSol+'</span>)<br>באילו מהמשוואות הבאות הפתרון <strong>זהה</strong>?',options:candidates.map(c=>c.eq),correctIndices:correctIndices,explanation:'הפתרון המקורי <span class="math-expr">x = '+origSol+'</span>. מציבים בכל משוואה ובודקים.'});
+  }
+
+  /* Q10-Q12: Factored equations "(x-a)(x-b)(x-c)=0" — find all solutions */
+  for(let i=0;i<3;i++){
+    const a=RI(1,6);const b=RI(a+1,10);const c=RI(b+1,15);
+    const factors=['(x - '+a+')','(2x - '+(2*b)+')','('+(c*2)+' - 2x)'];
+    const eq=factors.join(' · ')+' = 0';
+    /* solutions: x=a, 2x=2b→x=b, c*2-2x=0→x=c */
+    const sols=[a,b,c].sort((x,y)=>x-y);
+    qs.push({type:'input-text',stem:'מצאו את <strong>כל הפתרונות</strong> של:<br><div style="text-align:center;font-size:1.1rem;margin:12px 0"><span class="math-expr">'+eq+'</span></div>כתבו את הפתרונות מופרדים בפסיקים (למשל: 2,5,7):',answer:[sols.join(','),sols.join(', '),sols.join(' , ')],display:sols.join(', '),explanation:'כל גורם מתאפס: <span class="math-expr">x = '+a+'</span>, <span class="math-expr">x = '+b+'</span>, <span class="math-expr">x = '+c+'</span>'});
+  }
+
+  /* Q13-Q15: "Write an equation with solution x=N" */
+  for(let i=0;i<3;i++){
+    if(i<2){
+      const sol=RI(3,10);
+      const a=RI(2,5);const b=a*sol+RI(1,9);
+      qs.push({type:'input-text',stem:'כתבו משוואה שהפתרון שלה הוא <span class="math-expr">x = '+sol+'</span><br>(למשל: <span class="math-expr">x + 3 = '+(sol+3)+'</span>)',answer:['x+'+RI(1,9)+'='+(sol+RI(1,9))],display:'דוגמה: x + 3 = '+(sol+3),explanation:'כל משוואה שמקיימת <span class="math-expr">x = '+sol+'</span> מתקבלת. למשל: <span class="math-expr">x + 3 = '+(sol+3)+'</span>, <span class="math-expr">2x = '+(2*sol)+'</span>, וכו\'.',validate:function(val){
+        /* Accept any equation where substituting sol makes it true */
+        try{
+          const cleaned=val.replace(/\s/g,'').replace(/x/gi,'('+sol+')');
+          const parts=cleaned.split('=');
+          if(parts.length!==2)return false;
+          /* Safe eval for simple arithmetic */
+          const left=Function('"use strict";return('+parts[0].replace(/[^0-9+\-*/().]/g,'')+')')();
+          const right=Function('"use strict";return('+parts[1].replace(/[^0-9+\-*/().]/g,'')+')')();
+          return Math.abs(left-right)<0.001;
+        }catch(e){return false}
+      }});
+    } else {
+      qs.push({type:'input-text',stem:'כתבו משוואה <strong>שאין לה פתרון</strong> (Ø)<br>(למשל: <span class="math-expr">x + 1 = x + 2</span>)',answer:['x+1=x+2','x=x+1','x+0=x+1','2x-2x=1'],display:'דוגמה: x + 1 = x + 2',explanation:'כל משוואה שנותנת סתירה (כמו <span class="math-expr">0 = 1</span>) לאחר פישוט — אין לה פתרון.',validate:function(val){
+        /* Accept anything with x on both sides that simplifies to contradiction */
+        return val.includes('x')&&val.includes('=');
+      }});
+    }
+  }
+
+  return qs;
+}
+
+function generateQuestions(level){
+  if(level==='easy') return genEasy();
+  if(level==='medium') return genMedium();
+  if(level==='hard') return genHard();
+  return genChallenge();
+}
+
+/* ===== PRACTICE RENDERING ===== */
+function renderLevelTabs(){
+  const container=document.getElementById('levelTabs');
+  container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(lv=>{
+    const btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    const done=scores[lv].filter(s=>s===1).length;
+    const total=LEVEL_COUNTS[lv];
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+total+')</span>':'');
+    btn.onclick=()=>switchLevel(lv);
+    container.appendChild(btn);
+  });
+}
+
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv]) questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();
+}
+
+function updateLevelProgress(){
+  const lv=state.level;const total=LEVEL_COUNTS[lv];
+  const done=answered[lv].filter(a=>a).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+
+function renderQuestion(){
+  const lv=state.level;const idx=state.qIndex;
+  const qs=questions[lv];
+  if(!qs) return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  const q=qs[idx];
+  const area=document.getElementById('questionArea');
+  const isAnswered=answered[lv][idx];
+
+  let html='<div class="q-card"><div class="q-number">שאלה '+(idx+1)+' מתוך '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach((opt,i)=>{
+      const letter=LETTERS[i];
+      let cls='q-opt';
+      if(isAnswered){
+        cls+=' disabled';
+        if(i===q.answer) cls+=' correct';
+        else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel']) cls+=' wrong';
+      }
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>בדקו</button>';
+  } else if(q.type==='input'||q.type==='input-text'){
+    html+='<div class="q-input-row"><input type="'+(q.type==='input'?'number':'text')+'" class="q-input" id="qInput" placeholder="תשובה" dir="ltr" aria-label="תשובה">';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">בדקו</button>';
+    html+='</div>';
+    if(isAnswered){
+      const inp=q.type==='input'?q.answer:(q.display||q.answer[0]);
+      html+='<div style="margin-top:4px;font-weight:700;direction:ltr">תשובה: '+inp+'</div>';
+    }
+  } else if(q.type==='multi'){
+    html+='<div class="q-multi-opts" id="qMultiOpts">';
+    q.options.forEach((opt,i)=>{
+      let cls='q-multi-opt';
+      if(isAnswered){
+        cls+=' disabled';
+        if(q.correctIndices.includes(i)) cls+=' correct';
+        else if(answered[lv][idx+'_sels']&&answered[lv][idx+'_sels'].includes(i)) cls+=' wrong';
+      }
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-checkbox">'+(isAnswered&&q.correctIndices.includes(i)?'✓':'')+'</span><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMulti()">בדקו</button>';
+  }
+
+  if(isAnswered){
+    const isCorrect=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'✅ נכון! ':'❌ ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+
+  /* Set up MC click handlers */
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(el=>{
+      el.onclick=()=>{
+        area.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+  /* Set up multi-select click handlers */
+  if(q.type==='multi'&&!isAnswered){
+    area.querySelectorAll('.q-multi-opt').forEach(el=>{
+      el.onclick=()=>{
+        el.classList.toggle('checked');
+        el.querySelector('.q-checkbox').textContent=el.classList.contains('checked')?'✓':'';
+      };
+    });
+  }
+  /* Set up input enter key */
+  const inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){
+    inp.focus();
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkInput()});
+  }
+
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'סיום':'הבא ←';
+}
+
+window.checkMC=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const selected=document.querySelector('.q-opt.selected');
+  if(!selected) return;
+  const si=parseInt(selected.dataset.i);
+  const isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  answered[lv][idx+'_sel']=si;
+
+  document.querySelectorAll('.q-opt').forEach((el,i)=>{
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer) el.classList.add('correct');
+    else if(i===si&&!isCorrect) el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון מאוד!','✅ יפה!'])+' ':'❌ לא נכון. ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();
+};
+
+window.checkInput=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inp=document.getElementById('qInput');
+  const val=inp.value.trim();
+  if(!val) return;
+  let isCorrect=false;
+  if(q.type==='input'){
+    isCorrect=parseFloat(val)===q.answer;
+  } else if(q.validate){
+    isCorrect=q.validate(val);
+  } else {
+    const norm=val.replace(/\s+/g,'').toLowerCase();
+    isCorrect=q.answer.some(a=>a.replace(/\s+/g,'').toLowerCase()===norm);
+  }
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');
+  inp.disabled=true;
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון!'])+' ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();
+};
+
+window.checkMulti=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const opts=document.querySelectorAll('.q-multi-opt');
+  const selected=[];
+  opts.forEach((el,i)=>{if(el.classList.contains('checked'))selected.push(i)});
+  const isCorrect=selected.length===q.correctIndices.length&&selected.every(s=>q.correctIndices.includes(s));
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  answered[lv][idx+'_sels']=selected;
+
+  opts.forEach((el,i)=>{
+    el.classList.add('disabled');el.onclick=null;
+    if(q.correctIndices.includes(i)){el.classList.add('correct');el.querySelector('.q-checkbox').textContent='✓'}
+    else if(selected.includes(i)){el.classList.add('wrong')}
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון!'])+' ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();
+};
+
+function nextQuestion(){
+  const lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  /* Auth check: Q1 (index 0) is free, Q2+ requires auth */
+  if(state.qIndex>=0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function')showAuthModal();
+    return;
+  }
+  state.qIndex++;renderQuestion();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion()}}
+
+function renderLevelComplete(){
+  const lv=state.level;
+  const correct=scores[lv].filter(s=>s===1).length;
+  const total=LEVEL_COUNTS[lv];
+  const pct=Math.round(correct/total*100);
+  const scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  const emoji=pct>=80?'🎉':pct>=50?'👏':'💪';
+
+  document.getElementById('questionArea').innerHTML=`
+    <div class="q-card"><div class="level-complete">
+      <div class="big-emoji">${emoji}</div>
+      <h2>סיימתם את רמת "${LEVEL_NAMES[lv]}"!</h2>
+      <div class="score-display${scoreClass}">${correct} / ${total}</div>
+      <p style="color:var(--text-light);margin-bottom:16px">${pct}% הצלחה</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="mini-btn" onclick="retryLevel()">🔄 נסו שוב</button>
+        ${lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">▶ לרמה הבאה</button>':''}
+      </div>
+    </div></div>`;
+
+  if(pct>=80) showConfetti();
+}
+
+window.retryLevel=function(){
+  const lv=state.level;
+  scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);
+  state.qIndex=0;
+  renderLevelTabs();renderQuestion();
+};
+
+window.nextLevel=function(){
+  const order=['easy','medium','hard','challenge'];
+  const ci=order.indexOf(state.level);
+  if(ci<order.length-1) switchLevel(order[ci+1]);
+};
+
+/* ===== SECTION SWITCHING ===== */
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.section===sec);
+  });
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+}
+
+/* ===== CONFETTI ===== */
+function showConfetti(){
+  const box=document.getElementById('confettiBox');
+  box.innerHTML='';
+  const colors=['#1a2f5a','#4a9eda','#10b981','#ef4444','#8b5cf6','#ec4899'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';
+    c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(()=>box.innerHTML='',5000);
+}
+
+/* ===== INIT ===== */
+function init(){
+  Object.keys(LEVEL_COUNTS).forEach(lv=>{
+    if(!scores[lv]||!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice') switchSection('practice');
+}
+init();
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

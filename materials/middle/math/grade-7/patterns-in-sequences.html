@@ -273,6 +273,7 @@ function R(){return rng()}
 function RI(a,b){return a+Math.floor(R()*(b-a+1))}
 function pick(arr){return arr[Math.floor(R()*arr.length)]}
 function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function ltrN(v){return '\u200E'+v}
 
 const LETTERS=['א','ב','ג','ד'];
 
@@ -695,7 +696,7 @@ function genMedium(){
     const d3=c===0?d+'n + 2':(c>0?(d-1>0?(d-1):'')+'n + '+(c+d):d+'n + '+(c+1));
     const opts=shuffle([correct,d1,d2,d3]);
     const ci=opts.indexOf(correct);
-    qs.push({type:'mc',stem:'מצאו את <strong>הביטוי הכללי</strong> של הסדרה:<br><table class="q-table"><tr><th><span class="math-expr">n</span></th><th>1</th><th>2</th><th>3</th><th>4</th></tr><tr><td><strong>איבר</strong></td><td>'+terms.join('</td><td>')+'</td></tr></table>',options:opts,answer:ci,explanation:'ההפרש '+d+(c>0?', תיקון +'+c:c<0?', תיקון '+c:'')+'. הביטוי: <code>'+correct+'</code>'});
+    qs.push({type:'mc',stem:'מצאו את <strong>הביטוי הכללי</strong> של הסדרה:<br><table class="q-table"><tr><th><span class="math-expr">n</span></th><th>1</th><th>2</th><th>3</th><th>4</th></tr><tr><td><strong>איבר</strong></td><td>'+terms.join('</td><td>')+'</td></tr></table>',options:opts,answer:ci,explanation:'ההפרש '+d+(c>0?', תיקון +'+c:c<0?', תיקון '+ltrN(c):'')+'. הביטוי: <code>'+correct+'</code>'});
   }
   /* Q9-12: Shape pattern → expression */
   const mPats=[
@@ -747,7 +748,7 @@ function genHard(){
     const d3=(d-1)+'n + '+(c+1);
     const opts=shuffle([correct,d1,d2,d3]);
     const ci=opts.indexOf(correct);
-    qs.push({type:'mc',stem:'מצאו את <strong>הביטוי הכללי</strong>:<br><table class="q-table"><tr><th><span class="math-expr">n</span></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr><tr><td><strong>איבר</strong></td><td>'+terms.join('</td><td>')+'</td></tr></table>',options:opts,answer:ci,explanation:'ההפרש '+d+(c!==0?', תיקון '+(c>0?'+':'')+c:'')+'. הביטוי: <code>'+correct+'</code>'});
+    qs.push({type:'mc',stem:'מצאו את <strong>הביטוי הכללי</strong>:<br><table class="q-table"><tr><th><span class="math-expr">n</span></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr><tr><td><strong>איבר</strong></td><td>'+terms.join('</td><td>')+'</td></tr></table>',options:opts,answer:ci,explanation:'ההפרש '+d+(c!==0?', תיקון '+(c>0?'+':'')+ltrN(c):'')+'. הביטוי: <code>'+correct+'</code>'});
   }
   /* Q5-8: Quadratic patterns */
   const quadPats=[

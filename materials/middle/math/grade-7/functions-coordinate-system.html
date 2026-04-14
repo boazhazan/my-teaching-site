@@ -628,7 +628,8 @@ function quadrantOf(x,y){
 }
 function quadrantHeb(q){return{I:'רביע I',II:'רביע II',III:'רביע III',IV:'רביע IV'}[q]||q}
 function signWord(n){return n>0?'חיובי':n<0?'שלילי':'אפס'}
-function ptStr(x,y){return '('+x+', '+y+')'}
+function ptStr(x,y){return '\u200E(\u200E'+x+', \u200E'+y+')'}
+function ltrN(v){return '\u200E'+v}
 function randNonZero(a,b){var v=RI(a,b);while(v===0) v=RI(a,b);return v}
 
 function genEasy(){
@@ -641,7 +642,7 @@ function genEasy(){
     var opts=shuffle(['רביע I','רביע II','רביע III','רביע IV']);
     qs.push({type:'mc',stem:'הנקודה <span class="math-expr">'+ptStr(x,y)+'</span> נמצאת ב:',
       options:opts,answer:opts.indexOf(correct),
-      explanation:'x = '+x+' ('+signWord(x)+'), y = '+y+' ('+signWord(y)+') → '+correct});
+      explanation:'x = '+ltrN(x)+' ('+signWord(x)+'), y = '+ltrN(y)+' ('+signWord(y)+') → '+correct});
   }
   /* Q6-10: read coordinates from SVG */
   for(var i=0;i<5;i++){
@@ -661,7 +662,7 @@ function genEasy(){
     qs.push({type:'mc',
       stem:'מהן הקואורדינטות של הנקודה המסומנת?<br>'+qCoordSVG([{x:x,y:y,label:'?',color:'#8b5cf6'}],{range:5}),
       options:opts,answer:opts.indexOf(correct),
-      explanation:'הנקודה נמצאת ב-x = '+x+' ו-y = '+y+', כלומר '+correct});
+      explanation:'הנקודה נמצאת ב-x = '+ltrN(x)+' ו-y = '+ltrN(y)+', כלומר '+correct});
   }
   /* Q11-15: on which axis */
   for(var i=0;i<5;i++){
@@ -674,7 +675,7 @@ function genEasy(){
     var opts=shuffle(['על ציר x','על ציר y','בראשית הצירים','לא על אף ציר']);
     qs.push({type:'mc',stem:'הנקודה <span class="math-expr">'+ptStr(x,y)+'</span> נמצאת:',
       options:opts,answer:opts.indexOf(correct),
-      explanation:'x = '+x+', y = '+y+'. '+(y===0&&x===0?'שתי הקואורדינטות אפס → ראשית הצירים':y===0?'y = 0 → על ציר x':x===0?'x = 0 → על ציר y':'שתי הקואורדינטות שונות מ-0 → לא על ציר')});
+      explanation:'x = '+ltrN(x)+', y = '+ltrN(y)+'. '+(y===0&&x===0?'שתי הקואורדינטות אפס → ראשית הצירים':y===0?'y = 0 → על ציר x':x===0?'x = 0 → על ציר y':'שתי הקואורדינטות שונות מ-0 → לא על ציר')});
   }
   /* Q16-20: what is true about a point on axis */
   for(var i=0;i<5;i++){
@@ -759,7 +760,7 @@ function genMedium(){
     opts=shuffle(Object.keys(unique2)).slice(0,4);
     qs.push({type:'mc',stem:'מתחילים בנקודה <span class="math-expr">'+ptStr(sx,sy)+'</span>. זזים <strong>'+moveX+'</strong> ואחר כך <strong>'+moveY+'</strong>. איפה מגיעים?',
       options:opts,answer:opts.indexOf(correct),
-      explanation:ptStr(sx,sy)+': x: '+sx+(dx>0?' + ':' − ')+Math.abs(dx)+' = '+ex+', y: '+sy+(dy>0?' + ':' − ')+Math.abs(dy)+' = '+ey+' → '+correct});
+      explanation:ptStr(sx,sy)+': x: '+ltrN(sx)+(dx>0?' + ':' − ')+Math.abs(dx)+' = '+ltrN(ex)+', y: '+ltrN(sy)+(dy>0?' + ':' − ')+Math.abs(dy)+' = '+ltrN(ey)+' → '+correct});
   }
   /* Q13-16: identify coordinates of multiple points from SVG */
   for(var i=0;i<4;i++){
@@ -781,7 +782,7 @@ function genMedium(){
     qs.push({type:'mc',
       stem:'מהן הקואורדינטות של הנקודה <span style="color:'+colors[0]+';font-weight:700">'+labels[0]+'</span>?<br>'+qCoordSVG(allPts,{range:5}),
       options:opts,answer:opts.indexOf(correct),
-      explanation:labels[0]+' נמצאת ב-x = '+px+' ו-y = '+py+' → '+correct});
+      explanation:labels[0]+' נמצאת ב-x = '+ltrN(px)+' ו-y = '+ltrN(py)+' → '+correct});
   }
   /* Q17-20: point on axis - which coordinate is zero */
   for(var i=0;i<4;i++){
@@ -888,7 +889,7 @@ function genHard(){
     opts=shuffle(Object.keys(u6)).slice(0,4);
     qs.push({type:'mc',stem:'מה המרחק בין הנקודות <span class="math-expr">'+ptStr(p1.x,p1.y)+'</span> ו-<span class="math-expr">'+ptStr(p2.x,p2.y)+'</span>?',
       options:opts,answer:opts.indexOf(correct),
-      explanation:'המרחק = |'+a+' − '+b+'| = |'+(a-b)+'| = '+dist});
+      explanation:'המרחק = |'+ltrN(a)+' − '+ltrN(b)+'| = |'+ltrN(a-b)+'| = '+dist});
   }
   return qs;
 }
@@ -924,7 +925,7 @@ function genChallenge(){
     opts=shuffle(Object.keys(u8)).slice(0,4);
     qs.push({type:'mc',stem:'מלבן ABCD: A'+ptStr(x1,y1)+', B'+ptStr(x2,y1)+', C'+ptStr(x2,y2)+', D'+ptStr(x1,y2)+'.<br>מהו <strong>שטח</strong> המלבן?',
       options:opts,answer:opts.indexOf(correct),
-      explanation:'אורך = |'+x2+' − ('+x1+')| = '+w+', רוחב = |'+y2+' − ('+y1+')| = '+h+'. שטח = '+w+' × '+h+' = '+area});
+      explanation:'אורך = |'+ltrN(x2)+' − ('+ltrN(x1)+')| = '+w+', רוחב = |'+ltrN(y2)+' − ('+ltrN(y1)+')| = '+h+'. שטח = '+w+' × '+h+' = '+area});
   }
   /* Q7-9: count integer points inside a rectangle */
   for(var i=0;i<3;i++){
@@ -938,7 +939,7 @@ function genChallenge(){
     opts=shuffle(Object.keys(u9)).slice(0,4);
     qs.push({type:'mc',stem:'כמה <strong>נקודות שלמות</strong> (עם קואורדינטות שלמות) נמצאות בתוך או על גבולות המלבן שקודקודיו '+ptStr(x1,y1)+', '+ptStr(x2,y1)+', '+ptStr(x2,y2)+', '+ptStr(x1,y2)+'?',
       options:opts,answer:opts.indexOf(correct),
-      explanation:'x מ-'+x1+' עד '+x2+' = '+(x2-x1+1)+' ערכים. y מ-'+y1+' עד '+y2+' = '+(y2-y1+1)+' ערכים. סה"כ '+(x2-x1+1)+' × '+(y2-y1+1)+' = '+count});
+      explanation:'x מ-'+ltrN(x1)+' עד '+ltrN(x2)+' = '+(x2-x1+1)+' ערכים. y מ-'+ltrN(y1)+' עד '+ltrN(y2)+' = '+(y2-y1+1)+' ערכים. סה"כ '+(x2-x1+1)+' × '+(y2-y1+1)+' = '+count});
   }
   /* Q10-12: abstract — P(a,b) in quadrant, find quadrant of transformed point */
   for(var i=0;i<3;i++){
@@ -957,7 +958,7 @@ function genChallenge(){
     var opts=shuffle(['רביע I','רביע II','רביע III','רביע IV']);
     qs.push({type:'mc',stem:'הנקודה <span class="math-expr">P(a, b)</span> נמצאת ב'+quadrantHeb(srcQ)+'. באיזה רביע נמצאת <span class="math-expr">Q'+tr.label+'</span>?',
       options:opts,answer:opts.indexOf(resQ),
-      explanation:'ב'+quadrantHeb(srcQ)+' למשל a = '+a2+', b = '+b2+'. אז Q = '+(tr.label.replace('a','('+a2+')').replace('b','('+b2+')'))+' = '+ptStr(res[0],res[1])+' → '+resQ});
+      explanation:'ב'+quadrantHeb(srcQ)+' למשל a = '+ltrN(a2)+', b = '+ltrN(b2)+'. אז Q = '+(tr.label.replace('a','('+a2+')').replace('b','('+b2+')'))+' = '+ptStr(res[0],res[1])+' → '+resQ});
   }
   /* Q13-15: point equidistant / midpoint */
   for(var i=0;i<3;i++){
@@ -980,7 +981,7 @@ function genChallenge(){
       opts=shuffle(Object.keys(u10)).slice(0,4);
       qs.push({type:'mc',stem:'מהי <strong>נקודת האמצע</strong> של הקטע שקצותיו <span class="math-expr">'+ptStr(x1,y1)+'</span> ו-<span class="math-expr">'+ptStr(x2,y2)+'</span>?',
         options:opts,answer:opts.indexOf(correct),
-        explanation:'נקודת אמצע: ((' +x1+'+'+x2+')/2, ('+y1+'+'+y2+')/2) = '+correct});
+        explanation:'נקודת אמצע: (('+ltrN(x1)+'+'+ltrN(x2)+')/2, ('+ltrN(y1)+'+'+ltrN(y2)+')/2) = '+correct});
     } else {
       /* perimeter of rectangle */
       var x1=RI(-4,-1),x2=RI(1,4),y1=RI(-4,-1),y2=RI(1,4);

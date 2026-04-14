@@ -266,6 +266,7 @@ function R(){return rng()}
 function RI(a,b){return a+Math.floor(R()*(b-a+1))}
 function pick(arr){return arr[Math.floor(R()*arr.length)]}
 function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function ltrN(v){return '\u200E'+v}
 
 const LETTERS=['א','ב','ג','ד'];
 
@@ -691,7 +692,7 @@ function genEasy(){
     const sol=RI(-5,5)||1;const a=pick([2,3,-2,-3]);const b=RI(1,5);
     const rhs=a*(sol+b);
     qs.push({type:'input',stem:'פתרו: <code>'+fmt(a)+'(x + '+b+') = '+fmt(rhs)+'</code>',
-      answer:sol,explanation:'חילוק ב-'+fmt(a)+': <span class="math-expr">x + '+b+' = '+fmt(rhs/a)+'</span> &rarr; <span class="math-expr">x = '+fmt(sol)+'</span>'});
+      answer:sol,explanation:'חילוק ב-'+ltrN(fmt(a))+': <span class="math-expr">x + '+b+' = '+fmt(rhs/a)+'</span> &rarr; <span class="math-expr">x = '+fmt(sol)+'</span>'});
   }
   return qs.slice(0,20);
 }
@@ -892,7 +893,7 @@ function genChallenge(){
     const opts=shuffle([correct,w1,w2,w3]);
     qs.push({type:'mc',stem:'איזו משוואה שקולה ל-<code>'+fmt(a)+'('+fmtLinear(b,c)+') = '+fmt(rhs)+'</code>?',
       options:opts,answer:opts.indexOf(correct),
-      explanation:'חילוק שני האגפים ב-'+fmt(a)+': <code>'+correct+'</code>'});
+      explanation:'חילוק שני האגפים ב-'+ltrN(fmt(a))+': <code>'+correct+'</code>'});
   }
 
   /* Q7-Q9: Triangle perimeter with bracket expressions */

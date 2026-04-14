@@ -253,6 +253,7 @@ function R(){return rng()}
 function RI(a,b){return a+Math.floor(R()*(b-a+1))}
 function pick(arr){return arr[Math.floor(R()*arr.length)]}
 function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function ltrN(v){return '\u200E'+v}
 
 const boyNames=["דני","יואב","עמית","אורי","נועם","גיא","איתי","רון","תומר","עידו"];
 const girlNames=["מיכל","נועה","שירה","תמר","רונית","יעל","דנה","אורית","הילה","ליאת"];
@@ -710,7 +711,7 @@ function genMedium(){
     /* ensure correct answer is present */
     if(opts.indexOf(''+diff)===-1)opts[0]=''+diff;
     opts=shuffle(opts);
-    qs.push({type:'mc',stem:'הסתכלו בגרף.<br>'+svg+'מה השינוי ב-y בין <span class="math-expr">x='+x1+'</span> ל-<span class="math-expr">x='+x2+'</span>?<br>(שינוי חיובי = עלייה, שלילי = ירידה)',options:opts,answer:opts.indexOf(''+diff),explanation:'y ב-<span class="math-expr">x='+x1+'</span> הוא '+pts[x1][1]+', ב-<span class="math-expr">x='+x2+'</span> הוא '+pts[x2][1]+'. השינוי: '+pts[x2][1]+' - '+pts[x1][1]+' = <strong>'+diff+'</strong>'});
+    qs.push({type:'mc',stem:'הסתכלו בגרף.<br>'+svg+'מה השינוי ב-y בין <span class="math-expr">x='+x1+'</span> ל-<span class="math-expr">x='+x2+'</span>?<br>(שינוי חיובי = עלייה, שלילי = ירידה)',options:opts,answer:opts.indexOf(''+diff),explanation:'y ב-<span class="math-expr">x='+x1+'</span> הוא '+ltrN(pts[x1][1])+', ב-<span class="math-expr">x='+x2+'</span> הוא '+ltrN(pts[x2][1])+'. השינוי: '+ltrN(pts[x2][1])+' - '+ltrN(pts[x1][1])+' = <strong>'+ltrN(diff)+'</strong>'});
   }
   return qs;
 }
@@ -727,7 +728,7 @@ function genHard(){
     var rate=dy/dx;
     var rateStr=Number.isInteger(rate)?''+rate:rate.toFixed(1);
     var svg=qSVG(pts,'x','y',7,16,1,2,true);
-    qs.push({type:'input',stem:'מצאו את <strong>קצב השינוי הממוצע</strong> של y בין <span class="math-expr">x='+x1+'</span> ל-<span class="math-expr">x='+x2+'</span>.<br>'+svg+'<br>(חשבו: שינוי ב-y חלקי שינוי ב-x)',answer:parseFloat(rateStr),explanation:'שינוי ב-y: '+pts[x2][1]+' - '+pts[x1][1]+' = '+dy+'<br>שינוי ב-x: '+x2+' - '+x1+' = '+dx+'<br>קצב ממוצע: '+dy+' / '+dx+' = <strong>'+rateStr+'</strong>'});
+    qs.push({type:'input',stem:'מצאו את <strong>קצב השינוי הממוצע</strong> של y בין <span class="math-expr">x='+x1+'</span> ל-<span class="math-expr">x='+x2+'</span>.<br>'+svg+'<br>(חשבו: שינוי ב-y חלקי שינוי ב-x)',answer:parseFloat(rateStr),explanation:'שינוי ב-y: '+ltrN(pts[x2][1])+' - '+ltrN(pts[x1][1])+' = '+ltrN(dy)+'<br>שינוי ב-x: '+x2+' - '+x1+' = '+dx+'<br>קצב ממוצע: '+ltrN(dy)+' / '+dx+' = <strong>'+ltrN(rateStr)+'</strong>'});
   }
   /* Q6-10: find where two graphs meet (intersection x) */
   for(var i=0;i<5;i++){

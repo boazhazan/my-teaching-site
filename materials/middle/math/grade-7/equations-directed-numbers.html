@@ -264,6 +264,7 @@ function pick(arr){return arr[Math.floor(R()*arr.length)]}
 function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function fmtN(n){return n<0?'('+n+')':''+n}
 function fmtNhtml(n){return n<0?'('+n.toString().replace('-','\u2212')+')':''+n}
+function ltrN(v){return '\u200E'+v}
 
 const LETTERS=['א','ב','ג','ד'];
 
@@ -558,11 +559,11 @@ function genEasy(){
 
   /* Q1-Q5: Fill-in-the-blank arithmetic: ___-6=2, ___+6=2, etc. */
   const blanks=[
-    function(){var b=RI(2,9);var r=RI(-9,9);var a=r+b;return{eq:fmtNhtml(a)+' \u2212 '+b+' = '+fmtNhtml(r),ans:a,explain:fmtNhtml(a)+' \u2212 '+b+' = '+fmtNhtml(r)}},
-    function(){var b=RI(2,9);var r=RI(-9,-1);var a=r-b;return{eq:fmtNhtml(a)+' + '+b+' = '+fmtNhtml(r),ans:a,explain:fmtNhtml(a)+' + '+b+' = '+fmtNhtml(r)}},
-    function(){var b=pick([2,3,4,5]);var r=pick([-6,-8,-10,-12]);var a=r/b;return{eq:fmtNhtml(a)+' \u00b7 '+b+' = '+fmtNhtml(r),ans:a,explain:fmtNhtml(a)+' \u00b7 '+b+' = '+fmtNhtml(r)}},
-    function(){var a=-2;var b=pick([-6,-8,-4,-10]);var r=b/a;return{eq:fmtNhtml(a)+' \u00b7 ___ = '+fmtNhtml(b),ans:r,explain:fmtNhtml(a)+' \u00b7 '+fmtNhtml(r)+' = '+fmtNhtml(b)}},
-    function(){var b=pick([2,3,4,5,-2,-3]);var r=pick([-2,-3,-4]);var a=r*b;return{eq:fmtNhtml(a)+' : '+fmtNhtml(b)+' = ___',ans:r,explain:fmtNhtml(a)+' : '+fmtNhtml(b)+' = '+fmtNhtml(r)}}
+    function(){var b=RI(2,9);var r=RI(-9,9);var a=r+b;return{eq:fmtNhtml(a)+' \u2212 '+b+' = '+fmtNhtml(r),ans:a,explain:ltrN(fmtNhtml(a))+' \u2212 '+b+' = '+ltrN(fmtNhtml(r))}},
+    function(){var b=RI(2,9);var r=RI(-9,-1);var a=r-b;return{eq:fmtNhtml(a)+' + '+b+' = '+fmtNhtml(r),ans:a,explain:ltrN(fmtNhtml(a))+' + '+b+' = '+ltrN(fmtNhtml(r))}},
+    function(){var b=pick([2,3,4,5]);var r=pick([-6,-8,-10,-12]);var a=r/b;return{eq:fmtNhtml(a)+' \u00b7 '+b+' = '+fmtNhtml(r),ans:a,explain:ltrN(fmtNhtml(a))+' \u00b7 '+b+' = '+ltrN(fmtNhtml(r))}},
+    function(){var a=-2;var b=pick([-6,-8,-4,-10]);var r=b/a;return{eq:fmtNhtml(a)+' \u00b7 ___ = '+fmtNhtml(b),ans:r,explain:ltrN(fmtNhtml(a))+' \u00b7 '+ltrN(fmtNhtml(r))+' = '+ltrN(fmtNhtml(b))}},
+    function(){var b=pick([2,3,4,5,-2,-3]);var r=pick([-2,-3,-4]);var a=r*b;return{eq:fmtNhtml(a)+' : '+fmtNhtml(b)+' = ___',ans:r,explain:ltrN(fmtNhtml(a))+' : '+ltrN(fmtNhtml(b))+' = '+ltrN(fmtNhtml(r))}}
   ];
   for(var i=0;i<5;i++){
     var gen=blanks[i%blanks.length]();
@@ -590,7 +591,7 @@ function genEasy(){
     var eqStr=a+'x '+(b>=0?'+ '+b:'\u2212 '+Math.abs(b))+' = '+c;
     var correct=''+sol;
     var opts=cands.map(function(v){return ''+v});
-    qs.push({type:'mc',stem:'איזה מהמספרים הבאים הוא פתרון של <code>'+eqStr+'</code>?<br>היעזרו בהצבה.',options:opts,answer:opts.indexOf(correct),explanation:'נציב <span class="math-expr">x = '+fmtNhtml(sol)+'</span>: '+a+' \u00b7 '+fmtNhtml(sol)+' '+(b>=0?'+ '+b:'\u2212 '+Math.abs(b))+' = '+fmtNhtml(a*sol)+' '+(b>=0?'+ '+b:'\u2212 '+Math.abs(b))+' = '+c+' \u2714'});
+    qs.push({type:'mc',stem:'איזה מהמספרים הבאים הוא פתרון של <code>'+eqStr+'</code>?<br>היעזרו בהצבה.',options:opts,answer:opts.indexOf(correct),explanation:'נציב <span class="math-expr">x = '+fmtNhtml(sol)+'</span>: '+ltrN(a)+' \u00b7 '+ltrN(fmtNhtml(sol))+' '+(b>=0?'+ '+b:'\u2212 '+Math.abs(b))+' = '+ltrN(fmtNhtml(a*sol))+' '+(b>=0?'+ '+b:'\u2212 '+Math.abs(b))+' = '+ltrN(c)+' \u2714'});
   }
 
   /* Q11-Q15: Guided step-by-step fill (fill type) */
@@ -608,16 +609,16 @@ function genEasy(){
     fillHtml+='<p><code>'+a+'x '+(b>=0?'+ '+b:'\u2212 '+Math.abs(b))+' = '+c+'</code></p>';
     fillHtml+='<p>/'+stepSign+': &nbsp; '+a+'x = <input type="number" class="mini-input" id="'+uid+'0" style="width:60px" step="any"></p>';
     fillHtml+='<p>/:'+fmtNhtml(a)+': &nbsp; x = <input type="number" class="mini-input" id="'+uid+'1" style="width:60px" step="any"></p>';
-    qs.push({type:'fill',stem:'כתבו את המספרים בכל שלב:',fillHtml:fillHtml,fills:[{id:uid+'0',ans:step1Val},{id:uid+'1',ans:sol2}],explanation:a+'x '+(b>=0?'+ '+b:'\u2212 '+Math.abs(b))+' = '+c+' &rarr; '+a+'x = '+fmtNhtml(step1Val)+' &rarr; x = '+fmtNhtml(sol2)});
+    qs.push({type:'fill',stem:'כתבו את המספרים בכל שלב:',fillHtml:fillHtml,fills:[{id:uid+'0',ans:step1Val},{id:uid+'1',ans:sol2}],explanation:ltrN(a)+'x '+(b>=0?'+ '+b:'\u2212 '+Math.abs(b))+' = '+ltrN(c)+' &rarr; '+ltrN(a)+'x = '+ltrN(fmtNhtml(step1Val))+' &rarr; x = '+ltrN(fmtNhtml(sol2))});
   }
 
   /* Q16-Q20: Solve by reasoning (single step with negatives) */
   var reasonTemplates=[
-    function(){var x=pick([-1,-2,-3,-5,-7]);return{eq:'8 + x = '+(8+x),ans:x,explain:'8 + '+fmtNhtml(x)+' = '+(8+x)}},
-    function(){var x=pick([-1,-3,-5,1,3]);return{eq:fmtNhtml(-8)+' + x = '+(-8+x),ans:x,explain:fmtNhtml(-8)+' + '+fmtNhtml(x)+' = '+(-8+x)}},
-    function(){var x=pick([-8,-6,-4,-2]);return{eq:'2x = '+(2*x),ans:x,explain:'2 \u00b7 '+fmtNhtml(x)+' = '+(2*x)}},
-    function(){var x=pick([-8,-6,-4,-16,-10]);return{eq:'x/2 = '+(x/2),ans:x,explain:fmtNhtml(x)+'/2 = '+(x/2)}},
-    function(){var x=pick([-3,-5,-7,3,5]);return{eq:'x + 10 = '+(x+10),ans:x,explain:fmtNhtml(x)+' + 10 = '+(x+10)}}
+    function(){var x=pick([-1,-2,-3,-5,-7]);return{eq:'8 + x = '+(8+x),ans:x,explain:'8 + '+ltrN(fmtNhtml(x))+' = '+ltrN(8+x)}},
+    function(){var x=pick([-1,-3,-5,1,3]);return{eq:fmtNhtml(-8)+' + x = '+(-8+x),ans:x,explain:ltrN(fmtNhtml(-8))+' + '+ltrN(fmtNhtml(x))+' = '+ltrN(-8+x)}},
+    function(){var x=pick([-8,-6,-4,-2]);return{eq:'2x = '+(2*x),ans:x,explain:'2 \u00b7 '+ltrN(fmtNhtml(x))+' = '+ltrN(2*x)}},
+    function(){var x=pick([-8,-6,-4,-16,-10]);return{eq:'x/2 = '+(x/2),ans:x,explain:ltrN(fmtNhtml(x))+'/2 = '+ltrN(x/2)}},
+    function(){var x=pick([-3,-5,-7,3,5]);return{eq:'x + 10 = '+(x+10),ans:x,explain:ltrN(fmtNhtml(x))+' + 10 = '+ltrN(x+10)}}
   ];
   for(var i=0;i<5;i++){
     var t=reasonTemplates[i%reasonTemplates.length]();
@@ -651,23 +652,23 @@ function genMedium(){
   /* Q6-Q10: Equations with fractions */
   var fracEqs=[
     function(){var x=9;return{eq:'(b + 1) / 2 = 5',ans:x,explain:'b + 1 = 10 &rarr; b = 9'}},
-    function(){var x=pick([1,-1]);var c=3*x+11;return{eq:c+' = 3c + 11',ans:(c-11)/3,explain:c+' \u2212 11 = 3c &rarr; 3c = '+(c-11)+' &rarr; c = '+((c-11)/3)}},
-    function(){var t=pick([1,-1,2]);return{eq:'4(2t + 3) = '+(4*(2*t+3)),ans:t,explain:'8t + 12 = '+(4*(2*t+3))+' &rarr; 8t = '+(4*(2*t+3)-12)+' &rarr; t = '+t}},
-    function(){var p=pick([4,-4,12,-12]);return{eq:'p/3 = '+fmtNhtml(p/3),ans:p,explain:'p = 3 \u00b7 '+fmtNhtml(p/3)+' = '+fmtNhtml(p)}},
-    function(){var x=pick([-2,-5,3]);var a=2;var b=-1;var c=a*x+b;return{eq:a+'x \u2212 1 = '+c,ans:x,explain:a+'x = '+(c+1)+' &rarr; x = '+x}}
+    function(){var x=pick([1,-1]);var c=3*x+11;return{eq:c+' = 3c + 11',ans:(c-11)/3,explain:ltrN(c)+' \u2212 11 = 3c &rarr; 3c = '+ltrN(c-11)+' &rarr; c = '+ltrN((c-11)/3)}},
+    function(){var t=pick([1,-1,2]);return{eq:'4(2t + 3) = '+(4*(2*t+3)),ans:t,explain:'8t + 12 = '+ltrN(4*(2*t+3))+' &rarr; 8t = '+ltrN(4*(2*t+3)-12)+' &rarr; t = '+ltrN(t)}},
+    function(){var p=pick([4,-4,12,-12]);return{eq:'p/3 = '+fmtNhtml(p/3),ans:p,explain:'p = 3 \u00b7 '+ltrN(fmtNhtml(p/3))+' = '+ltrN(fmtNhtml(p))}},
+    function(){var x=pick([-2,-5,3]);var a=2;var b=-1;var c=a*x+b;return{eq:a+'x \u2212 1 = '+c,ans:x,explain:a+'x = '+ltrN(c+1)+' &rarr; x = '+ltrN(x)}}
   ];
   for(var i=0;i<5;i++){
     var gen=fracEqs[i]();
-    qs.push({type:'input',stem:'פתרו: <code>'+gen.eq+'</code>',answer:gen.ans,explanation:gen.explain||('הפתרון: '+fmtNhtml(gen.ans))});
+    qs.push({type:'input',stem:'פתרו: <code>'+gen.eq+'</code>',answer:gen.ans,explanation:gen.explain||('הפתרון: '+ltrN(fmtNhtml(gen.ans)))});
   }
 
   /* Q11-Q15: Solve and detail — equations with negative coefficients */
   var detailEqs=[
-    function(){/* -6x = 1 → x = -1/6 ... use integer version */var x=pick([-1,-2,-3]);return{eq:'\u22126x = '+((-6)*x),ans:x,explain:'\u22126x = '+((-6)*x)+' &rarr; x = '+((-6)*x)+'/(−6) = '+x}},
-    function(){var x=pick([3,-3,6,-6]);return{eq:'x : (\u22123) = '+(x/(-3)),ans:x,explain:'x = '+(x/(-3))+' \u00b7 (\u22123) = '+x}},
-    function(){var x=pick([-8,8,-4,4]);return{eq:'x \u00b7 (1/4) = '+(x/4),ans:x,explain:'x/4 = '+(x/4)+' &rarr; x = '+x}},
-    function(){var x=pick([15,-15,5,-5]);return{eq:'2x \u00b7 (1/5) = '+(2*x/5),ans:x,explain:'2x/5 = '+(2*x/5)+' &rarr; 2x = '+(2*x/5*5)+' &rarr; x = '+x}},
-    function(){var x=pick([-4,-7,2]);return{eq:'\u22123x + 1 = '+((-3)*x+1),ans:x,explain:'\u22123x = '+((-3)*x+1-1)+' &rarr; x = '+x}}
+    function(){/* -6x = 1 → x = -1/6 ... use integer version */var x=pick([-1,-2,-3]);return{eq:'\u22126x = '+((-6)*x),ans:x,explain:'\u22126x = '+ltrN((-6)*x)+' &rarr; x = '+ltrN((-6)*x)+'/(−6) = '+ltrN(x)}},
+    function(){var x=pick([3,-3,6,-6]);return{eq:'x : (\u22123) = '+(x/(-3)),ans:x,explain:'x = '+ltrN(x/(-3))+' \u00b7 (\u22123) = '+ltrN(x)}},
+    function(){var x=pick([-8,8,-4,4]);return{eq:'x \u00b7 (1/4) = '+(x/4),ans:x,explain:'x/4 = '+ltrN(x/4)+' &rarr; x = '+ltrN(x)}},
+    function(){var x=pick([15,-15,5,-5]);return{eq:'2x \u00b7 (1/5) = '+(2*x/5),ans:x,explain:'2x/5 = '+ltrN(2*x/5)+' &rarr; 2x = '+ltrN(2*x/5*5)+' &rarr; x = '+ltrN(x)}},
+    function(){var x=pick([-4,-7,2]);return{eq:'\u22123x + 1 = '+((-3)*x+1),ans:x,explain:'\u22123x = '+ltrN((-3)*x+1-1)+' &rarr; x = '+ltrN(x)}}
   ];
   for(var i=0;i<5;i++){
     var gen=detailEqs[i]();
@@ -743,15 +744,15 @@ function genHard(){
   ];
   /* fix: pick ones that give integer answers */
   /* Q11 */
-  qs.push({type:'input',stem:'פתרו ופרטו: <code>3 = 12 + m</code>',answer:-9,explanation:'m = 3 \u2212 12 = \u22129'});
+  qs.push({type:'input',stem:'פתרו ופרטו: <code>3 = 12 + m</code>',answer:-9,explanation:'m = 3 \u2212 12 = '+ltrN('\u22129')});
   /* Q12 */
-  qs.push({type:'input',stem:'פתרו ופרטו: <code>\u22123 = 2y + 3y \u2212 18</code>',answer:3,explanation:'5y \u2212 18 = \u22123 &rarr; 5y = 15 &rarr; y = 3'});
+  qs.push({type:'input',stem:'פתרו ופרטו: <code>\u22123 = 2y + 3y \u2212 18</code>',answer:3,explanation:'5y \u2212 18 = '+ltrN('\u22123')+' &rarr; 5y = 15 &rarr; y = 3'});
   /* Q13 */
-  qs.push({type:'input',stem:'פתרו ופרטו: <code>\u22126 + 3t = \u221212/2</code>',answer:0,explanation:'\u22126 + 3t = \u22126 &rarr; 3t = 0 &rarr; t = 0'});
+  qs.push({type:'input',stem:'פתרו ופרטו: <code>\u22126 + 3t = \u221212/2</code>',answer:0,explanation:ltrN('\u22126')+' + 3t = '+ltrN('\u22126')+' &rarr; 3t = 0 &rarr; t = 0'});
   /* Q14 */
-  (function(){var x=pick([-2,4,-5]);qs.push({type:'input',stem:'פתרו ופרטו: <code>2x \u2212 7 = '+(2*x-7)+'</code>',answer:x,explanation:'2x = '+(2*x-7+7)+' &rarr; x = '+x})})();
+  (function(){var x=pick([-2,4,-5]);qs.push({type:'input',stem:'פתרו ופרטו: <code>2x \u2212 7 = '+(2*x-7)+'</code>',answer:x,explanation:'2x = '+ltrN(2*x-7+7)+' &rarr; x = '+ltrN(x)})})();
   /* Q15 */
-  (function(){var x=-3;var c=(2*x-21)/3-5;qs.push({type:'input',stem:'פתרו ופרטו: <code>(2x \u2212 21)/3 \u2212 5 = '+c+'</code>',answer:x,explanation:'(2x \u2212 21)/3 = '+(c+5)+' &rarr; 2x \u2212 21 = '+((c+5)*3)+' &rarr; 2x = '+((c+5)*3+21)+' &rarr; x = '+x})})();
+  (function(){var x=-3;var c=(2*x-21)/3-5;qs.push({type:'input',stem:'פתרו ופרטו: <code>(2x \u2212 21)/3 \u2212 5 = '+c+'</code>',answer:x,explanation:'(2x \u2212 21)/3 = '+ltrN(c+5)+' &rarr; 2x \u2212 21 = '+ltrN((c+5)*3)+' &rarr; 2x = '+ltrN((c+5)*3+21)+' &rarr; x = '+ltrN(x)})})();
 
   /* Q16-Q20: Check by substitution — which values are solutions */
   /* Q16 */
@@ -782,7 +783,7 @@ function genHard(){
   /* Q20 */
   (function(){
     var x=pick([-2,2,-4]);
-    qs.push({type:'input',stem:'בדקו בהצבה ומצאו את הפתרון: <code>5x + 10 = '+(5*x+10)+'</code>',answer:x,explanation:'5\u00b7'+fmtNhtml(x)+' + 10 = '+(5*x)+' + 10 = '+(5*x+10)+' \u2714'});
+    qs.push({type:'input',stem:'בדקו בהצבה ומצאו את הפתרון: <code>5x + 10 = '+(5*x+10)+'</code>',answer:x,explanation:'5\u00b7'+ltrN(fmtNhtml(x))+' + 10 = '+ltrN(5*x)+' + 10 = '+ltrN(5*x+10)+' \u2714'});
   })();
 
   return qs;
@@ -801,11 +802,11 @@ function genChallenge(){
   /* Q4-Q6: Product = 0, identity equation */
   qs.push({type:'input-text',stem:'מצאו את כל הפתרונות: <code>(x + 2)(x \u2212 4) \u00b7 x = 0</code><br>(כתבו את הפתרונות מופרדים בפסיקים)',answer:['0,-2,4','0,4,-2','-2,0,4','-2,4,0','4,0,-2','4,-2,0','0, -2, 4','0, 4, -2','-2, 0, 4'],display:'x = 0, x = \u22122, x = 4',explanation:'מכפלה = 0 כאשר אחד הגורמים = 0: x = 0, x + 2 = 0 &rarr; x = \u22122, x \u2212 4 = 0 &rarr; x = 4'});
   qs.push({type:'input-text',stem:'פתרו: <code>\u2212x + 20 \u2212 3x + 4x = 12 + 8</code><br>(אם כל מספר הוא פתרון כתבו: R)',answer:['R','r','ℝ','כל מספר','all','הכל'],display:'\u211d (כל מספר)',explanation:'\u2212x + 4x \u2212 3x = 0, נשאר 20 = 20 &rarr; זהות &rarr; כל מספר'});
-  (function(){var x=pick([-2,2,-5]);qs.push({type:'input',stem:'פתרו: <code>\u22124x + 8 = '+((-4)*x+8)+'</code>',answer:x,explanation:'\u22124x = '+((-4)*x+8-8)+' &rarr; x = '+x})})();
+  (function(){var x=pick([-2,2,-5]);qs.push({type:'input',stem:'פתרו: <code>\u22124x + 8 = '+((-4)*x+8)+'</code>',answer:x,explanation:ltrN('\u22124x')+' = '+ltrN((-4)*x+8-8)+' &rarr; x = '+ltrN(x)})})();
 
   /* Q7-Q9: Solve the convenient way */
-  qs.push({type:'input',stem:'פתרו בדרך הנוחה: <code>3 = 12 + m</code>',answer:-9,explanation:'m = 3 \u2212 12 = \u22129'});
-  qs.push({type:'input',stem:'פתרו: <code>\u22123 = 2y + 3y \u2212 18</code>',answer:3,explanation:'5y \u2212 18 = \u22123 &rarr; 5y = 15 &rarr; y = 3'});
+  qs.push({type:'input',stem:'פתרו בדרך הנוחה: <code>3 = 12 + m</code>',answer:-9,explanation:'m = 3 \u2212 12 = '+ltrN('\u22129')});
+  qs.push({type:'input',stem:'פתרו: <code>\u22123 = 2y + 3y \u2212 18</code>',answer:3,explanation:'5y \u2212 18 = '+ltrN('\u22123')+' &rarr; 5y = 15 &rarr; y = 3'});
   qs.push({type:'input-text',stem:'פתרו: <code>c \u00b7 (1/4) \u2212 0.25c \u2212 3 = 3</code><br>(אם אין פתרון כתבו: Ø, אם כל מספר כתבו: R)',answer:['\u00d8','0/','Ø','ø','אין','no','none','empty'],display:'\u00d8',explanation:'c/4 \u2212 c/4 \u2212 3 = 3 &rarr; \u22123 = 3 &rarr; סתירה \u00d8'});
 
   /* Q10-Q12: Mixed complex */

@@ -183,6 +183,7 @@ function fmtN(v){
   if(n<0){var abs=Math.abs(n);var s=(abs===Math.floor(abs))?''+abs:parseFloat(abs.toFixed(4))+'';return s+'\u2212';}
   return (n===Math.floor(n))?''+n:parseFloat(n.toFixed(4))+'';
 }
+function ltrN(v){return '\u200E'+v}
 
 /* ===== STATE ===== */
 var state={section:'learn',step:0,level:'easy',qIndex:0};
@@ -360,12 +361,12 @@ function genEasy(){
       /* a + b*(neg) */
       ans=a+b*neg;
       expr=a+' + '+b+' \u00B7 ('+neg+')';
-      expTxt='\u05DB\u05E4\u05DC \u05E7\u05D5\u05D3\u05DD: '+b+'\u00B7('+neg+')='+(b*neg)+', \u05D0\u05D7\u05E8 \u05DB\u05DA '+a+'+('+b*neg+')='+ans;
+      expTxt='\u05DB\u05E4\u05DC \u05E7\u05D5\u05D3\u05DD: '+b+'\u00B7('+ltrN(neg)+')='+ltrN(b*neg)+', \u05D0\u05D7\u05E8 \u05DB\u05DA '+a+'+('+ltrN(b*neg)+')='+ltrN(ans);
     } else {
       /* a*(neg) - c */
       ans=a*neg-c;
       expr=a+' \u00B7 ('+neg+') \u2212 '+c;
-      expTxt='\u05DB\u05E4\u05DC \u05E7\u05D5\u05D3\u05DD: '+a+'\u00B7('+neg+')='+(a*neg)+', \u05D0\u05D7\u05E8 \u05DB\u05DA '+(a*neg)+'\u2212'+c+'='+ans;
+      expTxt='\u05DB\u05E4\u05DC \u05E7\u05D5\u05D3\u05DD: '+a+'\u00B7('+ltrN(neg)+')='+ltrN(a*neg)+', \u05D0\u05D7\u05E8 \u05DB\u05DA '+ltrN(a*neg)+'\u2212'+c+'='+ltrN(ans);
     }
     var w1=ans+RI2(2,5),w2=ans-RI2(2,5),w3=-ans;
     if(w1===ans)w1=ans+7;if(w2===ans)w2=ans-7;if(w3===ans)w3=ans+3;
@@ -383,13 +384,13 @@ function genEasy(){
       var inner=a+neg;
       ans=inner*c;
       expr='('+a+' + ('+neg+')) \u00B7 '+c;
-      expTxt='\u05E1\u05D5\u05D2\u05E8\u05D9\u05D9\u05DD: '+a+'+('+neg+')='+inner+', \u05DB\u05E4\u05DC: '+inner+'\u00B7'+c+'='+ans;
+      expTxt='\u05E1\u05D5\u05D2\u05E8\u05D9\u05D9\u05DD: '+ltrN(a)+'+('+ltrN(neg)+')='+ltrN(inner)+', \u05DB\u05E4\u05DC: '+ltrN(inner)+'\u00B7'+c+'='+ltrN(ans);
     } else {
       /* (a - b)*(neg) */
       var inner=a-b;
       ans=inner*neg;
       expr='('+a+' \u2212 '+b+') \u00B7 ('+neg+')';
-      expTxt='\u05E1\u05D5\u05D2\u05E8\u05D9\u05D9\u05DD: '+a+'\u2212'+b+'='+inner+', \u05DB\u05E4\u05DC: '+inner+'\u00B7('+neg+')='+ans;
+      expTxt='\u05E1\u05D5\u05D2\u05E8\u05D9\u05D9\u05DD: '+ltrN(a)+'\u2212'+b+'='+ltrN(inner)+', \u05DB\u05E4\u05DC: '+ltrN(inner)+'\u00B7('+ltrN(neg)+')='+ltrN(ans);
     }
     var w1=ans+RI2(2,6),w2=ans-RI2(2,6),w3=-ans;
     if(w1===ans)w1=ans+7;if(w2===ans)w2=ans-7;if(w3===ans)w3=ans+3;
@@ -414,12 +415,12 @@ function genMedium(){
       var inner=a+neg1;
       ans=inner*b+c;
       expr='('+a+' + ('+neg1+')) \u00B7 '+b+' + '+c;
-      expTxt='\u05E1\u05D5\u05D2\u05E8\u05D9\u05D9\u05DD: '+a+'+('+neg1+')='+inner+', \u05DB\u05E4\u05DC: '+inner+'\u00B7'+b+'='+(inner*b)+', \u05D7\u05D9\u05D1\u05D5\u05E8: '+(inner*b)+'+'+c+'='+ans;
+      expTxt='\u05E1\u05D5\u05D2\u05E8\u05D9\u05D9\u05DD: '+ltrN(a)+'+('+ltrN(neg1)+')='+ltrN(inner)+', \u05DB\u05E4\u05DC: '+ltrN(inner)+'\u00B7'+b+'='+ltrN(inner*b)+', \u05D7\u05D9\u05D1\u05D5\u05E8: '+ltrN(inner*b)+'+'+c+'='+ltrN(ans);
     } else {
       /* a * neg1 + b * neg2 */
       ans=a*neg1+b*neg2;
       expr=a+' \u00B7 ('+neg1+') + '+b+' \u00B7 ('+neg2+')';
-      expTxt=a+'\u00B7('+neg1+')='+(a*neg1)+', '+b+'\u00B7('+neg2+')='+(b*neg2)+', \u05E1\u05DB\u05D5\u05DD: '+(a*neg1)+'+('+b*neg2+')='+ans;
+      expTxt=ltrN(a)+'\u00B7('+ltrN(neg1)+')='+ltrN(a*neg1)+', '+b+'\u00B7('+ltrN(neg2)+')='+ltrN(b*neg2)+', \u05E1\u05DB\u05D5\u05DD: '+ltrN(a*neg1)+'+('+ltrN(b*neg2)+')='+ltrN(ans);
     }
     var w1=ans+RI2(2,6),w2=ans-RI2(2,6),w3=-ans;
     if(w1===ans)w1=ans+8;if(w2===ans)w2=ans-8;if(w3===ans)w3=ans+5;
@@ -436,7 +437,7 @@ function genMedium(){
     var addend=RI2(-6,8);
     var ans=numer/div1+addend;
     var expr='('+numer+') / '+div1+' + '+(addend>=0?addend:'('+addend+')');
-    var expTxt='('+numer+')/'+div1+'='+(numer/div1)+', \u05D7\u05D9\u05D1\u05D5\u05E8: '+(numer/div1)+'+'+(addend>=0?addend:'('+addend+')')+'='+ans;
+    var expTxt='('+ltrN(numer)+')/'+div1+'='+ltrN(numer/div1)+', \u05D7\u05D9\u05D1\u05D5\u05E8: '+ltrN(numer/div1)+'+'+(addend>=0?addend:'('+ltrN(addend)+')')+'='+ltrN(ans);
     var w1=ans+RI2(2,5),w2=ans-RI2(2,5),w3=-ans;
     if(w1===ans)w1=ans+7;if(w2===ans)w2=ans-7;if(w3===ans)w3=ans+4;
     var opts=[ltrWrap(fmtN(ans)),ltrWrap(fmtN(w1)),ltrWrap(fmtN(w2)),ltrWrap(fmtN(w3))];
@@ -460,7 +461,7 @@ function genHard(){
       var inner=a+neg1;
       ans=inner*b-c*neg2;
       expr='('+a+' + ('+neg1+')) \u00B7 '+b+' \u2212 '+c+' \u00B7 ('+neg2+')';
-      expTxt='\u05E1\u05D5\u05D2\u05E8\u05D9\u05D9\u05DD: '+inner+', \u05DB\u05E4\u05DC: '+inner+'\u00B7'+b+'='+(inner*b)+' \u05D5-'+c+'\u00B7('+neg2+')='+(c*neg2)+', \u05EA\u05D5\u05E6\u05D0\u05D4: '+(inner*b)+'\u2212('+(c*neg2)+')='+ans;
+      expTxt='\u05E1\u05D5\u05D2\u05E8\u05D9\u05D9\u05DD: '+ltrN(inner)+', \u05DB\u05E4\u05DC: '+ltrN(inner)+'\u00B7'+b+'='+ltrN(inner*b)+' \u05D5-'+c+'\u00B7('+ltrN(neg2)+')='+ltrN(c*neg2)+', \u05EA\u05D5\u05E6\u05D0\u05D4: '+ltrN(inner*b)+'\u2212('+ltrN(c*neg2)+')='+ltrN(ans);
     } else if(i<6){
       /* a * (neg1 + b) + c * d */
       var inner=neg1+b;

@@ -264,6 +264,7 @@ function R(){return rng()}
 function RI(a,b){return a+Math.floor(R()*(b-a+1))}
 function pick(arr){return arr[Math.floor(R()*arr.length)]}
 function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function ltrN(v){return '\u200E'+v}
 
 const LETTERS=['א','ב','ג','ד'];
 
@@ -711,7 +712,7 @@ function makeLinearGraphSVG(m,b,seed){
 function makeTableHTML(xs,ys){
   var h='<table class="q-table"><tr><th>x</th><th>y</th></tr>';
   for(var i=0;i<xs.length;i++){
-    h+='<tr><td>'+xs[i]+'</td><td>'+ys[i]+'</td></tr>';
+    h+='<tr><td>'+ltrN(xs[i])+'</td><td>'+ltrN(ys[i])+'</td></tr>';
   }
   h+='</table>';
   return h;
@@ -748,7 +749,7 @@ function genEasy(){rng=mulberry32(dateSeed+100);var qs=[];
     var b3=RI(-5,5);
     var exprStr=m3===0?'f(x) = '+b3:(m3===1?'f(x) = x':(m3===-1?'f(x) = -x':'f(x) = '+m3+'x'))+(b3>0?' + '+b3:b3<0?' - '+(-b3):'');
     var opts3=shuffle(['עולה','יורדת','קבועה','לא ניתן לדעת']);
-    qs.push({type:'mc',stem:'<code>'+exprStr+'</code> — האם הפונקציה עולה, יורדת או קבועה?',options:opts3,answer:opts3.indexOf(correct3),explanation:'השיפוע m = '+m3+(m3>0?' > 0 → עולה':m3<0?' < 0 → יורדת':' = 0 → קבועה')});
+    qs.push({type:'mc',stem:'<code>'+exprStr+'</code> — האם הפונקציה עולה, יורדת או קבועה?',options:opts3,answer:opts3.indexOf(correct3),explanation:'השיפוע m = '+ltrN(m3)+(m3>0?' > 0 → עולה':m3<0?' < 0 → יורדת':' = 0 → קבועה')});
   }
   /* Q16-20: SVG with marked interval */
   for(var n=0;n<5;n++){
@@ -767,12 +768,12 @@ function genMedium(){rng=mulberry32(dateSeed+200);var qs=[];
   for(var i=0;i<5;i++){
     var peakX=RI(1,5);
     var xMin=-RI(1,3);var xMax=peakX+RI(2,5);
-    var correctInc=xMin+' < x < '+peakX;
+    var correctInc=ltrN(xMin)+' < x < '+peakX;
     var correctDec=peakX+' < x < '+xMax;
     var isAskInc=i<3;
     var correctAns=isAskInc?correctInc:correctDec;
     var d1=isAskInc?correctDec:correctInc;
-    var d2=xMin+' < x < '+xMax;
+    var d2=ltrN(xMin)+' < x < '+xMax;
     var d3=(peakX-1)+' < x < '+(peakX+1);
     var opts=shuffle([correctAns,d1,d2,d3]);
     var svg='';
@@ -797,10 +798,10 @@ function genMedium(){rng=mulberry32(dateSeed+200);var qs=[];
     var leftX=px-RI(2,4);var rightX=px+RI(2,4);
     var leftY=py-RI(2,4);var rightY=py-RI(2,4);
     if(!isMax){leftY=py+RI(2,4);rightY=py+RI(2,4)}
-    var correctPt='('+px+', '+py+')';
-    var d1b='('+leftX+', '+leftY+')';
-    var d2b='('+rightX+', '+rightY+')';
-    var d3b='('+(px+1)+', '+(py+(isMax?-1:1))+')';
+    var correctPt='\u200E('+ltrN(px)+', '+ltrN(py)+')';
+    var d1b='\u200E('+ltrN(leftX)+', '+ltrN(leftY)+')';
+    var d2b='\u200E('+ltrN(rightX)+', '+ltrN(rightY)+')';
+    var d3b='\u200E('+ltrN(px+1)+', '+ltrN(py+(isMax?-1:1))+')';
     var opts2=shuffle([correctPt,d1b,d2b,d3b]);
     /* build SVG */
     var svgM=svgStart(340,180,'');
@@ -841,7 +842,7 @@ function genMedium(){rng=mulberry32(dateSeed+200);var qs=[];
     var opts4=shuffle(['עולה','יורדת','קבועה','לא ניתן לדעת']);
     var exprQ=a2===1?'f(x) = x²':(a2===-1?'f(x) = -x²':'f(x) = '+a2+'x²');
     exprQ+=b2>0?' + '+b2+'x':b2<0?' - '+(-b2)+'x':'';
-    qs.push({type:'mc',stem:'נתונה <code>'+exprQ+'</code>.<br>חשבו: <code>f('+testX+') = '+fTest+'</code> ו-<code>f('+(testX+1)+') = '+fTest2+'</code>.<br>האם הפונקציה <strong>עולה</strong> או <strong>יורדת</strong> בין <span class="math-expr">x = '+testX+'</span> ל-<span class="math-expr">x = '+(testX+1)+'</span>?',options:opts4,answer:opts4.indexOf(correctBeh),explanation:'<span class="math-expr">f('+(testX+1)+') = '+fTest2+(fTest2>fTest?' > ':' < ')+fTest+' = f('+testX+')</span> → הפונקציה '+correctBeh});
+    qs.push({type:'mc',stem:'נתונה <code>'+exprQ+'</code>.<br>חשבו: <code>f('+testX+') = '+ltrN(fTest)+'</code> ו-<code>f('+(testX+1)+') = '+ltrN(fTest2)+'</code>.<br>האם הפונקציה <strong>עולה</strong> או <strong>יורדת</strong> בין <span class="math-expr">x = '+testX+'</span> ל-<span class="math-expr">x = '+(testX+1)+'</span>?',options:opts4,answer:opts4.indexOf(correctBeh),explanation:'<span class="math-expr">f('+(testX+1)+') = '+ltrN(fTest2)+(fTest2>fTest?' > ':' < ')+ltrN(fTest)+' = f('+testX+')</span> → הפונקציה '+correctBeh});
   }
   return qs;
 }
@@ -894,15 +895,15 @@ function genHard(){rng=mulberry32(dateSeed+300);var qs=[];
     if(askWhat===0){
       correctInt=x1r+' < x < '+x2r;
       var question='באיזה תחום הפונקציה <strong>עולה</strong>?';
-      var exp2='הפונקציה עולה מ-('+x1r+','+y1r+') ל-('+x2r+','+y2r+') כלומר ב-<span class="math-expr">'+correctInt+'</span>';
+      var exp2='הפונקציה עולה מ-<span class="math-expr">('+ltrN(x1r)+','+y1r+')</span> ל-<span class="math-expr">('+x2r+','+y2r+')</span> כלומר ב-<span class="math-expr">'+ltrN(x1r)+' < x < '+x2r+'</span>';
     } else if(askWhat===1){
       correctInt=x2r+' < x < '+x3r;
       var question='באיזה תחום הפונקציה <strong>יורדת</strong>?';
-      var exp2='הפונקציה יורדת מ-('+x2r+','+y2r+') ל-('+x3r+','+y3r+') כלומר ב-<span class="math-expr">'+correctInt+'</span>';
+      var exp2='הפונקציה יורדת מ-<span class="math-expr">('+x2r+','+y2r+')</span> ל-<span class="math-expr">('+x3r+','+y3r+')</span> כלומר ב-<span class="math-expr">'+x2r+' < x < '+x3r+'</span>';
     } else {
       correctInt='('+x2r+', '+y2r+')';
       var question='מהי נקודת ה<strong>מקסימום</strong>?';
-      var exp2='הפונקציה עולה עד ('+x2r+','+y2r+') ואז יורדת — זו נקודת המקסימום';
+      var exp2='הפונקציה עולה עד <span class="math-expr">('+x2r+','+y2r+')</span> ואז יורדת — זו נקודת המקסימום';
     }
     var d1e=askWhat===2?'('+x1r+', '+y1r+')':x1r+' < x < '+x3r;
     var d2e=askWhat===2?'('+x3r+', '+y3r+')':x2r+' < x < '+x3r;
@@ -910,7 +911,7 @@ function genHard(){rng=mulberry32(dateSeed+300);var qs=[];
     if(askWhat===0) d3e=x2r+' < x < '+x3r;
     if(askWhat===1) d3e=x1r+' < x < '+x2r;
     var opts2b=shuffle([correctInt,d1e,d2e,d3e]);
-    qs.push({type:'mc',stem:'פונקציה <strong>עולה</strong> מ-<span class="math-expr">('+x1r+', '+y1r+')</span> ל-<span class="math-expr">('+x2r+', '+y2r+')</span>, ו<strong>יורדת</strong> מ-<span class="math-expr">('+x2r+', '+y2r+')</span> ל-<span class="math-expr">('+x3r+', '+y3r+')</span>.<br>'+question,options:opts2b.map(function(o){return '<span dir="ltr" style="unicode-bidi:embed">'+o+'</span>'}),answer:opts2b.indexOf(correctInt),explanation:exp2});
+    qs.push({type:'mc',stem:'פונקציה <strong>עולה</strong> מ-<span class="math-expr">('+ltrN(x1r)+', '+y1r+')</span> ל-<span class="math-expr">('+x2r+', '+y2r+')</span>, ו<strong>יורדת</strong> מ-<span class="math-expr">('+x2r+', '+y2r+')</span> ל-<span class="math-expr">('+x3r+', '+y3r+')</span>.<br>'+question,options:opts2b.map(function(o){return '<span dir="ltr" style="unicode-bidi:embed">'+o+'</span>'}),answer:opts2b.indexOf(correctInt),explanation:exp2});
   }
   /* Q11-15: Formula for function decreasing/increasing by slope */
   for(var k=0;k<5;k++){
@@ -929,7 +930,7 @@ function genHard(){rng=mulberry32(dateSeed+300);var qs=[];
       fStr2+=bVal2>0?' + '+bVal2:bVal2<0?' - '+(-bVal2):'';
       var correct5b='יורדת בכל התחום';
       var opts5b=shuffle([correct5b,'עולה בכל התחום','יורדת כש-x > 0 בלבד','קבועה']);
-      qs.push({type:'mc',stem:'<code>f(x) = '+fStr2+'</code> — מתי הפונקציה יורדת?',options:opts5b,answer:opts5b.indexOf(correct5b),explanation:'השיפוע m = '+mVal2+' < 0, לכן הפונקציה יורדת בכל התחום'});
+      qs.push({type:'mc',stem:'<code>f(x) = '+fStr2+'</code> — מתי הפונקציה יורדת?',options:opts5b,answer:opts5b.indexOf(correct5b),explanation:'השיפוע m = '+ltrN(mVal2)+' < 0, לכן הפונקציה יורדת בכל התחום'});
     } else {
       var a3=pick([1,-1]);var vertX3=RI(-2,3);
       var vertY3=RI(-2,5);
@@ -938,7 +939,7 @@ function genHard(){rng=mulberry32(dateSeed+300);var qs=[];
       else{incRange='x < '+vertX3;decRange='x > '+vertX3}
       var correctC=incRange;
       var optsC=shuffle([correctC,decRange,'בכל התחום','אף פעם']);
-      qs.push({type:'mc',stem:'פונקציה ריבועית עם קודקוד ב-<span class="math-expr">('+vertX3+', '+vertY3+')</span>'+(a3===1?' ומקדם חיובי (פרבולה "חיוכית" ∪)':' ומקדם שלילי (פרבולה "עצובה" ∩)')+'.<br>באיזה תחום הפונקציה <strong>עולה</strong>?',options:optsC.map(function(o){return '<span dir="ltr" style="unicode-bidi:embed">'+o+'</span>'}),answer:optsC.indexOf(correctC),explanation:(a3===1?'פרבולה חיוכית (∪) עולה מימין לקודקוד: ':'פרבולה עצובה (∩) עולה משמאל לקודקוד: ')+'<span class="math-expr">'+correctC+'</span>'});
+      qs.push({type:'mc',stem:'פונקציה ריבועית עם קודקוד ב-<span class="math-expr">('+ltrN(vertX3)+', '+ltrN(vertY3)+')</span>'+(a3===1?' ומקדם חיובי (פרבולה "חיוכית" ∪)':' ומקדם שלילי (פרבולה "עצובה" ∩)')+'.<br>באיזה תחום הפונקציה <strong>עולה</strong>?',options:optsC.map(function(o){return '<span dir="ltr" style="unicode-bidi:embed">'+o+'</span>'}),answer:optsC.indexOf(correctC),explanation:(a3===1?'פרבולה חיוכית (∪) עולה מימין לקודקוד: ':'פרבולה עצובה (∩) עולה משמאל לקודקוד: ')+'<span class="math-expr">'+correctC+'</span>'});
     }
   }
   /* Q16-20: Graph with multiple extrema — count/identify */
@@ -980,10 +981,10 @@ function genChallenge(){rng=mulberry32(dateSeed+400);var qs=[];
     var vx4=-b4/(2*a4);
     var vy4=a4*vx4*vx4+b4*vx4+c4;
     var extremeType=a4>0?'מינימום':'מקסימום';
-    var correctPt2='('+vx4+', '+vy4+')';
-    var d1f='('+(vx4+1)+', '+(vy4+a4)+')';
-    var d2f='('+(vx4-1)+', '+(vy4+a4)+')';
-    var d3f='('+(-vx4)+', '+vy4+')';
+    var correctPt2='\u200E('+ltrN(vx4)+', '+ltrN(vy4)+')';
+    var d1f='\u200E('+ltrN(vx4+1)+', '+ltrN(vy4+a4)+')';
+    var d2f='\u200E('+ltrN(vx4-1)+', '+ltrN(vy4+a4)+')';
+    var d3f='\u200E('+ltrN(-vx4)+', '+ltrN(vy4)+')';
     var opts7=shuffle([correctPt2,d1f,d2f,d3f]);
     var exprC='f(x) = '+(a4===-1?'-':'')+'x²'+(b4>0?' + '+b4+'x':b4<0?' - '+(-b4)+'x':'')+(c4>0?' + '+c4:c4<0?' - '+(-c4):'');
     /* build table for context */
@@ -996,11 +997,11 @@ function genChallenge(){rng=mulberry32(dateSeed+400);var qs=[];
     var aVal=RI(-2,4);
     var correctAns='מינימום';
     if(j===2) correctAns='מקסימום';
-    var desc=j<2?'עולה כש-<span class="math-expr">x > '+aVal+'</span> ויורדת כש-<span class="math-expr">x < '+aVal+'</span>':'יורדת כש-<span class="math-expr">x > '+aVal+'</span> ועולה כש-<span class="math-expr">x < '+aVal+'</span>';
+    var desc=j<2?'עולה כש-<span class="math-expr">x > '+ltrN(aVal)+'</span> ויורדת כש-<span class="math-expr">x < '+ltrN(aVal)+'</span>':'יורדת כש-<span class="math-expr">x > '+ltrN(aVal)+'</span> ועולה כש-<span class="math-expr">x < '+ltrN(aVal)+'</span>';
     var opts8=shuffle([correctAns,'מקסימום','מינימום','לא יודעים','הפונקציה עולה']);
     /* remove dups */
     opts8=[...new Set(opts8)];while(opts8.length<4)opts8.push('נקודת פיתול');
-    qs.push({type:'mc',stem:'פונקציה '+desc+'.<br>מה קורה בנקודה <span class="math-expr">x = '+aVal+'</span>?',options:opts8,answer:opts8.indexOf(correctAns),explanation:(correctAns==='מינימום'?'הפונקציה יורדת לפני ועולה אחרי — זו נקודת <strong>מינימום</strong>':'הפונקציה עולה לפני ויורדת אחרי — זו נקודת <strong>מקסימום</strong>')});
+    qs.push({type:'mc',stem:'פונקציה '+desc+'.<br>מה קורה בנקודה <span class="math-expr">x = '+ltrN(aVal)+'</span>?',options:opts8,answer:opts8.indexOf(correctAns),explanation:(correctAns==='מינימום'?'הפונקציה יורדת לפני ועולה אחרי — זו נקודת <strong>מינימום</strong>':'הפונקציה עולה לפני ויורדת אחרי — זו נקודת <strong>מקסימום</strong>')});
   }
   /* Q7-9: Sketch constraints — how many extrema */
   for(var k=0;k<3;k++){
@@ -1035,7 +1036,7 @@ function genChallenge(){rng=mulberry32(dateSeed+400);var qs=[];
     else if(kVal===minY||kVal===maxY) correctNum='1';
     else correctNum='2';
     var opts11=shuffle(['0','1','2','3']);
-    qs.push({type:'mc',stem:'פונקציה עם <strong>מינימום</strong> <span class="math-expr">y = '+minY+'</span> ו<strong>מקסימום</strong> <span class="math-expr">y = '+maxY+'</span>.<br>כמה פתרונות יש למשוואה <code>f(x) = '+kVal+'</code>?',options:opts11,answer:opts11.indexOf(correctNum),explanation:(correctNum==='0'?'הערך '+kVal+' מחוץ לתחום ['+minY+', '+maxY+'] — אין פתרונות':correctNum==='1'?'הערך '+kVal+' שווה בדיוק ל'+(kVal===minY?'מינימום':'מקסימום')+' — פתרון יחיד':'הערך '+kVal+' בתוך התחום ['+minY+', '+maxY+'] — בדרך כלל 2 פתרונות (אחד בעלייה ואחד בירידה)')});
+    qs.push({type:'mc',stem:'פונקציה עם <strong>מינימום</strong> <span class="math-expr">y = '+ltrN(minY)+'</span> ו<strong>מקסימום</strong> <span class="math-expr">y = '+maxY+'</span>.<br>כמה פתרונות יש למשוואה <code>f(x) = '+ltrN(kVal)+'</code>?',options:opts11,answer:opts11.indexOf(correctNum),explanation:(correctNum==='0'?'הערך '+ltrN(kVal)+' מחוץ לתחום ['+ltrN(minY)+', '+maxY+'] — אין פתרונות':correctNum==='1'?'הערך '+ltrN(kVal)+' שווה בדיוק ל'+(kVal===minY?'מינימום':'מקסימום')+' — פתרון יחיד':'הערך '+ltrN(kVal)+' בתוך התחום ['+ltrN(minY)+', '+maxY+'] — בדרך כלל 2 פתרונות (אחד בעלייה ואחד בירידה)')});
   }
   return qs;
 }

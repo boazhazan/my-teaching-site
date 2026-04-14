@@ -266,6 +266,7 @@ function R(){return rng()}
 function RI(a,b){return a+Math.floor(R()*(b-a+1))}
 function pick(arr){return arr[Math.floor(R()*arr.length)]}
 function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function ltrN(v){return '\u200E'+v}
 
 const boyNames=["דני","יואב","עמית","אורי","נועם","גיא","איתי","רון","תומר","עידו"];
 const girlNames=["מיכל","נועה","שירה","תמר","רונית","יעל","דנה","אורית","הילה","ליאת"];
@@ -675,11 +676,11 @@ function genEasy(){
     } else if(blankIdx===1){
       stem='נתונה המשוואה <code>'+eqStr+'</code>.<br>אחרי העברת <span class="math-expr">'+v+'</span> קיבלנו: <code>'+fmtCoeff(coeff,v)+' + ? = '+c+'</code>. מה החסר?';
       answer=b;
-      explanation='המספר החופשי '+b+' נשאר באגף ימין';
+      explanation='המספר החופשי '+ltrN(b)+' נשאר באגף ימין';
     } else {
       stem='נתונה המשוואה <code>'+eqStr+'</code>.<br>אחרי כל השלבים, מה ערך <span class="math-expr">'+v+'</span>?';
       answer=x;
-      explanation=eqStr+' → <span class="math-expr">'+fmtCoeff(coeff,v)+' = '+rhs+'</span> → <span class="math-expr">'+v+' = '+x+'</span>';
+      explanation='<span class="math-expr">'+eqStr+'</span> → <span class="math-expr">'+fmtCoeff(coeff,v)+' = '+rhs+'</span> → <span class="math-expr">'+v+' = '+x+'</span>';
     }
     const wrongs=wrongNums(answer,3);
     const opts=shuffle([''+answer,...wrongs.map(w=>''+w)]);
@@ -724,7 +725,7 @@ function genEasy(){
     const eqStr=fmtExpr(a,b,v)+' = '+fmtExpr(d,c,v);
     const wrongs=wrongNums(answer,3);
     const opts=shuffle([''+answer,...wrongs.map(w=>''+w)]);
-    qs.push({type:'mc',stem:'פתרו: <code>'+eqStr+'</code>',options:opts,answer:opts.indexOf(''+answer),explanation:eqStr+' → <span class="math-expr">'+v+' = '+answer+'</span>. בדיקה: '+fmtExpr(a,b,v).replace(v,'('+answer+')')+' = '+(a*answer+b)+', '+fmtExpr(d,c,v).replace(v,'('+answer+')')+' = '+(d*answer+c)});
+    qs.push({type:'mc',stem:'פתרו: <code>'+eqStr+'</code>',options:opts,answer:opts.indexOf(''+answer),explanation:'<span class="math-expr">'+eqStr+'</span> → <span class="math-expr">'+v+' = '+answer+'</span>. בדיקה: <span class="math-expr">'+fmtExpr(a,b,v).replace(v,'('+answer+')')+' = '+(a*answer+b)+'</span>, <span class="math-expr">'+fmtExpr(d,c,v).replace(v,'('+answer+')')+' = '+(d*answer+c)+'</span>'});
   }
 
   /* Q16-Q20: Solve and show answer (input) */
@@ -737,7 +738,7 @@ function genEasy(){
     }while(a===d||Math.abs(c)>30);
     const answer=x;
     const eqStr=fmtExpr(a,b,v)+' = '+fmtExpr(d,c,v);
-    qs.push({type:'input',stem:'פתרו ופרטו: <code>'+eqStr+'</code><br><span class="math-expr">'+v+'</span> = ?',answer:answer,explanation:eqStr+' → <span class="math-expr">'+v+' = '+answer+'</span>'});
+    qs.push({type:'input',stem:'פתרו ופרטו: <code>'+eqStr+'</code><br><span class="math-expr">'+v+'</span> = ?',answer:answer,explanation:'<span class="math-expr">'+eqStr+'</span> → <span class="math-expr">'+v+' = '+answer+'</span>'});
   }
 
   return qs;

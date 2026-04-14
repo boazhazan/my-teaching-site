@@ -269,6 +269,7 @@ function R(){return rng()}
 function RI(a,b){return a+Math.floor(R()*(b-a+1))}
 function pick(arr){return arr[Math.floor(R()*arr.length)]}
 function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function ltrN(v){return '\u200E'+v}
 
 const boyNames=["דני","יואב","עמית","אורי","נועם","גיא","איתי","רון","תומר","עידו"];
 const girlNames=["מיכל","נועה","שירה","תמר","רונית","יעל","דנה","אורית","הילה","ליאת"];
@@ -707,7 +708,7 @@ function genEasy(){
     /* ensure uniqueness */
     const uniq=[...new Set(opts)];
     while(uniq.length<4) uniq.push('f(x) = '+(m+uniq.length)+'x + '+(b+uniq.length));
-    qs.push({type:'mc',stem:'איזו נוסחה מתאימה לגרף הזה?<br>'+graphSvg,options:uniq,answer:uniq.indexOf(correct),explanation:'הגרף מתאים לנוסחה <code>'+correct+'</code>. שיפוע '+m+', חיתוך ציר y = '+b});
+    qs.push({type:'mc',stem:'איזו נוסחה מתאימה לגרף הזה?<br>'+graphSvg,options:uniq,answer:uniq.indexOf(correct),explanation:'הגרף מתאים לנוסחה <code>'+correct+'</code>. שיפוע '+m+', חיתוך ציר y = '+ltrN(b)});
   }
   /* Q11-15: Which verbal description matches formula */
   for(let i=0;i<5;i++){
@@ -731,7 +732,7 @@ function genEasy(){
     const w2='f(x) = '+m+'x'+(b>0?' + '+(b+2):' + 2');
     const w3='f(x) = '+(m===1?3:m-1)+'x'+(b!==0?' + '+(b+1):'');
     const opts=shuffle([correct,w1,w2,w3]);
-    qs.push({type:'mc',stem:'מהי הנוסחה שמתאימה לטבלה?<br><table class="q-table"><tr><th>x</th>'+xs.map(x=>'<td>'+x+'</td>').join('')+'</tr><tr><th>y</th>'+ys.map(y=>'<td>'+y+'</td>').join('')+'</tr></table>',options:opts,answer:opts.indexOf(correct),explanation:'כשמציבים <span class="math-expr">x=0</span> מקבלים <span class="math-expr">y='+b+'</span>, ובכל צעד <span class="math-expr">y</span> עולה ב-'+m+'. לכן <code>'+correct+'</code>'});
+    qs.push({type:'mc',stem:'מהי הנוסחה שמתאימה לטבלה?<br><table class="q-table"><tr><th>x</th>'+xs.map(x=>'<td>'+x+'</td>').join('')+'</tr><tr><th>y</th>'+ys.map(y=>'<td>'+ltrN(y)+'</td>').join('')+'</tr></table>',options:opts,answer:opts.indexOf(correct),explanation:'כשמציבים <span class="math-expr">x=0</span> מקבלים <span class="math-expr">y='+ltrN(b)+'</span>, ובכל צעד <span class="math-expr">y</span> עולה ב-'+m+'. לכן <code>'+correct+'</code>'});
   }
   return qs;
 }
@@ -758,7 +759,7 @@ function genMedium(){
     const yMin2=Math.min(...yVals,-1)-1;const yMax2=Math.max(...yVals,1)+1;
     const graphSvg=svgGraph(260,180,{xMin:-3,xMax:4,yMin:Math.floor(yMin2),yMax:Math.ceil(yMax2),points:pts,lineColor:'#2563eb',showGrid:true});
     const ans=mNZ*10+b;
-    qs.push({type:'input',stem:'מהגרף הבא, מצאו את הנוסחה וחשבו: מה הערך של <span class="math-expr">f(10)</span>?<br>'+graphSvg+'<br><em>רמז: מצאו שיפוע (m) וחיתוך ציר y (b)</em>',answer:ans,explanation:'השיפוע m = '+mNZ+', חיתוך b = '+b+'. לכן <code>f(x) = '+(b===0?mNZ+'x':(b>0?mNZ+'x + '+b:mNZ+'x - '+(-b)))+'</code>. f(10) = '+mNZ+'·10'+(b>0?' + '+b:(b<0?' - '+(-b):''))+' = <strong>'+ans+'</strong>'});
+    qs.push({type:'input',stem:'מהגרף הבא, מצאו את הנוסחה וחשבו: מה הערך של <span class="math-expr">f(10)</span>?<br>'+graphSvg+'<br><em>רמז: מצאו שיפוע (m) וחיתוך ציר y (b)</em>',answer:ans,explanation:'השיפוע m = '+ltrN(mNZ)+', חיתוך b = '+ltrN(b)+'. לכן <code>f(x) = '+(b===0?mNZ+'x':(b>0?mNZ+'x + '+b:mNZ+'x - '+(-b)))+'</code>. f(10) = '+ltrN(mNZ)+'·10'+(b>0?' + '+b:(b<0?' - '+(-b):''))+' = <strong>'+ltrN(ans)+'</strong>'});
   }
   /* Q11-15: Word problem — write function and compute */
   for(let i=0;i<5;i++){
@@ -788,12 +789,12 @@ function genMedium(){
       const actB2=yAtX-fm2*xSol;
       const e1=fb1===0?fm1+'x':fm1+'x + '+fb1;
       const e2=actB2===0?fm2+'x':(actB2>0?fm2+'x + '+actB2:fm2+'x - '+(-actB2));
-      qs.push({type:'input',stem:'נתונות שתי פונקציות:<br><code>f(x) = '+e1+'</code><br><code>g(x) = '+e2+'</code><br>מצאו את <span class="math-expr">x</span> שבו <span class="math-expr">f(x) = g(x)</span>.',answer:xSol,explanation:'<span class="math-expr">'+e1+' = '+e2+'</span><br><span class="math-expr">'+(fm1-fm2)+'x = '+(actB2-fb1)+'</span><br><span class="math-expr">x = '+xSol+'</span>'});
+      qs.push({type:'input',stem:'נתונות שתי פונקציות:<br><code>f(x) = '+e1+'</code><br><code>g(x) = '+e2+'</code><br>מצאו את <span class="math-expr">x</span> שבו <span class="math-expr">f(x) = g(x)</span>.',answer:xSol,explanation:'<span class="math-expr">'+e1+' = '+e2+'</span><br><span class="math-expr">'+ltrN(fm1-fm2)+'x = '+ltrN(actB2-fb1)+'</span><br><span class="math-expr">x = '+ltrN(xSol)+'</span>'});
     } else {
       const xSol=numer/denom;
       const e1=b1===0?m1+'x':m1+'x + '+b1;
       const e2=b2===0?m2NZ+'x':(b2>0?m2NZ+'x + '+b2:m2NZ+'x - '+(-b2));
-      qs.push({type:'input',stem:'נתונות שתי פונקציות:<br><code>f(x) = '+e1+'</code><br><code>g(x) = '+e2+'</code><br>מצאו את <span class="math-expr">x</span> שבו <span class="math-expr">f(x) = g(x)</span>.',answer:xSol,explanation:'<span class="math-expr">'+e1+' = '+e2+'</span><br><span class="math-expr">'+(m1-m2NZ)+'x = '+(b2-b1)+'</span><br><span class="math-expr">x = '+xSol+'</span>'});
+      qs.push({type:'input',stem:'נתונות שתי פונקציות:<br><code>f(x) = '+e1+'</code><br><code>g(x) = '+e2+'</code><br>מצאו את <span class="math-expr">x</span> שבו <span class="math-expr">f(x) = g(x)</span>.',answer:xSol,explanation:'<span class="math-expr">'+e1+' = '+e2+'</span><br><span class="math-expr">'+ltrN(m1-m2NZ)+'x = '+ltrN(b2-b1)+'</span><br><span class="math-expr">x = '+ltrN(xSol)+'</span>'});
     }
   }
   return qs;
@@ -809,9 +810,9 @@ function genHard(){
     const gVal=2*xVal;
     const diff=fVal-gVal;
     if(diff===0){
-      qs.push({type:'input',stem:'נתונות: <code>f(x) = x²</code> ו-<code>g(x) = 2x</code>.<br>כאשר <span class="math-expr">x = '+xVal+'</span>, מה הערך של <span class="math-expr">f(x) + g(x)</span>?',answer:fVal+gVal,explanation:'f('+xVal+') = '+xVal+'² = '+fVal+', g('+xVal+') = 2·'+xVal+' = '+gVal+'. f(x)+g(x) = '+fVal+' + '+gVal+' = <strong>'+(fVal+gVal)+'</strong>'});
+      qs.push({type:'input',stem:'נתונות: <code>f(x) = x²</code> ו-<code>g(x) = 2x</code>.<br>כאשר <span class="math-expr">x = '+ltrN(xVal)+'</span>, מה הערך של <span class="math-expr">f(x) + g(x)</span>?',answer:fVal+gVal,explanation:'f('+ltrN(xVal)+') = '+ltrN(xVal)+'² = '+ltrN(fVal)+', g('+ltrN(xVal)+') = 2·'+ltrN(xVal)+' = '+ltrN(gVal)+'. f(x)+g(x) = '+ltrN(fVal)+' + '+ltrN(gVal)+' = <strong>'+ltrN(fVal+gVal)+'</strong>'});
     } else {
-      qs.push({type:'input',stem:'נתונות: <code>f(x) = x²</code> ו-<code>g(x) = 2x</code>.<br>כאשר <span class="math-expr">x = '+xVal+'</span>, מה הערך של <span class="math-expr">f(x) - g(x)</span>?',answer:diff,explanation:'f('+xVal+') = '+xVal+'² = '+fVal+', g('+xVal+') = 2·'+xVal+' = '+gVal+'. f(x)-g(x) = '+fVal+' - '+gVal+' = <strong>'+diff+'</strong>'});
+      qs.push({type:'input',stem:'נתונות: <code>f(x) = x²</code> ו-<code>g(x) = 2x</code>.<br>כאשר <span class="math-expr">x = '+ltrN(xVal)+'</span>, מה הערך של <span class="math-expr">f(x) - g(x)</span>?',answer:diff,explanation:'f('+ltrN(xVal)+') = '+ltrN(xVal)+'² = '+ltrN(fVal)+', g('+ltrN(xVal)+') = 2·'+ltrN(xVal)+' = '+ltrN(gVal)+'. f(x)-g(x) = '+ltrN(fVal)+' - '+ltrN(gVal)+' = <strong>'+ltrN(diff)+'</strong>'});
     }
   }
   /* Q6-10: Graph with different linear segments — identify formula for segment */
@@ -828,7 +829,7 @@ function genHard(){
     const graphSvg=svgGraph(280,200,{xMin:-1,xMax:breakX+4,yMin:Math.min(...yVals)-2,yMax:Math.max(...yVals)+2,points:allPts,lineColor:'#2563eb',showGrid:true});
     const askX=breakX+2;
     const ans=m2*(askX-breakX)+yAtBreak;
-    qs.push({type:'input',stem:'מהגרף הבא, מה הערך של <span class="math-expr">y</span> כאשר <span class="math-expr">x = '+askX+'</span>?<br>'+graphSvg,answer:ans,explanation:'בקטע השני (מ-<span class="math-expr">x='+breakX+'</span>): השיפוע הוא '+m2+', הנוסחה <code>y = '+m2+'(x - '+breakX+') + '+yAtBreak+'</code>.<br>כש-<span class="math-expr">x='+askX+'</span>: y = '+m2+'·'+(askX-breakX)+' + '+yAtBreak+' = <strong>'+ans+'</strong>'});
+    qs.push({type:'input',stem:'מהגרף הבא, מה הערך של <span class="math-expr">y</span> כאשר <span class="math-expr">x = '+askX+'</span>?<br>'+graphSvg,answer:ans,explanation:'בקטע השני (מ-<span class="math-expr">x='+breakX+'</span>): השיפוע הוא '+ltrN(m2)+', הנוסחה <code>y = '+m2+'(x - '+breakX+') + '+yAtBreak+'</code>.<br>כש-<span class="math-expr">x='+askX+'</span>: y = '+ltrN(m2)+'·'+(askX-breakX)+' + '+ltrN(yAtBreak)+' = <strong>'+ltrN(ans)+'</strong>'});
   }
   /* Q11-15: Function with known points — find formula and complete */
   for(let i=0;i<5;i++){
@@ -838,7 +839,7 @@ function genHard(){
     const askX=x2+RI(1,3);
     const ans=m*askX+b;
     const exprStr=b===0?m+'x':(b>0?m+'x + '+b:m+'x - '+(-b));
-    qs.push({type:'input',stem:'פונקציה לינארית עוברת דרך הנקודות <span class="math-expr">('+x1+', '+y1+')</span> ו-<span class="math-expr">('+x2+', '+y2+')</span>.<br>מה הערך של <span class="math-expr">f('+askX+')</span>?',answer:ans,explanation:'שיפוע: m = ('+y2+' - '+y1+') / ('+x2+' - '+x1+') = '+(y2-y1)+' / '+(x2-x1)+' = '+m+'.<br>b = '+y1+' - '+m+'·'+x1+' = '+b+'.<br>נוסחה: <code>f(x) = '+exprStr+'</code>. f('+askX+') = <strong>'+ans+'</strong>'});
+    qs.push({type:'input',stem:'פונקציה לינארית עוברת דרך הנקודות <span class="math-expr">('+ltrN(x1)+', '+ltrN(y1)+')</span> ו-<span class="math-expr">('+ltrN(x2)+', '+ltrN(y2)+')</span>.<br>מה הערך של <span class="math-expr">f('+askX+')</span>?',answer:ans,explanation:'שיפוע: m = ('+ltrN(y2)+' - '+ltrN(y1)+') / ('+x2+' - '+x1+') = '+ltrN(y2-y1)+' / '+(x2-x1)+' = '+m+'.<br>b = '+ltrN(y1)+' - '+m+'·'+x1+' = '+ltrN(b)+'.<br>נוסחה: <code>f(x) = '+exprStr+'</code>. f('+askX+') = <strong>'+ltrN(ans)+'</strong>'});
   }
   /* Q16-20: Complex price problem — build formula and compute */
   for(let i=0;i<5;i++){
@@ -912,7 +913,7 @@ function genChallenge(){
     const askX=RI(-3,shift-1);
     const ans=fn(askX);
     const expr='|x - '+shift+'|';
-    qs.push({type:'input',stem:'נתונה הפונקציה <code>f(x) = '+expr+'</code>.<br>מה הערך של <span class="math-expr">f('+askX+')</span>?',answer:ans,explanation:'f('+askX+') = |'+askX+' - '+shift+'| = |'+(askX-shift)+'| = <strong>'+ans+'</strong>'});
+    qs.push({type:'input',stem:'נתונה הפונקציה <code>f(x) = '+expr+'</code>.<br>מה הערך של <span class="math-expr">f('+ltrN(askX)+')</span>?',answer:ans,explanation:'f('+ltrN(askX)+') = |'+ltrN(askX)+' - '+shift+'| = |'+ltrN(askX-shift)+'| = <strong>'+ans+'</strong>'});
   }
   /* Q13-15: Pattern recognition — f(1)=1, f(2)=4, f(3)=9... find formula */
   const patterns=[

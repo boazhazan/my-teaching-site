@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>כפל במאונך — כיתה ג' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#e11d48;--primary-dark:#be123c;--primary-light:#ffe4e6;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#be123c 0%,#e11d48 50%,#fb7185 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(225,29,72,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 6px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line;direction:ltr;text-align:center;font-family:'Courier New',monospace;font-weight:500}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.vertical-math{display:flex;justify-content:center;margin:16px 0;direction:ltr}.vertical-container{display:inline-flex;flex-direction:column;align-items:flex-end;position:relative;min-width:140px}.v-row{display:flex;align-items:center;justify-content:flex-end;position:relative}.v-op{font-size:1.6rem;font-weight:800;color:var(--primary);position:absolute;left:-32px;top:50%;transform:translateY(-50%)}.v-digit{width:44px;height:52px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;color:var(--text)}.v-digit.missing{color:var(--primary);font-size:2rem}.v-line{width:100%;height:3px;background:var(--text);margin:4px 0;border-radius:2px}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;direction:ltr}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;transition:all .2s}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}.lc-btn-outline:hover{background:var(--primary-light)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.v-digit{width:36px;height:44px;font-size:1.5rem}.vertical-container{min-width:100px}.v-op{font-size:1.3rem;left:-26px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">✖️</div><div><h1>כפל במאונך</h1><div class="subtitle">כיתה ג' — כפל מסודר עם המרות</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">כפל במאונך — כיתה ג' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>❓ כפל במאונך</h2>
+<p><strong>כותבים את המספר הגדול למעלה</strong> ואת המספר החד-ספרתי למטה עם סימן ×.</p>
+<p><strong>כופלים ספרה אחרי ספרה</strong> — תמיד מימין לשמאל (מהיחידות).</p>
+<p>אם תוצאת כפל של ספרה <strong>≥ 10</strong>, כותבים את ספרת היחידות ומעבירים את העשרות לעמודה הבאה (המרה).</p>
+<p>15 רמות מדורגות — מכפל דו-ספרתי ועד 4 ספרות עם המרות! בהצלחה! 💪</p>
+<button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function fmt(n){return n.toLocaleString()}
+
+/* ===== STATE ===== */
+let currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+const QPL=5;
+
+/* ===== HELPERS ===== */
+function digitsArr(n,len){
+  const s=String(n);const a=[];
+  for(let i=0;i<len;i++) a.push(i<s.length?parseInt(s[s.length-1-i]):0);
+  return a; /* a[0]=units, a[1]=tens, ... */
+}
+
+/* Classify carry pattern for a × b where b is single digit */
+function classifyCarry(a,b){
+  const s=String(a),nd=s.length;
+  let carry=0,carries=[];
+  for(let i=nd-1;i>=0;i--){
+    const prod=parseInt(s[i])*b+carry;
+    carries.push(prod>=10?1:0);
+    carry=Math.floor(prod/10);
+  }
+  /* carries[0]=units col carry, carries[1]=tens col carry, etc. */
+  const totalCarries=carries.reduce((x,y)=>x+y,0);
+  if(totalCarries===0) return 'none';
+  if(carries.length>=2&&carries[0]===1&&carries[1]===0) return 'units';
+  if(carries.length>=2&&carries[0]===0&&carries[1]===1) return 'tens';
+  if(totalCarries>=2) return 'both';
+  return 'some';
+}
+
+/* ===== WRONG OPTIONS FOR MULTIPLICATION ===== */
+function wrongOpts(correct,a,b){
+  const s=new Set();s.add(correct);
+  const nd=String(a).length;
+  const ds=String(a);
+
+  /* Forgot carry: multiply each digit independently, no propagation */
+  let noCarry='';
+  for(let i=0;i<ds.length;i++){
+    noCarry+=String((parseInt(ds[i])*b)%10);
+  }
+  const ncVal=parseInt(noCarry);
+  if(ncVal>0&&ncVal!==correct) s.add(ncVal);
+
+  /* Double carry: add extra 1 */
+  if(correct+10>0) s.add(correct+10);
+  if(correct-10>0) s.add(correct-10);
+
+  /* Off by b or by a */
+  if(correct+b>0) s.add(correct+b);
+  if(correct-b>0) s.add(correct-b);
+  if(correct+a>0) s.add(correct+a);
+  if(correct-a>0) s.add(correct-a);
+
+  /* Multiply by wrong single digit */
+  s.add(a*(b+1));
+  if(b-1>=2) s.add(a*(b-1));
+
+  /* off by +-1, +-100 */
+  s.add(correct+1);if(correct-1>0)s.add(correct-1);
+  if(correct+100>0)s.add(correct+100);if(correct-100>0)s.add(correct-100);
+
+  /* random near */
+  for(let t=0;t<10;t++){
+    const mag=Math.pow(10,rr(0,Math.min(2,String(correct).length-1)));
+    const off=rr(1,3)*(rr(0,1)?1:-1)*mag;
+    const v=correct+off;
+    if(v>0)s.add(v);
+  }
+
+  const arr=[...s].filter(v=>v!==correct&&v>0);
+  shuffle(arr);
+  return arr.slice(0,3);
+}
+
+/* ===== QUESTION GENERATOR ===== */
+/* qVertMul(numDigits, carryType)
+   numDigits: digits of top number (2,3,4)
+   carryType: 'none','units','tens','both','zeros','any'
+   bottom is always single digit 2-9
+*/
+function qVertMul(numDigits,carryType){
+  let a,b,attempts=0;
+  const lo=Math.pow(10,numDigits-1), hi=Math.pow(10,numDigits)-1;
+
+  while(attempts<300){
+    attempts++;
+    if(carryType==='zeros'){
+      /* top number has 0 in units place */
+      if(numDigits===2){
+        a=rr(1,9)*10; /* 10,20,...,90 */
+      } else if(numDigits===3){
+        /* e.g. 120, 205, 310 — at least one 0 */
+        const variant=rr(0,1);
+        if(variant===0){
+          /* zero in units: like 120, 310 */
+          a=rr(lo/10,hi/10)*10;
+          if(a<lo||a>hi){a=rr(1,9)*100+rr(0,9)*10;}
+        } else {
+          /* zero in tens: like 205, 302 */
+          a=rr(1,9)*100+rr(1,9);
+        }
+      } else {
+        /* 4 digits with zero */
+        a=rr(lo/10,hi/10)*10;
+        if(a<lo) a=lo;
+        if(a>hi) a=hi;
+      }
+      b=rr(2,9);
+      if(a*b>=Math.pow(10,numDigits+1)) continue;
+      break;
+    }
+
+    a=rr(lo,hi);
+    b=rr(2,9);
+
+    if(a*b>=Math.pow(10,numDigits+1)) continue;
+
+    if(carryType==='none'){
+      /* every digit*b + incoming carry < 10. For 'none' we need no carry at all */
+      const cl=classifyCarry(a,b);
+      if(cl!=='none') continue;
+    } else if(carryType==='units'){
+      const cl=classifyCarry(a,b);
+      if(cl!=='units') continue;
+    } else if(carryType==='tens'){
+      const cl=classifyCarry(a,b);
+      if(cl!=='tens') continue;
+    } else if(carryType==='both'){
+      const cl=classifyCarry(a,b);
+      if(cl!=='both') continue;
+    } else if(carryType==='any'){
+      /* at least one carry */
+      const cl=classifyCarry(a,b);
+      if(cl==='none') continue;
+    }
+    break;
+  }
+
+  const ans=a*b;
+  const w=wrongOpts(ans,a,b);
+  const opts=shuffle([ans,...w]);
+  return{type:'vert',a:a,b:b,answer:ans,options:opts,qText:'חשבו את תרגיל הכפל:'};
+}
+
+/* ===== LEVELS ===== */
+const levels=[
+  {title:'דו-ספרתי × חד — בלי המרה',instruction:'כפל מספר דו-ספרתי בחד-ספרתי — בלי המרה',
+   tip:'כופלים כל ספרה בנפרד: קודם יחידות, אחר כך עשרות.',
+   example:'  23\n×  3\n----\n  69\nיחידות: 3×3=9\nעשרות: 2×3=6',
+   gen:()=>qVertMul(2,'none')},
+
+  {title:'המרה מיחידות לעשרות',instruction:'כפל דו-ספרתי × חד — עם המרה מהיחידות',
+   tip:'כשתוצאת כפל ביחידות ≥ 10, כותבים יחידות ומעבירים עשרות.',
+   example:'  17\n×  4\n----\n  68\nיחידות: 7×4=28 → 8, המרה 2\nעשרות: 1×4+2=6',
+   gen:()=>qVertMul(2,'units')},
+
+  {title:'המרה מעשרות למאות',instruction:'כפל דו-ספרתי × חד — עם המרה מהעשרות',
+   tip:'כשתוצאת כפל בעשרות ≥ 10, כותבים יחידות ומעבירים למאות.',
+   example:'  31\n×  4\n----\n 124\nיחידות: 1×4=4\nעשרות: 3×4=12 → כותבים 2 ו-1 למאות',
+   gen:()=>qVertMul(2,'tens')},
+
+  {title:'שתי המרות',instruction:'כפל דו-ספרתי × חד — עם שתי המרות!',
+   tip:'בדקו כל עמודה בזהירות — ייתכנו שתי המרות!',
+   example:'  78\n×  6\n----\n 468\nיחידות: 8×6=48 → 8, המרה 4\nעשרות: 7×6+4=46',
+   gen:()=>qVertMul(2,'both')},
+
+  {title:'אפס ביחידות',instruction:'כפל מספרים עגולים — עם 0 ביחידות',
+   tip:'כשיש 0 ביחידות, היחידות תמיד 0 — מתחילים מהעשרות!',
+   example:'  30\n×  4\n----\n 120\nיחידות: 0×4=0\nעשרות: 3×4=12',
+   gen:()=>qVertMul(2,'zeros')},
+
+  {title:'תלת-ספרתי × חד — בלי המרה',instruction:'כפל מספר תלת-ספרתי בחד-ספרתי — בלי המרה',
+   tip:'3 עמודות: יחידות, עשרות, מאות. כופלים כל אחת בנפרד.',
+   example:' 123\n×  3\n-----\n 369\nיחידות: 3×3=9\nעשרות: 2×3=6\nמאות: 1×3=3',
+   gen:()=>qVertMul(3,'none')},
+
+  {title:'תלת-ספרתי — המרה אחת',instruction:'כפל תלת-ספרתי × חד — עם המרה אחת',
+   tip:'המרה מעמודה אחת — שימו לב להוסיף אותה!',
+   example:' 245\n×  3\n-----\n 735\nיחידות: 5×3=15 → 5, המרה 1\nעשרות: 4×3+1=13 → 3, המרה 1\nמאות: 2×3+1=7',
+   gen:()=>qVertMul(3,'any')},
+
+  {title:'תלת-ספרתי — שתי המרות',instruction:'כפל תלת-ספרתי × חד — שתי המרות!',
+   tip:'שתי המרות ברצף — ריכוז מלא!',
+   example:' 367\n×  4\n-----\n1468\nיחידות: 7×4=28 → 8, המרה 2\nעשרות: 6×4+2=26 → 6, המרה 2\nמאות: 3×4+2=14',
+   gen:()=>qVertMul(3,'both')},
+
+  {title:'אפסים בתלת-ספרתי',instruction:'כפל תלת-ספרתי עם אפסים',
+   tip:'ספרת 0 כפול כל מספר = 0. אל תשכחו לכתוב אותה!',
+   example:' 205\n×  4\n-----\n 820\nיחידות: 5×4=20 → 0, המרה 2\nעשרות: 0×4+2=2\nמאות: 2×4=8',
+   gen:()=>qVertMul(3,'zeros')},
+
+  {title:'4 ספרות × חד',instruction:'כפל מספר בן 4 ספרות בחד-ספרתי',
+   tip:'4 עמודות — אותו עיקרון, רק יותר! קחו את הזמן.',
+   example:' 1234\n×   2\n------\n 2468\nכופלים כל ספרה ב-2',
+   gen:()=>qVertMul(4,'any')},
+
+  {title:'מעורבב — דו-ספרתי',instruction:'תרגילי כפל דו-ספרתי מעורבבים',
+   tip:'כל תרגיל הוא הפתעה — שימו לב להמרות!',
+   example:'כל סוגי הכפל הדו-ספרתי שלמדתם!',
+   gen:()=>{const ct=['none','units','tens','both','zeros'];return qVertMul(2,ct[rr(0,4)]);}},
+
+  {title:'מעורבב — תלת-ספרתי',instruction:'תרגילי כפל תלת-ספרתי מעורבבים',
+   tip:'3 ספרות עם כל סוגי ההמרות!',
+   example:'תערובת של כל מה שלמדתם!',
+   gen:()=>{const ct=['none','any','both','zeros'];return qVertMul(3,ct[rr(0,3)]);}},
+
+  {title:'כל הסוגים',instruction:'כפל דו, תלת ורבע-ספרתי — הכל מעורבב!',
+   tip:'קראו היטב — המספרים משתנים בגודל!',
+   example:'מגוון תרגילים — תנו את המקסימום!',
+   gen:()=>{const nd=rr(0,2)?rr(2,3):4;return qVertMul(nd,'any');}},
+
+  {title:'אתגר',instruction:'4 ספרות עם המרות כבדות!',
+   tip:'ריכוז מלא — 4 ספרות עם כל סוגי ההמרות.',
+   example:'אתגר אמיתי — קחו את הזמן!',
+   gen:()=>qVertMul(rr(3,4),'both')},
+
+  {title:'סופר-אתגר!',instruction:'כל מה שלמדתם — בואו נראה!',
+   tip:'הרמה הגבוהה ביותר — בהצלחה!',
+   example:'אתם אלופים! 💪',
+   gen:()=>{const nd=[2,3,3,4][rr(0,3)];const ct=['any','both','zeros'];return qVertMul(nd,ct[rr(0,2)]);}}
+];
+
+/* ===== BUILD VERTICAL DISPLAY HTML ===== */
+function buildVertHTML(a,b){
+  const aS=String(a),bS=String(b);
+  const maxLen=Math.max(aS.length,bS.length+1); /* +1 for op space */
+  const resS=String(a*b);
+  const dispLen=Math.max(maxLen,resS.length);
+  let h='<div class="vertical-math"><div class="vertical-container">';
+  /* top row */
+  h+='<div class="v-row">';
+  for(let i=0;i<dispLen;i++){const idx=aS.length-dispLen+i;h+='<div class="v-digit">'+(idx>=0?aS[idx]:'')+'</div>';}
+  h+='</div>';
+  /* bottom row with op */
+  h+='<div class="v-row"><span class="v-op">&times;</span>';
+  for(let i=0;i<dispLen;i++){const idx=bS.length-dispLen+i;h+='<div class="v-digit">'+(idx>=0?bS[idx]:'')+'</div>';}
+  h+='</div>';
+  /* line */
+  h+='<div class="v-line"></div>';
+  /* result row — question mark */
+  h+='<div class="v-row"><div class="v-digit" style="color:var(--primary);font-size:2rem">?</div></div>';
+  h+='</div></div>';
+  return h;
+}
+
+/* ===== RENDER ===== */
+function renderTabs(){
+  const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  const row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach((_,i)=>{
+    const t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect');}
+    t.onclick=()=>goLevel(i);row.appendChild(t);
+  });
+  const at=row.querySelector('.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  const lvl=levels[currentLevel];
+  document.getElementById('tipText').textContent=lvl.tip;
+  document.getElementById('tipExample').textContent=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  for(let i=0;i<QPL;i++){let q,at=0;do{q=lvl.gen();at++;}while(at<30&&(!q||q.answer===undefined));currentQuestions.push(q);}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  const list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach((q,idx)=>{
+    const card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    let h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    h+=buildVertHTML(q.a,q.b);
+    /* options */
+    h+='<div class="answer-options cols-4">';
+    q.options.forEach((opt,oi)=>{
+      h+='<button class="answer-btn" data-qi="'+idx+'" data-oi="'+oi+'" onclick="checkChoice('+idx+','+oi+')">'+fmt(opt)+'</button>';
+    });
+    h+='</div>';
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+/* ===== CHECK ===== */
+function checkChoice(qi,oi){
+  const q=currentQuestions[qi];
+  const card=document.getElementById('q-'+qi);
+  if(card.classList.contains('correct'))return;
+  const btns=card.querySelectorAll('.answer-btn');
+  const chosen=q.options[oi];
+  const fb=document.getElementById('fb-'+qi);
+  if(chosen===q.answer){
+    card.classList.add('correct');
+    btns[oi].classList.add('correct-choice');
+    btns.forEach(b=>b.classList.add('disabled'));
+    fb.textContent=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+    updateProgress();
+    if(answeredCount===QPL)setTimeout(showLC,800);
+  } else {
+    card.classList.add('wrong');
+    btns[oi].classList.add('wrong-choice');
+    fb.textContent='לא נכון, נסו שוב! 💪';
+    fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    updateProgress();
+    setTimeout(()=>{card.classList.remove('wrong');btns[oi].classList.remove('wrong-choice');fb.classList.remove('show');},1200);
+  }
+}
+
+/* ===== LEVEL COMPLETE ===== */
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  const el=document.getElementById('levelComplete');
+  document.getElementById('lcCorrect').textContent=levelCorrect;
+  document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!';}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!';}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב לשיפור';}
+  el.classList.add('show');el.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+/* ===== NAVIGATION ===== */
+function goLevel(i){if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return;}currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});}
+function nextLevel(){if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return;}if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'});}}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'});}
+
+function updateProgress(){
+  const done=Object.keys(levelResults).length;
+  document.getElementById('progressFill').style.width=Math.round((done/levels.length)*100)+'%';
+  document.getElementById('totalCorrect').textContent=totalCorrect;
+  document.getElementById('totalWrong').textContent=totalWrong;
+}
+
+function showHelp(){document.getElementById('helpModal').classList.add('show');}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show');}
+function toggleTip(){const t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר';}
+
+/* INIT */
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs();});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

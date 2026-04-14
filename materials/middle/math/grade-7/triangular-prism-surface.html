@@ -1,0 +1,1261 @@
+<!--
+  Title: מנסרה משולשת — פריסה ושטח פנים
+  Unit: משולשים
+  Subject: מתמטיקה
+  Grade: ז׳
+  Lesson: 3
+  Tags: גיאומטריה,מנסרה משולשת,פריסה,שטח פנים,תלת-ממד
+  Ages: 12-13
+  Icon: 📦
+  Badge: חדש!
+  Description: מהי מנסרה משולשת, פריסה, שטח פנים. תרגול ב-4 רמות קושי
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>מנסרה משולשת — פריסה ושטח פנים | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#1a2f5a;--primary-dark:#0f1f3d;--primary-light:#d6e4f7;
+  --accent:#4a9eda;--accent-dark:#2b7cb8;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f4fa 0%,#dde8f5 50%,#f0f4fa 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--accent);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
+.step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+
+.mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.mini-table th,.mini-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:1rem}
+.mini-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.mini-table td{background:var(--bg)}
+.mini-input{width:60px;padding:6px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:1rem;font-family:inherit;font-weight:700;transition:.3s}
+.mini-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(26,47,90,.15)}
+.mini-input.correct{border-color:var(--success);background:#ecfdf5}
+.mini-input.wrong{border-color:var(--error);background:#fef2f2}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.reveal{display:none;animation:fadeIn .5s ease}
+.reveal.show{display:block}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-stem code,.q-stem .expr{font-size:1.1em}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;transition:.25s}
+.q-opt.selected .q-opt-letter{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-opt.correct .q-opt-letter{background:var(--success);color:#fff;border-color:var(--success)}
+.q-opt.wrong .q-opt-letter{background:var(--error);color:#fff;border-color:var(--error)}
+
+.q-input-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-input{width:120px;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1.1rem;font-family:inherit;font-weight:700;text-align:center;transition:.3s;direction:ltr}
+.q-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(26,47,90,.15)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+
+.q-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.q-table th,.q-table td{border:2px solid var(--border);padding:8px 14px;text-align:center;font-size:1rem;min-width:60px}
+.q-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.q-table input{width:55px;padding:5px;border:2px solid var(--border);border-radius:4px;text-align:center;font-size:1rem;font-family:inherit;font-weight:700}
+.q-table input:focus{border-color:var(--primary);outline:none}
+.q-table input.correct{border-color:var(--success);background:#ecfdf5}
+.q-table input.wrong{border-color:var(--error);background:#fef2f2}
+
+.q-check-btn{padding:10px 28px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;box-shadow:var(--shadow)}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.92rem;animation:fadeIn .3s}
+.q-feedback.correct{background:#ecfdf5;border-right:4px solid var(--success);color:#065f46}
+.q-feedback.wrong{background:#fef2f2;border-right:4px solid var(--error);color:#991b1b}
+
+.q-nav{display:flex;justify-content:space-between;margin-top:16px}
+.q-nav-btn{padding:10px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+.level-complete{text-align:center;padding:24px;animation:fadeIn .5s}
+.level-complete .big-emoji{font-size:4rem;margin-bottom:12px}
+.level-complete h2{font-size:1.4rem;color:var(--primary-dark);margin-bottom:8px}
+.level-complete .score-display{font-size:1.8rem;font-weight:800;color:var(--success);margin-bottom:16px}
+.level-complete .score-display.medium-score{color:#f59e0b}
+.level-complete .score-display.low-score{color:var(--error)}
+
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}100%{transform:translateY(105vh) rotate(720deg) scale(.3);opacity:0}}
+
+.print-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer;font-size:1rem;box-shadow:var(--shadow);transition:.25s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.print-btn:hover{background:var(--primary-dark);transform:scale(1.1)}
+
+.svg-container{text-align:center;margin:16px 0}
+.svg-container svg{max-width:100%;height:auto}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+@media(max-width:600px){
+  .container{padding:0 10px 30px}
+  .step-card,.q-card{padding:18px 14px}
+  .step-title{font-size:1.15rem}
+  .step-summary-grid{grid-template-columns:1fr}
+  .section-toggle{max-width:280px;margin:12px auto}
+  .section-btn{font-size:.88rem;padding:8px 14px}
+  .q-opt{padding:10px 12px;font-size:.9rem}
+  .topbar-title{font-size:.9rem}
+}
+@media print{
+  .topbar,.section-toggle,.step-nav,.q-nav,.print-btn,.level-tabs,.confetti-container,.q-check-btn{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .step-card,.q-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+  .container{max-width:100%}
+  .q-feedback{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">📦 כיתה ז׳ — מנסרה משולשת: פריסה ושטח פנים</span>
+  <div style="display:flex;align-items:center;gap:10px"><button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button><a href="../../../../materials.html">← חזרה לדף החומרים</a></div>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+
+<section id="learnSection">
+  <div class="step-progress">
+    <div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div>
+    <div class="step-progress-text" id="stepText"></div>
+  </div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress">
+    <div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div>
+    <div class="level-progress-text" id="levelText"></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+
+</div>
+
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const today=new Date();const dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+let rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(arr){return arr[Math.floor(R()*arr.length)]}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const LETTERS=['א','ב','ג','ד'];
+
+/* ===== STATE ===== */
+let state={section:'learn',step:0,level:'easy',qIndex:0};
+let scores={easy:[],medium:[],hard:[],challenge:[]};
+let answered={easy:[],medium:[],hard:[],challenge:[]};
+let questions={easy:null,medium:null,hard:null,challenge:null};
+const LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+const LEVEL_NAMES={easy:'קל',medium:'בינוני',hard:'קשה',challenge:'אתגר'};
+const TOTAL_STEPS=7;
+
+/* ===== LOCAL STORAGE ===== */
+const LS_KEY='bh_grade7_tri_prism_surface_'+dateSeed;
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores,answered,state}))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+/* ===== SVG HELPERS ===== */
+function svgPrism3D(w,h,labels){
+  /* 3D perspective triangular prism */
+  w=w||320;h=h||220;
+  var s='<svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg">';
+  /* Front triangle */
+  var fx1=60,fy1=180, fx2=200,fy2=180, fx3=130,fy3=40;
+  /* Back triangle (offset) */
+  var bx1=fx1+80,by1=fy1-30, bx2=fx2+80,by2=fy2-30, bx3=fx3+80,by3=fy3-30;
+  /* Back face (partially hidden) */
+  s+='<polygon points="'+bx1+','+by1+' '+bx2+','+by2+' '+bx3+','+by3+'" fill="#b3d4fc" stroke="#1a2f5a" stroke-width="2" stroke-dasharray="6,4" opacity="0.5"/>';
+  /* Side faces */
+  s+='<polygon points="'+fx1+','+fy1+' '+fx2+','+fy2+' '+bx2+','+by2+' '+bx1+','+by1+'" fill="#4a9eda" stroke="#1a2f5a" stroke-width="2" opacity="0.3"/>';
+  s+='<polygon points="'+fx2+','+fy2+' '+fx3+','+fy3+' '+bx3+','+by3+' '+bx2+','+by2+'" fill="#4a9eda" stroke="#1a2f5a" stroke-width="2" opacity="0.5"/>';
+  s+='<polygon points="'+fx1+','+fy1+' '+fx3+','+fy3+' '+bx3+','+by3+' '+bx1+','+by1+'" fill="#4a9eda" stroke="#1a2f5a" stroke-width="2" opacity="0.4"/>';
+  /* Front triangle */
+  s+='<polygon points="'+fx1+','+fy1+' '+fx2+','+fy2+' '+fx3+','+fy3+'" fill="#d6e4f7" stroke="#1a2f5a" stroke-width="2.5"/>';
+  /* Labels */
+  if(labels){
+    s+='<text x="'+((fx1+fx2)/2)+'" y="'+(fy1+18)+'" text-anchor="middle" font-size="13" fill="#1a2f5a" font-weight="700" font-family="Heebo">בסיס קדמי</text>';
+    s+='<text x="'+((bx1+bx2)/2)+'" y="'+(by1-8)+'" text-anchor="middle" font-size="12" fill="#1a2f5a" font-weight="600" font-family="Heebo" opacity="0.7">בסיס אחורי</text>';
+    s+='<text x="'+((fx2+bx2)/2+12)+'" y="'+((fy2+by2)/2-5)+'" text-anchor="start" font-size="12" fill="#1a2f5a" font-weight="600" font-family="Heebo">פאה</text>';
+  }
+  s+='</svg>';
+  return s;
+}
+
+function svgNet(w,h){
+  /* Standard net: 3 rectangles in a row + triangle top + triangle bottom */
+  w=w||340;h=h||280;
+  var s='<svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg">';
+  /* 3 rectangles side by side */
+  var rx=40,ry=90,rw=80,rh=100;
+  for(var i=0;i<3;i++){
+    s+='<rect x="'+(rx+i*rw)+'" y="'+ry+'" width="'+rw+'" height="'+rh+'" fill="'+(i===1?'#b3d4fc':'#d6e4f7')+'" stroke="#1a2f5a" stroke-width="2"/>';
+  }
+  /* Top triangle on middle rectangle */
+  var mx=rx+rw,mtop=ry;
+  s+='<polygon points="'+mx+','+mtop+' '+(mx+rw)+','+mtop+' '+(mx+rw/2)+','+(mtop-60)+'" fill="#4a9eda" stroke="#1a2f5a" stroke-width="2" opacity="0.7"/>';
+  /* Bottom triangle on middle rectangle */
+  var mbot=ry+rh;
+  s+='<polygon points="'+mx+','+mbot+' '+(mx+rw)+','+mbot+' '+(mx+rw/2)+','+(mbot+60)+'" fill="#4a9eda" stroke="#1a2f5a" stroke-width="2" opacity="0.7"/>';
+  /* Labels */
+  s+='<text x="'+(rx+rw/2)+'" y="'+(ry+rh/2+5)+'" text-anchor="middle" font-size="11" fill="#1a2f5a" font-weight="700" font-family="Heebo">מלבן 1</text>';
+  s+='<text x="'+(rx+rw+rw/2)+'" y="'+(ry+rh/2+5)+'" text-anchor="middle" font-size="11" fill="#1a2f5a" font-weight="700" font-family="Heebo">מלבן 2</text>';
+  s+='<text x="'+(rx+2*rw+rw/2)+'" y="'+(ry+rh/2+5)+'" text-anchor="middle" font-size="11" fill="#1a2f5a" font-weight="700" font-family="Heebo">מלבן 3</text>';
+  s+='<text x="'+(mx+rw/2)+'" y="'+(mtop-25)+'" text-anchor="middle" font-size="11" fill="#1a2f5a" font-weight="700" font-family="Heebo">משולש</text>';
+  s+='<text x="'+(mx+rw/2)+'" y="'+(mbot+45)+'" text-anchor="middle" font-size="11" fill="#1a2f5a" font-weight="700" font-family="Heebo">משולש</text>';
+  s+='</svg>';
+  return s;
+}
+
+function svgNetOption(type,w,h){
+  /* Draw 4 different net options for identification exercises */
+  w=w||160;h=h||130;
+  var s='<svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg">';
+  if(type===1){
+    /* Correct: 3 rectangles + 2 triangles top and bottom of middle */
+    for(var i=0;i<3;i++) s+='<rect x="'+(10+i*45)+'" y="40" width="45" height="50" fill="#d6e4f7" stroke="#1a2f5a" stroke-width="1.5"/>';
+    s+='<polygon points="55,40 100,40 77.5,10" fill="#4a9eda" stroke="#1a2f5a" stroke-width="1.5" opacity="0.7"/>';
+    s+='<polygon points="55,90 100,90 77.5,120" fill="#4a9eda" stroke="#1a2f5a" stroke-width="1.5" opacity="0.7"/>';
+  } else if(type===2){
+    /* Wrong: 4 rectangles in a row (box net, not prism) */
+    for(var i=0;i<4;i++) s+='<rect x="'+(5+i*37)+'" y="40" width="37" height="50" fill="#fce4e4" stroke="#991b1b" stroke-width="1.5"/>';
+    s+='<rect x="42" y="0" width="37" height="40" fill="#fce4e4" stroke="#991b1b" stroke-width="1.5"/>';
+    s+='<rect x="42" y="90" width="37" height="40" fill="#fce4e4" stroke="#991b1b" stroke-width="1.5"/>';
+  } else if(type===3){
+    /* Wrong: 2 rectangles + 2 triangles (missing one rectangle) */
+    for(var i=0;i<2;i++) s+='<rect x="'+(30+i*50)+'" y="40" width="50" height="50" fill="#fff3cd" stroke="#d97706" stroke-width="1.5"/>';
+    s+='<polygon points="30,40 80,40 55,10" fill="#fde68a" stroke="#d97706" stroke-width="1.5"/>';
+    s+='<polygon points="80,90 130,90 105,120" fill="#fde68a" stroke="#d97706" stroke-width="1.5"/>';
+  } else {
+    /* Wrong: 3 rectangles + 1 triangle only */
+    for(var i=0;i<3;i++) s+='<rect x="'+(10+i*45)+'" y="40" width="45" height="50" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>';
+    s+='<polygon points="55,40 100,40 77.5,10" fill="#81c784" stroke="#2e7d32" stroke-width="1.5"/>';
+  }
+  s+='</svg>';
+  return s;
+}
+
+function svg3DShape(type,w,h){
+  w=w||120;h=h||100;
+  var s='<svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg">';
+  if(type==='prism'){
+    s+='<polygon points="20,80 90,80 70,25" fill="#d6e4f7" stroke="#1a2f5a" stroke-width="2"/>';
+    s+='<polygon points="90,80 110,65 90,10 70,25" fill="#4a9eda" stroke="#1a2f5a" stroke-width="2" opacity="0.6"/>';
+    s+='<polygon points="20,80 40,65 90,10 70,25" fill="#4a9eda" stroke="#1a2f5a" stroke-width="2" opacity="0.3" stroke-dasharray="4,3"/>';
+    s+='<line x1="90" y1="80" x2="110" y2="65" stroke="#1a2f5a" stroke-width="2"/>';
+    s+='<line x1="20" y1="80" x2="40" y2="65" stroke="#1a2f5a" stroke-width="2"/>';
+    s+='<polygon points="40,65 110,65 90,10" fill="#b3d4fc" stroke="#1a2f5a" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.4"/>';
+  } else if(type==='box'){
+    s+='<rect x="15" y="30" width="60" height="50" fill="#fce4e4" stroke="#991b1b" stroke-width="2"/>';
+    s+='<polygon points="15,30 35,15 95,15 75,30" fill="#f8b4b4" stroke="#991b1b" stroke-width="2"/>';
+    s+='<polygon points="75,30 95,15 95,65 75,80" fill="#f5a3a3" stroke="#991b1b" stroke-width="2"/>';
+  } else if(type==='pyramid'){
+    s+='<polygon points="60,10 15,85 105,85" fill="#fde68a" stroke="#d97706" stroke-width="2"/>';
+    s+='<polygon points="60,10 105,85 90,70" fill="#fcd34d" stroke="#d97706" stroke-width="2" opacity="0.6"/>';
+    s+='<line x1="60" y1="10" x2="75" y2="72" stroke="#d97706" stroke-width="1.5" stroke-dasharray="4,3"/>';
+  } else if(type==='cylinder'){
+    s+='<ellipse cx="60" cy="25" rx="35" ry="12" fill="#c4b5fd" stroke="#6d28d9" stroke-width="2"/>';
+    s+='<rect x="25" y="25" width="70" height="50" fill="#ddd6fe" stroke="none"/>';
+    s+='<line x1="25" y1="25" x2="25" y2="75" stroke="#6d28d9" stroke-width="2"/>';
+    s+='<line x1="95" y1="25" x2="95" y2="75" stroke="#6d28d9" stroke-width="2"/>';
+    s+='<ellipse cx="60" cy="75" rx="35" ry="12" fill="#c4b5fd" stroke="#6d28d9" stroke-width="2"/>';
+  } else if(type==='pentprism'){
+    s+='<polygon points="60,10 20,40 30,85 90,85 100,40" fill="#a7f3d0" stroke="#065f46" stroke-width="2"/>';
+    s+='<polygon points="100,40 115,30 105,75 90,85" fill="#6ee7b7" stroke="#065f46" stroke-width="2" opacity="0.6"/>';
+    s+='<line x1="60" y1="10" x2="75" y2="3" stroke="#065f46" stroke-width="1.5" stroke-dasharray="4,3"/>';
+  } else if(type==='cone'){
+    s+='<ellipse cx="60" cy="80" rx="35" ry="10" fill="#fda4af" stroke="#be123c" stroke-width="2"/>';
+    s+='<line x1="25" y1="80" x2="60" y2="15" stroke="#be123c" stroke-width="2"/>';
+    s+='<line x1="95" y1="80" x2="60" y2="15" stroke="#be123c" stroke-width="2"/>';
+    s+='<circle cx="60" cy="15" r="3" fill="#be123c"/>';
+  }
+  s+='</svg>';
+  return s;
+}
+
+function svgTriangleWithLabels(base,height,w,h){
+  w=w||200;h=h||160;
+  var s='<svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg">';
+  s+='<polygon points="30,130 170,130 100,30" fill="#d6e4f7" stroke="#1a2f5a" stroke-width="2"/>';
+  /* height line */
+  s+='<line x1="100" y1="130" x2="100" y2="30" stroke="#ef4444" stroke-width="2" stroke-dasharray="5,3"/>';
+  s+='<rect x="96" y="120" width="8" height="8" fill="none" stroke="#ef4444" stroke-width="1.5"/>';
+  /* Labels */
+  s+='<text x="100" y="148" text-anchor="middle" font-size="13" fill="#1a2f5a" font-weight="700" font-family="Rubik">'+base+'</text>';
+  s+='<text x="82" y="85" text-anchor="end" font-size="13" fill="#ef4444" font-weight="700" font-family="Rubik">'+height+'</text>';
+  s+='</svg>';
+  return s;
+}
+
+function svgPrismWithMeasurements(a,b,c,triH,prismH,w,h){
+  w=w||340;h=h||240;
+  var s='<svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg">';
+  var fx1=50,fy1=190, fx2=190,fy2=190, fx3=120,fy3=60;
+  var bx1=fx1+90,by1=fy1-35, bx2=fx2+90,by2=fy2-35, bx3=fx3+90,by3=fy3-35;
+  s+='<polygon points="'+bx1+','+by1+' '+bx2+','+by2+' '+bx3+','+by3+'" fill="#b3d4fc" stroke="#1a2f5a" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.4"/>';
+  s+='<polygon points="'+fx1+','+fy1+' '+fx2+','+fy2+' '+bx2+','+by2+' '+bx1+','+by1+'" fill="#4a9eda" stroke="#1a2f5a" stroke-width="2" opacity="0.25"/>';
+  s+='<polygon points="'+fx2+','+fy2+' '+fx3+','+fy3+' '+bx3+','+by3+' '+bx2+','+by2+'" fill="#4a9eda" stroke="#1a2f5a" stroke-width="2" opacity="0.4"/>';
+  s+='<polygon points="'+fx1+','+fy1+' '+fx3+','+fy3+' '+bx3+','+by3+' '+bx1+','+by1+'" fill="#4a9eda" stroke="#1a2f5a" stroke-width="2" opacity="0.3"/>';
+  s+='<polygon points="'+fx1+','+fy1+' '+fx2+','+fy2+' '+fx3+','+fy3+'" fill="#d6e4f7" stroke="#1a2f5a" stroke-width="2.5"/>';
+  /* Measurements */
+  s+='<text x="'+((fx1+fx2)/2)+'" y="'+(fy1+18)+'" text-anchor="middle" font-size="13" fill="#1a2f5a" font-weight="700" font-family="Rubik">'+a+'</text>';
+  s+='<text x="'+(fx1-12)+'" y="'+((fy1+fy3)/2)+'" text-anchor="end" font-size="13" fill="#1a2f5a" font-weight="700" font-family="Rubik">'+b+'</text>';
+  s+='<text x="'+((fx2+fx3)/2+10)+'" y="'+((fy2+fy3)/2-5)+'" text-anchor="start" font-size="13" fill="#1a2f5a" font-weight="700" font-family="Rubik">'+c+'</text>';
+  /* Prism height */
+  s+='<line x1="'+(fx2+5)+'" y1="'+fy2+'" x2="'+(bx2+5)+'" y2="'+by2+'" stroke="#ef4444" stroke-width="2" stroke-dasharray="5,3"/>';
+  s+='<text x="'+((fx2+bx2)/2+15)+'" y="'+((fy2+by2)/2)+'" text-anchor="start" font-size="13" fill="#ef4444" font-weight="700" font-family="Rubik">H='+prismH+'</text>';
+  s+='</svg>';
+  return s;
+}
+
+/* ===== TEACHING SECTION ===== */
+const steps=[
+/* Step 0: What is a triangular prism */
+{title:'📦 מהי מנסרה משולשת?', render(){return `
+<p><strong>מנסרה משולשת ישרה</strong> היא גוף תלת-ממדי שמורכב מ:</p>
+<div class="highlight">
+  <p>• <strong>שני בסיסים</strong> — משולשים חופפים (זהים) זה לזה</p>
+  <p>• <strong>שלוש פאות צד</strong> — מלבנים שמחברים בין הבסיסים</p>
+</div>
+<div class="svg-container">${svgPrism3D(320,220,true)}</div>
+<p>בואו נספור: <strong>2 משולשים + 3 מלבנים = 5 פאות בסך הכול</strong></p>
+<p><strong>שאלת הבנה:</strong> כמה פאות יש למנסרה משולשת?</p>
+<div class="quiz-options" id="s0opts"></div>
+<div id="s0fb"></div>
+<div class="reveal" id="s0reveal">
+  <div class="success-box">✅ נכון! למנסרה משולשת יש <strong>5 פאות</strong>: 2 משולשים (בסיסים) + 3 מלבנים (פאות צד).</div>
+</div>
+`},init(){
+  const opts=shuffle([
+    {text:'5 (שני משולשים + שלושה מלבנים)',correct:true},
+    {text:'6 (שלושה משולשים + שלושה מלבנים)',correct:false},
+    {text:'4 (שני משולשים + שני מלבנים)',correct:false},
+    {text:'3 (שלושה מלבנים)',correct:false}
+  ]);
+  const c=document.getElementById('s0opts');c.innerHTML='';
+  opts.forEach(o=>{const d=document.createElement('div');d.className='quiz-opt';d.textContent=o.text;
+    d.onclick=()=>{c.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s0fb').innerHTML='<div class="feedback-inline ok">✅ מעולה!</div>';document.getElementById('s0reveal').classList.add('show')}
+      else{d.classList.add('wrong-answer');document.getElementById('s0fb').innerHTML='<div class="feedback-inline err">❌ נסו שוב — ספרו את כל הפאות: 2 בסיסים + 3 פאות צד</div>'}};c.appendChild(d)})
+}},
+
+/* Step 1: Identifying prisms */
+{title:'🔍 זיהוי מנסרה משולשת', render(){return `
+<p>לפניכם 6 גופים תלת-ממדיים. <strong>איזה מהם הוא מנסרה משולשת?</strong></p>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0">
+  <div style="text-align:center;padding:8px;background:var(--bg-soft);border-radius:var(--radius-sm);border:2px solid var(--border);cursor:pointer" class="shape-card" data-shape="0">
+    ${svg3DShape('prism',120,100)}
+    <div style="font-size:.85rem;font-weight:600;margin-top:4px">א</div>
+  </div>
+  <div style="text-align:center;padding:8px;background:var(--bg-soft);border-radius:var(--radius-sm);border:2px solid var(--border);cursor:pointer" class="shape-card" data-shape="1">
+    ${svg3DShape('box',120,100)}
+    <div style="font-size:.85rem;font-weight:600;margin-top:4px">ב</div>
+  </div>
+  <div style="text-align:center;padding:8px;background:var(--bg-soft);border-radius:var(--radius-sm);border:2px solid var(--border);cursor:pointer" class="shape-card" data-shape="2">
+    ${svg3DShape('pyramid',120,100)}
+    <div style="font-size:.85rem;font-weight:600;margin-top:4px">ג</div>
+  </div>
+  <div style="text-align:center;padding:8px;background:var(--bg-soft);border-radius:var(--radius-sm);border:2px solid var(--border);cursor:pointer" class="shape-card" data-shape="3">
+    ${svg3DShape('cylinder',120,100)}
+    <div style="font-size:.85rem;font-weight:600;margin-top:4px">ד</div>
+  </div>
+  <div style="text-align:center;padding:8px;background:var(--bg-soft);border-radius:var(--radius-sm);border:2px solid var(--border);cursor:pointer" class="shape-card" data-shape="4">
+    ${svg3DShape('pentprism',120,100)}
+    <div style="font-size:.85rem;font-weight:600;margin-top:4px">ה</div>
+  </div>
+  <div style="text-align:center;padding:8px;background:var(--bg-soft);border-radius:var(--radius-sm);border:2px solid var(--border);cursor:pointer" class="shape-card" data-shape="5">
+    ${svg3DShape('cone',120,100)}
+    <div style="font-size:.85rem;font-weight:600;margin-top:4px">ו</div>
+  </div>
+</div>
+<div id="s1fb"></div>
+<div class="reveal" id="s1reveal">
+  <div class="success-box">✅ נכון! גוף א הוא מנסרה משולשת — שימו לב לשני המשולשים כבסיסים ו-3 מלבנים כפאות צד.</div>
+  <div class="example" style="margin-top:8px">
+    <strong>שאר הגופים:</strong><br>
+    ב — תיבה (מנסרה מלבנית)<br>
+    ג — פירמידה<br>
+    ד — גליל<br>
+    ה — מנסרה מחומשת<br>
+    ו — חרוט
+  </div>
+</div>
+`},init(){
+  document.querySelectorAll('.shape-card').forEach(el=>{
+    el.onclick=()=>{
+      document.querySelectorAll('.shape-card').forEach(c=>c.style.borderColor='var(--border)');
+      if(el.dataset.shape==='0'){
+        el.style.borderColor='var(--success)';
+        document.getElementById('s1fb').innerHTML='<div class="feedback-inline ok">✅ מצוין!</div>';
+        document.getElementById('s1reveal').classList.add('show');
+      } else {
+        el.style.borderColor='var(--error)';
+        document.getElementById('s1fb').innerHTML='<div class="feedback-inline err">❌ זה לא מנסרה משולשת. חפשו גוף עם 2 בסיסי משולש ו-3 פאות מלבניות.</div>';
+        setTimeout(()=>el.style.borderColor='var(--border)',1500);
+      }
+    };
+  });
+}},
+
+/* Step 2: Net of a prism */
+{title:'📐 פריסה של מנסרה משולשת', render(){return `
+<div class="rule-box">📌 פריסה = "פתיחה" של כל הפאות על המישור (השטחה לדו-ממד)</div>
+<p>כשאנחנו "פותחים" מנסרה משולשת ומשטיחים אותה, מקבלים:</p>
+<div class="highlight">
+  <p>• <strong>3 מלבנים</strong> — פאות הצד</p>
+  <p>• <strong>2 משולשים</strong> — הבסיסים</p>
+</div>
+<div class="svg-container">${svgNet(340,280)}</div>
+<p>שימו לב: הפריסה מורכבת מ-<strong>5 צורות שטוחות</strong> שכשמקפלים אותן חזרה — מתקבלת מנסרה!</p>
+<p><strong>שאלת הבנה:</strong> מאילו צורות מורכבת פריסה של מנסרה משולשת?</p>
+<div class="quiz-options" id="s2opts"></div>
+<div id="s2fb"></div>
+<div class="reveal" id="s2reveal">
+  <div class="success-box">✅ נכון! 3 מלבנים + 2 משולשים = 5 צורות סך הכול.</div>
+</div>
+`},init(){
+  const opts=shuffle([
+    {text:'3 מלבנים + 2 משולשים',correct:true},
+    {text:'2 מלבנים + 2 משולשים',correct:false},
+    {text:'3 מלבנים + 1 משולש',correct:false},
+    {text:'4 מלבנים + 2 משולשים',correct:false}
+  ]);
+  const c=document.getElementById('s2opts');c.innerHTML='';
+  opts.forEach(o=>{const d=document.createElement('div');d.className='quiz-opt';d.textContent=o.text;
+    d.onclick=()=>{c.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s2fb').innerHTML='<div class="feedback-inline ok">✅ מצוין!</div>';document.getElementById('s2reveal').classList.add('show')}
+      else{d.classList.add('wrong-answer');document.getElementById('s2fb').innerHTML='<div class="feedback-inline err">❌ נסו שוב — זכרו: 2 בסיסים (משולשים) + 3 פאות צד (מלבנים)</div>'}};c.appendChild(d)})
+}},
+
+/* Step 3: Identifying correct nets */
+{title:'🧩 זיהוי פריסות', render(){return `
+<p>לפניכם 4 פריסות. <strong>איזו מהן מתקפלת למנסרה משולשת?</strong></p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0">
+  <div style="text-align:center;padding:10px;background:var(--bg-soft);border-radius:var(--radius-sm);border:2px solid var(--border);cursor:pointer" class="net-card" data-net="1">
+    ${svgNetOption(1,160,130)}
+    <div style="font-size:.85rem;font-weight:600;margin-top:4px">א</div>
+  </div>
+  <div style="text-align:center;padding:10px;background:var(--bg-soft);border-radius:var(--radius-sm);border:2px solid var(--border);cursor:pointer" class="net-card" data-net="2">
+    ${svgNetOption(2,160,130)}
+    <div style="font-size:.85rem;font-weight:600;margin-top:4px">ב</div>
+  </div>
+  <div style="text-align:center;padding:10px;background:var(--bg-soft);border-radius:var(--radius-sm);border:2px solid var(--border);cursor:pointer" class="net-card" data-net="3">
+    ${svgNetOption(3,160,130)}
+    <div style="font-size:.85rem;font-weight:600;margin-top:4px">ג</div>
+  </div>
+  <div style="text-align:center;padding:10px;background:var(--bg-soft);border-radius:var(--radius-sm);border:2px solid var(--border);cursor:pointer" class="net-card" data-net="4">
+    ${svgNetOption(4,160,130)}
+    <div style="font-size:.85rem;font-weight:600;margin-top:4px">ד</div>
+  </div>
+</div>
+<div id="s3fb"></div>
+<div class="reveal" id="s3reveal">
+  <div class="success-box">✅ נכון! פריסה א היא הנכונה — 3 מלבנים בשורה + משולש למעלה + משולש למטה.</div>
+  <div class="example" style="margin-top:8px">
+    <strong>למה האחרות לא מתאימות?</strong><br>
+    ב — זו פריסה של תיבה (6 מלבנים)<br>
+    ג — חסר מלבן אחד (רק 2 מלבנים + 2 משולשים)<br>
+    ד — חסר משולש אחד (3 מלבנים + 1 משולש)
+  </div>
+</div>
+`},init(){
+  document.querySelectorAll('.net-card').forEach(el=>{
+    el.onclick=()=>{
+      document.querySelectorAll('.net-card').forEach(c=>c.style.borderColor='var(--border)');
+      if(el.dataset.net==='1'){
+        el.style.borderColor='var(--success)';
+        document.getElementById('s3fb').innerHTML='<div class="feedback-inline ok">✅ מצוין!</div>';
+        document.getElementById('s3reveal').classList.add('show');
+      } else {
+        el.style.borderColor='var(--error)';
+        document.getElementById('s3fb').innerHTML='<div class="feedback-inline err">❌ פריסה זו לא מתקפלת למנסרה משולשת. חפשו 3 מלבנים + 2 משולשים.</div>';
+        setTimeout(()=>el.style.borderColor='var(--border)',1500);
+      }
+    };
+  });
+}},
+
+/* Step 4: Base area */
+{title:'📏 שטח בסיס המנסרה', render(){return `
+<div class="rule-box">📌 שטח בסיס = שטח המשולש = <span class="math-expr">(בסיס × גובה) / 2</span></div>
+<p>הבסיס של מנסרה משולשת הוא <strong>משולש</strong>. לכן כדי לחשב את שטחו נשתמש בנוסחה:</p>
+<div class="highlight" style="text-align:center;font-size:1.15rem">
+  שטח המשולש = <span class="math-expr">(a × h) / 2</span>
+</div>
+<p><strong>דוגמה:</strong> בסיס המשולש = 15, גובה המשולש = 9</p>
+<div class="svg-container">${svgTriangleWithLabels(15,9,200,160)}</div>
+<div class="example" style="text-align:center;direction:ltr;font-size:1.1rem">
+  S = (15 × 9) / 2 = 135 / 2 = <strong>67.5</strong>
+</div>
+<p><strong>תורכם:</strong> חשבו את שטח הבסיס כאשר: בסיס = 12, גובה = 8</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="baseArea1" placeholder="?" style="width:80px" aria-label="שטח בסיס">
+  <button class="mini-btn" onclick="checkBaseArea()">בדקו</button>
+</div>
+<div id="s4fb"></div>
+<div class="reveal" id="s4reveal">
+  <div class="success-box">✅ מעולה! שטח הבסיס = (12 × 8) / 2 = 96 / 2 = <strong>48</strong></div>
+</div>
+`}},
+
+/* Step 5: Total surface area */
+{title:'📐 שטח פנים של המנסרה', render(){return `
+<div class="rule-box">📌 שטח פנים = 2 × שטח בסיס + שטח 3 המלבנים</div>
+<p>כל מלבן = צלע בסיס × גובה המנסרה. נחשב שלב אחר שלב:</p>
+<div class="svg-container">${svgPrismWithMeasurements(5,12,13,'',10,340,240)}</div>
+<div class="example">
+<strong>דוגמה מלאה:</strong> צלעות בסיס: 5, 12, 13. שטח בסיס = 30. גובה מנסרה H = 10<br><br>
+<div style="direction:ltr;text-align:center;line-height:2.2">
+  <div>שטח בסיס = (5 × 12) / 2 = <strong>30</strong></div>
+  <div>מלבן 1: 5 × 10 = <strong>50</strong></div>
+  <div>מלבן 2: 13 × 10 = <strong>130</strong></div>
+  <div>מלבן 3: 12 × 10 = <strong>120</strong></div>
+  <div style="border-top:2px solid var(--border);padding-top:8px;margin-top:4px;font-size:1.1rem">
+    <strong>שטח פנים = 2 × 30 + 50 + 130 + 120 = 60 + 300 = 360</strong>
+  </div>
+</div>
+</div>
+<p>שימו לב: סכום 3 המלבנים = (5 + 12 + 13) × 10 = 30 × 10 = 300. זה <strong>היקף הבסיס × גובה המנסרה</strong>!</p>
+<div class="highlight" style="text-align:center;font-size:1.05rem">
+  נוסחה מקוצרת: שטח פנים = <span class="math-expr">2S + P × H</span><br>
+  <span style="font-size:.85rem;font-weight:400">(S = שטח בסיס, P = היקף בסיס, H = גובה מנסרה)</span>
+</div>
+<p><strong>תורכם:</strong> צלעות בסיס: 6, 8, 10. שטח בסיס = 24. גובה מנסרה = 7. מהו שטח הפנים?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="saInput" placeholder="?" style="width:80px" aria-label="שטח פנים">
+  <button class="mini-btn" onclick="checkSA()">בדקו</button>
+</div>
+<div id="s5fb"></div>
+<div class="reveal" id="s5reveal">
+  <div class="success-box">✅ מצוין!<br>שטח פנים = 2×24 + (6+8+10)×7 = 48 + 168 = <strong>216</strong></div>
+</div>
+`}},
+
+/* Step 6: Summary */
+{title:'🏆 סיכום', render(){return `
+<p style="font-size:1.1rem;text-align:center;margin-bottom:20px">מה למדנו על מנסרה משולשת?</p>
+<div class="step-summary-grid">
+  <div class="summary-item">
+    <div class="s-icon">📦</div>
+    <div class="s-title">מבנה</div>
+    <div class="s-text">5 פאות, 9 צלעות, 6 קודקודים</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">📐</div>
+    <div class="s-title">פריסה</div>
+    <div class="s-text">2 משולשים + 3 מלבנים</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">📏</div>
+    <div class="s-title">שטח בסיס</div>
+    <div class="s-text"><span class="math-expr">(b × h) / 2</span></div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🧮</div>
+    <div class="s-title">שטח פנים</div>
+    <div class="s-text"><span class="math-expr">2S + P × H</span></div>
+  </div>
+</div>
+<div class="example">
+  <strong>דוגמה:</strong> צלעות בסיס a=3, b=4, c=5. גובה משולש h=2.4 (מתאים ל-a=3). גובה מנסרה H=8.<br>
+  <div style="direction:ltr;text-align:center;margin-top:8px">
+    S = (3 × 2.4) / 2 = 3.6<br>
+    P = 3 + 4 + 5 = 12<br>
+    שטח פנים = 2 × 3.6 + 12 × 8 = 7.2 + 96 = <strong>103.2</strong>
+  </div>
+</div>
+<div class="success-box" style="text-align:center;font-size:1.1rem;margin-top:20px">
+  <p>🌟 עכשיו אתם מוכנים לתרגול!</p>
+  <p>4 רמות קושי מחכות לכם</p>
+  <button class="mini-btn accent" style="margin-top:12px;font-size:1rem;padding:12px 32px" onclick="switchSection('practice')">!מוכנים לתרגול ←</button>
+</div>
+`}}
+];
+
+function renderStep(idx){
+  state.step=idx;const s=steps[idx];
+  const fill=((idx+1)/TOTAL_STEPS*100).toFixed(0);
+  document.getElementById('stepFill').style.width=fill+'%';
+  document.getElementById('stepText').textContent='שלב '+(idx+1)+' מתוך '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+s.title+'</div>'+s.render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'לתרגול ←':'הבא ←';
+  if(s.init) s.init();
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+/* Step interactive handlers */
+window.checkBaseArea=function(){
+  var v=parseFloat(document.getElementById('baseArea1').value);
+  if(v===48){document.getElementById('s4fb').innerHTML='<div class="feedback-inline ok">✅ מעולה!</div>';document.getElementById('baseArea1').classList.add('correct');document.getElementById('s4reveal').classList.add('show')}
+  else if(isNaN(v)){document.getElementById('s4fb').innerHTML='<div class="feedback-inline err">הקלידו מספר</div>'}
+  else{document.getElementById('s4fb').innerHTML='<div class="feedback-inline err">❌ נסו שוב. שטח = (12 × 8) / 2 = ?</div>'}
+};
+window.checkSA=function(){
+  var v=parseFloat(document.getElementById('saInput').value);
+  if(v===216){document.getElementById('s5fb').innerHTML='<div class="feedback-inline ok">✅ מצוין!</div>';document.getElementById('saInput').classList.add('correct');document.getElementById('s5reveal').classList.add('show')}
+  else if(isNaN(v)){document.getElementById('s5fb').innerHTML='<div class="feedback-inline err">הקלידו מספר</div>'}
+  else{document.getElementById('s5fb').innerHTML='<div class="feedback-inline err">❌ נסו שוב. שטח פנים = 2×24 + (6+8+10)×7</div>'}
+};
+
+/* ===== QUESTION GENERATORS ===== */
+function genEasy(){
+  rng=mulberry32(dateSeed+100);
+  const qs=[];
+
+  /* Q1-5: Count faces/edges/vertices + identify prism */
+  const props=[
+    {q:'כמה <strong>פאות</strong> יש למנסרה משולשת?',ans:5,opts:['3','4','5','6'],ci:2,ex:'למנסרה משולשת 5 פאות: 2 בסיסי משולש + 3 פאות צד מלבניות.'},
+    {q:'כמה <strong>צלעות</strong> יש למנסרה משולשת?',ans:9,opts:['6','8','9','12'],ci:2,ex:'למנסרה משולשת 9 צלעות: 3 בבסיס עליון + 3 בתחתון + 3 צלעות צד.'},
+    {q:'כמה <strong>קודקודים</strong> יש למנסרה משולשת?',ans:6,opts:['4','5','6','8'],ci:2,ex:'למנסרה משולשת 6 קודקודים: 3 בכל בסיס.'},
+    {q:'כמה <strong>פאות צד</strong> (מלבנים) יש למנסרה משולשת?',ans:3,opts:['2','3','4','5'],ci:1,ex:'פאות הצד הן 3 מלבנים שמחברים בין 2 בסיסי המשולש.'},
+    {q:'מאילו צורות מורכבת <strong>פריסה</strong> של מנסרה משולשת?',ans:0,opts:['2 משולשים + 3 מלבנים','3 משולשים + 2 מלבנים','2 משולשים + 4 מלבנים','4 משולשים + 2 מלבנים'],ci:0,ex:'פריסה = 2 משולשי בסיס + 3 מלבני צד.'}
+  ];
+  props.forEach(p=>{
+    qs.push({type:'mc',stem:p.q,options:p.opts,answer:p.ci,explanation:p.ex});
+  });
+
+  /* Q6-10: Base area (triangle area) */
+  for(let i=0;i<5;i++){
+    const b=RI(4,16)*2;/* even base for whole answer */
+    const h=RI(3,12);
+    const area=b*h/2;
+    qs.push({type:'input',stem:'חשבו את <strong>שטח בסיס</strong> המנסרה המשולשת.<br>בסיס המשולש = <span class="math-expr">'+b+'</span> ס"מ, גובה המשולש = <span class="math-expr">'+h+'</span> ס"מ.'+
+      '<div class="svg-container">'+svgTriangleWithLabels(b,h,200,160)+'</div>',
+      answer:area,
+      explanation:'שטח בסיס = ('+b+' × '+h+') / 2 = '+(b*h)+' / 2 = <strong>'+area+'</strong> סמ"ר'});
+  }
+
+  /* Q11-15: One lateral face area (rectangle) */
+  for(let i=0;i<5;i++){
+    const side=RI(3,15);
+    const pH=RI(5,20);
+    const faceArea=side*pH;
+    qs.push({type:'input',stem:'חשבו את <strong>שטח פאה צדדית אחת</strong> של המנסרה.<br>צלע הבסיס = <span class="math-expr">'+side+'</span> ס"מ, גובה המנסרה = <span class="math-expr">'+pH+'</span> ס"מ.',
+      answer:faceArea,
+      explanation:'שטח מלבן = צלע × גובה מנסרה = '+side+' × '+pH+' = <strong>'+faceArea+'</strong> סמ"ר'});
+  }
+
+  /* Q16-20: Identify correct net (MC with SVG) */
+  for(let i=0;i<5;i++){
+    const correctType=1;/* type 1 is correct net */
+    const wrongTypes=[2,3,4];
+    const wt1=wrongTypes[Math.floor(R()*wrongTypes.length)];
+    let wt2=wrongTypes[Math.floor(R()*wrongTypes.length)];
+    while(wt2===wt1) wt2=wrongTypes[Math.floor(R()*wrongTypes.length)];
+    let wt3=wrongTypes[Math.floor(R()*wrongTypes.length)];
+    while(wt3===wt1||wt3===wt2) wt3=wrongTypes[Math.floor(R()*wrongTypes.length)];
+    const netOpts=[{t:correctType,label:'א'},{t:wt1,label:'ב'},{t:wt2,label:'ג'},{t:wt3,label:'ד'}];
+    const shuffled=shuffle([0,1,2,3]);
+    const orderedNets=shuffled.map(si=>netOpts[si]);
+    const correctIdx=shuffled.indexOf(0);
+    const optHtmls=orderedNets.map((n,idx)=>'<div style="text-align:center">'+svgNetOption(n.t,140,110)+'</div>');
+    qs.push({type:'mc',stem:'איזו פריסה מתקפלת ל<strong>מנסרה משולשת</strong>?',
+      options:optHtmls,
+      answer:correctIdx,
+      explanation:'הפריסה הנכונה מכילה 3 מלבנים בשורה + משולש מעל ומשולש מתחת למלבן האמצעי.'});
+  }
+
+  return qs;
+}
+
+function genMedium(){
+  rng=mulberry32(dateSeed+200);
+  const qs=[];
+
+  /* Q1-5: Full surface area calculation */
+  for(let i=0;i<5;i++){
+    /* Right triangle base for clean numbers: a,b are legs, c=hypotenuse */
+    const triples=[[3,4,5],[5,12,13],[6,8,10],[8,15,17],[9,12,15]];
+    const tri=triples[i%triples.length];
+    const a=tri[0],b=tri[1],c=tri[2];
+    const baseArea=a*b/2;
+    const pH=RI(4,12);
+    const SA=2*baseArea+(a+b+c)*pH;
+    qs.push({type:'input',stem:'חשבו את <strong>שטח הפנים</strong> של המנסרה.<br>'+
+      'צלעות בסיס: <span class="math-expr">'+a+'</span>, <span class="math-expr">'+b+'</span>, <span class="math-expr">'+c+'</span> ס"מ.<br>'+
+      'שטח בסיס = <span class="math-expr">'+baseArea+'</span> סמ"ר. גובה מנסרה = <span class="math-expr">'+pH+'</span> ס"מ.'+
+      '<div class="svg-container">'+svgPrismWithMeasurements(a,b,c,'',pH,340,240)+'</div>',
+      answer:SA,
+      explanation:'שטח פנים = 2×'+baseArea+' + ('+a+'+'+b+'+'+c+')×'+pH+' = '+(2*baseArea)+' + '+(a+b+c)+'×'+pH+' = '+(2*baseArea)+' + '+((a+b+c)*pH)+' = <strong>'+SA+'</strong> סמ"ר'});
+  }
+
+  /* Q6-10: Complete table — given some values, find missing */
+  for(let i=0;i<5;i++){
+    const triples=[[3,4,5],[5,12,13],[6,8,10],[8,15,17],[9,12,15]];
+    const tri=triples[i%triples.length];
+    const a=tri[0],b=tri[1],c=tri[2];
+    const baseArea=a*b/2;
+    const pH=RI(5,15);
+    const peri=a+b+c;
+    const latArea=peri*pH;
+    const SA=2*baseArea+latArea;
+    /* Ask for SA given all other values */
+    qs.push({type:'multi-input',stem:'השלימו את הטבלה עבור מנסרה משולשת עם צלעות בסיס <span class="math-expr">'+a+'</span>, <span class="math-expr">'+b+'</span>, <span class="math-expr">'+c+'</span> וגובה <span class="math-expr">'+pH+'</span> ס"מ:',
+      fields:[
+        {label:'שטח בסיס:',answer:baseArea},
+        {label:'היקף בסיס:',answer:peri},
+        {label:'שטח מעטפת (צדדים):',answer:latArea},
+        {label:'שטח פנים כולל:',answer:SA}
+      ],
+      explanation:'S_בסיס = ('+a+'×'+b+')/2 = '+baseArea+'. היקף = '+a+'+'+b+'+'+c+' = '+peri+'. מעטפת = '+peri+'×'+pH+' = '+latArea+'. שטח פנים = 2×'+baseArea+' + '+latArea+' = <strong>'+SA+'</strong>'});
+  }
+
+  /* Q11-15: Write expression for SA */
+  for(let i=0;i<5;i++){
+    const triples=[[5,12,13],[3,4,5],[6,8,10],[8,15,17],[9,12,15]];
+    const tri=triples[i%triples.length];
+    const a=tri[0],b=tri[1],c=tri[2];
+    const baseArea=a*b/2;
+    const pH=RI(4,10);
+    const peri=a+b+c;
+    const SA=2*baseArea+peri*pH;
+    /* Ask: what is SA when y is the height */
+    const exprCorrect='2 × '+baseArea+' + '+peri+'y';
+    const exprWrong1=baseArea+' + '+peri+'y';
+    const exprWrong2='2 × '+baseArea+' + '+(peri*2)+'y';
+    const exprWrong3=baseArea+' × y + '+peri;
+    const opts=shuffle([
+      '<span dir="ltr" style="unicode-bidi:embed">'+exprCorrect+'</span>',
+      '<span dir="ltr" style="unicode-bidi:embed">'+exprWrong1+'</span>',
+      '<span dir="ltr" style="unicode-bidi:embed">'+exprWrong2+'</span>',
+      '<span dir="ltr" style="unicode-bidi:embed">'+exprWrong3+'</span>'
+    ]);
+    const correctOpt='<span dir="ltr" style="unicode-bidi:embed">'+exprCorrect+'</span>';
+    qs.push({type:'mc',stem:'צלעות בסיס המנסרה: <span class="math-expr">'+a+'</span>, <span class="math-expr">'+b+'</span>, <span class="math-expr">'+c+'</span>. שטח בסיס = <span class="math-expr">'+baseArea+'</span>.<br>'+
+      'גובה המנסרה <span class="math-expr">y</span>. כתבו ביטוי ל<strong>שטח הפנים</strong>.',
+      options:opts,
+      answer:opts.indexOf(correctOpt),
+      explanation:'שטח פנים = 2 × שטח_בסיס + היקף × y = 2×'+baseArea+' + '+peri+'y = <strong>'+exprCorrect+'</strong>'});
+  }
+
+  /* Q16-20: Is the net correct? (MC) */
+  for(let i=0;i<5;i++){
+    const isCorrect=R()>0.5;
+    const netType=isCorrect?1:pick([2,3,4]);
+    const reasons={2:'זו פריסה של תיבה (6 מלבנים), לא של מנסרה משולשת.',3:'חסר מלבן — צריך 3 מלבנים ו-2 משולשים.',4:'חסר משולש — צריך 2 משולשי בסיס.'};
+    const netSvg=svgNetOption(netType,160,130);
+    const opts=isCorrect?
+      shuffle(['כן — זו פריסה של מנסרה משולשת','לא — חסר מלבן','לא — חסר משולש','לא — זו פריסה של תיבה']):
+      shuffle(['כן — זו פריסה של מנסרה משולשת','לא — '+reasons[netType].replace('זו פריסה','הפריסה הזו היא').substring(0,30),'לא — הפריסה לא מתאימה','כן — צריך רק לקפל אחרת']);
+    const correctAns=isCorrect?
+      opts.indexOf(opts.find(o=>o.startsWith('כן — זו'))):
+      opts.indexOf(opts.find(o=>o.startsWith('לא — הפריסה לא')||o.startsWith('לא — ')));
+    /* Fix: use a cleaner approach */
+    const correctText=isCorrect?'כן — זו פריסה של מנסרה משולשת':'לא — הפריסה לא מתאימה למנסרה משולשת';
+    const wrongOpts=isCorrect?
+      ['לא — חסר מלבן','לא — חסר משולש','לא — זו פריסה של תיבה']:
+      ['כן — זו פריסה של מנסרה משולשת','כן — צריך רק לקפל אחרת','כן — אלה הצורות הנכונות'];
+    const allOpts=shuffle([correctText,...wrongOpts.slice(0,3)]);
+    qs.push({type:'mc',stem:'האם הפריסה הבאה מתקפלת למנסרה משולשת?<div class="svg-container" style="margin:12px 0">'+netSvg+'</div>',
+      options:allOpts,
+      answer:allOpts.indexOf(correctText),
+      explanation:isCorrect?'נכון! הפריסה מכילה 3 מלבנים + 2 משולשים — מתקפלת למנסרה משולשת.':reasons[netType]||'הפריסה לא מכילה את הצורות הנכונות למנסרה משולשת (3 מלבנים + 2 משולשים).'});
+  }
+
+  return qs;
+}
+
+function genHard(){
+  rng=mulberry32(dateSeed+300);
+  const qs=[];
+
+  /* Q1-5: Given perimeter of base, find x, then SA */
+  for(let i=0;i<5;i++){
+    const a=RI(5,12);const b=RI(5,12);
+    const peri=RI(30,56);
+    const x=peri-a-b;/* third side */
+    const hTri=RI(3,8);/* height of triangle base */
+    const baseArea=a*hTri/2;
+    const pH=RI(6,15);
+    const SA=2*baseArea+peri*pH;
+    qs.push({type:'multi-input',stem:'במנסרה משולשת, צלעות הבסיס הן <span class="math-expr">'+a+'</span>, <span class="math-expr">'+b+'</span>, <span class="math-expr">x</span>.<br>'+
+      'היקף הבסיס = <span class="math-expr">'+peri+'</span> ס"מ. גובה המשולש לצלע <span class="math-expr">'+a+'</span> = <span class="math-expr">'+hTri+'</span> ס"מ. גובה המנסרה = <span class="math-expr">'+pH+'</span> ס"מ.<br>'+
+      '<div class="svg-container">'+svgPrismWithMeasurements(a,b,'x',hTri,pH,340,240)+'</div>',
+      fields:[
+        {label:'x =',answer:x},
+        {label:'שטח בסיס =',answer:baseArea},
+        {label:'שטח פנים =',answer:SA}
+      ],
+      explanation:'x = '+peri+' − '+a+' − '+b+' = <strong>'+x+'</strong>. שטח בסיס = ('+a+'×'+hTri+')/2 = <strong>'+baseArea+'</strong>. שטח פנים = 2×'+baseArea+' + '+peri+'×'+pH+' = '+(2*baseArea)+' + '+(peri*pH)+' = <strong>'+SA+'</strong>'});
+  }
+
+  /* Q6-10: Right-triangle base, given base area, find x (missing leg), then SA */
+  for(let i=0;i<5;i++){
+    const leg1=RI(3,12);
+    const leg2=RI(3,12);
+    const baseArea=leg1*leg2/2;
+    /* ensure whole baseArea */
+    const adjLeg1=(leg1%2===1&&leg2%2===1)?leg1+1:leg1;
+    const adjLeg2=leg2;
+    const adjBaseArea=adjLeg1*adjLeg2/2;
+    const hyp=Math.round(Math.sqrt(adjLeg1*adjLeg1+adjLeg2*adjLeg2)*10)/10;
+    const pH=RI(5,14);
+    const peri=adjLeg1+adjLeg2+hyp;
+    const SA=Math.round(2*adjBaseArea+peri*pH);
+    /* Ask: given baseArea and one leg, find the other */
+    const missingLeg=adjLeg2;
+    qs.push({type:'multi-input',stem:'במנסרה משולשת, בסיסה <strong>משולש ישר-זווית</strong>.<br>'+
+      'ניצב אחד = <span class="math-expr">'+adjLeg1+'</span> ס"מ, שטח הבסיס = <span class="math-expr">'+adjBaseArea+'</span> סמ"ר.<br>'+
+      'גובה המנסרה = <span class="math-expr">'+pH+'</span> ס"מ.',
+      fields:[
+        {label:'הניצב השני (x) =',answer:missingLeg},
+        {label:'שטח בסיס =',answer:adjBaseArea}
+      ],
+      explanation:'שטח בסיס = ('+adjLeg1+' × x)/2 = '+adjBaseArea+' ⇒ x = '+adjBaseArea+'×2/'+adjLeg1+' = <strong>'+missingLeg+'</strong>'});
+  }
+
+  /* Q11-15: Complete table from sketch — given partial info, find all */
+  for(let i=0;i<5;i++){
+    const triples=[[3,4,5],[5,12,13],[6,8,10],[8,15,17],[9,12,15]];
+    const tri=triples[i%triples.length];
+    const a=tri[0],b=tri[1],c=tri[2];
+    const baseArea=a*b/2;
+    const pH=RI(4,12);
+    const peri=a+b+c;
+    const latArea=peri*pH;
+    const SA=2*baseArea+latArea;
+    const vol=baseArea*pH;
+    qs.push({type:'multi-input',stem:'במנסרה משולשת, צלעות הבסיס: <span class="math-expr">'+a+'</span>, <span class="math-expr">'+b+'</span>, <span class="math-expr">'+c+'</span>. גובה משולש (לצלע '+a+') = <span class="math-expr">'+b+'</span>. גובה מנסרה = <span class="math-expr">'+pH+'</span>.<br>השלימו:',
+      fields:[
+        {label:'היקף בסיס =',answer:peri},
+        {label:'שטח בסיס =',answer:baseArea},
+        {label:'שטח מעטפת =',answer:latArea},
+        {label:'שטח פנים =',answer:SA},
+        {label:'נפח =',answer:vol}
+      ],
+      explanation:'היקף = '+a+'+'+b+'+'+c+' = '+peri+'. שטח בסיס = ('+a+'×'+b+')/2 = '+baseArea+'. מעטפת = '+peri+'×'+pH+' = '+latArea+'. שטח פנים = 2×'+baseArea+'+'+latArea+' = '+SA+'. נפח = '+baseArea+'×'+pH+' = <strong>'+vol+'</strong>'});
+  }
+
+  /* Q16-20: Net on grid — SA from grid net */
+  for(let i=0;i<5;i++){
+    const a=RI(3,7);const b=RI(3,7);const c=RI(3,7);
+    const hTri=RI(2,5);
+    const pH=RI(4,10);
+    const baseArea=a*hTri/2;
+    /* ensure whole number */
+    const adjA=(a*hTri)%2!==0?a+1:a;
+    const adjBaseArea=adjA*hTri/2;
+    const peri=adjA+b+c;
+    const latArea=peri*pH;
+    const SA=2*adjBaseArea+latArea;
+    qs.push({type:'input',stem:'בפריסה של מנסרה על משבצות:<br>'+
+      'צלעות בסיס המשולש: <span class="math-expr">'+adjA+'</span>, <span class="math-expr">'+b+'</span>, <span class="math-expr">'+c+'</span> ס"מ.<br>'+
+      'גובה המשולש = <span class="math-expr">'+hTri+'</span> ס"מ. גובה מנסרה = <span class="math-expr">'+pH+'</span> ס"מ.<br>'+
+      'חשבו את <strong>שטח הפנים</strong> של המנסרה.',
+      answer:SA,
+      explanation:'שטח בסיס = ('+adjA+'×'+hTri+')/2 = '+adjBaseArea+'. היקף = '+adjA+'+'+b+'+'+c+' = '+peri+'. שטח פנים = 2×'+adjBaseArea+' + '+peri+'×'+pH+' = '+(2*adjBaseArea)+' + '+latArea+' = <strong>'+SA+'</strong>'});
+  }
+
+  return qs;
+}
+
+function genChallenge(){
+  rng=mulberry32(dateSeed+400);
+  const qs=[];
+
+  /* Q1-5: Composite shape — box + triangular prism on top (house shape) */
+  for(let i=0;i<5;i++){
+    const w=RI(4,10);/* width = length of base */
+    const d=RI(4,10);/* depth */
+    const boxH=RI(3,8);/* box height */
+    const roofH=RI(2,5);/* roof (triangle) height */
+    const boxVol=w*d*boxH;
+    const roofBaseArea=w*roofH/2;
+    /* ensure whole number */
+    const adjW=(w*roofH)%2!==0?w+1:w;
+    const adjBoxVol=adjW*d*boxH;
+    const adjRoofBaseArea=adjW*roofH/2;
+    const roofVol=adjRoofBaseArea*d;
+    const totalVol=adjBoxVol+roofVol;
+    qs.push({type:'multi-input',stem:'מבנה בצורת "בית" מורכב מ<strong>תיבה</strong> ומעליה <strong>מנסרה משולשת</strong> (גג).<br>'+
+      'ממדי התיבה: <span class="math-expr">'+adjW+'</span> × <span class="math-expr">'+d+'</span> × <span class="math-expr">'+boxH+'</span> ס"מ.<br>'+
+      'גובה הגג (גובה המשולש) = <span class="math-expr">'+roofH+'</span> ס"מ. עומק הגג = <span class="math-expr">'+d+'</span> ס"מ.',
+      fields:[
+        {label:'נפח התיבה =',answer:adjBoxVol},
+        {label:'שטח בסיס הגג (משולש) =',answer:adjRoofBaseArea},
+        {label:'נפח הגג =',answer:roofVol},
+        {label:'נפח המבנה כולו =',answer:totalVol}
+      ],
+      explanation:'נפח תיבה = '+adjW+'×'+d+'×'+boxH+' = '+adjBoxVol+'. שטח משולש הגג = ('+adjW+'×'+roofH+')/2 = '+adjRoofBaseArea+'. נפח גג = '+adjRoofBaseArea+'×'+d+' = '+roofVol+'. סה"כ = '+adjBoxVol+'+'+roofVol+' = <strong>'+totalVol+'</strong>'});
+  }
+
+  /* Q6-10: Fill with water to 1/3 height — find total volume and x */
+  for(let i=0;i<5;i++){
+    /* water fills 1/3 of height, water volume given, find total vol and base side */
+    const b=RI(4,12)*2;/* even base for clean area */
+    const hTri=RI(3,10);
+    const baseArea=b*hTri/2;
+    const pH=RI(6,15);
+    /* ensure pH divisible by 3 */
+    const adjPH=pH%3===0?pH:pH+(3-pH%3);
+    const totalVol=baseArea*adjPH;
+    const waterVol=Math.round(totalVol/3);
+    qs.push({type:'multi-input',stem:'מנסרה משולשת מלאה במים עד <strong>שליש</strong> מגובהה.<br>'+
+      'כמות המים = <span class="math-expr">'+waterVol+'</span> סמ"ק.<br>'+
+      'בסיס המשולש = <span class="math-expr">'+b+'</span> ס"מ, גובה המשולש = <span class="math-expr">'+hTri+'</span> ס"מ.',
+      fields:[
+        {label:'שטח בסיס =',answer:baseArea},
+        {label:'נפח המנסרה כולה =',answer:totalVol},
+        {label:'גובה המנסרה =',answer:adjPH}
+      ],
+      explanation:'מים = שליש מהנפח ⇒ נפח כולל = '+waterVol+'×3 = '+totalVol+'. שטח בסיס = ('+b+'×'+hTri+')/2 = '+baseArea+'. גובה = נפח/שטח_בסיס = '+totalVol+'/'+baseArea+' = <strong>'+adjPH+'</strong>'});
+  }
+
+  /* Q11-15: Identify prism from net description */
+  for(let i=0;i<5;i++){
+    const triples=[[3,4,5],[5,12,13],[6,8,10],[8,15,17],[9,12,15]];
+    const tri=triples[i%triples.length];
+    const a=tri[0],b=tri[1],c=tri[2];
+    const baseArea=a*b/2;
+    const pH=RI(5,15);
+    const peri=a+b+c;
+    const SA=2*baseArea+peri*pH;
+    /* Give SA and some info, ask which prism */
+    const opts=shuffle([
+      'צלעות בסיס '+a+', '+b+', '+c+' וגובה '+pH,
+      'צלעות בסיס '+(a+1)+', '+(b+1)+', '+c+' וגובה '+pH,
+      'צלעות בסיס '+a+', '+b+', '+c+' וגובה '+(pH+2),
+      'צלעות בסיס '+b+', '+c+', '+(a+2)+' וגובה '+pH
+    ]);
+    const correctOpt='צלעות בסיס '+a+', '+b+', '+c+' וגובה '+pH;
+    qs.push({type:'mc',stem:'שטח הפנים של מנסרה משולשת הוא <span class="math-expr">'+SA+'</span> סמ"ר, שטח הבסיס = <span class="math-expr">'+baseArea+'</span> סמ"ר.<br>'+
+      'איזו מנסרה מתאימה?',
+      options:opts,
+      answer:opts.indexOf(correctOpt),
+      explanation:'שטח פנים = 2×'+baseArea+' + היקף×H. נבדוק: 2×'+baseArea+' + ('+a+'+'+b+'+'+c+')×'+pH+' = '+(2*baseArea)+' + '+(peri*pH)+' = <strong>'+SA+'</strong> ✓'});
+  }
+
+  return qs;
+}
+
+/* ===== PRACTICE RENDERING ===== */
+function renderLevelTabs(){
+  const container=document.getElementById('levelTabs');container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(lv=>{
+    const btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    const done=scores[lv].filter(s=>s===1).length;
+    const total=LEVEL_COUNTS[lv];
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+total+')</span>':'');
+    btn.onclick=()=>switchLevel(lv);
+    container.appendChild(btn);
+  });
+}
+
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv]) questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+
+function updateLevelProgress(){
+  const lv=state.level;const total=LEVEL_COUNTS[lv];
+  const done=answered[lv].filter(a=>a).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+
+function renderQuestion(){
+  const lv=state.level;const idx=state.qIndex;
+  const qs=questions[lv];if(!qs)return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  const q=qs[idx];const area=document.getElementById('questionArea');
+  const isAnswered=answered[lv][idx];
+  let html='<div class="q-card"><div class="q-number">שאלה '+(idx+1)+' מתוך '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach((opt,i)=>{
+      const letter=LETTERS[i];let cls='q-opt';
+      if(isAnswered){cls+=' disabled';if(i===q.answer)cls+=' correct';else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel'])cls+=' wrong'}
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span>'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered)html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>בדקו</button>';
+  } else if(q.type==='input'){
+    html+='<div class="q-input-row"><input type="number" step="any" class="q-input" id="qInput" placeholder="תשובה" dir="ltr" aria-label="תשובה">';
+    if(!isAnswered)html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">בדקו</button>';
+    html+='</div>';
+    if(isAnswered) html+='<div style="margin-top:4px;font-weight:700;direction:ltr">תשובה: '+q.answer+'</div>';
+  } else if(q.type==='multi-input'){
+    html+='<div style="margin:8px 0">';
+    q.fields.forEach((f,fi)=>{
+      html+='<div style="margin:6px 0;display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="font-weight:600">'+f.label+'</span>';
+      html+='<input type="number" step="any" class="q-input q-multi-input" data-fi="'+fi+'" data-ans="'+f.answer+'" placeholder="?" dir="ltr" style="width:90px"'+(isAnswered?' disabled value="'+f.answer+'"':'')+'>';
+      html+='</div>';
+    });
+    html+='</div>';
+    if(!isAnswered)html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMultiInput()">בדקו</button>';
+  }
+
+  if(isAnswered){
+    const isCorrect=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'✅ נכון! ':'❌ ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(el=>{
+      el.onclick=()=>{area.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');document.getElementById('qCheckBtn').disabled=false};
+    });
+  }
+  const inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){inp.focus();inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkInput()})}
+
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'סיום':'הבא ←';
+}
+
+window.checkMC=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const selected=document.querySelector('.q-opt.selected');if(!selected)return;
+  const si=parseInt(selected.dataset.i);const isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;answered[lv][idx]=true;answered[lv][idx+'_sel']=si;
+  document.querySelectorAll('.q-opt').forEach((el,i)=>{el.classList.add('disabled');el.onclick=null;if(i===q.answer)el.classList.add('correct');else if(i===si&&!isCorrect)el.classList.add('wrong')});
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון מאוד!','✅ יפה!'])+' ':'❌ לא נכון. ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkInput=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inp=document.getElementById('qInput');const val=inp.value.trim();if(!val)return;
+  const numVal=parseFloat(val);
+  const isCorrect=Math.abs(numVal-q.answer)<0.01;
+  scores[lv][idx]=isCorrect?1:0;answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');inp.disabled=true;
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון!'])+' ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkMultiInput=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inputs=document.querySelectorAll('.q-multi-input');
+  let allCorrect=true;
+  inputs.forEach(inp=>{
+    const ans=parseFloat(inp.dataset.ans);const val=parseFloat(inp.value);
+    if(Math.abs(val-ans)<0.01){inp.classList.add('correct')}else{inp.classList.add('wrong');allCorrect=false}
+    inp.disabled=true;
+  });
+  scores[lv][idx]=allCorrect?1:0;answered[lv][idx]=true;
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(allCorrect?'correct':'wrong')+'">'+(allCorrect?'✅ מעולה! ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+function nextQuestion(){
+  const lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function')showAuthModal();return;
+  }
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+
+function renderLevelComplete(){
+  const lv=state.level;
+  const correct=scores[lv].filter(s=>s===1).length;
+  const total=LEVEL_COUNTS[lv];const pct=Math.round(correct/total*100);
+  const scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  const emoji=pct>=80?'🎉':pct>=50?'👏':'💪';
+  document.getElementById('questionArea').innerHTML=`
+    <div class="q-card"><div class="level-complete">
+      <div class="big-emoji">${emoji}</div>
+      <h2>סיימתם את רמת "${LEVEL_NAMES[lv]}"!</h2>
+      <div class="score-display${scoreClass}">${correct} / ${total}</div>
+      <p style="color:var(--text-light);margin-bottom:16px">${pct}% הצלחה</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="mini-btn" onclick="retryLevel()">🔄 נסו שוב</button>
+        ${lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">▶ לרמה הבאה</button>':''}
+      </div>
+    </div></div>`;
+  if(pct>=80) showConfetti();
+  saveState();
+}
+
+window.retryLevel=function(){
+  const lv=state.level;
+  scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);
+  state.qIndex=0;
+  renderLevelTabs();renderQuestion();saveState();
+};
+window.nextLevel=function(){
+  const order=['easy','medium','hard','challenge'];
+  const ci=order.indexOf(state.level);
+  if(ci<order.length-1) switchLevel(order[ci+1]);
+};
+
+/* ===== SECTION SWITCHING ===== */
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(b=>{b.classList.toggle('active',b.dataset.section===sec)});
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+/* ===== CONFETTI ===== */
+function showConfetti(){
+  const box=document.getElementById('confettiBox');box.innerHTML='';
+  const colors=['#1a2f5a','#4a9eda','#10b981','#f59e0b','#8b5cf6','#ec4899'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');c.className='confetti';
+    c.style.left=Math.random()*100+'%';c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(()=>box.innerHTML='',5000);
+}
+
+function generateQuestions(level){
+  if(level==='easy') return genEasy();
+  if(level==='medium') return genMedium();
+  if(level==='hard') return genHard();
+  return genChallenge();
+}
+
+/* ===== INIT ===== */
+function init(){
+  loadState();
+  Object.keys(LEVEL_COUNTS).forEach(lv=>{
+    if(!scores[lv]||!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice') switchSection('practice');
+}
+init();
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

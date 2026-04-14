@@ -1,0 +1,1307 @@
+<!--
+  Title: זוויות מתאימות ומתחלפות
+  Unit: זוויות
+  Subject: מתמטיקה
+  Grade: ז׳
+  Lesson: 5
+  Tags: גיאומטריה,זוויות,מתאימות,מתחלפות,ישרים מקבילים
+  Ages: 12-13
+  Icon: ⫽
+  Badge: חדש!
+  Description: ישרים מקבילים וישר חותך — זוויות מתאימות, מתחלפות וחד-צדדיות. תרגול ב-4 רמות קושי
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>זוויות מתאימות ומתחלפות | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#1a2f5a;--primary-dark:#0f1f3d;--primary-light:#dbeafe;
+  --accent:#4a9eda;--accent-dark:#2d7ab8;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 50%,#f0f9ff 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+
+/* Top bar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--accent);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Section toggle */
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+
+/* Container */
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+
+/* ===== TEACHING SECTION ===== */
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
+.step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+
+/* Interactive elements inside steps */
+.mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.mini-table th,.mini-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:1rem}
+.mini-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.mini-table td{background:var(--bg)}
+.mini-input{width:60px;padding:6px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:1rem;font-family:inherit;font-weight:700;transition:.3s}
+.mini-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(26,47,90,.15)}
+.mini-input.correct{border-color:var(--success);background:#ecfdf5}
+.mini-input.wrong{border-color:var(--error);background:#fef2f2}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.reveal{display:none;animation:fadeIn .5s ease}
+.reveal.show{display:block}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+
+/* Step nav */
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== PRACTICE SECTION ===== */
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-stem code,.q-stem .expr{font-size:1.1em}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;transition:.25s}
+.q-opt.selected .q-opt-letter{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-opt.correct .q-opt-letter{background:var(--success);color:#fff;border-color:var(--success)}
+.q-opt.wrong .q-opt-letter{background:var(--error);color:#fff;border-color:var(--error)}
+
+.q-input-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-input{width:120px;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1.1rem;font-family:inherit;font-weight:700;text-align:center;transition:.3s;direction:ltr}
+.q-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(26,47,90,.15)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+
+.q-check-btn{padding:10px 28px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;box-shadow:var(--shadow)}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.92rem;animation:fadeIn .3s}
+.q-feedback.correct{background:#ecfdf5;border-right:4px solid var(--success);color:#065f46}
+.q-feedback.wrong{background:#fef2f2;border-right:4px solid var(--error);color:#991b1b}
+
+.q-nav{display:flex;justify-content:space-between;margin-top:16px}
+.q-nav-btn{padding:10px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Level complete */
+.level-complete{text-align:center;padding:24px;animation:fadeIn .5s}
+.level-complete .big-emoji{font-size:4rem;margin-bottom:12px}
+.level-complete h2{font-size:1.4rem;color:var(--primary-dark);margin-bottom:8px}
+.level-complete .score-display{font-size:1.8rem;font-weight:800;color:var(--success);margin-bottom:16px}
+.level-complete .score-display.medium-score{color:#f59e0b}
+.level-complete .score-display.low-score{color:var(--error)}
+
+/* Celebration confetti */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{
+  0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}
+  100%{transform:translateY(105vh) rotate(720deg) scale(.3);opacity:0}
+}
+
+/* SVG angle diagrams */
+.angle-svg{display:block;margin:12px auto;max-width:100%}
+
+/* Print button */
+.print-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer;font-size:1rem;box-shadow:var(--shadow);transition:.25s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.print-btn:hover{background:var(--primary-dark);transform:scale(1.1)}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+/* Responsive */
+@media(max-width:600px){
+  .container{padding:0 10px 30px}
+  .step-card,.q-card{padding:18px 14px}
+  .step-title{font-size:1.15rem}
+  .step-summary-grid{grid-template-columns:1fr}
+  .section-toggle{max-width:280px;margin:12px auto}
+  .section-btn{font-size:.88rem;padding:8px 14px}
+  .q-opt{padding:10px 12px;font-size:.9rem}
+  .topbar-title{font-size:.9rem}
+}
+
+/* Print */
+@media print{
+  .topbar,.section-toggle,.step-nav,.q-nav,.print-btn,.level-tabs,.confetti-container,.q-check-btn{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .step-card,.q-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+  .container{max-width:100%}
+  .q-feedback{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">⫽ כיתה ז׳ — זוויות מתאימות ומתחלפות</span>
+  <div style="display:flex;align-items:center;gap:10px"><button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button><a href="../../../../materials.html">← חזרה לדף החומרים</a></div>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+
+<!-- ===== LEARNING SECTION ===== -->
+<section id="learnSection">
+  <div class="step-progress">
+    <div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div>
+    <div class="step-progress-text" id="stepText"></div>
+  </div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+
+<!-- ===== PRACTICE SECTION ===== -->
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress">
+    <div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div>
+    <div class="level-progress-text" id="levelText"></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+
+</div>
+
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const today=new Date();const dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+let rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(arr){return arr[Math.floor(R()*arr.length)]}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const LETTERS=['א','ב','ג','ד'];
+
+/* ===== SVG HELPERS ===== */
+function svgParallel(opts){
+  /* Draws two parallel lines (a,b) with a transversal (c),
+     labeling 8 angles. opts can highlight pairs. */
+  const w=320,h=220;
+  const aY=60,bY=170;
+  /* transversal from top-left to bottom-right */
+  const tX1=100,tY1=20,tX2=230,tY2=210;
+  /* intersection points */
+  const slopeT=(tY2-tY1)/(tX2-tX1);
+  const axInt=tX1+(aY-tY1)/slopeT; /* x where transversal crosses line a */
+  const bxInt=tX1+(bY-tY1)/slopeT; /* x where transversal crosses line b */
+
+  let svg='<svg class="angle-svg" viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg" style="direction:ltr">';
+  /* parallel lines */
+  svg+='<line x1="30" y1="'+aY+'" x2="'+(w-20)+'" y2="'+aY+'" stroke="#1a2f5a" stroke-width="2.5"/>';
+  svg+='<line x1="30" y1="'+bY+'" x2="'+(w-20)+'" y2="'+bY+'" stroke="#1a2f5a" stroke-width="2.5"/>';
+  /* transversal */
+  svg+='<line x1="'+tX1+'" y1="'+tY1+'" x2="'+tX2+'" y2="'+tY2+'" stroke="#4a9eda" stroke-width="2.5"/>';
+  /* arrows for parallel */
+  svg+='<polygon points="'+(w-20)+','+aY+' '+(w-28)+','+(aY-4)+' '+(w-28)+','+(aY+4)+'" fill="#1a2f5a"/>';
+  svg+='<polygon points="'+(w-20)+','+bY+' '+(w-28)+','+(bY-4)+' '+(w-28)+','+(bY+4)+'" fill="#1a2f5a"/>';
+
+  /* labels */
+  svg+='<text x="'+(w-12)+'" y="'+(aY-8)+'" font-size="16" font-weight="bold" fill="#1a2f5a" font-family="Rubik">a</text>';
+  svg+='<text x="'+(w-12)+'" y="'+(bY-8)+'" font-size="16" font-weight="bold" fill="#1a2f5a" font-family="Rubik">b</text>';
+  svg+='<text x="'+(tX2+4)+'" y="'+(tY2+4)+'" font-size="16" font-weight="bold" fill="#4a9eda" font-family="Rubik">c</text>';
+
+  /* angle numbers at intersection with a: 1(top-left),2(top-right),3(bottom-right),4(bottom-left) */
+  /* angle numbers at intersection with b: 5(top-left),6(top-right),7(bottom-right),8(bottom-left) */
+  const aLabels=opts&&opts.aLabels?opts.aLabels:['1','2','3','4'];
+  const bLabels=opts&&opts.bLabels?opts.bLabels:['5','6','7','8'];
+  const highlightPairs=opts&&opts.highlight?opts.highlight:[];
+  const highlightColor=opts&&opts.highlightColor?opts.highlightColor:'#ef4444';
+  const highlightColor2=opts&&opts.highlightColor2?opts.highlightColor2:'#10b981';
+
+  function angleColor(label){
+    for(let pi=0;pi<highlightPairs.length;pi++){
+      const pair=highlightPairs[pi];
+      if(pair.includes(label)){
+        return pi===0?highlightColor:highlightColor2;
+      }
+    }
+    return '#64748b';
+  }
+
+  /* offsets for angle labels around intersection */
+  const aOff=[[-22,-10],[18,-10],[18,18],[-22,18]];
+  const bOff=[[-22,-10],[18,-10],[18,18],[-22,18]];
+
+  aLabels.forEach((lbl,i)=>{
+    if(lbl){
+      const clr=angleColor(lbl);
+      svg+='<text x="'+(axInt+aOff[i][0])+'" y="'+(aY+aOff[i][1])+'" font-size="14" font-weight="700" fill="'+clr+'" font-family="Heebo">'+lbl+'</text>';
+    }
+  });
+  bLabels.forEach((lbl,i)=>{
+    if(lbl){
+      const clr=angleColor(lbl);
+      svg+='<text x="'+(bxInt+bOff[i][0])+'" y="'+(bY+bOff[i][1])+'" font-size="14" font-weight="700" fill="'+clr+'" font-family="Heebo">'+lbl+'</text>';
+    }
+  });
+
+  /* optional angle arcs */
+  if(opts&&opts.arcs){
+    opts.arcs.forEach(arc=>{
+      svg+=arc;
+    });
+  }
+
+  /* parallel markers (arrows on lines) */
+  svg+='<text x="60" y="'+(aY-6)+'" font-size="11" fill="#1a2f5a">▸▸</text>';
+  svg+='<text x="60" y="'+(bY-6)+'" font-size="11" fill="#1a2f5a">▸▸</text>';
+
+  svg+='</svg>';
+  return svg;
+}
+
+/* Helper: create a practice SVG with angle values */
+function svgAngleQ(alpha,beta,alphaPos,betaPos,showAlpha,showBeta){
+  const w=280,h=200;
+  const aY=55,bY=155;
+  const tX1=90,tY1=15,tX2=200,tY2=195;
+  const slopeT=(tY2-tY1)/(tX2-tX1);
+  const axInt=tX1+(aY-tY1)/slopeT;
+  const bxInt=tX1+(bY-tY1)/slopeT;
+
+  let svg='<svg class="angle-svg" viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" xmlns="http://www.w3.org/2000/svg" style="direction:ltr">';
+  svg+='<line x1="20" y1="'+aY+'" x2="'+(w-15)+'" y2="'+aY+'" stroke="#1a2f5a" stroke-width="2"/>';
+  svg+='<line x1="20" y1="'+bY+'" x2="'+(w-15)+'" y2="'+bY+'" stroke="#1a2f5a" stroke-width="2"/>';
+  svg+='<line x1="'+tX1+'" y1="'+tY1+'" x2="'+tX2+'" y2="'+tY2+'" stroke="#4a9eda" stroke-width="2"/>';
+  svg+='<text x="'+(w-10)+'" y="'+(aY-6)+'" font-size="14" font-weight="bold" fill="#1a2f5a" font-family="Rubik">a</text>';
+  svg+='<text x="'+(w-10)+'" y="'+(bY-6)+'" font-size="14" font-weight="bold" fill="#1a2f5a" font-family="Rubik">b</text>';
+  svg+='<text x="16" y="'+(aY-5)+'" font-size="10" fill="#1a2f5a">▸▸</text>';
+  svg+='<text x="16" y="'+(bY-5)+'" font-size="10" fill="#1a2f5a">▸▸</text>';
+
+  /* position offsets: 0=top-left,1=top-right,2=bottom-right,3=bottom-left */
+  const aOff=[[-28,-8],[14,-8],[14,16],[-28,16]];
+  const bOff=[[-28,-8],[14,-8],[14,16],[-28,16]];
+
+  if(showAlpha!==false){
+    const off=alphaPos<4?aOff[alphaPos]:bOff[alphaPos-4];
+    const cx=alphaPos<4?axInt:bxInt;
+    const cy=alphaPos<4?aY:bY;
+    svg+='<text x="'+(cx+off[0])+'" y="'+(cy+off[1])+'" font-size="13" font-weight="700" fill="#ef4444" font-family="Heebo">'+alpha+'</text>';
+  }
+  if(showBeta!==false){
+    const off=betaPos<4?aOff[betaPos]:bOff[betaPos-4];
+    const cx=betaPos<4?axInt:bxInt;
+    const cy=betaPos<4?aY:bY;
+    svg+='<text x="'+(cx+off[0])+'" y="'+(cy+off[1])+'" font-size="13" font-weight="700" fill="#10b981" font-family="Heebo">'+beta+'</text>';
+  }
+
+  svg+='</svg>';
+  return svg;
+}
+
+/* ===== STATE ===== */
+let state={section:'learn',step:0,level:'easy',qIndex:0};
+let scores={easy:[],medium:[],hard:[],challenge:[]};
+let answered={easy:[],medium:[],hard:[],challenge:[]};
+let questions={easy:null,medium:null,hard:null,challenge:null};
+const LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+const LEVEL_NAMES={easy:'קל',medium:'בינוני',hard:'קשה',challenge:'אתגר'};
+const TOTAL_STEPS=7;
+
+/* ===== LOCAL STORAGE ===== */
+const LS_KEY='bh_grade7_corr_alt_angles_'+dateSeed;
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores,answered,state}))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+/* ===== TEACHING STEPS ===== */
+const steps=[
+/* Step 0: Parallel lines + transversal */
+{title:'📐 ישרים מקבילים וישר חותך', render(){return `
+<p>שני ישרים <strong>מקבילים</strong> הם ישרים שלעולם לא נפגשים. נסמן: <span class="math-expr">a ‖ b</span></p>
+<p>כאשר ישר שלישי <strong>c</strong> (הנקרא <strong>חותך</strong>) עובר דרך שני הישרים המקבילים, נוצרות <strong>8 זוויות</strong>: 4 בכל נקודת חיתוך.</p>
+${svgParallel({aLabels:['1','2','3','4'],bLabels:['5','6','7','8']})}
+<div class="highlight">
+<strong>שמות הזוויות:</strong><br>
+- זוויות <strong>1, 2, 3, 4</strong> — ליד הישר <span class="math-expr">a</span><br>
+- זוויות <strong>5, 6, 7, 8</strong> — ליד הישר <span class="math-expr">b</span>
+</div>
+<p><strong>שאלת הבנה:</strong> כמה זוויות נוצרות כששני ישרים מקבילים נחתכים על ידי ישר שלישי?</p>
+<div class="quiz-options" id="s0opts"></div>
+<div id="s0fb"></div>
+`},init(){
+  const opts=shuffle([
+    {text:'8 זוויות',correct:true},
+    {text:'4 זוויות',correct:false},
+    {text:'6 זוויות',correct:false},
+    {text:'12 זוויות',correct:false}
+  ]);
+  const container=document.getElementById('s0opts');
+  container.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');d.className='quiz-opt';d.textContent=o.text;
+    d.onclick=()=>{
+      container.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s0fb').innerHTML='<div class="feedback-inline ok">✅ נכון! 4 זוויות בכל נקודת חיתוך, סה"כ 8.</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s0fb').innerHTML='<div class="feedback-inline err">❌ נסו שוב — יש 4 זוויות בכל נקודת חיתוך.</div>'}
+    };
+    container.appendChild(d);
+  });
+}},
+
+/* Step 1: Corresponding angles */
+{title:'🔵 זוויות מתאימות', render(){return `
+<div class="rule-box">📌 זוויות מתאימות נמצאות <strong>באותו מיקום</strong> יחסית בשתי נקודות החיתוך.<br>כשהישרים מקבילים — הן <strong>שוות!</strong></div>
+${svgParallel({aLabels:['1','2','3','4'],bLabels:['5','6','7','8'],highlight:[['1','5'],['2','6']],highlightColor:'#2563eb',highlightColor2:'#8b5cf6'})}
+<div class="example">
+<strong>זוגות מתאימות:</strong><br>
+∠1 ו-∠5 &nbsp;|&nbsp; ∠2 ו-∠6 &nbsp;|&nbsp; ∠3 ו-∠7 &nbsp;|&nbsp; ∠4 ו-∠8<br><br>
+כל זוג נמצא <strong>באותו צד</strong> של החותך ו<strong>באותו צד</strong> של הישר המקביל.
+</div>
+<p><strong>דוגמה:</strong> אם <span class="math-expr">∠1 = 70°</span>, ו-<span class="math-expr">a ‖ b</span>, אז <span class="math-expr">∠5 = 70°</span> (מתאימות).</p>
+<p><strong>שאלת הבנה:</strong> ∠4 ו-∠8 הן זוויות ___. ∠1 ו-∠3 הן זוויות ___.</p>
+<div class="quiz-options" id="s1opts"></div>
+<div id="s1fb"></div>
+`},init(){
+  const opts=shuffle([
+    {text:'∠4 ו-∠8: מתאימות, ∠1 ו-∠3: קודקודיות',correct:true},
+    {text:'∠4 ו-∠8: מתחלפות, ∠1 ו-∠3: מתאימות',correct:false},
+    {text:'∠4 ו-∠8: קודקודיות, ∠1 ו-∠3: צמודות',correct:false},
+    {text:'∠4 ו-∠8: צמודות, ∠1 ו-∠3: מתחלפות',correct:false}
+  ]);
+  const container=document.getElementById('s1opts');container.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');d.className='quiz-opt';d.textContent=o.text;
+    d.onclick=()=>{
+      container.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s1fb').innerHTML='<div class="feedback-inline ok">✅ נכון! ∠4 ו-∠8 באותו מיקום → מתאימות. ∠1 ו-∠3 מול מול → קודקודיות.</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s1fb').innerHTML='<div class="feedback-inline err">❌ חשבו: ∠4 ו-∠8 באותו מיקום בשתי נקודות החיתוך? ∠1 ו-∠3 מול מול?</div>'}
+    };
+    container.appendChild(d);
+  });
+}},
+
+/* Step 2: Alternate angles */
+{title:'🟢 זוויות מתחלפות', render(){return `
+<div class="rule-box">📌 זוויות מתחלפות נמצאות <strong>בצדדים מנוגדים</strong> של החותך, <strong>בין</strong> שני הישרים המקבילים.<br>כשהישרים מקבילים — הן <strong>שוות!</strong></div>
+${svgParallel({aLabels:['1','2','3','4'],bLabels:['5','6','7','8'],highlight:[['3','6'],['4','5']],highlightColor:'#10b981',highlightColor2:'#f59e0b'})}
+<div class="example">
+<strong>זוגות מתחלפות:</strong><br>
+∠3 ו-∠6 &nbsp;|&nbsp; ∠4 ו-∠5<br><br>
+הן נמצאות <strong>בצדדים שונים</strong> של החותך ו<strong>בין</strong> הישרים (הזוויות "הפנימיות").
+</div>
+<p><strong>דוגמה:</strong> אם <span class="math-expr">∠4 = 110°</span>, ו-<span class="math-expr">a ‖ b</span>, אז <span class="math-expr">∠5 = 110°</span> (מתחלפות).</p>
+<p><strong>שאלת הבנה:</strong> סמנו את כל הזוגות המתחלפות בסרטוט.</p>
+<div class="quiz-options" id="s2opts"></div>
+<div id="s2fb"></div>
+`},init(){
+  const opts=shuffle([
+    {text:'∠3 ו-∠6, ∠4 ו-∠5',correct:true},
+    {text:'∠1 ו-∠5, ∠2 ו-∠6',correct:false},
+    {text:'∠3 ו-∠5, ∠4 ו-∠6',correct:false},
+    {text:'∠1 ו-∠8, ∠2 ו-∠7',correct:false}
+  ]);
+  const container=document.getElementById('s2opts');container.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');d.className='quiz-opt';d.textContent=o.text;
+    d.onclick=()=>{
+      container.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s2fb').innerHTML='<div class="feedback-inline ok">✅ מעולה! ∠3↔∠6 ו-∠4↔∠5 — צדדים מנוגדים של החותך, בין הישרים.</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s2fb').innerHTML='<div class="feedback-inline err">❌ מתחלפות = בצדדים שונים של החותך + בין הישרים. חשבו שוב!</div>'}
+    };
+    container.appendChild(d);
+  });
+}},
+
+/* Step 3: Co-interior (same-side) angles */
+{title:'🟡 זוויות חד-צדדיות (צמודות)', render(){return `
+<div class="rule-box">📌 זוויות חד-צדדיות נמצאות <strong>באותו צד</strong> של החותך, <strong>בין</strong> הישרים.<br>כשהישרים מקבילים — <strong>סכומן 180°!</strong></div>
+${svgParallel({aLabels:['1','2','3','4'],bLabels:['5','6','7','8'],highlight:[['3','5'],['4','6']],highlightColor:'#f59e0b',highlightColor2:'#ec4899'})}
+<div class="example">
+<strong>זוגות חד-צדדיות:</strong><br>
+∠3 ו-∠5 &nbsp;|&nbsp; ∠4 ו-∠6<br><br>
+הן <strong>באותו צד</strong> של החותך ו<strong>בין</strong> הישרים → סכומן <strong>180°</strong>.
+</div>
+<p><strong>דוגמה:</strong> <span class="math-expr">∠3 = 120°</span>, <span class="math-expr">a ‖ b</span>. מהו <span class="math-expr">∠5</span>?</p>
+<div class="q-input-row">
+  <span>∠5 = </span>
+  <input type="number" class="mini-input" id="s3input" placeholder="?" aria-label="ערך זווית 5" style="width:70px">
+  <span>°</span>
+  <button class="mini-btn" onclick="checkS3()">בדקו</button>
+</div>
+<div id="s3fb"></div>
+`}},
+
+/* Step 4: Identifying angle types */
+{title:'🔍 זיהוי סוגי הזוויות', render(){return `
+<p>בסרטוט הבא, שני ישרים <span class="math-expr">a ‖ b</span> נחתכים על ידי חותך <span class="math-expr">c</span>.</p>
+${svgParallel({aLabels:['1','2','3','4'],bLabels:['5','6','7','8']})}
+<p><strong>מיינו כל זוג:</strong></p>
+<table class="mini-table" style="direction:rtl;font-size:.9rem">
+<tr><th>זוג זוויות</th><th>סוג</th></tr>
+<tr><td>∠1 ו-∠5</td><td>מתאימות (שוות)</td></tr>
+<tr><td>∠3 ו-∠6</td><td>מתחלפות (שוות)</td></tr>
+<tr><td>∠3 ו-∠5</td><td>חד-צדדיות (סכום 180°)</td></tr>
+<tr><td>∠1 ו-∠3</td><td>קודקודיות (שוות)</td></tr>
+<tr><td>∠1 ו-∠2</td><td>צמודות על ישר (סכום 180°)</td></tr>
+</table>
+<p><strong>שאלת הבנה:</strong> ∠2 ו-∠5 הן זוויות ___?</p>
+<div class="quiz-options" id="s4opts"></div>
+<div id="s4fb"></div>
+`},init(){
+  const opts=shuffle([
+    {text:'חד-צדדיות (סכום 180°)',correct:true},
+    {text:'מתאימות (שוות)',correct:false},
+    {text:'מתחלפות (שוות)',correct:false},
+    {text:'קודקודיות (שוות)',correct:false}
+  ]);
+  const container=document.getElementById('s4opts');container.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');d.className='quiz-opt';d.textContent=o.text;
+    d.onclick=()=>{
+      container.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s4fb').innerHTML='<div class="feedback-inline ok">✅ נכון! ∠2 ו-∠5 באותו צד של החותך ובין הישרים → חד-צדדיות, סכומן 180°.</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s4fb').innerHTML='<div class="feedback-inline err">❌ ∠2 ו-∠5 באותו צד של החותך ובין הישרים. מה סוג כזה?</div>'}
+    };
+    container.appendChild(d);
+  });
+}},
+
+/* Step 5: Calculations with expressions */
+{title:'🧮 חישובים עם ביטויים', render(){return `
+<p>כשיש ישרים מקבילים, אפשר לכתוב <strong>משוואות</strong> ולפתור!</p>
+<div class="example">
+<strong>דוגמה 1 — זוויות מתאימות:</strong><br>
+<span class="math-expr">a ‖ b</span>. הזוויות <span class="math-expr">3x + 20°</span> ו-<span class="math-expr">x + 80°</span> הן מתאימות.<br>
+מתאימות → שוות:<br>
+<code>3x + 20 = x + 80</code><br>
+<code>2x = 60</code><br>
+<code>x = 30</code>
+</div>
+<div class="example">
+<strong>דוגמה 2 — זוויות מתחלפות:</strong><br>
+<span class="math-expr">a ‖ b</span>. הזוויות <span class="math-expr">55 - x</span> ו-<span class="math-expr">100 - 4x</span> הן מתחלפות.<br>
+מתחלפות → שוות:<br>
+<code>55 - x = 100 - 4x</code><br>
+<code>3x = 45</code><br>
+<code>x = 15</code>
+</div>
+<div class="example">
+<strong>דוגמה 3 — חד-צדדיות:</strong><br>
+<span class="math-expr">a ‖ b</span>. הזוויות <span class="math-expr">2x + 30°</span> ו-<span class="math-expr">x + 90°</span> הן חד-צדדיות.<br>
+חד-צדדיות → סכום 180°:<br>
+<code>(2x + 30) + (x + 90) = 180</code><br>
+<code>3x + 120 = 180</code><br>
+<code>x = 20</code>
+</div>
+<p><strong>תורכם:</strong> <span class="math-expr">a ‖ b</span>. הזוויות <span class="math-expr">4x + 10°</span> ו-<span class="math-expr">2x + 50°</span> הן מתאימות. מצאו <span class="math-expr">x</span>.</p>
+<div class="q-input-row">
+  <span>x = </span>
+  <input type="number" class="mini-input" id="s5input" placeholder="?" aria-label="ערך x" style="width:70px">
+  <button class="mini-btn" onclick="checkS5()">בדקו</button>
+</div>
+<div id="s5fb"></div>
+`}},
+
+/* Step 6: Summary */
+{title:'🏆 סיכום', render(){return `
+<p style="font-size:1.1rem;text-align:center;margin-bottom:20px">בשיעור הזה למדנו 3 סוגי זוויות שנוצרות מישרים מקבילים וחותך:</p>
+<div class="step-summary-grid">
+  <div class="summary-item">
+    <div class="s-icon">🔵</div>
+    <div class="s-title">מתאימות</div>
+    <div class="s-text">אותו מיקום בשתי נקודות החיתוך — <strong>שוות</strong></div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🟢</div>
+    <div class="s-title">מתחלפות</div>
+    <div class="s-text">צדדים מנוגדים, בין הישרים — <strong>שוות</strong></div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🟡</div>
+    <div class="s-title">חד-צדדיות</div>
+    <div class="s-text">אותו צד, בין הישרים — <strong>סכום 180°</strong></div>
+  </div>
+</div>
+${svgParallel({aLabels:['1','2','3','4'],bLabels:['5','6','7','8'],highlight:[['1','5'],['3','6']],highlightColor:'#2563eb',highlightColor2:'#10b981'})}
+<table class="mini-table" style="direction:rtl;font-size:.9rem">
+<tr><th>סוג</th><th>מיקום</th><th>קשר (כש- a‖b)</th><th>דוגמאות</th></tr>
+<tr><td>מתאימות</td><td>אותו צד, אותו מיקום</td><td>שוות</td><td>∠1↔∠5, ∠2↔∠6</td></tr>
+<tr><td>מתחלפות</td><td>צדדים מנוגדים, בין הישרים</td><td>שוות</td><td>∠3↔∠6, ∠4↔∠5</td></tr>
+<tr><td>חד-צדדיות</td><td>אותו צד, בין הישרים</td><td>סכום 180°</td><td>∠3↔∠5, ∠4↔∠6</td></tr>
+</table>
+<div class="success-box" style="text-align:center;font-size:1.1rem;margin-top:20px">
+  <p>🌟 עכשיו אתם מוכנים לתרגול!</p>
+  <p>4 רמות קושי מחכות לכם</p>
+  <button class="mini-btn accent" style="margin-top:12px;font-size:1rem;padding:12px 32px" onclick="switchSection('practice')">!מוכנים לתרגול ←</button>
+</div>
+`}}
+];
+
+function renderStep(idx){
+  state.step=idx;
+  const s=steps[idx];
+  const fill=((idx+1)/TOTAL_STEPS*100).toFixed(0);
+  document.getElementById('stepFill').style.width=fill+'%';
+  document.getElementById('stepText').textContent='שלב '+(idx+1)+' מתוך '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+s.title+'</div>'+s.render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'לתרגול ←':'הבא ←';
+  if(s.init) s.init();
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+/* Step interactive handlers */
+window.checkS3=function(){
+  const v=parseInt(document.getElementById('s3input').value);
+  const fb=document.getElementById('s3fb');
+  if(v===60){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! 120° + 60° = 180° (חד-צדדיות)</div>';document.getElementById('s3input').classList.add('correct')}
+  else if(isNaN(v)){fb.innerHTML='<div class="feedback-inline err">הקלידו מספר</div>'}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. חד-צדדיות → סכום 180°. אז 180° - 120° = ?</div>'}
+};
+window.checkS5=function(){
+  const v=parseInt(document.getElementById('s5input').value);
+  const fb=document.getElementById('s5fb');
+  if(v===20){fb.innerHTML='<div class="feedback-inline ok">✅ מעולה! 4x+10 = 2x+50 → 2x = 40 → x = 20</div>';document.getElementById('s5input').classList.add('correct')}
+  else if(isNaN(v)){fb.innerHTML='<div class="feedback-inline err">הקלידו מספר</div>'}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. מתאימות → שוות: 4x + 10 = 2x + 50</div>'}
+};
+
+/* ===== QUESTION GENERATORS ===== */
+
+/* Angle position map:
+   Line a: 0=top-left(∠1), 1=top-right(∠2), 2=bottom-right(∠3), 3=bottom-left(∠4)
+   Line b: 4=top-left(∠5), 5=top-right(∠6), 6=bottom-right(∠7), 7=bottom-left(∠8)
+*/
+const CORR_PAIRS=[[0,4],[1,5],[2,6],[3,7]]; /* corresponding — equal */
+const ALT_PAIRS=[[2,5],[3,4]];               /* alternate interior — equal (∠3↔∠6, ∠4↔∠5) */
+const COINT_PAIRS=[[2,4],[3,5]];             /* co-interior — sum 180 (∠3↔∠5, ∠4↔∠6) */
+const VERT_PAIRS_A=[[0,2],[1,3]];            /* vertical at a */
+const VERT_PAIRS_B=[[4,6],[5,7]];            /* vertical at b */
+const ANGLE_NAMES=['∠1','∠2','∠3','∠4','∠5','∠6','∠7','∠8'];
+
+function anglePairType(p){
+  for(const c of CORR_PAIRS) if((c[0]===p[0]&&c[1]===p[1])||(c[0]===p[1]&&c[1]===p[0])) return 'corresponding';
+  for(const c of ALT_PAIRS) if((c[0]===p[0]&&c[1]===p[1])||(c[0]===p[1]&&c[1]===p[0])) return 'alternate';
+  for(const c of COINT_PAIRS) if((c[0]===p[0]&&c[1]===p[1])||(c[0]===p[1]&&c[1]===p[0])) return 'co-interior';
+  for(const c of VERT_PAIRS_A.concat(VERT_PAIRS_B)) if((c[0]===p[0]&&c[1]===p[1])||(c[0]===p[1]&&c[1]===p[0])) return 'vertical';
+  return 'adjacent';
+}
+
+const TYPE_HEB={corresponding:'מתאימות',alternate:'מתחלפות','co-interior':'חד-צדדיות',vertical:'קודקודיות',adjacent:'צמודות על ישר'};
+
+/* Helper: generate 3 unique numeric distractors different from correct */
+function uniqueDistractors(correct,candidates){
+  const used=new Set([correct]);
+  const result=[];
+  for(const c of candidates){if(!used.has(c)&&c>0&&c<360){used.add(c);result.push(c);if(result.length===3)break;}}
+  /* fill if needed */
+  let v=correct+5;
+  while(result.length<3){if(!used.has(v)&&v>0&&v<360){used.add(v);result.push(v);}v+=5;}
+  return result;
+}
+
+function genEasy(){
+  rng=mulberry32(dateSeed+100);
+  const qs=[];
+
+  /* Q1-Q7: identify type (corresponding/alternate/co-interior/vertical) */
+  const identifyPairs=shuffle([
+    ...CORR_PAIRS.map(p=>({pair:p,type:'corresponding'})),
+    ...ALT_PAIRS.map(p=>({pair:p,type:'alternate'})),
+    ...COINT_PAIRS.map(p=>({pair:p,type:'co-interior'})),
+    [VERT_PAIRS_A[0]].map(p=>({pair:p,type:'vertical'}))[0],
+    [VERT_PAIRS_B[0]].map(p=>({pair:p,type:'vertical'}))[0],
+    {pair:[0,1],type:'adjacent'}
+  ]);
+  for(let i=0;i<7;i++){
+    const item=identifyPairs[i%identifyPairs.length];
+    const p=item.pair;
+    const correct=TYPE_HEB[item.type];
+    const allTypes=['מתאימות','מתחלפות','חד-צדדיות','קודקודיות'];
+    const distractors=allTypes.filter(t=>t!==correct);
+    const opts=shuffle([correct,...distractors.slice(0,3)]);
+    const aL=['','','',''];const bL=['','','',''];
+    aL[p[0]<4?p[0]:0]=ANGLE_NAMES[p[0]<4?p[0]:0];
+    bL[(p[1]<4?p[1]:p[1]-4)]=ANGLE_NAMES[p[1]];
+    if(p[0]<4) aL[p[0]]=ANGLE_NAMES[p[0]]; else bL[p[0]-4]=ANGLE_NAMES[p[0]];
+    if(p[1]<4) aL[p[1]]=ANGLE_NAMES[p[1]]; else bL[p[1]-4]=ANGLE_NAMES[p[1]];
+    const svg=svgParallel({aLabels:aL,bLabels:bL,highlight:[[ANGLE_NAMES[p[0]],ANGLE_NAMES[p[1]]]]});
+    qs.push({type:'mc',stem:'<span class="math-expr">a ‖ b</span>. הזוויות '+ANGLE_NAMES[p[0]]+' ו-'+ANGLE_NAMES[p[1]]+' הן:'+svg,
+      options:opts,answer:opts.indexOf(correct),
+      explanation:ANGLE_NAMES[p[0]]+' ו-'+ANGLE_NAMES[p[1]]+' הן <strong>'+correct+'</strong>'});
+  }
+
+  /* Q8-Q14: calculate from corresponding angles (equal) */
+  for(let i=0;i<7;i++){
+    const pair=CORR_PAIRS[i%CORR_PAIRS.length];
+    const alpha=RI(30,150);
+    const svg=svgAngleQ(alpha+'°','?',pair[0],pair[1],true,false);
+    const correct=''+alpha;
+    const ds=uniqueDistractors(alpha,[180-alpha,alpha+10,alpha-10,alpha+20,alpha-20]);
+    const opts=shuffle([correct,''+ds[0],''+ds[1],''+ds[2]]);
+    qs.push({type:'mc',stem:'<span class="math-expr">a ‖ b</span>. '+ANGLE_NAMES[pair[0]]+' = <span class="math-expr">'+alpha+'°</span>. מצאו את '+ANGLE_NAMES[pair[1]]+'.'+svg,
+      options:opts.map(o=>o+'°'),answer:opts.indexOf(correct),
+      explanation:ANGLE_NAMES[pair[0]]+' ו-'+ANGLE_NAMES[pair[1]]+' הן מתאימות (שוות), לכן '+ANGLE_NAMES[pair[1]]+' = <strong>'+alpha+'°</strong>'});
+  }
+
+  /* Q15-Q20: calculate from alternate angles (equal) */
+  for(let i=0;i<6;i++){
+    const pair=ALT_PAIRS[i%ALT_PAIRS.length];
+    const alpha=RI(25,155);
+    const svg=svgAngleQ(alpha+'°','?',pair[0],pair[1],true,false);
+    const correct=''+alpha;
+    const ds=uniqueDistractors(alpha,[180-alpha,alpha+15,alpha-15,alpha+25]);
+    const opts=shuffle([correct,''+ds[0],''+ds[1],''+ds[2]]);
+    qs.push({type:'mc',stem:'<span class="math-expr">a ‖ b</span>. '+ANGLE_NAMES[pair[0]]+' = <span class="math-expr">'+alpha+'°</span>. מצאו את '+ANGLE_NAMES[pair[1]]+'.'+svg,
+      options:opts.map(o=>o+'°'),answer:opts.indexOf(correct),
+      explanation:ANGLE_NAMES[pair[0]]+' ו-'+ANGLE_NAMES[pair[1]]+' הן מתחלפות (שוות), לכן '+ANGLE_NAMES[pair[1]]+' = <strong>'+alpha+'°</strong>'});
+  }
+
+  return qs;
+}
+
+function genMedium(){
+  rng=mulberry32(dateSeed+200);
+  const qs=[];
+
+  /* Q1-Q5: compute angle with reasoning — corresponding, alternate, or co-interior */
+  for(let i=0;i<5;i++){
+    const alpha=RI(40,140);
+    let givenPos,targetPos,rel,ans;
+    if(i<2){
+      /* corresponding: any position → same position on other line */
+      givenPos=RI(0,3);targetPos=givenPos+4;rel='מתאימות (שוות)';ans=alpha;
+    } else if(i<4){
+      /* alternate: ∠3↔∠6 (pos 2↔5) or ∠4↔∠5 (pos 3↔4) */
+      const pair=pick([[2,5],[3,4]]);
+      givenPos=pair[0];targetPos=pair[1];rel='מתחלפות (שוות)';ans=alpha;
+    } else {
+      /* co-interior: ∠3↔∠5 (pos 2↔4) or ∠4↔∠6 (pos 3↔5) */
+      const pair=pick([[2,4],[3,5]]);
+      givenPos=pair[0];targetPos=pair[1];rel='חד-צדדיות (סכום 180°)';ans=180-alpha;
+    }
+    const svg=svgAngleQ(alpha+'°','?',givenPos,targetPos,true,false);
+    const correct=''+ans;
+    const ds=uniqueDistractors(ans,[ans===alpha?(180-alpha):alpha,alpha+20,Math.abs(alpha-30),alpha+15]);
+    const opts=shuffle([correct,''+ds[0],''+ds[1],''+ds[2]]);
+    qs.push({type:'mc',stem:'<span class="math-expr">a ‖ b</span>. '+ANGLE_NAMES[givenPos]+' = <span class="math-expr">'+alpha+'°</span>. מצאו את '+ANGLE_NAMES[targetPos]+'. נמקו.'+svg,
+      options:opts.map(o=>o+'°'),answer:opts.indexOf(correct),
+      explanation:ANGLE_NAMES[givenPos]+' ו-'+ANGLE_NAMES[targetPos]+' הן '+rel+', לכן '+ANGLE_NAMES[targetPos]+' = <strong>'+ans+'°</strong>'});
+  }
+
+  /* Q6-Q10: complete the sentence — identify angle type */
+  const sentencePairs=[
+    {p:[2,5],type:'מתחלפות (שוות)'},   /* ∠3↔∠6 alternate */
+    {p:[0,4],type:'מתאימות (שוות)'},   /* ∠1↔∠5 corresponding */
+    {p:[2,4],type:'חד-צדדיות (סכום 180°)'}, /* ∠3↔∠5 co-interior */
+    {p:[1,3],type:'קודקודיות (שוות)'},  /* ∠2↔∠4 vertical */
+    {p:[2,6],type:'מתאימות (שוות)'}    /* ∠3↔∠7 corresponding */
+  ];
+  for(let i=0;i<5;i++){
+    const item=sentencePairs[i];
+    const correct=item.type;
+    const allOpts=['מתאימות (שוות)','מתחלפות (שוות)','חד-צדדיות (סכום 180°)','קודקודיות (שוות)'];
+    const distractors=allOpts.filter(o=>o!==correct);
+    const opts=shuffle([correct,...distractors.slice(0,3)]);
+    qs.push({type:'mc',stem:'השלימו: '+ANGLE_NAMES[item.p[0]]+' ו-'+ANGLE_NAMES[item.p[1]]+' הן זוויות ___'+svgParallel({aLabels:['1','2','3','4'],bLabels:['5','6','7','8'],highlight:[[ANGLE_NAMES[item.p[0]],ANGLE_NAMES[item.p[1]]]]}),
+      options:opts,answer:opts.indexOf(correct),
+      explanation:ANGLE_NAMES[item.p[0]]+' ו-'+ANGLE_NAMES[item.p[1]]+' הן <strong>'+correct+'</strong>'});
+  }
+
+  /* Q11-Q15: compound calculation — given two angles, find a third */
+  for(let i=0;i<5;i++){
+    const alpha=RI(50,130);
+    /* give ∠1=alpha, then ∠5=alpha (corresponding). Ask for ∠6=180-alpha (adjacent to ∠5) */
+    const givenPos=pick([0,1,2,3]);
+    const corrPos=givenPos+4; /* corresponding */
+    const adjPos=corrPos%2===0?corrPos+1:corrPos-1; /* adjacent on line b */
+    const ans=180-alpha;
+    const svg=svgAngleQ(alpha+'°','?',givenPos,adjPos,true,false);
+    qs.push({type:'input',stem:'<span class="math-expr">a ‖ b</span>. '+ANGLE_NAMES[givenPos]+' = <span class="math-expr">'+alpha+'°</span>. מצאו את '+ANGLE_NAMES[adjPos]+'.'+svg+'<br><strong>רמז:</strong> מצאו קודם את '+ANGLE_NAMES[corrPos]+' (מתאימות), ואז השתמשו בצמודות על ישר.',
+      answer:ans,
+      explanation:ANGLE_NAMES[corrPos]+' = '+alpha+'° (מתאימות ל-'+ANGLE_NAMES[givenPos]+'). '+ANGLE_NAMES[adjPos]+' = 180° - '+alpha+'° = <strong>'+ans+'°</strong> (צמודות על ישר)'});
+  }
+
+  /* Q16-Q20: write equation — corresponding or alternate expressions */
+  for(let i=0;i<5;i++){
+    const x=RI(10,40);
+    const a1=RI(1,4);const b1=RI(5,30);
+    const val=a1*x+b1;
+    /* choose type */
+    if(i<3){
+      /* corresponding → equal */
+      const a2=RI(1,3);const b2=val-a2*x;
+      const expr1=a1+'x + '+b1;
+      const expr2=a2===1?'x + '+b2:a2+'x + '+b2;
+      const svg=svgAngleQ(expr1+'°',expr2+'°',0,4,true,true);
+      qs.push({type:'input',stem:'<span class="math-expr">a ‖ b</span>. הזוויות מתאימות.'+svg+'<span class="math-expr">'+expr1+'°</span> ו-<span class="math-expr">'+expr2+'°</span> הן מתאימות. מצאו <span class="math-expr">x</span>.',
+        answer:x,
+        explanation:'מתאימות → שוות: <code>'+expr1+' = '+expr2+'</code> → <code>'+(a1-a2)+'x = '+(b2-b1)+'</code> → <code>x = '+x+'</code>'});
+    } else {
+      /* co-interior → sum 180 */
+      const sum=val;
+      const other=180-sum;
+      const a2=1;const b2=other;
+      const expr1=a1+'x + '+b1;
+      const expr2=b2>0?'x + '+b2:a2+'x';
+      const totalX=a1+a2;const totalB=b1+b2;
+      const xAns=Math.round((180-totalB)/totalX);
+      if(xAns>0&&xAns===Math.floor(xAns)){
+        const svg2=svgAngleQ(expr1+'°',expr2+'°',2,4,true,true);
+        qs.push({type:'input',stem:'<span class="math-expr">a ‖ b</span>. הזוויות חד-צדדיות.'+svg2+'<span class="math-expr">'+expr1+'°</span> ו-<span class="math-expr">'+expr2+'°</span> הן חד-צדדיות. מצאו <span class="math-expr">x</span>.',
+          answer:xAns,
+          explanation:'חד-צדדיות → סכום 180°: <code>('+expr1+') + ('+expr2+') = 180</code> → <code>'+totalX+'x + '+totalB+' = 180</code> → <code>x = '+xAns+'</code>'});
+      } else {
+        /* fallback: simple corresponding */
+        const expr1b=(a1+1)+'x + '+b1;const expr2b='x + '+(a1*x+b1);
+        const svg2=svgAngleQ(expr1b+'°',expr2b+'°',1,5,true,true);
+        qs.push({type:'input',stem:'<span class="math-expr">a ‖ b</span>. הזוויות מתאימות.'+svg2+'<span class="math-expr">'+expr1b+'°</span> ו-<span class="math-expr">'+expr2b+'°</span> הן מתאימות. מצאו <span class="math-expr">x</span>.',
+          answer:x,
+          explanation:'מתאימות → שוות: <code>'+expr1b+' = '+expr2b+'</code> → <code>'+a1+'x = '+(a1*x)+'</code> → <code>x = '+x+'</code>'});
+      }
+    }
+  }
+
+  return qs;
+}
+
+function genHard(){
+  rng=mulberry32(dateSeed+300);
+  const qs=[];
+
+  /* Q1-Q5: expressions with two unknowns — find angle values */
+  for(let i=0;i<5;i++){
+    const x=RI(15,35);
+    const a=RI(2,4);const b=RI(5,20);
+    const angle1=a*x+b;
+    const angle2=180-angle1;
+    const expr1=a+'x + '+b;
+    /* give expr1 at pos 3 (∠4), ask: what is ∠6 (pos 5)? */
+    /* ∠4 and ∠6 are co-interior (pos [3,5]) → sum 180 */
+    const ans=180-angle1;
+    const svg=svgAngleQ(expr1+'°','?',3,5,true,false);
+    qs.push({type:'input',stem:'<span class="math-expr">a ‖ b</span>. '+ANGLE_NAMES[3]+' = <span class="math-expr">'+expr1+'°</span>. אם <span class="math-expr">x = '+x+'</span>, מצאו את '+ANGLE_NAMES[5]+'.'+svg+'<br><strong>רמז:</strong> חשבו קודם את ערך '+ANGLE_NAMES[3]+', ואז השתמשו ביחס בין הזוויות.',
+      answer:ans,
+      explanation:ANGLE_NAMES[3]+' = '+a+'·'+x+' + '+b+' = '+angle1+'°. '+ANGLE_NAMES[3]+' ו-'+ANGLE_NAMES[5]+' הן חד-צדדיות → סכום 180°. '+ANGLE_NAMES[5]+' = 180° - '+angle1+'° = <strong>'+ans+'°</strong>'});
+  }
+
+  /* Q6-Q10: solve equation from expressions — alternate or co-interior */
+  for(let i=0;i<5;i++){
+    const x=RI(10,30);
+    if(i<3){
+      /* alternate → equal: ∠3↔∠6 (pos 2↔5) or ∠4↔∠5 (pos 3↔4) */
+      const a=RI(2,5);const c=RI(1,a-1);const d=a*x-(c*x);
+      const b=RI(0,10);const d2=b+(a-c)*x;
+      const expr1=a+'x'+(b>0?' + '+b:'');
+      const expr2=c===1?'x + '+d2:c+'x + '+d2;
+      const altPair=pick([[2,5],[3,4]]);
+      const svg=svgAngleQ(expr1+'°',expr2+'°',altPair[0],altPair[1],true,true);
+      qs.push({type:'input',stem:'<span class="math-expr">a ‖ b</span>. הזוויות '+ANGLE_NAMES[altPair[0]]+' ו-'+ANGLE_NAMES[altPair[1]]+' מתחלפות.'+svg+'כתבו משוואה ופתרו. מצאו <span class="math-expr">x</span>.',
+        answer:x,
+        explanation:'מתחלפות → שוות: <code>'+expr1+' = '+expr2+'</code> → <code>'+(a-c)+'x = '+(d2-b)+'</code> → <code>x = '+x+'</code>'});
+    } else {
+      /* co-interior → sum 180: ∠3↔∠5 (pos 2↔4) or ∠4↔∠6 (pos 3↔5) */
+      const a=RI(2,4);const c=RI(1,3);
+      const totalCoeff=a+c;
+      const b=RI(0,20);const d=180-totalCoeff*x-b;
+      if(d>=0){
+        const expr1=a+'x'+(b>0?' + '+b:'');
+        const expr2=c===1?'x + '+d:c+'x + '+d;
+        const cointPair=pick([[2,4],[3,5]]);
+        const svg=svgAngleQ(expr1+'°',expr2+'°',cointPair[0],cointPair[1],true,true);
+        qs.push({type:'input',stem:'<span class="math-expr">a ‖ b</span>. הזוויות '+ANGLE_NAMES[cointPair[0]]+' ו-'+ANGLE_NAMES[cointPair[1]]+' חד-צדדיות.'+svg+'כתבו משוואה ופתרו. מצאו <span class="math-expr">x</span>.',
+          answer:x,
+          explanation:'חד-צדדיות → סכום 180°: <code>('+expr1+') + ('+expr2+') = 180</code> → <code>'+totalCoeff+'x + '+(b+d)+' = 180</code> → <code>x = '+x+'</code>'});
+      } else {
+        /* fallback alternate: ∠4↔∠5 (pos 3↔4) */
+        const bF=RI(5,20);const dF=bF+RI(10,40);
+        const xF=Math.abs(dF-bF);
+        const expr1F='x + '+bF;const expr2F=''+dF;
+        const svg=svgAngleQ(expr1F+'°',expr2F+'°',3,4,true,true);
+        qs.push({type:'input',stem:'<span class="math-expr">a ‖ b</span>. '+ANGLE_NAMES[3]+' ו-'+ANGLE_NAMES[4]+' מתחלפות.'+svg+'מצאו <span class="math-expr">x</span>.',
+          answer:xF,
+          explanation:'מתחלפות → שוות: <code>x + '+bF+' = '+dF+'</code> → <code>x = '+xF+'</code>'});
+      }
+    }
+  }
+
+  /* Q11-Q15: "can you compute?" questions */
+  for(let i=0;i<5;i++){
+    /* avoid alpha=90 so 180-alpha !== alpha, and avoid values that create duplicate options */
+    const alpha=RI(40,80)+pick([0,1,51,52,53]);/* ranges: 40-80 or 91-133, never 90 */
+    if(i<2){
+      /* can compute: give ∠1 on line a, ask ∠7 on line b — yes, corresponding then vertical */
+      const svg=svgAngleQ(alpha+'°','?',0,6,true,false);
+      const correct='כן, '+ANGLE_NAMES[6]+' = '+alpha+'°';
+      const ds=uniqueDistractors(alpha,[180-alpha,alpha+15,alpha-15]);
+      const opts=shuffle([correct,'לא, אין מספיק נתונים','כן, '+ANGLE_NAMES[6]+' = '+ds[0]+'°','כן, '+ANGLE_NAMES[6]+' = '+ds[1]+'°']);
+      qs.push({type:'mc',stem:'<span class="math-expr">a ‖ b</span>. '+ANGLE_NAMES[0]+' = <span class="math-expr">'+alpha+'°</span>. האם אפשר לחשב את '+ANGLE_NAMES[6]+'?'+svg,
+        options:opts,answer:opts.indexOf(correct),
+        explanation:ANGLE_NAMES[0]+' ו-'+ANGLE_NAMES[4]+' מתאימות → '+ANGLE_NAMES[4]+' = '+alpha+'°. '+ANGLE_NAMES[4]+' ו-'+ANGLE_NAMES[6]+' קודקודיות → '+ANGLE_NAMES[6]+' = <strong>'+alpha+'°</strong>'});
+    } else if(i<4){
+      /* can compute: give ∠3 (pos 2), ask ∠6 (pos 5) — alternate → equal */
+      const svg=svgAngleQ(alpha+'°','?',2,5,true,false);
+      const correct='כן, '+ANGLE_NAMES[5]+' = '+alpha+'°';
+      const ds=uniqueDistractors(alpha,[180-alpha,alpha+10,alpha-10]);
+      const opts=shuffle([correct,'לא, אין מספיק נתונים','כן, '+ANGLE_NAMES[5]+' = '+ds[0]+'°','כן, '+ANGLE_NAMES[5]+' = '+ds[1]+'°']);
+      qs.push({type:'mc',stem:'<span class="math-expr">a ‖ b</span>. '+ANGLE_NAMES[2]+' = <span class="math-expr">'+alpha+'°</span>. האם אפשר לחשב את '+ANGLE_NAMES[5]+'?'+svg,
+        options:opts,answer:opts.indexOf(correct),
+        explanation:ANGLE_NAMES[2]+' ו-'+ANGLE_NAMES[5]+' הן מתחלפות → שוות. לכן '+ANGLE_NAMES[5]+' = <strong>'+alpha+'°</strong>'});
+    } else {
+      /* cannot compute without parallel */
+      const svg=svgAngleQ(alpha+'°','?',0,4,true,false);
+      const correct='לא, אין מספיק נתונים';
+      const ds=uniqueDistractors(alpha,[180-alpha,alpha+20]);
+      const opts=shuffle([correct,'כן, '+ANGLE_NAMES[4]+' = '+alpha+'°','כן, '+ANGLE_NAMES[4]+' = '+ds[0]+'°','כן, '+ANGLE_NAMES[4]+' = '+ds[1]+'°']);
+      qs.push({type:'mc',stem:'שני ישרים (לא בהכרח מקבילים) נחתכים על ידי חותך. '+ANGLE_NAMES[0]+' = <span class="math-expr">'+alpha+'°</span>. האם אפשר לחשב את '+ANGLE_NAMES[4]+'?'+svg,
+        options:opts,answer:opts.indexOf(correct),
+        explanation:'בלי לדעת שהישרים מקבילים, <strong>אי אפשר</strong> לקבוע את הקשר בין הזוויות בנקודות חיתוך שונות.'});
+    }
+  }
+
+  /* Q16-Q20: triangle with DE‖BC */
+  for(let i=0;i<5;i++){
+    const angleA=RI(30,80);
+    const angleB=RI(30,70);
+    const angleC=180-angleA-angleB;
+    if(i<2){
+      /* find angle ADE given DE‖BC, angle B given */
+      const ans=angleB;
+      qs.push({type:'input',stem:'במשולש <span class="math-expr">ABC</span>, הנקודה <span class="math-expr">D</span> על <span class="math-expr">AB</span> והנקודה <span class="math-expr">E</span> על <span class="math-expr">AC</span>, כך ש-<span class="math-expr">DE ‖ BC</span>.<br>'+ANGLE_NAMES[1].replace('∠','∠')+' = <span class="math-expr">'+angleA+'°</span> (זווית A), <span class="math-expr">∠B = '+angleB+'°</span>.<br>מצאו את <span class="math-expr">∠ADE</span>.',
+        answer:ans,
+        explanation:'<span class="math-expr">DE ‖ BC</span> → <span class="math-expr">∠ADE</span> ו-<span class="math-expr">∠B</span> הן מתאימות (שוות). לכן <span class="math-expr">∠ADE = '+angleB+'°</span>'});
+    } else if(i<4){
+      /* find angle AED */
+      const ans=angleC;
+      qs.push({type:'input',stem:'במשולש <span class="math-expr">ABC</span>, <span class="math-expr">DE ‖ BC</span> כאשר <span class="math-expr">D</span> על <span class="math-expr">AB</span> ו-<span class="math-expr">E</span> על <span class="math-expr">AC</span>.<br><span class="math-expr">∠A = '+angleA+'°</span>, <span class="math-expr">∠B = '+angleB+'°</span>.<br>מצאו את <span class="math-expr">∠AED</span>.',
+        answer:ans,
+        explanation:'סכום זוויות המשולש = 180°. <span class="math-expr">∠C = 180° - '+angleA+'° - '+angleB+'° = '+angleC+'°</span>. מכיוון ש-<span class="math-expr">DE ‖ BC</span>, <span class="math-expr">∠AED = ∠C = '+angleC+'°</span> (מתאימות).'});
+    } else {
+      /* find angle BAC from DE‖BC and given angles */
+      qs.push({type:'input',stem:'במשולש <span class="math-expr">ABC</span>, <span class="math-expr">DE ‖ BC</span>.<br><span class="math-expr">∠ADE = '+angleB+'°</span>, <span class="math-expr">∠AED = '+angleC+'°</span>.<br>מצאו את <span class="math-expr">∠BAC</span>.',
+        answer:angleA,
+        explanation:'במשולש <span class="math-expr">ADE</span>: <span class="math-expr">∠A = 180° - '+angleB+'° - '+angleC+'° = '+angleA+'°</span>. (ו-<span class="math-expr">∠ADE = ∠B</span>, <span class="math-expr">∠AED = ∠C</span> כי <span class="math-expr">DE ‖ BC</span>)'});
+    }
+  }
+
+  return qs;
+}
+
+function genChallenge(){
+  rng=mulberry32(dateSeed+400);
+  const qs=[];
+
+  /* Q1-Q5: 4 parallel lines + 2 transversals scenario */
+  for(let i=0;i<5;i++){
+    const alpha=RI(50,130);
+    const beta=RI(40,120);
+    if(i<2){
+      /* Two parallel lines, given ∠1=alpha. Find ∠7 (corresponding then vertical = same) */
+      const ans=alpha;
+      const svg=svgAngleQ(alpha+'°','?',0,6,true,false);
+      qs.push({type:'input',stem:'<span class="math-expr">a ‖ b</span>. '+ANGLE_NAMES[0]+' = <span class="math-expr">'+alpha+'°</span>.'+svg+'מצאו את '+ANGLE_NAMES[6]+'. נמקו כל שלב.',
+        answer:ans,
+        explanation:ANGLE_NAMES[0]+' ו-'+ANGLE_NAMES[4]+' מתאימות → '+ANGLE_NAMES[4]+' = '+alpha+'°. '+ANGLE_NAMES[4]+' ו-'+ANGLE_NAMES[6]+' קודקודיות → '+ANGLE_NAMES[6]+' = <strong>'+alpha+'°</strong>'});
+    } else if(i<4){
+      /* given ∠1=alpha, find all 8 angles — MC about how many distinct values */
+      const correct='2';
+      const opts=shuffle([correct,'4','8','3']);
+      const svg=svgAngleQ(alpha+'°','',0,4,true,false);
+      qs.push({type:'mc',stem:'<span class="math-expr">a ‖ b</span>. '+ANGLE_NAMES[0]+' = <span class="math-expr">'+alpha+'°</span>.'+svg+'כמה ערכים <strong>שונים</strong> יש בין 8 הזוויות?',
+        options:opts,answer:opts.indexOf(correct),
+        explanation:'כל 8 הזוויות מתחלקות לשני ערכים: <strong>'+alpha+'°</strong> ו-<strong>'+(180-alpha)+'°</strong>. זוויות שוות (מתאימות/מתחלפות/קודקודיות) ומשלימות (חד-צדדיות/צמודות).'});
+    } else {
+      /* three unknowns chain: ∠1 → ∠5 (corresponding) → ∠6 (adjacent) → ∠2 (corresponding to ∠6) */
+      const ans=180-alpha;
+      qs.push({type:'input',stem:'<span class="math-expr">a ‖ b</span>. '+ANGLE_NAMES[0]+' = <span class="math-expr">'+alpha+'°</span>. מצאו את '+ANGLE_NAMES[1]+'.'+svgAngleQ(alpha+'°','?',0,1,true,false)+'<strong>רמז:</strong> '+ANGLE_NAMES[0]+' ו-'+ANGLE_NAMES[1]+' הן...',
+        answer:ans,
+        explanation:ANGLE_NAMES[0]+' ו-'+ANGLE_NAMES[1]+' צמודות על ישר → סכום 180°. '+ANGLE_NAMES[1]+' = 180° - '+alpha+'° = <strong>'+ans+'°</strong>'});
+    }
+  }
+
+  /* Q6-Q10: quadrilateral ABCD with AD‖BC */
+  for(let i=0;i<5;i++){
+    const angleA=RI(50,120);
+    const angleB=RI(40,110);
+    if(i<2){
+      /* AD‖BC, ∠A given → ∠B = 180-∠A (co-interior) */
+      const ans=180-angleA;
+      qs.push({type:'input',stem:'במרובע <span class="math-expr">ABCD</span>, <span class="math-expr">AD ‖ BC</span>. <span class="math-expr">∠A = '+angleA+'°</span>.<br>מצאו את <span class="math-expr">∠B</span>.<br><strong>רמז:</strong> <span class="math-expr">∠A</span> ו-<span class="math-expr">∠B</span> הן חד-צדדיות.',
+        answer:ans,
+        explanation:'<span class="math-expr">AD ‖ BC</span> והצלע <span class="math-expr">AB</span> היא חותך. <span class="math-expr">∠A</span> ו-<span class="math-expr">∠B</span> חד-צדדיות → סכום 180°. <span class="math-expr">∠B = 180° - '+angleA+'° = <strong>'+ans+'°</strong></span>'});
+    } else if(i<4){
+      /* AD‖BC, ∠D given → ∠C = 180-∠D */
+      const angleD=RI(50,130);
+      const ans=180-angleD;
+      qs.push({type:'input',stem:'במרובע <span class="math-expr">ABCD</span>, <span class="math-expr">AD ‖ BC</span>. <span class="math-expr">∠D = '+angleD+'°</span>.<br>מצאו את <span class="math-expr">∠C</span>.',
+        answer:ans,
+        explanation:'<span class="math-expr">AD ‖ BC</span> והצלע <span class="math-expr">DC</span> היא חותך. <span class="math-expr">∠D</span> ו-<span class="math-expr">∠C</span> חד-צדדיות → <span class="math-expr">∠C = 180° - '+angleD+'° = <strong>'+ans+'°</strong></span>'});
+    } else {
+      /* AD‖BC, expression for angles: ∠A = 3x+10, ∠B = 2x+20, find x */
+      const x=RI(15,30);
+      const a=3;const b1=10;const c=2;const b2=180-a*x-b1-c*x;
+      if(b2>=0){
+        const expr1=a+'x + '+b1;
+        const expr2=c+'x + '+b2;
+        qs.push({type:'input',stem:'במרובע <span class="math-expr">ABCD</span>, <span class="math-expr">AD ‖ BC</span>.<br><span class="math-expr">∠A = '+expr1+'°</span>, <span class="math-expr">∠B = '+expr2+'°</span>.<br>חד-צדדיות → סכום 180°. מצאו <span class="math-expr">x</span>.',
+          answer:x,
+          explanation:'<code>('+expr1+') + ('+expr2+') = 180</code> → <code>'+(a+c)+'x + '+(b1+b2)+' = 180</code> → <code>x = '+x+'</code>'});
+      } else {
+        /* fallback: simpler expression */
+        const xF=RI(10,25);
+        const expr1F='2x + 30';const expr2F='3x + '+(150-5*xF);
+        qs.push({type:'input',stem:'<span class="math-expr">a ‖ b</span>. <span class="math-expr">∠1 = '+expr1F+'°</span> ו-<span class="math-expr">∠5 = '+expr2F+'°</span> מתאימות. מצאו <span class="math-expr">x</span>.',
+          answer:xF,
+          explanation:'מתאימות → שוות: <code>'+expr1F+' = '+expr2F+'</code> → <code>x = '+xF+'</code>'});
+      }
+    }
+  }
+
+  /* Q11-Q15: thinking questions — three parallel lines */
+  for(let i=0;i<5;i++){
+    const alpha=RI(40,130);
+    if(i<2){
+      /* Given ∠ on first line, find ∠ on third line via middle line */
+      const ans=alpha;
+      qs.push({type:'input',stem:'שלושה ישרים מקבילים: <span class="math-expr">a ‖ b ‖ c</span>. חותך עובר דרך שלושתם.<br>הזווית שנוצרת עם הישר <span class="math-expr">a</span> היא <span class="math-expr">'+alpha+'°</span>.<br>מהי הזווית המתאימה לה בישר <span class="math-expr">c</span>?',
+        answer:ans,
+        explanation:'אם <span class="math-expr">a ‖ b ‖ c</span> והחותך עובר דרך כולם, הזוויות המתאימות בכל נקודת חיתוך שוות: <strong>'+alpha+'°</strong>'});
+    } else if(i<4){
+      /* how many 8-angle groups formed by 3 parallel lines + 1 transversal */
+      const correct='3';
+      const opts=shuffle([correct,'2','4','6']);
+      qs.push({type:'mc',stem:'שלושה ישרים מקבילים נחתכים על ידי חותך אחד. כמה נקודות חיתוך נוצרות?',
+        options:opts,answer:opts.indexOf(correct),
+        explanation:'כל חותך חותך כל ישר פעם אחת: <strong>3</strong> נקודות חיתוך, ובכל אחת 4 זוויות — סה"כ 12 זוויות.'});
+    } else {
+      /* sum of co-interior: given one angle at a, and two transversals creating known angles at b */
+      const beta=180-alpha;
+      qs.push({type:'input',stem:'<span class="math-expr">a ‖ b</span>. שני חותכים יוצרים זוויות.<br>זווית מתחלפת של <span class="math-expr">'+alpha+'°</span> נוצרת בישר <span class="math-expr">b</span>. מהו ערכה?',
+        answer:alpha,
+        explanation:'זוויות מתחלפות בין ישרים מקבילים <strong>שוות</strong>: <strong>'+alpha+'°</strong>'});
+    }
+  }
+
+  return qs;
+}
+
+function generateQuestions(level){
+  if(level==='easy') return genEasy();
+  if(level==='medium') return genMedium();
+  if(level==='hard') return genHard();
+  return genChallenge();
+}
+
+/* ===== PRACTICE RENDERING ===== */
+function renderLevelTabs(){
+  const container=document.getElementById('levelTabs');
+  container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(lv=>{
+    const btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    const done=scores[lv].filter(s=>s===1).length;
+    const total=LEVEL_COUNTS[lv];
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+total+')</span>':'');
+    btn.onclick=()=>switchLevel(lv);
+    container.appendChild(btn);
+  });
+}
+
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv]) questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+
+function updateLevelProgress(){
+  const lv=state.level;const total=LEVEL_COUNTS[lv];
+  const done=answered[lv].filter(a=>a).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+
+function renderQuestion(){
+  const lv=state.level;const idx=state.qIndex;
+  const qs=questions[lv];
+  if(!qs) return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  const q=qs[idx];
+  const area=document.getElementById('questionArea');
+  const isAnswered=answered[lv][idx];
+
+  let html='<div class="q-card"><div class="q-number">שאלה '+(idx+1)+' מתוך '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach((opt,i)=>{
+      const letter=LETTERS[i];
+      let cls='q-opt';
+      if(isAnswered){
+        cls+=' disabled';
+        if(i===q.answer) cls+=' correct';
+        else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel']) cls+=' wrong';
+      }
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>בדקו</button>';
+  } else if(q.type==='input'){
+    html+='<div class="q-input-row"><input type="number" class="q-input" id="qInput" placeholder="תשובה" dir="ltr" aria-label="תשובה">';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">בדקו</button>';
+    html+='</div>';
+    if(isAnswered){
+      html+='<div style="margin-top:4px;font-weight:700;direction:ltr">תשובה: '+q.answer+'</div>';
+    }
+  }
+
+  if(isAnswered){
+    const isCorrect=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'✅ נכון! ':'❌ ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+
+  /* Set up MC click handlers */
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(el=>{
+      el.onclick=()=>{
+        area.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+  /* Set up input enter key */
+  const inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){
+    inp.focus();
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkInput()});
+  }
+
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'סיום':'הבא ←';
+}
+
+window.checkMC=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const selected=document.querySelector('.q-opt.selected');
+  if(!selected) return;
+  const si=parseInt(selected.dataset.i);
+  const isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  answered[lv][idx+'_sel']=si;
+
+  document.querySelectorAll('.q-opt').forEach((el,i)=>{
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer) el.classList.add('correct');
+    else if(i===si&&!isCorrect) el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון מאוד!','✅ יפה!'])+' ':'❌ לא נכון. ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkInput=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inp=document.getElementById('qInput');
+  const val=inp.value.trim();
+  if(!val) return;
+  const isCorrect=parseFloat(val)===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');
+  inp.disabled=true;
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון!'])+' ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+function nextQuestion(){
+  const lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function')showAuthModal();
+    return;
+  }
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+
+function renderLevelComplete(){
+  const lv=state.level;
+  const correct=scores[lv].filter(s=>s===1).length;
+  const total=LEVEL_COUNTS[lv];
+  const pct=Math.round(correct/total*100);
+  const scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  const emoji=pct>=80?'🎉':pct>=50?'👏':'💪';
+
+  document.getElementById('questionArea').innerHTML=`
+    <div class="q-card"><div class="level-complete">
+      <div class="big-emoji">${emoji}</div>
+      <h2>סיימתם את רמת "${LEVEL_NAMES[lv]}"!</h2>
+      <div class="score-display${scoreClass}">${correct} / ${total}</div>
+      <p style="color:var(--text-light);margin-bottom:16px">${pct}% הצלחה</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="mini-btn" onclick="retryLevel()">🔄 נסו שוב</button>
+        ${lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">▶ לרמה הבאה</button>':''}
+      </div>
+    </div></div>`;
+
+  if(pct>=80) showConfetti();
+  saveState();
+}
+
+window.retryLevel=function(){
+  const lv=state.level;
+  scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);
+  state.qIndex=0;
+  renderLevelTabs();renderQuestion();saveState();
+};
+
+window.nextLevel=function(){
+  const order=['easy','medium','hard','challenge'];
+  const ci=order.indexOf(state.level);
+  if(ci<order.length-1) switchLevel(order[ci+1]);
+};
+
+/* ===== SECTION SWITCHING ===== */
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.section===sec);
+  });
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+/* ===== CONFETTI ===== */
+function showConfetti(){
+  const box=document.getElementById('confettiBox');
+  box.innerHTML='';
+  const colors=['#1a2f5a','#4a9eda','#10b981','#ef4444','#8b5cf6','#ec4899'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';
+    c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(()=>box.innerHTML='',5000);
+}
+
+/* ===== INIT ===== */
+function init(){
+  loadState();
+  Object.keys(LEVEL_COUNTS).forEach(lv=>{
+    if(!scores[lv]||!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice') switchSection('practice');
+}
+init();
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

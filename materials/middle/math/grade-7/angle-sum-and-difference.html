@@ -1,0 +1,1234 @@
+<!--
+  Title: סכום והפרש זוויות
+  Unit: זוויות
+  Subject: מתמטיקה
+  Grade: ז׳
+  Lesson: 2
+  Tags: גיאומטריה,זוויות,סכום,הפרש,חוצה זווית
+  Ages: 12-13
+  Icon: ➕
+  Badge: חדש!
+  Description: חיבור וחיסור זוויות, חוצה זווית, חישוב ערך x. תרגול ב-4 רמות קושי
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>סכום והפרש זוויות | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#1a2f5a;--primary-dark:#0f1d3a;--primary-light:#e0ecff;
+  --accent:#4a9eda;--accent-dark:#2d7bbd;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f9ff 0%,#e0ecff 50%,#f0f9ff 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+
+/* Top bar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--accent);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Section toggle */
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+
+/* Container */
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+
+/* ===== TEACHING SECTION ===== */
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
+.step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+
+/* SVG angle diagrams */
+.angle-svg{display:block;margin:16px auto;background:#fff;border-radius:var(--radius-sm);border:1px solid var(--border)}
+.angle-svg text{font-family:'Heebo',sans-serif;font-size:14px;fill:var(--text)}
+.angle-svg .ray{stroke:var(--primary);stroke-width:2.5;stroke-linecap:round}
+.angle-svg .arc{fill:none;stroke:var(--accent);stroke-width:2}
+.angle-svg .arc-fill{fill:rgba(74,158,218,.15);stroke:none}
+.angle-svg .bisector{stroke:var(--success);stroke-width:2;stroke-dasharray:6,4}
+.angle-svg .tick{stroke:var(--accent-dark);stroke-width:2}
+.angle-svg .label{font-size:13px;font-weight:700;fill:var(--primary-dark)}
+.angle-svg .angle-label{font-size:12px;fill:var(--accent-dark);font-weight:600}
+
+/* Interactive elements inside steps */
+.mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.mini-table th,.mini-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:1rem}
+.mini-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.mini-table td{background:var(--bg)}
+.mini-input{width:80px;padding:6px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:1rem;font-family:inherit;font-weight:700;transition:.3s}
+.mini-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(26,47,90,.15)}
+.mini-input.correct{border-color:var(--success);background:#ecfdf5}
+.mini-input.wrong{border-color:var(--error);background:#fef2f2}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.reveal{display:none;animation:fadeIn .5s ease}
+.reveal.show{display:block}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+
+/* Step nav */
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== PRACTICE SECTION ===== */
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-stem code,.q-stem .expr{font-size:1.1em}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;transition:.25s}
+.q-opt.selected .q-opt-letter{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-opt.correct .q-opt-letter{background:var(--success);color:#fff;border-color:var(--success)}
+.q-opt.wrong .q-opt-letter{background:var(--error);color:#fff;border-color:var(--error)}
+
+.q-input-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-input{width:120px;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1.1rem;font-family:inherit;font-weight:700;text-align:center;transition:.3s;direction:ltr}
+.q-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(26,47,90,.15)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+
+.q-check-btn{padding:10px 28px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;box-shadow:var(--shadow)}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.92rem;animation:fadeIn .3s}
+.q-feedback.correct{background:#ecfdf5;border-right:4px solid var(--success);color:#065f46}
+.q-feedback.wrong{background:#fef2f2;border-right:4px solid var(--error);color:#991b1b}
+
+.q-nav{display:flex;justify-content:space-between;margin-top:16px}
+.q-nav-btn{padding:10px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Level complete */
+.level-complete{text-align:center;padding:24px;animation:fadeIn .5s}
+.level-complete .big-emoji{font-size:4rem;margin-bottom:12px}
+.level-complete h2{font-size:1.4rem;color:var(--primary-dark);margin-bottom:8px}
+.level-complete .score-display{font-size:1.8rem;font-weight:800;color:var(--success);margin-bottom:16px}
+.level-complete .score-display.medium-score{color:#f59e0b}
+.level-complete .score-display.low-score{color:var(--error)}
+
+/* Celebration confetti */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{
+  0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}
+  100%{transform:translateY(105vh) rotate(720deg) scale(.3);opacity:0}
+}
+
+/* Print button */
+.print-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer;font-size:1rem;box-shadow:var(--shadow);transition:.25s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.print-btn:hover{background:var(--primary-dark);transform:scale(1.1)}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+/* Responsive */
+@media(max-width:600px){
+  .container{padding:0 10px 30px}
+  .step-card,.q-card{padding:18px 14px}
+  .step-title{font-size:1.15rem}
+  .step-summary-grid{grid-template-columns:1fr}
+  .section-toggle{max-width:280px;margin:12px auto}
+  .section-btn{font-size:.88rem;padding:8px 14px}
+  .q-opt{padding:10px 12px;font-size:.9rem}
+  .topbar-title{font-size:.9rem}
+  .angle-svg{max-width:100%;height:auto}
+}
+/* Print */
+@media print{
+  .topbar,.section-toggle,.step-nav,.q-nav,.print-btn,.level-tabs,.confetti-container,.q-check-btn{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .step-card,.q-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+  .container{max-width:100%}
+  .q-feedback{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">➕ כיתה ז׳ — סכום והפרש זוויות</span>
+  <div style="display:flex;align-items:center;gap:10px"><button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button><a href="../../../../materials.html">← חזרה לדף החומרים</a></div>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+
+<!-- ===== LEARNING SECTION ===== -->
+<section id="learnSection">
+  <div class="step-progress">
+    <div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div>
+    <div class="step-progress-text" id="stepText"></div>
+  </div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+
+<!-- ===== PRACTICE SECTION ===== -->
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress">
+    <div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div>
+    <div class="level-progress-text" id="levelText"></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+
+</div>
+
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const today=new Date();const dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+let rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(arr){return arr[Math.floor(R()*arr.length)]}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const LETTERS=['\u05d0','\u05d1','\u05d2','\u05d3'];
+
+/* ===== SVG HELPERS ===== */
+function toRad(deg){return deg*Math.PI/180}
+function polarX(cx,r,deg){return cx+r*Math.cos(toRad(deg))}
+function polarY(cy,r,deg){return cy-r*Math.sin(toRad(deg))}
+
+function svgRay(cx,cy,r,deg,cls){
+  return '<line x1="'+cx+'" y1="'+cy+'" x2="'+polarX(cx,r,deg)+'" y2="'+polarY(cy,r,deg)+'" class="'+(cls||'ray')+'"/>';
+}
+
+function svgArc(cx,cy,r,startDeg,endDeg,cls){
+  var x1=polarX(cx,r,startDeg),y1=polarY(cy,r,startDeg);
+  var x2=polarX(cx,r,endDeg),y2=polarY(cy,r,endDeg);
+  var large=(endDeg-startDeg)>180?1:0;
+  return '<path d="M'+x1+','+y1+' A'+r+','+r+' 0 '+large+',0 '+x2+','+y2+'" class="'+(cls||'arc')+'"/>';
+}
+
+function svgArcFill(cx,cy,r,startDeg,endDeg){
+  var x1=polarX(cx,r,startDeg),y1=polarY(cy,r,startDeg);
+  var x2=polarX(cx,r,endDeg),y2=polarY(cy,r,endDeg);
+  var large=(endDeg-startDeg)>180?1:0;
+  return '<path d="M'+cx+','+cy+' L'+x1+','+y1+' A'+r+','+r+' 0 '+large+',0 '+x2+','+y2+' Z" class="arc-fill"/>';
+}
+
+function svgLabel(cx,cy,r,deg,text,cls){
+  var x=polarX(cx,r,deg),y=polarY(cy,r,deg);
+  return '<text x="'+x+'" y="'+y+'" text-anchor="middle" dominant-baseline="central" class="'+(cls||'label')+'">'+text+'</text>';
+}
+
+function svgTick(cx,cy,r,deg,offset){
+  offset=offset||0;
+  var r1=r-4+offset,r2=r+4+offset;
+  return '<line x1="'+polarX(cx,r1,deg)+'" y1="'+polarY(cy,r1,deg)+'" x2="'+polarX(cx,r2,deg)+'" y2="'+polarY(cy,r2,deg)+'" class="tick"/>';
+}
+
+function drawAngle3Rays(w,h,cx,cy,rayLen,deg0,deg1,deg2,labels,angleLbls,opts){
+  opts=opts||{};
+  var arcR=opts.arcR||35;
+  var svg='<svg class="angle-svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">';
+  /* rays */
+  svg+=svgRay(cx,cy,rayLen,deg0,'ray');
+  svg+=svgRay(cx,cy,rayLen,deg1,'ray');
+  svg+=svgRay(cx,cy,rayLen,deg2,opts.bisector?'bisector':'ray');
+  /* arcs */
+  if(angleLbls[0]){
+    svg+=svgArcFill(cx,cy,arcR,deg0,deg1);
+    svg+=svgArc(cx,cy,arcR,deg0,deg1);
+    var mid01=(deg0+deg1)/2;
+    svg+=svgLabel(cx,cy,arcR+14,mid01,angleLbls[0],'angle-label');
+  }
+  if(angleLbls[1]){
+    svg+=svgArcFill(cx,cy,arcR+12,deg1,deg2);
+    svg+=svgArc(cx,cy,arcR+12,deg1,deg2);
+    var mid12=(deg1+deg2)/2;
+    svg+=svgLabel(cx,cy,arcR+26,mid12,angleLbls[1],'angle-label');
+  }
+  if(angleLbls[2]){
+    svg+=svgArc(cx,cy,arcR+24,deg0,deg2,'arc');
+    var midFull=(deg0+deg2)/2;
+    svg+=svgLabel(cx,cy,arcR+38,midFull,angleLbls[2],'angle-label');
+  }
+  /* tick marks for bisector */
+  if(opts.bisector){
+    var tickMid1=(deg0+deg1)/2;
+    var tickMid2=(deg1+deg2)/2;
+    svg+=svgTick(cx,cy,arcR,tickMid1);
+    svg+=svgTick(cx,cy,arcR+12,tickMid2);
+  }
+  /* point labels */
+  if(labels[0]) svg+=svgLabel(cx,cy,rayLen+16,deg0,labels[0],'label');
+  if(labels[1]) svg+=svgLabel(cx,cy,rayLen+16,deg1,labels[1],'label');
+  if(labels[2]) svg+=svgLabel(cx,cy,rayLen+16,deg2,labels[2],'label');
+  /* vertex */
+  svg+='<circle cx="'+cx+'" cy="'+cy+'" r="3" fill="var(--primary)"/>';
+  svg+=svgLabel(cx,cy,14,225,opts.vertex||'O','label');
+  svg+='</svg>';
+  return svg;
+}
+
+/* ===== STATE ===== */
+let state={section:'learn',step:0,level:'easy',qIndex:0};
+let scores={easy:[],medium:[],hard:[],challenge:[]};
+let answered={easy:[],medium:[],hard:[],challenge:[]};
+let questions={easy:null,medium:null,hard:null,challenge:null};
+const LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+const LEVEL_NAMES={easy:'\u05e7\u05dc',medium:'\u05d1\u05d9\u05e0\u05d5\u05e0\u05d9',hard:'\u05e7\u05e9\u05d4',challenge:'\u05d0\u05ea\u05d2\u05e8'};
+const TOTAL_STEPS=7;
+
+/* ===== LOCAL STORAGE ===== */
+const LS_KEY='bh_grade7_angle_sum_diff_'+dateSeed;
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores,answered,state}))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+/* ===== TEACHING SECTION ===== */
+const steps=[
+/* Step 0: Sum of two angles */
+{title:'📐 סכום שתי זוויות', render(){return `
+<p>כאשר <strong>קרן מחלקת זווית</strong> לשתי זוויות קטנות יותר, הזווית הגדולה שווה ל<strong>סכום</strong> שתי הזוויות הקטנות.</p>
+`+drawAngle3Rays(320,200,60,160,120,0,35,85,['B','M','R'],['30\u00b0','55\u00b0','85\u00b0'])+`
+<div class="rule-box">\u2220ROB = \u2220ROM + \u2220MOB</div>
+<div class="example">
+<strong>\u05d3\u05d5\u05d2\u05de\u05d4:</strong><br>
+\u2220ROM = 30\u00b0, \u2220MOB = 55\u00b0<br>
+\u2220ROB = 30\u00b0 + 55\u00b0 = <strong>85\u00b0</strong>
+</div>
+<p><strong>\u05e9\u05d0\u05dc\u05ea \u05d4\u05d1\u05e0\u05d4:</strong> \u2220HAN = 75\u00b0. \u05e7\u05e8\u05df AT \u05de\u05d7\u05dc\u05e7\u05ea \u05d0\u05ea \u05d4\u05d6\u05d5\u05d5\u05d9\u05ea. \u05d0\u05dd \u2220HAT = <span class="math-expr">2x</span> \u05d5-\u2220TAN = <span class="math-expr">x</span>, \u05de\u05e6\u05d0\u05d5 \u05d0\u05ea <span class="math-expr">x</span>.</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s0input" placeholder="x=?" aria-label="\u05ea\u05e9\u05d5\u05d1\u05d4">
+  <button class="mini-btn" onclick="checkS0()">\u05d1\u05d3\u05e7\u05d5</button>
+</div>
+<div id="s0fb"></div>
+<div class="reveal" id="s0reveal">
+  <div class="success-box">\u2705 \u05e0\u05db\u05d5\u05df! <span class="math-expr">2x + x = 75</span> \u2192 <span class="math-expr">3x = 75</span> \u2192 <span class="math-expr">x = 25</span></div>
+</div>
+`}},
+
+/* Step 1: Difference of angles */
+{title:'📏 הפרש זוויות', render(){return `
+<p>אם ידועה הזווית הגדולה ואחת הקטנות, נוכל <strong>לחסר</strong> כדי למצוא את השנייה.</p>
+`+drawAngle3Rays(320,200,60,160,120,0,40,102,['B','M','R'],['40\u00b0','62\u00b0','102\u00b0'])+`
+<div class="rule-box">\u2220MOB = \u2220ROB \u2212 \u2220ROM</div>
+<div class="example">
+<strong>\u05d3\u05d5\u05d2\u05de\u05d4:</strong><br>
+\u2220ROB = 102\u00b0, \u2220ROM = 62\u00b0<br>
+\u2220MOB = 102\u00b0 \u2212 62\u00b0 = <strong>40\u00b0</strong>
+</div>
+<p><strong>\u05e9\u05d0\u05dc\u05ea \u05d4\u05d1\u05e0\u05d4:</strong> \u2220AOC = 130\u00b0, \u2220BOC = 50\u00b0. \u05de\u05d4 \u05d2\u05d5\u05d3\u05dc \u2220AOB?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s1input" placeholder="?" aria-label="\u05ea\u05e9\u05d5\u05d1\u05d4">
+  <button class="mini-btn" onclick="checkS1()">\u05d1\u05d3\u05e7\u05d5</button>
+</div>
+<div id="s1fb"></div>
+<div class="reveal" id="s1reveal">
+  <div class="success-box">\u2705 \u05de\u05e2\u05d5\u05dc\u05d4! \u2220AOB = 130\u00b0 \u2212 50\u00b0 = <strong>80\u00b0</strong></div>
+</div>
+`}},
+
+/* Step 2: Writing exercise from diagram */
+{title:'\u270d\ufe0f \u05db\u05ea\u05d9\u05d1\u05ea \u05ea\u05e8\u05d2\u05d9\u05dc \u05de\u05e9\u05e8\u05d8\u05d5\u05d8', render(){return `
+<p>\u05d1\u05e9\u05e8\u05d8\u05d5\u05d8 \u05e2\u05dd 3 \u05e7\u05e8\u05e0\u05d9\u05d9\u05dd \u05de\u05e7\u05d5\u05d3\u05e7\u05d5\u05d3 \u05d0\u05e4\u05e9\u05e8 \u05dc\u05db\u05ea\u05d5\u05d1 <strong>\u05ea\u05e8\u05d2\u05d9\u05dc \u05e1\u05db\u05d5\u05dd</strong> \u05d0\u05d5 <strong>\u05ea\u05e8\u05d2\u05d9\u05dc \u05d4\u05e4\u05e8\u05e9</strong>.</p>
+`+drawAngle3Rays(320,200,60,160,120,0,30,75,['D','G','C'],['40\u00b0','75\u00b0',''],{vertex:'O'})+`
+<div class="example">
+<strong>\u05d3\u05d5\u05d2\u05de\u05d4 \u05de\u05d5\u05d3\u05e8\u05db\u05ea:</strong><br>
+\u2220COD = 75\u00b0, \u2220COG = 40\u00b0<br>
+\u05ea\u05e8\u05d2\u05d9\u05dc \u05e1\u05db\u05d5\u05dd: \u2220COD = \u2220COG + \u2220GOD<br>
+<span class="math-expr">75 = 40 + \u2220GOD</span><br>
+\u2220GOD = 75 \u2212 40 = <strong>35\u00b0</strong>
+</div>
+<p><strong>\u05e9\u05d0\u05dc\u05d4:</strong> \u2220COD = 75\u00b0, \u2220COG = 40\u00b0, \u2220GOR = \u2220COR. \u05d7\u05e9\u05d1\u05d5 \u05d0\u05ea \u2220DOG.</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s2input" placeholder="?" aria-label="\u05ea\u05e9\u05d5\u05d1\u05d4">
+  <button class="mini-btn" onclick="checkS2()">\u05d1\u05d3\u05e7\u05d5</button>
+</div>
+<div id="s2fb"></div>
+<div class="reveal" id="s2reveal">
+  <div class="success-box">\u2705 \u05e0\u05db\u05d5\u05df! \u2220DOG = \u2220COD \u2212 \u2220COG = 75\u00b0 \u2212 40\u00b0 = <strong>35\u00b0</strong></div>
+</div>
+`}},
+
+/* Step 3: Expressions with x */
+{title:'\u2753 \u05d1\u05d9\u05d8\u05d5\u05d9\u05d9\u05dd \u05e2\u05dd x', render(){return `
+<p>\u05dc\u05e4\u05e2\u05de\u05d9\u05dd \u05d2\u05d5\u05d3\u05dc \u05d4\u05d6\u05d5\u05d5\u05d9\u05ea \u05db\u05ea\u05d5\u05d1 \u05db<strong>\u05d1\u05d9\u05d8\u05d5\u05d9</strong>: <span class="math-expr">2x</span>, <span class="math-expr">x+5</span> \u05d5\u05db\u05d5'. \u05e0\u05db\u05ea\u05d5\u05d1 \u05de\u05e9\u05d5\u05d5\u05d0\u05d4 \u05d5\u05e0\u05e4\u05ea\u05d5\u05e8.</p>
+`+drawAngle3Rays(320,200,60,160,120,0,35,75,['N','T','H'],['x','2x','75\u00b0'],{vertex:'A'})+`
+<div class="example">
+<strong>\u05d3\u05d5\u05d2\u05de\u05d4:</strong><br>
+\u2220HAN = 75\u00b0, \u2220HAT = <span class="math-expr">2x</span>, \u2220TAN = <span class="math-expr">x</span><br>
+\u05de\u05e9\u05d5\u05d5\u05d0\u05d4: <span class="math-expr">2x + x = 75</span><br>
+<span class="math-expr">3x = 75</span><br>
+<span class="math-expr">x = 25</span>
+</div>
+<p><strong>\u05e9\u05d0\u05dc\u05d4:</strong> \u2220BEG = 80\u00b0, \u2220BET = <span class="math-expr">x</span>, \u2220GET = <span class="math-expr">x + 30</span>. \u05de\u05e6\u05d0\u05d5 \u05d0\u05ea <span class="math-expr">x</span>.</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s3input" placeholder="x=?" aria-label="\u05ea\u05e9\u05d5\u05d1\u05d4">
+  <button class="mini-btn" onclick="checkS3()">\u05d1\u05d3\u05e7\u05d5</button>
+</div>
+<div id="s3fb"></div>
+<div class="reveal" id="s3reveal">
+  <div class="success-box">\u2705 \u05e0\u05db\u05d5\u05df! <span class="math-expr">x + (x + 30) = 80</span> \u2192 <span class="math-expr">2x + 30 = 80</span> \u2192 <span class="math-expr">2x = 50</span> \u2192 <span class="math-expr">x = 25</span></div>
+</div>
+`}},
+
+/* Step 4: Angle bisector */
+{title:'\u2702\ufe0f \u05d7\u05d5\u05e6\u05d4 \u05d6\u05d5\u05d5\u05d9\u05ea', render(){return `
+<div class="rule-box">\ud83d\udccc \u05d7\u05d5\u05e6\u05d4 \u05d6\u05d5\u05d5\u05d9\u05ea = \u05e7\u05e8\u05df \u05e9\u05de\u05d7\u05dc\u05e7\u05ea \u05d6\u05d5\u05d5\u05d9\u05ea \u05dc<strong>\u05e9\u05ea\u05d9 \u05d6\u05d5\u05d5\u05d9\u05d5\u05ea \u05e9\u05d5\u05d5\u05ea</strong></div>
+<p>\u05d0\u05dd BH \u05d7\u05d5\u05e6\u05d4 \u05d0\u05ea \u2220GBK, \u05d0\u05d6: \u2220GBH = \u2220HBK</p>
+`+drawAngle3Rays(320,200,60,160,120,0,35,70,['K','H','G'],['35\u00b0','35\u00b0','70\u00b0'],{vertex:'B',bisector:true})+`
+<div class="example">
+\u2220GBK = 70\u00b0<br>
+BH \u05d7\u05d5\u05e6\u05d4 \u05d0\u05ea \u2220GBK<br>
+\u05dc\u05db\u05df: \u2220GBH = \u2220HBK = 70\u00b0 / 2 = <strong>35\u00b0</strong>
+</div>
+<p><strong>\u05e9\u05d0\u05dc\u05d4:</strong> \u2220HBK = 35\u00b0, BH \u05d7\u05d5\u05e6\u05d4 \u05d0\u05ea \u2220GBK. \u05de\u05d4 \u05d2\u05d5\u05d3\u05dc \u2220GBK?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s4input" placeholder="?" aria-label="\u05ea\u05e9\u05d5\u05d1\u05d4">
+  <button class="mini-btn" onclick="checkS4()">\u05d1\u05d3\u05e7\u05d5</button>
+</div>
+<div id="s4fb"></div>
+<div class="reveal" id="s4reveal">
+  <div class="success-box">\u2705 \u05e0\u05db\u05d5\u05df! \u05d0\u05dd BH \u05d7\u05d5\u05e6\u05d4 \u05d0\u05d6 \u2220GBK = 2 \u00d7 \u2220HBK = 2 \u00d7 35\u00b0 = <strong>70\u00b0</strong></div>
+</div>
+`}},
+
+/* Step 5: Bisector + calculations */
+{title:'\ud83e\udde9 \u05d7\u05d5\u05e6\u05d4 \u05d6\u05d5\u05d5\u05d9\u05ea + \u05d7\u05d9\u05e9\u05d5\u05d1\u05d9\u05dd', render(){return `
+<p>\u05e0\u05e9\u05dc\u05d1 \u05d7\u05d5\u05e6\u05d4 \u05d6\u05d5\u05d5\u05d9\u05ea \u05e2\u05dd \u05e1\u05db\u05d5\u05dd/\u05d4\u05e4\u05e8\u05e9 \u05d5\u05d1\u05d9\u05d8\u05d5\u05d9\u05d9\u05dd.</p>
+<div class="example">
+<strong>\u05d3\u05d5\u05d2\u05de\u05d4:</strong><br>
+\u2220FBM = 112\u00b0. BK \u05d7\u05d5\u05e6\u05d4 \u05d0\u05ea \u2220FBM. BL \u05d7\u05d5\u05e6\u05d4 \u05d0\u05ea \u2220KBM.<br><br>
+<strong>\u05e4\u05ea\u05e8\u05d5\u05df:</strong><br>
+BK \u05d7\u05d5\u05e6\u05d4 \u05d0\u05ea \u2220FBM \u2192 \u2220FBK = \u2220KBM = 112\u00b0/2 = <strong>56\u00b0</strong><br>
+BL \u05d7\u05d5\u05e6\u05d4 \u05d0\u05ea \u2220KBM \u2192 \u2220KBL = \u2220LBM = 56\u00b0/2 = <strong>28\u00b0</strong>
+</div>
+<p><strong>\u05e9\u05d0\u05dc\u05d4:</strong> \u2220PQR = 100\u00b0. QS \u05d7\u05d5\u05e6\u05d4 \u05d0\u05ea \u2220PQR. \u05de\u05d4 \u05d2\u05d5\u05d3\u05dc \u2220PQS?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s5input" placeholder="?" aria-label="\u05ea\u05e9\u05d5\u05d1\u05d4">
+  <button class="mini-btn" onclick="checkS5()">\u05d1\u05d3\u05e7\u05d5</button>
+</div>
+<div id="s5fb"></div>
+<div class="reveal" id="s5reveal">
+  <div class="success-box">\u2705 \u05e0\u05db\u05d5\u05df! \u2220PQS = 100\u00b0 / 2 = <strong>50\u00b0</strong></div>
+  <p style="margin-top:12px"><strong>\u05d1\u05d5\u05e0\u05d5\u05e1:</strong> \u05d0\u05dd QT \u05d7\u05d5\u05e6\u05d4 \u05d0\u05ea \u2220SQR, \u05de\u05d4 \u05d2\u05d5\u05d3\u05dc \u2220SQT?</p>
+  <div class="q-input-row">
+    <input type="number" class="mini-input" id="s5bonus" placeholder="?" aria-label="\u05d1\u05d5\u05e0\u05d5\u05e1">
+    <button class="mini-btn accent" onclick="checkS5b()">\u05d1\u05d3\u05e7\u05d5</button>
+  </div>
+  <div id="s5bfb"></div>
+</div>
+`}},
+
+/* Step 6: Summary */
+{title:'\ud83c\udfc6 \u05e1\u05d9\u05db\u05d5\u05dd', render(){return `
+<p style="font-size:1.1rem;text-align:center;margin-bottom:20px">\u05d1\u05e9\u05d9\u05e2\u05d5\u05e8 \u05d4\u05d6\u05d4 \u05dc\u05de\u05d3\u05e0\u05d5 3 \u05db\u05dc\u05dc\u05d9\u05dd \u05d7\u05e9\u05d5\u05d1\u05d9\u05dd:</p>
+<div class="step-summary-grid">
+  <div class="summary-item">
+    <div class="s-icon">\u2795</div>
+    <div class="s-title">\u05db\u05dc\u05dc \u05d4\u05e1\u05db\u05d5\u05dd</div>
+    <div class="s-text">\u2220AOC = \u2220AOB + \u2220BOC</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">\u2796</div>
+    <div class="s-title">\u05db\u05dc\u05dc \u05d4\u05d4\u05e4\u05e8\u05e9</div>
+    <div class="s-text">\u2220AOB = \u2220AOC \u2212 \u2220BOC</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">\u2702\ufe0f</div>
+    <div class="s-title">\u05d7\u05d5\u05e6\u05d4 \u05d6\u05d5\u05d5\u05d9\u05ea</div>
+    <div class="s-text">\u05de\u05d7\u05dc\u05e7\u05ea \u05d6\u05d5\u05d5\u05d9\u05ea \u05dc\u05e9\u05ea\u05d9 \u05d7\u05dc\u05e7\u05d9\u05dd \u05e9\u05d5\u05d5\u05d9\u05dd</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">\u2753</div>
+    <div class="s-title">\u05d1\u05d9\u05d8\u05d5\u05d9\u05d9\u05dd \u05e2\u05dd x</div>
+    <div class="s-text">\u05db\u05d5\u05ea\u05d1\u05d9\u05dd \u05de\u05e9\u05d5\u05d5\u05d0\u05d4 \u05d5\u05e4\u05d5\u05ea\u05e8\u05d9\u05dd</div>
+  </div>
+</div>
+<div class="success-box" style="text-align:center;font-size:1.1rem;margin-top:20px">
+  <p>\ud83c\udf1f \u05e2\u05db\u05e9\u05d9\u05d5 \u05d0\u05ea\u05dd \u05de\u05d5\u05db\u05e0\u05d9\u05dd \u05dc\u05ea\u05e8\u05d2\u05d5\u05dc!</p>
+  <p>4 \u05e8\u05de\u05d5\u05ea \u05e7\u05d5\u05e9\u05d9 \u05de\u05d7\u05db\u05d5\u05ea \u05dc\u05db\u05dd</p>
+  <button class="mini-btn accent" style="margin-top:12px;font-size:1rem;padding:12px 32px" onclick="switchSection('practice')">\u05de\u05d5\u05db\u05e0\u05d9\u05dd \u05dc\u05ea\u05e8\u05d2\u05d5\u05dc! \u2190</button>
+</div>
+`}}
+];
+
+function renderStep(idx){
+  state.step=idx;
+  const s=steps[idx];
+  const fill=((idx+1)/TOTAL_STEPS*100).toFixed(0);
+  document.getElementById('stepFill').style.width=fill+'%';
+  document.getElementById('stepText').textContent='\u05e9\u05dc\u05d1 '+(idx+1)+' \u05de\u05ea\u05d5\u05da '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+s.title+'</div>'+s.render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'\u05dc\u05ea\u05e8\u05d2\u05d5\u05dc \u2190':'\u05d4\u05d1\u05d0 \u2190';
+  if(s.init) s.init();
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+/* Step interactive handlers */
+window.checkS0=function(){
+  var v=parseInt(document.getElementById('s0input').value);
+  var fb=document.getElementById('s0fb');
+  if(v===25){fb.innerHTML='<div class="feedback-inline ok">\u2705 \u05de\u05e2\u05d5\u05dc\u05d4!</div>';document.getElementById('s0reveal').classList.add('show')}
+  else if(isNaN(v)){fb.innerHTML='<div class="feedback-inline err">\u05d4\u05e7\u05dc\u05d9\u05d3\u05d5 \u05de\u05e1\u05e4\u05e8</div>'}
+  else{fb.innerHTML='<div class="feedback-inline err">\u274c \u05e0\u05e1\u05d5 \u05e9\u05d5\u05d1. \u05e8\u05de\u05d6: 2x + x = 75</div>'}
+};
+window.checkS1=function(){
+  var v=parseInt(document.getElementById('s1input').value);
+  var fb=document.getElementById('s1fb');
+  if(v===80){fb.innerHTML='<div class="feedback-inline ok">\u2705 \u05de\u05e2\u05d5\u05dc\u05d4!</div>';document.getElementById('s1reveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">\u274c \u05e0\u05e1\u05d5 \u05e9\u05d5\u05d1. \u05e8\u05de\u05d6: 130 \u2212 50 = ?</div>'}
+};
+window.checkS2=function(){
+  var v=parseInt(document.getElementById('s2input').value);
+  var fb=document.getElementById('s2fb');
+  if(v===35){fb.innerHTML='<div class="feedback-inline ok">\u2705 \u05de\u05e2\u05d5\u05dc\u05d4!</div>';document.getElementById('s2reveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">\u274c \u05e0\u05e1\u05d5 \u05e9\u05d5\u05d1. \u05e8\u05de\u05d6: \u2220COD \u2212 \u2220COG = ?</div>'}
+};
+window.checkS3=function(){
+  var v=parseInt(document.getElementById('s3input').value);
+  var fb=document.getElementById('s3fb');
+  if(v===25){fb.innerHTML='<div class="feedback-inline ok">\u2705 \u05de\u05e2\u05d5\u05dc\u05d4!</div>';document.getElementById('s3reveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">\u274c \u05e0\u05e1\u05d5 \u05e9\u05d5\u05d1. \u05e8\u05de\u05d6: x + (x+30) = 80</div>'}
+};
+window.checkS4=function(){
+  var v=parseInt(document.getElementById('s4input').value);
+  var fb=document.getElementById('s4fb');
+  if(v===70){fb.innerHTML='<div class="feedback-inline ok">\u2705 \u05de\u05e2\u05d5\u05dc\u05d4!</div>';document.getElementById('s4reveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">\u274c \u05e0\u05e1\u05d5 \u05e9\u05d5\u05d1. \u05e8\u05de\u05d6: \u05d4\u05d7\u05d5\u05e6\u05d4 \u05de\u05d7\u05dc\u05e7\u05ea \u05dc\u05e9\u05e0\u05d9\u05d9\u05dd, \u05d0\u05d6 \u05d4\u05d6\u05d5\u05d5\u05d9\u05ea \u05d4\u05de\u05dc\u05d0\u05d4 = 2 \u00d7 \u05d4\u05d7\u05e6\u05d9</div>'}
+};
+window.checkS5=function(){
+  var v=parseInt(document.getElementById('s5input').value);
+  var fb=document.getElementById('s5fb');
+  if(v===50){fb.innerHTML='<div class="feedback-inline ok">\u2705 \u05de\u05e2\u05d5\u05dc\u05d4!</div>';document.getElementById('s5reveal').classList.add('show')}
+  else{fb.innerHTML='<div class="feedback-inline err">\u274c \u05e0\u05e1\u05d5 \u05e9\u05d5\u05d1. \u05e8\u05de\u05d6: 100 / 2 = ?</div>'}
+};
+window.checkS5b=function(){
+  var v=parseInt(document.getElementById('s5bonus').value);
+  var fb=document.getElementById('s5bfb');
+  if(v===25){fb.innerHTML='<div class="feedback-inline ok">\u2705 \u05e0\u05db\u05d5\u05df! \u2220SQR = 50\u00b0, \u05d0\u05d6 \u2220SQT = 50\u00b0/2 = 25\u00b0</div>'}
+  else{fb.innerHTML='<div class="feedback-inline err">\u274c \u05e8\u05de\u05d6: \u2220SQR = 50\u00b0. QT \u05d7\u05d5\u05e6\u05d4, \u05d0\u05d6 \u05d7\u05dc\u05e7\u05d5 \u05d1-2</div>'}
+};
+
+/* ===== QUESTION GENERATORS ===== */
+
+/* Helper: draw 4-ray angle diagram */
+function drawAngle4Rays(w,h,cx,cy,rayLen,degs,labels,angleLbls,opts){
+  opts=opts||{};
+  var arcR=opts.arcR||30;
+  var svg='<svg class="angle-svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">';
+  degs.forEach(function(d,i){
+    var cls=(opts.bisectors&&opts.bisectors.indexOf(i)>=0)?'bisector':'ray';
+    if(opts.perpendicular&&opts.perpendicular.indexOf(i)>=0) cls='ray';
+    svg+=svgRay(cx,cy,rayLen,d,cls);
+  });
+  /* arcs between consecutive rays */
+  for(var i=0;i<degs.length-1;i++){
+    if(angleLbls[i]){
+      var offset=i*10;
+      svg+=svgArcFill(cx,cy,arcR+offset,degs[i],degs[i+1]);
+      svg+=svgArc(cx,cy,arcR+offset,degs[i],degs[i+1]);
+      var mid=(degs[i]+degs[i+1])/2;
+      svg+=svgLabel(cx,cy,arcR+offset+14,mid,angleLbls[i],'angle-label');
+    }
+  }
+  /* total arc if provided */
+  if(opts.totalLabel){
+    var totalR=arcR+degs.length*12;
+    svg+=svgArc(cx,cy,totalR,degs[0],degs[degs.length-1],'arc');
+    var midT=(degs[0]+degs[degs.length-1])/2;
+    svg+=svgLabel(cx,cy,totalR+14,midT,opts.totalLabel,'angle-label');
+  }
+  /* perpendicular marker */
+  if(opts.perpMark){
+    var pi=opts.perpMark;
+    var sz=12;
+    var ax=polarX(cx,sz,degs[pi]),ay=polarY(cy,sz,degs[pi]);
+    var bx=polarX(cx,sz,degs[pi+1]),by=polarY(cy,sz,degs[pi+1]);
+    var corner_x=ax+bx-cx,corner_y=ay+by-cy;
+    svg+='<polyline points="'+ax+','+ay+' '+corner_x+','+corner_y+' '+bx+','+by+'" fill="none" stroke="var(--primary)" stroke-width="1.5"/>';
+  }
+  /* tick marks for bisector pairs */
+  if(opts.tickPairs){
+    opts.tickPairs.forEach(function(pair){
+      var mid1=(degs[pair[0]]+degs[pair[0]+1])/2;
+      var mid2=(degs[pair[1]]+degs[pair[1]+1])/2;
+      svg+=svgTick(cx,cy,arcR+pair[0]*10,mid1);
+      svg+=svgTick(cx,cy,arcR+pair[1]*10,mid2);
+    });
+  }
+  /* point labels */
+  labels.forEach(function(lb,i){
+    if(lb) svg+=svgLabel(cx,cy,rayLen+16,degs[i],lb,'label');
+  });
+  svg+='<circle cx="'+cx+'" cy="'+cy+'" r="3" fill="var(--primary)"/>';
+  svg+=svgLabel(cx,cy,14,225,opts.vertex||'O','label');
+  svg+='</svg>';
+  return svg;
+}
+
+/* Helper: generate unique wrong answers near correct */
+function wrongs(correct,count,min,max){
+  var set=new Set();set.add(correct);
+  var offsets=[-3,-2,-1,1,2,3,5,-5,10,-10];
+  shuffle(offsets).forEach(function(d){
+    if(set.size<=count){var v=correct+d;if(v>min&&v<max&&!set.has(v))set.add(v)}
+  });
+  while(set.size<=count){var v=RI(min,max);if(!set.has(v))set.add(v)}
+  var arr=Array.from(set);arr.splice(arr.indexOf(correct),1);
+  return arr.slice(0,count);
+}
+
+function genEasy(){
+  rng=mulberry32(dateSeed+100);
+  var qs=[];
+  var vtxNames=['A','B','C','D','E','O','P','Q'];
+  var rayNames=[['M','N','K'],['P','Q','R'],['D','G','H'],['F','T','S'],['L','W','V']];
+
+  /* Q1-Q5: sum of two angles (input) */
+  for(var i=0;i<5;i++){
+    var a1=RI(15,80);var a2=RI(15,80);var total=a1+a2;
+    var vtx=pick(vtxNames);
+    var rn=rayNames[i%rayNames.length];
+    var svg=makeSVGForQ(a1,a2,[rn[0],rn[1],rn[2]],vtx,{});
+    qs.push({type:'input',
+      stem:'\u2220'+rn[2]+vtx+rn[1]+' = '+a2+'\u00b0, \u2220'+rn[1]+vtx+rn[0]+' = '+a1+'\u00b0. \u05d7\u05e9\u05d1\u05d5 \u05d0\u05ea \u2220'+rn[2]+vtx+rn[0]+'.',
+      svg:svg, answer:total,
+      explanation:'\u2220'+rn[2]+vtx+rn[0]+' = '+a1+' + '+a2+' = <strong>'+total+'\u00b0</strong>'
+    });
+  }
+
+  /* Q6-Q10: difference of angles (input) */
+  for(var i=0;i<5;i++){
+    var small=RI(15,60);var big=RI(small+15,small+80);
+    var diff=big-small;
+    var vtx=pick(vtxNames);
+    var rn=rayNames[(i+2)%rayNames.length];
+    var svg=makeSVGForQ(small,diff,[rn[0],rn[1],rn[2]],vtx,{showTotal:true,customLabels:[small+'\u00b0','?',big+'\u00b0']});
+    qs.push({type:'input',
+      stem:'\u2220'+rn[2]+vtx+rn[0]+' = '+big+'\u00b0, \u2220'+rn[1]+vtx+rn[0]+' = '+small+'\u00b0. \u05d7\u05e9\u05d1\u05d5 \u05d0\u05ea \u2220'+rn[2]+vtx+rn[1]+'.',
+      svg:svg, answer:diff,
+      explanation:'\u2220'+rn[2]+vtx+rn[1]+' = '+big+' \u2212 '+small+' = <strong>'+diff+'\u00b0</strong>'
+    });
+  }
+
+  /* Q11-Q15: bisector halves (input) */
+  for(var i=0;i<5;i++){
+    var full=RI(10,90)*2; /* ensure even */
+    var half=full/2;
+    var vtx=pick(vtxNames);
+    var rn=rayNames[(i+1)%rayNames.length];
+    var svg=makeSVGForQ(half,half,[rn[0],rn[1],rn[2]],vtx,{bisector:true,customLabels:['?','?',full+'\u00b0']});
+    qs.push({type:'input',
+      stem:rn[1]+vtx+' \u05d7\u05d5\u05e6\u05d4 \u05d0\u05ea \u2220'+rn[2]+vtx+rn[0]+'. \u2220'+rn[2]+vtx+rn[0]+' = '+full+'\u00b0. \u05de\u05d4 \u05d2\u05d5\u05d3\u05dc \u05db\u05dc \u05d7\u05e6\u05d9?',
+      svg:svg, answer:half,
+      explanation:'\u05d7\u05d5\u05e6\u05d4 \u05d6\u05d5\u05d5\u05d9\u05ea \u05de\u05d7\u05dc\u05e7\u05ea \u05dc\u05e9\u05e0\u05d9\u05d9\u05dd: '+full+' / 2 = <strong>'+half+'\u00b0</strong>'
+    });
+  }
+
+  /* Q16-Q20: write exercise from diagram (MC) */
+  for(var i=0;i<5;i++){
+    var a1=RI(20,70);var a2=RI(20,70);var total=a1+a2;
+    var vtx=pick(vtxNames);
+    var rn=rayNames[(i+3)%rayNames.length];
+    var svg=makeSVGForQ(a1,a2,[rn[0],rn[1],rn[2]],vtx,{});
+    /* which exercise matches this diagram? */
+    var correctExpr=a1+' + '+a2+' = '+total;
+    var w1=total+' + '+a1+' = '+(total+a1);
+    var w2=a1+' \u2212 '+a2+' = '+(a1-a2);
+    var w3=a2+' + '+a1+' = '+(a2+a1+5);
+    var opts=shuffle([correctExpr,w1,w2,w3]);
+    qs.push({type:'mc',
+      stem:'\u05d0\u05d9\u05d6\u05d4 \u05ea\u05e8\u05d2\u05d9\u05dc \u05de\u05ea\u05d0\u05d9\u05dd \u05dc\u05e1\u05e8\u05d8\u05d5\u05d8?',
+      svg:svg, options:opts, answer:opts.indexOf(correctExpr),
+      explanation:'\u2220'+rn[2]+vtx+rn[0]+' = \u2220'+rn[1]+vtx+rn[0]+' + \u2220'+rn[2]+vtx+rn[1]+' = '+a1+' + '+a2+' = <strong>'+total+'\u00b0</strong>'
+    });
+  }
+  return qs;
+}
+
+function genMedium(){
+  rng=mulberry32(dateSeed+200);
+  var qs=[];
+  var vtxNames=['A','B','E','P','Q'];
+  var rayNames=[['M','N','K'],['P','Q','R'],['D','G','H'],['F','T','S'],['L','W','V']];
+
+  /* Q1-Q5: solve x, two angles sum to known (input) */
+  for(var i=0;i<5;i++){
+    var x=RI(10,50);
+    var b=RI(10,60);
+    var total=x+b;
+    var vtx=pick(vtxNames);
+    var rn=rayNames[i%rayNames.length];
+    var svg=makeSVGForQ(0,0,[rn[0],rn[1],rn[2]],vtx,{customLabels:['x',b+'\u00b0',total+'\u00b0']});
+    qs.push({type:'input',
+      stem:'\u2220'+rn[2]+vtx+rn[0]+' = '+total+'\u00b0, \u2220'+rn[2]+vtx+rn[1]+' = '+b+'\u00b0. \u05de\u05e6\u05d0\u05d5 \u05d0\u05ea <span class="math-expr">x</span> = \u2220'+rn[1]+vtx+rn[0]+'.',
+      svg:makeSVGForQ(x,b,[rn[0],rn[1],rn[2]],vtx,{customLabels:['x',b+'\u00b0',total+'\u00b0']}),
+      answer:x,
+      explanation:'x + '+b+' = '+total+' \u2192 x = '+total+' \u2212 '+b+' = <strong>'+x+'\u00b0</strong>'
+    });
+  }
+
+  /* Q6-Q10: bisector + full angle — find the parts (input) */
+  for(var i=0;i<5;i++){
+    var full=RI(20,80)*2; /* even */
+    var half=full/2;
+    var extraAngle=RI(10,50);
+    var vtx=pick(vtxNames);
+    var rn=rayNames[(i+2)%rayNames.length];
+    /* BH bisects angle, plus extra ray — find the bisected angle */
+    qs.push({type:'input',
+      stem:rn[1]+vtx+' \u05d7\u05d5\u05e6\u05d4 \u05d0\u05ea \u2220'+rn[2]+vtx+rn[0]+'. \u2220'+rn[2]+vtx+rn[0]+' = '+full+'\u00b0. \u05de\u05d4 \u05d2\u05d5\u05d3\u05dc \u2220'+rn[1]+vtx+rn[0]+'?',
+      svg:makeSVGForQ(half,half,[rn[0],rn[1],rn[2]],vtx,{bisector:true,customLabels:['?','?',full+'\u00b0']}),
+      answer:half,
+      explanation:rn[1]+vtx+' \u05d7\u05d5\u05e6\u05d4: \u2220'+rn[1]+vtx+rn[0]+' = '+full+' / 2 = <strong>'+half+'\u00b0</strong>'
+    });
+  }
+
+  /* Q11-Q15: 3 rays from vertex — given 2, find third (input) */
+  for(var i=0;i<5;i++){
+    var a1=RI(20,60);var a2=RI(20,60);var total=a1+a2;
+    var vtx=pick(vtxNames);
+    var rn=rayNames[(i+1)%rayNames.length];
+    /* give total and one part, find other */
+    var giveFirst=(i%2===0);
+    var given=giveFirst?a1:a2;
+    var ans=giveFirst?a2:a1;
+    var knownName=giveFirst?('\u2220'+rn[1]+vtx+rn[0]):('\u2220'+rn[2]+vtx+rn[1]);
+    var unknownName=giveFirst?('\u2220'+rn[2]+vtx+rn[1]):('\u2220'+rn[1]+vtx+rn[0]);
+    var clbls=giveFirst?[a1+'\u00b0','?',total+'\u00b0']:['?',a2+'\u00b0',total+'\u00b0'];
+    qs.push({type:'input',
+      stem:'\u2220'+rn[2]+vtx+rn[0]+' = '+total+'\u00b0, '+knownName+' = '+given+'\u00b0. \u05d7\u05e9\u05d1\u05d5 \u05d0\u05ea '+unknownName+'.',
+      svg:makeSVGForQ(a1,a2,[rn[0],rn[1],rn[2]],vtx,{customLabels:clbls}),
+      answer:ans,
+      explanation:unknownName+' = '+total+' \u2212 '+given+' = <strong>'+ans+'\u00b0</strong>'
+    });
+  }
+
+  /* Q16-Q20: double angle — one angle is twice another (MC) */
+  for(var i=0;i<5;i++){
+    var small=RI(15,45);
+    var big=small*2;
+    var total=small+big;
+    var vtx=pick(vtxNames);
+    var rn=rayNames[(i+3)%rayNames.length];
+    var svg=makeSVGForQ(small,big,[rn[0],rn[1],rn[2]],vtx,{customLabels:['\u03b1','2\u03b1',total+'\u00b0']});
+    var correctOpt=small+'\u00b0';
+    var wArr=wrongs(small,3,5,90);
+    var opts=shuffle([correctOpt,wArr[0]+'\u00b0',wArr[1]+'\u00b0',wArr[2]+'\u00b0']);
+    qs.push({type:'mc',
+      stem:'\u2220'+rn[2]+vtx+rn[1]+' \u05d2\u05d3\u05d5\u05dc\u05d4 \u05e4\u05d9 2 \u05de-\u2220'+rn[1]+vtx+rn[0]+'. \u2220'+rn[2]+vtx+rn[0]+' = '+total+'\u00b0. \u05de\u05e6\u05d0\u05d5 \u05d0\u05ea \u03b1.',
+      svg:svg, options:opts, answer:opts.indexOf(correctOpt),
+      explanation:'\u03b1 + 2\u03b1 = '+total+' \u2192 3\u03b1 = '+total+' \u2192 \u03b1 = <strong>'+small+'\u00b0</strong>'
+    });
+  }
+  return qs;
+}
+
+function genHard(){
+  rng=mulberry32(dateSeed+300);
+  var qs=[];
+  var vtxNames=['B','E','A','P','Q'];
+  var rayNames=[['F','G','H'],['D','K','L'],['M','N','R'],['T','S','W'],['C','V','Z']];
+
+  /* Q1-Q5: expressions with alpha — 2 parts as expressions of alpha, total given (input) */
+  for(var i=0;i<5;i++){
+    var alpha=RI(15,45);
+    var addend=RI(5,25);
+    /* parts: (alpha + addend) and 2*alpha, total = 3*alpha + addend */
+    var total=3*alpha+addend;
+    var vtx=pick(vtxNames);
+    var rn=rayNames[i%rayNames.length];
+    var lbl1='\u03b1+'+addend+'\u00b0';
+    var lbl2='2\u03b1';
+    var svg=makeSVGForQ(alpha+addend,2*alpha,[rn[0],rn[1],rn[2]],vtx,{customLabels:[lbl1,lbl2,total+'\u00b0']});
+    qs.push({type:'input',
+      stem:'\u2220'+rn[2]+vtx+rn[0]+' = '+total+'\u00b0. \u2220'+rn[1]+vtx+rn[0]+' = <span class="math-expr">\u03b1+'+addend+'</span>, \u2220'+rn[2]+vtx+rn[1]+' = <span class="math-expr">2\u03b1</span>. \u05de\u05e6\u05d0\u05d5 \u05d0\u05ea <span class="math-expr">\u03b1</span>.',
+      svg:svg, answer:alpha,
+      explanation:'(\u03b1+'+addend+') + 2\u03b1 = '+total+' \u2192 3\u03b1+'+addend+' = '+total+' \u2192 3\u03b1 = '+(total-addend)+' \u2192 \u03b1 = <strong>'+alpha+'\u00b0</strong>'
+    });
+  }
+
+  /* Q6-Q10: double bisector — BK bisects angle, BL bisects half (input) */
+  for(var i=0;i<5;i++){
+    var full=RI(10,44)*4; /* divisible by 4 */
+    var half=full/2;
+    var quarter=full/4;
+    var vtx=pick(vtxNames);
+    var rn=rayNames[(i+2)%rayNames.length];
+    /* 4 rays: rn[0], K, L, rn[2] — K bisects full, L bisects the half KBrn[0] */
+    var svg=drawAngle4Rays(300,180,50,150,110,
+      [0,full/4,full/2,full],
+      [rn[0],'L','K',rn[2]],
+      [quarter+'\u00b0',quarter+'\u00b0','',''],
+      {vertex:vtx,bisectors:[2],tickPairs:[[0,1]],totalLabel:full+'\u00b0'});
+    qs.push({type:'input',
+      stem:vtx+'K \u05d7\u05d5\u05e6\u05d4 \u05d0\u05ea \u2220'+rn[2]+vtx+rn[0]+'. '+vtx+'L \u05d7\u05d5\u05e6\u05d4 \u05d0\u05ea \u2220K'+vtx+rn[0]+'. \u2220'+rn[2]+vtx+rn[0]+' = '+full+'\u00b0. \u05de\u05d4 \u05d2\u05d5\u05d3\u05dc \u2220L'+vtx+rn[0]+'?',
+      svg:svg, answer:quarter,
+      explanation:vtx+'K \u05d7\u05d5\u05e6\u05d4: \u2220K'+vtx+rn[0]+' = '+full+'/2 = '+half+'\u00b0. '+vtx+'L \u05d7\u05d5\u05e6\u05d4: \u2220L'+vtx+rn[0]+' = '+half+'/2 = <strong>'+quarter+'\u00b0</strong>'
+    });
+  }
+
+  /* Q11-Q15: compound problem — total angle, 2 parts as expressions of x, find x and all parts (MC) */
+  for(var i=0;i<5;i++){
+    var x=RI(8,30);
+    var coeff1=pick([1,2,3]);
+    var coeff2=pick([1,2]);
+    var add2=RI(5,20);
+    /* part1 = coeff1*x, part2 = coeff2*x + add2, total = (coeff1+coeff2)*x + add2 */
+    var total=(coeff1+coeff2)*x+add2;
+    var vtx=pick(vtxNames);
+    var rn=rayNames[(i+1)%rayNames.length];
+    var expr1=(coeff1===1?'x':coeff1+'x');
+    var expr2=(coeff2===1?'x':coeff2+'x')+'+'+add2;
+    var svg=makeSVGForQ(coeff1*x,coeff2*x+add2,[rn[0],rn[1],rn[2]],vtx,{customLabels:[expr1,expr2,total+'\u00b0']});
+    var correctOpt=x+'\u00b0';
+    var wArr=wrongs(x,3,3,60);
+    var opts=shuffle([correctOpt,wArr[0]+'\u00b0',wArr[1]+'\u00b0',wArr[2]+'\u00b0']);
+    qs.push({type:'mc',
+      stem:'\u2220'+rn[2]+vtx+rn[0]+' = '+total+'\u00b0. \u2220'+rn[1]+vtx+rn[0]+' = <span class="math-expr">'+expr1+'</span>, \u2220'+rn[2]+vtx+rn[1]+' = <span class="math-expr">'+expr2+'</span>. \u05de\u05d4\u05d5 <span class="math-expr">x</span>?',
+      svg:svg, options:opts, answer:opts.indexOf(correctOpt),
+      explanation:expr1+' + ('+expr2+') = '+total+' \u2192 '+(coeff1+coeff2)+'x + '+add2+' = '+total+' \u2192 '+(coeff1+coeff2)+'x = '+(total-add2)+' \u2192 x = <strong>'+x+'\u00b0</strong>'
+    });
+  }
+
+  /* Q16-Q20: one angle is double another + total given (input) */
+  for(var i=0;i<5;i++){
+    var small=RI(12,40);
+    var mult=pick([2,3]);
+    var big=small*mult;
+    var extraAngle=RI(10,30);
+    var total=big+extraAngle;
+    var vtx=pick(vtxNames);
+    var rn=rayNames[(i+3)%rayNames.length];
+    /* 3 rays: angle1 = big (mult*alpha), angle2 = extraAngle. Total known. Find alpha */
+    var svg=makeSVGForQ(big,extraAngle,[rn[0],rn[1],rn[2]],vtx,{customLabels:[mult+'\u03b1',extraAngle+'\u00b0',total+'\u00b0']});
+    qs.push({type:'input',
+      stem:'\u2220'+rn[2]+vtx+rn[0]+' = '+total+'\u00b0, \u2220'+rn[2]+vtx+rn[1]+' = '+extraAngle+'\u00b0, \u2220'+rn[1]+vtx+rn[0]+' = <span class="math-expr">'+mult+'\u03b1</span>. \u05de\u05e6\u05d0\u05d5 \u05d0\u05ea <span class="math-expr">\u03b1</span>.',
+      svg:svg, answer:small,
+      explanation:mult+'\u03b1 = '+total+' \u2212 '+extraAngle+' = '+big+' \u2192 \u03b1 = '+big+'/'+mult+' = <strong>'+small+'\u00b0</strong>'
+    });
+  }
+  return qs;
+}
+
+function genChallenge(){
+  rng=mulberry32(dateSeed+400);
+  var qs=[];
+  var vtxNames=['A','E','B','P'];
+
+  /* Q1-Q5: 4+ rays — given several angles, compute others (MC) */
+  for(var i=0;i<5;i++){
+    var a1=RI(10,40);var a2=RI(10,35);var a3=RI(15,40);
+    var total=a1+a2+a3;
+    var vtx=pick(vtxNames);
+    var pts=['B','C','D','F'];
+    /* ask for sum of first two */
+    var askSum=a1+a2;
+    var svg=drawAngle4Rays(320,190,50,160,110,
+      [0,a1,a1+a2,a1+a2+a3],
+      [pts[0],pts[1],pts[2],pts[3]],
+      [a1+'\u00b0',a2+'\u00b0',a3+'\u00b0'],
+      {vertex:vtx,totalLabel:total+'\u00b0'});
+    /* Ask for ∠D_vtx_B = a1+a2 */
+    var correctOpt=askSum+'\u00b0';
+    var wArr=wrongs(askSum,3,10,170);
+    var opts=shuffle([correctOpt,wArr[0]+'\u00b0',wArr[1]+'\u00b0',wArr[2]+'\u00b0']);
+    qs.push({type:'mc',
+      stem:'\u05e2\u05dc \u05e4\u05d9 \u05d4\u05e1\u05e8\u05d8\u05d5\u05d8, \u05d7\u05e9\u05d1\u05d5 \u05d0\u05ea \u2220'+pts[2]+vtx+pts[0]+'.',
+      svg:svg, options:opts, answer:opts.indexOf(correctOpt),
+      explanation:'\u2220'+pts[2]+vtx+pts[0]+' = \u2220'+pts[1]+vtx+pts[0]+' + \u2220'+pts[2]+vtx+pts[1]+' = '+a1+' + '+a2+' = <strong>'+askSum+'\u00b0</strong>'
+    });
+  }
+
+  /* Q6-Q10: perpendicular + bisector (input) */
+  for(var i=0;i<5;i++){
+    /* BD perpendicular to BA, angle ABC given, BP bisects angle DBC, find angle ABP */
+    var angleABC=RI(100,160);
+    var angleDBA=90;
+    var angleDBC=angleABC-angleDBA;
+    /* BP bisects DBC */
+    var halfDBC=angleDBC/2;
+    /* make sure angleDBC is even */
+    angleABC=RI(6,40)*2+90; /* ensure DBC is even, keep ABC < 180 */
+    angleDBC=angleABC-90;
+    halfDBC=angleDBC/2;
+    var angleABP=90+halfDBC;
+    var vtx='B';
+    var svg=drawAngle4Rays(320,190,60,155,110,
+      [0,angleDBC/2,angleDBC,angleABC],
+      ['C','P','D','A'],
+      ['','','',''],
+      {vertex:vtx,perpMark:2,
+       totalLabel:angleABC+'\u00b0'});
+    /* add custom arcs with proper labels */
+    svg=drawAngle4Rays(320,190,60,155,110,
+      [0,halfDBC,angleDBC,angleABC],
+      ['C','P','D','A'],
+      [halfDBC+'\u00b0',halfDBC+'\u00b0','90\u00b0'],
+      {vertex:vtx,perpMark:2,tickPairs:[[0,1]],
+       totalLabel:angleABC+'\u00b0'});
+    qs.push({type:'input',
+      stem:'BD\u22a5BA. BP \u05d7\u05d5\u05e6\u05d4 \u05d0\u05ea \u2220DBC. \u2220ABC = '+angleABC+'\u00b0. \u05de\u05e6\u05d0\u05d5 \u05d0\u05ea \u2220ABP.',
+      svg:svg, answer:angleABP,
+      explanation:'\u2220DBC = '+angleABC+' \u2212 90 = '+angleDBC+'\u00b0. BP \u05d7\u05d5\u05e6\u05d4: \u2220DBP = '+angleDBC+'/2 = '+halfDBC+'\u00b0. \u2220ABP = 90 + '+halfDBC+' = <strong>'+angleABP+'\u00b0</strong>'
+    });
+  }
+
+  /* Q11-Q15: complex multi-step — expressions with alpha + perpendicular (MC) */
+  for(var i=0;i<5;i++){
+    /* ∠ABC = given. BD⊥BA (so ∠DBA=90). ∠DBP = α, ∠PBC = total - 90 - α. Given ∠PBC = known. Find α */
+    var angleABC=RI(120,165);
+    var alpha=RI(10,angleABC-95);
+    var anglePBC=angleABC-90-alpha;
+    /* ensure positive */
+    if(anglePBC<=0){alpha=RI(5,angleABC-95);anglePBC=angleABC-90-alpha}
+    var vtx='B';
+    var svg=drawAngle4Rays(320,190,60,155,110,
+      [0,anglePBC,anglePBC+alpha,angleABC],
+      ['C','P','D','A'],
+      [anglePBC+'\u00b0','\u03b1','90\u00b0'],
+      {vertex:vtx,perpMark:2,
+       totalLabel:angleABC+'\u00b0'});
+    var correctOpt=alpha+'\u00b0';
+    var wArr=wrongs(alpha,3,3,80);
+    var opts=shuffle([correctOpt,wArr[0]+'\u00b0',wArr[1]+'\u00b0',wArr[2]+'\u00b0']);
+    qs.push({type:'mc',
+      stem:'BD\u22a5BA. \u2220ABC = '+angleABC+'\u00b0, \u2220PBC = '+anglePBC+'\u00b0, \u2220DBP = \u03b1. \u05de\u05e6\u05d0\u05d5 \u05d0\u05ea \u03b1.',
+      svg:svg, options:opts, answer:opts.indexOf(correctOpt),
+      explanation:'\u2220DBA = 90\u00b0. \u03b1 = \u2220ABC \u2212 90 \u2212 \u2220PBC = '+angleABC+' \u2212 90 \u2212 '+anglePBC+' = <strong>'+alpha+'\u00b0</strong>'
+    });
+  }
+  return qs;
+}
+
+function generateQuestions(level){
+  if(level==='easy') return genEasy();
+  if(level==='medium') return genMedium();
+  if(level==='hard') return genHard();
+  return genChallenge();
+}
+
+/* ===== PRACTICE RENDERING ===== */
+function renderLevelTabs(){
+  const container=document.getElementById('levelTabs');
+  container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(lv=>{
+    const btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    const done=scores[lv].filter(s=>s===1).length;
+    const total=LEVEL_COUNTS[lv];
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+total+')</span>':'');
+    btn.onclick=()=>switchLevel(lv);
+    container.appendChild(btn);
+  });
+}
+
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv]) questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+
+function updateLevelProgress(){
+  const lv=state.level;const total=LEVEL_COUNTS[lv];
+  const done=answered[lv].filter(a=>a).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+
+function makeSVGForQ(a1,a2,labels,vertex,opts){
+  opts=opts||{};
+  var w=280,h=160,cx=50,cy=130,rLen=100;
+  var deg0=0,deg1=a1,deg2=a1+a2;
+  var aLbls=[a1+'\u00b0',a2+'\u00b0',''];
+  if(opts.showTotal) aLbls[2]=(a1+a2)+'\u00b0';
+  if(opts.customLabels) aLbls=opts.customLabels;
+  return drawAngle3Rays(w,h,cx,cy,rLen,deg0,deg1,deg2,labels,aLbls,{vertex:vertex,arcR:opts.arcR||30,bisector:opts.bisector||false});
+}
+
+function renderQuestion(){
+  const lv=state.level;const idx=state.qIndex;
+  const qs=questions[lv];
+  if(!qs) return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  const q=qs[idx];
+  const area=document.getElementById('questionArea');
+  const isAnswered=answered[lv][idx];
+
+  let html='<div class="q-card"><div class="q-number">\u05e9\u05d0\u05dc\u05d4 '+(idx+1)+' \u05de\u05ea\u05d5\u05da '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+  if(q.svg) html+=q.svg;
+
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach((opt,i)=>{
+      const letter=LETTERS[i];
+      let cls='q-opt';
+      if(isAnswered){
+        cls+=' disabled';
+        if(i===q.answer) cls+=' correct';
+        else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel']) cls+=' wrong';
+      }
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>\u05d1\u05d3\u05e7\u05d5</button>';
+  } else if(q.type==='input'){
+    html+='<div class="q-input-row"><input type="number" class="q-input" id="qInput" placeholder="\u05ea\u05e9\u05d5\u05d1\u05d4" dir="ltr" aria-label="\u05ea\u05e9\u05d5\u05d1\u05d4">';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">\u05d1\u05d3\u05e7\u05d5</button>';
+    html+='</div>';
+    if(isAnswered){
+      html+='<div style="margin-top:4px;font-weight:700;direction:ltr">\u05ea\u05e9\u05d5\u05d1\u05d4: '+q.answer+'</div>';
+    }
+  }
+
+  if(isAnswered){
+    const isCorrect=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'\u2705 \u05e0\u05db\u05d5\u05df! ':'\u274c ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+
+  /* MC click handlers */
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(el=>{
+      el.onclick=()=>{
+        area.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+  /* Input enter key */
+  const inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){
+    inp.focus();
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkInput()});
+  }
+
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'\u05e1\u05d9\u05d5\u05dd':'\u05d4\u05d1\u05d0 \u2190';
+}
+
+window.checkMC=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const selected=document.querySelector('.q-opt.selected');
+  if(!selected) return;
+  const si=parseInt(selected.dataset.i);
+  const isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  answered[lv][idx+'_sel']=si;
+
+  document.querySelectorAll('.q-opt').forEach((el,i)=>{
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer) el.classList.add('correct');
+    else if(i===si&&!isCorrect) el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['\u2705 \u05db\u05dc \u05d4\u05db\u05d1\u05d5\u05d3!','\u2705 \u05de\u05e2\u05d5\u05dc\u05d4!','\u2705 \u05e0\u05db\u05d5\u05df \u05de\u05d0\u05d5\u05d3!','\u2705 \u05d9\u05e4\u05d4!'])+' ':'\u274c \u05dc\u05d0 \u05e0\u05db\u05d5\u05df. ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkInput=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inp=document.getElementById('qInput');
+  const val=inp.value.trim();
+  if(!val) return;
+  const isCorrect=parseFloat(val)===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');
+  inp.disabled=true;
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['\u2705 \u05db\u05dc \u05d4\u05db\u05d1\u05d5\u05d3!','\u2705 \u05de\u05e2\u05d5\u05dc\u05d4!','\u2705 \u05e0\u05db\u05d5\u05df!'])+' ':'\u274c ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+function nextQuestion(){
+  const lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function')showAuthModal();
+    return;
+  }
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+
+function renderLevelComplete(){
+  const lv=state.level;
+  const correct=scores[lv].filter(s=>s===1).length;
+  const total=LEVEL_COUNTS[lv];
+  const pct=Math.round(correct/total*100);
+  const scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  const emoji=pct>=80?'\ud83c\udf89':pct>=50?'\ud83d\udc4f':'\ud83d\udcaa';
+
+  document.getElementById('questionArea').innerHTML=`
+    <div class="q-card"><div class="level-complete">
+      <div class="big-emoji">${emoji}</div>
+      <h2>\u05e1\u05d9\u05d9\u05de\u05ea\u05dd \u05d0\u05ea \u05e8\u05de\u05ea "${LEVEL_NAMES[lv]}"!</h2>
+      <div class="score-display${scoreClass}">${correct} / ${total}</div>
+      <p style="color:var(--text-light);margin-bottom:16px">${pct}% \u05d4\u05e6\u05dc\u05d7\u05d4</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="mini-btn" onclick="retryLevel()">\ud83d\udd04 \u05e0\u05e1\u05d5 \u05e9\u05d5\u05d1</button>
+        ${lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">\u25b6 \u05dc\u05e8\u05de\u05d4 \u05d4\u05d1\u05d0\u05d4</button>':''}
+      </div>
+    </div></div>`;
+
+  if(pct>=80) showConfetti();
+  saveState();
+}
+
+window.retryLevel=function(){
+  const lv=state.level;
+  scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);
+  state.qIndex=0;
+  renderLevelTabs();renderQuestion();saveState();
+};
+
+window.nextLevel=function(){
+  const order=['easy','medium','hard','challenge'];
+  const ci=order.indexOf(state.level);
+  if(ci<order.length-1) switchLevel(order[ci+1]);
+};
+
+/* ===== SECTION SWITCHING ===== */
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.section===sec);
+  });
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+/* ===== CONFETTI ===== */
+function showConfetti(){
+  const box=document.getElementById('confettiBox');
+  box.innerHTML='';
+  const colors=['#1a2f5a','#4a9eda','#10b981','#f59e0b','#8b5cf6','#ec4899'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';
+    c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(()=>box.innerHTML='',5000);
+}
+
+/* ===== INIT ===== */
+function init(){
+  loadState();
+  Object.keys(LEVEL_COUNTS).forEach(lv=>{
+    if(!scores[lv]||!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice') switchSection('practice');
+}
+init();
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

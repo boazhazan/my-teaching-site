@@ -1,0 +1,1164 @@
+<!--
+  Title: סכום זוויות — שאלון מרכזי
+  Unit: זוויות
+  Subject: מתמטיקה
+  Grade: ז׳
+  Lesson: 7
+  Tags: גיאומטריה,זוויות,שאלון מרכזי,סיכום,משולש,מרובע,ישרים מקבילים
+  Ages: 12-13
+  Icon: 🏆
+  Badge: חדש!
+  Description: שאלון מרכזי מסכם — סכום זוויות, צמודות, קודקודיות, מתאימות, מתחלפות. תרגול ב-4 רמות קושי
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>סכום זוויות — שאלון מרכזי | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#1a2f5a;--primary-dark:#0f1d3a;--primary-light:#e8edf5;
+  --accent:#4a9eda;--accent-dark:#3580b8;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f4fa 0%,#e0eaf5 50%,#f0f4fa 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+
+/* Top bar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Section toggle */
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+
+/* Container */
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+
+/* ===== TEACHING SECTION ===== */
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
+.step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+
+/* Interactive elements inside steps */
+.mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.mini-table th,.mini-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:1rem}
+.mini-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.mini-table td{background:var(--bg)}
+.mini-input{width:60px;padding:6px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:1rem;font-family:inherit;font-weight:700;transition:.3s}
+.mini-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(26,47,90,.15)}
+.mini-input.correct{border-color:var(--success);background:#ecfdf5}
+.mini-input.wrong{border-color:var(--error);background:#fef2f2}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.reveal{display:none;animation:fadeIn .5s ease}
+.reveal.show{display:block}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+
+/* Geometry diagrams */
+.geo-diagram{background:#f8fafc;border:2px solid var(--border);border-radius:var(--radius);margin:12px auto;display:block;max-width:100%}
+
+/* Step nav */
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== PRACTICE SECTION ===== */
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-stem code,.q-stem .expr{font-size:1.1em}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;transition:.25s}
+.q-opt.selected .q-opt-letter{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-opt.correct .q-opt-letter{background:var(--success);color:#fff;border-color:var(--success)}
+.q-opt.wrong .q-opt-letter{background:var(--error);color:#fff;border-color:var(--error)}
+
+.q-input-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-input{width:120px;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1.1rem;font-family:inherit;font-weight:700;text-align:center;transition:.3s;direction:ltr}
+.q-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(26,47,90,.15)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+
+.q-check-btn{padding:10px 28px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;box-shadow:var(--shadow)}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.92rem;animation:fadeIn .3s}
+.q-feedback.correct{background:#ecfdf5;border-right:4px solid var(--success);color:#065f46}
+.q-feedback.wrong{background:#fef2f2;border-right:4px solid var(--error);color:#991b1b}
+
+.q-nav{display:flex;justify-content:space-between;margin-top:16px}
+.q-nav-btn{padding:10px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Level complete */
+.level-complete{text-align:center;padding:24px;animation:fadeIn .5s}
+.level-complete .big-emoji{font-size:4rem;margin-bottom:12px}
+.level-complete h2{font-size:1.4rem;color:var(--primary-dark);margin-bottom:8px}
+.level-complete .score-display{font-size:1.8rem;font-weight:800;color:var(--success);margin-bottom:16px}
+.level-complete .score-display.medium-score{color:#f59e0b}
+.level-complete .score-display.low-score{color:var(--error)}
+
+/* Celebration confetti */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{
+  0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}
+  100%{transform:translateY(105vh) rotate(720deg) scale(.3);opacity:0}
+}
+
+/* Print button */
+.print-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer;font-size:1rem;box-shadow:var(--shadow);transition:.25s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.print-btn:hover{background:var(--primary-dark);transform:scale(1.1)}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+/* Responsive */
+@media(max-width:600px){
+  .container{padding:0 10px 30px}
+  .step-card,.q-card{padding:18px 14px}
+  .step-title{font-size:1.15rem}
+  .step-summary-grid{grid-template-columns:1fr}
+  .section-toggle{max-width:280px;margin:12px auto}
+  .section-btn{font-size:.88rem;padding:8px 14px}
+  .q-opt{padding:10px 12px;font-size:.9rem}
+  .topbar-title{font-size:.9rem}
+}
+
+/* Print */
+@media print{
+  .topbar,.section-toggle,.step-nav,.q-nav,.print-btn,.level-tabs,.confetti-container,.q-check-btn{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .step-card,.q-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+  .container{max-width:100%}
+  .q-feedback{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">🏆 כיתה ז׳ — סכום זוויות — שאלון מרכזי</span>
+  <div style="display:flex;align-items:center;gap:10px"><button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button><a href="../../../../materials.html">← חזרה לדף החומרים</a></div>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+
+<!-- ===== LEARNING SECTION ===== -->
+<section id="learnSection">
+  <div class="step-progress">
+    <div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div>
+    <div class="step-progress-text" id="stepText"></div>
+  </div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+
+<!-- ===== PRACTICE SECTION ===== -->
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress">
+    <div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div>
+    <div class="level-progress-text" id="levelText"></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+
+</div>
+
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const today=new Date();const dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+let rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(arr){return arr[Math.floor(R()*arr.length)]}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const LETTERS=['א','ב','ג','ד'];
+
+/* ===== STATE ===== */
+let state={section:'learn',step:0,level:'easy',qIndex:0};
+let scores={easy:[],medium:[],hard:[],challenge:[]};
+let answered={easy:[],medium:[],hard:[],challenge:[]};
+let questions={easy:null,medium:null,hard:null,challenge:null};
+const LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+const LEVEL_NAMES={easy:'קל',medium:'בינוני',hard:'קשה',challenge:'אתגר'};
+const TOTAL_STEPS=7;
+
+/* ===== LOCAL STORAGE ===== */
+const LS_KEY='bh_grade7_angle_comprehensive_'+dateSeed;
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores,answered,state}))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+/* ===== TEACHING SECTION ===== */
+const steps=[
+/* Step 0: Triangle angle sum review */
+{title:'🔺 חזרה: סכום זוויות במשולש = 180°', render(){return `
+<div class="rule-box">📌 סכום הזוויות בכל משולש הוא תמיד <strong>180°</strong></div>
+<p>זהו אחד הכללים הבסיסיים ביותר בגיאומטריה. לא משנה איזה סוג משולש — שווה צלעות, שווה שוקיים, או סתם משולש כלשהו — סכום שלוש הזוויות תמיד 180°.</p>
+<div class="example">
+<strong>דוגמה:</strong> במשולש ABC, הזוויות הן: <span class="math-expr">A = 50°</span>, <span class="math-expr">B = 70°</span>. מהי זווית <span class="math-expr">C</span>?<br><br>
+פתרון: <span class="math-expr">C = 180° - 50° - 70° = 60°</span> ✓
+</div>
+<p><strong>עם ביטויים:</strong> אם זוויות המשולש הן <span class="math-expr">x</span>, <span class="math-expr">2x</span> ו-<span class="math-expr">3x</span>, מצאו את <span class="math-expr">x</span>:</p>
+<div class="highlight">
+<span class="math-expr">x + 2x + 3x = 180°</span><br>
+<span class="math-expr">6x = 180°</span><br>
+<span class="math-expr">x = 30°</span>
+</div>
+<p><strong>בדקו את עצמכם:</strong> במשולש, שתי זוויות הן <span class="math-expr">45°</span> ו-<span class="math-expr">85°</span>. מהי הזווית השלישית?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s0input" placeholder="?" aria-label="הזווית השלישית">
+  <span>°</span>
+  <button class="mini-btn" onclick="checkS0()">בדקו</button>
+</div>
+<div id="s0fb"></div>
+`}},
+
+/* Step 1: Quadrilateral angle sum review */
+{title:'🔷 חזרה: סכום זוויות במרובע = 360°', render(){return `
+<div class="rule-box">📌 סכום הזוויות בכל מרובע הוא תמיד <strong>360°</strong></div>
+<p>למה 360°? כי כל מרובע ניתן לחלוקה לשני משולשים. שני משולשים = <span class="math-expr">2 × 180° = 360°</span></p>
+<div class="example">
+<strong>דוגמה 1 — ריבוע:</strong> 4 זוויות ישרות → <span class="math-expr">4 × 90° = 360°</span> ✓<br><br>
+<strong>דוגמה 2 — מרובע כללי:</strong> הזוויות הן <span class="math-expr">80°, 100°, 70°</span> ו-<span class="math-expr">x</span>.<br>
+<span class="math-expr">80 + 100 + 70 + x = 360</span><br>
+<span class="math-expr">250 + x = 360</span><br>
+<span class="math-expr">x = 110°</span>
+</div>
+<p><strong>בדקו:</strong> במרובע ABCD, הזוויות הן <span class="math-expr">90°, 85°, 95°</span> ו-<span class="math-expr">x</span>. מצאו את <span class="math-expr">x</span>.</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s1input" placeholder="?" aria-label="הזווית החסרה">
+  <span>°</span>
+  <button class="mini-btn" onclick="checkS1()">בדקו</button>
+</div>
+<div id="s1fb"></div>
+`}},
+
+/* Step 2: Exterior angle of triangle */
+{title:'📐 חזרה: זווית חיצונית למשולש', render(){return `
+<div class="rule-box">📌 זווית חיצונית למשולש = סכום שתי הזוויות הפנימיות שלא צמודות לה</div>
+<p>כשמאריכים צלע של משולש, נוצרת זווית חיצונית. היא שווה לסכום שתי הזוויות שנמצאות "ממול".</p>
+<div class="example">
+<strong>דוגמה:</strong> במשולש ABC, הזוויות הפנימיות: <span class="math-expr">A = 40°</span>, <span class="math-expr">B = 65°</span>.<br>
+הזווית החיצונית בקודקוד C = ?<br><br>
+<span class="math-expr">40° + 65° = 105°</span><br><br>
+<strong>בדיקה:</strong> הזווית הפנימית ב-C = <span class="math-expr">180° - 40° - 65° = 75°</span><br>
+הזווית החיצונית + הפנימית = <span class="math-expr">75° + 105° = 180°</span> ✓ (כי הן צמודות!)
+</div>
+<p><strong>תרגול:</strong> במשולש, הזוויות הפנימיות הן <span class="math-expr">55°</span> ו-<span class="math-expr">70°</span>. מהי הזווית החיצונית שצמודה לזווית השלישית?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s2input" placeholder="?" aria-label="הזווית החיצונית">
+  <span>°</span>
+  <button class="mini-btn" onclick="checkS2()">בדקו</button>
+</div>
+<div id="s2fb"></div>
+`}},
+
+/* Step 3: Supplementary and vertical angles */
+{title:'↔️ חזרה: זוויות צמודות וקודקודיות', render(){return `
+<div class="rule-box">📌 צמודות: סכומן <strong>180°</strong> &nbsp;|&nbsp; קודקודיות: <strong>שוות</strong></div>
+<p><strong>זוויות צמודות (סמוכות):</strong> שני ישרים נפגשים — כל זוג זוויות שכנות סכומו 180°.</p>
+<p><strong>זוויות קודקודיות:</strong> שני ישרים נחתכים — הזוויות שמול "מולן" שוות.</p>
+<div class="example">
+<strong>דוגמה:</strong> שני ישרים נחתכים. אחת הזוויות היא <span class="math-expr">130°</span>.<br><br>
+• הזווית הקודקודית = <span class="math-expr">130°</span> (שוות!)<br>
+• הזוויות הצמודות = <span class="math-expr">180° - 130° = 50°</span><br>
+• ארבע הזוויות: <span class="math-expr">130°, 50°, 130°, 50°</span><br>
+• בדיקה: <span class="math-expr">130 + 50 + 130 + 50 = 360°</span> ✓
+</div>
+<p><strong>בדקו:</strong> שני ישרים נחתכים. אחת הזוויות היא <span class="math-expr">72°</span>. מהי הזווית הצמודה לה?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s3input" placeholder="?" aria-label="הזווית הצמודה">
+  <span>°</span>
+  <button class="mini-btn" onclick="checkS3()">בדקו</button>
+</div>
+<div id="s3fb"></div>
+`}},
+
+/* Step 4: Corresponding and alternate angles */
+{title:'🔀 חזרה: מתאימות ומתחלפות', render(){return `
+<div class="rule-box">📌 בין ישרים מקבילים: <strong>מתאימות = שוות</strong> &nbsp;|&nbsp; <strong>מתחלפות = שוות</strong></div>
+<p>כשישר חותך שני ישרים מקבילים, נוצרים זוגות מיוחדים:</p>
+<div class="highlight">
+<strong>זוויות מתאימות:</strong> באותו צד של החותך, באותו מיקום ליד כל ישר → <strong>שוות</strong><br><br>
+<strong>זוויות מתחלפות:</strong> בצדדים מנוגדים של החותך, בין שני הישרים → <strong>שוות</strong><br><br>
+<strong>זוויות חד-צדדיות:</strong> באותו צד של החותך, בין שני הישרים → <strong>סכומן 180°</strong>
+</div>
+<div class="example">
+<strong>דוגמה:</strong> שני ישרים מקבילים נחתכים על ידי חותך. אחת הזוויות היא <span class="math-expr">65°</span>.<br><br>
+• הזווית המתאימה = <span class="math-expr">65°</span><br>
+• הזווית המתחלפת = <span class="math-expr">65°</span><br>
+• הזווית החד-צדדית = <span class="math-expr">180° - 65° = 115°</span>
+</div>
+<p><strong>בדקו:</strong> ישרים מקבילים וחותך. אחת הזוויות היא <span class="math-expr">48°</span>. מהי הזווית החד-צדדית (שסכומה עם <span class="math-expr">48°</span> שווה ל-<span class="math-expr">180°</span>)?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s4input" placeholder="?" aria-label="הזווית החד-צדדית">
+  <span>°</span>
+  <button class="mini-btn" onclick="checkS4()">בדקו</button>
+</div>
+<div id="s4fb"></div>
+`}},
+
+/* Step 5: Combined — triangle + parallel lines */
+{title:'🔗 שילוב: משולש + ישרים מקבילים', render(){return `
+<p>כאן מגיע החלק המעניין — לשלב את <strong>כל הכלים ביחד!</strong></p>
+<div class="example">
+<strong>בעיה:</strong> במשולש ABC, הישר DE מקביל לצלע BC ועובר דרך A.<br>
+נתון: <span class="math-expr">∠B = 50°</span>, <span class="math-expr">∠C = 70°</span>.<br><br>
+<strong>פתרון מודרך:</strong><br>
+1. <span class="math-expr">DE ∥ BC</span> → AB הוא חותך<br>
+2. <span class="math-expr">∠DAB = ∠B = 50°</span> (מתחלפות בין DE ∥ BC)<br>
+3. <span class="math-expr">∠EAC = ∠C = 70°</span> (מתחלפות בין DE ∥ BC)<br>
+4. בדיקה: <span class="math-expr">∠DAB + ∠BAC + ∠EAC = 50° + 60° + 70° = 180°</span> ✓ (זוויות על ישר DE)
+</div>
+<div class="success-box">💡 <strong>תובנה מפתח:</strong> ההוכחה שסכום הזוויות במשולש = 180° מבוססת בדיוק על הרעיון הזה! מעבירים ישר מקביל לצלע דרך הקודקוד הנגדי.</div>
+<p><strong>בדקו:</strong> במשולש ABC, <span class="math-expr">DE ∥ BC</span>. אם <span class="math-expr">∠DAB = 35°</span> ו-<span class="math-expr">∠EAC = 55°</span>, מהי <span class="math-expr">∠BAC</span>?</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s5input" placeholder="?" aria-label="זווית BAC">
+  <span>°</span>
+  <button class="mini-btn" onclick="checkS5()">בדקו</button>
+</div>
+<div id="s5fb"></div>
+<div class="reveal" id="s5reveal">
+<div class="highlight"><span class="math-expr">∠BAC = 180° - 35° - 55° = 90°</span><br>
+ובדיקה: סכום זוויות המשולש = <span class="math-expr">35° + 55° + 90° = 180°</span> ✓<br>
+(כי <span class="math-expr">∠B = ∠DAB = 35°</span> ו-<span class="math-expr">∠C = ∠EAC = 55°</span> מתחלפות)</div>
+</div>
+`}},
+
+/* Step 6: Summary + strategies */
+{title:'🏆 אסטרטגיות פתרון — סיכום', render(){return `
+<div class="rule-box">📌 אסטרטגיה לפתרון בעיות זוויות:<br>סמנו מקבילות → חפשו זוגות → כתבו משוואה → נמקו!</div>
+<p style="font-size:1.1rem;text-align:center;margin-bottom:20px">ריכוז כל הכלים שלמדתם ביחידה:</p>
+<div class="step-summary-grid">
+  <div class="summary-item">
+    <div class="s-icon">🔺</div>
+    <div class="s-title">משולש = 180°</div>
+    <div class="s-text">סכום שלוש הזוויות הפנימיות</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🔷</div>
+    <div class="s-title">מרובע = 360°</div>
+    <div class="s-text">סכום ארבע הזוויות הפנימיות</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">📐</div>
+    <div class="s-title">זווית חיצונית</div>
+    <div class="s-text">= סכום 2 הפנימיות שלא צמודות</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">↔️</div>
+    <div class="s-title">צמודות = 180°</div>
+    <div class="s-text">זוויות סמוכות על ישר</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">✖️</div>
+    <div class="s-title">קודקודיות = שוות</div>
+    <div class="s-text">זוויות "ממול" בהצטלבות</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🔀</div>
+    <div class="s-title">מתאימות / מתחלפות</div>
+    <div class="s-text">שוות בין ישרים מקבילים</div>
+  </div>
+</div>
+<div class="warning">⚠️ <strong>טעויות נפוצות:</strong><br>
+• לשכוח לבדוק אם הישרים מקבילים לפני שמשתמשים במתאימות/מתחלפות<br>
+• לבלבל בין זווית חיצונית (180° פחות הפנימית) לזווית חיצונית למשולש (סכום שתי הפנימיות)<br>
+• לא לנמק כל שלב — בשאלון מרכזי חייבים נימוק!
+</div>
+<div class="success-box" style="text-align:center;font-size:1.1rem;margin-top:20px">
+  <p>🌟 עכשיו אתם מוכנים לשאלון המרכזי!</p>
+  <p>4 רמות קושי מחכות לכם</p>
+  <button class="mini-btn accent" style="margin-top:12px;font-size:1rem;padding:12px 32px" onclick="switchSection('practice')">!מוכנים לתרגול ←</button>
+</div>
+`}}
+];
+
+function renderStep(idx){
+  state.step=idx;
+  const s=steps[idx];
+  const fill=((idx+1)/TOTAL_STEPS*100).toFixed(0);
+  document.getElementById('stepFill').style.width=fill+'%';
+  document.getElementById('stepText').textContent='שלב '+(idx+1)+' מתוך '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+s.title+'</div>'+s.render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'לתרגול ←':'הבא ←';
+  if(s.init) s.init();
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+/* Step interactive handlers */
+window.checkS0=function(){
+  const v=parseInt(document.getElementById('s0input').value);
+  const fb=document.getElementById('s0fb');
+  if(v===50){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! 180 - 45 - 85 = 50°</div>';document.getElementById('s0input').classList.add('correct')}
+  else if(isNaN(v)){fb.innerHTML='<div class="feedback-inline err">הקלידו מספר</div>'}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. סכום זוויות במשולש = 180°, אז 180 - 45 - 85 = ?</div>'}
+};
+window.checkS1=function(){
+  const v=parseInt(document.getElementById('s1input').value);
+  const fb=document.getElementById('s1fb');
+  if(v===90){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! 360 - 90 - 85 - 95 = 90°</div>';document.getElementById('s1input').classList.add('correct')}
+  else if(isNaN(v)){fb.innerHTML='<div class="feedback-inline err">הקלידו מספר</div>'}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. סכום זוויות במרובע = 360°, אז 360 - 90 - 85 - 95 = ?</div>'}
+};
+window.checkS2=function(){
+  const v=parseInt(document.getElementById('s2input').value);
+  const fb=document.getElementById('s2fb');
+  if(v===125){fb.innerHTML='<div class="feedback-inline ok">✅ מעולה! זווית חיצונית = 55 + 70 = 125°</div>';document.getElementById('s2input').classList.add('correct')}
+  else if(isNaN(v)){fb.innerHTML='<div class="feedback-inline err">הקלידו מספר</div>'}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. זווית חיצונית = סכום שתי הפנימיות שלא צמודות לה</div>'}
+};
+window.checkS3=function(){
+  const v=parseInt(document.getElementById('s3input').value);
+  const fb=document.getElementById('s3fb');
+  if(v===108){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! 180 - 72 = 108°</div>';document.getElementById('s3input').classList.add('correct')}
+  else if(isNaN(v)){fb.innerHTML='<div class="feedback-inline err">הקלידו מספר</div>'}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. צמודות = 180°, אז 180 - 72 = ?</div>'}
+};
+window.checkS4=function(){
+  const v=parseInt(document.getElementById('s4input').value);
+  const fb=document.getElementById('s4fb');
+  if(v===132){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! 180 - 48 = 132°</div>';document.getElementById('s4input').classList.add('correct')}
+  else if(isNaN(v)){fb.innerHTML='<div class="feedback-inline err">הקלידו מספר</div>'}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. חד-צדדיות סכומן 180°, אז 180 - 48 = ?</div>'}
+};
+window.checkS5=function(){
+  const v=parseInt(document.getElementById('s5input').value);
+  const fb=document.getElementById('s5fb');
+  if(v===90){fb.innerHTML='<div class="feedback-inline ok">✅ מצוין! 180 - 35 - 55 = 90°</div>';document.getElementById('s5input').classList.add('correct');document.getElementById('s5reveal').classList.add('show')}
+  else if(isNaN(v)){fb.innerHTML='<div class="feedback-inline err">הקלידו מספר</div>'}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. שלוש הזוויות על הישר DE סכומן 180°</div>'}
+};
+
+/* ===== SVG HELPERS ===== */
+function svgTriangle(w,h,a1,a2,a3,labels,highlight){
+  /* Draw a triangle with labelled angles. labels = {A:'60°',B:'70°',C:'?'}, highlight = index 0-2 */
+  const cx=w/2,pad=30;
+  const Ax=cx,Ay=pad;
+  const Bx=pad,By=h-pad;
+  const Cx=w-pad,Cy=h-pad;
+  let s='<svg class="geo-diagram" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">';
+  s+='<polygon points="'+Ax+','+Ay+' '+Bx+','+By+' '+Cx+','+Cy+'" fill="none" stroke="#1a2f5a" stroke-width="2.5"/>';
+  const pts=[{x:Ax,y:Ay,lbl:labels.A||'',dy:-14},{x:Bx,y:By,lbl:labels.B||'',dy:18},{x:Cx,y:Cy,lbl:labels.C||'',dy:18}];
+  const names=['A','B','C'];
+  pts.forEach((p,i)=>{
+    const col=i===highlight?'#ef4444':'#1a2f5a';
+    s+='<text x="'+p.x+'" y="'+(p.y+p.dy)+'" text-anchor="middle" font-size="13" font-weight="700" fill="'+col+'" font-family="Rubik,Heebo,sans-serif">'+names[i]+'</text>';
+    if(p.lbl){
+      const offX=i===0?0:(i===1?22:-22);const offY=i===0?26:-10;
+      s+='<text x="'+(p.x+offX)+'" y="'+(p.y+offY)+'" text-anchor="middle" font-size="12" font-weight="600" fill="'+(i===highlight?'#ef4444':'#4a9eda')+'" font-family="Rubik,Heebo,sans-serif">'+p.lbl+'</text>';
+    }
+  });
+  s+='</svg>';
+  return s;
+}
+function svgQuad(w,h,labels,highlight){
+  const pad=32;
+  const pts=[{x:pad+20,y:pad},{x:w-pad,y:pad+20},{x:w-pad-10,y:h-pad},{x:pad,y:h-pad-10}];
+  const names=['A','B','C','D'];
+  let s='<svg class="geo-diagram" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">';
+  s+='<polygon points="'+pts.map(p=>p.x+','+p.y).join(' ')+'" fill="none" stroke="#1a2f5a" stroke-width="2.5"/>';
+  const offsets=[{dx:0,dy:-12},{dx:14,dy:-8},{dx:12,dy:16},{dx:-14,dy:16}];
+  const lblOff=[{dx:16,dy:16},{dx:-16,dy:16},{dx:-16,dy:-8},{dx:16,dy:-4}];
+  pts.forEach((p,i)=>{
+    const col=i===highlight?'#ef4444':'#1a2f5a';
+    s+='<text x="'+(p.x+offsets[i].dx)+'" y="'+(p.y+offsets[i].dy)+'" text-anchor="middle" font-size="13" font-weight="700" fill="'+col+'" font-family="Rubik,Heebo,sans-serif">'+names[i]+'</text>';
+    const lbl=labels[names[i]];
+    if(lbl){
+      s+='<text x="'+(p.x+lblOff[i].dx)+'" y="'+(p.y+lblOff[i].dy)+'" text-anchor="middle" font-size="11" font-weight="600" fill="'+(i===highlight?'#ef4444':'#4a9eda')+'" font-family="Rubik,Heebo,sans-serif">'+lbl+'</text>';
+    }
+  });
+  s+='</svg>';
+  return s;
+}
+function svgTwoLines(w,h,ang,labelA,labelB){
+  /* Two intersecting lines with labelled angles */
+  const cx=w/2,cy=h/2,r=w*0.4;
+  const rad=ang*Math.PI/180;
+  const x1=cx+r,y1=cy;const x2=cx-r,y2=cy;
+  const x3=cx+r*Math.cos(rad),y3=cy-r*Math.sin(rad);
+  const x4=cx-r*Math.cos(rad),y4=cy+r*Math.sin(rad);
+  let s='<svg class="geo-diagram" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">';
+  s+='<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="#1a2f5a" stroke-width="2.5"/>';
+  s+='<line x1="'+x3.toFixed(1)+'" y1="'+y3.toFixed(1)+'" x2="'+x4.toFixed(1)+'" y2="'+y4.toFixed(1)+'" stroke="#1a2f5a" stroke-width="2.5"/>';
+  s+='<circle cx="'+cx+'" cy="'+cy+'" r="3" fill="#1a2f5a"/>';
+  /* arc for angle A (between horizontal and the other line, counterclockwise) */
+  const arcR=26;
+  const sx=cx+arcR,sy=cy;
+  const ex=cx+arcR*Math.cos(rad),ey=cy-arcR*Math.sin(rad);
+  s+='<path d="M'+sx+' '+sy+' A'+arcR+' '+arcR+' 0 0 0 '+ex.toFixed(1)+' '+ey.toFixed(1)+'" fill="none" stroke="#4a9eda" stroke-width="2.5"/>';
+  if(labelA){
+    const ma=rad/2;const lx=cx+38*Math.cos(ma),ly=cy-38*Math.sin(ma);
+    s+='<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" text-anchor="middle" font-size="13" font-weight="700" fill="#4a9eda" font-family="Rubik,Heebo,sans-serif">'+labelA+'</text>';
+  }
+  /* opposite arc for label B */
+  const sx2=cx-arcR,sy2=cy;
+  const ex2=cx-arcR*Math.cos(rad),ey2=cy+arcR*Math.sin(rad);
+  s+='<path d="M'+sx2+' '+sy2+' A'+arcR+' '+arcR+' 0 0 0 '+ex2.toFixed(1)+' '+ey2.toFixed(1)+'" fill="none" stroke="#ef4444" stroke-width="2.5"/>';
+  if(labelB){
+    const ma2=Math.PI+rad/2;const lx2=cx+38*Math.cos(ma2),ly2=cy-38*Math.sin(ma2);
+    s+='<text x="'+lx2.toFixed(1)+'" y="'+ly2.toFixed(1)+'" text-anchor="middle" font-size="13" font-weight="700" fill="#ef4444" font-family="Rubik,Heebo,sans-serif">'+labelB+'</text>';
+  }
+  s+='</svg>';
+  return s;
+}
+function svgParallel(w,h,ang,labelTop,labelBot){
+  /* Two parallel lines with a transversal */
+  const pad=20,lineY1=pad+15,lineY2=h-pad-15;
+  const midY=(lineY1+lineY2)/2;
+  const dx=((lineY2-lineY1)/2)/Math.tan(ang*Math.PI/180);
+  let s='<svg class="geo-diagram" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">';
+  /* parallel lines */
+  s+='<line x1="'+pad+'" y1="'+lineY1+'" x2="'+(w-pad)+'" y2="'+lineY1+'" stroke="#1a2f5a" stroke-width="2.5"/>';
+  s+='<line x1="'+pad+'" y1="'+lineY2+'" x2="'+(w-pad)+'" y2="'+lineY2+'" stroke="#1a2f5a" stroke-width="2.5"/>';
+  /* arrows for parallel */
+  s+='<text x="'+(w-pad-5)+'" y="'+(lineY1-6)+'" font-size="11" fill="#64748b" font-family="Rubik">l\u2081</text>';
+  s+='<text x="'+(w-pad-5)+'" y="'+(lineY2-6)+'" font-size="11" fill="#64748b" font-family="Rubik">l\u2082</text>';
+  /* transversal */
+  const tx1=w/2+dx+15,ty1=lineY1-15;
+  const tx2=w/2-dx-15,ty2=lineY2+15;
+  s+='<line x1="'+tx1.toFixed(1)+'" y1="'+ty1+'" x2="'+tx2.toFixed(1)+'" y2="'+ty2+'" stroke="#4a9eda" stroke-width="2"/>';
+  /* intersection dots */
+  const ix1=w/2+dx*(lineY1-midY)/(lineY2-lineY1)*2;
+  s+='<circle cx="'+(w/2+dx).toFixed(1)+'" cy="'+lineY1+'" r="3" fill="#1a2f5a"/>';
+  s+='<circle cx="'+(w/2-dx).toFixed(1)+'" cy="'+lineY2+'" r="3" fill="#1a2f5a"/>';
+  if(labelTop){
+    s+='<text x="'+(w/2+dx+22).toFixed(1)+'" y="'+(lineY1+16)+'" font-size="12" font-weight="700" fill="#4a9eda" font-family="Rubik,Heebo,sans-serif">'+labelTop+'</text>';
+  }
+  if(labelBot){
+    s+='<text x="'+(w/2-dx+22).toFixed(1)+'" y="'+(lineY2+16)+'" font-size="12" font-weight="700" fill="#ef4444" font-family="Rubik,Heebo,sans-serif">'+labelBot+'</text>';
+  }
+  s+='</svg>';
+  return s;
+}
+function svgSquareWithPoint(w,h,ptName,ptSide,angLabel,angLabel2){
+  /* Square ABCD with a point E on one side */
+  const pad=40;
+  const Ax=pad,Ay=pad,Bx=w-pad,By=pad,Cx=w-pad,Cy=h-pad,Dx=pad,Dy=h-pad;
+  const mid=0.3+0.4*R();
+  let Ex,Ey;
+  if(ptSide==='BC'){Ex=Bx;Ey=By+mid*(Cy-By);}
+  else if(ptSide==='CD'){Ex=Cx-mid*(Cx-Dx);Ey=Cy;}
+  else if(ptSide==='AB'){Ex=Ax+mid*(Bx-Ax);Ey=Ay;}
+  else {Ex=Ax;Ey=Ay+mid*(Dy-Ay);}
+  let s='<svg class="geo-diagram" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">';
+  s+='<polygon points="'+Ax+','+Ay+' '+Bx+','+By+' '+Cx+','+Cy+' '+Dx+','+Dy+'" fill="none" stroke="#1a2f5a" stroke-width="2.5"/>';
+  /* right-angle marks at corners */
+  const rm=10;
+  [[Ax,Ay,1,1],[Bx,By,-1,1],[Cx,Cy,-1,-1],[Dx,Dy,1,-1]].forEach(([px,py,sx,sy])=>{
+    s+='<polyline points="'+(px+rm*sx)+','+py+' '+(px+rm*sx)+','+(py+rm*sy)+' '+px+','+(py+rm*sy)+'" fill="none" stroke="#64748b" stroke-width="1.5"/>';
+  });
+  /* labels */
+  s+='<text x="'+(Ax-14)+'" y="'+(Ay-6)+'" font-size="13" font-weight="700" fill="#1a2f5a" font-family="Rubik">A</text>';
+  s+='<text x="'+(Bx+6)+'" y="'+(By-6)+'" font-size="13" font-weight="700" fill="#1a2f5a" font-family="Rubik">B</text>';
+  s+='<text x="'+(Cx+6)+'" y="'+(Cy+16)+'" font-size="13" font-weight="700" fill="#1a2f5a" font-family="Rubik">C</text>';
+  s+='<text x="'+(Dx-14)+'" y="'+(Dy+16)+'" font-size="13" font-weight="700" fill="#1a2f5a" font-family="Rubik">D</text>';
+  /* point E */
+  s+='<circle cx="'+Ex.toFixed(1)+'" cy="'+Ey.toFixed(1)+'" r="3.5" fill="#ef4444"/>';
+  const eOff=ptSide==='BC'?{dx:14,dy:4}:ptSide==='CD'?{dx:0,dy:16}:ptSide==='AB'?{dx:0,dy:-10}:{dx:-14,dy:4};
+  s+='<text x="'+(Ex+eOff.dx).toFixed(1)+'" y="'+(Ey+eOff.dy).toFixed(1)+'" font-size="13" font-weight="700" fill="#ef4444" font-family="Rubik">'+ptName+'</text>';
+  /* diagonal lines from square corners to E */
+  s+='<line x1="'+Ax+'" y1="'+Ay+'" x2="'+Ex.toFixed(1)+'" y2="'+Ey.toFixed(1)+'" stroke="#4a9eda" stroke-width="1.8" stroke-dasharray="6,3"/>';
+  s+='<line x1="'+Bx+'" y1="'+By+'" x2="'+Ex.toFixed(1)+'" y2="'+Ey.toFixed(1)+'" stroke="#4a9eda" stroke-width="1.8" stroke-dasharray="6,3"/>';
+  if(angLabel){
+    s+='<text x="'+(Ax+30)+'" y="'+(Ay+22)+'" font-size="11" font-weight="700" fill="#4a9eda" font-family="Rubik">'+angLabel+'</text>';
+  }
+  if(angLabel2){
+    s+='<text x="'+(Bx-40)+'" y="'+(By+22)+'" font-size="11" font-weight="700" fill="#ef4444" font-family="Rubik">'+angLabel2+'</text>';
+  }
+  s+='</svg>';
+  return s;
+}
+function svgTriangleParallel(w,h,angB,angC,labelD,labelE){
+  /* Triangle ABC with DE parallel to BC through points on AB and AC */
+  const pad=30;
+  const Ax=w/2,Ay=pad;
+  const Bx=pad,By=h-pad;
+  const Cx=w-pad,Cy=h-pad;
+  const t=0.4;
+  const Dx=Ax+t*(Bx-Ax),Dy=Ay+t*(By-Ay);
+  const Ex=Ax+t*(Cx-Ax),Ey=Ay+t*(Cy-Ay);
+  let s='<svg class="geo-diagram" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">';
+  s+='<polygon points="'+Ax+','+Ay+' '+Bx+','+By+' '+Cx+','+Cy+'" fill="none" stroke="#1a2f5a" stroke-width="2.5"/>';
+  s+='<line x1="'+(Dx-20).toFixed(1)+'" y1="'+Dy.toFixed(1)+'" x2="'+(Ex+20).toFixed(1)+'" y2="'+Ey.toFixed(1)+'" stroke="#4a9eda" stroke-width="2" stroke-dasharray="6,3"/>';
+  s+='<circle cx="'+Dx.toFixed(1)+'" cy="'+Dy.toFixed(1)+'" r="3" fill="#4a9eda"/>';
+  s+='<circle cx="'+Ex.toFixed(1)+'" cy="'+Ey.toFixed(1)+'" r="3" fill="#4a9eda"/>';
+  s+='<text x="'+Ax+'" y="'+(Ay-10)+'" text-anchor="middle" font-size="13" font-weight="700" fill="#1a2f5a" font-family="Rubik">A</text>';
+  s+='<text x="'+(Bx-12)+'" y="'+(By+14)+'" font-size="13" font-weight="700" fill="#1a2f5a" font-family="Rubik">B</text>';
+  s+='<text x="'+(Cx+12)+'" y="'+(Cy+14)+'" font-size="13" font-weight="700" fill="#1a2f5a" font-family="Rubik">C</text>';
+  s+='<text x="'+(Dx-14).toFixed(1)+'" y="'+(Dy-6).toFixed(1)+'" font-size="12" font-weight="700" fill="#4a9eda" font-family="Rubik">'+(labelD||'D')+'</text>';
+  s+='<text x="'+(Ex+10).toFixed(1)+'" y="'+(Ey-6).toFixed(1)+'" font-size="12" font-weight="700" fill="#4a9eda" font-family="Rubik">'+(labelE||'E')+'</text>';
+  /* parallel marks */
+  const mx=(Dx+Ex)/2,my=(Dy+Ey)/2;
+  s+='<text x="'+(mx+25).toFixed(1)+'" y="'+(my-4).toFixed(1)+'" font-size="10" fill="#4a9eda" font-family="Rubik">DE\u2225BC</text>';
+  if(angB) s+='<text x="'+(Bx+20)+'" y="'+(By-10)+'" font-size="12" font-weight="700" fill="#4a9eda" font-family="Rubik">'+angB+'</text>';
+  if(angC) s+='<text x="'+(Cx-30)+'" y="'+(Cy-10)+'" font-size="12" font-weight="700" fill="#ef4444" font-family="Rubik">'+angC+'</text>';
+  s+='</svg>';
+  return s;
+}
+
+/* ===== QUESTION GENERATORS ===== */
+function genEasy(){
+  rng=mulberry32(dateSeed+100);
+  const qs=[];
+  /* Q1-5: find missing angle in triangle (with SVG) */
+  for(let i=0;i<5;i++){
+    const a1=RI(25,80);const a2=RI(25,Math.min(80,179-a1-10));const a3=180-a1-a2;
+    const svg=svgTriangle(280,180,a1,a2,a3,{A:a1+'°',B:a2+'°',C:'?'},2);
+    const correct=''+a3;
+    const d1=''+(a3+RI(5,15));const d2=''+(Math.abs(a3-RI(5,15)));const d3=''+(360-a1-a2);
+    const opts=shuffle([correct,d1,d2,d3]);
+    qs.push({type:'mc',stem:svg+'<p>במשולש ABC: <span class="math-expr">∠A = '+a1+'°</span>, <span class="math-expr">∠B = '+a2+'°</span>. מצאו את <span class="math-expr">∠C</span>.</p>',options:opts.map(o=>o+'°'),answer:opts.indexOf(correct),explanation:'סכום זוויות במשולש = 180°. לכן: <span class="math-expr">180 - '+a1+' - '+a2+' = '+a3+'°</span>'});
+  }
+  /* Q6-10: find missing angle in quadrilateral (with SVG) */
+  for(let i=0;i<5;i++){
+    const a1=RI(60,120);const a2=RI(60,120);const a3=RI(60,Math.min(120,359-a1-a2-20));const a4=360-a1-a2-a3;
+    const svg=svgQuad(280,200,{A:a1+'°',B:a2+'°',C:a3+'°',D:'?'},3);
+    const correct=''+a4;
+    const d1=''+(a4+RI(10,20));const d2=''+(Math.abs(a4-RI(10,20)));const d3=''+(180-a1);
+    const opts=shuffle([correct,d1,d2,d3]);
+    qs.push({type:'mc',stem:svg+'<p>במרובע ABCD: <span class="math-expr">∠A = '+a1+'°</span>, <span class="math-expr">∠B = '+a2+'°</span>, <span class="math-expr">∠C = '+a3+'°</span>. מצאו את <span class="math-expr">∠D</span>.</p>',options:opts.map(o=>o+'°'),answer:opts.indexOf(correct),explanation:'סכום זוויות במרובע = 360°. לכן: <span class="math-expr">360 - '+a1+' - '+a2+' - '+a3+' = '+a4+'°</span>'});
+  }
+  /* Q11-15: supplementary angle (with SVG) */
+  for(let i=0;i<5;i++){
+    const a=RI(30,150);const supp=180-a;
+    const svg=svgTwoLines(240,140,a,a+'°','?');
+    const correct=''+supp;
+    const d1=''+(supp+RI(10,25));const d2=''+a;const d3=''+(360-a);
+    const opts=shuffle([correct,d1,d2,d3]);
+    qs.push({type:'mc',stem:svg+'<p>שני ישרים נפגשים. אחת הזוויות היא <span class="math-expr">'+a+'°</span>. מהי הזווית <strong>הצמודה</strong> לה?</p>',options:opts.map(o=>o+'°'),answer:opts.indexOf(correct),explanation:'זוויות צמודות סכומן 180°. לכן: <span class="math-expr">180 - '+a+' = '+supp+'°</span>'});
+  }
+  /* Q16-20: vertical angle (with SVG) */
+  for(let i=0;i<5;i++){
+    const a=RI(25,155);const supp=180-a;
+    const svg=svgTwoLines(240,140,a,a+'°','');
+    const correct=''+a;
+    const d1=''+supp;const d2=''+(a+RI(5,15));const d3=''+(360-a);
+    const opts=shuffle([correct,d1,d2,d3]);
+    qs.push({type:'mc',stem:svg+'<p>שני ישרים נחתכים. אחת הזוויות היא <span class="math-expr">'+a+'°</span>. מהי הזווית <strong>הקודקודית</strong> לה?</p>',options:opts.map(o=>o+'°'),answer:opts.indexOf(correct),explanation:'זוויות קודקודיות שוות! הזווית הקודקודית = <span class="math-expr">'+a+'°</span>'});
+  }
+  return qs;
+}
+
+function genMedium(){
+  rng=mulberry32(dateSeed+200);
+  const qs=[];
+  /* Q1-7: "3 students claim about a triangle" — who's right? (with SVG) */
+  for(let i=0;i<7;i++){
+    const types=['acute','right','obtuse'];
+    const typ=types[i%3];
+    var sa,sb,sc;
+    if(typ==='acute'){sa=RI(50,70);sb=RI(50,Math.min(70,179-sa-40));sc=180-sa-sb;}
+    else if(typ==='right'){sa=90;sb=RI(20,70);sc=180-sa-sb;}
+    else{sa=RI(100,140);sb=RI(15,Math.min(65,179-sa-10));sc=180-sa-sb;}
+    const svg=svgTriangle(260,170,sa,sb,sc,{A:sa+'°',B:sb+'°',C:sc+'°'},-1);
+    const correctType=sa===90||sb===90||sc===90?'ישר זווית':(sa>90||sb>90||sc>90?'קהה זווית':'חד זווית');
+    const wrongTypes=['חד זווית','ישר זווית','קהה זווית'].filter(t=>t!==correctType);
+    const allNames=[['דני','נועה','עמית'],['יובל','מיכל','אורי'],['רון','שירה','תום'],['ליאור','הדר','גיל']];
+    const names=allNames[i%allNames.length];
+    const shuffledNames=shuffle([...names]);
+    const claims=shuffle([
+      {name:shuffledNames[0],claim:correctType,correct:true},
+      {name:shuffledNames[1],claim:wrongTypes[0],correct:false},
+      {name:shuffledNames[2],claim:wrongTypes[1],correct:false}
+    ]);
+    const correctIdx=claims.findIndex(c=>c.correct);
+    const opts=claims.map(c=>c.name+': "המשולש '+c.claim+'"');
+    qs.push({type:'mc',stem:svg+'<p>שלושה תלמידים טוענים על המשולש שזוויותיו <span class="math-expr">'+sa+'°, '+sb+'°, '+sc+'°</span>. מי צודק?</p>',options:opts,answer:correctIdx,explanation:'הזוויות: '+sa+'°, '+sb+'°, '+sc+'°. '+(sa>90||sb>90||sc>90?'יש זווית גדולה מ-90° → קהה זווית':(sa===90||sb===90||sc===90?'יש זווית = 90° → ישר זווית':'כל הזוויות קטנות מ-90° → חד זווית'))+'. לכן '+claims[correctIdx].name+' צודק/ת.'});
+  }
+  /* Q8-13: find angles in quadrilateral HBDF — complex shape (with SVG) */
+  for(let i=0;i<6;i++){
+    const a1=RI(50,100);const a2=RI(50,100);const a3=RI(50,100);const a4=360-a1-a2-a3;
+    if(a4<=15||a4>=175){
+      const fa=80,fb=90,fc=100,fd=90;
+      const svg2=svgQuad(280,200,{A:fa+'°',B:fb+'°',C:fc+'°',D:'x'},-1);
+      qs.push({type:'input',stem:svg2+'<p>במרובע HBDF: <span class="math-expr">∠H = '+fa+'°</span>, <span class="math-expr">∠B = '+fb+'°</span>, <span class="math-expr">∠D = '+fc+'°</span>. מצאו את <span class="math-expr">∠F</span>.</p>',answer:fd,explanation:'סכום זוויות במרובע = 360°. <span class="math-expr">∠F = 360 - '+fa+' - '+fb+' - '+fc+' = '+fd+'°</span>'});
+    } else {
+      const svg2=svgQuad(280,200,{A:a1+'°',B:a2+'°',C:a3+'°',D:'x'},3);
+      qs.push({type:'input',stem:svg2+'<p>במרובע HBDF: <span class="math-expr">∠H = '+a1+'°</span>, <span class="math-expr">∠B = '+a2+'°</span>, <span class="math-expr">∠D = '+a3+'°</span>. מצאו את <span class="math-expr">∠F</span>.</p>',answer:a4,explanation:'סכום זוויות במרובע = 360°. <span class="math-expr">∠F = 360 - '+a1+' - '+a2+' - '+a3+' = '+a4+'°</span>'});
+    }
+  }
+  /* Q14-17: corresponding / alternate / co-interior angles (with SVG) */
+  for(let i=0;i<4;i++){
+    const a=RI(35,145);
+    const typeQ=['corresponding','alternate','co-interior'][i%3];
+    const svg=svgParallel(300,160,Math.min(Math.max(a,30),80),a+'°','?');
+    if(typeQ==='corresponding'){
+      const correct=''+a;
+      const d1=''+(180-a);const d2=''+(a+RI(5,15));const d3=''+(360-a);
+      const opts=shuffle([correct,d1,d2,d3]);
+      qs.push({type:'mc',stem:svg+'<p>שני ישרים מקבילים וחותך. אחת הזוויות היא <span class="math-expr">'+a+'°</span>. מצאו את הזווית <strong>המתאימה</strong>.</p>',options:opts.map(o=>o+'°'),answer:opts.indexOf(correct),explanation:'זוויות מתאימות בין מקבילים שוות: <span class="math-expr">'+a+'°</span>'});
+    } else if(typeQ==='alternate'){
+      const correct=''+a;
+      const d1=''+(180-a);const d2=''+(a+RI(8,20));const d3=''+(a>20?a-RI(8,15):a+25);
+      const opts=shuffle([correct,d1,d2,d3]);
+      qs.push({type:'mc',stem:svg+'<p>שני ישרים מקבילים וחותך. אחת הזוויות היא <span class="math-expr">'+a+'°</span>. מצאו את הזווית <strong>המתחלפת</strong>.</p>',options:opts.map(o=>o+'°'),answer:opts.indexOf(correct),explanation:'זוויות מתחלפות בין מקבילים שוות: <span class="math-expr">'+a+'°</span>'});
+    } else {
+      const co=180-a;
+      const correct=''+co;
+      const d1=''+a;const d2=''+(co+RI(5,15));const d3=''+(360-a);
+      const opts=shuffle([correct,d1,d2,d3]);
+      qs.push({type:'mc',stem:svg+'<p>שני ישרים מקבילים וחותך. אחת הזוויות היא <span class="math-expr">'+a+'°</span>. מצאו את הזווית <strong>החד-צדדית</strong>.</p>',options:opts.map(o=>o+'°'),answer:opts.indexOf(correct),explanation:'זוויות חד-צדדיות סכומן 180°: <span class="math-expr">180 - '+a+' = '+co+'°</span>'});
+    }
+  }
+  /* Q18-20: exterior angle of triangle (with SVG) */
+  for(let i=0;i<3;i++){
+    const a1=RI(30,70);const a2=RI(30,70);const a3=180-a1-a2;const ext=a1+a2;
+    const svg=svgTriangle(260,170,a1,a2,a3,{A:a1+'°',B:a2+'°',C:a3+'°'},-1);
+    qs.push({type:'input',stem:svg+'<p>במשולש ABC: <span class="math-expr">∠A = '+a1+'°</span>, <span class="math-expr">∠B = '+a2+'°</span>. צלע BC מוארכת. מצאו את הזווית החיצונית הצמודה ל-<span class="math-expr">∠C</span>.</p>',answer:ext,explanation:'זווית חיצונית = סכום 2 הפנימיות שלא צמודות: <span class="math-expr">'+a1+' + '+a2+' = '+ext+'°</span>'});
+  }
+  return qs;
+}
+
+function genHard(){
+  rng=mulberry32(dateSeed+300);
+  const qs=[];
+  /* Q1-5: Square ABCD with AE and BF — find angle in triangle (with SVG) */
+  for(let i=0;i<5;i++){
+    const side=pick(['CD','BC']);
+    const angABE=RI(15,65);
+    /* In square ABCD, E on CD (or BC). Triangle ABE has angle A = 90, so angle AEB = 90 - angABE */
+    const angAEB=90-angABE;
+    const svg=svgSquareWithPoint(260,220,'E',side,angABE+'°','');
+    const correct=''+angAEB;
+    const d1=''+(angABE);const d2=''+(180-angABE);const d3=''+(90+angABE);
+    const opts=shuffle([correct,d1,d2,d3]);
+    qs.push({type:'mc',stem:svg+'<p>בריבוע ABCD, הנקודה E על הצלע '+side+'. <span class="math-expr">∠ABE = '+angABE+'°</span>. מצאו את <span class="math-expr">∠AEB</span>.</p><p><em>רמז: במשולש ABE, <span class="math-expr">∠A = 90°</span> (זווית הריבוע).</em></p>',options:opts.map(o=>o+'°'),answer:opts.indexOf(correct),explanation:'במשולש ABE: <span class="math-expr">∠A = 90°</span> (ריבוע), <span class="math-expr">∠ABE = '+angABE+'°</span>. לכן <span class="math-expr">∠AEB = 180 - 90 - '+angABE+' = '+angAEB+'°</span>'});
+  }
+  /* Q6-10: Right triangle + DE parallel to BC — find angle ADE (with SVG) */
+  for(let i=0;i<5;i++){
+    const angA=RI(25,65);const angB=90-angA;
+    /* DE||BC, D on AB, E on AC. By similar triangles: angle ADE = angle ABC = angB */
+    const svg=svgTriangleParallel(300,200,angB+'°=∠B','90°=∠C');
+    qs.push({type:'input',stem:svg+'<p>במשולש ישר זווית ABC: <span class="math-expr">∠C = 90°</span>, <span class="math-expr">∠A = '+angA+'°</span>. D על AB ו-E על AC, כך ש-<span class="math-expr">DE ∥ BC</span>. מצאו את <span class="math-expr">∠ADE</span>.</p>',answer:angB,explanation:'<span class="math-expr">DE ∥ BC</span> וחותך AB → <span class="math-expr">∠ADE = ∠ABC</span> (מתאימות). <span class="math-expr">∠ABC = 180 - 90 - '+angA+' = '+angB+'°</span>'});
+  }
+  /* Q11-15: Find alpha in quadrilateral — diagonal splits into two triangles (with SVG) */
+  for(let i=0;i<5;i++){
+    const angBAC=RI(30,60);const angABC=RI(30,60);const angACB=180-angBAC-angABC;
+    const angACD=RI(25,55);const angADC=RI(25,Math.min(55,179-angACB-angACD-5));
+    const angDAC=180-angACD-angADC;
+    if(angDAC<=5||angDAC>=170||angADC<=5||angADC>=170){
+      /* fallback: simple exterior angle */
+      const fa=RI(40,70);const fb=RI(40,70);const ext=fa+fb;
+      const svg2=svgTriangle(260,170,fa,fb,180-fa-fb,{A:fa+'°',B:fb+'°',C:(180-fa-fb)+'°'},-1);
+      qs.push({type:'input',stem:svg2+'<p>במשולש ABC: <span class="math-expr">∠A = '+fa+'°</span>, <span class="math-expr">∠B = '+fb+'°</span>. צלע BC מוארכת לנקודה D. מצאו את <span class="math-expr">α = ∠ACD</span> (הזווית החיצונית).</p>',answer:ext,explanation:'זווית חיצונית = סכום הפנימיות שלא צמודות: <span class="math-expr">α = '+fa+' + '+fb+' = '+ext+'°</span>'});
+    } else {
+      /* Quadrilateral ABCD with diagonal AC */
+      const svg2=svgQuad(280,200,{A:(angBAC+angDAC)+'°',B:angABC+'°',C:(angACB+angACD)+'°',D:'α'},3);
+      qs.push({type:'input',stem:svg2+'<p>במרובע ABCD: <span class="math-expr">∠A = '+(angBAC+angDAC)+'°</span>, <span class="math-expr">∠B = '+angABC+'°</span>, <span class="math-expr">∠C = '+(angACB+angACD)+'°</span>. מצאו את <span class="math-expr">α = ∠D</span>.</p>',answer:angADC,explanation:'סכום זוויות במרובע = 360°. <span class="math-expr">α = 360 - '+(angBAC+angDAC)+' - '+angABC+' - '+(angACB+angACD)+' = '+angADC+'°</span>'});
+    }
+  }
+  /* Q16-20: Parallel lines + triangle — find angle using alternate/corresponding (with SVG) */
+  for(let i=0;i<5;i++){
+    const tplType=i%3;
+    if(tplType===0){
+      /* DE || BC, find angle DAB */
+      const angB=RI(30,70);const angC=RI(30,70);
+      const svg=svgTriangleParallel(300,200,angB+'°','');
+      qs.push({type:'input',stem:svg+'<p>במשולש ABC: <span class="math-expr">∠B = '+angB+'°</span>, <span class="math-expr">∠C = '+angC+'°</span>. דרך A עובר ישר DE כך ש-<span class="math-expr">DE ∥ BC</span>. מצאו את <span class="math-expr">∠DAB</span>.</p>',answer:angB,explanation:'<span class="math-expr">DE ∥ BC</span>, AB חותך. <span class="math-expr">∠DAB = ∠ABC = '+angB+'°</span> (מתחלפות)'});
+    } else if(tplType===1){
+      /* Quadrilateral with algebraic angles: 2x, 3x, 4x, rest */
+      const x=RI(15,38);const s9=9*x;const a4=360-s9;
+      if(a4>10&&a4<170){
+        const svg=svgQuad(280,200,{A:'2x',B:'3x',C:'4x',D:a4+'°'},-1);
+        qs.push({type:'input',stem:svg+'<p>במרובע, הזוויות הן <span class="math-expr">2x°, 3x°, 4x°</span> ו-<span class="math-expr">'+a4+'°</span>. מצאו את <span class="math-expr">x</span>.</p>',answer:x,explanation:'<span class="math-expr">2x + 3x + 4x + '+a4+' = 360</span> → <span class="math-expr">9x = '+(360-a4)+'</span> → <span class="math-expr">x = '+x+'</span>'});
+      } else {
+        const svg=svgTriangle(260,170,0,0,0,{A:'x',B:'(x+20)',C:'(x+40)'},-1);
+        qs.push({type:'input',stem:svg+'<p>במשולש, הזוויות הן <span class="math-expr">x°, (x+20)°, (x+40)°</span>. מצאו את <span class="math-expr">x</span>.</p>',answer:40,explanation:'<span class="math-expr">x + (x+20) + (x+40) = 180 → 3x + 60 = 180 → x = 40</span>'});
+      }
+    } else {
+      /* Exterior angle with algebraic expressions */
+      const x=RI(15,50);const ext=3*x;
+      const svg=svgTriangle(260,170,0,0,0,{A:'x',B:'2x',C:''},-1);
+      qs.push({type:'input',stem:svg+'<p>במשולש, שתי זוויות פנימיות הן <span class="math-expr">x°</span> ו-<span class="math-expr">2x°</span>. הזווית החיצונית הצמודה לשלישית = <span class="math-expr">'+ext+'°</span>. מצאו את <span class="math-expr">x</span>.</p>',answer:x,explanation:'זווית חיצונית = סכום הפנימיות שלא צמודות: <span class="math-expr">x + 2x = '+ext+'</span> → <span class="math-expr">3x = '+ext+'</span> → <span class="math-expr">x = '+x+'</span>'});
+    }
+  }
+  return qs;
+}
+
+function genChallenge(){
+  rng=mulberry32(dateSeed+400);
+  const qs=[];
+  /* Q1-4: "Can this triangle exist?" — determine validity */
+  for(let i=0;i<4;i++){
+    /* Generate random triples, some valid (sum=180) some not */
+    let a,b,c,valid;
+    if(i%2===0){
+      /* valid triangle */
+      a=RI(30,100);b=RI(20,Math.min(90,179-a-10));c=180-a-b;valid=true;
+    } else {
+      /* invalid triangle: sum != 180 */
+      a=RI(40,120);b=RI(30,90);c=RI(20,80);
+      if(a+b+c===180){c+=RI(5,15);} /* ensure invalid */
+      valid=false;
+    }
+    const sum=a+b+c;
+    const svg=svgTriangle(240,160,a,b,c,{A:a+'°',B:b+'°',C:c+'°'},-1);
+    const correct=valid?'כן, המשולש קיים':'לא, המשולש לא קיים';
+    const wrong=valid?'לא, המשולש לא קיים':'כן, המשולש קיים';
+    const extra1=valid?'כן, אבל רק אם הוא שווה שוקיים':'לא, כי יש זווית קהה';
+    const extra2='לא ניתן לקבוע ללא מידע על הצלעות';
+    const opts=shuffle([correct,wrong,extra1,extra2]);
+    qs.push({type:'mc',stem:svg+'<p>האם ייתכן משולש שזוויותיו <span class="math-expr">'+a+'°, '+b+'°, '+c+'°</span>?</p>',options:opts,answer:opts.indexOf(correct),explanation:'<span class="math-expr">'+a+' + '+b+' + '+c+' = '+sum+'</span>. '+(valid?'סכום = 180° → המשולש קיים!':'סכום \u2260 180° → המשולש לא קיים!')+' משולש קיים אם ורק אם סכום זוויותיו = 180°.'});
+  }
+  /* Q5-8: Square ABCD with extra info — E on BC, find angle AEC (with SVG) */
+  for(let i=0;i<4;i++){
+    const angBAE=RI(15,65);
+    /* Triangle ABE: B=90, BAE=angBAE => AEB = 90-angBAE. AEC = 180-AEB = 90+angBAE */
+    const angAEB=90-angBAE;const angAEC=90+angBAE;
+    const svg=svgSquareWithPoint(260,220,'E','BC',angBAE+'°','');
+    qs.push({type:'input',stem:svg+'<p>בריבוע ABCD, E נקודה על BC. <span class="math-expr">∠BAE = '+angBAE+'°</span>. מצאו את <span class="math-expr">∠AEC</span>.</p><p><em>רמז: חשבו את ∠AEB במשולש ABE (∠B=90°), ואז זוויות צמודות.</em></p>',answer:angAEC,explanation:'במשולש ABE: <span class="math-expr">∠AEB = 180 - 90 - '+angBAE+' = '+angAEB+'°</span>. זוויות צמודות: <span class="math-expr">∠AEC = 180 - '+angAEB+' = '+angAEC+'°</span>'});
+  }
+  /* Q9-11: Quadrilateral + triangle on segment CF — multi-step (with SVG) */
+  for(let i=0;i<3;i++){
+    const angA=RI(35,65);const angB=RI(35,65);const angC=180-angA-angB;
+    const ext=angA+angB; /* exterior angle at C */
+    const angCDE=RI(25,Math.min(75,ext-10));
+    const angCED=180-ext-angCDE;
+    if(angCED>5&&angCED<170){
+      const svg=svgTriangle(280,180,angA,angB,angC,{A:angA+'°',B:angB+'°',C:angC+'°'},-1);
+      qs.push({type:'input',stem:svg+'<p>במשולש ABC: <span class="math-expr">∠A = '+angA+'°</span>, <span class="math-expr">∠B = '+angB+'°</span>. צלע BC מוארכת לנקודה D. על הקטע CD נבנה משולש CDE כך ש-<span class="math-expr">∠CDE = '+angCDE+'°</span>. מצאו את <span class="math-expr">∠CED</span>.</p><p><em>רמז: מצאו קודם את הזווית החיצונית ∠ACD = ∠DCE.</em></p>',answer:angCED,explanation:'הזווית החיצונית ב-C: <span class="math-expr">∠DCE = '+angA+' + '+angB+' = '+ext+'°</span>. במשולש CDE: <span class="math-expr">∠CED = 180 - '+ext+' - '+angCDE+' = '+angCED+'°</span>'});
+    } else {
+      const fa=50,fb=60;const fext=fa+fb;
+      const svg=svgTriangle(280,180,fa,fb,70,{A:fa+'°',B:fb+'°',C:'70°'},-1);
+      qs.push({type:'input',stem:svg+'<p>במשולש ABC: <span class="math-expr">∠A = 50°</span>, <span class="math-expr">∠B = 60°</span>. צלע BC מוארכת לנקודה D. מצאו את הזווית החיצונית <span class="math-expr">∠ACD</span>.</p>',answer:fext,explanation:'זווית חיצונית = סכום 2 הפנימיות שלא צמודות: <span class="math-expr">50 + 60 = 110°</span>'});
+    }
+  }
+  /* Q12-15: Parallel lines with triangle between them — multi-step (with SVG) */
+  for(let i=0;i<4;i++){
+    const angP=RI(25,65);const angQ=RI(25,65);const angV=180-angP-angQ;
+    const svg=svgParallel(320,180,Math.min(Math.max(angP,30),70),angP+'°',angQ+'°');
+    qs.push({type:'input',stem:svg+'<p>שני ישרים מקבילים <span class="math-expr">l\u2081 \u2225 l\u2082</span>. חותך ראשון יוצר זווית <span class="math-expr">'+angP+'°</span> עם <span class="math-expr">l\u2081</span>. חותך שני יוצר זווית <span class="math-expr">'+angQ+'°</span> עם <span class="math-expr">l\u2082</span>. הם נפגשים בנקודה V ביניהם. מצאו את <span class="math-expr">∠V</span>.</p><p><em>רמז: השתמשו במתחלפות למציאת 2 זוויות המשולש.</em></p>',answer:angV,explanation:'בין המקבילים נוצר משולש: <span class="math-expr">'+angP+'°</span> (מתחלפת ל-l\u2081) + <span class="math-expr">'+angQ+'°</span> (מתחלפת ל-l\u2082) + <span class="math-expr">∠V = 180</span>. לכן <span class="math-expr">∠V = 180 - '+angP+' - '+angQ+' = '+angV+'°</span>'});
+  }
+  return qs;
+}
+
+function generateQuestions(level){
+  if(level==='easy') return genEasy();
+  if(level==='medium') return genMedium();
+  if(level==='hard') return genHard();
+  return genChallenge();
+}
+
+/* ===== PRACTICE RENDERING ===== */
+function renderLevelTabs(){
+  const container=document.getElementById('levelTabs');
+  container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(lv=>{
+    const btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    const done=scores[lv].filter(s=>s===1).length;
+    const total=LEVEL_COUNTS[lv];
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+total+')</span>':'');
+    btn.onclick=()=>switchLevel(lv);
+    container.appendChild(btn);
+  });
+}
+
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv]) questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+
+function updateLevelProgress(){
+  const lv=state.level;const total=LEVEL_COUNTS[lv];
+  const done=answered[lv].filter(a=>a).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+
+function renderQuestion(){
+  const lv=state.level;const idx=state.qIndex;
+  const qs=questions[lv];
+  if(!qs) return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  const q=qs[idx];
+  const area=document.getElementById('questionArea');
+  const isAnswered=answered[lv][idx];
+
+  let html='<div class="q-card"><div class="q-number">שאלה '+(idx+1)+' מתוך '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach((opt,i)=>{
+      const letter=LETTERS[i];
+      let cls='q-opt';
+      if(isAnswered){
+        cls+=' disabled';
+        if(i===q.answer) cls+=' correct';
+        else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel']) cls+=' wrong';
+      }
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>בדקו</button>';
+  } else if(q.type==='input'){
+    html+='<div class="q-input-row"><input type="number" class="q-input" id="qInput" placeholder="תשובה" dir="ltr" aria-label="תשובה">';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">בדקו</button>';
+    html+='</div>';
+    if(isAnswered){
+      html+='<div style="margin-top:4px;font-weight:700;direction:ltr">תשובה: '+q.answer+'</div>';
+    }
+  }
+
+  if(isAnswered){
+    const isCorrect=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'✅ נכון! ':'❌ ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+
+  /* Set up MC click handlers */
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(el=>{
+      el.onclick=()=>{
+        area.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+  /* Set up input enter key */
+  const inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){
+    inp.focus();
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkInput()});
+  }
+
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'סיום':'הבא ←';
+}
+
+window.checkMC=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const selected=document.querySelector('.q-opt.selected');
+  if(!selected) return;
+  const si=parseInt(selected.dataset.i);
+  const isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  answered[lv][idx+'_sel']=si;
+
+  document.querySelectorAll('.q-opt').forEach((el,i)=>{
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer) el.classList.add('correct');
+    else if(i===si&&!isCorrect) el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון מאוד!','✅ יפה!'])+' ':'❌ לא נכון. ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkInput=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inp=document.getElementById('qInput');
+  const val=inp.value.trim();
+  if(!val) return;
+  const isCorrect=parseFloat(val)===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');
+  inp.disabled=true;
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון!'])+' ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+function nextQuestion(){
+  const lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function')showAuthModal();
+    return;
+  }
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+
+function renderLevelComplete(){
+  const lv=state.level;
+  const correct=scores[lv].filter(s=>s===1).length;
+  const total=LEVEL_COUNTS[lv];
+  const pct=Math.round(correct/total*100);
+  const scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  const emoji=pct>=80?'🎉':pct>=50?'👏':'💪';
+
+  document.getElementById('questionArea').innerHTML=`
+    <div class="q-card"><div class="level-complete">
+      <div class="big-emoji">${emoji}</div>
+      <h2>סיימתם את רמת "${LEVEL_NAMES[lv]}"!</h2>
+      <div class="score-display${scoreClass}">${correct} / ${total}</div>
+      <p style="color:var(--text-light);margin-bottom:16px">${pct}% הצלחה</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="mini-btn" onclick="retryLevel()">🔄 נסו שוב</button>
+        ${lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">▶ לרמה הבאה</button>':''}
+      </div>
+    </div></div>`;
+
+  if(pct>=80) showConfetti();
+  saveState();
+}
+
+window.retryLevel=function(){
+  const lv=state.level;
+  scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);
+  state.qIndex=0;
+  renderLevelTabs();renderQuestion();saveState();
+};
+
+window.nextLevel=function(){
+  const order=['easy','medium','hard','challenge'];
+  const ci=order.indexOf(state.level);
+  if(ci<order.length-1) switchLevel(order[ci+1]);
+};
+
+/* ===== SECTION SWITCHING ===== */
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.section===sec);
+  });
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+/* ===== CONFETTI ===== */
+function showConfetti(){
+  const box=document.getElementById('confettiBox');
+  box.innerHTML='';
+  const colors=['#1a2f5a','#4a9eda','#10b981','#ef4444','#8b5cf6','#ec4899'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';
+    c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(()=>box.innerHTML='',5000);
+}
+
+/* ===== INIT ===== */
+function init(){
+  loadState();
+  Object.keys(LEVEL_COUNTS).forEach(lv=>{
+    if(!scores[lv]||!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice') switchSection('practice');
+}
+init();
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

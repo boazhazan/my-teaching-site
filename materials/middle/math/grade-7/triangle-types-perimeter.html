@@ -1,0 +1,1275 @@
+<!--
+  Title: סוגי משולשים והיקף — תרגול
+  Unit: משולשים
+  Subject: מתמטיקה
+  Grade: ז׳
+  Lesson: 2
+  Tags: גיאומטריה,משולשים,היקף,סיווג,תרגול
+  Ages: 12-13
+  Icon: 📝
+  Badge: חדש!
+  Description: תרגול מעמיק — סיווג משולשים, אי-שוויון, היקף עם ביטויים. תרגול ב-4 רמות קושי
+-->
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>סוגי משולשים והיקף — תרגול | כיתה ז׳ — מתמטיקה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&family=Rubik:wght@700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#1a2f5a;--primary-dark:#0f1e3d;--primary-light:#e8edf5;
+  --accent:#4a9eda;--accent-dark:#2f7ab8;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+  --shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#f0f4fa 0%,#e0eaf5 50%,#f0f4fa 100%);min-height:100vh;color:var(--text);line-height:1.6}
+h1,h2,h3,.step-title{font-family:'Rubik','Heebo',sans-serif}
+
+/* Top bar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:var(--primary-dark)}
+.topbar a{color:var(--accent);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Section toggle */
+.section-toggle{display:flex;justify-content:center;gap:0;margin:16px auto;max-width:340px;background:var(--bg);border-radius:999px;padding:4px;box-shadow:var(--shadow)}
+.section-btn{flex:1;padding:10px 20px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-family:'Heebo',sans-serif;font-size:.95rem;font-weight:700;color:var(--text-light);transition:.3s}
+.section-btn.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-md)}
+
+/* Container */
+.container{max-width:760px;margin:0 auto;padding:0 16px 40px}
+
+/* ===== TEACHING SECTION ===== */
+#learnSection{animation:fadeIn .4s ease}
+.step-progress{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding:0 4px}
+.step-progress-bar{flex:1;height:8px;background:var(--border);border-radius:999px;overflow:hidden}
+.step-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:999px;transition:width .4s ease}
+.step-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+.step-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px 24px;animation:slideIn .4s ease}
+.step-title{font-size:1.35rem;font-weight:700;color:var(--primary-dark);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.step-card p{margin-bottom:12px;font-size:.95rem;line-height:1.7}
+.step-card .highlight{background:var(--primary-light);border-right:4px solid var(--primary);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600}
+.step-card .warning{background:#fef2f2;border-right:4px solid var(--error);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#991b1b}
+.step-card .success-box{background:#ecfdf5;border-right:4px solid var(--success);padding:12px 16px;border-radius:var(--radius-sm);margin:12px 0;font-weight:600;color:#065f46}
+.step-card .rule-box{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;padding:16px;border-radius:var(--radius);margin:16px 0;text-align:center;font-size:1.1rem;font-weight:700}
+.step-card .example{background:var(--bg-soft);border:1px solid var(--border);padding:14px;border-radius:var(--radius-sm);margin:10px 0;font-size:1rem}
+.step-card .example .arrow{color:var(--primary);font-weight:800;margin:0 6px}
+.step-card code,.expr{font-family:'Courier New',monospace;background:var(--primary-light);padding:2px 8px;border-radius:4px;font-weight:700;color:var(--primary-dark);font-size:1.05em;direction:ltr;display:inline-block}
+.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-family:'Rubik',sans-serif;font-weight:700;color:var(--primary)}
+
+/* Interactive elements inside steps */
+.mini-table{border-collapse:collapse;margin:12px auto;direction:ltr}
+.mini-table th,.mini-table td{border:2px solid var(--border);padding:8px 16px;text-align:center;font-size:1rem}
+.mini-table th{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
+.mini-table td{background:var(--bg)}
+.mini-input{width:60px;padding:6px;border:2px solid var(--border);border-radius:var(--radius-sm);text-align:center;font-size:1rem;font-family:inherit;font-weight:700;transition:.3s}
+.mini-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(26,47,90,.15)}
+.mini-input.correct{border-color:var(--success);background:#ecfdf5}
+.mini-input.wrong{border-color:var(--error);background:#fef2f2}
+.mini-btn{padding:8px 20px;border:none;border-radius:999px;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;transition:.25s;margin:4px}
+.mini-btn:hover{background:var(--primary-dark)}
+.mini-btn.accent{background:var(--accent);color:#fff}
+.mini-btn.accent:hover{background:var(--accent-dark)}
+.mini-btn:disabled{opacity:.5;cursor:not-allowed}
+.reveal{display:none;animation:fadeIn .5s ease}
+.reveal.show{display:block}
+.feedback-inline{margin-top:8px;padding:8px 12px;border-radius:var(--radius-sm);font-weight:600;font-size:.9rem;animation:fadeIn .3s}
+.feedback-inline.ok{background:#ecfdf5;color:#065f46}
+.feedback-inline.err{background:#fef2f2;color:#991b1b}
+.quiz-options{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg)}
+.quiz-opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.quiz-opt.correct-answer{border-color:var(--success);background:#ecfdf5;font-weight:700}
+.quiz-opt.wrong-answer{border-color:var(--error);background:#fef2f2}
+.step-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.summary-item{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.summary-item .s-icon{font-size:2rem;margin-bottom:6px}
+.summary-item .s-title{font-weight:700;color:var(--primary-dark);margin-bottom:4px;font-size:.9rem}
+.summary-item .s-text{font-size:.82rem;color:var(--text-light)}
+
+/* SVG triangle illustrations */
+.tri-svg{display:block;margin:8px auto;max-width:180px}
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.type-card{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius-sm);padding:12px 8px;text-align:center}
+.type-card .tc-name{font-weight:700;color:var(--primary-dark);margin-top:6px;font-size:.9rem}
+.type-card .tc-desc{font-size:.78rem;color:var(--text-light);margin-top:2px}
+
+/* Step nav */
+.step-nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.step-nav-btn{padding:10px 28px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s}
+.step-nav-btn.primary{background:var(--primary);color:#fff}
+.step-nav-btn.primary:hover{background:var(--primary-dark)}
+.step-nav-btn.secondary{background:var(--bg);color:var(--text);border:2px solid var(--border)}
+.step-nav-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+.step-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ===== PRACTICE SECTION ===== */
+#practiceSection{display:none;animation:fadeIn .4s ease}
+.level-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px}
+.level-tab{padding:8px 20px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:700;color:var(--text-light);transition:.25s;white-space:nowrap}
+.level-tab.active{border-color:var(--primary);background:var(--primary);color:#fff}
+.level-tab .tab-score{font-size:.75rem;font-weight:400;margin-right:4px}
+.level-progress{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.level-progress-bar{flex:1;height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.level-progress-fill{height:100%;background:var(--success);border-radius:999px;transition:width .4s}
+.level-progress-text{font-size:.8rem;color:var(--text-light);font-weight:600;white-space:nowrap}
+
+.q-card{background:var(--bg);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:24px;animation:slideIn .3s ease}
+.q-number{font-size:.8rem;color:var(--text-light);font-weight:600;margin-bottom:4px}
+.q-stem{font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.q-stem code,.q-stem .expr{font-size:1.1em}
+.q-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.q-opt{padding:12px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;font-size:.95rem;transition:.25s;background:var(--bg);display:flex;align-items:center;gap:10px}
+.q-opt:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light)}
+.q-opt.selected{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.q-opt.correct{border-color:var(--success)!important;background:#ecfdf5!important;font-weight:700}
+.q-opt.wrong{border-color:var(--error)!important;background:#fef2f2!important}
+.q-opt.disabled{cursor:default;opacity:.85}
+.q-opt-letter{width:28px;height:28px;border-radius:50%;background:var(--bg-soft);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0;transition:.25s}
+.q-opt.selected .q-opt-letter{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-opt.correct .q-opt-letter{background:var(--success);color:#fff;border-color:var(--success)}
+.q-opt.wrong .q-opt-letter{background:var(--error);color:#fff;border-color:var(--error)}
+
+.q-input-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.q-input{width:120px;padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:1.1rem;font-family:inherit;font-weight:700;text-align:center;transition:.3s;direction:ltr}
+.q-input:focus{border-color:var(--primary);outline:none;box-shadow:0 0 0 3px rgba(26,47,90,.15)}
+.q-input.correct{border-color:var(--success);background:#ecfdf5}
+.q-input.wrong{border-color:var(--error);background:#fef2f2}
+
+.q-check-btn{padding:10px 28px;border-radius:999px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;transition:.25s;box-shadow:var(--shadow)}
+.q-check-btn:hover{background:var(--primary-dark)}
+.q-check-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.q-feedback{margin-top:12px;padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.92rem;animation:fadeIn .3s}
+.q-feedback.correct{background:#ecfdf5;border-right:4px solid var(--success);color:#065f46}
+.q-feedback.wrong{background:#fef2f2;border-right:4px solid var(--error);color:#991b1b}
+
+.q-nav{display:flex;justify-content:space-between;margin-top:16px}
+.q-nav-btn{padding:10px 24px;border-radius:999px;border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:700;color:var(--text);transition:.25s}
+.q-nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.q-nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-btn.primary:hover{background:var(--primary-dark)}
+.q-nav-btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Level complete */
+.level-complete{text-align:center;padding:24px;animation:fadeIn .5s}
+.level-complete .big-emoji{font-size:4rem;margin-bottom:12px}
+.level-complete h2{font-size:1.4rem;color:var(--primary-dark);margin-bottom:8px}
+.level-complete .score-display{font-size:1.8rem;font-weight:800;color:var(--success);margin-bottom:16px}
+.level-complete .score-display.medium-score{color:#f59e0b}
+.level-complete .score-display.low-score{color:var(--error)}
+
+/* Celebration confetti */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall linear forwards}
+@keyframes confettiFall{
+  0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1}
+  100%{transform:translateY(105vh) rotate(720deg) scale(.3);opacity:0}
+}
+
+/* Print button */
+.print-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--primary);color:#fff;cursor:pointer;font-size:1rem;box-shadow:var(--shadow);transition:.25s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.print-btn:hover{background:var(--primary-dark);transform:scale(1.1)}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+/* Responsive */
+@media(max-width:600px){
+  .container{padding:0 10px 30px}
+  .step-card,.q-card{padding:18px 14px}
+  .step-title{font-size:1.15rem}
+  .step-summary-grid{grid-template-columns:1fr}
+  .type-grid{grid-template-columns:1fr 1fr}
+  .section-toggle{max-width:280px;margin:12px auto}
+  .section-btn{font-size:.88rem;padding:8px 14px}
+  .q-opt{padding:10px 12px;font-size:.9rem}
+  .topbar-title{font-size:.9rem}
+}
+
+/* Print */
+@media print{
+  .topbar,.section-toggle,.step-nav,.q-nav,.print-btn,.level-tabs,.confetti-container,.q-check-btn{display:none!important}
+  body{background:#fff;font-size:11pt}
+  .step-card,.q-card{box-shadow:none;border:1px solid #ccc;break-inside:avoid;page-break-inside:avoid}
+  .container{max-width:100%}
+  .q-feedback{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-title">📝 כיתה ז׳ — סוגי משולשים והיקף</span>
+  <div style="display:flex;align-items:center;gap:10px"><button class="print-btn" onclick="window.print()" title="הדפסה" aria-label="הדפסה">🖨️</button><a href="../../../../materials.html">← חזרה לדף החומרים</a></div>
+</div>
+
+<div class="section-toggle">
+  <button class="section-btn active" data-section="learn" onclick="switchSection('learn')">📖 הקניה</button>
+  <button class="section-btn" data-section="practice" onclick="switchSection('practice')">✏️ תרגול</button>
+</div>
+
+<div class="container">
+
+<!-- ===== LEARNING SECTION ===== -->
+<section id="learnSection">
+  <div class="step-progress">
+    <div class="step-progress-bar"><div class="step-progress-fill" id="stepFill"></div></div>
+    <div class="step-progress-text" id="stepText"></div>
+  </div>
+  <div id="stepContent"></div>
+  <div class="step-nav">
+    <button class="step-nav-btn secondary" id="prevBtn" onclick="prevStep()">→ הקודם</button>
+    <button class="step-nav-btn primary" id="nextBtn" onclick="nextStep()">הבא ←</button>
+  </div>
+</section>
+
+<!-- ===== PRACTICE SECTION ===== -->
+<section id="practiceSection">
+  <div class="level-tabs" id="levelTabs"></div>
+  <div class="level-progress">
+    <div class="level-progress-bar"><div class="level-progress-fill" id="levelFill"></div></div>
+    <div class="level-progress-text" id="levelText"></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="qPrev" onclick="prevQuestion()">→ הקודם</button>
+    <button class="q-nav-btn primary" id="qNext" onclick="nextQuestion()">הבא ←</button>
+  </div>
+</section>
+
+</div>
+
+<div class="confetti-container" id="confettiBox"></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const today=new Date();const dateSeed=today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+let rng=mulberry32(dateSeed);
+function R(){return rng()}
+function RI(a,b){return a+Math.floor(R()*(b-a+1))}
+function pick(arr){return arr[Math.floor(R()*arr.length)]}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+const LETTERS=['א','ב','ג','ד'];
+
+/* ===== STATE ===== */
+let state={section:'learn',step:0,level:'easy',qIndex:0};
+let scores={easy:[],medium:[],hard:[],challenge:[]};
+let answered={easy:[],medium:[],hard:[],challenge:[]};
+let questions={easy:null,medium:null,hard:null,challenge:null};
+const LEVEL_COUNTS={easy:20,medium:20,hard:20,challenge:15};
+const LEVEL_NAMES={easy:'קל',medium:'בינוני',hard:'קשה',challenge:'אתגר'};
+const TOTAL_STEPS=7;
+
+/* ===== LOCAL STORAGE ===== */
+const LS_KEY='bh_grade7_tri_types_perim_'+dateSeed;
+function saveState(){try{localStorage.setItem(LS_KEY,JSON.stringify({scores,answered,state}))}catch(e){}}
+function loadState(){try{const d=JSON.parse(localStorage.getItem(LS_KEY));if(d){scores=d.scores||scores;answered=d.answered||answered;if(d.state)state=d.state}}catch(e){}}
+
+/* ===== HELPER: triangle inequality check ===== */
+function triValid(a,b,c){return a+b>c&&a+c>b&&b+c>a&&a>0&&b>0&&c>0}
+function triType(a,b,c){
+  const s=[a,b,c].sort((x,y)=>x-y);
+  let byS='שונה צלעות';
+  if(s[0]===s[1]&&s[1]===s[2]) byS='שווה צלעות';
+  else if(s[0]===s[1]||s[1]===s[2]) byS='שווה שוקיים';
+  return byS;
+}
+function triAngle(a,b,c){
+  const s=[a,b,c].sort((x,y)=>x-y);
+  const sq=s[0]*s[0]+s[1]*s[1];
+  const cSq=s[2]*s[2];
+  if(sq===cSq) return 'ישר זווית';
+  if(sq>cSq) return 'חד זוויות';
+  return 'קהה זווית';
+}
+
+/* ===== TEACHING SECTION ===== */
+const steps=[
+/* Step 0: Review — types by sides + angles */
+{title:'📐 חזרה: 6 סוגי משולשים', render(){return `
+<p>לפני שנתרגל — בואו נחזור על <strong>6 סוגי המשולשים</strong>:</p>
+<p style="font-weight:700;color:var(--primary-dark);margin-top:12px">לפי צלעות:</p>
+<div class="type-grid">
+  <div class="type-card">
+    <svg class="tri-svg" viewBox="0 0 120 100" width="100"><polygon points="60,10 10,90 110,90" fill="none" stroke="var(--primary)" stroke-width="3"/><text x="60" y="70" text-anchor="middle" fill="var(--primary-dark)" font-size="11" font-weight="700">שווה צלעות</text></svg>
+    <div class="tc-name">שווה צלעות</div>
+    <div class="tc-desc">3 צלעות שוות</div>
+  </div>
+  <div class="type-card">
+    <svg class="tri-svg" viewBox="0 0 120 100" width="100"><polygon points="60,10 20,90 100,90" fill="none" stroke="var(--accent)" stroke-width="3"/><line x1="38" y1="52" x2="42" y2="48" stroke="var(--accent)" stroke-width="2"/><line x1="82" y1="52" x2="78" y2="48" stroke="var(--accent)" stroke-width="2"/></svg>
+    <div class="tc-name">שווה שוקיים</div>
+    <div class="tc-desc">2 צלעות שוות</div>
+  </div>
+  <div class="type-card">
+    <svg class="tri-svg" viewBox="0 0 120 100" width="100"><polygon points="40,15 10,90 110,90" fill="none" stroke="var(--error)" stroke-width="3"/></svg>
+    <div class="tc-name">שונה צלעות</div>
+    <div class="tc-desc">אין צלעות שוות</div>
+  </div>
+</div>
+<p style="font-weight:700;color:var(--primary-dark);margin-top:12px">לפי זוויות:</p>
+<div class="type-grid">
+  <div class="type-card">
+    <svg class="tri-svg" viewBox="0 0 120 100" width="100"><polygon points="60,15 15,85 105,85" fill="none" stroke="var(--success)" stroke-width="3"/><text x="60" y="75" text-anchor="middle" fill="var(--success)" font-size="10">כל זווית &lt; 90°</text></svg>
+    <div class="tc-name">חד זוויות</div>
+    <div class="tc-desc">כל הזוויות &lt; 90°</div>
+  </div>
+  <div class="type-card">
+    <svg class="tri-svg" viewBox="0 0 120 100" width="100"><polygon points="10,90 110,90 110,20" fill="none" stroke="#8b5cf6" stroke-width="3"/><rect x="104" y="84" width="8" height="8" fill="none" stroke="#8b5cf6" stroke-width="1.5"/></svg>
+    <div class="tc-name">ישר זווית</div>
+    <div class="tc-desc">זווית אחת = 90°</div>
+  </div>
+  <div class="type-card">
+    <svg class="tri-svg" viewBox="0 0 120 100" width="100"><polygon points="90,15 10,90 110,90" fill="none" stroke="#d97706" stroke-width="3"/><text x="55" y="75" text-anchor="middle" fill="#d97706" font-size="10">זווית &gt; 90°</text></svg>
+    <div class="tc-name">קהה זווית</div>
+    <div class="tc-desc">זווית אחת &gt; 90°</div>
+  </div>
+</div>
+<p><strong>שאלה:</strong> משולש שכל צלעותיו שונות וכל זוויותיו חדות — מה סוגו?</p>
+<div class="quiz-options" id="s0opts"></div>
+<div id="s0fb"></div>
+`},init(){
+  const opts=shuffle([
+    {text:'שונה צלעות + חד זוויות',correct:true},
+    {text:'שווה שוקיים + חד זוויות',correct:false},
+    {text:'שונה צלעות + ישר זווית',correct:false},
+    {text:'שווה צלעות + חד זוויות',correct:false}
+  ]);
+  const c=document.getElementById('s0opts');c.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');d.className='quiz-opt';d.textContent=o.text;
+    d.onclick=()=>{
+      c.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s0fb').innerHTML='<div class="feedback-inline ok">✅ נכון! סיווג כפול — לפי צלעות ולפי זוויות</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s0fb').innerHTML='<div class="feedback-inline err">❌ נסו שוב — צלעות שונות = שונה צלעות, זוויות חדות = חד זוויות</div>'}
+    };c.appendChild(d);
+  });
+}},
+
+/* Step 1: Triangle inequality */
+{title:'📏 אי-שוויון המשולש', render(){return `
+<div class="rule-box">📌 במשולש: <strong>סכום כל שתי צלעות חייב להיות גדול מהצלע השלישית</strong></div>
+<p>בפועל, מספיק לבדוק שסכום <strong>שתי הקצרות</strong> גדול מ<strong>הארוכה</strong>.</p>
+<div class="example">
+<strong>דוגמה 1:</strong> צלעות 5, 7, 10<br>
+בדיקה: <span class="math-expr">5 + 7 = 12 > 10</span> ✅ — ייתכן משולש!
+</div>
+<div class="example">
+<strong>דוגמה 2:</strong> צלעות 4, 10, 16<br>
+בדיקה: <span class="math-expr">4 + 10 = 14 < 16</span> ❌ — לא ייתכן משולש!
+</div>
+<div class="warning">⚠️ שימו לב: <span class="math-expr">4 + 10 = 14</span> ו-<span class="math-expr">14 < 16</span> — הסכום קטן מהצלע הארוכה, לכן אי אפשר לסגור משולש!</div>
+<p><strong>שאלה:</strong> האם ניתן לבנות משולש מצלעות 3, 8, 12?</p>
+<div class="quiz-options" id="s1opts"></div>
+<div id="s1fb"></div>
+`},init(){
+  const opts=[
+    {text:'כן — 3 + 8 = 11 > 12',correct:false},
+    {text:'לא — 3 + 8 = 11 < 12',correct:true}
+  ];
+  const c=document.getElementById('s1opts');c.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');d.className='quiz-opt';d.textContent=o.text;
+    d.onclick=()=>{
+      c.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s1fb').innerHTML='<div class="feedback-inline ok">✅ נכון! 3 + 8 = 11 ו-11 < 12, לכן לא ייתכן משולש</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s1fb').innerHTML='<div class="feedback-inline err">❌ בדקו שוב: 3 + 8 = 11, ו-11 קטן מ-12!</div>'}
+    };c.appendChild(d);
+  });
+}},
+
+/* Step 2: Drawing from description */
+{title:'✏️ סרטוט משולש לפי תיאור', render(){return `
+<p>כשמבקשים "סרטטו משולש מסוג מסוים" — צריך לחשוב על <strong>שני התנאים</strong>: צלעות + זוויות.</p>
+<div class="example">
+<strong>דוגמה 1:</strong> "משולש חד זוויות ושווה צלעות"<br>
+<svg viewBox="0 0 160 140" width="160" style="display:block;margin:8px auto"><polygon points="80,15 20,120 140,120" fill="rgba(26,47,90,.05)" stroke="var(--primary)" stroke-width="3"/>
+<line x1="46" y1="70" x2="50" y2="66" stroke="var(--primary)" stroke-width="2"/><line x1="48" y1="72" x2="52" y2="68" stroke="var(--primary)" stroke-width="2"/>
+<line x1="108" y1="66" x2="112" y2="70" stroke="var(--primary)" stroke-width="2"/><line x1="110" y1="68" x2="114" y2="72" stroke="var(--primary)" stroke-width="2"/>
+<line x1="75" y1="122" x2="75" y2="116" stroke="var(--primary)" stroke-width="2"/><line x1="85" y1="122" x2="85" y2="116" stroke="var(--primary)" stroke-width="2"/>
+<text x="80" y="85" text-anchor="middle" fill="var(--primary-dark)" font-size="11">60° 60° 60°</text>
+</svg>
+כל הצלעות שוות → כל הזוויות 60° → חד זוויות ✅
+</div>
+<div class="example">
+<strong>דוגמה 2:</strong> "משולש ישר זווית ושווה שוקיים"<br>
+<svg viewBox="0 0 160 140" width="160" style="display:block;margin:8px auto"><polygon points="20,120 140,120 20,20" fill="rgba(74,158,218,.05)" stroke="var(--accent)" stroke-width="3"/>
+<rect x="20" y="112" width="10" height="10" fill="none" stroke="var(--accent)" stroke-width="2"/>
+<line x1="22" y1="68" x2="16" y2="68" stroke="var(--accent)" stroke-width="2"/>
+<line x1="78" y1="122" x2="78" y2="116" stroke="var(--accent)" stroke-width="2"/>
+<text x="90" y="110" fill="var(--accent-dark)" font-size="11">45°</text>
+<text x="30" y="35" fill="var(--accent-dark)" font-size="11">45°</text>
+</svg>
+שוקיים שוות + זווית 90° → הזוויות 45°-45°-90° ✅
+</div>
+<p><strong>שאלה:</strong> האם כל משולש ישר זווית הוא שונה צלעות?</p>
+<div class="quiz-options" id="s2opts"></div>
+<div id="s2fb"></div>
+`},init(){
+  const opts=[
+    {text:'כן — תמיד',correct:false},
+    {text:'לא — למשל משולש ישר זווית ושווה שוקיים (45°-45°-90°)',correct:true}
+  ];
+  const c=document.getElementById('s2opts');c.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');d.className='quiz-opt';d.textContent=o.text;
+    d.onclick=()=>{
+      c.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s2fb').innerHTML='<div class="feedback-inline ok">✅ נכון! משולש ישר זווית יכול להיות שווה שוקיים (45°-45°-90°)</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s2fb').innerHTML='<div class="feedback-inline err">❌ חשבו שוב — מה עם משולש עם זוויות 45°-45°-90°?</div>'}
+    };c.appendChild(d);
+  });
+}},
+
+/* Step 3: "Does it exist?" */
+{title:'🤔 שאלות "האם קיים?"', render(){return `
+<p>בואו נבדוק שאלות מעניינות על קיום משולשים:</p>
+<div class="example">
+<strong>1.</strong> "האם קיים משולש שווה שוקיים וישר זווית?"<br>
+<span style="color:var(--success);font-weight:700">✅ כן!</span> — זוויות: 45°-45°-90°. שתי השוקיים שוות.
+</div>
+<div class="example">
+<strong>2.</strong> "האם קיים משולש שצלעותיו 4, 4, 8?"<br>
+<span style="color:var(--error);font-weight:700">❌ לא!</span> — בדיקה: <span class="math-expr">4 + 4 = 8</span>, לא גדול מ-8! (צריך <strong>גדול ממש</strong>, שווה לא מספיק)
+</div>
+<div class="example">
+<strong>3.</strong> "האם קיים משולש ישר זווית שהוא גם קהה זווית?"<br>
+<span style="color:var(--error);font-weight:700">❌ לא!</span> — סכום הזוויות = 180°. אם יש 90° ועוד זווית > 90°, הסכום כבר > 180°.
+</div>
+<div class="example">
+<strong>4.</strong> "האם כל משולש שווה צלעות הוא חד זוויות?"<br>
+<span style="color:var(--success);font-weight:700">✅ כן!</span> — כל הזוויות שוות → <span class="math-expr">180° / 3 = 60°</span> → כל זווית 60° → חד זוויות!
+</div>
+<div class="highlight">💡 <strong>תובנה חשובה:</strong> בשאלות "האם קיים?" — תמיד בדקו אי-שוויון המשולש + שסכום הזוויות = 180°</div>
+<p><strong>שאלה:</strong> האם קיים משולש שווה צלעות וישר זווית?</p>
+<div class="quiz-options" id="s3opts"></div>
+<div id="s3fb"></div>
+`},init(){
+  const opts=[
+    {text:'כן — שלוש צלעות שוות וזווית 90°',correct:false},
+    {text:'לא — שווה צלעות → כל זווית 60°, אי אפשר שתהיה 90°',correct:true}
+  ];
+  const c=document.getElementById('s3opts');c.innerHTML='';
+  opts.forEach(o=>{
+    const d=document.createElement('div');d.className='quiz-opt';d.textContent=o.text;
+    d.onclick=()=>{
+      c.querySelectorAll('.quiz-opt').forEach(el=>el.classList.remove('selected','correct-answer','wrong-answer'));
+      if(o.correct){d.classList.add('correct-answer');document.getElementById('s3fb').innerHTML='<div class="feedback-inline ok">✅ נכון! במשולש שווה צלעות כל זווית = 60°, אז אי אפשר שתהיה 90°</div>'}
+      else{d.classList.add('wrong-answer');document.getElementById('s3fb').innerHTML='<div class="feedback-inline err">❌ חשבו: אם 3 הזוויות שוות וסכומן 180°, כל אחת = 60°. אין זווית ישרה!</div>'}
+    };c.appendChild(d);
+  });
+}},
+
+/* Step 4: Perimeter with x */
+{title:'🔢 היקף עם ביטויי x', render(){return `
+<div class="rule-box">📌 היקף משולש = סכום שלוש הצלעות</div>
+<p><strong>דוגמה:</strong> משולש שווה שוקיים. שוק = <span class="math-expr">x + 6</span>, בסיס = <span class="math-expr">x</span>. היקף = 33.</p>
+<div class="example" id="perimExample">
+  <button class="mini-btn accent" onclick="showPerimSteps()">▶ הראו פתרון צעד אחר צעד</button>
+</div>
+<div class="reveal" id="perimReveal">
+<div class="example">
+<strong>דוגמה נוספת:</strong><br>
+<span class="math-expr">AB = x - 1</span>,&nbsp; <span class="math-expr">BC = 3x - 11</span>,&nbsp; <span class="math-expr">AC = 2(x - 3)</span>. היקף = 12.<br>
+משוואה: <span class="math-expr">(x-1) + (3x-11) + 2(x-3) = 12</span><br>
+<span class="math-expr">x - 1 + 3x - 11 + 2x - 6 = 12</span><br>
+<span class="math-expr">6x - 18 = 12</span><br>
+<span class="math-expr">6x = 30</span><br>
+<span class="math-expr">x = 5</span><br>
+צלעות: <span class="math-expr">4, 4, 4</span> → שווה צלעות! ✅ (אי-שוויון: <span class="math-expr">4+4=8>4</span> ✅)
+</div>
+</div>
+<p><strong>שאלה:</strong> משולש שווה שוקיים. שוק = <span class="math-expr">2x + 1</span>, בסיס = <span class="math-expr">x + 3</span>. היקף = 25. מצאו <span class="math-expr">x</span>.</p>
+<div class="q-input-row">
+  <input type="number" class="mini-input" id="s4input" placeholder="x=?" aria-label="ערך x">
+  <button class="mini-btn" onclick="checkS4()">בדקו</button>
+</div>
+<div id="s4fb"></div>
+`}},
+
+/* Step 5: Check ALL possibilities */
+{title:'⚠️ בדיקת כל האפשרויות', render(){return `
+<div class="warning">⚠️ במשולש שווה שוקיים — כשנותנים מידע על "אחת הצלעות" — יכולים להיות <strong>שני מקרים</strong>!</div>
+<p><strong>דוגמה:</strong> במשולש שווה שוקיים, אחת הצלעות ארוכה ב-9 מהאחרת. היקף = 27.</p>
+<div class="example">
+<strong>אפשרות 1:</strong> שוק = <span class="math-expr">x</span>, בסיס = <span class="math-expr">x + 9</span><br>
+<span class="math-expr">2x + (x + 9) = 27</span> → <span class="math-expr">3x + 9 = 27</span> → <span class="math-expr">x = 6</span><br>
+צלעות: <span class="math-expr">6, 6, 15</span><br>
+בדיקת אי-שוויון: <span class="math-expr">6 + 6 = 12 < 15</span> ❌ <strong>לא ייתכן!</strong>
+</div>
+<div class="example">
+<strong>אפשרות 2:</strong> שוק = <span class="math-expr">x + 9</span>, בסיס = <span class="math-expr">x</span><br>
+<span class="math-expr">2(x + 9) + x = 27</span> → <span class="math-expr">2x + 18 + x = 27</span> → <span class="math-expr">3x = 9</span> → <span class="math-expr">x = 3</span><br>
+צלעות: <span class="math-expr">12, 12, 3</span><br>
+בדיקת אי-שוויון: <span class="math-expr">12 + 3 = 15 > 12</span> ✅ <strong>ייתכן!</strong>
+</div>
+<div class="success-box">💡 <strong>תובנה:</strong> אפשרות 1 נפסלה כי לא עומדת באי-שוויון המשולש! תמיד בדקו <strong>שתי אפשרויות</strong> ואז סננו.</div>
+<p><strong>שאלה:</strong> במשולש שווה שוקיים, ההפרש בין השוק לבסיס הוא 5. היקף = 31. מהם אורכי הצלעות? (השוק הארוכה יותר)</p>
+<div class="q-input-row">
+  <span>שוק =</span>
+  <input type="number" class="mini-input" id="s5leg" placeholder="?" aria-label="שוק" style="width:50px">
+  <span>בסיס =</span>
+  <input type="number" class="mini-input" id="s5base" placeholder="?" aria-label="בסיס" style="width:50px">
+  <button class="mini-btn" onclick="checkS5()">בדקו</button>
+</div>
+<div id="s5fb"></div>
+`}},
+
+/* Step 6: Summary */
+{title:'🏆 סיכום וטיפים', render(){return `
+<p style="font-size:1.1rem;text-align:center;margin-bottom:20px">בשיעור הזה חזרנו על כללים חשובים:</p>
+<div class="step-summary-grid">
+  <div class="summary-item">
+    <div class="s-icon">📐</div>
+    <div class="s-title">6 סוגי משולשים</div>
+    <div class="s-text">3 לפי צלעות + 3 לפי זוויות</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">📏</div>
+    <div class="s-title">אי-שוויון המשולש</div>
+    <div class="s-text">סכום 2 קצרות > ארוכה</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">🔢</div>
+    <div class="s-title">היקף עם x</div>
+    <div class="s-text">כותבים משוואה ופותרים</div>
+  </div>
+  <div class="summary-item">
+    <div class="s-icon">⚠️</div>
+    <div class="s-title">בדיקת אפשרויות</div>
+    <div class="s-text">שווה שוקיים = 2 מקרים!</div>
+  </div>
+</div>
+<div class="rule-box" style="text-align:right">
+<p style="margin-bottom:8px">🔑 <strong>טיפים חשובים:</strong></p>
+<p style="margin-bottom:4px">1. תמיד בדקו אי-שוויון המשולש אחרי שמצאתם <span class="math-expr">x</span>!</p>
+<p style="margin-bottom:4px">2. במשולש שווה שוקיים — בדקו שתי אפשרויות!</p>
+<p>3. ודאו שכל הצלעות חיוביות!</p>
+</div>
+<div class="success-box" style="text-align:center;font-size:1.1rem;margin-top:20px">
+  <p>🌟 עכשיו אתם מוכנים לתרגול!</p>
+  <p>4 רמות קושי מחכות לכם — 75 שאלות בסך הכול</p>
+  <button class="mini-btn accent" style="margin-top:12px;font-size:1rem;padding:12px 32px" onclick="switchSection('practice')">!מוכנים לתרגול ←</button>
+</div>
+`}}
+];
+
+/* ===== STEP INTERACTIVE HANDLERS ===== */
+window.showPerimSteps=function(){
+  document.getElementById('perimExample').innerHTML=`
+    <div style="direction:ltr;text-align:center;font-size:1.05rem;line-height:2.2">
+      <div style="animation:fadeIn .5s">שוק = <code>x + 6</code>, בסיס = <code>x</code>, היקף = 33</div>
+      <div style="animation:fadeIn .5s .3s both">↓ כותבים משוואה</div>
+      <div style="animation:fadeIn .5s .6s both"><code>2(x + 6) + x = 33</code></div>
+      <div style="animation:fadeIn .5s .9s both">↓ פותחים סוגריים</div>
+      <div style="animation:fadeIn .5s 1.2s both"><code>2x + 12 + x = 33</code></div>
+      <div style="animation:fadeIn .5s 1.5s both">↓ מאחדים</div>
+      <div style="animation:fadeIn .5s 1.8s both"><code>3x + 12 = 33</code></div>
+      <div style="animation:fadeIn .5s 2.1s both"><code>3x = 21</code></div>
+      <div style="animation:fadeIn .5s 2.4s both"><strong><code>x = 7</code></strong></div>
+      <div style="animation:fadeIn .5s 2.7s both">↓ מציבים</div>
+      <div style="animation:fadeIn .5s 3s both">צלעות: <strong>13, 13, 7</strong> → שווה שוקיים ✅</div>
+      <div style="animation:fadeIn .5s 3.3s both">אי-שוויון: 13 + 7 = 20 > 13 ✅</div>
+    </div>`;
+  document.getElementById('perimReveal').classList.add('show');
+};
+window.checkS4=function(){
+  const v=parseInt(document.getElementById('s4input').value);
+  const fb=document.getElementById('s4fb');
+  if(v===4){fb.innerHTML='<div class="feedback-inline ok">✅ נכון! 2(2·4+1)+(4+3) = 2·9+7 = 18+7 = 25 ✅</div>';document.getElementById('s4input').classList.add('correct')}
+  else if(isNaN(v)){fb.innerHTML='<div class="feedback-inline err">הקלידו מספר</div>'}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. משוואה: 2(2x+1)+(x+3)=25 → 4x+2+x+3=25 → 5x+5=25 → 5x=20 → x=?</div>'}
+};
+window.checkS5=function(){
+  const leg=parseInt(document.getElementById('s5leg').value);
+  const base=parseInt(document.getElementById('s5base').value);
+  const fb=document.getElementById('s5fb');
+  if(leg===12&&base===7){fb.innerHTML='<div class="feedback-inline ok">✅ מעולה! שוק=12, בסיס=7. היקף: 12+12+7=31 ✅ אי-שוויון: 12+7=19>12 ✅</div>';document.getElementById('s5leg').classList.add('correct');document.getElementById('s5base').classList.add('correct')}
+  else{fb.innerHTML='<div class="feedback-inline err">❌ נסו שוב. אפשרות: שוק=x+5, בסיס=x → 2(x+5)+x=31 → 3x+10=31 → x=7 → צלעות 12,12,7</div>'}
+};
+
+/* ===== QUESTION GENERATORS ===== */
+
+/* SVG helper for triangle illustration */
+function triSvg(a,b,c,labels){
+  /* Simple triangle SVG with side labels */
+  var w=160,h=120;
+  var pts;
+  /* scale to fit */
+  var mx=Math.max(a,b,c);
+  var sc=100/mx;
+  /* place base (c) at bottom, vertex up */
+  var bx=c*sc;
+  var startX=(w-bx)/2;
+  /* approximate vertex position */
+  var vx=startX+(a*a-b*b+c*c)/(2*c)*sc;
+  var vy=20;
+  var x1=startX,y1=h-15,x2=startX+bx,y2=h-15;
+  if(vx<15)vx=15;if(vx>w-15)vx=w-15;
+  pts=vx+','+vy+' '+x1+','+y1+' '+x2+','+y2;
+  var la=labels||[a,b,c];
+  return '<svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" class="tri-svg" style="display:block;margin:8px auto">'+
+    '<polygon points="'+pts+'" fill="rgba(26,47,90,.05)" stroke="var(--primary)" stroke-width="2.5"/>'+
+    '<text x="'+(x1+(vx-x1)/2-10)+'" y="'+((y1+vy)/2)+'" fill="var(--primary-dark)" font-size="12" font-weight="700" text-anchor="middle">'+la[0]+'</text>'+
+    '<text x="'+(x2+(vx-x2)/2+10)+'" y="'+((y2+vy)/2)+'" fill="var(--primary-dark)" font-size="12" font-weight="700" text-anchor="middle">'+la[1]+'</text>'+
+    '<text x="'+((x1+x2)/2)+'" y="'+(y1+14)+'" fill="var(--primary-dark)" font-size="12" font-weight="700" text-anchor="middle">'+la[2]+'</text>'+
+    '</svg>';
+}
+
+/* Helper: unique options for MC */
+function uniqueOpts(correct,wrongs){
+  var u=[correct];
+  wrongs.forEach(function(w){if(u.indexOf(w)===-1)u.push(w)});
+  var fallback=1;
+  while(u.length<4){var f=correct+'('+fallback+')';u.push(f);fallback++}
+  return shuffle(u.slice(0,4));
+}
+
+function genEasy(){
+  rng=mulberry32(dateSeed+100);
+  var qs=[];
+  /* Q1-5: classify by sides (MC) */
+  for(var i=0;i<5;i++){
+    var kind=pick(['equi','iso','sca']);
+    var a,b,c,ans;
+    if(kind==='equi'){var s=RI(4,15);a=b=c=s;ans='שווה צלעות'}
+    else if(kind==='iso'){var s=RI(4,12);var bs=RI(3,s*2-2);if(bs===s){bs=s+1}a=s;b=s;c=bs;ans='שווה שוקיים'}
+    else{a=RI(3,8);b=RI(a+1,a+6);c=RI(b+1,a+b-1);ans='שונה צלעות'}
+    if(!triValid(a,b,c)){a=5;b=7;c=9;ans='שונה צלעות'}
+    var opts=uniqueOpts(ans,['שווה צלעות','שווה שוקיים','שונה צלעות']);
+    qs.push({type:'mc',stem:triSvg(a,b,c)+'סווגו את המשולש עם צלעות <span class="math-expr">'+a+'</span>, <span class="math-expr">'+b+'</span>, <span class="math-expr">'+c+'</span> <strong>לפי צלעות</strong>:',options:opts,answer:opts.indexOf(ans),explanation:'צלעות: '+a+', '+b+', '+c+' → <strong>'+ans+'</strong>'});
+  }
+  /* Q6-10: triangle inequality yes/no (MC) */
+  for(var i=0;i<5;i++){
+    var valid=i<3;/* 3 valid, 2 invalid */
+    var a,b,c;
+    if(valid){a=RI(3,10);b=RI(3,10);c=RI(Math.abs(a-b)+1,a+b-1);if(c<1)c=1}
+    else{a=RI(2,6);b=RI(2,6);c=a+b+RI(0,3);/* c >= a+b */}
+    if(!triValid(a,b,c)&&valid){c=a+b-1}
+    if(triValid(a,b,c)&&!valid){c=a+b+1}
+    var sorted=[a,b,c].sort(function(x,y){return x-y});
+    var sum12=sorted[0]+sorted[1];
+    var ans=triValid(a,b,c)?'כן, ניתן לבנות משולש':'לא, לא ניתן לבנות משולש';
+    var opts=uniqueOpts(ans,['כן, ניתן לבנות משולש','לא, לא ניתן לבנות משולש','אי אפשר לדעת','רק אם הוא ישר זווית']);
+    var expl=sorted[0]+' + '+sorted[1]+' = '+sum12+(triValid(a,b,c)?' > '+sorted[2]+' ✅ → ניתן לבנות משולש':' ≤ '+sorted[2]+' ❌ → לא ניתן לבנות משולש');
+    qs.push({type:'mc',stem:'האם ניתן לבנות משולש מצלעות <span class="math-expr">'+a+'</span>, <span class="math-expr">'+b+'</span>, <span class="math-expr">'+c+'</span>?',options:opts,answer:opts.indexOf(ans),explanation:expl});
+  }
+  /* Q11-15: direct perimeter computation (input) */
+  for(var i=0;i<5;i++){
+    var a=RI(3,15);var b=RI(3,15);var c=RI(Math.abs(a-b)+1,a+b-1);
+    if(c<1)c=1;
+    if(!triValid(a,b,c)){a=5;b=7;c=9}
+    var perim=a+b+c;
+    qs.push({type:'input',stem:triSvg(a,b,c)+'חשבו את <strong>היקף המשולש</strong> שצלעותיו <span class="math-expr">'+a+'</span>, <span class="math-expr">'+b+'</span>, <span class="math-expr">'+c+'</span>:',answer:perim,explanation:a+' + '+b+' + '+c+' = <strong>'+perim+'</strong>'});
+  }
+  /* Q16-20: simple x — equilateral/isosceles perimeter, find x (input) */
+  for(var i=0;i<5;i++){
+    var x=RI(2,10);
+    var pattern=i%3;
+    var stem,ans,expl;
+    if(pattern===0){
+      /* equilateral: side=x+k, perim given */
+      var k=RI(1,5);
+      var side=x+k;var perim=3*side;
+      stem='משולש <strong>שווה צלעות</strong>. אורך צלע: <span class="math-expr">x + '+k+'</span>. היקף = <span class="math-expr">'+perim+'</span>.<br>מצאו את <span class="math-expr">x</span>:';
+      ans=x;
+      expl='3(x + '+k+') = '+perim+' → 3x + '+3*k+' = '+perim+' → 3x = '+(perim-3*k)+' → x = <strong>'+x+'</strong>';
+    } else if(pattern===1){
+      /* isosceles: leg=x, base=given, perim given */
+      var base=RI(3,10);var perim=2*x+base;
+      stem='משולש <strong>שווה שוקיים</strong>. שוק = <span class="math-expr">x</span>, בסיס = <span class="math-expr">'+base+'</span>. היקף = <span class="math-expr">'+perim+'</span>.<br>מצאו את <span class="math-expr">x</span>:';
+      ans=x;
+      expl='2x + '+base+' = '+perim+' → 2x = '+(perim-base)+' → x = <strong>'+x+'</strong>';
+    } else {
+      /* side = 2x+1, other sides given */
+      var s1=2*x+1;var s2=RI(3,12);var s3=RI(3,12);
+      if(!triValid(s1,s2,s3)){s2=s1-1;s3=s1-2;if(!triValid(s1,s2,s3)){s2=s1;s3=s1}}
+      var perim=s1+s2+s3;
+      stem='צלעות המשולש: <span class="math-expr">2x + 1</span>, <span class="math-expr">'+s2+'</span>, <span class="math-expr">'+s3+'</span>. היקף = <span class="math-expr">'+perim+'</span>.<br>מצאו את <span class="math-expr">x</span>:';
+      ans=x;
+      expl='(2x + 1) + '+s2+' + '+s3+' = '+perim+' → 2x + '+(1+s2+s3)+' = '+perim+' → 2x = '+(perim-1-s2-s3)+' → x = <strong>'+x+'</strong>';
+    }
+    qs.push({type:'input',stem:stem,answer:ans,explanation:expl});
+  }
+  return qs;
+}
+
+function genMedium(){
+  rng=mulberry32(dateSeed+200);
+  var qs=[];
+  /* Q1-5: double classification — by sides AND angles (MC) */
+  for(var i=0;i<5;i++){
+    var triples=[[5,5,5],[6,6,8],[3,4,5],[7,7,10],[5,12,13],[8,8,8],[6,8,10],[4,4,6],[9,9,9],[7,8,11]];
+    var tri=triples[i%triples.length];
+    /* shuffle to vary presentation */
+    tri=shuffle(tri);
+    var a=tri[0],b=tri[1],c=tri[2];
+    var bySides=triType(a,b,c);
+    var byAngles=triAngle(a,b,c);
+    var ans=bySides+' + '+byAngles;
+    var wrongs=[];
+    var sideTypes=['שווה צלעות','שווה שוקיים','שונה צלעות'];
+    var angleTypes=['חד זוויות','ישר זווית','קהה זווית'];
+    for(var si=0;si<sideTypes.length;si++){
+      for(var ai=0;ai<angleTypes.length;ai++){
+        var cand=sideTypes[si]+' + '+angleTypes[ai];
+        if(cand!==ans) wrongs.push(cand);
+      }
+    }
+    wrongs=shuffle(wrongs).slice(0,3);
+    var opts=uniqueOpts(ans,wrongs);
+    qs.push({type:'mc',stem:triSvg(a,b,c)+'סווגו את המשולש עם צלעות <span class="math-expr">'+a+'</span>, <span class="math-expr">'+b+'</span>, <span class="math-expr">'+c+'</span> לפי צלעות <strong>וגם</strong> לפי זוויות:',options:opts,answer:opts.indexOf(ans),explanation:'צלעות: '+bySides+', זוויות: '+a+'²+'+b+'²='+(a*a+b*b)+' vs '+c+'² ='+c*c+' → <strong>'+byAngles+'</strong>'});
+  }
+  /* Q6-10: find x from perimeter with expressions (input) */
+  for(var i=0;i<5;i++){
+    var x=RI(2,8);
+    var stem,ans,expl;
+    if(i%3===0){
+      /* isosceles: leg=x+k, base=2x */
+      var k=RI(2,6);var leg=x+k;var base=2*x;var perim=2*leg+base;
+      stem='משולש <strong>שווה שוקיים</strong>. שוק = <span class="math-expr">x + '+k+'</span>, בסיס = <span class="math-expr">2x</span>. היקף = <span class="math-expr">'+perim+'</span>.<br>מצאו את <span class="math-expr">x</span>:';
+      ans=x;
+      expl='2(x+'+k+') + 2x = '+perim+' → 2x+'+2*k+'+2x = '+perim+' → 4x+'+2*k+' = '+perim+' → 4x = '+(perim-2*k)+' → x = <strong>'+x+'</strong>';
+    } else if(i%3===1){
+      /* sides: 3x-1, x+5, 2x */
+      var s1=3*x-1;var s2=x+5;var s3=2*x;var perim=s1+s2+s3;
+      if(!triValid(s1,s2,s3)){x=4;s1=11;s2=9;s3=8;perim=28}
+      stem='צלעות משולש: <span class="math-expr">3x − 1</span>, <span class="math-expr">x + 5</span>, <span class="math-expr">2x</span>. היקף = <span class="math-expr">'+perim+'</span>.<br>מצאו את <span class="math-expr">x</span>:';
+      ans=x;
+      expl='(3x-1)+(x+5)+2x = '+perim+' → 6x+4 = '+perim+' → 6x = '+(perim-4)+' → x = <strong>'+x+'</strong>';
+    } else {
+      /* equilateral: side=2x+3, perim given */
+      var side=2*x+3;var perim=3*side;
+      stem='משולש <strong>שווה צלעות</strong>. אורך צלע: <span class="math-expr">2x + 3</span>. היקף = <span class="math-expr">'+perim+'</span>.<br>מצאו את <span class="math-expr">x</span>:';
+      ans=x;
+      expl='3(2x+3) = '+perim+' → 6x+9 = '+perim+' → 6x = '+(perim-9)+' → x = <strong>'+x+'</strong>';
+    }
+    qs.push({type:'input',stem:stem,answer:ans,explanation:expl});
+  }
+  /* Q11-15: "Does it exist?" — MC */
+  var existQs=[
+    {q:'האם קיים משולש שווה שוקיים וקהה זווית?',ans:'כן',expl:'כן! למשל צלעות 3, 3, 5. הזווית שמול הצלע הארוכה קהה.'},
+    {q:'האם קיים משולש שצלעותיו 7, 7, 14?',ans:'לא',expl:'לא! 7 + 7 = 14, צריך גדול ממש, שווה לא מספיק.'},
+    {q:'האם קיים משולש שווה צלעות וקהה זווית?',ans:'לא',expl:'לא! במשולש שווה צלעות כל זווית = 60° → חד זוויות בלבד.'},
+    {q:'האם קיים משולש ישר זווית ושווה שוקיים?',ans:'כן',expl:'כן! זוויות 45°-45°-90°. שתי השוקיים שוות.'},
+    {q:'האם קיים משולש שצלעותיו 1, 2, 3?',ans:'לא',expl:'לא! 1 + 2 = 3, לא גדול ממש מ-3.'}
+  ];
+  existQs=shuffle(existQs);
+  for(var i=0;i<5;i++){
+    var eq=existQs[i];
+    var ansText=eq.ans==='כן'?'כן, קיים':'לא, לא קיים';
+    var opts=uniqueOpts(ansText,['כן, קיים','לא, לא קיים','רק במקרים מיוחדים','לא ניתן לדעת']);
+    qs.push({type:'mc',stem:eq.q,options:opts,answer:opts.indexOf(ansText),explanation:eq.expl});
+  }
+  /* Q16-20: isosceles conditions — given leg or base, find x with perimeter constraint (input) */
+  for(var i=0;i<5;i++){
+    var x=RI(3,9);
+    var k=RI(1,5);
+    var stem,ans,expl;
+    if(i%2===0){
+      /* leg = x+k, base = x-1, find x given perimeter */
+      var leg=x+k;var base=x-1;
+      if(base<1){x=5;k=2;leg=7;base=4}
+      var perim=2*leg+base;
+      if(!triValid(leg,leg,base)){x=6;k=2;leg=8;base=5;perim=21}
+      stem='משולש שווה שוקיים. שוק = <span class="math-expr">x + '+k+'</span>, בסיס = <span class="math-expr">x − 1</span>. היקף = <span class="math-expr">'+perim+'</span>.<br>מצאו את <span class="math-expr">x</span>:';
+      ans=x;
+      expl='2(x+'+k+')+(x-1) = '+perim+' → 2x+'+2*k+'+x-1 = '+perim+' → 3x+'+(2*k-1)+' = '+perim+' → 3x = '+(perim-2*k+1)+' → x = <strong>'+x+'</strong>';
+    } else {
+      /* leg = 2x, base = x+k, find x given perimeter */
+      var leg=2*x;var base=x+k;var perim=2*leg+base;
+      if(!triValid(leg,leg,base)){x=5;k=3;leg=10;base=8;perim=28}
+      stem='משולש שווה שוקיים. שוק = <span class="math-expr">2x</span>, בסיס = <span class="math-expr">x + '+k+'</span>. היקף = <span class="math-expr">'+perim+'</span>.<br>מצאו את <span class="math-expr">x</span>:';
+      ans=x;
+      expl='2(2x)+(x+'+k+') = '+perim+' → 4x+x+'+k+' = '+perim+' → 5x+'+k+' = '+perim+' → 5x = '+(perim-k)+' → x = <strong>'+x+'</strong>';
+    }
+    qs.push({type:'input',stem:stem,answer:ans,explanation:expl});
+  }
+  return qs;
+}
+
+function genHard(){
+  rng=mulberry32(dateSeed+300);
+  var qs=[];
+  /* Q1-5: complex expressions — 3 sides as expressions of x, find x and classify (MC for classification) */
+  for(var i=0;i<5;i++){
+    var x=RI(3,8);
+    var configs=[
+      {s1:'x+'+RI(1,4),s2:'2x-'+RI(1,3),s3:'3x-'+(2*x-RI(2,5))},
+      {s1:'2x+1',s2:'x+'+RI(3,6),s3:'3x-'+RI(1,4)},
+      {s1:'x+'+RI(2,5),s2:'x+'+RI(2,5),s3:'2x-'+RI(1,3)},
+      {s1:'4x-'+RI(1,5),s2:'x+'+RI(2,6),s3:'2x+'+RI(1,3)},
+      {s1:'3x-'+RI(2,6),s2:'2x+'+RI(1,4),s3:'x+'+RI(3,7)}
+    ];
+    var cfg=configs[i%configs.length];
+    /* evaluate sides */
+    var ev=function(expr,xv){
+      var e=expr.replace(/x/g,'('+xv+')');
+      try{return eval(e)}catch(ex){return 0}
+    };
+    var s1=ev(cfg.s1,x),s2=ev(cfg.s2,x),s3=ev(cfg.s3,x);
+    var perim=s1+s2+s3;
+    /* ensure valid */
+    if(!triValid(s1,s2,s3)||s1<1||s2<1||s3<1){
+      x=5;cfg={s1:'x+2',s2:'x+3',s3:'2x-1'};s1=7;s2=8;s3=9;perim=24;
+    }
+    var cls=triType(s1,s2,s3);
+    var opts=uniqueOpts(cls,['שווה צלעות','שווה שוקיים','שונה צלעות']);
+    qs.push({type:'mc',stem:'צלעות משולש: <span class="math-expr">'+cfg.s1+'</span>, <span class="math-expr">'+cfg.s2+'</span>, <span class="math-expr">'+cfg.s3+'</span>. היקף = <span class="math-expr">'+perim+'</span>.<br>מצאו את <span class="math-expr">x</span> וסווגו את המשולש לפי צלעות:',options:opts,answer:opts.indexOf(cls),explanation:'x = '+x+' → צלעות: '+s1+', '+s2+', '+s3+' → <strong>'+cls+'</strong>'});
+  }
+  /* Q6-10: check ALL possibilities — isosceles with difference, two cases (MC) */
+  for(var i=0;i<5;i++){
+    var diff=RI(3,8);
+    var x=RI(3,8);
+    /* case 1: leg=x, base=x+diff → 2x+(x+diff)=perim → 3x+diff=perim */
+    /* case 2: leg=x+diff, base=x → 2(x+diff)+x=perim → 3x+2*diff=perim */
+    /* We want exactly one valid case */
+    var perim,validCases=[];
+    /* try case2 valid, case1 invalid */
+    perim=3*x+2*diff;
+    var c1leg=Math.floor((perim-diff)/3),c1base;
+    if((perim-diff)%3===0){c1leg=(perim-diff)/3;c1base=c1leg+diff}else{c1leg=-1}
+    var c2leg=x+diff,c2base=x;
+    var case1ok=c1leg>0&&triValid(c1leg,c1leg,c1leg+diff);
+    var case2ok=triValid(c2leg,c2leg,c2base);
+    if(!case2ok||case1ok){
+      /* fallback: known good example */
+      diff=9;perim=27;
+      /* case1: leg=6,base=15 → 6+6=12<15 invalid */
+      /* case2: leg=12,base=3 → 12+3=15>12 valid */
+      c2leg=12;c2base=3;case2ok=true;case1ok=false;
+    }
+    var ansStr;
+    if(case2ok&&!case1ok) ansStr=c2leg+', '+c2leg+', '+c2base;
+    else if(case1ok&&!case2ok) ansStr=c1leg+', '+c1leg+', '+(c1leg+diff);
+    else ansStr=c2leg+', '+c2leg+', '+c2base;
+    var w1=c2base+', '+c2base+', '+c2leg;
+    var w2=(c2leg+1)+', '+(c2leg+1)+', '+(c2base-2);
+    var w3='אין פתרון';
+    var opts=uniqueOpts(ansStr,[w1,w2,w3]);
+    qs.push({type:'mc',stem:'במשולש שווה שוקיים, ההפרש בין השוק לבסיס הוא <span class="math-expr">'+diff+'</span>. היקף = <span class="math-expr">'+perim+'</span>.<br>מהם אורכי הצלעות? <strong>(בדקו שתי אפשרויות!)</strong>',options:opts,answer:opts.indexOf(ansStr),explanation:'אפשרות 1: שוק=x, בסיס=x+'+diff+' → '+(case1ok?'ייתכן':'לא ייתכן (אי-שוויון!)')+'<br>אפשרות 2: שוק=x+'+diff+', בסיס=x → צלעות '+c2leg+','+c2leg+','+c2base+' → '+(case2ok?'ייתכן ✅':'לא ייתכן')});
+  }
+  /* Q11-15: triangles inside shapes — perimeter of triangle from rectangle/square (input) */
+  for(var i=0;i<5;i++){
+    var a,b,perim,stem,expl;
+    if(i%3===0){
+      /* equilateral triangle from given perimeter, find side */
+      var side=RI(4,15);perim=3*side;
+      stem='היקף משולש שווה צלעות הוא <span class="math-expr">'+perim+'</span>. מהו אורך כל צלע?';
+      a=side;
+      expl=perim+' ÷ 3 = <strong>'+side+'</strong>';
+    } else if(i%3===1){
+      /* triangle cut from rectangle: base=rect width, two sides=diagonals of half-rect */
+      var w=RI(6,12);var h=RI(4,10);
+      /* triangle on top of rectangle: base=w, two slanted sides from corners to midpoint top */
+      /* isosceles triangle perimeter: base + 2*leg */
+      /* here: right triangle inside rectangle, sides are w, h, and hypotenuse */
+      /* perimeter of right triangle with legs w,h */
+      var hyp=Math.sqrt(w*w+h*h);
+      if(hyp!==Math.floor(hyp)){
+        /* use Pythagorean triple */
+        var triples=[[3,4,5],[5,12,13],[6,8,10],[8,15,17],[9,12,15]];
+        var t=triples[i%triples.length];w=t[0];h=t[1];hyp=t[2];
+      }
+      perim=w+h+hyp;
+      stem='משולש ישר זווית שניצביו <span class="math-expr">'+w+'</span> ו-<span class="math-expr">'+h+'</span> ויתרו <span class="math-expr">'+hyp+'</span>.<br>מהו היקף המשולש?';
+      a=perim;
+      expl=w+' + '+h+' + '+hyp+' = <strong>'+perim+'</strong>';
+    } else {
+      /* isosceles triangle: given perim and base, find leg */
+      var base=RI(4,10);var leg=RI(base,base+8);
+      if(!triValid(leg,leg,base)){leg=base+2}
+      perim=2*leg+base;
+      stem='היקף משולש שווה שוקיים הוא <span class="math-expr">'+perim+'</span> והבסיס שלו <span class="math-expr">'+base+'</span>.<br>מהו אורך השוק?';
+      a=leg;
+      expl='('+perim+' − '+base+') ÷ 2 = '+(perim-base)+' ÷ 2 = <strong>'+leg+'</strong>';
+    }
+    qs.push({type:'input',stem:stem,answer:a,explanation:expl});
+  }
+  /* Q16-20: find x AND verify triangle inequality (input — x value) */
+  for(var i=0;i<5;i++){
+    var x=RI(3,9);
+    var k1=RI(1,4);var k2=RI(1,5);
+    /* sides: x+k1, x+k2, x */
+    var s1=x+k1,s2=x+k2,s3=x;
+    var perim=s1+s2+s3;
+    if(!triValid(s1,s2,s3)){k1=2;k2=3;s1=x+2;s2=x+3;s3=x;perim=3*x+5}
+    var valid=triValid(s1,s2,s3);
+    qs.push({type:'input',stem:'צלעות משולש: <span class="math-expr">x + '+k1+'</span>, <span class="math-expr">x + '+k2+'</span>, <span class="math-expr">x</span>. היקף = <span class="math-expr">'+perim+'</span>.<br>מצאו את <span class="math-expr">x</span> ובדקו אי-שוויון:',answer:x,explanation:'3x + '+(k1+k2)+' = '+perim+' → 3x = '+(perim-k1-k2)+' → x = '+x+'<br>צלעות: '+s1+', '+s2+', '+s3+(valid?' → אי-שוויון מתקיים ✅':' → אי-שוויון לא מתקיים ❌')});
+  }
+  return qs;
+}
+
+function genChallenge(){
+  rng=mulberry32(dateSeed+400);
+  var qs=[];
+  /* Q1-5: true/false statements about triangles (MC — which statement is correct) */
+  var statements=[
+    {q:'איזו טענה <strong>נכונה</strong>?',
+     correct:'כל משולש שווה צלעות הוא בהכרח חד זוויות',
+     wrongs:['כל משולש חד זוויות הוא שווה צלעות','כל משולש שווה שוקיים הוא חד זוויות','כל משולש ישר זווית הוא שונה צלעות'],
+     expl:'שווה צלעות → כל זווית 60° → חד זוויות. ההפך לא נכון — יש משולשים חדי זוויות שאינם שווי צלעות.'},
+    {q:'איזו טענה <strong>נכונה</strong>?',
+     correct:'אם במשולש a + b = c אז לא ניתן לבנות את המשולש',
+     wrongs:['אם a + b ≥ c אז ניתן לבנות משולש','משולש שווה צלעות יכול להיות קהה זווית','קיים משולש עם זוויות 60°, 70°, 60°'],
+     expl:'חייבים a + b > c (גדול ממש). שוויון = קו ישר. שווה צלעות → 60° בלבד → לא קהה. 60+70+60=190≠180.'},
+    {q:'איזו טענה <strong>לא נכונה</strong>?',
+     correct:'במשולש שווה שוקיים שוק תמיד ארוכה מהבסיס',
+     wrongs:['במשולש שווה שוקיים שתי זוויות הבסיס שוות','היקף משולש = סכום 3 צלעותיו','במשולש שווה צלעות כל הזוויות 60°'],
+     expl:'לא נכון! הבסיס יכול להיות ארוך מהשוק (למשל: שוק=3, בסיס=5).'},
+    {q:'איזו טענה <strong>נכונה</strong>?',
+     correct:'קיים משולש שהוא גם שווה שוקיים וגם ישר זווית',
+     wrongs:['קיים משולש שהוא גם שווה צלעות וגם ישר זווית','כל משולש קהה זווית הוא שונה צלעות','אם שתי צלעות שוות אז המשולש שווה צלעות'],
+     expl:'כן! 45°-45°-90° = שווה שוקיים + ישר זווית. שווה צלעות+ישר = בלתי אפשרי (60°≠90°). קהה+שווה שוקיים אפשרי.'},
+    {q:'איזו טענה <strong>לא נכונה</strong>?',
+     correct:'אם היקף משולש = 30 ואחת הצלעות = 15, אז המשולש תמיד קיים',
+     wrongs:['משולש עם צלעות 10, 10, 10 הוא שווה צלעות','אי-שוויון המשולש דורש שסכום כל שתי צלעות גדול מהשלישית','משולש שווה צלעות הוא גם שווה שוקיים'],
+     expl:'לא נכון! אם צלע=15 ושתי האחרות מסתכמות ב-15, צריך ששתי הצלעות הנותרות יסתכמו ליותר מ-15, אבל הן מסתכמות בדיוק ב-15!'}
+  ];
+  statements=shuffle(statements);
+  for(var i=0;i<5;i++){
+    var st=statements[i];
+    var opts=uniqueOpts(st.correct,st.wrongs);
+    qs.push({type:'mc',stem:st.q,options:opts,answer:opts.indexOf(st.correct),explanation:st.expl});
+  }
+  /* Q6-10: combined inequality + x + classification (input for x, explanation includes full check) */
+  for(var i=0;i<5;i++){
+    var x=RI(2,7);
+    var stem,ans,expl;
+    if(i%3===0){
+      /* isosceles: leg=3x-2, base=x+4, perim=?, find x, classify, check inequality */
+      var leg=3*x-2;var base=x+4;var perim=2*leg+base;
+      if(leg<1||base<1||!triValid(leg,leg,base)){x=4;leg=10;base=8;perim=28}
+      var cls=triType(leg,leg,base);
+      stem='משולש שווה שוקיים. שוק = <span class="math-expr">3x − 2</span>, בסיס = <span class="math-expr">x + 4</span>. היקף = <span class="math-expr">'+perim+'</span>.<br>מצאו את <span class="math-expr">x</span>:';
+      ans=x;
+      expl='2(3x-2)+(x+4) = '+perim+' → 6x-4+x+4 = '+perim+' → 7x = '+perim+' → x = '+x+'<br>צלעות: '+leg+', '+leg+', '+base+' → '+cls+'<br>אי-שוויון: '+leg+'+'+base+'='+(leg+base)+' > '+leg+' ✅';
+    } else if(i%3===1){
+      /* all sides expressions: 2x+1, 3x-2, x+5, perim given */
+      var s1=2*x+1,s2=3*x-2,s3=x+5;var perim=s1+s2+s3;
+      if(s1<1||s2<1||s3<1||!triValid(s1,s2,s3)){x=4;s1=9;s2=10;s3=9;perim=28}
+      var cls=triType(s1,s2,s3);
+      var aType=triAngle(s1,s2,s3);
+      stem='צלעות משולש: <span class="math-expr">2x + 1</span>, <span class="math-expr">3x − 2</span>, <span class="math-expr">x + 5</span>. היקף = <span class="math-expr">'+perim+'</span>.<br>מצאו את <span class="math-expr">x</span>:';
+      ans=x;
+      expl='6x + 4 = '+perim+' → x = '+x+'<br>צלעות: '+s1+', '+s2+', '+s3+' → '+cls+' + '+aType;
+    } else {
+      /* equilateral with expression: side=2x+k, perim given */
+      var k=RI(1,5);var side=2*x+k;var perim=3*side;
+      stem='משולש שווה צלעות עם צלע <span class="math-expr">2x + '+k+'</span>. היקף = <span class="math-expr">'+perim+'</span>.<br>מצאו את <span class="math-expr">x</span>:';
+      ans=x;
+      expl='3(2x+'+k+') = '+perim+' → 6x+'+3*k+' = '+perim+' → 6x = '+(perim-3*k)+' → x = <strong>'+x+'</strong><br>צלע = '+side+'. אי-שוויון: '+side+'+'+side+'='+(2*side)+' > '+side+' ✅ (שווה צלעות — תמיד מתקיים)';
+    }
+    qs.push({type:'input',stem:stem,answer:ans,explanation:expl});
+  }
+  /* Q11-15: two unknowns / advanced problems (MC) */
+  for(var i=0;i<5;i++){
+    var stem,ans,wrongs,expl;
+    if(i===0){
+      /* two unknowns: isosceles, leg=a, base=b, a=b+4, perim=28 */
+      /* 2a+b=28, a=b+4 → 2(b+4)+b=28 → 3b+8=28 → b=20/3 ... not whole. Adjust: perim=26, a=b+3 → 2(b+3)+b=26 → 3b+6=26 → b=20/3 again */
+      /* Use: a=b+5, perim=35 → 2(b+5)+b=35 → 3b+10=35 → b=25/3... */
+      /* Clean: a=b+4, perim=34 → 2(b+4)+b=34 → 3b+8=34 → 3b=26... */
+      /* a=b+3, perim=27 → 2(b+3)+b=27 → 3b+6=27 → b=7, a=10. Valid: 10+7=17>10 ✅ */
+      stem='במשולש שווה שוקיים, השוק ארוכה ב-<span class="math-expr">3</span> מהבסיס. היקף = <span class="math-expr">27</span>.<br>מהו אורך השוק?';
+      ans='10';wrongs=['7','9','13'];
+      expl='שוק = b+3, בסיס = b. → 2(b+3)+b = 27 → 3b+6 = 27 → b = 7. שוק = <strong>10</strong>.<br>בדיקה: 10+7 = 17 > 10 ✅';
+    } else if(i===1){
+      /* two unknowns: sides x, x+2, x+4 (arithmetic), perim=36 */
+      stem='שלוש צלעות משולש יוצרות סדרה חשבונית: <span class="math-expr">x</span>, <span class="math-expr">x + 2</span>, <span class="math-expr">x + 4</span>. היקף = <span class="math-expr">36</span>.<br>מהו אורך הצלע הארוכה?';
+      /* 3x+6=36 → x=10. sides: 10,12,14. longest=14 */
+      ans='14';wrongs=['10','12','36'];
+      expl='3x + 6 = 36 → x = 10. צלעות: 10, 12, 14. הארוכה = <strong>14</strong>.<br>אי-שוויון: 10+12 = 22 > 14 ✅';
+    } else if(i===2){
+      /* perimeter constraint + inequality: which value of x is possible */
+      stem='צלעות משולש: <span class="math-expr">x</span>, <span class="math-expr">x + 3</span>, <span class="math-expr">12</span>. לאיזה ערך של <span class="math-expr">x</span> ניתן לבנות את המשולש?';
+      /* inequality: x+(x+3)>12 → 2x>9 → x>4.5 → x≥5. Also x+12>x+3 (always), x+3+12>x (always). */
+      ans='5';wrongs=['3','4','2'];
+      expl='אי-שוויון: x + (x+3) > 12 → 2x + 3 > 12 → x > 4.5<br>מבין האפשרויות, רק x = <strong>5</strong> מקיים (צלעות: 5, 8, 12 → 5+8=13 > 12 ✅)';
+    } else if(i===3){
+      /* Two unknowns: equilateral + isosceles combined */
+      stem='משולש שווה שוקיים שהיקפו שווה להיקף משולש שווה צלעות עם צלע <span class="math-expr">8</span>.<br>אם הבסיס של משולש שווה השוקיים הוא <span class="math-expr">6</span>, מהו אורך השוק?';
+      /* equilateral perim = 24. iso: 2*leg+6=24 → leg=9 */
+      ans='9';wrongs=['8','12','6'];
+      expl='היקף שווה צלעות = 3 × 8 = 24.<br>שווה שוקיים: 2 × שוק + 6 = 24 → 2 × שוק = 18 → שוק = <strong>9</strong>';
+    } else {
+      /* max integer value for x given inequality */
+      stem='צלעות משולש: <span class="math-expr">3</span>, <span class="math-expr">7</span>, <span class="math-expr">x</span>.<br>מהו הערך השלם <strong>הגדול ביותר</strong> האפשרי של <span class="math-expr">x</span>?';
+      /* 3+7>x → x<10. Also 3+x>7 → x>4. And 7+x>3 (always). So x can be 5,6,7,8,9. Max=9 */
+      ans='9';wrongs=['10','7','11'];
+      expl='אי-שוויון: 3 + 7 > x → x < 10.<br>גם: x + 3 > 7 → x > 4.<br>ערכים אפשריים: 5, 6, 7, 8, 9. הגדול ביותר = <strong>9</strong>';
+    }
+    var opts=uniqueOpts(ans,wrongs);
+    qs.push({type:'mc',stem:stem,options:opts,answer:opts.indexOf(ans),explanation:expl});
+  }
+  return qs;
+}
+
+function generateQuestions(level){
+  if(level==='easy') return genEasy();
+  if(level==='medium') return genMedium();
+  if(level==='hard') return genHard();
+  return genChallenge();
+}
+
+/* ===== STEP RENDERING ===== */
+function renderStep(idx){
+  state.step=idx;
+  const s=steps[idx];
+  const fill=((idx+1)/TOTAL_STEPS*100).toFixed(0);
+  document.getElementById('stepFill').style.width=fill+'%';
+  document.getElementById('stepText').textContent='שלב '+(idx+1)+' מתוך '+TOTAL_STEPS;
+  document.getElementById('stepContent').innerHTML='<div class="step-card"><div class="step-title">'+s.title+'</div>'+s.render()+'</div>';
+  document.getElementById('prevBtn').disabled=idx===0;
+  document.getElementById('nextBtn').textContent=idx===TOTAL_STEPS-1?'לתרגול ←':'הבא ←';
+  if(s.init) s.init();
+  saveState();
+}
+function nextStep(){if(state.step<TOTAL_STEPS-1)renderStep(state.step+1);else switchSection('practice')}
+function prevStep(){if(state.step>0)renderStep(state.step-1)}
+
+/* ===== PRACTICE RENDERING ===== */
+function renderLevelTabs(){
+  const container=document.getElementById('levelTabs');
+  container.innerHTML='';
+  ['easy','medium','hard','challenge'].forEach(lv=>{
+    const btn=document.createElement('button');
+    btn.className='level-tab'+(state.level===lv?' active':'');
+    const done=scores[lv].filter(s=>s===1).length;
+    const total=LEVEL_COUNTS[lv];
+    btn.innerHTML=LEVEL_NAMES[lv]+(done>0?' <span class="tab-score">('+done+'/'+total+')</span>':'');
+    btn.onclick=()=>switchLevel(lv);
+    container.appendChild(btn);
+  });
+}
+
+function switchLevel(lv){
+  state.level=lv;state.qIndex=0;
+  if(!questions[lv]) questions[lv]=generateQuestions(lv);
+  if(!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  if(!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  renderLevelTabs();renderQuestion();saveState();
+}
+
+function updateLevelProgress(){
+  const lv=state.level;const total=LEVEL_COUNTS[lv];
+  const done=answered[lv].filter(a=>a).length;
+  document.getElementById('levelFill').style.width=(done/total*100)+'%';
+  document.getElementById('levelText').textContent=done+' / '+total;
+}
+
+function renderQuestion(){
+  const lv=state.level;const idx=state.qIndex;
+  const qs=questions[lv];
+  if(!qs) return;
+  if(idx>=qs.length){renderLevelComplete();return}
+  const q=qs[idx];
+  const area=document.getElementById('questionArea');
+  const isAnswered=answered[lv][idx];
+
+  let html='<div class="q-card"><div class="q-number">שאלה '+(idx+1)+' מתוך '+qs.length+'</div>';
+  html+='<div class="q-stem">'+q.stem+'</div>';
+
+  if(q.type==='mc'){
+    html+='<div class="q-options" id="qOpts">';
+    q.options.forEach((opt,i)=>{
+      const letter=LETTERS[i];
+      let cls='q-opt';
+      if(isAnswered){
+        cls+=' disabled';
+        if(i===q.answer) cls+=' correct';
+        else if(scores[lv][idx]===0&&i===answered[lv][idx+'_sel']) cls+=' wrong';
+      }
+      html+='<div class="'+cls+'" data-i="'+i+'"><span class="q-opt-letter">'+letter+'</span><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></div>';
+    });
+    html+='</div>';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkMC()" disabled>בדקו</button>';
+  } else if(q.type==='input'){
+    html+='<div class="q-input-row"><input type="number" class="q-input" id="qInput" placeholder="תשובה" dir="ltr" aria-label="תשובה">';
+    if(!isAnswered) html+='<button class="q-check-btn" id="qCheckBtn" onclick="checkInput()">בדקו</button>';
+    html+='</div>';
+    if(isAnswered){
+      html+='<div style="margin-top:4px;font-weight:700;direction:ltr">תשובה: '+q.answer+'</div>';
+    }
+  }
+
+  if(isAnswered){
+    const isCorrect=scores[lv][idx]===1;
+    html+='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?'✅ נכון! ':'❌ ')+q.explanation+'</div>';
+  }
+  html+='<div id="qFeedback"></div></div>';
+  area.innerHTML=html;
+
+  /* Set up MC click handlers */
+  if(q.type==='mc'&&!isAnswered){
+    area.querySelectorAll('.q-opt').forEach(el=>{
+      el.onclick=()=>{
+        area.querySelectorAll('.q-opt').forEach(o=>o.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('qCheckBtn').disabled=false;
+      };
+    });
+  }
+  /* Set up input enter key */
+  const inp=document.getElementById('qInput');
+  if(inp&&!isAnswered){
+    inp.focus();
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter')checkInput()});
+  }
+
+  updateLevelProgress();
+  document.getElementById('qPrev').disabled=idx===0;
+  document.getElementById('qNext').textContent=idx>=qs.length-1?'סיום':'הבא ←';
+}
+
+window.checkMC=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const selected=document.querySelector('.q-opt.selected');
+  if(!selected) return;
+  const si=parseInt(selected.dataset.i);
+  const isCorrect=si===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  answered[lv][idx+'_sel']=si;
+
+  document.querySelectorAll('.q-opt').forEach((el,i)=>{
+    el.classList.add('disabled');el.onclick=null;
+    if(i===q.answer) el.classList.add('correct');
+    else if(i===si&&!isCorrect) el.classList.add('wrong');
+  });
+  document.getElementById('qCheckBtn').remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון מאוד!','✅ יפה!'])+' ':'❌ לא נכון. ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+window.checkInput=function(){
+  const lv=state.level;const idx=state.qIndex;const q=questions[lv][idx];
+  const inp=document.getElementById('qInput');
+  const val=inp.value.trim();
+  if(!val) return;
+  const isCorrect=parseFloat(val)===q.answer;
+  scores[lv][idx]=isCorrect?1:0;
+  answered[lv][idx]=true;
+  inp.classList.add(isCorrect?'correct':'wrong');
+  inp.disabled=true;
+  const btn=document.getElementById('qCheckBtn');if(btn)btn.remove();
+  document.getElementById('qFeedback').innerHTML='<div class="q-feedback '+(isCorrect?'correct':'wrong')+'">'+(isCorrect?pick(['✅ כל הכבוד!','✅ מעולה!','✅ נכון!'])+' ':'❌ ')+q.explanation+'</div>';
+  renderLevelTabs();updateLevelProgress();saveState();
+};
+
+function nextQuestion(){
+  const lv=state.level;
+  if(state.qIndex>=questions[lv].length-1){renderLevelComplete();return}
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function')showAuthModal();
+    return;
+  }
+  state.qIndex++;renderQuestion();saveState();
+}
+function prevQuestion(){if(state.qIndex>0){state.qIndex--;renderQuestion();saveState()}}
+
+function renderLevelComplete(){
+  const lv=state.level;
+  const correct=scores[lv].filter(s=>s===1).length;
+  const total=LEVEL_COUNTS[lv];
+  const pct=Math.round(correct/total*100);
+  const scoreClass=pct>=80?'':pct>=50?' medium-score':' low-score';
+  const emoji=pct>=80?'🎉':pct>=50?'👏':'💪';
+
+  document.getElementById('questionArea').innerHTML=
+    '<div class="q-card"><div class="level-complete">'+
+    '<div class="big-emoji">'+emoji+'</div>'+
+    '<h2>סיימתם את רמת "'+LEVEL_NAMES[lv]+'"!</h2>'+
+    '<div class="score-display'+scoreClass+'">'+correct+' / '+total+'</div>'+
+    '<p style="color:var(--text-light);margin-bottom:16px">'+pct+'% הצלחה</p>'+
+    '<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'+
+    '<button class="mini-btn" onclick="retryLevel()">🔄 נסו שוב</button>'+
+    (lv!=='challenge'?'<button class="mini-btn accent" onclick="nextLevel()">▶ לרמה הבאה</button>':'')+
+    '</div></div></div>';
+
+  if(pct>=80) showConfetti();
+  saveState();
+}
+
+window.retryLevel=function(){
+  const lv=state.level;
+  scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+  answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  questions[lv]=generateQuestions(lv);
+  state.qIndex=0;
+  renderLevelTabs();renderQuestion();saveState();
+};
+
+window.nextLevel=function(){
+  const order=['easy','medium','hard','challenge'];
+  const ci=order.indexOf(state.level);
+  if(ci<order.length-1) switchLevel(order[ci+1]);
+};
+
+/* ===== SECTION SWITCHING ===== */
+function switchSection(sec){
+  state.section=sec;
+  document.querySelectorAll('.section-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.section===sec);
+  });
+  document.getElementById('learnSection').style.display=sec==='learn'?'block':'none';
+  document.getElementById('practiceSection').style.display=sec==='practice'?'block':'none';
+  if(sec==='practice'){
+    if(!questions[state.level]) questions[state.level]=generateQuestions(state.level);
+    if(!scores[state.level].length) scores[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(-1);
+    if(!answered[state.level].length) answered[state.level]=new Array(LEVEL_COUNTS[state.level]).fill(false);
+    renderLevelTabs();renderQuestion();
+  }
+  saveState();
+}
+
+/* ===== CONFETTI ===== */
+function showConfetti(){
+  const box=document.getElementById('confettiBox');
+  box.innerHTML='';
+  const colors=['#1a2f5a','#4a9eda','#10b981','#f59e0b','#8b5cf6','#ec4899'];
+  for(let i=0;i<50;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.width=(6+Math.random()*8)+'px';
+    c.style.height=(6+Math.random()*8)+'px';
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=(2+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*1.5)+'s';
+    box.appendChild(c);
+  }
+  setTimeout(()=>box.innerHTML='',5000);
+}
+
+/* ===== INIT ===== */
+function init(){
+  loadState();
+  Object.keys(LEVEL_COUNTS).forEach(lv=>{
+    if(!scores[lv]||!scores[lv].length) scores[lv]=new Array(LEVEL_COUNTS[lv]).fill(-1);
+    if(!answered[lv]||!answered[lv].length) answered[lv]=new Array(LEVEL_COUNTS[lv]).fill(false);
+  });
+  renderStep(state.step);
+  if(state.section==='practice') switchSection('practice');
+}
+init();
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

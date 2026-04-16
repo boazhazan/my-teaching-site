@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ישר המספרים — כיתה ג' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#4f46e5;--primary-dark:#4338ca;--primary-light:#e0e7ff;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#4f46e5 0%,#6366f1 50%,#818cf8 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(79,70,229,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:20px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px 20px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.nl-container{direction:ltr;overflow-x:auto;padding:12px 0;margin:10px 0;text-align:center}
+.nl-container svg{display:inline-block;max-width:100%}
+.answer-options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}.answer-options.cols-2{grid-template-columns:repeat(2,1fr)}
+.answer-btn{height:48px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.2rem;font-weight:800;color:var(--text);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.04)}.answer-btn:active:not(.disabled){transform:scale(.96)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.answer-btn.svg-btn{height:auto;padding:8px;flex-direction:column}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)}.answer-btn{height:44px;font-size:1rem}.question-card{padding:18px 14px}.header-title h1{font-size:1.1rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">📏</div><div><h1>ישר המספרים</h1><div class="subtitle">כיתה ג' — מספרים גדולים על הישר</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">ישר המספרים — כיתה ג' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>❓ איך משחקים?</h2><p>על <strong>ישר המספרים</strong> מסומנים מספרים בסדר עולה — מהקטן לגדול, משמאל לימין.</p><p>המרחק בין כל שני סימנים סמוכים הוא <strong>שווה</strong>. אם הקפיצות הן 100, אז כל סימן גדל ב-100.</p><p>כשרואים <strong>?</strong> על הישר — צריך למצוא את המספר שצריך להיות שם.</p><p>מספר שנמצא <strong>ימינה יותר</strong> על הישר הוא <strong>גדול יותר</strong>.</p><p>15 רמות — מ-0 עד 100 ועד 10,000!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function fmtNum(n){return n.toLocaleString('he-IL')}
+
+/* Generate 4 unique distractors including the answer */
+function genD4(ans,step,min,max){
+  var s=new Set([ans]);
+  var offsets=[step,-step,step*2,-step*2,Math.round(step/2),-Math.round(step/2),step*3,-step*3];
+  var att=0;
+  while(s.size<4&&att<50){
+    var d=ans+offsets[rr(0,offsets.length-1)];
+    if(d>=0&&d<=max+step&&d!==ans) s.add(d);
+    att++;
+  }
+  while(s.size<4){s.add(ans+rr(1,5)*step)}
+  return shuffle([...s]);
+}
+
+/* ===== SVG NUMBER LINE BUILDER ===== */
+function buildSVG(start,end,step,labels,mysteryIdx){
+  /* labels = array of {val,show} for each tick; mysteryIdx = index with ? */
+  var count=labels.length;
+  var W=420,H=65,pad=25,lineY=30;
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:'+W+'px;display:block;margin:0 auto">';
+  /* main line */
+  svg+='<line x1="'+pad+'" y1="'+lineY+'" x2="'+(W-pad)+'" y2="'+lineY+'" stroke="#334155" stroke-width="2"/>';
+  /* arrowheads */
+  svg+='<polygon points="'+(W-pad)+','+lineY+' '+(W-pad-8)+','+(lineY-5)+' '+(W-pad-8)+','+(lineY+5)+'" fill="#334155"/>';
+  svg+='<polygon points="'+pad+','+lineY+' '+(pad+8)+','+(lineY-5)+' '+(pad+8)+','+(lineY+5)+'" fill="#334155"/>';
+  var usable=W-2*pad-16;
+  var x0=pad+8;
+  for(var i=0;i<count;i++){
+    var x=x0+(i/(count-1))*usable;
+    /* tick */
+    svg+='<line x1="'+x+'" y1="'+(lineY-8)+'" x2="'+x+'" y2="'+(lineY+8)+'" stroke="#334155" stroke-width="1.5"/>';
+    if(i===mysteryIdx){
+      /* mystery circle + ? */
+      svg+='<circle cx="'+x+'" cy="'+(lineY-18)+'" r="13" fill="#f59e0b" stroke="#fbbf24" stroke-width="2"/>';
+      svg+='<text x="'+x+'" y="'+(lineY-13)+'" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff" font-family="Heebo,sans-serif">?</text>';
+    } else if(labels[i].show){
+      svg+='<text x="'+x+'" y="'+(lineY+24)+'" text-anchor="middle" font-size="11" font-weight="600" fill="#334155" font-family="Heebo,sans-serif">'+fmtNum(labels[i].val)+'</text>';
+    }
+  }
+  svg+='</svg>';
+  return svg;
+}
+
+/* Build SVG with jump arcs */
+function buildJumpSVG(start,step,count,mysteryIdx){
+  var W=420,H=80,pad=25,lineY=45;
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:'+W+'px;display:block;margin:0 auto">';
+  svg+='<line x1="'+pad+'" y1="'+lineY+'" x2="'+(W-pad)+'" y2="'+lineY+'" stroke="#334155" stroke-width="2"/>';
+  svg+='<polygon points="'+(W-pad)+','+lineY+' '+(W-pad-8)+','+(lineY-5)+' '+(W-pad-8)+','+(lineY+5)+'" fill="#334155"/>';
+  svg+='<polygon points="'+pad+','+lineY+' '+(pad+8)+','+(lineY-5)+' '+(pad+8)+','+(lineY+5)+'" fill="#334155"/>';
+  var usable=W-2*pad-16;
+  var x0=pad+8;
+  for(var i=0;i<count;i++){
+    var x=x0+(i/(count-1))*usable;
+    var val=start+i*step;
+    svg+='<line x1="'+x+'" y1="'+(lineY-8)+'" x2="'+x+'" y2="'+(lineY+8)+'" stroke="#334155" stroke-width="1.5"/>';
+    if(i===mysteryIdx){
+      svg+='<circle cx="'+x+'" cy="'+(lineY+20)+'" r="12" fill="#f59e0b" stroke="#fbbf24" stroke-width="2"/>';
+      svg+='<text x="'+x+'" y="'+(lineY+25)+'" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff" font-family="Heebo,sans-serif">?</text>';
+    } else {
+      svg+='<text x="'+x+'" y="'+(lineY+24)+'" text-anchor="middle" font-size="11" font-weight="600" fill="#334155" font-family="Heebo,sans-serif">'+fmtNum(val)+'</text>';
+    }
+    /* jump arcs */
+    if(i<count-1){
+      var x2=x0+((i+1)/(count-1))*usable;
+      var mx=(x+x2)/2;
+      var arcH=lineY-22;
+      svg+='<path d="M'+x+','+lineY+' Q'+mx+','+arcH+' '+x2+','+lineY+'" fill="none" stroke="'+((i%2===0)?'#4f46e5':'#6366f1')+'" stroke-width="2" stroke-dasharray="4,3"/>';
+      svg+='<text x="'+mx+'" y="'+(arcH-2)+'" text-anchor="middle" font-size="9" font-weight="700" fill="#4f46e5" font-family="Heebo,sans-serif">+'+fmtNum(step)+'</text>';
+    }
+  }
+  svg+='</svg>';
+  return svg;
+}
+
+/* Build 4 small SVG lines for "place" questions — each with arrow at different position */
+function buildPlaceSVGs(start,end,step,target,positions){
+  /* positions = array of 4 values, one of which is target */
+  var svgs=[];
+  var count=Math.round((end-start)/step)+1;
+  var letterLabels=['A','B','C','D'];
+  for(var p=0;p<4;p++){
+    var W=320,H=55,pad=20,lineY=25;
+    var svg='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:'+W+'px;display:block;margin:0 auto">';
+    svg+='<line x1="'+pad+'" y1="'+lineY+'" x2="'+(W-pad)+'" y2="'+lineY+'" stroke="#334155" stroke-width="1.5"/>';
+    var usable=W-2*pad-12;
+    var x0=pad+6;
+    /* show only first, last, and middle label */
+    for(var i=0;i<count;i++){
+      var x=x0+(i/(count-1))*usable;
+      svg+='<line x1="'+x+'" y1="'+(lineY-5)+'" x2="'+x+'" y2="'+(lineY+5)+'" stroke="#334155" stroke-width="1"/>';
+      if(i===0||i===count-1||i===Math.floor(count/2)){
+        svg+='<text x="'+x+'" y="'+(lineY+18)+'" text-anchor="middle" font-size="9" font-weight="600" fill="#334155" font-family="Heebo,sans-serif">'+fmtNum(start+i*step)+'</text>';
+      }
+    }
+    /* arrow at the position value */
+    var arrowPct=(positions[p]-start)/(end-start);
+    var arrowX=x0+arrowPct*usable;
+    svg+='<polygon points="'+arrowX+','+(lineY-7)+' '+(arrowX-5)+','+(lineY-16)+' '+(arrowX+5)+','+(lineY-16)+'" fill="#ef4444"/>';
+    svg+='<text x="'+arrowX+'" y="'+(lineY-19)+'" text-anchor="middle" font-size="10" font-weight="bold" fill="#ef4444" font-family="Heebo,sans-serif">'+fmtNum(target)+'</text>';
+    svg+='</svg>';
+    svgs.push({label:letterLabels[p],svg:svg,val:positions[p]});
+  }
+  return svgs;
+}
+
+/* Build SVG with two labeled points for compare questions */
+function buildCompareSVG(start,end,step,a,b){
+  var count=Math.round((end-start)/step)+1;
+  var W=420,H=65,pad=25,lineY=30;
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:'+W+'px;display:block;margin:0 auto">';
+  svg+='<line x1="'+pad+'" y1="'+lineY+'" x2="'+(W-pad)+'" y2="'+lineY+'" stroke="#334155" stroke-width="2"/>';
+  svg+='<polygon points="'+(W-pad)+','+lineY+' '+(W-pad-8)+','+(lineY-5)+' '+(W-pad-8)+','+(lineY+5)+'" fill="#334155"/>';
+  svg+='<polygon points="'+pad+','+lineY+' '+(pad+8)+','+(lineY-5)+' '+(pad+8)+','+(lineY+5)+'" fill="#334155"/>';
+  var usable=W-2*pad-16;
+  var x0=pad+8;
+  for(var i=0;i<count;i++){
+    var x=x0+(i/(count-1))*usable;
+    var val=start+i*step;
+    svg+='<line x1="'+x+'" y1="'+(lineY-8)+'" x2="'+x+'" y2="'+(lineY+8)+'" stroke="#334155" stroke-width="1.5"/>';
+    if(i===0||i===count-1){
+      svg+='<text x="'+x+'" y="'+(lineY+24)+'" text-anchor="middle" font-size="11" font-weight="600" fill="#334155" font-family="Heebo,sans-serif">'+fmtNum(val)+'</text>';
+    }
+  }
+  /* Point A */
+  var pctA=(a-start)/(end-start);
+  var xA=x0+pctA*usable;
+  svg+='<circle cx="'+xA+'" cy="'+lineY+'" r="7" fill="#4f46e5" stroke="#fff" stroke-width="2"/>';
+  svg+='<text x="'+xA+'" y="'+(lineY-14)+'" text-anchor="middle" font-size="12" font-weight="800" fill="#4f46e5" font-family="Heebo,sans-serif">'+fmtNum(a)+'</text>';
+  /* Point B */
+  var pctB=(b-start)/(end-start);
+  var xB=x0+pctB*usable;
+  svg+='<circle cx="'+xB+'" cy="'+lineY+'" r="7" fill="#ef4444" stroke="#fff" stroke-width="2"/>';
+  svg+='<text x="'+xB+'" y="'+(lineY-14)+'" text-anchor="middle" font-size="12" font-weight="800" fill="#ef4444" font-family="Heebo,sans-serif">'+fmtNum(b)+'</text>';
+  svg+='</svg>';
+  return svg;
+}
+
+/* Build SVG for "between" questions — shows a, ?, b */
+function buildBetweenSVG(start,end,step,a,b,mid){
+  var count=Math.round((end-start)/step)+1;
+  var W=420,H=65,pad=25,lineY=30;
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:'+W+'px;display:block;margin:0 auto">';
+  svg+='<line x1="'+pad+'" y1="'+lineY+'" x2="'+(W-pad)+'" y2="'+lineY+'" stroke="#334155" stroke-width="2"/>';
+  svg+='<polygon points="'+(W-pad)+','+lineY+' '+(W-pad-8)+','+(lineY-5)+' '+(W-pad-8)+','+(lineY+5)+'" fill="#334155"/>';
+  svg+='<polygon points="'+pad+','+lineY+' '+(pad+8)+','+(lineY-5)+' '+(pad+8)+','+(lineY+5)+'" fill="#334155"/>';
+  var usable=W-2*pad-16;
+  var x0=pad+8;
+  for(var i=0;i<count;i++){
+    var x=x0+(i/(count-1))*usable;
+    var val=start+i*step;
+    svg+='<line x1="'+x+'" y1="'+(lineY-8)+'" x2="'+x+'" y2="'+(lineY+8)+'" stroke="#334155" stroke-width="1.5"/>';
+    if(i===0||i===count-1){
+      svg+='<text x="'+x+'" y="'+(lineY+24)+'" text-anchor="middle" font-size="11" font-weight="600" fill="#334155" font-family="Heebo,sans-serif">'+fmtNum(val)+'</text>';
+    }
+  }
+  /* Point A */
+  var pctA=(a-start)/(end-start);
+  var xA=x0+pctA*usable;
+  svg+='<circle cx="'+xA+'" cy="'+lineY+'" r="7" fill="#4f46e5" stroke="#fff" stroke-width="2"/>';
+  svg+='<text x="'+xA+'" y="'+(lineY+24)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#4f46e5" font-family="Heebo,sans-serif">'+fmtNum(a)+'</text>';
+  /* Point B */
+  var pctB=(b-start)/(end-start);
+  var xB=x0+pctB*usable;
+  svg+='<circle cx="'+xB+'" cy="'+lineY+'" r="7" fill="#4f46e5" stroke="#fff" stroke-width="2"/>';
+  svg+='<text x="'+xB+'" y="'+(lineY+24)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#4f46e5" font-family="Heebo,sans-serif">'+fmtNum(b)+'</text>';
+  /* Mystery in middle */
+  var pctM=(mid-start)/(end-start);
+  var xM=x0+pctM*usable;
+  svg+='<circle cx="'+xM+'" cy="'+(lineY-18)+'" r="13" fill="#f59e0b" stroke="#fbbf24" stroke-width="2"/>';
+  svg+='<text x="'+xM+'" y="'+(lineY-13)+'" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff" font-family="Heebo,sans-serif">?</text>';
+  svg+='</svg>';
+  return svg;
+}
+
+/* ===== QUESTION GENERATORS ===== */
+
+/* 1. qNL_find — SVG number line with ? at one tick */
+function qNL_find(rangeStart,rangeEnd,step){
+  var count=Math.round((rangeEnd-rangeStart)/step)+1;
+  if(count<4) count=4;
+  var mystIdx=rr(1,count-2);
+  var labels=[];
+  for(var i=0;i<count;i++){
+    labels.push({val:rangeStart+i*step,show:true});
+  }
+  var answer=labels[mystIdx].val;
+  var svgHtml='<div class="nl-container">'+buildSVG(rangeStart,rangeEnd,step,labels,mystIdx)+'</div>';
+  return {type:'find',qText:'איזה מספר נמצא במקום סימן ה-❓?',visual:svgHtml,answer:answer,options:genD4(answer,step,rangeStart,rangeEnd)};
+}
+
+/* 2. qNL_place — show 4 small SVGs, pick the one where arrow is at correct position */
+function qNL_place(rangeStart,rangeEnd){
+  var step=Math.round((rangeEnd-rangeStart)/10);
+  if(step<1)step=1;
+  /* pick a target that's on a tick */
+  var tickCount=Math.round((rangeEnd-rangeStart)/step)+1;
+  var tIdx=rr(2,tickCount-3);
+  var target=rangeStart+tIdx*step;
+  /* correct position */
+  var correct=target;
+  /* 3 wrong positions */
+  var wrongSet=new Set([correct]);
+  var att=0;
+  while(wrongSet.size<4&&att<50){
+    var wi=rr(1,tickCount-2);
+    var wv=rangeStart+wi*step;
+    if(wv!==correct) wrongSet.add(wv);
+    att++;
+  }
+  var positions=shuffle([...wrongSet]);
+  var svgs=buildPlaceSVGs(rangeStart,rangeEnd,step,target,positions);
+  var correctIdx=positions.indexOf(correct);
+  return {type:'place',qText:'איפה נמצא '+fmtNum(target)+' על הישר?',visual:'',answer:correctIdx,svgOptions:svgs};
+}
+
+/* 3. qNL_compare — two numbers on line, who is bigger (further right) */
+function qNL_compare(rangeStart,rangeEnd){
+  var step=Math.round((rangeEnd-rangeStart)/10);
+  if(step<1)step=1;
+  var tickCount=Math.round((rangeEnd-rangeStart)/step)+1;
+  var iA=rr(1,tickCount-3);
+  var iB=rr(iA+1,tickCount-1);
+  if(iA===iB)iB=iA+1;
+  var a=rangeStart+iA*step;
+  var b=rangeStart+iB*step;
+  var svgHtml='<div class="nl-container">'+buildCompareSVG(rangeStart,rangeEnd,step,a,b)+'</div>';
+  /* b is always bigger (further right) */
+  return {type:'compare',qText:'מי ימינה יותר על הישר (= גדול יותר)?',visual:svgHtml,answer:b,options:shuffle([a,b]),cols:2};
+}
+
+/* 4. qNL_jumps — number line with arcs, one number missing */
+function qNL_jumps(rangeStart,step,count){
+  if(!count) count=rr(5,7);
+  var mystIdx=rr(1,count-2);
+  var answer=rangeStart+mystIdx*step;
+  var svgHtml='<div class="nl-container">'+buildJumpSVG(rangeStart,step,count,mystIdx)+'</div>';
+  return {type:'find',qText:'מהו המספר החסר?',visual:svgHtml,answer:answer,options:genD4(answer,step,rangeStart,rangeStart+(count-1)*step)};
+}
+
+/* 5. qNL_between — what number is in the middle between A and B */
+function qNL_between(rangeStart,rangeEnd,step){
+  if(!step) step=Math.round((rangeEnd-rangeStart)/10);
+  if(step<1)step=1;
+  var tickCount=Math.round((rangeEnd-rangeStart)/step)+1;
+  /* pick two ticks with even gap so midpoint is integer */
+  var iA,iB,gap;
+  var att=0;
+  do{
+    iA=rr(0,tickCount-4);
+    gap=rr(1,3)*2; /* 2,4,6 ticks apart — guarantees integer midpoint */
+    iB=iA+gap;
+    att++;
+  }while(iB>=tickCount&&att<30);
+  if(iB>=tickCount){iA=0;iB=2;}
+  var a=rangeStart+iA*step;
+  var b=rangeStart+iB*step;
+  var mid=(a+b)/2;
+  var svgHtml='<div class="nl-container">'+buildBetweenSVG(rangeStart,rangeEnd,step,a,b,mid)+'</div>';
+  /* distractors */
+  var opts=new Set([mid]);
+  opts.add(a);opts.add(b);
+  var off=[step,-step,step*2,-step*2];
+  att=0;
+  while(opts.size<4&&att<30){opts.add(mid+off[rr(0,off.length-1)]);att++}
+  return {type:'find',qText:'איזה מספר נמצא בדיוק באמצע בין '+fmtNum(a)+' ל-'+fmtNum(b)+'?',visual:svgHtml,answer:mid,options:shuffle([...opts])};
+}
+
+/* ===== STATE ===== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+/* ===== LEVELS ===== */
+var levels=[
+  {title:'ישר 0-100 (חזרה)',instruction:'מצאו את המספר החסר על הישר',
+   tip:'שימו לב לקפיצות — כל סימן עולה ב-10!',
+   example:'<span class="math">0, 10, 20, ?, 40</span> → המספר החסר הוא 30!',
+   gen:function(){return qNL_find(0,100,10)}},
+
+  {title:'ישר 0-100 — קפיצות של 5',instruction:'עכשיו הקפיצות קטנות יותר — 5!',
+   tip:'כל סימן עולה ב-5. ספרו: 5, 10, 15, 20...',
+   example:'<span class="math">25, 30, ?, 40, 45</span> → 35!',
+   gen:function(){var s=rr(0,3)*20;return qNL_find(s,s+60,5)}},
+
+  {title:'ישר 0-1,000 בקפיצות 100',instruction:'מספרים גדולים! כל סימן = 100',
+   tip:'ספרו מאות: 100, 200, 300... בדיוק כמו קפיצות של 1, רק פי 100!',
+   example:'<span class="math">200, 300, ?, 500</span> → 400!',
+   gen:function(){return qNL_find(0,1000,100)}},
+
+  {title:'ישר 0-1,000 בקפיצות 50',instruction:'קפיצות של 50 — יותר מדויק!',
+   tip:'חצי מאה = 50. אז בין 100 ל-200 יש גם 150!',
+   example:'<span class="math">350, 400, ?, 500</span> → 450!',
+   gen:function(){var s=rr(0,4)*200;return qNL_find(s,s+500,50)}},
+
+  {title:'מקמו מספר על הישר',instruction:'איפה המספר נמצא? בחרו את הישר הנכון!',
+   tip:'הסתכלו על המספרים בקצוות — המספר צריך להיות קרוב למקום הנכון.',
+   example:'500 נמצא באמצע בין 0 ל-1,000!',
+   gen:function(){return qNL_place(0,1000)}},
+
+  {title:'מי ימינה = מי גדול',instruction:'מי גדול יותר? מי ימינה יותר על הישר!',
+   tip:'על ישר המספרים, ככל שהמספר ימינה יותר — הוא גדול יותר!',
+   example:'בין 300 ל-700 — 700 ימינה יותר, אז 700 גדול יותר!',
+   gen:function(){return qNL_compare(0,1000)}},
+
+  {title:'ישר 0-10,000 בקפיצות 1,000',instruction:'מספרים ענקיים! כל סימן = 1,000',
+   tip:'אלפים! ספרו: 1,000 → 2,000 → 3,000...',
+   example:'<span class="math">3,000 → 4,000 → ? → 6,000</span> → 5,000!',
+   gen:function(){return qNL_find(0,10000,1000)}},
+
+  {title:'ישר 0-10,000 בקפיצות 500',instruction:'קפיצות של 500 — בין האלפים!',
+   tip:'בין כל אלף יש גם חצי אלף! 500, 1,500, 2,500...',
+   example:'<span class="math">2,000 → 2,500 → ? → 3,500</span> → 3,000!',
+   gen:function(){var s=rr(0,4)*2000;return qNL_find(s,s+5000,500)}},
+
+  {title:'מקמו מספר — אלפים',instruction:'איפה המספר הגדול נמצא על הישר?',
+   tip:'חשבו: 5,000 זה באמצע בין 0 ל-10,000. איפה המספר שלכם?',
+   example:'7,000 קרוב לקצה הימני של ישר 0-10,000!',
+   gen:function(){return qNL_place(0,10000)}},
+
+  {title:'מספר באמצע',instruction:'מהו המספר שנמצא בדיוק באמצע?',
+   tip:'כדי למצוא את האמצע — חברו את שני המספרים וחלקו ב-2!',
+   example:'באמצע בין 200 ל-400? → (200+400)÷2 = 300!',
+   gen:function(){return qNL_between(0,1000,100)}},
+
+  {title:'קפיצות מעורבבות',instruction:'קפיצות על הישר — מצאו את החסר!',
+   tip:'הסתכלו על גודל הקפיצה שכתוב מעל הקשתות!',
+   example:'אם הקפיצה +200 והמספר לפני זה 400, אז הבא הוא 600!',
+   gen:function(){
+     var steps=[50,100,200,500];
+     var st=steps[rr(0,3)];
+     var s=rr(0,3)*st;
+     return qNL_jumps(s,st,rr(5,7));
+   }},
+
+  {title:'כל הסוגים',instruction:'שאלות מכל הסוגים שלמדנו!',
+   tip:'שימו לב לסוג השאלה — לפעמים צריך למצוא מספר, לפעמים לבחור ישר!',
+   example:'קראו היטב את השאלה!',
+   gen:function(){
+     var gens=[
+       function(){return qNL_find(0,1000,100)},
+       function(){return qNL_place(0,1000)},
+       function(){return qNL_compare(0,1000)},
+       function(){return qNL_between(0,1000,100)},
+       function(){return qNL_jumps(0,100,6)}
+     ];
+     return gens[rr(0,gens.length-1)]();
+   }},
+
+  {title:'כל הסוגים — תרגול',instruction:'עוד תרגול עם כל הסוגים!',
+   tip:'אתם כבר מומחים! שימו לב לפרטים.',
+   example:'בהצלחה!',
+   gen:function(){
+     var gens=[
+       function(){return qNL_find(0,10000,1000)},
+       function(){return qNL_place(0,10000)},
+       function(){return qNL_compare(0,10000)},
+       function(){return qNL_between(0,10000,1000)},
+       function(){return qNL_jumps(0,500,6)}
+     ];
+     return gens[rr(0,gens.length-1)]();
+   }},
+
+  {title:'אתגר',instruction:'שאלות מאתגרות עם מספרים גדולים!',
+   tip:'חשבו בהיגיון — מה גודל הקפיצה? איפה המספר צריך להיות?',
+   example:'השתמשו בכל מה שלמדתם!',
+   gen:function(){
+     var gens=[
+       function(){var s=rr(0,3)*2000;return qNL_find(s,s+5000,500)},
+       function(){return qNL_place(0,10000)},
+       function(){return qNL_between(0,10000,500)},
+       function(){return qNL_jumps(rr(0,3)*1000,rr(1,5)*100,rr(5,7))},
+       function(){return qNL_compare(0,10000)}
+     ];
+     return gens[rr(0,gens.length-1)]();
+   }},
+
+  {title:'סופר-אתגר!',instruction:'הרמה הכי קשה — מוכנים?',
+   tip:'🏆 רמת מומחים! שימו לב לכל פרט!',
+   example:'בהצלחה, אלופים!',
+   gen:function(){
+     var gens=[
+       function(){var s=rr(0,9)*1000;return qNL_find(s,s+3000,250)},
+       function(){return qNL_place(0,10000)},
+       function(){return qNL_between(0,10000,500)},
+       function(){return qNL_jumps(rr(0,5)*500,rr(1,4)*250,rr(5,7))},
+       function(){return qNL_compare(0,10000)}
+     ];
+     return gens[rr(0,gens.length-1)]();
+   }}
+];
+
+/* ===== RENDERING & LOGIC ===== */
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){
+    var q,att=0;
+    do{q=lvl.gen();att++}while(att<50&&seen.has(String(q.answer)));
+    seen.add(String(q.answer));currentQuestions.push(q);
+  }
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.visual) h+=q.visual;
+    if(q.type==='place'){
+      /* 4 SVG options */
+      h+='<div class="answer-options" style="grid-template-columns:repeat(2,1fr)" id="opts-'+idx+'">';
+      q.svgOptions.forEach(function(so,si){
+        h+='<button class="answer-btn svg-btn" onclick="checkChoice('+idx+','+si+',this)">';
+        h+='<div style="font-weight:800;font-size:1rem;color:var(--primary);margin-bottom:4px">'+so.label+'</div>';
+        h+=so.svg;
+        h+='</button>';
+      });
+      h+='</div>';
+    } else {
+      /* regular numeric options */
+      var cols=q.cols||4;
+      h+='<div class="answer-options'+(cols===2?' cols-2':'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+opt+'\',this)">'+fmtNum(opt)+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];
+  var card=document.getElementById('q-'+idx);
+  var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct')) return;
+  var isCorrect=false;
+  if(q.type==='place'){
+    isCorrect=(chosen===q.answer);
+  } else {
+    isCorrect=(String(chosen)===String(q.answer));
+  }
+  if(isCorrect){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    fb.textContent=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  } else {
+    btn.classList.add('wrong-choice');
+    fb.textContent='לא נכון, נסו שוב! 💪';
+    fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();
+  if(answeredCount===QPL) setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;
+  document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){
+  document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';
+  document.getElementById('totalCorrect').textContent=totalCorrect;
+  document.getElementById('totalWrong').textContent=totalWrong;
+}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

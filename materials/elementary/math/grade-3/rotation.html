@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>סיבוב — כיתה ג' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#c2410c;--primary-dark:#9a3412;--primary-light:#fff7ed;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#9a3412 0%,#c2410c 50%,#ea580c 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(194,65,12,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.shape-display{text-align:center;margin:16px 0}
+.shape-row{display:flex;justify-content:center;align-items:center;gap:20px;flex-wrap:wrap;margin:10px 0}
+.shape-label{font-size:.85rem;font-weight:700;color:var(--text-light);text-align:center;margin-bottom:4px}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-options.visual-opts{grid-template-columns:repeat(4,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.shape-row svg{width:70px!important;height:70px!important}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🔄</div><div><h1>סיבוב</h1><div class="subtitle">כיתה ג' — סיבוב צורות, רבע ושלם</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">סיבוב — כיתה ג' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>🔄 סיבוב צורות</h2><p><strong>מהו סיבוב?</strong> סיבוב הוא תנועה מעגלית של צורה סביב נקודה קבועה (מרכז הסיבוב).</p><p>🔹 <strong>רבע סיבוב</strong> = 90° — הצורה מסתובבת רבע עיגול<br>🔹 <strong>חצי סיבוב</strong> = 180° — הצורה מסתובבת חצי עיגול<br>🔹 <strong>שלושה רבעי סיבוב</strong> = 270°<br>🔹 <strong>סיבוב שלם</strong> = 360° — הצורה חוזרת למקום המקורי!</p><p>🔹 בסיבוב, הצורה <strong>לא מתהפכת</strong> — היא שומרת על הכיוון שלה (ימין/שמאל).<br>🔹 בשיקוף, הצורה <strong>כן מתהפכת</strong> — כמו במראה!</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+
+/* ========== SHAPES ========== */
+var shapeLib=[
+  {name:'L',pts:'25,20 25,80 65,80 65,60 45,60 45,20',fill:'var(--primary-light)',stroke:'var(--primary)'},
+  {name:'חץ',pts:'20,40 55,40 55,25 80,50 55,75 55,60 20,60',fill:'var(--primary-light)',stroke:'var(--primary)'},
+  {name:'דגל',pts:'30,20 30,80 50,80 50,50 70,50 70,20',fill:'var(--primary-light)',stroke:'var(--primary)'},
+  {name:'מדרגה',pts:'20,20 20,80 80,80 80,50 50,50 50,20',fill:'var(--primary-light)',stroke:'var(--primary)'}
+];
+
+/* Shapes with rotational symmetry info */
+var symShapes=[
+  {name:'ריבוע',pts:'25,25 75,25 75,75 25,75',hasSym:true,order:4,fill:'var(--primary-light)',stroke:'var(--primary)'},
+  {name:'מלבן',pts:'15,30 85,30 85,70 15,70',hasSym:true,order:2,fill:'var(--primary-light)',stroke:'var(--primary)'},
+  {name:'משולש שווה-צלעות',pts:'50,15 85,75 15,75',hasSym:true,order:3,fill:'var(--primary-light)',stroke:'var(--primary)'},
+  {name:'צורת L',pts:'25,20 25,80 65,80 65,60 45,60 45,20',hasSym:false,order:0,fill:'var(--primary-light)',stroke:'var(--primary)'},
+  {name:'חץ',pts:'20,40 55,40 55,25 80,50 55,75 55,60 20,60',hasSym:false,order:0,fill:'var(--primary-light)',stroke:'var(--primary)'},
+  {name:'מעוין',pts:'50,15 85,50 50,85 15,50',hasSym:true,order:2,fill:'var(--primary-light)',stroke:'var(--primary)'}
+];
+
+function shapeSVG(shape,rotation,reflect){
+  var t='';
+  if(reflect) t='scale(-1,1) translate(-100,0) ';
+  if(rotation) t+='rotate('+rotation+',50,50)';
+  return '<svg viewBox="0 0 100 100" style="width:90px;height:90px;border:2px solid var(--border);border-radius:8px;background:#fff"><polygon points="'+shape.pts+'" fill="'+shape.fill+'" stroke="'+shape.stroke+'" stroke-width="2"'+(t?' transform="'+t+'"':'')+'/></svg>';
+}
+
+function symShapeSVG(shape){
+  return '<svg viewBox="0 0 100 100" style="width:90px;height:90px;border:2px solid var(--border);border-radius:8px;background:#fff"><polygon points="'+shape.pts+'" fill="'+shape.fill+'" stroke="'+shape.stroke+'" stroke-width="2"/></svg>';
+}
+
+/* Pick a random shape from shapeLib */
+function pickShape(){return shapeLib[rr(0,shapeLib.length-1)]}
+
+/* ========== QUESTION TYPE 1: What does the shape look like after rotation? ========== */
+function qRotateResult(deg){
+  var shape=pickShape();
+  var degLabel;
+  if(deg===90) degLabel='רבע סיבוב (90°)';
+  else if(deg===180) degLabel='חצי סיבוב (180°)';
+  else if(deg===270) degLabel='שלושה רבעי סיבוב (270°)';
+  else degLabel='סיבוב שלם (360°)';
+
+  var original=shapeSVG(shape,0,false);
+  var correctSVG=shapeSVG(shape,deg,false);
+
+  /* Build 4 options: correct rotation, other rotations, one reflected */
+  var allDegs=[90,180,270];
+  var wrongDegs=allDegs.filter(function(d){return d!==deg});
+  shuffle(wrongDegs);
+  var opts=[
+    {svg:shapeSVG(shape,deg,false),key:'correct'},
+    {svg:shapeSVG(shape,wrongDegs[0],false),key:'wrong1'},
+    {svg:shapeSVG(shape,wrongDegs[1],false),key:'wrong2'},
+    {svg:shapeSVG(shape,deg,true),key:'wrong3'}
+  ];
+  shuffle(opts);
+  var labels=['א','ב','ג','ד'];
+  var correctLabel='';
+  var optionsHTML='';
+  for(var i=0;i<4;i++){
+    if(opts[i].key==='correct') correctLabel=labels[i];
+    optionsHTML+=opts[i].svg;
+  }
+  return{type:'visual',qText:'מה מתקבל אחרי <strong>'+degLabel+'</strong> של הצורה?',
+    display:'<div class="shape-display"><div class="shape-label">הצורה המקורית:</div><div class="shape-row">'+original+'</div></div>',
+    answer:correctLabel,options:labels,optionsSVG:opts,colClass:'visual-opts',
+    explain:'אחרי '+degLabel+' הצורה מסתובבת סביב מרכזה'};
+}
+
+/* ========== QUESTION TYPE 2: How much did it rotate? ========== */
+function qHowMuchRotation(){
+  var shape=pickShape();
+  var degs=[90,180,270];
+  var deg=degs[rr(0,2)];
+  var original=shapeSVG(shape,0,false);
+  var result=shapeSVG(shape,deg,false);
+  var correctLabel;
+  if(deg===90) correctLabel='רבע סיבוב';
+  else if(deg===180) correctLabel='חצי סיבוב';
+  else correctLabel='שלושה רבעי סיבוב';
+  var opts=['רבע סיבוב','חצי סיבוב','שלושה רבעי סיבוב','סיבוב שלם'];
+  return{type:'choice',qText:'כמה הסתובבה הצורה?',
+    display:'<div class="shape-display"><div class="shape-row"><div><div class="shape-label">לפני:</div>'+original+'</div><div style="font-size:2rem;color:var(--primary)">➜</div><div><div class="shape-label">אחרי:</div>'+result+'</div></div></div>',
+    answer:correctLabel,options:opts,colClass:'cols-2',
+    explain:'הצורה סובבה '+deg+'° = '+correctLabel};
+}
+
+/* ========== QUESTION TYPE 3: Rotation or Reflection? ========== */
+function qRotateVsReflect(){
+  var shape=pickShape();
+  var isRotation=rr(0,1)===1;
+  var original=shapeSVG(shape,0,false);
+  var result;
+  if(isRotation){
+    var degs=[90,180,270];
+    var deg=degs[rr(0,2)];
+    result=shapeSVG(shape,deg,false);
+  }else{
+    result=shapeSVG(shape,0,true);
+  }
+  var correct=isRotation?'סיבוב':'שיקוף';
+  return{type:'choice',qText:'מה בוצע על הצורה — <strong>סיבוב</strong> או <strong>שיקוף</strong>?',
+    display:'<div class="shape-display"><div class="shape-row"><div><div class="shape-label">לפני:</div>'+original+'</div><div style="font-size:2rem;color:var(--primary)">➜</div><div><div class="shape-label">אחרי:</div>'+result+'</div></div></div>',
+    answer:correct,options:['סיבוב','שיקוף'],colClass:'cols-2',
+    explain:isRotation?'בסיבוב הצורה שומרת על הכיוון שלה (ימין/שמאל)':'בשיקוף הצורה מתהפכת — כמו מראה'};
+}
+
+/* ========== QUESTION TYPE 4: Rotational Symmetry ========== */
+function qRotationalSymmetry(){
+  var shape=symShapes[rr(0,symShapes.length-1)];
+  var svg=symShapeSVG(shape);
+  var correct=shape.hasSym?'כן':'לא';
+  var explain;
+  if(shape.hasSym){
+    explain='ל'+shape.name+' יש סימטריה סיבובית מסדר '+shape.order+' — אפשר לסובב אותו ולקבל את אותה צורה';
+  }else{
+    explain='ל'+shape.name+' אין סימטריה סיבובית — כשמסובבים אותו הוא נראה שונה';
+  }
+  return{type:'choice',qText:'האם ל<strong>'+shape.name+'</strong> יש סימטריה סיבובית?',
+    display:'<div class="shape-display"><div class="shape-row">'+svg+'</div></div>',
+    answer:correct,options:['כן','לא'],colClass:'cols-2',explain:explain};
+}
+
+/* ========== QUESTION TYPE 5: Full Rotation ========== */
+function qFullRotation(){
+  var variants=[
+    {q:'כמה רבעי סיבוב יש בסיבוב שלם?',answer:'4',options:['2','3','4','6'],explain:'סיבוב שלם = 360° = 4 × 90°'},
+    {q:'כמה מעלות בסיבוב שלם?',answer:'360°',options:['90°','180°','270°','360°'],explain:'סיבוב שלם = 360 מעלות'},
+    {q:'כמה מעלות ברבע סיבוב?',answer:'90°',options:['45°','90°','180°','270°'],explain:'רבע סיבוב = 360° ÷ 4 = 90°'},
+    {q:'כמה מעלות בחצי סיבוב?',answer:'180°',options:['90°','180°','270°','360°'],explain:'חצי סיבוב = 360° ÷ 2 = 180°'},
+    {q:'אחרי סיבוב שלם (360°), הצורה...',answer:'חוזרת למקום המקורי',options:['חוזרת למקום המקורי','מתהפכת','נעלמת','משתנה'],explain:'סיבוב שלם (360°) מחזיר את הצורה למיקום המקורי שלה'}
+  ];
+  var v=variants[rr(0,variants.length-1)];
+  return{type:'choice',qText:v.q,display:'',answer:v.answer,options:shuffle(v.options.slice()),colClass:'cols-2',explain:v.explain};
+}
+
+/* ========== QUESTION TYPE 6: Fixed Point ========== */
+function qFixedPoint(){
+  var variants=[
+    {q:'בסיבוב סביב נקודה, מה <strong>לא זז</strong>?',answer:'מרכז הסיבוב',options:['מרכז הסיבוב','נקודה על ההיקף'],explain:'מרכז הסיבוב הוא הנקודה היחידה שנשארת במקום'},
+    {q:'כשמסובבים צורה, הנקודות על ההיקף...',answer:'זזות במעגל',options:['זזות במעגל','נשארות במקום','זזות בקו ישר','נעלמות'],explain:'כל נקודה (חוץ מהמרכז) זזה במעגל סביב מרכז הסיבוב'},
+    {q:'מרכז הסיבוב נמצא...',answer:'בנקודה קבועה שסביבה הצורה מסתובבת',options:['בנקודה קבועה שסביבה הצורה מסתובבת','תמיד בפינה של הצורה','תמיד מחוץ לצורה','תמיד בצד שמאל'],explain:'מרכז הסיבוב יכול להיות בכל מקום — בתוך הצורה, על השפה, או מחוצה לה'},
+    {q:'האם הצורה משנה את <strong>גודלה</strong> אחרי סיבוב?',answer:'לא',options:['כן','לא'],explain:'סיבוב לא משנה את גודל הצורה — רק את המיקום שלה'},
+    {q:'בסיבוב, המרחק מכל נקודה למרכז הסיבוב...',answer:'נשאר קבוע',options:['נשאר קבוע','גדל','קטן','משתנה'],explain:'בסיבוב כל נקודה שומרת על מרחק קבוע ממרכז הסיבוב'}
+  ];
+  var v=variants[rr(0,variants.length-1)];
+  return{type:'choice',qText:v.q,display:'',answer:v.answer,options:shuffle(v.options.slice()),colClass:'cols-2',explain:v.explain};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  /* 1 */ {title:'סיבוב רבע (90°)',instruction:'זהו את הצורה אחרי רבע סיבוב',
+   tip:'<strong>רבע סיבוב</strong> = 90° — הצורה מסתובבת רבע עיגול.\nדמיינו שעון: מחוג שעובר מ-12 ל-3.',
+   example:'צורת L שמסתובבת רבע סיבוב → הזרוע הארוכה פונה לכיוון אחר',
+   gen:function(){return qRotateResult(90)}},
+
+  /* 2 */ {title:'סיבוב חצי (180°)',instruction:'זהו את הצורה אחרי חצי סיבוב',
+   tip:'<strong>חצי סיבוב</strong> = 180° — הצורה מסתובבת חצי עיגול.\nמה שהיה למעלה — עכשיו למטה!',
+   example:'חץ שמצביע ימינה → אחרי חצי סיבוב מצביע שמאלה',
+   gen:function(){return qRotateResult(180)}},
+
+  /* 3 */ {title:'סיבוב שלוש רבעים (270°)',instruction:'זהו את הצורה אחרי שלושה רבעי סיבוב',
+   tip:'<strong>שלושה רבעי סיבוב</strong> = 270° — כמעט סיבוב שלם!\nדמיינו שעון: מחוג שעובר מ-12 ל-9.',
+   example:'שלושה רבעי סיבוב = רבע סיבוב בכיוון ההפוך!',
+   gen:function(){return qRotateResult(270)}},
+
+  /* 4 */ {title:'סיבוב שלם',instruction:'שאלות על סיבוב שלם (360°)',
+   tip:'<strong>סיבוב שלם</strong> = 360° — הצורה חוזרת בדיוק למקום שהתחילה!\n4 רבעי סיבוב = סיבוב שלם אחד.',
+   example:'סובבו צורה 4 פעמים רבע סיבוב → היא חוזרת למקום!',
+   gen:function(){return qFullRotation()}},
+
+  /* 5 */ {title:'כמה הסתובב?',instruction:'זהו את כמות הסיבוב',
+   tip:'השוו את הצורה לפני ואחרי הסיבוב.\n• רבע סיבוב = 90° — הצורה "שכבה" על הצד\n• חצי סיבוב = 180° — הצורה "הפוכה"\n• שלושה רבעי = 270° — כמעט חזרה',
+   example:'אם חץ שמצביע ימינה הפך למצביע למטה → זה רבע סיבוב',
+   gen:function(){return qHowMuchRotation()}},
+
+  /* 6 */ {title:'סיבוב או שיקוף?',instruction:'האם הצורה סובבה או שוקפה?',
+   tip:'<strong>סיבוב</strong> — הצורה שומרת על הכיוון שלה (ימין/שמאל).\n<strong>שיקוף</strong> — הצורה מתהפכת, כמו מראה.\n\nטיפ: חפשו את ה"יד" של הצורה — אם היא עדיין באותו צד → סיבוב!',
+   example:'צורת L: אם הזרוע הקצרה עדיין ימינה → סיבוב\nאם הזרוע הקצרה עברה שמאלה → שיקוף',
+   gen:function(){return qRotateVsReflect()}},
+
+  /* 7 */ {title:'סיבוב או שיקוף — תרגול',instruction:'עוד תרגול: סיבוב או שיקוף?',
+   tip:'הסתכלו על הפרטים הקטנים!\nבסיבוב — כל החלקים "זורמים" באותו כיוון.\nבשיקוף — חלקים שהיו מימין עוברים לשמאל.',
+   example:'דמיינו כפפה: סיבוב = עדיין כפפת ימין, שיקוף = הפכה לכפפת שמאל!',
+   gen:function(){return qRotateVsReflect()}},
+
+  /* 8 */ {title:'סימטריה סיבובית',instruction:'האם לצורה יש סימטריה סיבובית?',
+   tip:'<strong>סימטריה סיבובית</strong> = אפשר לסובב את הצורה (פחות מסיבוב שלם) והיא נראית בדיוק אותו דבר.\n• לריבוע יש — סובבו 90° והוא נראה אותו דבר!\n• לצורת L אין — אחרי כל סיבוב היא נראית שונה.',
+   example:'ריבוע: כל 90° → נראה אותו דבר ✅\nמשולש שווה-צלעות: כל 120° → נראה אותו דבר ✅\nצורת L: אף סיבוב לא מחזיר → אין ❌',
+   gen:function(){return qRotationalSymmetry()}},
+
+  /* 9 */ {title:'סימטריה סיבובית — תרגול',instruction:'עוד תרגול בסימטריה סיבובית',
+   tip:'שאלו את עצמכם: האם אפשר לסובב את הצורה בזווית כלשהי (לא 360°) ולקבל את אותה צורה בדיוק?',
+   example:'מעוין: כל 180° → נראה אותו דבר ✅\nחץ: אין סיבוב שמחזיר אותו → ❌',
+   gen:function(){return qRotationalSymmetry()}},
+
+  /* 10 */ {title:'נקודת שבת',instruction:'מה לא זז בסיבוב?',
+   tip:'<strong>נקודת שבת</strong> (מרכז הסיבוב) היא הנקודה היחידה שלא זזה!\nכל שאר הנקודות זזות במעגל סביבה.',
+   example:'סובבו ספינר — המרכז שלו נשאר במקום, אבל הזרועות זזות!',
+   gen:function(){return qFixedPoint()}},
+
+  /* 11 */ {title:'מעורבב — סיבובים',instruction:'שאלות מגוונות על סיבוב!',
+   tip:'שלבו את כל מה שלמדתם:\n• רבע = 90°, חצי = 180°, שלושה רבעים = 270°, שלם = 360°\n• סיבוב שומר כיוון, שיקוף מהפך',
+   example:'🎲 כל שאלה היא הפתעה!',
+   gen:function(){
+     var types=[function(){return qRotateResult([90,180,270][rr(0,2)])},function(){return qHowMuchRotation()},function(){return qFullRotation()}];
+     return types[rr(0,2)]();
+   }},
+
+  /* 12 */ {title:'מעורבב — סיבוב ושיקוף',instruction:'סיבוב או שיקוף? + זיהוי סיבובים',
+   tip:'הסתכלו טוב על הצורה — שימו לב לכיוון שלה!',
+   example:'🎯 דיוק מקסימלי!',
+   gen:function(){
+     var types=[function(){return qRotateVsReflect()},function(){return qRotateResult([90,180,270][rr(0,2)])},function(){return qHowMuchRotation()}];
+     return types[rr(0,2)]();
+   }},
+
+  /* 13 */ {title:'אתגר — סימטריה ונקודת שבת',instruction:'שאלות על סימטריה ונקודת שבת!',
+   tip:'🏆 אתם כבר מומחים!',
+   example:'💪 בהצלחה!',
+   gen:function(){
+     var types=[function(){return qRotationalSymmetry()},function(){return qFixedPoint()},function(){return qFullRotation()}];
+     return types[rr(0,2)]();
+   }},
+
+  /* 14 */ {title:'סופר אתגר!',instruction:'כל הסוגים — שאלות מאתגרות!',
+   tip:'🏆 שלטתם בכל הנושאים!',
+   example:'🌟 💪 🏆',
+   gen:function(){
+     var types=[function(){return qRotateResult([90,180,270][rr(0,2)])},function(){return qHowMuchRotation()},function(){return qRotateVsReflect()},function(){return qRotationalSymmetry()},function(){return qFullRotation()},function(){return qFixedPoint()}];
+     return types[rr(0,5)]();
+   }},
+
+  /* 15 */ {title:'מאסטר!',instruction:'הרמה הכי קשה — כל הסוגים!',
+   tip:'🏆 אין עליכם! שלטתם בסיבוב!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[function(){return qRotateResult([90,180,270][rr(0,2)])},function(){return qHowMuchRotation()},function(){return qRotateVsReflect()},function(){return qRotationalSymmetry()},function(){return qFullRotation()},function(){return qFixedPoint()}];
+     return types[rr(0,5)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='visual'){
+      var labels=['א','ב','ג','ד'];
+      h+='<div class="answer-options visual-opts" id="opts-'+idx+'">';
+      for(var oi=0;oi<q.optionsSVG.length;oi++){
+        var escaped=labels[oi].replace(/'/g,"\\'");
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)"><div>'+q.optionsSVG[oi].svg+'</div><div style="font-weight:800;font-size:1.1rem">'+labels[oi]+'</div></button>';
+      }
+      h+='</div>';
+    }else if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.textContent=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

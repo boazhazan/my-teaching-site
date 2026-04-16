@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>חיבור במאונך — כיתה ג' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#ea580c;--primary-dark:#c2410c;--primary-light:#fff7ed;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#c2410c 0%,#ea580c 50%,#f97316 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(234,88,12,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 6px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line;direction:ltr;text-align:center;font-family:'Courier New',monospace;font-weight:500}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.vertical-math{display:flex;justify-content:center;margin:16px 0;direction:ltr}.vertical-container{display:inline-flex;flex-direction:column;align-items:flex-end;position:relative;min-width:140px}.v-row{display:flex;align-items:center;justify-content:flex-end;position:relative}.v-op{font-size:1.6rem;font-weight:800;color:var(--primary);position:absolute;left:-32px;top:50%;transform:translateY(-50%)}.v-digit{width:44px;height:52px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;color:var(--text)}.v-digit.missing{color:var(--primary);font-size:2rem}.v-line{width:100%;height:3px;background:var(--text);margin:4px 0;border-radius:2px}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;direction:ltr}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;transition:all .2s}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}.lc-btn-outline:hover{background:var(--primary-light)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.v-digit{width:36px;height:44px;font-size:1.5rem}.vertical-container{min-width:100px}.v-op{font-size:1.3rem;left:-26px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">➕</div><div><h1>חיבור במאונך</h1><div class="subtitle">כיתה ג' — חיבור מסודר עם המרות</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">חיבור במאונך — כיתה ג' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>❓ חיבור במאונך</h2>
+<p><strong>סדרו את המספרים</strong> אחד מתחת לשני — יחידות מתחת ליחידות, עשרות מתחת לעשרות.</p>
+<p><strong>חברו עמודה אחרי עמודה</strong> — תמיד מימין לשמאל (מהיחידות).</p>
+<p>אם סכום עמודה <strong>≥ 10</strong>, כותבים את ספרת היחידות ומעבירים 1 לעמודה הבאה (המרה).</p>
+<p>15 רמות מדורגות — מחיבור דו-ספרתי ועד 4 ספרות עם המרות! בהצלחה! 💪</p>
+<button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ===== UTILITIES ===== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function fmt(n){return n.toLocaleString()}
+
+/* ===== STATE ===== */
+let currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+const QPL=5;
+
+/* ===== QUESTION GENERATORS ===== */
+
+/* --- digits helper --- */
+function digits(n,len){const s=String(n);const a=[];for(let i=0;i<len;i++)a.push(i<s.length?parseInt(s[s.length-1-i]):0);return a;}
+
+/* --- wrong options for vertical addition --- */
+function wrongOpts(correct,a,b){
+  const s=new Set();s.add(correct);
+  // forget carry
+  const da=digits(a,5),db=digits(b,5);
+  let noCarry=0;for(let i=4;i>=0;i--)noCarry=noCarry*10+((da[i]+db[i])%10);
+  if(noCarry>0&&noCarry!==correct)s.add(noCarry);
+  // off by +10 / -10
+  if(correct+10>0)s.add(correct+10);
+  if(correct-10>0)s.add(correct-10);
+  // off by +1 / -1
+  s.add(correct+1);if(correct-1>0)s.add(correct-1);
+  // off by +100 / -100
+  if(correct+100>0)s.add(correct+100);if(correct-100>0)s.add(correct-100);
+  // random near
+  for(let t=0;t<10;t++){
+    const off=rr(1,3)*(rr(0,1)?1:-1)*Math.pow(10,rr(0,Math.min(2,String(correct).length-1)));
+    const v=correct+off;
+    if(v>0)s.add(v);
+  }
+  const arr=[...s].filter(v=>v!==correct&&v>0);
+  shuffle(arr);
+  return arr.slice(0,3);
+}
+
+/* --- qVertAdd(maxDigits, carryType) --- */
+function qVertAdd(maxDigits,carryType){
+  let a,b,attempts=0;
+  const lo=Math.pow(10,maxDigits-1),hi=Math.pow(10,maxDigits)-1;
+  while(attempts<200){
+    attempts++;
+    a=rr(lo,hi);b=rr(lo,hi);
+    if(a+b>=Math.pow(10,maxDigits+1))continue;
+    const da=digits(a,maxDigits),db=digits(b,maxDigits);
+    const uSum=da[0]+db[0],tSum=da[1]+db[1];
+    if(carryType==='none'){
+      let ok=true;
+      for(let i=0;i<maxDigits;i++){let c=0;for(let j=0;j<=i;j++){/* simplified: just check each column */}
+        if(da[i]+db[i]>=10){ok=false;break;}
+      }
+      // stricter: check column-by-column with carry propagation
+      ok=true;let carry=0;
+      for(let i=0;i<maxDigits;i++){const s=da[i]+db[i]+carry;if(s>=10){ok=false;break;}carry=Math.floor(s/10);}
+      if(!ok)continue;
+    } else if(carryType==='units'){
+      let carry=0;const sums=[];
+      for(let i=0;i<maxDigits;i++){const s=da[i]+db[i]+carry;sums.push(s);carry=Math.floor(s/10);}
+      if(sums[0]<10||sums[1]>=10)continue;
+    } else if(carryType==='tens'){
+      let carry=0;const sums=[];
+      for(let i=0;i<maxDigits;i++){const s=da[i]+db[i]+carry;sums.push(s);carry=Math.floor(s/10);}
+      if(sums[0]>=10||sums[1]<10)continue;
+    } else if(carryType==='both'){
+      let carry=0;const sums=[];
+      for(let i=0;i<maxDigits;i++){const s=da[i]+db[i]+carry;sums.push(s);carry=Math.floor(s/10);}
+      if(sums[0]<10||sums[1]<10)continue;
+    }
+    // carryType===true means any carry — just accept if at least one column carries
+    if(carryType===true){
+      let carry=0,anyCarry=false;
+      for(let i=0;i<maxDigits;i++){const s=da[i]+db[i]+carry;if(s>=10)anyCarry=true;carry=Math.floor(s/10);}
+      if(!anyCarry)continue;
+    }
+    break;
+  }
+  const ans=a+b;
+  const w=wrongOpts(ans,a,b);
+  const opts=shuffle([ans,...w]);
+  return{type:'vert',a:a,b:b,answer:ans,options:opts,qText:'חשבו את תרגיל החיבור:'};
+}
+
+/* --- qEstimate --- */
+function qEstimate(){
+  const nums=[rr(100,999),rr(1000,9999),rr(10,999)];
+  const exact=nums[0]+nums[1]+nums[2];
+  // round each
+  function roundN(n){if(n>=1000)return Math.round(n/1000)*1000;if(n>=100)return Math.round(n/100)*100;return Math.round(n/10)*10;}
+  const est=roundN(nums[0])+roundN(nums[1])+roundN(nums[2]);
+  // create options: est, est+500, est-500, est+1000
+  const s=new Set();s.add(est);
+  [500,-500,1000,-1000,2000,-2000,300,-300].forEach(d=>{const v=est+d;if(v>0)s.add(v);});
+  const arr=[...s].filter(v=>v!==est&&v>0);shuffle(arr);
+  const w=arr.slice(0,3);
+  const opts=shuffle([est,...w]);
+  const stem='מהי, בערך, תוצאת '+fmt(nums[0])+' + '+fmt(nums[1])+' + '+fmt(nums[2])+'?';
+  return{type:'estimate',answer:est,options:opts,qText:stem,nums:nums};
+}
+
+/* --- qMissingDigitAdd --- */
+function qMissingDigitAdd(){
+  const nd=rr(2,3);
+  const lo=Math.pow(10,nd-1),hi=Math.pow(10,nd)-1;
+  let a=rr(lo,hi),b=rr(lo,hi);
+  if(a+b>=Math.pow(10,nd+1)){b=hi-a+lo;}
+  const ans=a+b;
+  const ansStr=String(ans);
+  const aStr=String(a);
+  const bStr=String(b);
+  // pick where to hide: 0=result, 1=top number, 2=bottom number
+  const where=rr(0,2);
+  let target,pos,original;
+  if(where===0){target=ansStr;pos=rr(0,ansStr.length-1);original=ansStr;}
+  else if(where===1){target=aStr;pos=rr(0,aStr.length-1);original=aStr;}
+  else{target=bStr;pos=rr(0,bStr.length-1);original=bStr;}
+  const missingDigit=parseInt(target[pos]);
+  const masked=target.substring(0,pos)+'☐'+target.substring(pos+1);
+  let dispA=aStr,dispB=bStr,dispAns=ansStr;
+  if(where===0)dispAns=masked;else if(where===1)dispA=masked;else dispB=masked;
+  // options
+  const s=new Set();s.add(missingDigit);
+  while(s.size<4){s.add(rr(0,9));}
+  const opts=shuffle([...s]);
+  return{type:'missing',a:a,b:b,answer:missingDigit,options:opts,qText:'מהי הספרה החסרה?',dispA:dispA,dispB:dispB,dispAns:dispAns};
+}
+
+/* ===== LEVELS ===== */
+const levels=[
+  {title:'חיבור דו-ספרתי בלי המרה',instruction:'חברו שני מספרים דו-ספרתיים — בלי המרה',tip:'מתחילים מהיחידות (מימין) ועוברים לעשרות. אין המרה — פשוט!',example:'  45\n+ 32\n----\n  77\nיחידות: 5+2=7, עשרות: 4+3=7',gen:()=>qVertAdd(2,'none')},
+  {title:'חיבור דו-ספרתי עם המרה',instruction:'חברו שני מספרים דו-ספרתיים — עם המרה!',tip:'כשסכום יחידות ≥ 10, כותבים את ספרת היחידות ומעבירים 1 לעשרות.',example:'  27\n+ 45\n----\n  72\nיחידות: 7+5=12 → 2, המרה 1\nעשרות: 2+4+1=7',gen:()=>qVertAdd(2,true)},
+  {title:'חיבור תלת-ספרתי בלי המרה',instruction:'חברו שני מספרים תלת-ספרתיים — בלי המרה',tip:'עכשיו 3 עמודות: יחידות, עשרות, מאות. אותו עיקרון!',example:' 231\n+145\n-----\n 376\nיחידות: 1+5=6\nעשרות: 3+4=7\nמאות: 2+1=3',gen:()=>qVertAdd(3,'none')},
+  {title:'חיבור תלת-ספרתי — המרה ביחידות',instruction:'המרה מהיחידות לעשרות',tip:'כשהיחידות ≥ 10 — כותבים יחידות, מעבירים 1 לעשרות.',example:' 248\n+135\n-----\n 383\nיחידות: 8+5=13 → 3, המרה 1\nעשרות: 4+3+1=8\nמאות: 2+1=3',gen:()=>qVertAdd(3,'units')},
+  {title:'חיבור תלת-ספרתי — המרה בעשרות',instruction:'המרה מהעשרות למאות',tip:'כשהעשרות ≥ 10 — כותבים יחידות, מעבירים 1 למאות.',example:' 261\n+182\n-----\n 443\nיחידות: 1+2=3\nעשרות: 6+8=14 → 4, המרה 1\nמאות: 2+1+1=4',gen:()=>qVertAdd(3,'tens')},
+  {title:'חיבור תלת-ספרתי — שתי המרות',instruction:'המרה ביחידות וגם בעשרות!',tip:'שתי המרות — בדקו כל עמודה בזהירות!',example:' 378\n+256\n-----\n 634\nיחידות: 8+6=14 → 4, המרה 1\nעשרות: 7+5+1=13 → 3, המרה 1\nמאות: 3+2+1=6',gen:()=>qVertAdd(3,'both')},
+  {title:'חיבור 4 ספרות בלי המרה',instruction:'חברו מספרים בני 4 ספרות — בלי המרות',tip:'4 עמודות: יחידות, עשרות, מאות, אלפים. אותו עיקרון!',example:' 2,113\n+3,425\n-------\n 5,538',gen:()=>qVertAdd(4,'none')},
+  {title:'חיבור 4 ספרות עם המרה',instruction:'חברו מספרים בני 4 ספרות — עם המרות!',tip:'זהירות בכל עמודה — אם ≥ 10, מעבירים 1!',example:' 2,836\n+1,497\n-------\n 4,333',gen:()=>qVertAdd(4,true)},
+  {title:'אומדן תוצאות',instruction:'עגלו וחשבו — מה התוצאה בערך?',tip:'עגלו כל מספר למאות או לאלפים הקרובים, ואז חברו.',example:'527 ≈ 500\n2,809 ≈ 3,000\n95 ≈ 100\nסה"כ ≈ 3,600',gen:()=>qEstimate()},
+  {title:'ספרה חסרה בתוצאה',instruction:'מצאו את הספרה החסרה!',tip:'חשבו את התרגיל ומצאו איזו ספרה מסתתרת.',example:'  4☐\n+ 23\n----\n  68\nמה חסר? 68-23=45 → הספרה היא 5!',gen:()=>qMissingDigitAdd()},
+  {title:'מעורבב — דו+תלת',instruction:'תרגילים מעורבבים — 2 ו-3 ספרות',tip:'שימו לב לכמות הספרות בכל תרגיל!',example:'כל תרגיל הוא הפתעה!',gen:()=>rr(0,1)?qVertAdd(2,true):qVertAdd(3,true)},
+  {title:'מעורבב — כל הסוגים',instruction:'חיבור, אומדן וספרה חסרה!',tip:'קראו היטב כל שאלה — הסוג משתנה!',example:'תערובת של כל מה שלמדתם!',gen:()=>{const r=rr(0,2);if(r===0)return qVertAdd(rr(2,3),true);if(r===1)return qEstimate();return qMissingDigitAdd();}},
+  {title:'כל הסוגים — תרגול',instruction:'המשיכו לתרגל!',tip:'אתם כבר מקצוענים — הוכיחו את זה!',example:'מגוון תרגילים — תנו את המקסימום!',gen:()=>{const r=rr(0,2);if(r===0)return qVertAdd(rr(2,4),true);if(r===1)return qEstimate();return qMissingDigitAdd();}},
+  {title:'אתגר',instruction:'4 ספרות + המרות — לגדולים!',tip:'ריכוז מלא — 4 ספרות עם כל סוגי ההמרות.',example:'אתגר אמיתי — קחו את הזמן!',gen:()=>{const r=rr(0,1);if(r===0)return qVertAdd(4,true);return qMissingDigitAdd();}},
+  {title:'סופר-אתגר!',instruction:'כל מה שלמדתם — בואו נראה!',tip:'🏆 הרמה הגבוהה ביותר — בהצלחה!',example:'אתם אלופים! 💪',gen:()=>{const r=rr(0,2);if(r===0)return qVertAdd(4,true);if(r===1)return qEstimate();return qMissingDigitAdd();}}
+];
+
+/* ===== BUILD VERTICAL DISPLAY HTML ===== */
+function buildVertHTML(a,b,ansStr){
+  const aS=String(a),bS=String(b);
+  const maxLen=Math.max(aS.length,bS.length,ansStr?String(ansStr).length:0);
+  let h='<div class="vertical-math"><div class="vertical-container">';
+  // top row
+  h+='<div class="v-row">';
+  for(let i=0;i<maxLen;i++){const idx=aS.length-maxLen+i;h+='<div class="v-digit">'+(idx>=0?aS[idx]:'')+'</div>';}
+  h+='</div>';
+  // bottom row with op
+  h+='<div class="v-row"><span class="v-op">+</span>';
+  for(let i=0;i<maxLen;i++){const idx=bS.length-maxLen+i;h+='<div class="v-digit">'+(idx>=0?bS[idx]:'')+'</div>';}
+  h+='</div>';
+  // line
+  h+='<div class="v-line"></div>';
+  // result row
+  h+='<div class="v-row">';
+  if(ansStr!==undefined&&ansStr!==null){
+    const rs=String(ansStr);
+    for(let i=0;i<Math.max(maxLen,rs.length);i++){
+      const idx=rs.length-Math.max(maxLen,rs.length)+i;
+      const ch=idx>=0?rs[idx]:'';
+      if(ch==='☐')h+='<div class="v-digit missing">☐</div>';
+      else h+='<div class="v-digit" style="color:var(--primary);font-weight:900">'+(ch||'')+'</div>';
+    }
+  } else {
+    h+='<div class="v-digit" style="color:var(--primary);font-size:2rem">?</div>';
+  }
+  h+='</div></div></div>';
+  return h;
+}
+
+function buildVertMissing(dispA,dispB,dispAns){
+  const aS=String(dispA),bS=String(dispB),rS=String(dispAns);
+  const maxLen=Math.max(aS.length,bS.length,rS.length);
+  let h='<div class="vertical-math"><div class="vertical-container">';
+  function renderRow(s){
+    let r='';
+    for(let i=0;i<maxLen;i++){
+      const idx=s.length-maxLen+i;
+      const ch=idx>=0?s[idx]:'';
+      if(ch==='☐')r+='<div class="v-digit missing">☐</div>';
+      else r+='<div class="v-digit">'+ch+'</div>';
+    }
+    return r;
+  }
+  h+='<div class="v-row">'+renderRow(aS)+'</div>';
+  h+='<div class="v-row"><span class="v-op">+</span>'+renderRow(bS)+'</div>';
+  h+='<div class="v-line"></div>';
+  h+='<div class="v-row">';
+  for(let i=0;i<maxLen;i++){
+    const idx=rS.length-maxLen+i;
+    const ch=idx>=0?rS[idx]:'';
+    if(ch==='☐')h+='<div class="v-digit missing">☐</div>';
+    else h+='<div class="v-digit" style="color:var(--primary);font-weight:900">'+ch+'</div>';
+  }
+  h+='</div></div></div>';
+  return h;
+}
+
+/* ===== RENDER ===== */
+function renderTabs(){
+  const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  const row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach((_,i)=>{
+    const t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect');}
+    t.onclick=()=>goLevel(i);row.appendChild(t);
+  });
+  const at=row.querySelector('.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  const lvl=levels[currentLevel];
+  document.getElementById('tipText').textContent=lvl.tip;
+  document.getElementById('tipExample').textContent=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  for(let i=0;i<QPL;i++){let q,at=0;do{q=lvl.gen();at++;}while(at<30&&(!q||q.answer===undefined));currentQuestions.push(q);}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  const list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach((q,idx)=>{
+    const card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    let h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    // build display based on type
+    if(q.type==='vert'){
+      h+=buildVertHTML(q.a,q.b,null);
+    } else if(q.type==='missing'){
+      h+=buildVertMissing(q.dispA,q.dispB,q.dispAns);
+    } else if(q.type==='estimate'){
+      // no vertical display for estimate — text is enough
+    }
+    // options
+    h+='<div class="answer-options cols-4">';
+    q.options.forEach((opt,oi)=>{
+      h+='<button class="answer-btn" data-qi="'+idx+'" data-oi="'+oi+'" onclick="checkChoice('+idx+','+oi+')">'+fmt(opt)+'</button>';
+    });
+    h+='</div>';
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+/* ===== CHECK ===== */
+function checkChoice(qi,oi){
+  const q=currentQuestions[qi];
+  const card=document.getElementById('q-'+qi);
+  if(card.classList.contains('correct'))return;
+  const btns=card.querySelectorAll('.answer-btn');
+  const chosen=q.options[oi];
+  const fb=document.getElementById('fb-'+qi);
+  if(chosen===q.answer){
+    card.classList.add('correct');
+    btns[oi].classList.add('correct-choice');
+    btns.forEach(b=>b.classList.add('disabled'));
+    fb.textContent=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+    updateProgress();
+    if(answeredCount===QPL)setTimeout(showLC,800);
+  } else {
+    card.classList.add('wrong');
+    btns[oi].classList.add('wrong-choice');
+    fb.textContent='לא נכון, נסו שוב! 💪';
+    fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    updateProgress();
+    setTimeout(()=>{card.classList.remove('wrong');btns[oi].classList.remove('wrong-choice');fb.classList.remove('show');},1200);
+  }
+}
+
+/* ===== LEVEL COMPLETE ===== */
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  const el=document.getElementById('levelComplete');
+  document.getElementById('lcCorrect').textContent=levelCorrect;
+  document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!';}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!';}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב לשיפור';}
+  el.classList.add('show');el.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+/* ===== NAVIGATION ===== */
+function goLevel(i){if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return;}currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});}
+function nextLevel(){if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return;}if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'});}}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'});}
+
+function updateProgress(){
+  const done=Object.keys(levelResults).length;
+  document.getElementById('progressFill').style.width=Math.round((done/levels.length)*100)+'%';
+  document.getElementById('totalCorrect').textContent=totalCorrect;
+  document.getElementById('totalWrong').textContent=totalWrong;
+}
+
+function showHelp(){document.getElementById('helpModal').classList.add('show');}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show');}
+function toggleTip(){const t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר';}
+
+/* INIT */
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs();});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

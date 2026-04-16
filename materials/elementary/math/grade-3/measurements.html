@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>מדידות — כיתה ג' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#92400e;--primary-dark:#78350f;--primary-light:#fef3c7;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#78350f 0%,#92400e 50%,#b45309 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(146,64,14,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:3rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:2.2rem;padding:6px 20px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">📏</div><div><h1>מדידות</h1><div class="subtitle">כיתה ג' — אורך, משקל וזמן</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">מדידות — כיתה ג' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>📏 מדידות</h2><p><strong>יחידות אורך:</strong><br>🔹 מ"מ (מילימטר) — דברים קטנטנים (עובי דף)<br>🔹 ס"מ (סנטימטר) — דברים קטנים (מחק, אצבע)<br>🔹 מ' (מטר) — דברים גדולים (חדר, אדם)<br>🔹 ק"מ (קילומטר) — מרחקים גדולים (בין ערים)</p><p><strong>יחידות משקל:</strong><br>🔹 גרם — דברים קלים (תפוח, ביצה)<br>🔹 ק"ג (קילוגרם) — דברים כבדים (ילד, תיק)<br>🔹 טונה — דברים כבדים מאוד (מכונית, פיל)</p><p><strong>יחידות זמן:</strong><br>🔹 שעה = 60 דקות<br>🔹 דקה = 60 שניות<br>🔹 יום = 24 שעות<br>🔹 שבוע = 7 ימים</p><p><strong>היקף מלבן:</strong> (אורך + רוחב) × 2</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* --- LENGTH UNIT --- */
+var lengthItems=[
+  {item:'מרחק בין ערים',answer:'ק"מ'},
+  {item:'גובה חדר',answer:'מ\''},
+  {item:'רוחב מחק',answer:'ס"מ'},
+  {item:'עובי דף נייר',answer:'מ"מ'},
+  {item:'אורך מגרש כדורגל',answer:'מ\''},
+  {item:'רוחב ציפורן',answer:'מ"מ'},
+  {item:'גובה ילד',answer:'מ\''},
+  {item:'אורך עיפרון',answer:'ס"מ'},
+  {item:'מרחק מהבית לבית הספר',answer:'ק"מ'},
+  {item:'עובי ספר',answer:'ס"מ'},
+  {item:'אורך נמלה',answer:'מ"מ'},
+  {item:'רוחב כביש',answer:'מ\''},
+  {item:'גובה בניין',answer:'מ\''},
+  {item:'אורך חוט תפירה',answer:'ס"מ'},
+  {item:'מרחק ריצה במרתון',answer:'ק"מ'}
+];
+
+function qLengthUnit(){
+  var item=lengthItems[rr(0,lengthItems.length-1)];
+  var opts=['מ"מ','ס"מ','מ\'','ק"מ'];
+  return{type:'choice',qText:'באיזו יחידה נמדוד <strong>'+item.item+'</strong>?',display:'',answer:item.answer,options:opts,colClass:'cols-4',explain:item.item+' מודדים ב-'+item.answer};
+}
+
+/* --- CONVERT LENGTH --- */
+function qConvertLength(fromUnit,toUnit,factor,maxMult){
+  var n=rr(1,maxMult);
+  var correct=n*factor;
+  var wrongs=new Set();
+  wrongs.add(correct+factor);wrongs.add(correct-factor);wrongs.add(n*10);wrongs.add(n*100);wrongs.add(n*1000);wrongs.add(correct*10);wrongs.add(correct/10);wrongs.add(n);
+  wrongs.delete(correct);wrongs.delete(0);
+  var wArr=[];
+  wrongs.forEach(function(v){if(v>0&&v!==correct&&Number.isInteger(v))wArr.push(v)});
+  wArr=shuffle(wArr).slice(0,3);
+  while(wArr.length<3){var f=correct+rr(1,5)*factor;if(f!==correct&&wArr.indexOf(f)===-1&&f>0)wArr.push(f)}
+  var options=shuffle([String(correct)].concat(wArr.map(String)));
+  var sym={mm:'מ"מ',cm:'ס"מ',m:'מ\'',km:'ק"מ'};
+  return{type:'choice',qText:'<strong>'+n+' '+sym[fromUnit]+'</strong> = ? '+sym[toUnit],display:'<div class="num-display"><span class="big-num" style="font-size:2.2rem">'+n+' '+sym[fromUnit]+' = ?</span></div>',answer:String(correct),options:options,colClass:'cols-4',explain:n+' '+sym[fromUnit]+' = '+correct+' '+sym[toUnit]};
+}
+
+/* --- WEIGHT UNIT --- */
+var weightItems=[
+  {item:'ילד',answer:'ק"ג'},
+  {item:'פיל',answer:'טונה'},
+  {item:'תפוח',answer:'גרם'},
+  {item:'מכונית',answer:'טונה'},
+  {item:'ביצה',answer:'גרם'},
+  {item:'תיק בית ספר',answer:'ק"ג'},
+  {item:'אבטיח',answer:'ק"ג'},
+  {item:'נוצה',answer:'גרם'},
+  {item:'משאית',answer:'טונה'},
+  {item:'חתול',answer:'ק"ג'},
+  {item:'פרפר',answer:'גרם'},
+  {item:'אוטובוס',answer:'טונה'}
+];
+
+function qWeightUnit(){
+  var item=weightItems[rr(0,weightItems.length-1)];
+  var opts=['גרם','ק"ג','טונה'];
+  return{type:'choice',qText:'באיזו יחידה נשקול <strong>'+item.item+'</strong>?',display:'',answer:item.answer,options:opts,colClass:'cols-3',explain:item.item+' שוקלים ב-'+item.answer};
+}
+
+/* --- CONVERT WEIGHT --- */
+function qConvertWeight(fromUnit,toUnit,factor,maxMult){
+  var n=rr(1,maxMult);
+  var correct=n*factor;
+  var wrongs=new Set();
+  wrongs.add(correct+factor);wrongs.add(correct-factor);wrongs.add(n*10);wrongs.add(n*100);wrongs.add(n*1000);wrongs.add(correct*10);
+  wrongs.delete(correct);wrongs.delete(0);
+  var wArr=[];
+  wrongs.forEach(function(v){if(v>0&&v!==correct&&Number.isInteger(v))wArr.push(v)});
+  wArr=shuffle(wArr).slice(0,3);
+  while(wArr.length<3){var f=correct+rr(1,3)*factor;if(f!==correct&&wArr.indexOf(f)===-1&&f>0)wArr.push(f)}
+  var options=shuffle([String(correct)].concat(wArr.map(String)));
+  var sym={g:'גרם',kg:'ק"ג',ton:'טונה'};
+  return{type:'choice',qText:'<strong>'+n+' '+sym[fromUnit]+'</strong> = ? '+sym[toUnit],display:'<div class="num-display"><span class="big-num" style="font-size:2.2rem">'+n+' '+sym[fromUnit]+' = ?</span></div>',answer:String(correct),options:options,colClass:'cols-4',explain:n+' '+sym[fromUnit]+' = '+correct+' '+sym[toUnit]};
+}
+
+/* --- TIME UNIT --- */
+function qTimeUnit(){
+  var timeQ=[
+    {q:'שעה = ? דקות',answer:'60',wrongs:['30','45','100']},
+    {q:'דקה = ? שניות',answer:'60',wrongs:['30','100','45']},
+    {q:'יום = ? שעות',answer:'24',wrongs:['12','36','48']},
+    {q:'שבוע = ? ימים',answer:'7',wrongs:['5','10','14']},
+    {q:'חצי שעה = ? דקות',answer:'30',wrongs:['15','45','60']},
+    {q:'רבע שעה = ? דקות',answer:'15',wrongs:['10','20','30']},
+    {q:'שעתיים = ? דקות',answer:'120',wrongs:['60','90','200']},
+    {q:'שעה וחצי = ? דקות',answer:'90',wrongs:['60','75','120']},
+    {q:'3 ימים = ? שעות',answer:'72',wrongs:['36','48','96']},
+    {q:'2 שבועות = ? ימים',answer:'14',wrongs:['7','10','21']}
+  ];
+  var t=timeQ[rr(0,timeQ.length-1)];
+  var options=shuffle([t.answer].concat(t.wrongs));
+  return{type:'choice',qText:'<strong>'+t.q+'</strong>',display:'',answer:t.answer,options:options,colClass:'cols-4',explain:t.q.replace('?',t.answer)};
+}
+
+/* --- TIME PROBLEM --- */
+function qTimeProblem(){
+  var scenarios=[
+    function(){var dur=rr(1,4)*15;var sh=rr(7,11);var sm=0;var eh=sh;var em=sm+dur;if(em>=60){eh++;em-=60}return{q:'השיעור '+dur+' דקות. התחיל ב-'+sh+':00. מתי נגמר?',answer:eh+':'+(em<10?'0':'')+em,wrongs:function(){var w=[];w.push(sh+':'+(dur<10?'0':'')+dur);w.push((sh+1)+':00');var fe=em+15;var fh=eh;if(fe>=60){fh++;fe-=60}w.push(fh+':'+(fe<10?'0':'')+fe);return w}()}},
+    function(){var dur=rr(1,3)*30;var sh=rr(8,14);var correct_h=sh;var correct_m=dur;if(correct_m>=60){correct_h++;correct_m-=60}return{q:'ההפסקה '+dur+' דקות. התחילה ב-'+sh+':00. מתי נגמרה?',answer:correct_h+':'+(correct_m<10?'0':'')+correct_m,wrongs:function(){var w=[];w.push((sh+1)+':'+dur);w.push(sh+':'+dur);var a2=correct_h;var a2m=correct_m+15;if(a2m>=60){a2++;a2m-=60}w.push(a2+':'+(a2m<10?'0':'')+a2m);return w}()}},
+    function(){var sh=rr(7,10);var sm=[0,15,30][rr(0,2)];var dur=rr(2,6)*15;var totalM=sh*60+sm+dur;var eh=Math.floor(totalM/60);var em=totalM%60;return{q:'יצאנו מהבית ב-'+sh+':'+(sm<10?'0':'')+sm+'. הלכנו '+dur+' דקות. מתי הגענו?',answer:eh+':'+(em<10?'0':'')+em,wrongs:function(){var w=[];var t2=totalM+15;w.push(Math.floor(t2/60)+':'+(t2%60<10?'0':'')+(t2%60));var t3=totalM-15;if(t3>0)w.push(Math.floor(t3/60)+':'+(t3%60<10?'0':'')+(t3%60));else w.push((eh+1)+':'+(em<10?'0':'')+em);w.push(sh+':'+(dur<10?'0':'')+dur);return w}()}}
+  ];
+  var s=scenarios[rr(0,scenarios.length-1)]();
+  var options=shuffle([s.answer].concat(s.wrongs.slice(0,3)));
+  while(options.length<4){options.push((rr(8,12))+':'+(['00','15','30','45'])[rr(0,3)])}
+  /* deduplicate */
+  var seen={};var uniq=[];for(var i=0;i<options.length;i++){if(!seen[options[i]]){seen[options[i]]=true;uniq.push(options[i])}}
+  while(uniq.length<4){var x=rr(7,13)+':'+(rr(0,3)*15<10?'0':'')+rr(0,3)*15;if(!seen[x]){seen[x]=true;uniq.push(x)}}
+  return{type:'choice',qText:s.q,display:'',answer:s.answer,options:uniq.slice(0,4),colClass:'cols-4'};
+}
+
+/* --- CLOCK READ --- */
+function clockSVG(h,m){
+  var svg='<svg viewBox="0 0 120 120" style="width:120px;height:120px;display:block;margin:0 auto">';
+  svg+='<circle cx="60" cy="60" r="54" fill="#fff" stroke="var(--text)" stroke-width="2"/>';
+  for(var i=0;i<12;i++){var a=i*30*Math.PI/180;var x1=60+46*Math.sin(a),y1=60-46*Math.cos(a);var x2=60+50*Math.sin(a),y2=60-50*Math.cos(a);svg+='<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="var(--text)" stroke-width="'+(i%3===0?2.5:1)+'"/>';}
+  for(var i=1;i<=12;i++){var a=i*30*Math.PI/180;svg+='<text x="'+(60+38*Math.sin(a))+'" y="'+(60-38*Math.cos(a)+4)+'" text-anchor="middle" font-size="10" font-weight="700" fill="var(--text)">'+i+'</text>';}
+  var ha=(h%12+m/60)*30*Math.PI/180;svg+='<line x1="60" y1="60" x2="'+(60+25*Math.sin(ha))+'" y2="'+(60-25*Math.cos(ha))+'" stroke="var(--text)" stroke-width="3.5" stroke-linecap="round"/>';
+  var ma=m*6*Math.PI/180;svg+='<line x1="60" y1="60" x2="'+(60+36*Math.sin(ma))+'" y2="'+(60-36*Math.cos(ma))+'" stroke="var(--primary)" stroke-width="2" stroke-linecap="round"/>';
+  svg+='<circle cx="60" cy="60" r="3" fill="var(--text)"/>';
+  svg+='</svg>';
+  return svg;
+}
+
+function qClockRead(minuteChoices){
+  var h=rr(1,12);
+  var m=minuteChoices[rr(0,minuteChoices.length-1)];
+  var correctStr=h+':'+(m<10?'0':'')+m;
+  var wrongs=new Set();
+  /* wrong hour */
+  var wh=h===12?1:h+1;
+  wrongs.add(wh+':'+(m<10?'0':'')+m);
+  /* wrong minute */
+  var wm=(m+15)%60;
+  wrongs.add(h+':'+(wm<10?'0':'')+wm);
+  /* swap hour/minute perception */
+  if(m<=12&&m!==h) wrongs.add(m+':'+(h<10?'0':'')+h);
+  /* another wrong */
+  var wh2=h>=2?h-1:12;
+  wrongs.add(wh2+':'+(m<10?'0':'')+m);
+  wrongs.delete(correctStr);
+  var wArr=Array.from(wrongs).slice(0,3);
+  while(wArr.length<3){var rh=rr(1,12);var rm=minuteChoices[rr(0,minuteChoices.length-1)];var rs=rh+':'+(rm<10?'0':'')+rm;if(rs!==correctStr&&wArr.indexOf(rs)===-1)wArr.push(rs)}
+  var options=shuffle([correctStr].concat(wArr.slice(0,3)));
+  return{type:'choice',qText:'מה השעה שמוצגת בשעון?',display:'<div class="num-display">'+clockSVG(h,m)+'</div>',answer:correctStr,options:options,colClass:'cols-4',explain:'השעה היא '+correctStr};
+}
+
+/* --- PERIMETER --- */
+function rectSVG(a,b){
+  var w=Math.max(80,a*12);var h=Math.max(50,b*12);
+  var svg='<svg viewBox="0 0 '+(w+60)+' '+(h+50)+'" style="width:'+(w+60)+'px;height:'+(h+50)+'px;display:block;margin:0 auto;max-width:100%">';
+  svg+='<rect x="30" y="20" width="'+w+'" height="'+h+'" fill="var(--primary-light)" stroke="var(--primary)" stroke-width="2.5" rx="4"/>';
+  /* top label */
+  svg+='<text x="'+(30+w/2)+'" y="14" text-anchor="middle" font-size="13" font-weight="700" fill="var(--primary)">'+a+' ס"מ</text>';
+  /* right label */
+  svg+='<text x="'+(35+w)+'" y="'+(20+h/2+4)+'" text-anchor="start" font-size="13" font-weight="700" fill="var(--primary)">'+b+' ס"מ</text>';
+  svg+='</svg>';
+  return svg;
+}
+
+function qPerimeter(){
+  var a=rr(2,15);var b=rr(2,15);
+  var correct=(a+b)*2;
+  var wrongs=new Set();
+  wrongs.add(a*b);wrongs.add(a+b);wrongs.add(correct+2);wrongs.add(correct-2);wrongs.add((a+b));wrongs.add(a*4);wrongs.add(b*4);
+  wrongs.delete(correct);wrongs.delete(0);
+  var wArr=[];wrongs.forEach(function(v){if(v>0&&v!==correct)wArr.push(v)});
+  wArr=shuffle(wArr).slice(0,3);
+  while(wArr.length<3){var f=correct+rr(-5,5);if(f>0&&f!==correct&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var options=shuffle([String(correct)].concat(wArr.map(String)));
+  return{type:'choice',qText:'מה ההיקף של המלבן? (בס"מ)',display:'<div class="num-display">'+rectSVG(a,b)+'</div>',answer:String(correct),options:options,colClass:'cols-4',explain:'היקף = ('+a+' + '+b+') × 2 = '+correct+' ס"מ'};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  /* 1 */ {title:'יחידות אורך',instruction:'באיזו יחידה מודדים?',
+   tip:'יחידות אורך מהקטנה לגדולה:\n<strong>מ"מ</strong> (מילימטר) → <strong>ס"מ</strong> (סנטימטר) → <strong>מ\'</strong> (מטר) → <strong>ק"מ</strong> (קילומטר)',
+   example:'עובי דף → מ"מ\nאורך עיפרון → ס"מ\nגובה חדר → מ\'\nמרחק בין ערים → ק"מ',
+   gen:function(){return qLengthUnit()}},
+
+  /* 2 */ {title:'המרות ס"מ ↔ מ\'',instruction:'כמה ס"מ יש במטר?',
+   tip:'<strong>1 מ\' = 100 ס"מ</strong>\nכדי להמיר ממטרים לסנטימטרים — כופלים ב-100.',
+   example:'<span class="math">2 מ\' = 200 ס"מ</span>\n<span class="math">3 מ\' = 300 ס"מ</span>',
+   gen:function(){return qConvertLength('m','cm',100,9)}},
+
+  /* 3 */ {title:'המרות מ\' ↔ ק"מ',instruction:'כמה מטרים יש בקילומטר?',
+   tip:'<strong>1 ק"מ = 1,000 מ\'</strong>\nכדי להמיר מקילומטרים למטרים — כופלים ב-1,000.',
+   example:'<span class="math">2 ק"מ = 2,000 מ\'</span>\n<span class="math">5 ק"מ = 5,000 מ\'</span>',
+   gen:function(){return qConvertLength('km','m',1000,9)}},
+
+  /* 4 */ {title:'יחידות משקל',instruction:'באיזו יחידה שוקלים?',
+   tip:'יחידות משקל מהקלה לכבדה:\n<strong>גרם</strong> → <strong>ק"ג</strong> (קילוגרם) → <strong>טונה</strong>',
+   example:'ביצה → גרם\nילד → ק"ג\nמשאית → טונה',
+   gen:function(){return qWeightUnit()}},
+
+  /* 5 */ {title:'המרות משקל',instruction:'כמה גרם בקילוגרם?',
+   tip:'<strong>1 ק"ג = 1,000 גרם</strong>\n<strong>1 טונה = 1,000 ק"ג</strong>',
+   example:'<span class="math">2 ק"ג = 2,000 גרם</span>\n<span class="math">3 טונה = 3,000 ק"ג</span>',
+   gen:function(){
+     return rr(0,1)===0?qConvertWeight('kg','g',1000,9):qConvertWeight('ton','kg',1000,5);
+   }},
+
+  /* 6 */ {title:'קריאת שעון',instruction:'מה השעה?',
+   tip:'<strong>המחוג הקצר</strong> מראה את השעה.\n<strong>המחוג הארוך</strong> מראה את הדקות.\nכשהמחוג הארוך על 12 — השעה בדיוק (עגולה).',
+   example:'מחוג קצר על 3, ארוך על 12 → 3:00\nמחוג קצר על 7, ארוך על 6 → 7:30',
+   gen:function(){return qClockRead([0,30])}},
+
+  /* 7 */ {title:'יחידות זמן',instruction:'כמה דקות בשעה? כמה שעות ביום?',
+   tip:'<strong>שעה = 60 דקות</strong>\n<strong>דקה = 60 שניות</strong>\n<strong>יום = 24 שעות</strong>\n<strong>שבוע = 7 ימים</strong>',
+   example:'<span class="math">שעה = 60 דקות</span>\n<span class="math">חצי שעה = 30 דקות</span>\n<span class="math">רבע שעה = 15 דקות</span>',
+   gen:function(){return qTimeUnit()}},
+
+  /* 8 */ {title:'שאלות זמן',instruction:'חשבו מתי מתחיל או נגמר',
+   tip:'כדי לחשב שעת סיום:\n1. קחו את שעת ההתחלה\n2. הוסיפו את מספר הדקות\n3. אם עברתם 60 — הוסיפו שעה והורידו 60 דקות',
+   example:'התחלנו ב-8:00, השיעור 45 דקות:\n8:00 + 45 = <span class="math">8:45</span>',
+   gen:function(){return qTimeProblem()}},
+
+  /* 9 */ {title:'היקף מלבן',instruction:'חשבו את ההיקף!',
+   tip:'<strong>היקף מלבן = (אורך + רוחב) × 2</strong>\nאפשר גם: אורך + רוחב + אורך + רוחב\n(סוכמים את כל הצלעות!)',
+   example:'מלבן עם צלעות 5 ו-3:\nהיקף = (5 + 3) × 2 = <span class="math">16 ס"מ</span>',
+   gen:function(){return qPerimeter()}},
+
+  /* 10 */ {title:'היקף — תרגול',instruction:'עוד תרגילי היקף!',
+   tip:'זכרו: <strong>היקף = (אורך + רוחב) × 2</strong>\nבריבוע: היקף = צלע × 4',
+   example:'מלבן 7 ו-4:\n(7 + 4) × 2 = <span class="math">22 ס"מ</span>',
+   gen:function(){return qPerimeter()}},
+
+  /* 11 */ {title:'מעורבב — אורך ומשקל',instruction:'יחידות + המרות!',
+   tip:'זכרו:\n• 1 מ\' = 100 ס"מ, 1 ק"מ = 1,000 מ\'\n• 1 ק"ג = 1,000 גרם, 1 טונה = 1,000 ק"ג',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[qLengthUnit,qWeightUnit,
+       function(){return qConvertLength('m','cm',100,9)},
+       function(){return qConvertWeight('kg','g',1000,9)},
+       function(){return qConvertLength('km','m',1000,5)}];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  /* 12 */ {title:'מעורבב — שעון וזמן',instruction:'קריאת שעון + חשבון זמן',
+   tip:'קראו את השעון בעזרת שני המחוגים.\nשימו לב — המחוג הקצר הוא השעה!',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[function(){return qClockRead([0,15,30,45])},qTimeUnit,qTimeProblem];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  /* 13 */ {title:'אתגר — כל הנושאים!',instruction:'אורך, משקל, זמן והיקף!',
+   tip:'שלבו את כל מה שלמדתם! 💪',
+   example:'🏆 בהצלחה!',
+   gen:function(){
+     var types=[qLengthUnit,qWeightUnit,qTimeUnit,qTimeProblem,qPerimeter,
+       function(){return qClockRead([0,15,30,45])},
+       function(){return qConvertLength('m','cm',100,9)},
+       function(){return qConvertWeight('kg','g',1000,9)}];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  /* 14 */ {title:'סופר אתגר!',instruction:'שאלות מאתגרות!',
+   tip:'🏆 אתם מומחים למדידות!',
+   example:'🌟 💪 🏆',
+   gen:function(){
+     var types=[
+       function(){return qClockRead([0,5,10,15,20,25,30,35,40,45,50,55])},
+       qTimeProblem,qPerimeter,
+       function(){return qConvertLength('cm','mm',10,20)},
+       function(){return qConvertWeight('ton','kg',1000,5)},
+       qLengthUnit,qWeightUnit];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  /* 15 */ {title:'מאסטר!',instruction:'הרמה הכי קשה — כל הסוגים!',
+   tip:'🏆 אין עליכם! שלטתם בכל המדידות!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[
+       function(){return qClockRead([0,5,10,15,20,25,30,35,40,45,50,55])},
+       qTimeProblem,qPerimeter,
+       function(){return qConvertLength('m','cm',100,9)},
+       function(){return qConvertLength('km','m',1000,9)},
+       function(){return qConvertLength('cm','mm',10,30)},
+       function(){return qConvertWeight('kg','g',1000,9)},
+       function(){return qConvertWeight('ton','kg',1000,5)},
+       qLengthUnit,qWeightUnit,qTimeUnit];
+     return types[rr(0,types.length-1)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.textContent=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

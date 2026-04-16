@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>חיסור במאונך — כיתה ג' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --primary: #dc2626;
+  --primary-dark: #b91c1c;
+  --primary-light: #fee2e2;
+  --accent: #f59e0b;
+  --accent-dark: #d97706;
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --error: #ef4444;
+  --error-light: #fee2e2;
+  --text: #1e293b;
+  --text-light: #64748b;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Heebo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  direction: rtl;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== HEADER ===== */
+.app-header {
+  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 50%, #ef4444 100%);
+  color: #fff;
+  padding: 20px 24px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 16px rgba(185,28,28,0.3);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.header-title h1 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.header-title .subtitle {
+  font-size: 0.8rem;
+  opacity: 0.85;
+  font-weight: 400;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.header-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: #fff;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.header-btn:hover { background: rgba(255,255,255,0.3); }
+
+.progress-bar {
+  background: rgba(255,255,255,0.2);
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+.progress-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+/* ===== TABS ===== */
+.tabs-container {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.tabs-container::-webkit-scrollbar { display: none; }
+
+.tabs-row {
+  display: flex;
+  gap: 6px;
+  min-width: max-content;
+}
+
+.tab {
+  min-width: 40px;
+  height: 36px;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  background: var(--card);
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+}
+
+.tab:hover { border-color: var(--primary); color: var(--primary); }
+.tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.tab.done { background: var(--success-light); color: var(--success); border-color: var(--success); }
+.tab.done.perfect::after { content: '\2B50'; font-size: 0.6rem; margin-right: 2px; }
+
+/* ===== MAIN ===== */
+.main-content {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px 16px 100px;
+}
+
+/* Level info */
+.level-info {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.level-badge {
+  display: inline-block;
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.level-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.level-instruction {
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+/* ===== TIP BOX ===== */
+.level-tip {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 2px solid #fcd34d;
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.level-tip.collapsed .tip-body { display: none; }
+
+.tip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+}
+
+.tip-toggle {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.tip-body { margin-top: 8px; }
+
+.tip-text {
+  font-size: 0.88rem;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+
+.tip-example {
+  background: rgba(255,255,255,0.7);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  direction: ltr;
+  text-align: center;
+  font-weight: 500;
+  line-height: 1.8;
+  font-family: 'Courier New', monospace;
+  white-space: pre-wrap;
+}
+
+/* ===== QUESTION CARD ===== */
+.questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.question-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  transition: all 0.3s;
+  position: relative;
+}
+
+.question-card.correct {
+  border-color: var(--success);
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.question-card.wrong {
+  border-color: var(--error);
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.question-number {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 28px;
+  height: 28px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.question-card.correct .question-number {
+  background: var(--success);
+  color: #fff;
+}
+
+/* Question stem for non-vertical questions */
+.question-stem {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+/* ===== VERTICAL MATH DISPLAY ===== */
+.vertical-math {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+  direction: ltr;
+}
+
+.vertical-container {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: relative;
+  min-width: 140px;
+}
+
+.v-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0;
+  position: relative;
+}
+
+.v-op {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--primary);
+  position: absolute;
+  left: -32px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.v-digit {
+  width: 44px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.v-line {
+  width: 100%;
+  height: 3px;
+  background: var(--text);
+  margin: 4px 0;
+  border-radius: 2px;
+}
+
+/* Answer digit input */
+.v-digit-input {
+  width: 44px;
+  height: 52px;
+  border: 3px dashed var(--primary);
+  border-radius: 10px;
+  background: var(--primary-light);
+  font-family: inherit;
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-align: center;
+  color: var(--primary);
+  outline: none;
+  transition: all 0.2s;
+  -moz-appearance: textfield;
+  caret-color: var(--primary);
+}
+
+.v-digit-input::-webkit-outer-spin-button,
+.v-digit-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.v-digit-input:focus {
+  border-style: solid;
+  background: #fca5a5;
+  box-shadow: 0 0 0 3px rgba(220,38,38,0.2);
+}
+
+.v-digit-input.correct-digit {
+  background: var(--success-light);
+  border-color: var(--success);
+  color: var(--success);
+  border-style: solid;
+}
+
+.v-digit-input.wrong-digit {
+  background: var(--error-light);
+  border-color: var(--error);
+  color: var(--error);
+  border-style: solid;
+}
+
+/* Carry/borrow cells */
+.carry-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0;
+  min-height: 28px;
+}
+
+.carry-input {
+  width: 32px;
+  height: 26px;
+  margin: 0 6px;
+  border: 2px dashed #d4d4d8;
+  border-radius: 6px;
+  background: #fafafa;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-align: center;
+  color: var(--primary);
+  outline: none;
+  transition: all 0.2s;
+  -moz-appearance: textfield;
+}
+
+.carry-input::-webkit-outer-spin-button,
+.carry-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.carry-input:focus {
+  border-color: var(--primary);
+  border-style: solid;
+  background: var(--primary-light);
+}
+
+.carry-input.correct-carry {
+  border-color: var(--success);
+  background: var(--success-light);
+  color: var(--success);
+  border-style: solid;
+}
+
+.carry-spacer {
+  width: 44px;
+  height: 24px;
+}
+
+/* MC options for estimate and alternative method */
+.mc-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.mc-option {
+  padding: 14px 10px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--border);
+  background: var(--card);
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.mc-option:hover { border-color: var(--primary); background: var(--primary-light); }
+.mc-option.selected { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+.mc-option.correct-opt { border-color: var(--success); background: var(--success-light); color: var(--success); }
+.mc-option.wrong-opt { border-color: var(--error); background: var(--error-light); color: var(--error); }
+.mc-option:disabled { cursor: default; opacity: 0.85; }
+
+/* Check button */
+.check-btn {
+  display: block;
+  margin: 16px auto 0;
+  padding: 10px 32px;
+  border-radius: 10px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.check-btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+.check-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+
+/* Feedback */
+.feedback {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.feedback.show { opacity: 1; }
+.feedback.correct-fb { color: var(--success); }
+.feedback.wrong-fb { color: var(--error); }
+
+/* ===== LEVEL COMPLETE ===== */
+.level-complete {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 2px solid var(--success);
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  display: none;
+}
+
+.level-complete.show { display: block; animation: popIn 0.4s ease; }
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.lc-emoji { font-size: 3.5rem; margin-bottom: 12px; }
+.lc-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 4px; }
+.lc-sub { color: var(--text-light); margin-bottom: 8px; }
+
+.lc-score {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 16px 0;
+}
+
+.lc-score-item { text-align: center; }
+.lc-score-num { font-size: 2rem; font-weight: 900; }
+.lc-score-label { font-size: 0.8rem; color: var(--text-light); }
+
+.lc-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.lc-btn {
+  padding: 12px 28px;
+  border-radius: 10px;
+  border: none;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lc-btn-primary { background: var(--primary); color: #fff; }
+.lc-btn-primary:hover { background: var(--primary-dark); }
+.lc-btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+.lc-btn-outline:hover { background: var(--primary-light); }
+
+/* ===== HELP MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.show { display: flex; }
+
+.modal {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  max-width: 420px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: popIn 0.3s ease;
+}
+
+.modal h2 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal p {
+  color: var(--text-light);
+  margin-bottom: 12px;
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+.modal-close {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+/* ===== PRINT ===== */
+.print-overlay { display: none; }
+
+@media print {
+  .app-header, .tabs-container, .level-tip, .level-complete, .modal-overlay { display: none !important; }
+  .main-content { padding: 0; max-width: 100%; }
+  .print-overlay { display: block !important; text-align: center; padding: 20px 0; font-size: 1.3rem; font-weight: 800; border-bottom: 2px solid #000; margin-bottom: 20px; }
+  .question-card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; margin-bottom: 12px; }
+  .check-btn { display: none; }
+  .feedback { display: none; }
+  body { background: #fff; }
+  .v-digit-input { border-style: solid; background: #f0f0f0; }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+  .v-digit, .v-digit-input { width: 38px; height: 46px; font-size: 1.5rem; }
+  .v-op { font-size: 1.3rem; left: -26px; }
+  .question-card { padding: 18px 14px; }
+  .header-title h1 { font-size: 1.1rem; }
+  .vertical-container { min-width: 110px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="app-header">
+  <div class="header-top">
+    <div class="header-title">
+      <div class="header-icon">➖</div>
+      <div>
+        <h1>חיסור במאונך</h1>
+        <div class="subtitle">כיתה ג' — חיסור מסודר עם פריטות</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="header-btn" onclick="showHelp()" title="עזרה">❓</button>
+      <button class="header-btn" onclick="window.print()" title="הדפסה">🖨️</button>
+    </div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-stats">
+    <span>✅ <span id="totalCorrect">0</span> נכון</span>
+    <span>❌ <span id="totalWrong">0</span> שגוי</span>
+    <span id="progressText">רמה 1 מתוך 15</span>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-container">
+  <div class="tabs-row" id="tabsRow"></div>
+</div>
+
+<!-- MAIN -->
+<div class="main-content">
+  <div class="print-overlay">חיסור במאונך — כיתה ג' | בועז חזן</div>
+
+  <div class="level-info">
+    <span class="level-badge" id="levelBadge">רמה 1</span>
+    <h2 class="level-title" id="levelTitle"></h2>
+    <p class="level-instruction" id="levelInstruction"></p>
+  </div>
+
+  <div class="level-tip" id="levelTip" onclick="toggleTip()">
+    <div class="tip-header">
+      <span>💡 טיפ</span>
+      <span class="tip-toggle" id="tipToggle">▲ הסתר</span>
+    </div>
+    <div class="tip-body">
+      <p class="tip-text" id="tipText"></p>
+      <div class="tip-example" id="tipExample"></div>
+    </div>
+  </div>
+
+  <div class="questions-list" id="questionsList"></div>
+
+  <div class="level-complete" id="levelComplete">
+    <div class="lc-emoji" id="lcEmoji">🎉</div>
+    <div class="lc-title" id="lcTitle">כל הכבוד!</div>
+    <div class="lc-sub" id="lcSub"></div>
+    <div class="lc-score">
+      <div class="lc-score-item">
+        <div class="lc-score-num" id="lcCorrect" style="color: var(--success);">0</div>
+        <div class="lc-score-label">נכון</div>
+      </div>
+      <div class="lc-score-item">
+        <div class="lc-score-num" id="lcWrong" style="color: var(--error);">0</div>
+        <div class="lc-score-label">שגוי</div>
+      </div>
+    </div>
+    <div class="lc-buttons">
+      <button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button>
+      <button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button>
+    </div>
+  </div>
+</div>
+
+<!-- HELP MODAL -->
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2>❓ איך מחסרים במאונך?</h2>
+    <p><strong>1. מסדרים</strong> — כותבים את המספרים זה מתחת לזה, יחידות מתחת ליחידות, עשרות מתחת לעשרות.</p>
+    <p><strong>2. מתחילים מימין</strong> — קודם מחסרים את ספרת היחידות.</p>
+    <p><strong>3. פריטה</strong> — אם הספרה למעלה קטנה מהספרה למטה, "לווים" 10 מהעמודה הבאה: הספרה למעלה מקבלת +10, והעמודה השכנה מפחיתה 1.</p>
+    <p><strong>4. ממשיכים שמאלה</strong> — עשרות, מאות, אלפים — אותו עיקרון!</p>
+    <p>15 רמות מדורגות — מחיסור פשוט ועד אתגרים! בהצלחה! 💪</p>
+    <button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button>
+  </div>
+</div>
+
+<script>
+// ===== HELPERS =====
+function rr(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function shuffle(arr){ for(let i=arr.length-1;i>0;i--){const j=rr(0,i);[arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
+
+function getDigits(n, len) {
+  const s = String(n);
+  const arr = [];
+  for(let i=0;i<len;i++) arr.push(i<s.length ? parseInt(s[s.length-1-i]) : 0);
+  return arr;
+}
+
+// ===== QUESTION GENERATORS =====
+
+// Type 1: Vertical Subtraction
+function qVertSub(maxDigits, breakType) {
+  let a, b;
+  let attempts = 0;
+  while(attempts < 100) {
+    attempts++;
+    if(maxDigits === 2) {
+      a = rr(21, 99);
+      b = rr(10, a - 1);
+    } else if(maxDigits === 3) {
+      a = rr(100, 999);
+      b = rr(10, a - 1);
+    } else {
+      a = rr(1000, 9999);
+      b = rr(100, a - 1);
+    }
+
+    const aD = getDigits(a, maxDigits);
+    const bD = getDigits(b, maxDigits);
+
+    if(breakType === 'none') {
+      // Every digit of top >= corresponding digit of bottom
+      let ok = true;
+      for(let d=0; d<maxDigits; d++) {
+        if(aD[d] < bD[d]) { ok = false; break; }
+      }
+      if(!ok) continue;
+      // Also make sure b is at least 2 digits
+      if(b < 10) continue;
+      return makeVertQ(a, b);
+    }
+
+    if(breakType === 'units') {
+      // Units digit top < bottom, tens top >= bottom (no second borrow)
+      if(aD[0] >= bD[0]) continue;
+      // Check tens won't need borrow after losing 1
+      let ok = true;
+      let borrow = 1;
+      for(let d=1; d<maxDigits; d++) {
+        if(aD[d] - borrow < bD[d]) { ok = false; break; }
+        borrow = 0;
+      }
+      if(!ok) continue;
+      if(b < 10) continue;
+      return makeVertQ(a, b);
+    }
+
+    if(breakType === 'tens') {
+      // Units no borrow, tens need borrow
+      if(aD[0] < bD[0]) continue; // units must not borrow
+      if(maxDigits < 3) continue;
+      if(aD[1] >= bD[1]) continue; // tens must borrow
+      // Hundreds after losing 1 must be fine
+      if(aD[2] - 1 < bD[2]) continue;
+      if(b < 10) continue;
+      return makeVertQ(a, b);
+    }
+
+    if(breakType === 'both') {
+      // Both units and tens need borrow
+      if(aD[0] >= bD[0]) continue;
+      if(maxDigits < 3) continue;
+      // After units borrow, tens loses 1
+      if((aD[1] - 1) >= bD[1]) continue; // tens must still need borrow
+      // Hundreds after losing 1 must be fine
+      if(aD[2] - 1 < bD[2]) continue;
+      if(b < 10) continue;
+      return makeVertQ(a, b);
+    }
+
+    if(breakType === 'zeros') {
+      // Minuend has zeros: like 300, 500, 1000, 400
+      const zeroNums3 = [200,300,400,500,600,700,800,900];
+      const zeroNums4 = [1000,2000,3000,4000,5000];
+      if(maxDigits === 3) {
+        a = zeroNums3[rr(0, zeroNums3.length-1)];
+      } else {
+        a = zeroNums4[rr(0, zeroNums4.length-1)];
+      }
+      b = rr(Math.max(11, Math.floor(a*0.1)), Math.floor(a*0.9));
+      if(a - b <= 0) continue;
+      return makeVertQ(a, b);
+    }
+
+    if(breakType === 'from1000') {
+      a = 1000;
+      b = rr(101, 999);
+      return makeVertQ(a, b);
+    }
+
+    if(breakType === 'mixed') {
+      // Random break type
+      const types = ['none','units','tens','both','zeros'];
+      const t = types[rr(0, types.length-1)];
+      return qVertSub(maxDigits, t);
+    }
+  }
+  // Fallback: simple no-borrow
+  a = maxDigits === 2 ? rr(50,99) : maxDigits === 3 ? rr(500,999) : rr(5000,9999);
+  b = maxDigits === 2 ? rr(10,20) : maxDigits === 3 ? rr(100,200) : rr(1000,2000);
+  return makeVertQ(a, b);
+}
+
+function makeVertQ(a, b) {
+  const answer = a - b;
+  // Generate 3 wrong options near correct
+  const wrongs = new Set();
+  let tries = 0;
+  while(wrongs.size < 3 && tries < 50) {
+    tries++;
+    const offset = rr(1, 20) * (rr(0,1) ? 1 : -1);
+    const w = answer + offset;
+    if(w > 0 && w !== answer && !wrongs.has(w)) wrongs.add(w);
+  }
+  while(wrongs.size < 3) wrongs.add(answer + wrongs.size + 1);
+  return { type: 'vert', a: a, b: b, answer: answer, wrongs: Array.from(wrongs) };
+}
+
+// Type 2: Estimate Subtraction
+function qEstimateSub() {
+  // Numbers in thousands/hundreds range
+  const scenarios = [
+    () => { const a = rr(2,8)*1000 + rr(1,9)*100 + rr(10,90); const b = rr(1,a/1000-1)*1000 + rr(1,9)*100 + rr(10,90); return [a,b]; },
+    () => { const a = rr(3,9)*100 + rr(10,90); const b = rr(1,Math.floor(a/100)-1)*100 + rr(10,90); return [a,b]; }
+  ];
+  const [a,b] = scenarios[rr(0, scenarios.length-1)]();
+  const exact = a - b;
+  // Round to nearest 100 or 1000
+  const roundTo = exact > 2000 ? 1000 : 100;
+  const rounded = Math.round(exact / roundTo) * roundTo;
+
+  // Generate options: the correct rounded + 3 wrong rounded values
+  const options = [rounded];
+  const offsets = [-2,-1,1,2,3];
+  shuffle(offsets);
+  for(const off of offsets) {
+    const w = rounded + off * roundTo;
+    if(w > 0 && !options.includes(w)) options.push(w);
+    if(options.length === 4) break;
+  }
+  while(options.length < 4) options.push(rounded + (options.length+1)*roundTo);
+  shuffle(options);
+
+  const aStr = a.toLocaleString('he-IL');
+  const bStr = b.toLocaleString('he-IL');
+
+  return {
+    type: 'estimate',
+    stem: 'מהי, בערך, תוצאת החיסור ' + aStr + ' \u2212 ' + bStr + '?',
+    options: options,
+    answer: rounded,
+    a: a,
+    b: b
+  };
+}
+
+// Type 3: Alternative Method (add same to both)
+function qAlternativeMethod() {
+  // Strategy: a - b = (a+k) - (b+k) to make nicer numbers
+  const pairs = [
+    {a:75, b:39, k:1, display:'75 \u2212 39 = 76 \u2212 40', correct: true},
+    {a:83, b:47, k:3, display:'83 \u2212 47 = 86 \u2212 50', correct: true},
+    {a:62, b:28, k:2, display:'62 \u2212 28 = 64 \u2212 30', correct: true},
+    {a:94, b:56, k:4, display:'94 \u2212 56 = 98 \u2212 60', correct: true},
+    {a:51, b:19, k:1, display:'51 \u2212 19 = 52 \u2212 20', correct: true},
+    {a:145, b:68, k:2, display:'145 \u2212 68 = 147 \u2212 70', correct: true},
+    {a:200, b:87, k:3, display:'200 \u2212 87 = 203 \u2212 90', correct: true},
+    {a:123, b:78, k:2, display:'123 \u2212 78 = 125 \u2212 80', correct: true},
+    // Wrong ones - add different amounts
+    {a:75, b:39, k:0, display:'75 \u2212 39 = 76 \u2212 39', correct: false},
+    {a:83, b:47, k:0, display:'83 \u2212 47 = 86 \u2212 47', correct: false},
+    {a:62, b:28, k:0, display:'62 \u2212 28 = 64 \u2212 28', correct: false},
+    {a:94, b:56, k:0, display:'94 \u2212 56 = 98 \u2212 56', correct: false},
+    {a:51, b:19, k:0, display:'51 \u2212 19 = 52 \u2212 19', correct: false},
+    {a:63, b:29, k:0, display:'63 \u2212 29 = 64 \u2212 31', correct: false},
+    {a:85, b:37, k:0, display:'85 \u2212 37 = 88 \u2212 37', correct: false},
+    {a:100, b:46, k:0, display:'100 \u2212 46 = 104 \u2212 50', correct: false}
+  ];
+  const p = pairs[rr(0, pairs.length-1)];
+  return {
+    type: 'alternative',
+    stem: 'האם החישוב הבא נכון?',
+    display: p.display,
+    options: ['\u05E0\u05DB\u05D5\u05DF', '\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF'],
+    answer: p.correct ? 0 : 1,
+    explanation: p.correct
+      ? 'נכון! הוספנו את אותו מספר לשני הצדדים, אז התוצאה לא משתנה.'
+      : 'לא נכון! הוספנו מספרים שונים לכל צד, אז התוצאה השתנתה.'
+  };
+}
+
+// ===== LEVELS =====
+const levels = [
+  {
+    title: 'חיסור דו-ספרתי בלי פריטה',
+    instruction: 'חסרו במאונך — בלי לפרוט',
+    tip: 'מתחילים מימין — מחסרים יחידות, ואז עשרות. פשוט!',
+    example: '  47\n- 23\n----\n  24\n\u05D9\u05D7\u05D9\u05D3\u05D5\u05EA: 7-3=4, \u05E2\u05E9\u05E8\u05D5\u05EA: 4-2=2',
+    gen: () => qVertSub(2, 'none')
+  },
+  {
+    title: 'פריטה ביחידות בלבד',
+    instruction: 'כשספרת היחידות למעלה קטנה — פורטים!',
+    tip: 'אם הספרה למעלה קטנה מלמטה — לווים 10 מהעשרות.',
+    example: '  43\n- 17\n----\n  26\n\u05D9\u05D7\u05D9\u05D3\u05D5\u05EA: 3<7 \u2192 13-7=6\n\u05E2\u05E9\u05E8\u05D5\u05EA: 4-1-1=2',
+    gen: () => qVertSub(2, 'units')
+  },
+  {
+    title: 'חיסור תלת-ספרתי בלי פריטה',
+    instruction: 'שלוש עמודות — בלי פריטה',
+    tip: 'אותו עיקרון — 3 עמודות! יחידות, עשרות, מאות.',
+    example: ' 567\n-234\n-----\n 333\n\u05D9\u05D7\u05D9\u05D3\u05D5\u05EA: 7-4=3, \u05E2\u05E9\u05E8\u05D5\u05EA: 6-3=3, \u05DE\u05D0\u05D5\u05EA: 5-2=3',
+    gen: () => qVertSub(3, 'none')
+  },
+  {
+    title: 'פריטה ביחידות — תלת-ספרתי',
+    instruction: 'תלת-ספרתי עם פריטה ביחידות',
+    tip: 'גם עם 3 ספרות — אם היחידות למעלה קטנות, לווים מהעשרות.',
+    example: ' 354\n-128\n-----\n 226\n\u05D9\u05D7\u05D9\u05D3\u05D5\u05EA: 4<8 \u2192 14-8=6\n\u05E2\u05E9\u05E8\u05D5\u05EA: 5-1-2=2, \u05DE\u05D0\u05D5\u05EA: 3-1=2',
+    gen: () => qVertSub(3, 'units')
+  },
+  {
+    title: 'פריטה בעשרות',
+    instruction: 'הפעם הפריטה בעמודת העשרות!',
+    tip: 'כשהעשרות למעלה קטנות מלמטה — לווים מהמאות.',
+    example: ' 538\n-271\n-----\n 267\n\u05D9\u05D7\u05D9\u05D3\u05D5\u05EA: 8-1=7\n\u05E2\u05E9\u05E8\u05D5\u05EA: 3<7 \u2192 13-7=6\n\u05DE\u05D0\u05D5\u05EA: 5-1-2=2',
+    gen: () => qVertSub(3, 'tens')
+  },
+  {
+    title: 'שתי פריטות',
+    instruction: 'פריטה גם ביחידות וגם בעשרות!',
+    tip: 'לפעמים צריך לפרוט בשתי עמודות — שימו לב לכל אחת!',
+    example: ' 523\n-278\n-----\n 245\n\u05D9\u05D7\u05D9\u05D3\u05D5\u05EA: 3<8 \u2192 13-8=5\n\u05E2\u05E9\u05E8\u05D5\u05EA: 2-1<7 \u2192 11-7=4\n\u05DE\u05D0\u05D5\u05EA: 5-1-2=2',
+    gen: () => qVertSub(3, 'both')
+  },
+  {
+    title: 'אפסים במחוסר',
+    instruction: 'חיסור ממספרים עגולים כמו 500, 300',
+    tip: 'כשיש אפסים למעלה, צריך לפרוט בשרשרת — מהמאות לעשרות, ומהעשרות ליחידות.',
+    example: ' 500\n-237\n-----\n 263\n0<7 \u2192 \u05E4\u05D5\u05E8\u05D8\u05D9\u05DD \u05DE\u05D4\u05DE\u05D0\u05D5\u05EA\n\u05DE\u05D0\u05D5\u05EA: 5\u21924, \u05E2\u05E9\u05E8\u05D5\u05EA: 0\u21929\n\u05D0\u05D7\u05E8\u05D9 \u05E4\u05E8\u05D9\u05D8\u05D4: 10-7=3, 9-3=6, 4-2=2',
+    gen: () => qVertSub(3, 'zeros')
+  },
+  {
+    title: 'חיסור 4 ספרות',
+    instruction: 'עכשיו עם מספרים בני 4 ספרות!',
+    tip: 'אותו עיקרון — רק עמודה נוספת של אלפים.',
+    example: '5678\n-2345\n------\n 3333',
+    gen: () => qVertSub(4, 'mixed')
+  },
+  {
+    title: '1000 מינוס מספר',
+    instruction: 'חיסור מ-1000 — אתגר מיוחד!',
+    tip: '1000 מינוס מספר: פורטים בשרשרת! 1000 = 0 אלפים + 10 מאות, אבל גם 9 מאות + 10 עשרות, וכן הלאה.',
+    example: '1000\n- 437\n------\n  563\n0<7: \u05E4\u05D5\u05E8\u05D8\u05D9\u05DD \u05D1\u05E9\u05E8\u05E9\u05E8\u05EA\n10-7=3, 9-3=6, 9-4=5',
+    gen: () => qVertSub(4, 'from1000')
+  },
+  {
+    title: 'אומדן תוצאות',
+    instruction: 'מהי בערך תוצאת החיסור?',
+    tip: 'עגלו כל מספר למאות או לאלפים הקרובים, ואז חסרו.',
+    example: '3200 - 1890 \u2248 3200 - 1900 = 1300\n\u05D0\u05D5 \u2248 3000 - 2000 = 1000',
+    gen: () => qEstimateSub()
+  },
+  {
+    title: 'דרכים אחרות',
+    instruction: 'האם החישוב נכון? הוספה של אותו מספר לשני הצדדים',
+    tip: 'טריק: a - b = (a+k) - (b+k). אם מוסיפים את אותו מספר לשניהם — התוצאה לא משתנה!',
+    example: '75 - 39 = 76 - 40 = 36 \u2713\n\u05D4\u05D5\u05E1\u05E4\u05E0\u05D5 1 \u05DC\u05E9\u05E0\u05D9\u05D4\u05DD \u2192 \u05D4\u05EA\u05D5\u05E6\u05D0\u05D4 \u05D6\u05D4\u05D4!',
+    gen: () => qAlternativeMethod()
+  },
+  {
+    title: 'מעורבב — כל הסוגים',
+    instruction: 'תרגילים מכל הסוגים!',
+    tip: 'שימו לב לסוג השאלה — לפעמים מאונך, לפעמים אומדן, לפעמים דרך אחרת!',
+    example: '\u05DB\u05DC \u05EA\u05E8\u05D2\u05D9\u05DC \u05D4\u05D5\u05D0 \u05D4\u05E4\u05EA\u05E2\u05D4 \u2014 \u05EA\u05D4\u05D9\u05D5 \u05DE\u05D5\u05DB\u05E0\u05D9\u05DD!',
+    gen: () => {
+      const r = rr(0,9);
+      if(r < 4) return qVertSub(3, 'mixed');
+      if(r < 6) return qVertSub(4, 'mixed');
+      if(r < 8) return qEstimateSub();
+      return qAlternativeMethod();
+    }
+  },
+  {
+    title: 'תרגול',
+    instruction: 'עוד תרגול מגוון — התמדה עושה מאסטר!',
+    tip: 'קחו רגע, חשבו לפני שעונים!',
+    example: '\u05D9\u05D7\u05D9\u05D3\u05D5\u05EA \u2192 \u05E2\u05E9\u05E8\u05D5\u05EA \u2192 \u05DE\u05D0\u05D5\u05EA \u2192 \u05D0\u05DC\u05E4\u05D9\u05DD',
+    gen: () => {
+      const r = rr(0,9);
+      if(r < 3) return qVertSub(3, 'both');
+      if(r < 5) return qVertSub(4, 'mixed');
+      if(r < 7) return qVertSub(3, 'zeros');
+      if(r < 9) return qEstimateSub();
+      return qAlternativeMethod();
+    }
+  },
+  {
+    title: 'אתגר',
+    instruction: 'שאלות קשות יותר — מוכנים?',
+    tip: 'בהצלחה! השתמשו בכל מה שלמדתם!',
+    example: '\u05E0\u05E9\u05DE\u05D5 \u05E2\u05DE\u05D5\u05E7 \u05D5\u05E4\u05EA\u05E8\u05D5!',
+    gen: () => {
+      const r = rr(0,9);
+      if(r < 3) return qVertSub(4, 'from1000');
+      if(r < 5) return qVertSub(4, 'mixed');
+      if(r < 7) return qVertSub(3, 'both');
+      if(r < 9) return qEstimateSub();
+      return qAlternativeMethod();
+    }
+  },
+  {
+    title: 'סופר-אתגר!',
+    instruction: 'הרמה הגבוהה ביותר — בואו!',
+    tip: '🏆 אתם אלופים! תנו את המקסימום!',
+    example: '\u05D4\u05DB\u05DC \u05D1\u05E4\u05E0\u05D9\u05DD!',
+    gen: () => {
+      const r = rr(0,9);
+      if(r < 2) return qVertSub(4, 'from1000');
+      if(r < 5) return qVertSub(4, 'mixed');
+      if(r < 7) return qVertSub(3, 'both');
+      if(r < 8) return qVertSub(3, 'zeros');
+      if(r < 9) return qEstimateSub();
+      return qAlternativeMethod();
+    }
+  }
+];
+
+// ===== STATE =====
+let currentLevel = 0;
+let totalCorrect = 0;
+let totalWrong = 0;
+let levelResults = {};
+let currentQuestions = [];
+let answeredCount = 0;
+let levelCorrect = 0;
+let levelWrong = 0;
+const QPL = 5;
+
+// ===== RENDER =====
+function renderTabs() {
+  const lk = (typeof AuthState !== 'undefined' && !AuthState.isLoggedIn());
+  const row = document.getElementById('tabsRow');
+  row.innerHTML = '';
+  levels.forEach((_, i) => {
+    const t = document.createElement('button');
+    t.className = 'tab';
+    t.textContent = (i + 1) + (lk && i > 0 ? ' 🔒' : '');
+    if(i === currentLevel) t.classList.add('active');
+    if(levelResults[i] !== undefined) { t.classList.add('done'); if(levelResults[i] === 0) t.classList.add('perfect'); }
+    t.onclick = () => goLevel(i);
+    row.appendChild(t);
+  });
+  const at = row.querySelector('.active');
+  if(at) at.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+}
+
+function renderLevel() {
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent = '\u05E8\u05DE\u05D4 ' + (currentLevel + 1);
+  document.getElementById('levelTitle').textContent = levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent = levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent = '\u05E8\u05DE\u05D4 ' + (currentLevel + 1) + ' \u05DE\u05EA\u05D5\u05DA ' + levels.length;
+
+  const lvl = levels[currentLevel];
+  document.getElementById('tipText').textContent = lvl.tip;
+  document.getElementById('tipExample').innerHTML = lvl.example.replace(/\n/g, '<br>');
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent = '\u25B2 \u05D4\u05E1\u05EA\u05E8';
+
+  currentQuestions = [];
+  answeredCount = 0;
+  levelCorrect = 0;
+  levelWrong = 0;
+
+  for(let i = 0; i < QPL; i++) {
+    let q;
+    let attempts = 0;
+    do {
+      q = lvl.gen();
+      attempts++;
+    } while(attempts < 30 && q.type === 'vert' && (q.answer < 0 || q.b < 1));
+    currentQuestions.push(q);
+  }
+
+  renderQuestions();
+  updateProgress();
+  renderTabs();
+}
+
+function renderQuestions() {
+  const list = document.getElementById('questionsList');
+  list.innerHTML = '';
+
+  currentQuestions.forEach((q, idx) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = 'q-' + idx;
+    let html = '<div class="question-number">' + (idx + 1) + '</div>';
+
+    if(q.type === 'vert') {
+      html += renderVertical(q, idx);
+    } else if(q.type === 'estimate') {
+      html += renderEstimate(q, idx);
+    } else if(q.type === 'alternative') {
+      html += renderAlternative(q, idx);
+    }
+
+    card.innerHTML = html;
+    list.appendChild(card);
+  });
+
+  // Focus first input
+  setTimeout(() => {
+    const first = document.getElementById('ans-0-0') || document.querySelector('.mc-option');
+    if(first && first.focus) first.focus();
+  }, 300);
+}
+
+function renderVertical(q, idx) {
+  const maxNum = Math.max(q.a, q.b, q.answer);
+  const numDigits = String(maxNum).length;
+  const aDigits = getDigits(q.a, numDigits);
+  const bDigits = getDigits(q.b, numDigits);
+
+  // Determine borrow at each position
+  const needsBorrow = [];
+  let borrow = 0;
+  for(let d = 0; d < numDigits; d++) {
+    let top = aDigits[d] - borrow;
+    needsBorrow.push(top < bDigits[d] && d < numDigits - 1);
+    borrow = top < bDigits[d] ? 1 : 0;
+  }
+
+  let html = '<div class="vertical-math"><div class="vertical-container">';
+
+  // Carry/borrow row
+  html += '<div class="carry-row">';
+  for(let d = numDigits - 1; d >= 0; d--) {
+    let showInput = false;
+    if(needsBorrow[d]) showInput = true;
+    if(d > 0 && needsBorrow[d - 1] && !needsBorrow[d]) showInput = true;
+    if(d > 0 && needsBorrow[d - 1]) showInput = true;
+
+    if(showInput) {
+      html += '<input type="number" class="carry-input" id="ci-' + idx + '-' + d + '" placeholder="?" title="\u05E4\u05E8\u05D9\u05D8\u05D4" data-idx="' + idx + '" data-digit="' + d + '">';
+    } else {
+      html += '<div class="carry-spacer"></div>';
+    }
+  }
+  html += '</div>';
+
+  // First number row
+  html += '<div class="v-row">';
+  const aStr = String(q.a);
+  for(let d = numDigits - 1; d >= 0; d--) {
+    if(d >= aStr.length) {
+      html += '<div class="v-digit"></div>';
+    } else {
+      html += '<div class="v-digit">' + aDigits[d] + '</div>';
+    }
+  }
+  html += '</div>';
+
+  // Second number row with operator
+  html += '<div class="v-row"><span class="v-op">\u2212</span>';
+  const bStr = String(q.b);
+  for(let d = numDigits - 1; d >= 0; d--) {
+    if(d >= bStr.length) {
+      html += '<div class="v-digit"></div>';
+    } else {
+      html += '<div class="v-digit">' + bDigits[d] + '</div>';
+    }
+  }
+  html += '</div>';
+
+  // Line
+  html += '<div class="v-line"></div>';
+
+  // Answer row - inputs
+  html += '<div class="v-row">';
+  const ansLen = String(q.answer).length;
+  for(let d = numDigits - 1; d >= 0; d--) {
+    html += '<input type="number" class="v-digit-input" id="ans-' + idx + '-' + d + '" min="0" max="9" maxlength="1" data-idx="' + idx + '" data-digit="' + d + '" data-numdigits="' + numDigits + '" oninput="handleDigitInput(this)" onkeydown="handleDigitNav(event,' + idx + ',' + d + ',' + numDigits + ')">';
+  }
+  html += '</div>';
+
+  html += '</div></div>';
+
+  // Check button
+  html += '<button class="check-btn" id="btn-' + idx + '" onclick="checkVertAnswer(' + idx + ')">\u05D1\u05D3\u05D9\u05E7\u05D4 \u2713</button>';
+  html += '<div class="feedback" id="fb-' + idx + '"></div>';
+
+  return html;
+}
+
+function renderEstimate(q, idx) {
+  let html = '<div class="question-stem">' + q.stem + '</div>';
+  html += '<div class="mc-options">';
+  q.options.forEach((opt, oi) => {
+    html += '<button class="mc-option" data-idx="' + idx + '" data-oi="' + oi + '" onclick="checkMC(' + idx + ',' + oi + ')">' + opt.toLocaleString('he-IL') + '</button>';
+  });
+  html += '</div>';
+  html += '<div class="feedback" id="fb-' + idx + '"></div>';
+  return html;
+}
+
+function renderAlternative(q, idx) {
+  let html = '<div class="question-stem">' + q.stem + '<br><strong dir="ltr" style="font-size:1.3rem;display:inline-block;margin-top:8px;unicode-bidi:embed">' + q.display + '</strong></div>';
+  html += '<div class="mc-options">';
+  q.options.forEach((opt, oi) => {
+    html += '<button class="mc-option" data-idx="' + idx + '" data-oi="' + oi + '" onclick="checkMC(' + idx + ',' + oi + ')">' + opt + '</button>';
+  });
+  html += '</div>';
+  html += '<div class="feedback" id="fb-' + idx + '"></div>';
+  return html;
+}
+
+// ===== INPUT HANDLING =====
+function handleDigitInput(el) {
+  let val = el.value;
+  if(val.length > 1) val = val.slice(-1);
+  if(val && (parseInt(val) < 0 || parseInt(val) > 9)) val = '';
+  el.value = val;
+
+  if(val !== '') {
+    const idx = parseInt(el.dataset.idx);
+    const d = parseInt(el.dataset.digit);
+    const numDigits = parseInt(el.dataset.numdigits);
+    for(let next = d + 1; next < numDigits; next++) {
+      const nextEl = document.getElementById('ans-' + idx + '-' + next);
+      if(nextEl && !nextEl.disabled) { nextEl.focus(); nextEl.select(); return; }
+    }
+  }
+}
+
+function handleDigitNav(e, idx, d, numDigits) {
+  if(e.key === 'Backspace' && e.target.value === '') {
+    for(let prev = d - 1; prev >= 0; prev--) {
+      const prevEl = document.getElementById('ans-' + idx + '-' + prev);
+      if(prevEl && !prevEl.disabled) { prevEl.focus(); prevEl.select(); break; }
+    }
+  }
+  if(e.key === 'Enter') {
+    checkVertAnswer(idx);
+  }
+}
+
+// ===== CHECK VERTICAL =====
+function checkVertAnswer(idx) {
+  const q = currentQuestions[idx];
+  const card = document.getElementById('q-' + idx);
+  const fb = document.getElementById('fb-' + idx);
+  const btn = document.getElementById('btn-' + idx);
+
+  if(card.classList.contains('correct')) return;
+
+  const maxNum = Math.max(q.a, q.b, q.answer);
+  const numDigits = String(maxNum).length;
+  const ansDigits = getDigits(q.answer, numDigits);
+  const aD = getDigits(q.a, numDigits);
+  const bD = getDigits(q.b, numDigits);
+
+  let allFilled = true;
+  let allCorrect = true;
+
+  for(let d = 0; d < numDigits; d++) {
+    const el = document.getElementById('ans-' + idx + '-' + d);
+    const val = el.value.trim();
+    if(val === '') { allFilled = false; continue; }
+    if(parseInt(val) !== ansDigits[d]) allCorrect = false;
+  }
+
+  if(!allFilled) {
+    fb.textContent = '\u05DE\u05DC\u05D0\u05D5 \u05D0\u05EA \u05DB\u05DC \u05D4\u05E1\u05E4\u05E8\u05D5\u05EA!';
+    fb.className = 'feedback show wrong-fb';
+    setTimeout(() => fb.classList.remove('show'), 1500);
+    return;
+  }
+
+  // Show borrow visuals on correct answer
+  if(allCorrect) {
+    let borrow = 0;
+    for(let d = 0; d < numDigits; d++) {
+      let top = aD[d] - borrow;
+      if(top < bD[d] && d < numDigits - 1) {
+        const ciLose = document.getElementById('ci-' + idx + '-' + (d + 1));
+        if(ciLose) { ciLose.value = aD[d + 1] - (borrow > 0 ? 1 : 0) - 1; ciLose.classList.add('correct-carry'); ciLose.disabled = true; }
+        const ciGain = document.getElementById('ci-' + idx + '-' + d);
+        if(ciGain) { ciGain.value = top + 10; ciGain.classList.add('correct-carry'); ciGain.disabled = true; }
+        borrow = 1;
+      } else {
+        borrow = 0;
+      }
+    }
+  }
+
+  if(allCorrect) {
+    card.classList.add('correct');
+    for(let d = 0; d < numDigits; d++) {
+      const el = document.getElementById('ans-' + idx + '-' + d);
+      el.classList.add('correct-digit');
+      el.disabled = true;
+    }
+    fb.textContent = ['\u05DE\u05E6\u05D5\u05D9\u05DF! \u2B50','\u05E0\u05DB\u05D5\u05DF! \uD83C\uDFAF','\u05D9\u05D5\u05E4\u05D9! \u2728','\u05DE\u05D3\u05D4\u05D9\u05DD! \uD83C\uDF1F'][rr(0,3)];
+    fb.className = 'feedback show correct-fb';
+    btn.disabled = true;
+    levelCorrect++;
+    totalCorrect++;
+    answeredCount++;
+  } else {
+    card.classList.add('wrong');
+    for(let d = 0; d < numDigits; d++) {
+      const el = document.getElementById('ans-' + idx + '-' + d);
+      const val = parseInt(el.value);
+      if(val !== ansDigits[d]) el.classList.add('wrong-digit');
+      else el.classList.add('correct-digit');
+    }
+    fb.textContent = '\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF, \u05E0\u05E1\u05D5 \u05E9\u05D5\u05D1! \uD83D\uDCAA';
+    fb.className = 'feedback show wrong-fb';
+    levelWrong++;
+    totalWrong++;
+
+    setTimeout(() => {
+      card.classList.remove('wrong');
+      for(let d = 0; d < numDigits; d++) {
+        const el = document.getElementById('ans-' + idx + '-' + d);
+        if(el.classList.contains('wrong-digit')) {
+          el.classList.remove('wrong-digit');
+          el.value = '';
+        }
+      }
+      fb.classList.remove('show');
+      for(let d = 0; d < numDigits; d++) {
+        const el = document.getElementById('ans-' + idx + '-' + d);
+        if(el.value === '') { el.focus(); break; }
+      }
+    }, 1200);
+  }
+
+  updateProgress();
+  if(answeredCount === QPL) setTimeout(showLevelComplete, 800);
+}
+
+// ===== CHECK MC (Estimate + Alternative) =====
+function checkMC(idx, oi) {
+  const q = currentQuestions[idx];
+  const card = document.getElementById('q-' + idx);
+  const fb = document.getElementById('fb-' + idx);
+
+  if(card.classList.contains('correct')) return;
+
+  const btns = card.querySelectorAll('.mc-option');
+  let correctIdx;
+
+  if(q.type === 'estimate') {
+    correctIdx = q.options.indexOf(q.answer);
+  } else {
+    correctIdx = q.answer;
+  }
+
+  if(oi === correctIdx) {
+    card.classList.add('correct');
+    btns[oi].classList.add('correct-opt');
+    btns.forEach(b => b.disabled = true);
+    let msg = ['\u05DE\u05E6\u05D5\u05D9\u05DF! \u2B50','\u05E0\u05DB\u05D5\u05DF! \uD83C\uDFAF','\u05D9\u05D5\u05E4\u05D9! \u2728'][rr(0,2)];
+    if(q.explanation) msg += ' ' + q.explanation;
+    fb.textContent = msg;
+    fb.className = 'feedback show correct-fb';
+    levelCorrect++;
+    totalCorrect++;
+    answeredCount++;
+  } else {
+    card.classList.add('wrong');
+    btns[oi].classList.add('wrong-opt');
+    let msg = '\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF, \u05E0\u05E1\u05D5 \u05E9\u05D5\u05D1! \uD83D\uDCAA';
+    if(q.explanation) msg += ' ' + q.explanation;
+    fb.textContent = msg;
+    fb.className = 'feedback show wrong-fb';
+    levelWrong++;
+    totalWrong++;
+
+    setTimeout(() => {
+      card.classList.remove('wrong');
+      btns[oi].classList.remove('wrong-opt');
+      fb.classList.remove('show');
+    }, 1200);
+  }
+
+  updateProgress();
+  if(answeredCount === QPL) setTimeout(showLevelComplete, 800);
+}
+
+// ===== LEVEL COMPLETE =====
+function showLevelComplete() {
+  levelResults[currentLevel] = levelWrong;
+  const card = document.getElementById('levelComplete');
+  document.getElementById('lcCorrect').textContent = levelCorrect;
+  document.getElementById('lcWrong').textContent = levelWrong;
+
+  if(levelWrong === 0) {
+    document.getElementById('lcEmoji').textContent = '\uD83C\uDFC6';
+    document.getElementById('lcTitle').textContent = '\u05DE\u05D5\u05E9\u05DC\u05DD!';
+    document.getElementById('lcSub').textContent = '\u05DB\u05DC \u05D4\u05EA\u05E9\u05D5\u05D1\u05D5\u05EA \u05E0\u05DB\u05D5\u05E0\u05D5\u05EA!';
+  } else if(levelWrong <= 2) {
+    document.getElementById('lcEmoji').textContent = '\uD83C\uDF89';
+    document.getElementById('lcTitle').textContent = '\u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3!';
+    document.getElementById('lcSub').textContent = '\u05DB\u05DE\u05E2\u05D8 \u05DE\u05D5\u05E9\u05DC\u05DD!';
+  } else {
+    document.getElementById('lcEmoji').textContent = '\uD83D\uDCAA';
+    document.getElementById('lcTitle').textContent = '\u05E1\u05D9\u05D9\u05DE\u05EA\u05DD!';
+    document.getElementById('lcSub').textContent = '\u05DB\u05D3\u05D0\u05D9 \u05DC\u05E0\u05E1\u05D5\u05EA \u05E9\u05D5\u05D1 \u05DC\u05E9\u05D9\u05E4\u05D5\u05E8';
+  }
+
+  card.classList.add('show');
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  renderTabs();
+}
+
+// ===== NAV =====
+function goLevel(i) {
+  if(i > 0 && typeof AuthState !== 'undefined' && !AuthState.isLoggedIn()) {
+    if(typeof showAuthModal === 'function') showAuthModal();
+    return;
+  }
+  currentLevel = i;
+  renderLevel();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function nextLevel() {
+  if(typeof AuthState !== 'undefined' && !AuthState.isLoggedIn()) {
+    if(typeof showAuthModal === 'function') showAuthModal();
+    return;
+  }
+  if(currentLevel < levels.length - 1) {
+    currentLevel++;
+    renderLevel();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function retry() {
+  renderLevel();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress() {
+  const done = Object.keys(levelResults).length;
+  document.getElementById('progressFill').style.width = Math.round((done / levels.length) * 100) + '%';
+  document.getElementById('totalCorrect').textContent = totalCorrect;
+  document.getElementById('totalWrong').textContent = totalWrong;
+}
+
+function showHelp() { document.getElementById('helpModal').classList.add('show'); }
+function closeHelp(e) { if(e.target === document.getElementById('helpModal')) document.getElementById('helpModal').classList.remove('show'); }
+function toggleTip() { const t = document.getElementById('levelTip'); t.classList.toggle('collapsed'); document.getElementById('tipToggle').textContent = t.classList.contains('collapsed') ? '\u25BC \u05D4\u05E6\u05D2 \u05D8\u05D9\u05E4' : '\u25B2 \u05D4\u05E1\u05EA\u05E8'; }
+
+// INIT
+renderLevel();
+document.addEventListener('DOMContentLoaded', function() { renderTabs(); });
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

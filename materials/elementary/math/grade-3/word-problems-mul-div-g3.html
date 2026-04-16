@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>שאלות מילוליות — כפל וחילוק — כיתה ג' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#7c3aed;--primary-dark:#6d28d9;--primary-light:#ede9fe;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#6d28d9 0%,#7c3aed 50%,#a78bfa 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(124,58,237,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.2rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:20px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.story-section{margin-bottom:20px}.story-emoji{text-align:center;font-size:2.2rem;margin-bottom:12px;letter-spacing:4px}.story-text{font-size:1.05rem;line-height:1.9;color:var(--text);background:#f5f3ff;border-radius:var(--radius-sm);padding:16px 20px;border-right:4px solid var(--primary)}.story-question{font-weight:800;color:var(--primary);margin-top:8px;font-size:1.1rem}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;direction:ltr}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.solution-reveal{margin-top:12px;background:var(--success-light);border-radius:var(--radius-sm);padding:12px 16px;text-align:center;font-size:1rem;font-weight:700;color:var(--success);direction:ltr;display:none}.solution-reveal.show{display:block;animation:popIn .3s}
+@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}.answer-btn{border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.story-text{font-size:.95rem;padding:12px 14px}.story-question{font-size:1rem}.answer-options{grid-template-columns:1fr}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.05rem}.story-emoji{font-size:1.8rem}}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="header-top">
+    <div class="header-title">
+      <div class="header-icon">📖</div>
+      <div>
+        <h1>שאלות מילוליות — כפל וחילוק</h1>
+        <div class="subtitle">כיתה ג' — סיפורים עם כפל וחילוק</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="header-btn" onclick="showHelp()">❓</button>
+      <button class="header-btn" onclick="window.print()">🖨️</button>
+    </div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-stats">
+    <span>✅ <span id="totalCorrect">0</span></span>
+    <span>❌ <span id="totalWrong">0</span></span>
+    <span id="progressText">רמה 1 מתוך 15</span>
+  </div>
+</div>
+
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+
+<div class="main-content">
+  <div class="print-overlay">שאלות מילוליות — כפל וחילוק — כיתה ג' | בועז חזן</div>
+
+  <div class="level-info">
+    <span class="level-badge" id="levelBadge">רמה 1</span>
+    <h2 class="level-title" id="levelTitle"></h2>
+    <p class="level-instruction" id="levelInstruction"></p>
+  </div>
+
+  <div class="level-tip" id="levelTip" onclick="toggleTip()">
+    <div class="tip-header">
+      <span>💡 טיפ</span>
+      <span class="tip-toggle" id="tipToggle">▲ הסתר</span>
+    </div>
+    <div class="tip-body">
+      <p class="tip-text" id="tipText"></p>
+      <div class="tip-example" id="tipExample"></div>
+    </div>
+  </div>
+
+  <div class="questions-list" id="questionsList"></div>
+
+  <div class="level-complete" id="levelComplete">
+    <div class="lc-emoji" id="lcEmoji">🎉</div>
+    <div class="lc-title" id="lcTitle"></div>
+    <div class="lc-sub" id="lcSub"></div>
+    <div class="lc-score">
+      <div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div>
+      <div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div>
+    </div>
+    <div class="lc-buttons">
+      <button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button>
+      <button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2>❓ איך פותרים שאלות מילוליות בכפל וחילוק?</h2>
+    <p><strong>שלב 1 — קראו בעיון:</strong> קראו את כל הסיפור עד הסוף לפני שעונים.</p>
+    <p><strong>שלב 2 — זהו את הפעולה:</strong></p>
+    <p>• <strong>"כמה ביחד"</strong>, <strong>"לכל אחד... כמה"</strong> כשכופלים קבוצות = <strong>כפל (×)</strong></p>
+    <p>• <strong>"כמה לכל אחד"</strong> כשמחלקים שווה = <strong>חילוק לחלקים (÷)</strong></p>
+    <p>• <strong>"כמה קבוצות"</strong>, <strong>"כמה תלמידים יקבלו"</strong> = <strong>חילוק להכלה (÷)</strong></p>
+    <p>• <strong>"פי כמה יותר"</strong> = <strong>חילוק (÷)</strong> של הגדול בקטן</p>
+    <p>• <strong>"קטן פי..."</strong> = <strong>חילוק (÷)</strong></p>
+    <p><strong>שלב 3 — חשבו ובחרו:</strong> חשבו את התרגיל ובחרו את התשובה הנכונה.</p>
+    <p>15 רמות — מכפל פשוט ועד אתגרים משולבים!</p>
+    <button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button>
+  </div>
+</div>
+
+<script>
+/* ===== UTILITIES ===== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function fmt(n){return n.toLocaleString('en-US')}
+
+/* ===== STORY DATA ===== */
+var maleNames=['יוסי','דני','נועם','אורי','איתי','רועי','עומר','גיל','אלון','עידו'];
+var femaleNames=['רותי','אסנת','דינה','מיכל','שירה','תמר','נועה','ליאת','יעל','הילה'];
+var allNames=maleNames.concat(femaleNames);
+
+/* ===== DISTRACTOR GENERATOR ===== */
+function genDistractors(ans,count){
+  count=count||4;
+  var s=new Set([ans]);
+  var offsets=[-10,-5,-3,-2,-1,1,2,3,5,10,15,20,-15,-20];
+  var tries=0;
+  while(s.size<count&&tries<200){
+    var d=ans+offsets[Math.floor(Math.random()*offsets.length)];
+    if(d>0) s.add(d);
+    tries++;
+  }
+  while(s.size<count){s.add(ans+rr(1,30))}
+  return shuffle([].concat(Array.from(s)));
+}
+
+/* ===== QUESTION GENERATORS ===== */
+
+/* 1. qStoryMul — כפל: קבוצות × כמות בכל קבוצה */
+function qStoryMul(maxFactor){
+  maxFactor=maxFactor||10;
+  var contexts=[
+    {item:'רגליים',emoji:'🪑🪑🪑',tpl:function(n,a,b){return 'בכיתה יש '+a+' שולחנות. לכל שולחן '+b+' רגליים.'},q:'כמה רגליים יש בסך הכל?'},
+    {item:'עפרונות',emoji:'✏️✏️✏️',tpl:function(n,a,b){return n+' קנה/תה '+a+' חבילות עפרונות. בכל חבילה '+b+' עפרונות.'},q:'כמה עפרונות יש בסך הכל?'},
+    {item:'ילדים',emoji:'👧👦👧',tpl:function(n,a,b){return 'בבית הספר יש '+a+' כיתות. בכל כיתה '+b+' תלמידים.'},q:'כמה תלמידים יש בסך הכל?'},
+    {item:'סוכריות',emoji:'🍬🍬🍬',tpl:function(n,a,b){return n+' חילק/ה '+b+' סוכריות לכל ילד. יש '+a+' ילדים.'},q:'כמה סוכריות חילק/ה בסך הכל?'},
+    {item:'גלגלים',emoji:'🚗🚗🚗',tpl:function(n,a,b){return 'בחניון יש '+a+' מכוניות. לכל מכונית '+b+' גלגלים.'},q:'כמה גלגלים יש בסך הכל?'},
+    {item:'פרחים',emoji:'🌸🌸🌸',tpl:function(n,a,b){return n+' שתל/ה '+a+' שורות של פרחים. בכל שורה '+b+' פרחים.'},q:'כמה פרחים יש בסך הכל?'},
+    {item:'עוגיות',emoji:'🍪🍪🍪',tpl:function(n,a,b){return n+' אפה/תה '+a+' מגשים של עוגיות. בכל מגש '+b+' עוגיות.'},q:'כמה עוגיות אפה/תה בסך הכל?'},
+    {item:'ביצים',emoji:'🥚🥚🥚',tpl:function(n,a,b){return 'בלול יש '+a+' תרנגולות. כל תרנגולת הטילה '+b+' ביצים.'},q:'כמה ביצים הוטלו בסך הכל?'},
+    {item:'דפים',emoji:'📄📄📄',tpl:function(n,a,b){return n+' חילק/ה '+b+' דפים לכל תלמיד. בכיתה '+a+' תלמידים.'},q:'כמה דפים חולקו בסך הכל?'},
+    {item:'כדורים',emoji:'⚽⚽⚽',tpl:function(n,a,b){return 'בחנות יש '+a+' ארגזים. בכל ארגז '+b+' כדורים.'},q:'כמה כדורים יש בחנות?'}
+  ];
+  var ctx=pick(contexts);
+  var n=pick(allNames);
+  var a=rr(2,maxFactor),b=rr(2,maxFactor);
+  var ans=a*b;
+  var story=ctx.tpl(n,a,b);
+  return {story:story,question:ctx.q,emoji:ctx.emoji,answer:ans,equation:a+' × '+b+' = '+ans,options:genDistractors(ans)};
+}
+
+/* 2. qStoryDivParts — חילוק לחלקים: מחלקים שווה בשווה */
+function qStoryDivParts(maxFactor){
+  maxFactor=maxFactor||10;
+  var b=rr(2,maxFactor),q2=rr(2,maxFactor);
+  var total=b*q2;
+  var contexts=[
+    {emoji:'📄📄📄',tpl:function(n,t,d){return n+' חילק/ה '+t+' דפים שווה בשווה ל-'+d+' תלמידים.'},q:'כמה דפים קיבל כל תלמיד?'},
+    {emoji:'🍬🍬🍬',tpl:function(n,t,d){return n+' חילק/ה '+t+' סוכריות שווה בשווה ל-'+d+' ילדים.'},q:'כמה סוכריות קיבל כל ילד?'},
+    {emoji:'🍎🍎🍎',tpl:function(n,t,d){return 'בסלסלה יש '+t+' תפוחים. '+n+' רוצה לחלק אותם שווה ל-'+d+' ילדים.'},q:'כמה תפוחים יקבל כל ילד?'},
+    {emoji:'⭐⭐⭐',tpl:function(n,t,d){return n+' אסף/ה '+t+' מדבקות וחילק/ה שווה ל-'+d+' חברים.'},q:'כמה מדבקות קיבל כל חבר?'},
+    {emoji:'🖍️🖍️🖍️',tpl:function(n,t,d){return 'המורה חילק/ה '+t+' צבעים שווה ל-'+d+' שולחנות.'},q:'כמה צבעים יש בכל שולחן?'},
+    {emoji:'🎈🎈🎈',tpl:function(n,t,d){return 'במסיבה יש '+t+' בלונים. '+n+' חילק/ה אותם שווה ל-'+d+' ילדים.'},q:'כמה בלונים קיבל כל ילד?'},
+    {emoji:'🍪🍪🍪',tpl:function(n,t,d){return n+' אפה/תה '+t+' עוגיות וחילק/ה שווה ל-'+d+' צלחות.'},q:'כמה עוגיות יש בכל צלחת?'},
+    {emoji:'📚📚📚',tpl:function(n,t,d){return 'בספרייה הגיעו '+t+' ספרים חדשים. חילקו אותם שווה ל-'+d+' מדפים.'},q:'כמה ספרים יש בכל מדף?'}
+  ];
+  var ctx=pick(contexts);
+  var n=pick(allNames);
+  var story=ctx.tpl(n,total,b);
+  return {story:story,question:ctx.q,emoji:ctx.emoji,answer:q2,equation:total+' ÷ '+b+' = '+q2,options:genDistractors(q2)};
+}
+
+/* 3. qStoryDivContain — חילוק להכלה: כמה קבוצות */
+function qStoryDivContain(maxFactor){
+  maxFactor=maxFactor||10;
+  var perGroup=rr(2,maxFactor),groups=rr(2,maxFactor);
+  var total=perGroup*groups;
+  var contexts=[
+    {emoji:'📄📄📄',tpl:function(n,t,pg){return n+' צריך/ה לחלק '+t+' דפים. כל תלמיד מקבל '+pg+' דפים.'},q:'לכמה תלמידים מספיק?'},
+    {emoji:'🍬🍬🍬',tpl:function(n,t,pg){return 'יש '+t+' סוכריות. כל ילד מקבל '+pg+' סוכריות.'},q:'לכמה ילדים מספיק?'},
+    {emoji:'🚌🚌🚌',tpl:function(n,t,pg){return t+' ילדים יוצאים לטיול. בכל אוטובוס '+pg+' מקומות.'},q:'כמה אוטובוסים צריך?'},
+    {emoji:'📦📦📦',tpl:function(n,t,pg){return 'יש '+t+' תפוזים. בכל שקית שמים '+pg+' תפוזים.'},q:'כמה שקיות צריך?'},
+    {emoji:'🎁🎁🎁',tpl:function(n,t,pg){return n+' מכין/ה '+t+' עוגיות למתנות. בכל שקית '+pg+' עוגיות.'},q:'כמה שקיות ייצאו?'},
+    {emoji:'🪴🪴🪴',tpl:function(n,t,pg){return n+' שתל/ה '+t+' פרחים. בכל אדנית '+pg+' פרחים.'},q:'כמה אדניות מילא/ה?'},
+    {emoji:'🥚🥚🥚',tpl:function(n,t,pg){return 'בחנות יש '+t+' ביצים. בכל קרטון '+pg+' ביצים.'},q:'כמה קרטונים מלאים ייצאו?'},
+    {emoji:'📖📖📖',tpl:function(n,t,pg){return n+' צריך/ה לקרוא '+t+' עמודים. כל יום קורא/ת '+pg+' עמודים.'},q:'בכמה ימים יסיים/תסיים?'}
+  ];
+  var ctx=pick(contexts);
+  var n=pick(allNames);
+  var story=ctx.tpl(n,total,perGroup);
+  return {story:story,question:ctx.q,emoji:ctx.emoji,answer:groups,equation:total+' ÷ '+perGroup+' = '+groups,options:genDistractors(groups)};
+}
+
+/* 4. qStoryCompareMul — פי כמה יותר? */
+function qStoryCompareMul(){
+  var n1=pick(allNames),n2=pick(allNames);
+  while(n2===n1) n2=pick(allNames);
+  var items=pick(['גולות','מדבקות','ספרים','עפרונות','סוכריות','צבעים','כדורים']);
+  var emojis=pick(['🔵🔴🟢','⭐🌟⭐','📚📖📚','✏️✏️✏️','🍬🍭🍬','🖍️🖍️🖍️','⚽⚽⚽']);
+  var small=rr(2,10),factor=rr(2,7);
+  var big=small*factor;
+  var story='ל'+n1+' יש '+big+' '+items+'. ל'+n2+' יש '+small+' '+items+'.';
+  var qText='פי כמה '+items+' יש ל'+n1+' יותר מאשר ל'+n2+'?';
+  return {story:story,question:qText,emoji:emojis,answer:factor,equation:big+' ÷ '+small+' = '+factor,options:genDistractors(factor)};
+}
+
+/* 5. qStoryCompareMulReverse — קטן פי... */
+function qStoryCompareMulReverse(){
+  var n1=pick(allNames),n2=pick(allNames);
+  while(n2===n1) n2=pick(allNames);
+  var items=pick(['עפרונות','גולות','מדבקות','סוכריות','ספרים','כדורים']);
+  var emojis=pick(['✏️✏️✏️','🔵🔴🟢','⭐🌟⭐','🍬🍬🍬','📚📚📚','⚽⚽⚽']);
+  var factor=rr(2,7),small=rr(2,10);
+  var big=small*factor;
+  var story='ל'+n1+' יש '+big+' '+items+'. מספר ה'+items+' של '+n2+' קטן פי '+factor+'.';
+  var qText='כמה '+items+' יש ל'+n2+'?';
+  return {story:story,question:qText,emoji:emojis,answer:small,equation:big+' ÷ '+factor+' = '+small,options:genDistractors(small)};
+}
+
+/* 6. qStoryNumProblem — שאלות מספריות עם כפל/חילוק */
+function qStoryNumProblem(){
+  var type=rr(1,4);
+  var ans,story,qText,eq;
+  if(type===1){
+    var a=rr(2,9),b=rr(2,9);ans=a*b;
+    story='חשבו על מספר.';
+    qText='איזה מספר מקבלים כשכופלים '+a+' ב-'+b+'?';
+    eq=a+' × '+b+' = '+ans;
+  }else if(type===2){
+    var b2=rr(2,9),q2=rr(2,9);var t=b2*q2;ans=q2;
+    story='חשבו על מספר.';
+    qText='כפלנו מספר ב-'+b2+' וקיבלנו '+t+'. מה המספר?';
+    eq=t+' ÷ '+b2+' = '+ans;
+  }else if(type===3){
+    var b3=rr(2,9),q3=rr(2,9);var t3=b3*q3;ans=b3;
+    story='חשבו על מספר.';
+    qText='חילקנו '+t3+' במספר כלשהו וקיבלנו '+q3+'. מה המספר?';
+    eq=t3+' ÷ '+q3+' = '+ans;
+  }else{
+    var a4=rr(2,9),b4=rr(2,9);ans=a4*b4;
+    story='חשבו על שני מספרים: '+a4+' ו-'+b4+'.';
+    qText='מה המכפלה שלהם?';
+    eq=a4+' × '+b4+' = '+ans;
+  }
+  return {story:story,question:qText,emoji:'🔢🧮🔢',answer:ans,equation:eq,options:genDistractors(ans)};
+}
+
+/* 7. qStoryMoney — שאלות כסף עם כפל/חילוק */
+function qStoryMoney(){
+  var type=rr(1,4);
+  var n=pick(allNames);
+  var ans,story,qText,eq;
+  if(type===1){
+    var qty=rr(2,9),price=rr(2,10);ans=qty*price;
+    var item=pick(['מחברות','עפרונות','ממתקים','מדבקות','בלונים','סוכריות']);
+    story=n+' קנה/תה '+qty+' '+item+' במחיר '+price+' ש"ח כל אחד/ת.';
+    qText='כמה שילם/ה בסך הכל?';
+    eq=qty+' × '+price+' = '+ans+' ש"ח';
+  }else if(type===2){
+    var total2=pick([12,15,18,20,24,27,30,35,36,40,42,45,48,50,54,56,60,63,70,72,80,90]);
+    var qty2=rr(2,9);
+    while(total2%qty2!==0) qty2=rr(2,9);
+    ans=total2/qty2;
+    var item2=pick(['כדורים','ספרים','צעצועים','חולצות','כובעים']);
+    story=n+' שילם/ה '+total2+' ש"ח על '+qty2+' '+item2+'.';
+    qText='כמה עולה כל '+item2.replace(/ים$/,'').replace(/ות$/,'ה')+'?';
+    eq=total2+' ÷ '+qty2+' = '+ans+' ש"ח';
+  }else if(type===3){
+    var budget=pick([20,30,40,50,60,70,80,90,100]);
+    var price3=rr(2,10);
+    while(budget%price3!==0) price3=rr(2,10);
+    ans=budget/price3;
+    var item3=pick(['מחברות','עפרונות','ממתקים','מדבקות','סוכריות']);
+    story='ל'+n+' יש '+budget+' ש"ח. כל '+item3.replace(/ים$/,'').replace(/ות$/,'ה')+' עולה '+price3+' ש"ח.';
+    qText='כמה '+item3+' אפשר לקנות?';
+    eq=budget+' ÷ '+price3+' = '+ans;
+  }else{
+    var people=rr(2,8),perPerson=rr(3,10);ans=people*perPerson;
+    story=n+' הזמין/ה אוכל למסיבה. יש '+people+' אורחים וכל מנה עולה '+perPerson+' ש"ח.';
+    qText='כמה שילם/ה בסך הכל?';
+    eq=people+' × '+perPerson+' = '+ans+' ש"ח';
+  }
+  return {story:story,question:qText,emoji:'💰💰💰',answer:ans,equation:eq,options:genDistractors(ans)};
+}
+
+/* ===== MIXED GENERATOR ===== */
+function makeMixed(pool){
+  var type=pick(pool);
+  if(type==='mul') return qStoryMul();
+  if(type==='mulBig') return qStoryMul(12);
+  if(type==='divP') return qStoryDivParts();
+  if(type==='divPBig') return qStoryDivParts(12);
+  if(type==='divC') return qStoryDivContain();
+  if(type==='divCBig') return qStoryDivContain(12);
+  if(type==='cmpMul') return qStoryCompareMul();
+  if(type==='cmpRev') return qStoryCompareMulReverse();
+  if(type==='numProb') return qStoryNumProblem();
+  if(type==='money') return qStoryMoney();
+  return qStoryMul();
+}
+
+/* ===== LEVELS ===== */
+var levels=[
+  {title:'כפל — כמה ביחד?',instruction:'שאלות כפל: קבוצות × כמות בכל קבוצה',
+   tip:'חפשו מילים כמו "בכל אחד", "לכל שולחן", "בכל חבילה" — כופלים את מספר הקבוצות בכמות בכל קבוצה!',
+   example:'בכיתה יש 5 שולחנות. לכל שולחן 4 רגליים.\nכמה רגליים?\n→ <span class="math">5 × 4 = 20</span>',
+   gen:function(){return qStoryMul(7)}},
+
+  {title:'כפל — תרגול',instruction:'עוד שאלות כפל — עם מספרים קצת יותר גדולים',
+   tip:'אותו עיקרון: מספר קבוצות × כמות בכל קבוצה = סך הכל!',
+   example:'בחנות יש 8 ארגזים. בכל ארגז 6 כדורים.\nכמה כדורים?\n→ <span class="math">8 × 6 = 48</span>',
+   gen:function(){return qStoryMul(10)}},
+
+  {title:'חילוק לחלקים',instruction:'מחלקים שווה בשווה — כמה לכל אחד?',
+   tip:'כשכתוב "חילק שווה בשווה" — מחלקים את הסך הכל במספר האנשים/קבוצות.',
+   example:'חילקו 24 סוכריות ל-6 ילדים שווה.\nכמה לכל ילד?\n→ <span class="math">24 ÷ 6 = 4</span>',
+   gen:function(){return qStoryDivParts(7)}},
+
+  {title:'חילוק להכלה',instruction:'כמה קבוצות אפשר ליצור?',
+   tip:'כשכתוב "כל אחד מקבל X" וצריך למצוא כמה אנשים — מחלקים את הסך הכל בכמות לכל אחד.',
+   example:'יש 30 עוגיות. בכל שקית 5.\nכמה שקיות?\n→ <span class="math">30 ÷ 5 = 6</span>',
+   gen:function(){return qStoryDivContain(7)}},
+
+  {title:'חילוק — מעורבב',instruction:'חילוק לחלקים או להכלה — זהו את הסוג!',
+   tip:'שימו לב: "כמה לכל אחד?" = חילוק לחלקים. "כמה קבוצות?" = חילוק להכלה.',
+   example:'שני סוגי חילוק:\n• 20 ÷ 4 ילדים = 5 לכל ילד (חלקים)\n• 20 ÷ 5 בכל שקית = 4 שקיות (הכלה)',
+   gen:function(){return pick([0,1])===0?qStoryDivParts():qStoryDivContain()}},
+
+  {title:'פי כמה יותר?',instruction:'השוואה כפלית — פי כמה?',
+   tip:'כדי למצוא "פי כמה" — מחלקים את הגדול בקטן.',
+   example:'ליוסי 24 גולות, לדני 4 גולות.\nפי כמה יותר ליוסי?\n→ <span class="math">24 ÷ 4 = 6</span> (פי 6)',
+   gen:function(){return qStoryCompareMul()}},
+
+  {title:'קטן פי...',instruction:'מספר קטן פי... — כמה זה?',
+   tip:'כשכתוב "קטן פי X" — מחלקים ב-X.',
+   example:'ליעל 36 מדבקות. לנועם קטן פי 4.\nכמה לנועם?\n→ <span class="math">36 ÷ 4 = 9</span>',
+   gen:function(){return qStoryCompareMulReverse()}},
+
+  {title:'השוואה כפלית — מעורבב',instruction:'פי כמה יותר? קטן פי? שאלות מעורבבות',
+   tip:'קראו בעיון — "פי כמה" = חילוק הגדול בקטן. "קטן פי" = חילוק.',
+   example:'בשני הסוגים: מחלקים! פשוט שימו לב מה שואלים.',
+   gen:function(){return pick([0,1])===0?qStoryCompareMul():qStoryCompareMulReverse()}},
+
+  {title:'שאלות במספרים',instruction:'שאלות על כפל וחילוק עם מספרים',
+   tip:'קראו בעיון — "כפלנו ב..." = כפל, "חילקנו ב..." = חילוק, "מה המספר?" = הפעולה ההפוכה!',
+   example:'כפלנו מספר ב-7 וקיבלנו 56.\nמה המספר?\n→ <span class="math">56 ÷ 7 = 8</span>',
+   gen:function(){return qStoryNumProblem()}},
+
+  {title:'שאלות בכסף',instruction:'שאלות כסף עם כפל וחילוק',
+   tip:'קנייה = כפל (כמות × מחיר). מחיר לפריט = חילוק (סכום ÷ כמות). כמה אפשר לקנות = חילוק (תקציב ÷ מחיר).',
+   example:'קנו 6 מחברות ב-4 ש"ח כל אחת.\nכמה שילמו?\n→ <span class="math">6 × 4 = 24</span> ש"ח',
+   gen:function(){return qStoryMoney()}},
+
+  {title:'כפל וחילוק — מעורבב',instruction:'שאלות מכל הסוגים שלמדנו',
+   tip:'זהו את סוג השאלה: כפל (ביחד) או חילוק (לכל אחד / כמה קבוצות / פי כמה)?',
+   example:'קראו את הסיפור, חשבו, ובחרו!',
+   gen:function(){return makeMixed(['mul','divP','divC','cmpMul'])}},
+
+  {title:'כל הסוגים',instruction:'שאלות מכל סוג — כולל כסף ומספרים!',
+   tip:'השתמשו בכל מה שלמדתם! כפל, חילוק, השוואה כפלית, כסף ומספרים.',
+   example:'בהצלחה! אתם כבר מומחים!',
+   gen:function(){return makeMixed(['mul','divP','divC','cmpMul','cmpRev','money','numProb'])}},
+
+  {title:'מספרים גדולים יותר',instruction:'כפל וחילוק עם מספרים מלוח הכפל המורחב',
+   tip:'אותם כללים — רק עם מספרים קצת יותר גדולים. חשבו בראש או בכתב!',
+   example:'9 ארגזים × 8 כדורים = 72 כדורים!',
+   gen:function(){return makeMixed(['mulBig','divPBig','divCBig','cmpMul','cmpRev'])}},
+
+  {title:'אתגר',instruction:'שאלות מאתגרות — מוכנים?',
+   tip:'קראו לאט, חשבו היטב, ואל תמהרו!',
+   example:'קחו רגע לחשוב לפני שעונים.',
+   gen:function(){return makeMixed(['mulBig','divPBig','divCBig','cmpMul','cmpRev','money','numProb'])}},
+
+  {title:'סופר-אתגר!',instruction:'הרמה הכי קשה — בהצלחה!',
+   tip:'השתמשו בכל מה שלמדתם!',
+   example:'אתם אלופים!',
+   gen:function(){return makeMixed(['mulBig','divPBig','divCBig','cmpMul','cmpRev','money','numProb'])}}
+];
+
+/* ===== STATE ===== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+/* ===== RENDER ===== */
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');
+  row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');
+    t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel) t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0) t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};
+    row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at) at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').textContent=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example.replace(/\n/g,'<br>');
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+
+  currentQuestions=[];
+  answeredCount=0;levelCorrect=0;levelWrong=0;
+
+  for(var i=0;i<QPL;i++){
+    var q;
+    var attempts=0;
+    do{q=lvl.gen();attempts++}while(attempts<30&&(q.answer===undefined||(typeof q.answer==='number'&&q.answer<0)));
+    currentQuestions.push(q);
+  }
+
+  renderQuestions();
+  updateProgress();
+  renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');
+  list.innerHTML='';
+
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');
+    card.className='question-card';
+    card.id='q-'+idx;
+
+    var html='<div class="question-number">'+(idx+1)+'</div>';
+    html+='<div class="story-section">';
+    html+='<div class="story-emoji">'+q.emoji+'</div>';
+    html+='<div class="story-text">'+q.story+'<div class="story-question">'+q.question+'</div></div>';
+    html+='</div>';
+
+    html+='<div class="answer-options" id="opts-'+idx+'">';
+    q.options.forEach(function(opt){
+      html+='<button class="answer-btn" onclick="checkAnswer('+idx+','+opt+',this)">'+fmt(opt)+'</button>';
+    });
+    html+='</div>';
+
+    html+='<div class="solution-reveal" id="sol-'+idx+'">'+q.equation+'</div>';
+    html+='<div class="feedback" id="fb-'+idx+'"></div>';
+
+    card.innerHTML=html;
+    list.appendChild(card);
+  });
+}
+
+/* ===== CHECK ===== */
+function checkAnswer(idx,chosen,btn){
+  var q=currentQuestions[idx];
+  var card=document.getElementById('q-'+idx);
+  var fb=document.getElementById('fb-'+idx);
+  var sol=document.getElementById('sol-'+idx);
+
+  if(card.classList.contains('correct')) return;
+
+  if(chosen===q.answer){
+    card.classList.add('correct');
+    btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    sol.classList.add('show');
+    fb.textContent=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟','כל הכבוד! 👏'][rr(0,4)];
+    fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');
+    fb.textContent='לא נכון, נסו שוב! 💪';
+    fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+
+  updateProgress();
+  if(answeredCount===QPL) setTimeout(showLevelComplete,800);
+}
+
+function showLevelComplete(){
+  levelResults[currentLevel]=levelWrong;
+  var card=document.getElementById('levelComplete');
+  document.getElementById('lcCorrect').textContent=levelCorrect;
+  document.getElementById('lcWrong').textContent=levelWrong;
+
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+
+  card.classList.add('show');
+  card.scrollIntoView({behavior:'smooth',block:'center'});
+  renderTabs();
+}
+
+/* ===== NAV ===== */
+function goLevel(i){if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function nextLevel(){if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+
+function updateProgress(){
+  document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';
+  document.getElementById('totalCorrect').textContent=totalCorrect;
+  document.getElementById('totalWrong').textContent=totalWrong;
+}
+
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal')) document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

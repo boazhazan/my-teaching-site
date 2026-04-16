@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>חילוק בתחום המאה — כיתה ג' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#92400e;--primary-dark:#78350f;--primary-light:#fef3c7;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#78350f 0%,#92400e 50%,#b45309 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(146,64,14,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math-expr{direction:ltr;unicode-bidi:embed;display:inline;font-weight:700;color:var(--primary)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-expr{direction:ltr;unicode-bidi:embed;text-align:center;font-size:2.2rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary)}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;direction:ltr;unicode-bidi:embed}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-expr{font-size:1.7rem;padding:6px 20px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">➗</div><div><h1>חילוק בתחום המאה</h1><div class="subtitle">כיתה ג' — חילוק עם ובלי שארית</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">חילוק בתחום המאה — כיתה ג' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>❓ טיפים לחילוק</h2><p><strong>חילוק = ההפך מכפל:</strong> אם <span class="math-expr">6 × 8 = 48</span> אז <span class="math-expr">48 ÷ 8 = 6</span></p><p><strong>חילוק עם שארית:</strong> כשהמספר לא מתחלק בדיוק, נשארת שארית.<br><span class="math-expr">17 ÷ 5 = 3</span> שארית <span class="math-expr">2</span> (כי <span class="math-expr">5 × 3 = 15</span>, ונשאר <span class="math-expr">17 − 15 = 2</span>)</p><p><strong>השארית תמיד קטנה מהמחלק!</strong><br>אם מחלקים ב-6, השאריות האפשריות הן: 0, 1, 2, 3, 4, 5</p><p><strong>חילוק בעל פה (פילוג):</strong> פרקו את המחולק לחלקים נוחים!<br><span class="math-expr">84 ÷ 4 = ?</span> → <span class="math-expr">80 ÷ 4 + 4 ÷ 4 = 20 + 1 = 21</span></p><p><strong>בדיקה:</strong> מנה × מחלק + שארית = מחולק<br><span class="math-expr">3 × 5 + 2 = 17</span> ✓</p><p>15 רמות — מחילוק פשוט ועד סופר-אתגר!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* === UTILITIES === */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function makeWrong(correct,count,min,max){
+  const s=new Set([correct]);
+  const offsets=[-1,1,-2,2,-3,3,-10,10,-5,5];
+  for(const d of offsets){const v=correct+d;if(v>=min&&v<=max&&!s.has(v))s.add(v);if(s.size>=count+1)break}
+  let att=0;while(s.size<count+1&&att<100){att++;const v=rr(min,max);s.add(v)}
+  const arr=[...s];arr.splice(arr.indexOf(correct),1);return shuffle(arr).slice(0,count);
+}
+
+/* === QUESTION GENERATORS === */
+
+/* 1. qDivNoRemainder() — division from multiplication table, no remainder */
+function qDivNoRemainder(minD,maxD,minQ,maxQ){
+  minD=minD||2;maxD=maxD||9;minQ=minQ||1;maxQ=maxQ||10;
+  const divisor=rr(minD,maxD),quotient=rr(minQ,maxQ);
+  const dividend=divisor*quotient;
+  const wrongs=makeWrong(quotient,3,Math.max(0,quotient-5),quotient+5);
+  return{type:'choice',qText:'כמה זה?',display:'<div class="num-display"><span class="big-expr">'+dividend+' ÷ '+divisor+' = ?</span></div>',answer:String(quotient),options:shuffle([String(quotient),...wrongs.map(String)]),colClass:'cols-4'};
+}
+
+/* 2. qDivWithRemainder() — division with remainder */
+function qDivWithRemainder(minD,maxD){
+  minD=minD||2;maxD=maxD||9;
+  const divisor=rr(minD,maxD);
+  /* ensure remainder > 0 */
+  let dividend,quotient,remainder;
+  let att=0;
+  do{
+    dividend=rr(divisor+1,99);
+    quotient=Math.floor(dividend/divisor);
+    remainder=dividend-quotient*divisor;
+    att++;
+  }while((remainder===0||quotient<1)&&att<100);
+  const ansStr=quotient+' שארית '+remainder;
+  /* build distractors */
+  const wrongs=[];
+  const seen=new Set([ansStr]);
+  /* close distractors: wrong quotient, wrong remainder */
+  const candidates=[
+    (quotient+1)+' שארית '+(remainder>0?remainder-1:0),
+    (quotient-1)+' שארית '+(remainder+divisor),
+    quotient+' שארית '+(remainder+1 < divisor ? remainder+1 : remainder-1 > 0 ? remainder-1 : 0),
+    (quotient+1)+' שארית 0',
+    (quotient-1)+' שארית '+(remainder+1),
+    quotient+' שארית '+(divisor-1),
+  ];
+  for(const c of candidates){
+    if(!seen.has(c)&&wrongs.length<3){
+      /* validate: quotient part >= 0, remainder part >= 0 and < divisor conceptually */
+      const parts=c.split(' שארית ');
+      const wq=parseInt(parts[0]),wr=parseInt(parts[1]);
+      if(wq>=0&&wr>=0&&!(wq===quotient&&wr===remainder)){wrongs.push(c);seen.add(c)}
+    }
+  }
+  /* fill if needed */
+  while(wrongs.length<3){
+    const wq=rr(Math.max(1,quotient-3),quotient+3);
+    const wr=rr(0,divisor-1);
+    const s=wq+' שארית '+wr;
+    if(!seen.has(s)){wrongs.push(s);seen.add(s)}
+  }
+  return{type:'choice',qText:'חלקו ומצאו את המנה והשארית:',display:'<div class="num-display"><span class="big-expr">'+dividend+' ÷ '+divisor+' = ?</span></div>',answer:ansStr,options:shuffle([ansStr,...wrongs]),colClass:'cols-2'};
+}
+
+/* 3. qDivTwoDigitQuotient() — two-digit quotient, no remainder */
+function qDivTwoDigitQuotient(){
+  const divisor=rr(2,5);
+  const quotient=rr(11,33);
+  const dividend=divisor*quotient;
+  if(dividend>99){/* keep in range — regenerate with smaller quotient */
+    const q2=rr(11,Math.floor(99/divisor));
+    const d2=divisor*q2;
+    const wrongs=makeWrong(q2,3,Math.max(10,q2-5),q2+5);
+    return{type:'choice',qText:'כמה זה?',display:'<div class="num-display"><span class="big-expr">'+d2+' ÷ '+divisor+' = ?</span></div>',answer:String(q2),options:shuffle([String(q2),...wrongs.map(String)]),colClass:'cols-4'};
+  }
+  const wrongs=makeWrong(quotient,3,Math.max(10,quotient-5),quotient+5);
+  return{type:'choice',qText:'כמה זה?',display:'<div class="num-display"><span class="big-expr">'+dividend+' ÷ '+divisor+' = ?</span></div>',answer:String(quotient),options:shuffle([String(quotient),...wrongs.map(String)]),colClass:'cols-4'};
+}
+
+/* 4. qDivOralDistrib() — mental division via distribution */
+function qDivOralDistrib(){
+  const divisor=rr(2,5);
+  /* build a nice two-digit dividend that splits cleanly */
+  const tens=rr(1,Math.floor(9/divisor))*divisor*10; /* tens part divisible */
+  const units=rr(1,Math.floor(9/divisor))*divisor;   /* units part divisible */
+  const dividend=Math.floor(tens/10)+units; /* wait, we want the actual number */
+  /* Let me rethink: we want dividend in [20..99], divisible by divisor, where we can show tens+units split */
+  const q=rr(4,Math.floor(99/divisor));
+  const dv=divisor*q;
+  if(dv<20||dv>99)return qDivOralDistrib(); /* retry */
+  /* find a nice split: dv = a + b where both a,b divisible by divisor */
+  const tensDigit=Math.floor(dv/10);
+  const a=Math.floor(tensDigit/divisor)*divisor*10||divisor*10;
+  const b=dv-a;
+  if(a<=0||b<0||a%divisor!==0||b%divisor!==0){
+    /* fallback: just show it as a normal division */
+    const wrongs=makeWrong(q,3,Math.max(1,q-5),q+5);
+    return{type:'choice',qText:'חלקו בעל פה (פילוג):',display:'<div class="num-display"><span class="big-expr">'+dv+' ÷ '+divisor+' = ?</span></div>',answer:String(q),options:shuffle([String(q),...wrongs.map(String)]),colClass:'cols-4'};
+  }
+  const wrongs=makeWrong(q,3,Math.max(1,q-5),q+5);
+  return{type:'choice',qText:'חלקו בעל פה (פילוג):',display:'<div class="num-display"><span class="big-expr">'+dv+' ÷ '+divisor+' = ?</span></div>',answer:String(q),options:shuffle([String(q),...wrongs.map(String)]),colClass:'cols-4'};
+}
+
+/* 5. qPossibleRemainders() — what are the possible remainders when dividing by N? */
+function qPossibleRemainders(){
+  const divisor=rr(2,9);
+  /* correct answer: 0,1,...,divisor-1 */
+  const rems=[];for(let i=0;i<divisor;i++)rems.push(i);
+  const ansStr=rems.join(', ');
+  const wrongs=[];const seen=new Set([ansStr]);
+  /* wrong: include divisor itself */
+  const w1=[];for(let i=0;i<=divisor;i++)w1.push(i);
+  const w1s=w1.join(', ');if(!seen.has(w1s)){wrongs.push(w1s);seen.add(w1s)}
+  /* wrong: start from 1 */
+  const w2=[];for(let i=1;i<divisor;i++)w2.push(i);
+  const w2s=w2.join(', ');if(!seen.has(w2s)&&w2.length>0){wrongs.push(w2s);seen.add(w2s)}
+  /* wrong: 1 to divisor */
+  const w3=[];for(let i=1;i<=divisor;i++)w3.push(i);
+  const w3s=w3.join(', ');if(!seen.has(w3s)){wrongs.push(w3s);seen.add(w3s)}
+  /* wrong: 0 to divisor+1 */
+  const w4=[];for(let i=0;i<=divisor+1;i++)w4.push(i);
+  const w4s=w4.join(', ');if(!seen.has(w4s)&&wrongs.length<3){wrongs.push(w4s);seen.add(w4s)}
+  while(wrongs.length<3){
+    /* make random wrong set */
+    const start=rr(0,1),end=rr(divisor-1,divisor+1);
+    const wx=[];for(let i=start;i<=end;i++)wx.push(i);
+    const wxs=wx.join(', ');
+    if(!seen.has(wxs)){wrongs.push(wxs);seen.add(wxs)}
+  }
+  return{type:'choice',qText:'בחילוק ב-'+divisor+', מה השאריות האפשריות?',display:'',answer:ansStr,options:shuffle([ansStr,...wrongs.slice(0,3)]),colClass:'cols-2'};
+}
+
+/* === LEVELS === */
+const levels=[
+  /* 1 */ {title:'חילוק בלוח הכפל',instruction:'חילוק ללא שארית — מלוח הכפל',tip:'💡 טיפ: חילוק הוא ההפך מכפל! אם <span class="math-expr">6 × 7 = 42</span> אז <span class="math-expr">42 ÷ 7 = 6</span>',example:'<span class="math-expr">24 ÷ 6 = 4</span> (כי <span class="math-expr">6 × 4 = 24</span>)\n<span class="math-expr">45 ÷ 9 = 5</span> (כי <span class="math-expr">9 × 5 = 45</span>)',gen:()=>qDivNoRemainder(2,9,1,10)},
+  /* 2 */ {title:'חילוק — תרגול',instruction:'עוד תרגילי חילוק מלוח הכפל',tip:'💡 טיפ: נסו להיזכר באיזה כפל נותן את המספר הזה!',example:'<span class="math-expr">56 ÷ 8 = 7</span> (כי <span class="math-expr">8 × 7 = 56</span>)\n<span class="math-expr">81 ÷ 9 = 9</span> (כי <span class="math-expr">9 × 9 = 81</span>)',gen:()=>qDivNoRemainder(2,9,2,10)},
+  /* 3 */ {title:'חילוק עם שארית',instruction:'כשהמספר לא מתחלק בדיוק — נשארת שארית!',tip:'💡 טיפ: מצאו את הכפולה הכי קרובה מלמטה, וההפרש הוא השארית!',example:'<span class="math-expr">17 ÷ 5 = 3</span> שארית <span class="math-expr">2</span>\nכי <span class="math-expr">5 × 3 = 15</span> ונשאר <span class="math-expr">17 − 15 = 2</span>',gen:()=>qDivWithRemainder(2,5)},
+  /* 4 */ {title:'חילוק עם שארית — תרגול',instruction:'תרגול נוסף עם שארית — מחלקים גדולים יותר',tip:'💡 טיפ: השארית תמיד קטנה מהמחלק! אם מחלקים ב-7, השארית יכולה להיות 0 עד 6.',example:'<span class="math-expr">50 ÷ 7 = 7</span> שארית <span class="math-expr">1</span>\nכי <span class="math-expr">7 × 7 = 49</span> ונשאר <span class="math-expr">50 − 49 = 1</span>',gen:()=>qDivWithRemainder(2,9)},
+  /* 5 */ {title:'מנה דו-ספרתית',instruction:'חילוק שהתוצאה שלו דו-ספרתית (ללא שארית)',tip:'💡 טיפ: פרקו את המספר! <span class="math-expr">60 ÷ 3</span> → חשבו <span class="math-expr">6 ÷ 3 = 2</span>, ואז הוסיפו 0 → <span class="math-expr">20</span>',example:'<span class="math-expr">60 ÷ 3 = 20</span>\n<span class="math-expr">96 ÷ 4 = 24</span>',gen:()=>qDivTwoDigitQuotient()},
+  /* 6 */ {title:'חילוק בעל פה (פילוג)',instruction:'חלקו בעל פה — פרקו את המספר לחלקים נוחים!',tip:'💡 טיפ: פרקו את המחולק לעשרות ויחידות שמתחלקים בקלות!',example:'<span class="math-expr">84 ÷ 4 = ?</span>\n<span class="math-expr">80 ÷ 4 = 20</span>, <span class="math-expr">4 ÷ 4 = 1</span>\n<span class="math-expr">20 + 1 = 21</span> ✓',gen:()=>qDivOralDistrib()},
+  /* 7 */ {title:'חילוק בעל פה — תרגול',instruction:'עוד תרגילי פילוג — בעל פה!',tip:'💡 טיפ: אם מתקשים, חפשו פירוק אחר! לפעמים אפשר לפרק ל-3 חלקים.',example:'<span class="math-expr">78 ÷ 3 = ?</span>\n<span class="math-expr">60 ÷ 3 = 20</span>, <span class="math-expr">18 ÷ 3 = 6</span>\n<span class="math-expr">20 + 6 = 26</span> ✓',gen:()=>qDivOralDistrib()},
+  /* 8 */ {title:'שאריות אפשריות',instruction:'מצאו אילו שאריות אפשריות בחילוק במספר מסוים',tip:'💡 טיפ: בחילוק ב-N, השאריות האפשריות הן 0 עד N−1. למשל, בחילוק ב-4: השאריות 0, 1, 2, 3.',example:'בחילוק ב-3: שאריות אפשריות <span class="math-expr">0, 1, 2</span>\nבחילוק ב-5: שאריות אפשריות <span class="math-expr">0, 1, 2, 3, 4</span>',gen:()=>qPossibleRemainders()},
+  /* 9 */ {title:'ללא שארית + עם שארית',instruction:'תרגילים מעורבבים — חילוק עם ובלי שארית',tip:'💡 טיפ: קראו טוב! לפעמים יש שארית ולפעמים לא.',example:'<span class="math-expr">36 ÷ 6 = 6</span> (ללא שארית)\n<span class="math-expr">37 ÷ 6 = 6</span> שארית <span class="math-expr">1</span>',gen:()=>rr(0,1)?qDivNoRemainder(2,9,1,10):qDivWithRemainder(2,9)},
+  /* 10 */ {title:'פילוג + מנה דו-ספרתית',instruction:'חילוק בעל פה ומנה דו-ספרתית — מעורבב',tip:'🏆 טיפ: חשבו מהר — פרקו את המספר ותחלקו בקלות!',example:'<span class="math-expr">75 ÷ 5 = 15</span>\n<span class="math-expr">92 ÷ 4 = 23</span>',gen:()=>rr(0,1)?qDivTwoDigitQuotient():qDivOralDistrib()},
+  /* 11 */ {title:'מעורבב — כל הסוגים',instruction:'חילוק מכל הסוגים — מוכנים?',tip:'🏆 טיפ: קראו כל שאלה בזהירות — כל אחת מסוג אחר!',example:'חילוק בסיסי, עם שארית, דו-ספרתי ופילוג — הכל!',gen:()=>[()=>qDivNoRemainder(2,9,1,10),()=>qDivWithRemainder(2,9),()=>qDivTwoDigitQuotient(),()=>qDivOralDistrib(),()=>qPossibleRemainders()][rr(0,4)]()},
+  /* 12 */ {title:'אתגר — חילוק מעורבב',instruction:'תרגילי אתגר — ברמה גבוהה!',tip:'🏆 טיפ: השתמשו בכל השיטות שלמדתם!',example:'💪 אתם מוכנים!',gen:()=>[()=>qDivNoRemainder(3,9,3,10),()=>qDivWithRemainder(3,9),()=>qDivTwoDigitQuotient(),()=>qDivOralDistrib()][rr(0,3)]()},
+  /* 13 */ {title:'אתגר — שאריות ופילוג',instruction:'שאריות אפשריות + חילוק בעל פה',tip:'🏆 טיפ: השארית תמיד קטנה מהמחלק!',example:'בחילוק ב-7 → שאריות: 0, 1, 2, 3, 4, 5, 6\n<span class="math-expr">91 ÷ 7 = 13</span>',gen:()=>rr(0,1)?qPossibleRemainders():qDivOralDistrib()},
+  /* 14 */ {title:'סופר מעורבב',instruction:'כל סוגי השאלות — בדיוק כמו מבחן!',tip:'🏆 טיפ: קראו בזהירות — כל שאלה שונה!',example:'💪 כל שאלה מפתיעה!',gen:()=>[()=>qDivNoRemainder(2,9,2,10),()=>qDivWithRemainder(2,9),()=>qDivTwoDigitQuotient(),()=>qDivOralDistrib(),()=>qPossibleRemainders()][rr(0,4)]()},
+  /* 15 */ {title:'סופר-אתגר!',instruction:'הרמה הכי קשה — מאסטרים של החילוק!',tip:'🏆 טיפ: בהצלחה! הגעתם רחוק! 💪',example:'💪 כל שאלה מפתיעה!',gen:()=>[()=>qDivNoRemainder(3,9,3,10),()=>qDivWithRemainder(3,9),()=>qDivTwoDigitQuotient(),()=>qDivOralDistrib(),()=>qPossibleRemainders()][rr(0,4)]()},
+];
+
+/* === STATE === */
+let currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+const QPL=5;
+
+/* === RENDERING === */
+function renderTabs(){
+  const lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  const row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach((_,i)=>{
+    const t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=()=>goLevel(i);row.appendChild(t);
+  });
+  const at=row.querySelector('.active');if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  const lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  const seen=new Set();
+  for(let i=0;i<QPL;i++){let q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q)));seen.add(JSON.stringify(q));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  const list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach((q,idx)=>{
+    const card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    let h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+    q.options.forEach(opt=>{
+      h+='<button class="answer-btn" onclick="checkChoice('+idx+',this)" data-val="'+opt.replace(/"/g,'&quot;')+'"><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></button>';
+    });
+    h+='</div>';
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,btn){
+  const chosen=btn.dataset.val;
+  const q=currentQuestions[idx];const card=document.getElementById('q-'+idx);const fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(b=>b.classList.add('disabled'));
+    fb.textContent=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(()=>{btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  const lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function nextLevel(){if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){if(typeof showAuthModal==='function')showAuthModal();return}if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

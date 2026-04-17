@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>השוואת שברים עשרוניים — כיתה ה' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#e11d48;--primary-dark:#be123c;--primary-light:#ffe4e6;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#be123c 0%,#e11d48 50%,#fb7185 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(225,29,72,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:3rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.vs-display{display:flex;align-items:center;justify-content:center;gap:16px;margin:16px 0;flex-wrap:wrap}
+.vs-num{font-size:2.5rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 24px;min-width:70px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed;text-align:center}
+.vs-or{font-size:1.5rem;font-weight:800;color:var(--primary)}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;direction:ltr;unicode-bidi:embed}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:2.2rem;padding:6px 20px}.vs-num{font-size:1.8rem;padding:6px 16px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">⚖️</div><div><h1>השוואת שברים עשרוניים</h1><div class="subtitle">כיתה ה' — סידור, עיגול וטעויות נפוצות</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">השוואת שברים עשרוניים — כיתה ה' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>⚖️ השוואת שברים עשרוניים</h2><p><strong>איך משווים שברים עשרוניים?</strong></p><p>🔹 <strong>השוואה:</strong> משווים ספרה-ספרה משמאל לימין — קודם חלק שלם, אחר כך עשיריות, אחר כך מאיות...<br>🔹 <strong>טעות נפוצה:</strong> לחשוב ש-0.12 &gt; 0.9 כי 12 &gt; 9 — לא נכון! צריך להשוות <strong>0.12</strong> מול <strong>0.90</strong><br>🔹 <strong>טריק:</strong> השלימו אפסים כדי שלשני המספרים יהיה אותו מספר ספרות אחרי הנקודה</p><p>לדוגמה:<br>🔸 <strong>0.9</strong> מול <strong>0.12</strong> → כתבו <strong>0.90</strong> מול <strong>0.12</strong> → &nbsp;90 &gt; 12 → &nbsp;0.9 גדול יותר!<br>🔸 <strong>0.5</strong> מול <strong>0.50</strong> → אותו דבר בדיוק!</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function d(v){return '<span style="direction:ltr;unicode-bidi:embed;font-weight:700">'+v+'</span>'}
+
+/* Round to avoid floating point weirdness */
+function rd(v,decimals){var m=Math.pow(10,decimals||2);return Math.round(v*m)/m}
+
+/* Generate random decimal with given number of decimal places */
+function randDec(places,minInt,maxInt){
+  minInt=minInt||0;maxInt=maxInt||0;
+  var intPart=rr(minInt,maxInt);
+  var fracPart=rr(1,Math.pow(10,places)-1);
+  var s=intPart+'.'+String(fracPart).padStart(places,'0');
+  return parseFloat(s);
+}
+
+/* Format decimal for display — always show the right number of digits */
+function fmtDec(v,places){
+  if(places===undefined){
+    var s=String(v);
+    var dot=s.indexOf('.');
+    if(dot===-1) return s+'.0';
+    return s;
+  }
+  return v.toFixed(places);
+}
+
+/* Generate unique distractors near a value */
+function nearDistractors(correct,count,places,lo,hi){
+  lo=lo||0;hi=hi||1;
+  var set=new Set();set.add(correct.toFixed(places));
+  var result=[];
+  var step=1/Math.pow(10,places);
+  var attempts=0;
+  while(result.length<count&&attempts<200){
+    attempts++;
+    var offset=rr(1,Math.max(5,Math.pow(10,places)-1));
+    if(rr(0,1)) offset=-offset;
+    var v=rd(correct+offset*step,places);
+    if(v<lo||v>hi) continue;
+    var key=v.toFixed(places);
+    if(set.has(key)) continue;
+    set.add(key);
+    result.push(v);
+  }
+  /* fill remaining with random */
+  while(result.length<count){
+    var rv=rd(lo+Math.random()*(hi-lo),places);
+    var rk=rv.toFixed(places);
+    if(!set.has(rk)){set.add(rk);result.push(rv)}
+  }
+  return result;
+}
+
+/* ========== SVG NUMBER LINE ========== */
+function makeNumberLine(val,lo,hi,ticks){
+  lo=lo||0;hi=hi||1;ticks=ticks||10;
+  var w=320,h=70,pad=30;
+  var lineY=35;
+  var svg='<svg viewBox="0 0 '+w+' '+h+'" style="max-width:100%;display:block;margin:8px auto" xmlns="http://www.w3.org/2000/svg">';
+  /* main line */
+  svg+='<line x1="'+pad+'" y1="'+lineY+'" x2="'+(w-pad)+'" y2="'+lineY+'" stroke="#334155" stroke-width="2.5" stroke-linecap="round"/>';
+  /* ticks */
+  var range=hi-lo;
+  for(var i=0;i<=ticks;i++){
+    var x=pad+i*((w-2*pad)/ticks);
+    var tickVal=rd(lo+i*(range/ticks),2);
+    var isMajor=(i===0||i===ticks||i===ticks/2);
+    var tickH=isMajor?14:8;
+    svg+='<line x1="'+x+'" y1="'+(lineY-tickH/2)+'" x2="'+x+'" y2="'+(lineY+tickH/2)+'" stroke="#334155" stroke-width="'+(isMajor?2:1.5)+'"/>';
+    if(isMajor||i%2===0){
+      svg+='<text x="'+x+'" y="'+(lineY+tickH/2+14)+'" text-anchor="middle" font-size="11" font-family="Heebo,sans-serif" font-weight="600" fill="#334155">'+fmtDec(tickVal)+'</text>';
+    }
+  }
+  /* red dot */
+  var dotX=pad+((val-lo)/range)*(w-2*pad);
+  svg+='<circle cx="'+dotX+'" cy="'+lineY+'" r="8" fill="#e11d48" stroke="#fff" stroke-width="2"/>';
+  svg+='<text x="'+dotX+'" y="'+(lineY-16)+'" text-anchor="middle" font-size="13" font-family="Heebo,sans-serif" font-weight="800" fill="#e11d48">?</text>';
+  svg+='</svg>';
+  return svg;
+}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: Compare two decimals — which is bigger? */
+function qCompareDecimals(placesA,placesB,maxTenths){
+  maxTenths=maxTenths||9;
+  var a,b,att=0;
+  do{
+    a=randDec(placesA,0,0);
+    b=randDec(placesB,0,0);
+    att++;
+  }while(att<100&&(a===b||a>maxTenths/10||b>maxTenths/10||a<=0||b<=0));
+  var correct=a>b?fmtDec(a,placesA):fmtDec(b,placesB);
+  var other=a>b?fmtDec(b,placesB):fmtDec(a,placesA);
+  var options=[correct,other];
+  /* Explanation: pad to same places */
+  var maxP=Math.max(placesA,placesB);
+  var explain='נשווה: '+d(fmtDec(a,maxP))+' מול '+d(b.toFixed(maxP))+' → '+d(correct)+' גדול יותר!';
+  return{type:'choice',qText:'מי <strong>גדול</strong> יותר?',
+    display:'<div class="vs-display"><span class="vs-num">'+fmtDec(a,placesA)+'</span><span class="vs-or">או</span><span class="vs-num">'+fmtDec(b,placesB)+'</span></div>',
+    answer:correct,options:options,colClass:'cols-2',explain:explain};
+}
+
+/* Type 2: Order 4 decimals from smallest to largest */
+function qOrderDecimals(places,maxVal){
+  maxVal=maxVal||0.99;
+  var nums=[],set=new Set();
+  while(nums.length<4){
+    var v=randDec(places,0,0);
+    if(v<=0||v>maxVal) continue;
+    var k=v.toFixed(places);
+    if(set.has(k)) continue;
+    set.add(k);nums.push(v);
+  }
+  var sorted=nums.slice().sort(function(a,b){return a-b});
+  var correct=sorted.map(function(v){return fmtDec(v,places)}).join(' , ');
+  /* Generate 3 wrong orderings */
+  var options=[correct];
+  var wrongSet=new Set();wrongSet.add(correct);
+  var att=0;
+  while(options.length<4&&att<50){
+    att++;
+    var shuf=shuffle(nums.slice());
+    var s=shuf.map(function(v){return fmtDec(v,places)}).join(' , ');
+    if(!wrongSet.has(s)){wrongSet.add(s);options.push(s)}
+  }
+  options=shuffle(options);
+  return{type:'choice',qText:'סדרו מה<strong>קטן</strong> לגדול:',
+    display:'<div class="num-display"><span class="big-num" style="font-size:1.8rem;padding:10px 20px">'+nums.map(function(v){return fmtDec(v,places)}).join(' &nbsp;,&nbsp; ')+'</span></div>',
+    answer:correct,options:options,colClass:'cols-2',
+    explain:'הסדר הנכון: '+d(correct)};
+}
+
+/* Type 3: Closest to target (0, 0.5, or 1) */
+function qCloserTo(target,places){
+  var nums=[],set=new Set();
+  while(nums.length<4){
+    var v=randDec(places,0,0);
+    if(v<=0||v>=1) continue;
+    var k=v.toFixed(places);
+    if(set.has(k)) continue;
+    set.add(k);nums.push(v);
+  }
+  /* find closest */
+  var best=nums[0],bestDist=Math.abs(nums[0]-target);
+  for(var i=1;i<nums.length;i++){
+    var dist=Math.abs(nums[i]-target);
+    if(dist<bestDist){bestDist=dist;best=nums[i]}
+  }
+  var correct=fmtDec(best,places);
+  var options=nums.map(function(v){return fmtDec(v,places)});
+  var targetStr=target===0?'0':target===1?'1':fmtDec(target,1);
+  return{type:'choice',qText:'מי הכי <strong>קרוב</strong> ל-'+d(targetStr)+'?',
+    display:'<div class="num-display"><span class="big-num" style="font-size:1.6rem;padding:10px 16px">'+nums.map(function(v){return fmtDec(v,places)}).join(' &nbsp;,&nbsp; ')+'</span></div>',
+    answer:correct,options:options,colClass:'cols-4',
+    explain:d(correct)+' הכי קרוב ל-'+d(targetStr)+' (מרחק '+d(fmtDec(bestDist,places))+')'};
+}
+
+/* Type 4: Is this claim correct? (common mistakes) */
+function qIsCorrect(){
+  /* Generate pairs where students commonly err */
+  var pairs=[
+    {a:'0.9',b:'0.12',claim:'>',wrong:true,explain:'0.9 = 0.90 שזה גדול מ-0.12. אל תשוו 9 ל-12 — השוו עשיריות!'},
+    {a:'0.3',b:'0.30',claim:'>',wrong:true,explain:'0.3 ו-0.30 שווים בדיוק! הוספת אפס מימין לא משנה את הערך.'},
+    {a:'0.7',b:'0.08',claim:'<',wrong:true,explain:'0.7 = 0.70 שגדול בהרבה מ-0.08. אל תתבלבלו בין ספרות לערך!'},
+    {a:'0.50',b:'0.5',claim:'>',wrong:true,explain:'0.50 ו-0.5 שווים בדיוק! אפס בסוף לא משנה.'},
+    {a:'0.6',b:'0.45',claim:'>',wrong:false,explain:'נכון! 0.6 = 0.60 שגדול מ-0.45.'},
+    {a:'0.25',b:'0.3',claim:'>',wrong:true,explain:'0.25 קטן מ-0.3! כי 0.3 = 0.30, ו-30 מאיות > 25 מאיות.'},
+    {a:'0.8',b:'0.15',claim:'<',wrong:true,explain:'0.8 = 0.80 שגדול בהרבה מ-0.15!'},
+    {a:'0.99',b:'1',claim:'>',wrong:true,explain:'0.99 קטן מ-1! חסרה מאית אחת ל-1 שלם.'},
+    {a:'0.4',b:'0.40',claim:'<',wrong:true,explain:'0.4 ו-0.40 שווים בדיוק!'},
+    {a:'0.19',b:'0.2',claim:'>',wrong:true,explain:'0.19 קטן מ-0.2! כי 0.2 = 0.20, ו-20 מאיות > 19 מאיות.'},
+    {a:'0.35',b:'0.4',claim:'>',wrong:true,explain:'0.35 קטן מ-0.4! כי 0.4 = 0.40, ו-40 מאיות > 35 מאיות.'},
+    {a:'0.1',b:'0.09',claim:'>',wrong:false,explain:'נכון! 0.1 = 0.10 שגדול מ-0.09.'}
+  ];
+  var p=pairs[rr(0,pairs.length-1)];
+  var sign=p.claim==='>'?' גדול מ-':' קטן מ-';
+  var name=['דנה','גלעד','מיכל','אורי','נועה','עידו','שירה','יובל'][rr(0,7)];
+  var correct=p.wrong?'לא!':'כן!';
+  return{type:'choice',
+    qText:name+' טוען/ת: '+d(p.a)+sign+d(p.b)+'. <strong>נכון?</strong>',
+    display:'',
+    answer:correct,options:['כן!','לא!'],colClass:'cols-2',
+    explain:p.explain};
+}
+
+/* Type 5: Find a number between two values */
+function qFillBetween(places){
+  var lo,hi,att=0;
+  do{
+    lo=randDec(places,0,0);
+    hi=randDec(places,0,0);
+    att++;
+    if(lo>hi){var tmp=lo;lo=hi;hi=tmp}
+  }while(att<100&&(hi-lo<2/Math.pow(10,places)||lo<=0||hi>=1));
+  /* find a correct value between them */
+  var mid=rd((lo+hi)/2,places);
+  if(mid<=lo||mid>=hi) mid=rd(lo+1/Math.pow(10,places),places);
+  var correct=fmtDec(mid,places);
+  /* distractors: outside the range */
+  var wrongs=nearDistractors(mid,3,places,0,1).filter(function(v){
+    return v<=lo||v>=hi;
+  });
+  while(wrongs.length<3){
+    var rv=randDec(places,0,0);
+    if(rv<=lo||rv>=hi){
+      var rk=rv.toFixed(places);
+      if(rk!==correct&&wrongs.map(function(w){return w.toFixed(places)}).indexOf(rk)===-1){
+        wrongs.push(rv);
+      }
+    }
+  }
+  wrongs=wrongs.slice(0,3);
+  var options=shuffle([correct].concat(wrongs.map(function(v){return fmtDec(v,places)})));
+  return{type:'choice',
+    qText:'מצאו מספר <strong>בין</strong> '+d(fmtDec(lo,places))+' ל-'+d(fmtDec(hi,places)),
+    display:'<div class="vs-display"><span class="vs-num" style="font-size:2rem">'+fmtDec(lo,places)+'</span><span class="vs-or">⟵ ? ⟶</span><span class="vs-num" style="font-size:2rem">'+fmtDec(hi,places)+'</span></div>',
+    answer:correct,options:options,colClass:'cols-4',
+    explain:d(correct)+' נמצא בין '+d(fmtDec(lo,places))+' ל-'+d(fmtDec(hi,places))};
+}
+
+/* Type 6: Identify decimal on number line */
+function qDecimalOnLine(places){
+  var step=1/Math.pow(10,Math.min(places,1));
+  var idx=rr(1,9);
+  var val=rd(idx*0.1,1);
+  if(places===2){
+    val=rd(rr(1,99)/100,2);
+  }
+  var correct=fmtDec(val,places);
+  var wrongs=[];
+  var wSet=new Set();wSet.add(correct);
+  /* nearby distractors */
+  var offsets=[-2,-1,1,2];
+  shuffle(offsets);
+  for(var i=0;i<offsets.length&&wrongs.length<3;i++){
+    var wv=rd(val+offsets[i]*(1/Math.pow(10,places)),places);
+    if(wv>0&&wv<1){
+      var wk=fmtDec(wv,places);
+      if(!wSet.has(wk)){wSet.add(wk);wrongs.push(wk)}
+    }
+  }
+  while(wrongs.length<3){
+    var rv=randDec(places,0,0);
+    if(rv>0&&rv<1){var rk=fmtDec(rv,places);if(!wSet.has(rk)){wSet.add(rk);wrongs.push(rk)}}
+  }
+  var options=shuffle([correct].concat(wrongs));
+  var svgLine=makeNumberLine(val,0,1,10);
+  return{type:'choice',
+    qText:'איזה מספר מסומן על ישר המספרים?',
+    display:svgLine,
+    answer:correct,options:options,colClass:'cols-4',
+    explain:'הנקודה נמצאת על '+d(correct)};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'השוואה — עשיריות',instruction:'מי גדול? השוו שברים עם ספרה אחת',
+   tip:'כששני המספרים הם עשיריות (ספרה אחת אחרי הנקודה), פשוט משווים את הספרות.\n<strong>ככל שהספרה גדולה יותר — המספר גדול יותר!</strong>',
+   example:'<span class="math">0.7</span> מול <span class="math">0.3</span> → 7 עשיריות > 3 עשיריות → <span class="math">0.7</span> גדול!',
+   gen:function(){return qCompareDecimals(1,1)}},
+
+  {title:'השוואה — מאיות',instruction:'מי גדול? השוו שברים עם שתי ספרות',
+   tip:'כששני המספרים הם מאיות (שתי ספרות אחרי הנקודה), משווים ספרה-ספרה:\nקודם עשיריות, אחר כך מאיות.',
+   example:'<span class="math">0.45</span> מול <span class="math">0.38</span> → עשיריות: 4>3 → <span class="math">0.45</span> גדול!',
+   gen:function(){return qCompareDecimals(2,2)}},
+
+  {title:'טעות נפוצה!',instruction:'האם הטענה נכונה? היזהרו!',
+   tip:'<strong>הטעות הכי נפוצה:</strong> לחשוב ש-0.12 גדול מ-0.9 כי 12>9.\nהפתרון: <strong>השלימו אפסים!</strong> כתבו 0.90 במקום 0.9, ואז השוו.',
+   example:'0.9 מול 0.12 → כתבו: <span class="math">0.90</span> מול <span class="math">0.12</span> → 90>12 → <span class="math">0.9</span> גדול!',
+   gen:function(){return qIsCorrect()}},
+
+  {title:'סידור מהקטן לגדול',instruction:'סדרו 4 מספרים — מהקטן לגדול!',
+   tip:'טריק: <strong>השלימו אפסים</strong> לכולם לאותו מספר ספרות, ואז סדרו כמו מספרים רגילים.',
+   example:'0.8, 0.35, 0.5 → כתבו: <span class="math">0.80, 0.35, 0.50</span> → סדר: <span class="math">0.35, 0.50, 0.80</span>',
+   gen:function(){return qOrderDecimals(2)}},
+
+  {title:'קרוב ל-0 / 0.5 / 1',instruction:'מי הכי קרוב ליעד?',
+   tip:'חשבו על ישר המספרים:\n• קרוב ל-0 = מספר <strong>קטן</strong>\n• קרוב ל-1 = מספר <strong>גדול</strong> (קרוב ל-1 שלם)\n• קרוב ל-0.5 = קרוב <strong>לאמצע</strong>',
+   example:'מי קרוב ל-1? &nbsp; 0.3, 0.85, 0.6 → <span class="math">0.85</span> (מרחק 0.15 בלבד!)',
+   gen:function(){var targets=[0,0.5,1];return qCloserTo(targets[rr(0,2)],2)}},
+
+  {title:'מספרים ביניים',instruction:'מצאו מספר שנמצא בין שני מספרים',
+   tip:'כדי למצוא מספר בין שני מספרים, חשבו מה נמצא <strong>באמצע</strong>.\nאפשר גם להשלים אפסים ולחפש מספר שנמצא "ביניהם".',
+   example:'בין <span class="math">0.3</span> ל-<span class="math">0.5</span>: <span class="math">0.4</span> (או 0.35, 0.42...)',
+   gen:function(){return qFillBetween(2)}},
+
+  {title:'עשרוניים על ישר מספרים',instruction:'זהו את המספר שמסומן על הישר',
+   tip:'ספרו את הקווים הקטנים (סימני סרגל) על ישר המספרים.\nבין 0 ל-1 יש 10 חלקים — כל חלק שווה <strong>0.1</strong>.',
+   example:'הנקודה על הסימן השביעי → <span class="math">0.7</span>',
+   gen:function(){return qDecimalOnLine(1)}},
+
+  {title:'מעורבב — השוואה ושגיאות',instruction:'שאלות מגוונות!',
+   tip:'זכרו: תמיד אפשר <strong>להשלים אפסים</strong> כדי להשוות בקלות.',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[function(){return qCompareDecimals(1,2)},function(){return qIsCorrect()},function(){return qCompareDecimals(2,1)}];
+     return types[rr(0,2)]();
+   }},
+
+  {title:'מעורבב — סידור ומיקום',instruction:'סידור + ישר מספרים + ביניים!',
+   tip:'שלבו את כל הכלים שלמדתם!',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[function(){return qOrderDecimals(2)},function(){return qDecimalOnLine(1)},function(){return qFillBetween(2)}];
+     return types[rr(0,2)]();
+   }},
+
+  {title:'השוואת עשיריות ומאיות',instruction:'השוו מספרים עם מספר שונה של ספרות!',
+   tip:'<strong>זה המלכוד!</strong> כשלמספר אחד יש ספרה אחת ולשני שתיים — השלימו אפסים!\n<span class="math">0.5</span> = <span class="math">0.50</span>',
+   example:'<span class="math">0.5</span> מול <span class="math">0.35</span> → כתבו <span class="math">0.50</span> מול <span class="math">0.35</span> → 50>35 → <span class="math">0.5</span> גדול!',
+   gen:function(){return qCompareDecimals(1,2)}},
+
+  {title:'קרוב + ביניים — אתגר',instruction:'שאלות קרבה ומספרים ביניים!',
+   tip:'חשבו על ישר המספרים — איפה כל מספר נמצא?',
+   example:'💪 אתם יכולים!',
+   gen:function(){
+     var types=[function(){return qCloserTo([0,0.5,1][rr(0,2)],2)},function(){return qFillBetween(2)},function(){return qDecimalOnLine(2)}];
+     return types[rr(0,2)]();
+   }},
+
+  {title:'סידור 4 מספרים — מעורבב',instruction:'סדרו מספרים עם ספרות שונות!',
+   tip:'השלימו אפסים לכולם, סדרו, ורק אז בחרו תשובה.',
+   example:'🏆 בהצלחה!',
+   gen:function(){return qOrderDecimals(2)}},
+
+  {title:'כל הסוגים — אתגר!',instruction:'שאלות מכל הסוגים!',
+   tip:'שלבו את כל מה שלמדתם!',
+   example:'🌟 כל שאלה היא הפתעה!',
+   gen:function(){
+     var types=[function(){return qCompareDecimals(1,2)},function(){return qIsCorrect()},function(){return qOrderDecimals(2)},function(){return qCloserTo([0,0.5,1][rr(0,2)],2)},function(){return qFillBetween(2)},function(){return qDecimalOnLine(1)}];
+     return types[rr(0,5)]();
+   }},
+
+  {title:'סופר אתגר!',instruction:'השאלות הכי קשות!',
+   tip:'🏆 אתם מומחים לשברים עשרוניים!',
+   example:'🌟 💪 🏆',
+   gen:function(){
+     var types=[function(){return qCompareDecimals(1,2)},function(){return qCompareDecimals(2,2)},function(){return qIsCorrect()},function(){return qOrderDecimals(2)},function(){return qCloserTo([0,0.5,1][rr(0,2)],2)},function(){return qFillBetween(2)},function(){return qDecimalOnLine(2)}];
+     return types[rr(0,6)]();
+   }},
+
+  {title:'מאסטר!',instruction:'הרמה הכי קשה — הוכיחו שליטה!',
+   tip:'🏆 אין עליכם! שלטתם בהשוואת שברים עשרוניים!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[function(){return qCompareDecimals(1,2)},function(){return qCompareDecimals(2,1)},function(){return qIsCorrect()},function(){return qOrderDecimals(2)},function(){return qCloserTo([0,0.5,1][rr(0,2)],2)},function(){return qFillBetween(2)},function(){return qDecimalOnLine(2)}];
+     return types[rr(0,6)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=6;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)"><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

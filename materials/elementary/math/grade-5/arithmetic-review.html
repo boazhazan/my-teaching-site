@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>חיבור, חיסור וכפל — חזרה | כיתה ה' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#4f46e5;--primary-dark:#4338ca;--primary-light:#e0e7ff;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#4f46e5 0%,#6366f1 50%,#818cf8 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(79,70,229,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:2.2rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;direction:ltr;unicode-bidi:embed}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.vert-add{font-family:'Courier New',monospace;font-size:1.5rem;font-weight:900;direction:ltr;unicode-bidi:embed;text-align:right;display:inline-block;line-height:1.6;padding:8px 16px;background:var(--primary-light);border-radius:12px;border:2px solid var(--primary)}
+.vert-add .vert-line{border-bottom:3px solid var(--text);display:block;margin-bottom:4px;padding-bottom:4px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:1.7rem;padding:6px 16px}.vert-add{font-size:1.2rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🔢</div><div><h1>חיבור, חיסור וכפל — חזרה</h1><div class="subtitle">כיתה ה' — מספרים גדולים ותובנה</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">חיבור, חיסור וכפל — חזרה — כיתה ה' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>🔢 חיבור, חיסור וכפל — חזרה</h2><p><strong>בתרגיל הזה נתרגל חשיבה מתמטית חכמה!</strong></p><p>🔹 <strong>השוואה ללא חישוב</strong> — מי גדול יותר? בלי לחשב! נשתמש באומדן ובהיגיון.</p><p>🔹 <strong>אותה תוצאה</strong> — איזה שני תרגילים נותנים תוצאה זהה? (חוק החילוף)</p><p>🔹 <strong>עובדות קשורות</strong> — נתון תרגיל אחד, איך מחשבים תרגיל קרוב?</p><p>🔹 <strong>השלמת טווח</strong> — מצאו את המספר שמכניס את התוצאה לטווח!</p><p>🔹 <strong>תוצאה גדולה/קטנה</strong> — איזו פעולה נותנת את התוצאה הגדולה או הקטנה ביותר?</p><p>🔹 <strong>חיבור מחוברים</strong> — חיבור אנכי של 3 מספרים או יותר!</p><p>🔹 <strong>כפל תלת×תלת</strong> — כפל מספרים תלת-ספרתיים!</p><p>15 רמות — מהקל אל הקשה! 🏆</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function fmtNum(n){return n.toLocaleString('he-IL')}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: Compare without calculating */
+function qCompareNoCalc(mode){
+  /* mode: 'add' or 'sub' */
+  var a,b,c,d,leftVal,rightVal,op,opSym;
+  if(mode==='add'){
+    opSym='+';
+    a=rr(1000,5000);b=rr(200,2000);c=rr(1000,5000);d=rr(200,2000);
+    leftVal=a+b;rightVal=c+d;
+  }else{
+    opSym='\u2212';
+    a=rr(3000,9000);b=rr(200,2000);c=rr(3000,9000);d=rr(200,2000);
+    leftVal=a-b;rightVal=c-d;
+  }
+  var correct;
+  if(leftVal>rightVal) correct='>';
+  else if(leftVal<rightVal) correct='<';
+  else correct='=';
+  var leftStr=fmtNum(a)+' '+opSym+' '+fmtNum(b);
+  var rightStr=fmtNum(c)+' '+opSym+' '+fmtNum(d);
+  var explainStr;
+  if(mode==='add'){
+    explainStr=fmtNum(a)+' + '+fmtNum(b)+' = '+fmtNum(leftVal)+', ואילו '+fmtNum(c)+' + '+fmtNum(d)+' = '+fmtNum(rightVal);
+  }else{
+    explainStr=fmtNum(a)+' \u2212 '+fmtNum(b)+' = '+fmtNum(leftVal)+', ואילו '+fmtNum(c)+' \u2212 '+fmtNum(d)+' = '+fmtNum(rightVal);
+  }
+  return{type:'choice',
+    qText:'מה הקשר? (בלי לחשב!)',
+    display:'<div class="num-display"><span class="big-num" style="font-size:1.4rem"><span dir="ltr" style="unicode-bidi:embed">'+leftStr+'</span> ___ <span dir="ltr" style="unicode-bidi:embed">'+rightStr+'</span></span></div>',
+    answer:correct,options:['<','>','='],colClass:'cols-3',
+    explain:explainStr};
+}
+
+/* Type 2: Same result — commutative property */
+function qSameResult(){
+  var a=rr(20,99),b=rr(20,99);
+  while(a===b) b=rr(20,99);
+  /* correct pair: a×b and b×a */
+  var exprCorrect1=fmtNum(a)+' \u00D7 '+fmtNum(b);
+  var exprCorrect2=fmtNum(b)+' \u00D7 '+fmtNum(a);
+  /* distractors: two other expressions that do NOT equal a*b */
+  var c,d,e,f;
+  do{c=rr(20,99);d=rr(20,99)}while(c*d===a*b||(c===a&&d===b)||(c===b&&d===a));
+  do{e=rr(20,99);f=rr(20,99)}while(e*f===a*b||e*f===c*d||(e===a&&f===b)||(e===b&&f===a));
+  var exprWrong1=fmtNum(c)+' \u00D7 '+fmtNum(d);
+  var exprWrong2=fmtNum(e)+' \u00D7 '+fmtNum(f);
+  var correct=exprCorrect1+' ו-'+exprCorrect2;
+  var options=[
+    exprCorrect1+' ו-'+exprCorrect2,
+    exprCorrect1+' ו-'+exprWrong1,
+    exprWrong1+' ו-'+exprWrong2,
+    exprCorrect2+' ו-'+exprWrong2
+  ];
+  options=shuffle(options);
+  return{type:'choice',
+    qText:'לאילו שני תרגילים <strong>אותה תוצאה</strong>?',
+    display:'',
+    answer:correct,options:options,colClass:'cols-2',
+    explain:'לפי חוק החילוף: '+exprCorrect1+' = '+exprCorrect2+' = '+fmtNum(a*b)};
+}
+
+/* Type 3: Related fact */
+function qRelatedFact(){
+  var a=rr(15,40),b=rr(20,50);
+  var product=a*b;
+  /* derive (a-1)*b or (a+1)*b */
+  var direction=rr(0,1); /* 0=subtract 1, 1=add 1 */
+  var newA,newProduct,questionStr,explainStr;
+  if(direction===0){
+    newA=a-1;newProduct=product-b;
+    questionStr='נתון: <span dir="ltr" style="unicode-bidi:embed">'+fmtNum(a)+' \u00D7 '+fmtNum(b)+' = '+fmtNum(product)+'</span>.\nמהו <span dir="ltr" style="unicode-bidi:embed">'+fmtNum(newA)+' \u00D7 '+fmtNum(b)+'</span>?';
+    explainStr=fmtNum(newA)+' \u00D7 '+fmtNum(b)+' = '+fmtNum(a)+' \u00D7 '+fmtNum(b)+' \u2212 '+fmtNum(b)+' = '+fmtNum(product)+' \u2212 '+fmtNum(b)+' = '+fmtNum(newProduct);
+  }else{
+    newA=a+1;newProduct=product+b;
+    questionStr='נתון: <span dir="ltr" style="unicode-bidi:embed">'+fmtNum(a)+' \u00D7 '+fmtNum(b)+' = '+fmtNum(product)+'</span>.\nמהו <span dir="ltr" style="unicode-bidi:embed">'+fmtNum(newA)+' \u00D7 '+fmtNum(b)+'</span>?';
+    explainStr=fmtNum(newA)+' \u00D7 '+fmtNum(b)+' = '+fmtNum(a)+' \u00D7 '+fmtNum(b)+' + '+fmtNum(b)+' = '+fmtNum(product)+' + '+fmtNum(b)+' = '+fmtNum(newProduct);
+  }
+  var correct=fmtNum(newProduct);
+  var wrongs=new Set();
+  wrongs.add(newProduct+b);wrongs.add(newProduct-b);wrongs.add(product);
+  wrongs.delete(newProduct);
+  var wArr=Array.from(wrongs).filter(function(v){return v>0}).slice(0,3);
+  while(wArr.length<3){var f=newProduct+rr(-100,100);if(f!==newProduct&&f>0&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var options=shuffle([correct].concat(wArr.map(fmtNum)));
+  return{type:'choice',
+    qText:questionStr,
+    display:'',
+    answer:correct,options:options,colClass:'cols-2',
+    explain:explainStr};
+}
+
+/* Type 4: Fill range — find multiplier so product is in range */
+function qFillRange(){
+  var b=rr(30,80);
+  var lo=rr(1500,3000);var hi=lo+1000;
+  /* find correct multiplier range */
+  var minK=Math.ceil(lo/b);var maxK=Math.floor(hi/b);
+  if(minK>maxK){/* adjust range */lo=b*rr(20,40);hi=lo+b*5;minK=Math.ceil(lo/b);maxK=Math.floor(hi/b)}
+  var correct=rr(minK,maxK);
+  var wrongs=new Set();
+  wrongs.add(correct-2);wrongs.add(correct+2);wrongs.add(correct+3);wrongs.add(minK-1);wrongs.add(maxK+1);
+  wrongs.delete(correct);
+  var wArr=Array.from(wrongs).filter(function(v){return v>0&&(v<minK||v>maxK)}).slice(0,3);
+  while(wArr.length<3){var f=correct+rr(-5,5);if(f!==correct&&f>0&&(f<minK||f>maxK)&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var options=shuffle([fmtNum(correct)].concat(wArr.map(fmtNum)));
+  return{type:'choice',
+    qText:'מצאו מספר שמשלים: <span dir="ltr" style="unicode-bidi:embed">___ \u00D7 '+fmtNum(b)+'</span> כך שהתוצאה בין <strong>'+fmtNum(lo)+'</strong> ל-<strong>'+fmtNum(hi)+'</strong>',
+    display:'',
+    answer:fmtNum(correct),options:options,colClass:'cols-4',
+    explain:fmtNum(correct)+' \u00D7 '+fmtNum(b)+' = '+fmtNum(correct*b)+' (בין '+fmtNum(lo)+' ל-'+fmtNum(hi)+')'};
+}
+
+/* Type 5: Which operation gives biggest/smallest result */
+function qBiggestSmallestOp(){
+  var a=rr(100,999),b=rr(100,999);
+  while(a===b) b=rr(100,999);
+  var big=Math.max(a,b),small=Math.min(a,b);
+  var resAdd=big+small,resSub=big-small,resMul=big*small;
+  var wantBig=rr(0,1)===1;
+  var qStr;
+  if(wantBig){
+    qStr='<strong>'+fmtNum(big)+'</strong> ו-<strong>'+fmtNum(small)+'</strong> — איזו פעולה נותנת את התוצאה <strong>הגדולה ביותר</strong>?';
+  }else{
+    qStr='<strong>'+fmtNum(big)+'</strong> ו-<strong>'+fmtNum(small)+'</strong> — איזו פעולה נותנת את התוצאה <strong>הקטנה ביותר</strong>?';
+  }
+  /* multiplication always biggest for numbers > 1, subtraction always smallest */
+  var correct,explain;
+  if(wantBig){
+    correct='\u00D7 (כפל)';
+    explain=fmtNum(big)+' \u00D7 '+fmtNum(small)+' = '+fmtNum(resMul)+' — גדול בהרבה מחיבור ('+fmtNum(resAdd)+') וחיסור ('+fmtNum(resSub)+')';
+  }else{
+    correct='\u2212 (חיסור)';
+    explain=fmtNum(big)+' \u2212 '+fmtNum(small)+' = '+fmtNum(resSub)+' — קטן מחיבור ('+fmtNum(resAdd)+') וכפל ('+fmtNum(resMul)+')';
+  }
+  var options=['+ (חיבור)','\u2212 (חיסור)','\u00D7 (כפל)'];
+  return{type:'choice',
+    qText:qStr,display:'',
+    answer:correct,options:options,colClass:'cols-3',
+    explain:explain};
+}
+
+/* Type 6: Vertical addition of 3+ addends */
+function qVertAdd3Plus(){
+  var count=rr(3,4);
+  var nums=[];var sum=0;
+  for(var i=0;i<count;i++){var n=rr(100,2999);nums.push(n);sum+=n}
+  /* build vertical display */
+  var maxLen=String(sum).length;
+  var lines='';
+  for(var i=0;i<nums.length;i++){
+    var prefix=(i===0)?'  ':((i===nums.length-1)?'+ ':'  ');
+    var padded=String(nums[i]).padStart(maxLen,' ');
+    lines+=prefix+padded+'\n';
+    if(i===nums.length-1) lines+='  '+'\u2500'.repeat(maxLen)+'\n  '+'?'.padStart(maxLen,' ');
+  }
+  var correct=fmtNum(sum);
+  var wrongs=new Set();
+  wrongs.add(sum+rr(1,50));wrongs.add(sum-rr(1,50));wrongs.add(sum+100);
+  wrongs.delete(sum);
+  var wArr=Array.from(wrongs).filter(function(v){return v>0}).slice(0,3);
+  while(wArr.length<3){var f=sum+rr(-200,200);if(f!==sum&&f>0&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var options=shuffle([correct].concat(wArr.map(fmtNum)));
+  var display='<div class="num-display"><div class="vert-add"><pre style="margin:0;font-family:inherit;font-size:inherit;font-weight:inherit">'+lines+'</pre></div></div>';
+  return{type:'choice',
+    qText:'חשבו את תרגיל החיבור:',display:display,
+    answer:correct,options:options,colClass:'cols-2',
+    explain:nums.map(fmtNum).join(' + ')+' = '+fmtNum(sum)};
+}
+
+/* Type 7: 3-digit × 3-digit multiplication */
+function qMul3x3(){
+  var a=rr(100,400),b=rr(100,400);
+  var product=a*b;
+  var correct=fmtNum(product);
+  var wrongs=new Set();
+  wrongs.add(product+rr(100,2000));wrongs.add(product-rr(100,2000));wrongs.add((a+1)*b);
+  wrongs.delete(product);
+  var wArr=Array.from(wrongs).filter(function(v){return v>0}).slice(0,3);
+  while(wArr.length<3){var f=product+rr(-3000,3000);if(f!==product&&f>0&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var options=shuffle([correct].concat(wArr.map(fmtNum)));
+  return{type:'choice',
+    qText:'מהי התוצאה?',
+    display:'<div class="num-display"><span class="big-num"><span dir="ltr" style="unicode-bidi:embed">'+fmtNum(a)+' \u00D7 '+fmtNum(b)+'</span></span></div>',
+    answer:correct,options:options,colClass:'cols-2',
+    explain:fmtNum(a)+' \u00D7 '+fmtNum(b)+' = '+fmtNum(product)};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'השוואה ללא חישוב — חיבור',instruction:'מי גדול יותר? אל תחשבו — השתמשו באומדן!',
+   tip:'כשמשווים שני תרגילי חיבור, בדקו: מי שהמחוברים שלו <strong>שניהם גדולים יותר</strong> — הסכום שלו בוודאי גדול יותר.\nאם מחובר אחד גדול והשני קטן — העריכו את ההפרש.',
+   example:'<span class="math">3,200 + 800</span> ___ <span class="math">2,900 + 600</span>\n3,200 > 2,900 וגם 800 > 600 → צד שמאל גדול יותר → >',
+   gen:function(){return qCompareNoCalc('add')}},
+
+  {title:'השוואה ללא חישוב — חיסור',instruction:'מי גדול יותר? חשבו בלי לחשב!',
+   tip:'בחיסור: אם המחוסר גדול יותר <strong>והמחסר קטן יותר</strong> — התוצאה בוודאי גדולה יותר.\nאם שניהם באותו כיוון — צריך להעריך.',
+   example:'<span class="math">5,000 \u2212 300</span> ___ <span class="math">4,800 \u2212 500</span>\n5,000 > 4,800 וגם 300 < 500 → צד שמאל גדול יותר → >',
+   gen:function(){return qCompareNoCalc('sub')}},
+
+  {title:'אותה תוצאה?',instruction:'מצאו את שני התרגילים עם אותה תוצאה!',
+   tip:'<strong>חוק החילוף בכפל:</strong> סדר הגורמים לא משנה!\n<span class="math">a \u00D7 b = b \u00D7 a</span>\nחפשו שני תרגילים שהגורמים שלהם הפוכים.',
+   example:'<span class="math">46 \u00D7 87</span> ו-<span class="math">87 \u00D7 46</span> — אותה תוצאה!\nלפי חוק החילוף: <span class="math">46 \u00D7 87 = 87 \u00D7 46 = 4,002</span>',
+   gen:function(){return qSameResult()}},
+
+  {title:'עובדות קשורות',instruction:'נתון תרגיל — גזרו ממנו תרגיל קרוב!',
+   tip:'אם ידוע ש-<span class="math">a \u00D7 b = c</span>, אז:\n• <span class="math">(a\u22121) \u00D7 b = c \u2212 b</span>\n• <span class="math">(a+1) \u00D7 b = c + b</span>\nמוסיפים או מחסירים פעם אחת את b.',
+   example:'נתון: <span class="math">30 \u00D7 45 = 1,350</span>\nמהו <span class="math">29 \u00D7 45</span>?\n1,350 \u2212 45 = <span class="math">1,305</span>',
+   gen:function(){return qRelatedFact()}},
+
+  {title:'השלמת טווח',instruction:'מצאו מכפיל שנותן תוצאה בטווח!',
+   tip:'כדי שהתוצאה תהיה בין שני מספרים, חלקו את גבולות הטווח במכפיל.\nמספר שנמצא ביניהם — זו התשובה!',
+   example:'___ \u00D7 45 בין 2,000 ל-3,000\n2,000 \u00F7 45 \u2248 44, ו-3,000 \u00F7 45 \u2248 66\nכל מספר בין 45 ל-66 מתאים!',
+   gen:function(){return qFillRange()}},
+
+  {title:'תוצאה גדולה/קטנה ביותר',instruction:'איזו פעולה נותנת את התוצאה הגדולה או הקטנה ביותר?',
+   tip:'כשהמספרים גדולים מ-1:\n• <strong>כפל</strong> תמיד נותן את התוצאה <strong>הגדולה</strong> ביותר\n• <strong>חיסור</strong> תמיד נותן את התוצאה <strong>הקטנה</strong> ביותר\n• חיבור נמצא באמצע',
+   example:'507 ו-340:\nכפל: <span class="math">507 \u00D7 340 = 172,380</span> — הכי גדול!\nחיבור: <span class="math">507 + 340 = 847</span>\nחיסור: <span class="math">507 \u2212 340 = 167</span> — הכי קטן!',
+   gen:function(){return qBiggestSmallestOp()}},
+
+  {title:'חיבור 3+ מחוברים',instruction:'חשבו את תרגיל החיבור האנכי!',
+   tip:'חברו מלמטה למעלה, ספרה אחרי ספרה.\nאל תשכחו את הנשא (carry)!\nטיפ: חפשו זוגות שמשלימים ל-10 או 100.',
+   example:'<span class="math">250 + 375 + 125</span>\n250 + 125 = 375 (משלימים!) → 375 + 375 = <span class="math">750</span>',
+   gen:function(){return qVertAdd3Plus()}},
+
+  {title:'כפל תלת×תלת',instruction:'כפל של מספרים תלת-ספרתיים!',
+   tip:'פרקו את הכפל:\n<span class="math">123 \u00D7 456</span> =\n<span class="math">123 \u00D7 400 + 123 \u00D7 50 + 123 \u00D7 6</span>\nאו השתמשו בכפל אנכי — ספרה אחרי ספרה.',
+   example:'<span class="math">150 \u00D7 200 = 30,000</span>\n(150 \u00D7 2 = 300, ואז \u00D7 100 = 30,000)',
+   gen:function(){return qMul3x3()}},
+
+  /* Levels 9-15: Mixed, increasing difficulty */
+  {title:'מעורבב — השוואה ועובדות',instruction:'שאלות מגוונות!',
+   tip:'שלבו את כל הכלים: אומדן, חוק החילוף, ועובדות קשורות!',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[function(){return qCompareNoCalc(['add','sub'][rr(0,1)])},function(){return qSameResult()},function(){return qRelatedFact()}];
+     return types[rr(0,2)]();
+   }},
+
+  {title:'מעורבב — טווחים ופעולות',instruction:'עוד מגוון!',
+   tip:'חשבו לפני שאתם מחשבים — הרבה שאלות נפתרות עם הערכה!',
+   example:'💪 בהצלחה!',
+   gen:function(){
+     var types=[function(){return qFillRange()},function(){return qBiggestSmallestOp()},function(){return qVertAdd3Plus()}];
+     return types[rr(0,2)]();
+   }},
+
+  {title:'מעורבב — כל הסוגים',instruction:'כל סוגי השאלות!',
+   tip:'15 רמות — כבר עברתם 10! עוד קצת!',
+   example:'🌟 אתם אלופים!',
+   gen:function(){
+     var types=[function(){return qCompareNoCalc(['add','sub'][rr(0,1)])},function(){return qSameResult()},function(){return qRelatedFact()},function(){return qFillRange()},function(){return qBiggestSmallestOp()}];
+     return types[rr(0,4)]();
+   }},
+
+  {title:'אתגר — חיבור וכפל',instruction:'שאלות מאתגרות!',
+   tip:'נסו לפתור מהר — אבל בדיוק!',
+   example:'🏆 אתם יכולים!',
+   gen:function(){
+     var types=[function(){return qVertAdd3Plus()},function(){return qMul3x3()},function(){return qRelatedFact()},function(){return qCompareNoCalc(['add','sub'][rr(0,1)])}];
+     return types[rr(0,3)]();
+   }},
+
+  {title:'אתגר — הכל ביחד',instruction:'כל הסוגים — שאלות קשות!',
+   tip:'שלבו אומדן, חוק חילוף, עובדות קשורות, וחישוב!',
+   example:'💪🏆 מי שמגיע לכאן — אלוף!',
+   gen:function(){
+     var types=[function(){return qCompareNoCalc(['add','sub'][rr(0,1)])},function(){return qSameResult()},function(){return qRelatedFact()},function(){return qFillRange()},function(){return qBiggestSmallestOp()},function(){return qVertAdd3Plus()},function(){return qMul3x3()}];
+     return types[rr(0,6)]();
+   }},
+
+  {title:'סופר אתגר!',instruction:'רמה מאוד קשה!',
+   tip:'🏆 אתם מומחים! הצליחו פה — ואתם מוכנים לכל דבר!',
+   example:'🌟🌟 בהצלחה!',
+   gen:function(){
+     var types=[function(){return qCompareNoCalc(['add','sub'][rr(0,1)])},function(){return qSameResult()},function(){return qRelatedFact()},function(){return qFillRange()},function(){return qBiggestSmallestOp()},function(){return qVertAdd3Plus()},function(){return qMul3x3()}];
+     return types[rr(0,6)]();
+   }},
+
+  {title:'מאסטר!',instruction:'הרמה הכי קשה — הוכיחו שליטה מלאה!',
+   tip:'🏆🏆 אין עליכם! 15 רמות — סיימתם הכל!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[function(){return qCompareNoCalc(['add','sub'][rr(0,1)])},function(){return qSameResult()},function(){return qRelatedFact()},function(){return qFillRange()},function(){return qBiggestSmallestOp()},function(){return qVertAdd3Plus()},function(){return qMul3x3()}];
+     return types[rr(0,6)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='\u05E8\u05DE\u05D4 '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='\u05E8\u05DE\u05D4 '+(currentLevel+1)+' \u05DE\u05EA\u05D5\u05DA '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='\u25B2 \u05D4\u05E1\u05EA\u05E8';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)"><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['\u05DE\u05E6\u05D5\u05D9\u05DF! \u2B50','\u05E0\u05DB\u05D5\u05DF! \uD83C\uDFAF','\u05D9\u05D5\u05E4\u05D9! \u2728','\u05DE\u05D3\u05D4\u05D9\u05DD! \uD83C\uDF1F'][rr(0,3)];
+    if(q.explain) praise+=' \u2014 '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF, \u05E0\u05E1\u05D5 \u05E9\u05D5\u05D1! \uD83D\uDCAA';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='\uD83C\uDFC6';document.getElementById('lcTitle').textContent='\u05DE\u05D5\u05E9\u05DC\u05DD!';document.getElementById('lcSub').textContent='\u05DB\u05DC \u05D4\u05EA\u05E9\u05D5\u05D1\u05D5\u05EA \u05E0\u05DB\u05D5\u05E0\u05D5\u05EA!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='\uD83C\uDF89';document.getElementById('lcTitle').textContent='\u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3!';document.getElementById('lcSub').textContent='\u05DB\u05DE\u05E2\u05D8 \u05DE\u05D5\u05E9\u05DC\u05DD!'}
+  else{document.getElementById('lcEmoji').textContent='\uD83D\uDCAA';document.getElementById('lcTitle').textContent='\u05E1\u05D9\u05D9\u05DE\u05EA\u05DD!';document.getElementById('lcSub').textContent='\u05DB\u05D3\u05D0\u05D9 \u05DC\u05E0\u05E1\u05D5\u05EA \u05E9\u05D5\u05D1'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'\u25BC \u05D4\u05E6\u05D2 \u05D8\u05D9\u05E4':'\u25B2 \u05D4\u05E1\u05EA\u05E8'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>שאלות מילוליות — שברים | כיתה ה' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#0d9488;--primary-dark:#0f766e;--primary-light:#ccfbf1;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#0d9488 0%,#14b8a6 50%,#2dd4bf 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(13,148,136,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary);line-height:1.8}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;line-height:1.6}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">📖</div><div><h1>שאלות מילוליות — שברים</h1><div class="subtitle">כיתה ה' — סיפורים עם שברים פשוטים</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">שאלות מילוליות — שברים | כיתה ה' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>📖 שאלות מילוליות עם שברים</h2><p><strong>מה לומדים כאן?</strong> איך לפתור בעיות מילוליות שקשורות לשברים — חיבור, חיסור, השוואה, חלק מכמות ועוד!</p><p>🔹 <strong>השוואה</strong> — מי קיבל יותר? משווים שברים עם אותו מכנה או מכנה שונה<br>🔹 <strong>חיבור</strong> — מוצאים מכנה משותף ומחברים<br>🔹 <strong>חיסור</strong> — 1 פחות מה שאכלו = כמה נשאר<br>🔹 <strong>חלק מכמות</strong> — שבר כפול מספר שלם</p><p>15 רמות — מהקל אל הקשה! 🚀</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function gcd(a,b){while(b){var t=b;b=a%b;a=t}return a}
+function lcm(a,b){return(a*b)/gcd(a,b)}
+
+/* Fraction display — inline vertical fraction */
+function fracHTML(n,d){
+  var g=gcd(Math.abs(n),Math.abs(d));
+  n=n/g; d=d/g;
+  if(d<0){n=-n;d=-d}
+  if(d===1) return '<span style="font-weight:800;direction:ltr;unicode-bidi:embed;margin:0 4px">'+n+'</span>';
+  return '<span style="display:inline-flex;flex-direction:column;align-items:center;direction:ltr;unicode-bidi:embed;font-weight:800;vertical-align:middle;margin:0 4px"><span style="border-bottom:2px solid var(--text);padding:0 8px;line-height:1.3">'+n+'</span><span style="padding:0 8px;line-height:1.3">'+d+'</span></span>';
+}
+
+/* Fraction as plain text key (reduced) for answer matching */
+function fracKey(n,d){
+  var g=gcd(Math.abs(n),Math.abs(d));
+  n=n/g; d=d/g;
+  if(d<0){n=-n;d=-d}
+  if(d===1) return ''+n;
+  return n+'/'+d;
+}
+
+/* Fraction HTML for option buttons (with LTR embed wrapper) */
+function fracOpt(n,d){
+  return '<span dir="ltr" style="unicode-bidi:embed">'+fracHTML(n,d)+'</span>';
+}
+
+/* Names pool */
+var NAMES=['דן','נועה','רנה','תמר','מיכל','אורי','יעל','עמית','שירה','גיל'];
+function pickNames(count){
+  var pool=shuffle(NAMES.slice());
+  return pool.slice(0,count);
+}
+
+/* Food items for stories */
+var FOODS=['עוגה','פיצה','שוקולד','עוגת גבינה'];
+var BOOKS=['ספר','סיפור','רומן','ספר הרפתקאות'];
+
+/* Generate wrong fraction options (unique, different from correct) */
+function wrongFracs(corrN,corrD,count,maxD){
+  if(!maxD) maxD=12;
+  var ck=fracKey(corrN,corrD);
+  var wrongs=[];
+  var seen=new Set();seen.add(ck);
+  var att=0;
+  while(wrongs.length<count&&att<200){
+    att++;
+    var wn=rr(1,maxD-1);
+    var wd=rr(2,maxD);
+    if(wn>=wd) continue;
+    var k=fracKey(wn,wd);
+    if(seen.has(k)) continue;
+    seen.add(k);
+    wrongs.push({n:wn,d:wd});
+  }
+  /* fallback if not enough */
+  while(wrongs.length<count){
+    wrongs.push({n:rr(1,5),d:rr(6,12)});
+  }
+  return wrongs;
+}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: Story compare — same denominator */
+function qStoryCompareSame(){
+  var names=pickNames(2);
+  var food=FOODS[rr(0,FOODS.length-1)];
+  var d=rr(3,10);
+  var a,b;
+  do{a=rr(1,d-1);b=rr(1,d-1)}while(a===b);
+  var winner=a>b?names[0]:names[1];
+  var explain=names[0]+' קיבל/ה '+fracHTML(a,d)+' ו'+names[1]+' קיבל/ה '+fracHTML(b,d)+'. '+
+    (a>b?fracHTML(a,d)+' > '+fracHTML(b,d):fracHTML(b,d)+' > '+fracHTML(a,d))+' ← '+winner+' קיבל/ה יותר!';
+  return{type:'choice',
+    qText:names[0]+' קיבל/ה '+fracHTML(a,d)+' '+food+' ו'+names[1]+' קיבל/ה '+fracHTML(b,d)+' '+food+'.<br>מי קיבל/ה יותר?',
+    display:'',answer:winner,options:shuffle([names[0],names[1]]),colClass:'cols-2',explain:explain};
+}
+
+/* Type 1b: Story compare — different denominators */
+function qStoryCompareDiff(){
+  var names=pickNames(2);
+  var food=FOODS[rr(0,FOODS.length-1)];
+  var d1,d2;
+  do{d1=rr(2,8);d2=rr(2,8)}while(d1===d2||lcm(d1,d2)>24);
+  var n1=rr(1,d1-1);
+  var n2=rr(1,d2-1);
+  var cm=lcm(d1,d2);
+  var v1=n1*(cm/d1), v2=n2*(cm/d2);
+  if(v1===v2){n2=Math.max(1,n2-1);v2=n2*(cm/d2)}
+  if(v1===v2){n1=Math.min(d1-1,n1+1);v1=n1*(cm/d1)}
+  var winner=v1>v2?names[0]:names[1];
+  var explain='מכנה משותף: '+cm+'. '+names[0]+': '+fracHTML(v1,cm)+', '+names[1]+': '+fracHTML(v2,cm)+'. '+
+    winner+' קיבל/ה יותר!';
+  return{type:'choice',
+    qText:names[0]+' קיבל/ה '+fracHTML(n1,d1)+' '+food+' ו'+names[1]+' קיבל/ה '+fracHTML(n2,d2)+' '+food+'.<br>מי קיבל/ה יותר?',
+    display:'',answer:winner,options:shuffle([names[0],names[1]]),colClass:'cols-2',explain:explain};
+}
+
+/* Type 2: Story add — same denominator */
+function qStoryAddSame(){
+  var names=pickNames(2);
+  var food=FOODS[rr(0,FOODS.length-1)];
+  var d=rr(3,10);
+  var a,b;
+  do{a=rr(1,d-2);b=rr(1,d-2)}while(a+b>=d||a+b<2);
+  var sumN=a+b;
+  var ck=fracKey(sumN,d);
+  var wrongs=wrongFracs(sumN,d,3,d+4);
+  var options=[{n:sumN,d:d,key:ck}];
+  wrongs.forEach(function(w){options.push({n:w.n,d:w.d,key:fracKey(w.n,w.d)})});
+  options=shuffle(options);
+  var explain=fracHTML(a,d)+' + '+fracHTML(b,d)+' = '+fracHTML(sumN,d);
+  return{type:'choice',
+    qText:names[0]+' אכל/ה '+fracHTML(a,d)+' '+food+' ו'+names[1]+' אכל/ה '+fracHTML(b,d)+' '+food+'.<br>כמה אכלו ביחד?',
+    display:'',answer:ck,
+    options:options.map(function(o){return o.key}),
+    optDisplay:options.map(function(o){return fracOpt(o.n,o.d)}),
+    colClass:'cols-4',explain:explain};
+}
+
+/* Type 2b: Story add — different denominators */
+function qStoryAddDiff(){
+  var names=pickNames(2);
+  var food=FOODS[rr(0,FOODS.length-1)];
+  var d1,d2;
+  do{d1=rr(2,6);d2=rr(2,6)}while(d1===d2||lcm(d1,d2)>12);
+  var n1=rr(1,d1-1);
+  var n2=rr(1,d2-1);
+  var cm=lcm(d1,d2);
+  var sumN=n1*(cm/d1)+n2*(cm/d2);
+  if(sumN>=cm){n2=1;sumN=n1*(cm/d1)+n2*(cm/d2)}
+  var ck=fracKey(sumN,cm);
+  var wrongs=wrongFracs(sumN,cm,3,cm+2);
+  var options=[{n:sumN,d:cm,key:ck}];
+  wrongs.forEach(function(w){options.push({n:w.n,d:w.d,key:fracKey(w.n,w.d)})});
+  options=shuffle(options);
+  var explain='מכנה משותף: '+cm+'. '+fracHTML(n1*(cm/d1),cm)+' + '+fracHTML(n2*(cm/d2),cm)+' = '+fracHTML(sumN,cm);
+  return{type:'choice',
+    qText:names[0]+' אכל/ה '+fracHTML(n1,d1)+' '+food+' ו'+names[1]+' אכל/ה '+fracHTML(n2,d2)+' '+food+'.<br>כמה אכלו ביחד?',
+    display:'',answer:ck,
+    options:options.map(function(o){return o.key}),
+    optDisplay:options.map(function(o){return fracOpt(o.n,o.d)}),
+    colClass:'cols-4',explain:explain};
+}
+
+/* Type 3: Story remain — how much is left from whole */
+function qStoryRemainFrac(){
+  var names=pickNames(2);
+  var food=FOODS[rr(0,FOODS.length-1)];
+  var d1,d2;
+  do{d1=rr(2,6);d2=rr(2,6)}while(lcm(d1,d2)>12);
+  var n1=rr(1,d1-1);
+  var n2=rr(1,d2-1);
+  var cm=lcm(d1,d2);
+  var ate=n1*(cm/d1)+n2*(cm/d2);
+  if(ate>=cm){n1=1;n2=1;ate=1*(cm/d1)+1*(cm/d2)}
+  if(ate>=cm){d1=4;d2=4;n1=1;n2=1;cm=4;ate=2}
+  var remN=cm-ate;
+  var ck=fracKey(remN,cm);
+  var wrongs=wrongFracs(remN,cm,3,cm+2);
+  var options=[{n:remN,d:cm,key:ck}];
+  wrongs.forEach(function(w){options.push({n:w.n,d:w.d,key:fracKey(w.n,w.d)})});
+  options=shuffle(options);
+  var explain='אכלו סה"כ: '+fracHTML(ate,cm)+'. נשאר: 1 - '+fracHTML(ate,cm)+' = '+fracHTML(remN,cm);
+  return{type:'choice',
+    qText:'מ'+food+' שלמה, '+names[0]+' אכל/ה '+fracHTML(n1,d1)+' ו'+names[1]+' אכל/ה '+fracHTML(n2,d2)+'.<br>כמה נשאר מה'+food+'?',
+    display:'',answer:ck,
+    options:options.map(function(o){return o.key}),
+    optDisplay:options.map(function(o){return fracOpt(o.n,o.d)}),
+    colClass:'cols-4',explain:explain};
+}
+
+/* Type 4: Book reading story */
+function qStoryBookReading(){
+  var name=pickNames(1)[0];
+  var book=BOOKS[rr(0,BOOKS.length-1)];
+  var d1,d2;
+  do{d1=rr(2,6);d2=rr(2,6)}while(lcm(d1,d2)>12);
+  var n1=rr(1,d1-1);
+  var n2=rr(1,d2-1);
+  var cm=lcm(d1,d2);
+  var sumN=n1*(cm/d1)+n2*(cm/d2);
+  if(sumN>=cm){n2=1;sumN=n1*(cm/d1)+1*(cm/d2)}
+  if(sumN>=cm){n1=1;sumN=1*(cm/d1)+1*(cm/d2)}
+  if(sumN>=cm){d1=3;d2=4;n1=1;n2=1;cm=12;sumN=4+3}
+  var ck=fracKey(sumN,cm);
+  var wrongs=wrongFracs(sumN,cm,3,cm+2);
+  var options=[{n:sumN,d:cm,key:ck}];
+  wrongs.forEach(function(w){options.push({n:w.n,d:w.d,key:fracKey(w.n,w.d)})});
+  options=shuffle(options);
+  var days=['ביום ראשון','ביום שני','בבוקר','אחרי הצהריים','בערב','לפני השינה'];
+  var d1Label=days[rr(0,2)], d2Label=days[rr(3,5)];
+  var explain=fracHTML(n1,d1)+' + '+fracHTML(n2,d2)+' = '+fracHTML(n1*(cm/d1),cm)+' + '+fracHTML(n2*(cm/d2),cm)+' = '+fracHTML(sumN,cm);
+  return{type:'choice',
+    qText:name+' קרא/ה '+fracHTML(n1,d1)+' מה'+book+' '+d1Label+' ועוד '+fracHTML(n2,d2)+' '+d2Label+'.<br>כמה מה'+book+' קרא/ה בסך הכל?',
+    display:'',answer:ck,
+    options:options.map(function(o){return o.key}),
+    optDisplay:options.map(function(o){return fracOpt(o.n,o.d)}),
+    colClass:'cols-4',explain:explain};
+}
+
+/* Type 5: Money — fraction of amount */
+function qStoryMoney(amounts){
+  if(!amounts) amounts=[60,80,100,120,150,180,200,240];
+  var name=pickNames(1)[0];
+  var total=amounts[rr(0,amounts.length-1)];
+  var denoms=[2,3,4,5,6];
+  var d=denoms[rr(0,denoms.length-1)];
+  while(total%d!==0){d=denoms[rr(0,denoms.length-1)]}
+  var n=rr(1,d-1);
+  var correct=total*n/d;
+  var items=['ספר','צעצוע','משחק','מתנה','חולצה'];
+  var item=items[rr(0,items.length-1)];
+  var wrongs=new Set();
+  wrongs.add(total/d);
+  wrongs.add(total*(d-n)/d);
+  wrongs.add(correct+total/d);
+  if(correct>total/d) wrongs.add(correct-total/d);
+  wrongs.delete(correct);
+  var wArr=[];
+  wrongs.forEach(function(v){if(v>0&&v!==correct&&v<=total)wArr.push(v)});
+  while(wArr.length<3){var f=rr(1,total-1);if(f!==correct&&wArr.indexOf(f)===-1)wArr.push(f)}
+  wArr=wArr.slice(0,3);
+  var options=shuffle([correct].concat(wArr));
+  var explain=fracHTML(n,d)+' מתוך '+total+' ₪ = '+total+' × '+n+' ÷ '+d+' = '+correct+' ₪';
+  return{type:'choice',
+    qText:'ל'+name+' יש '+total+' ₪. הוא/היא קנה/תה '+item+' ב-'+fracHTML(n,d)+' מהכסף.<br>כמה שילם/ה?',
+    display:'',answer:String(correct),
+    options:options.map(function(o){return String(o)}),
+    optDisplay:options.map(function(o){return '<span dir="ltr" style="unicode-bidi:embed">'+o+' ₪</span>'}),
+    colClass:'cols-4',explain:explain};
+}
+
+/* Type 6: Possibilities — split a fraction into two parts */
+function qStoryPossibilities(){
+  var names=pickNames(2);
+  var food=FOODS[rr(0,FOODS.length-1)];
+  var wholeD=rr(4,8);
+  var wholeN=rr(2,wholeD-1);
+  /* Generate one correct split */
+  var partA=rr(1,wholeN-1);
+  var partB=wholeN-partA;
+  var correctKey=fracKey(partA,wholeD)+' + '+fracKey(partB,wholeD);
+  var correctDisplay=fracOpt(partA,wholeD)+' + '+fracOpt(partB,wholeD);
+  /* Generate 3 wrong splits */
+  var wrongOpts=[];
+  var seenKeys=new Set();seenKeys.add(correctKey);
+  var att=0;
+  while(wrongOpts.length<3&&att<100){
+    att++;
+    var wa=rr(1,wholeD-1);
+    var wb=rr(1,wholeD-1);
+    if(wa+wb===wholeN) continue; /* that would be correct */
+    var wk=fracKey(wa,wholeD)+' + '+fracKey(wb,wholeD);
+    if(seenKeys.has(wk)) continue;
+    seenKeys.add(wk);
+    wrongOpts.push({key:wk,display:fracOpt(wa,wholeD)+' + '+fracOpt(wb,wholeD)});
+  }
+  while(wrongOpts.length<3){
+    wrongOpts.push({key:rr(1,3)+'/'+wholeD+' + '+rr(1,3)+'/'+wholeD,
+      display:fracOpt(rr(1,3),wholeD)+' + '+fracOpt(rr(1,3),wholeD)});
+  }
+  var allOpts=[{key:correctKey,display:correctDisplay}].concat(wrongOpts);
+  allOpts=shuffle(allOpts);
+  var explain=fracHTML(partA,wholeD)+' + '+fracHTML(partB,wholeD)+' = '+fracHTML(wholeN,wholeD)+' ✅';
+  return{type:'choice',
+    qText:names[0]+' ו'+names[1]+' חילקו ביניהם '+fracHTML(wholeN,wholeD)+' '+food+'.<br>איזו חלוקה אפשרית?',
+    display:'',answer:correctKey,
+    options:allOpts.map(function(o){return o.key}),
+    optDisplay:allOpts.map(function(o){return o.display}),
+    colClass:'cols-2',explain:explain};
+}
+
+/* Type 7: How much left to read (complement) */
+function qStoryLeftToRead(){
+  var name=pickNames(1)[0];
+  var book=BOOKS[rr(0,BOOKS.length-1)];
+  var d=rr(3,8);
+  var n=rr(1,d-1);
+  var remN=d-n;
+  var ck=fracKey(remN,d);
+  var wrongs=wrongFracs(remN,d,3,d+3);
+  var options=[{n:remN,d:d,key:ck}];
+  wrongs.forEach(function(w){options.push({n:w.n,d:w.d,key:fracKey(w.n,w.d)})});
+  options=shuffle(options);
+  var explain='קרא/ה '+fracHTML(n,d)+', נשאר: 1 - '+fracHTML(n,d)+' = '+fracHTML(remN,d);
+  return{type:'choice',
+    qText:name+' קרא/ה '+fracHTML(n,d)+' מה'+book+'.<br>כמה נשאר לקרוא?',
+    display:'',answer:ck,
+    options:options.map(function(o){return o.key}),
+    optDisplay:options.map(function(o){return fracOpt(o.n,o.d)}),
+    colClass:'cols-4',explain:explain};
+}
+
+/* Type 8: Fraction of quantity (not money) */
+function qStoryFracOfQuantity(){
+  var name=pickNames(1)[0];
+  var items=[{name:'גולות',unit:'גולות'},{name:'מדבקות',unit:'מדבקות'},{name:'סוכריות',unit:'סוכריות'},{name:'עפרונות',unit:'עפרונות'}];
+  var item=items[rr(0,items.length-1)];
+  var d=rr(2,6);
+  var total=d*rr(3,10);
+  var n=rr(1,d-1);
+  var correct=total*n/d;
+  var wrongs=new Set();
+  wrongs.add(total/d);wrongs.add(total-correct);wrongs.add(correct+rr(1,5));
+  wrongs.delete(correct);
+  var wArr=[];
+  wrongs.forEach(function(v){if(v>0&&v!==correct)wArr.push(v)});
+  while(wArr.length<3){var f=rr(1,total);if(f!==correct&&wArr.indexOf(f)===-1)wArr.push(f)}
+  wArr=wArr.slice(0,3);
+  var options=shuffle([correct].concat(wArr));
+  var explain=fracHTML(n,d)+' מתוך '+total+' = '+total+' × '+n+' ÷ '+d+' = '+correct;
+  return{type:'choice',
+    qText:'ל'+name+' יש '+total+' '+item.name+'. הוא/היא נתן/ה '+fracHTML(n,d)+' מהם לחבר/ה.<br>כמה '+item.unit+' נתן/ה?',
+    display:'',answer:String(correct),
+    options:options.map(function(o){return String(o)}),
+    optDisplay:options.map(function(o){return '<span dir="ltr" style="unicode-bidi:embed">'+o+'</span>'}),
+    colClass:'cols-4',explain:explain};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'השוואה — מי קיבל יותר?',instruction:'השוו שברים עם אותו מכנה',
+   tip:'כששני שברים הם עם <strong>אותו מכנה</strong> — מי שיש לו מונה גדול יותר, קיבל יותר!',
+   example:''+fracHTML(3,8)+' לעומת '+fracHTML(5,8)+' → מי יותר גדול?\n3 < 5 → '+fracHTML(5,8)+' גדול יותר!',
+   gen:function(){return qStoryCompareSame()}},
+
+  {title:'חיבור שברים — אותו מכנה',instruction:'חברו שברים עם אותו מכנה',
+   tip:'כששני שברים עם <strong>אותו מכנה</strong> — מחברים רק את המונים!\nהמכנה נשאר אותו דבר.',
+   example:fracHTML(2,7)+' + '+fracHTML(3,7)+' = '+fracHTML(5,7),
+   gen:function(){return qStoryAddSame()}},
+
+  {title:'כמה נשאר?',instruction:'מצאו כמה נשאר מהשלם',
+   tip:'כדי למצוא כמה נשאר — מחסירים מ-1 (שלם) את מה שאכלו.\nלמשל: אכלו '+fracHTML(3,8)+' → נשאר '+fracHTML(5,8),
+   example:'אכלו '+fracHTML(1,4)+' ועוד '+fracHTML(1,4)+' = '+fracHTML(2,4)+'\nנשאר: 1 - '+fracHTML(2,4)+' = '+fracHTML(2,4),
+   gen:function(){return qStoryRemainFrac()}},
+
+  {title:'מעורבב — עוגה!',instruction:'שאלות מגוונות על עוגות ושברים',
+   tip:'קראו את השאלה בזהירות — האם צריך לחבר, לחסר, או להשוות?',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){return[qStoryCompareSame,qStoryAddSame,qStoryRemainFrac][rr(0,2)]()}},
+
+  {title:'קריאת ספר',instruction:'כמה מהספר קרא?',
+   tip:'כדי לחבר שברים עם <strong>מכנה שונה</strong> — מוצאים מכנה משותף!\nלמשל: '+fracHTML(1,3)+' + '+fracHTML(1,4)+' = '+fracHTML(4,12)+' + '+fracHTML(3,12)+' = '+fracHTML(7,12),
+   example:fracHTML(1,3)+' + '+fracHTML(1,4)+'\nמכנה משותף: 12\n= '+fracHTML(4,12)+' + '+fracHTML(3,12)+' = '+fracHTML(7,12),
+   gen:function(){return qStoryBookReading()}},
+
+  {title:'חלק מכמות — כסף',instruction:'מצאו חלק מכמות של כסף',
+   tip:'כדי למצוא <strong>שבר מתוך כמות</strong>:\nמחלקים את הכמות במכנה ואז כופלים במונה.\nלמשל: '+fracHTML(2,3)+' מתוך 90 = 90 ÷ 3 × 2 = 60',
+   example:fracHTML(1,4)+' מתוך 80 ₪ = 80 ÷ 4 × 1 = 20 ₪\n'+fracHTML(3,5)+' מתוך 100 ₪ = 100 ÷ 5 × 3 = 60 ₪',
+   gen:function(){return qStoryMoney([60,80,100,120])}},
+
+  {title:'חלוקה אפשרית',instruction:'מצאו חלוקה אפשרית של שבר',
+   tip:'צריך למצוא שני שברים שמחוברים יחד נותנים את השבר הנתון.\nלמשל: '+fracHTML(3,5)+' = '+fracHTML(1,5)+' + '+fracHTML(2,5),
+   example:fracHTML(5,8)+' = '+fracHTML(2,8)+' + '+fracHTML(3,8)+' ✅\n'+fracHTML(5,8)+' = '+fracHTML(1,8)+' + '+fracHTML(4,8)+' ✅',
+   gen:function(){return qStoryPossibilities()}},
+
+  {title:'כמה כסף שילמו?',instruction:'חלק מכמות — מספרים גדולים יותר',
+   tip:'אותו כלל!\nמחלקים במכנה, כופלים במונה.',
+   example:fracHTML(2,5)+' מתוך 200 ₪ = 200 ÷ 5 × 2 = 80 ₪',
+   gen:function(){return qStoryMoney([120,150,180,200,240,300])}},
+
+  {title:'השוואה — מכנה שונה!',instruction:'מי קיבל יותר? מכנים שונים!',
+   tip:'כדי להשוות שברים עם <strong>מכנה שונה</strong> — מרחיבים למכנה משותף ואז משווים מונים.',
+   example:fracHTML(1,3)+' לעומת '+fracHTML(2,5)+'\nמכנה משותף: 15\n'+fracHTML(5,15)+' לעומת '+fracHTML(6,15)+' → '+fracHTML(2,5)+' גדול יותר!',
+   gen:function(){return qStoryCompareDiff()}},
+
+  {title:'חיבור — מכנה שונה',instruction:'חברו שברים עם מכנה שונה',
+   tip:'שלבים:\n1. מוצאים מכנה משותף\n2. מרחיבים כל שבר\n3. מחברים את המונים',
+   example:fracHTML(1,3)+' + '+fracHTML(1,4)+' = '+fracHTML(4,12)+' + '+fracHTML(3,12)+' = '+fracHTML(7,12),
+   gen:function(){return qStoryAddDiff()}},
+
+  {title:'כמה נשאר לקרוא?',instruction:'מצאו כמה נשאר מהספר',
+   tip:'קרא חלק → כמה נשאר?\nמחסירים מ-1 (שלם) את מה שקרא.',
+   example:'קרא '+fracHTML(2,5)+'\nנשאר: 1 - '+fracHTML(2,5)+' = '+fracHTML(3,5),
+   gen:function(){return qStoryLeftToRead()}},
+
+  {title:'חלקים מכמות — חפצים',instruction:'מצאו חלק מכמות של חפצים',
+   tip:'אותו כלל כמו עם כסף!\nחלק מכמות = כמות ÷ מכנה × מונה',
+   example:fracHTML(2,3)+' מתוך 24 גולות = 24 ÷ 3 × 2 = 16 גולות',
+   gen:function(){return qStoryFracOfQuantity()}},
+
+  {title:'מעורבב — חיבור וחיסור',instruction:'שאלות מגוונות על חיבור וחיסור שברים',
+   tip:'קראו היטב — מחברים או מחסירים?\nזכרו: מכנה משותף → מונים → צמצום!',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){return[qStoryAddDiff,qStoryRemainFrac,qStoryBookReading,qStoryLeftToRead][rr(0,3)]()}},
+
+  {title:'אתגר — כל הסוגים!',instruction:'שאלות מכל הסוגים שלמדנו',
+   tip:'שלבו את כל הכלים:\n• השוואה — מכנה משותף\n• חיבור/חיסור — מכנה משותף\n• חלק מכמות — חלוקה וכפל',
+   example:'💪 אתם יכולים!',
+   gen:function(){return[qStoryCompareDiff,qStoryAddDiff,qStoryRemainFrac,qStoryBookReading,qStoryMoney,qStoryPossibilities,qStoryFracOfQuantity][rr(0,6)]()}},
+
+  {title:'מאסטר שברים!',instruction:'הרמה הכי קשה — שברים בכל מקום!',
+   tip:'🏆 אין עליכם! שלטתם בשברים!',
+   example:'🌟🌟🌟',
+   gen:function(){return[qStoryCompareDiff,qStoryAddDiff,qStoryRemainFrac,qStoryBookReading,function(){return qStoryMoney([150,200,240,300,360])},qStoryPossibilities,qStoryFracOfQuantity,qStoryLeftToRead][rr(0,7)]()}}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(q.qText));seen.add(q.qText);currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt,oi){
+        var displayText=(q.optDisplay&&q.optDisplay[oi])?q.optDisplay[oi]:opt;
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+displayText+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

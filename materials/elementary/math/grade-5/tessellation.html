@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ריצוף במצולעים משוכללים — כיתה ה' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#c2410c;--primary-dark:#9a3412;--primary-light:#fff7ed;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#9a3412 0%,#c2410c 50%,#ea580c 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(194,65,12,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.shape-display{text-align:center;margin:16px 0;font-size:3.5rem}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.shape-display{font-size:2.5rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🧩</div><div><h1>ריצוף במצולעים משוכללים</h1><div class="subtitle">כיתה ה' — משולש, ריבוע ומשושה</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">ריצוף במצולעים משוכללים — כיתה ה' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>🧩 ריצוף במצולעים משוכללים</h2><p><strong>מהו ריצוף?</strong> כיסוי שטח שלם בצורות זהות, בלי חפיפה ובלי רווחים.</p><p>🔹 <strong>הכלל:</strong> מצולע משוכלל מרצף את המישור רק אם הזווית הפנימית שלו מחלקת את 360°.</p><p>🔹 <strong>נוסחת הזווית הפנימית:</strong> <span class="math">(n-2) × 180 / n</span></p><p>🔹 <strong>משולש שווה-צלעות:</strong> זווית 60°, מספר צורות בקדקוד: <span class="math">360÷60=6</span> ✅<br>🔹 <strong>ריבוע:</strong> זווית 90°, מספר צורות בקדקוד: <span class="math">360÷90=4</span> ✅<br>🔹 <strong>משושה משוכלל:</strong> זווית 120°, מספר צורות בקדקוד: <span class="math">360÷120=3</span> ✅<br>🔹 <strong>מחומש משוכלל:</strong> זווית 108°, <span class="math">360÷108</span> לא שלם ❌<br>🔹 <strong>מתומן משוכלל:</strong> זווית 135°, <span class="math">360÷135</span> לא שלם ❌</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+
+/* ========== SHAPE DATA ========== */
+var shapes={
+  triangle:{name:'משולש שווה-צלעות',sides:3,angle:60,canTile:true,emoji:'🔺',count:6},
+  square:{name:'ריבוע',sides:4,angle:90,canTile:true,emoji:'🟧',count:4},
+  hexagon:{name:'משושה משוכלל',sides:6,angle:120,canTile:true,emoji:'⬡',count:3},
+  pentagon:{name:'מחומש משוכלל',sides:5,angle:108,canTile:false,emoji:'⬠',count:'3.33...'},
+  octagon:{name:'מתומן משוכלל',sides:8,angle:135,canTile:false,emoji:'🛑',count:'2.66...'},
+  heptagon:{name:'משובע משוכלל',sides:7,angle:128.57,canTile:false,emoji:'🔷',count:'2.8'},
+  nonagon:{name:'מתושע משוכלל',sides:9,angle:140,canTile:false,emoji:'🔵',count:'2.57...'},
+  decagon:{name:'מעושר משוכלל',sides:10,angle:144,canTile:false,emoji:'🟣',count:'2.5'},
+  dodecagon:{name:'מצולע בן 12 צלעות',sides:12,angle:150,canTile:false,emoji:'⚪',count:'2.4'}
+};
+
+var tileShapes=['triangle','square','hexagon'];
+var noTileShapes=['pentagon','octagon','heptagon','nonagon','decagon','dodecagon'];
+var allShapeKeys=['triangle','square','hexagon','pentagon','octagon','heptagon','nonagon','decagon','dodecagon'];
+
+function interiorAngle(n){return (n-2)*180/n}
+
+function sidesName(n){
+  var map={3:'משולש',4:'מרובע',5:'מחומש',6:'משושה',7:'משובע',8:'מתומן',9:'מתושע',10:'מעושר',12:'מצולע בן 12 צלעות'};
+  return map[n]||('מצולע בן '+n+' צלעות');
+}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: Can this shape tessellate? */
+function qCanTessellate(shapeKey){
+  if(!shapeKey){
+    shapeKey=allShapeKeys[rr(0,allShapeKeys.length-1)];
+  }
+  var s=shapes[shapeKey];
+  var correct=s.canTile?'כן':'לא';
+  var explain;
+  if(s.canTile){
+    explain='הזווית הפנימית היא '+s.angle+'°. '+s.angle+'° מחלק את 360° → '+s.count+' צורות נפגשות בכל קדקוד.';
+  }else{
+    explain='הזווית הפנימית היא '+s.angle+'°. 360 חלקי '+s.angle+' אינו מספר שלם → לא ניתן לרצף.';
+  }
+  return{type:'choice',qText:'האם אפשר לרצף את המישור ב<strong>'+s.name+'</strong>?',display:'<div class="shape-display">'+s.emoji+'</div>',answer:correct,options:['כן','לא'],colClass:'cols-2',explain:explain};
+}
+
+/* Type 2: Why can't this shape tessellate? */
+function qWhyNot(shapeKey){
+  if(!shapeKey){
+    shapeKey=noTileShapes[rr(0,noTileShapes.length-1)];
+  }
+  var s=shapes[shapeKey];
+  var correct='הזווית '+s.angle+'° לא מחלקת את 360°';
+  var wrongs=[];
+  wrongs.push('הזווית '+s.angle+'° מחלקת את 360°');
+  wrongs.push('הצורה עגולה מדי');
+  wrongs.push('יש לה יותר מדי צלעות');
+  wrongs.push('הזווית '+s.angle+'° גדולה מ-360°');
+  wrongs.push('מספר הצלעות אי-זוגי');
+  wrongs.push('צריך לפחות 4 צלעות כדי לרצף');
+  shuffle(wrongs);
+  var options=[correct];
+  for(var i=0;i<wrongs.length&&options.length<4;i++){
+    if(wrongs[i]!==correct) options.push(wrongs[i]);
+  }
+  options=shuffle(options);
+  return{type:'choice',qText:'למה <strong>לא ניתן</strong> לרצף את המישור ב<strong>'+s.name+'</strong>?',display:'<div class="shape-display">'+s.emoji+'</div>',answer:correct,options:options,colClass:'',explain:'הזווית הפנימית של '+s.name+' היא '+s.angle+'°. כדי לרצף צריך ש-360 חלקי הזווית יהיה מספר שלם, אך 360÷'+s.angle+' = '+s.count+' — לא שלם.'};
+}
+
+/* Type 3: Angle calculation — how many shapes meet at a vertex? */
+function qAngleCalc(shapeKey){
+  if(!shapeKey){
+    shapeKey=tileShapes[rr(0,2)];
+  }
+  var s=shapes[shapeKey];
+  var correct=String(s.count);
+  var wrongSet=new Set();
+  wrongSet.add(s.count+1);
+  wrongSet.add(s.count-1);
+  wrongSet.add(s.count+2);
+  wrongSet.add(s.count*2);
+  wrongSet.delete(s.count);
+  wrongSet.delete(0);
+  var wArr=Array.from(wrongSet).filter(function(v){return v>1&&v<=12}).slice(0,3);
+  while(wArr.length<3){var f=rr(2,10);if(f!==s.count&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var options=shuffle([correct].concat(wArr.map(String)));
+  return{type:'choice',qText:'הזווית ב<strong>'+s.name+'</strong> היא '+s.angle+'°. כמה צורות נפגשות בכל קדקוד בריצוף?',display:'<div class="shape-display">'+s.emoji+'</div>',answer:correct,options:options,colClass:'cols-4',explain:'360° ÷ '+s.angle+'° = '+s.count+' צורות בכל קדקוד.'};
+}
+
+/* Type 4: Identify shape from tessellation description */
+function qIdentifyShape(){
+  var shapeKey=tileShapes[rr(0,2)];
+  var s=shapes[shapeKey];
+  var correct=s.name;
+  var wrongs=[];
+  for(var i=0;i<allShapeKeys.length;i++){
+    if(allShapeKeys[i]!==shapeKey) wrongs.push(shapes[allShapeKeys[i]].name);
+  }
+  shuffle(wrongs);
+  var options=shuffle([correct,wrongs[0],wrongs[1],wrongs[2]]);
+  return{type:'choice',qText:s.count+' צורות נפגשות סביב כל קדקוד, והזווית הפנימית היא '+s.angle+'°. <strong>מהי הצורה?</strong>',display:'',answer:correct,options:options,colClass:'cols-2',explain:s.count+' צורות × '+s.angle+'° = 360°. זהו '+s.name+'!'};
+}
+
+/* Type 5: What is the interior angle of a regular polygon? */
+function qInteriorAngle(sides){
+  if(!sides){
+    var options_sides=[3,4,5,6,7,8,9,10,12];
+    sides=options_sides[rr(0,options_sides.length-1)];
+  }
+  var angle=interiorAngle(sides);
+  var angleFmt=(angle%1===0)?String(angle):angle.toFixed(2);
+  var correct=angleFmt+'°';
+  var wrongSet=new Set();
+  wrongSet.add(Math.round(angle+10)+'°');
+  wrongSet.add(Math.round(angle-10)+'°');
+  wrongSet.add(Math.round(angle+20)+'°');
+  wrongSet.add((sides*30)+'°');
+  wrongSet.add((180-angle)+'°');
+  wrongSet.delete(correct);
+  var wArr=Array.from(wrongSet).slice(0,3);
+  while(wArr.length<3){var f=rr(50,170);if(f+'°'!==correct&&wArr.indexOf(f+'°')===-1)wArr.push(f+'°')}
+  var options=shuffle([correct,wArr[0],wArr[1],wArr[2]]);
+  var shapeName=sidesName(sides)+' משוכלל';
+  return{type:'choice',qText:'מהי הזווית הפנימית ב<strong>'+shapeName+'</strong>?',display:'<div class="shape-display" style="font-size:2rem;font-weight:800;color:var(--primary)">'+shapeName+'<br><span style="font-size:1rem;color:var(--text-light)">('+sides+' צלעות)</span></div>',answer:correct,options:options,colClass:'cols-4',explain:'הנוסחה: (n-2)×180÷n = ('+sides+'-2)×180÷'+sides+' = '+(sides-2)+'×180÷'+sides+' = '+angleFmt+'°'};
+}
+
+/* Extra type: Does 360/angle give an integer? */
+function qDivides360(){
+  var angles=[60,72,90,108,120,135,140,144,150];
+  var angle=angles[rr(0,angles.length-1)];
+  var divides=(360%angle===0);
+  var correct=divides?'כן':'לא';
+  return{type:'choice',qText:'האם <strong>'+angle+'°</strong> מחלק את 360° בלי שארית?',display:'<div class="shape-display" style="font-size:2rem;font-weight:800;color:var(--primary)">360° ÷ '+angle+'° = ?</div>',answer:correct,options:['כן','לא'],colClass:'cols-2',explain:'360 ÷ '+angle+' = '+(360/angle).toFixed(2).replace(/\.?0+$/,'')+(divides?' — מספר שלם! ✅':' — לא שלם, אי אפשר לרצף. ❌')};
+}
+
+/* Extra type: Which shape CAN tessellate (pick from 4)? */
+function qPickTiling(){
+  var tKey=tileShapes[rr(0,2)];
+  var correct=shapes[tKey].name;
+  var wrongs=[];
+  var noKeys=shuffle(noTileShapes.slice());
+  for(var i=0;i<noKeys.length&&wrongs.length<3;i++){
+    wrongs.push(shapes[noKeys[i]].name);
+  }
+  var options=shuffle([correct,wrongs[0],wrongs[1],wrongs[2]]);
+  return{type:'choice',qText:'איזו צורה <strong>כן מרצפת</strong> את המישור?',display:'',answer:correct,options:options,colClass:'cols-2',explain:correct+' מרצף כי הזווית הפנימית שלו מחלקת את 360°.'};
+}
+
+/* Extra type: Which shape CANNOT tessellate? */
+function qPickNonTiling(){
+  var nKey=noTileShapes[rr(0,noTileShapes.length-1)];
+  var correct=shapes[nKey].name;
+  var wrongs=[];
+  var tKeys=shuffle(tileShapes.slice());
+  for(var i=0;i<tKeys.length;i++){
+    wrongs.push(shapes[tKeys[i]].name);
+  }
+  var options=shuffle([correct,wrongs[0],wrongs[1],wrongs[2]]);
+  return{type:'choice',qText:'איזו צורה <strong>לא מרצפת</strong> את המישור?',display:'',answer:correct,options:options,colClass:'cols-2',explain:correct+' — הזווית הפנימית שלו לא מחלקת את 360° ולכן אי אפשר לרצף בו.'};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  /* 1 */ {title:'ריצוף בריבועים',instruction:'האם אפשר לרצף את המישור בריבועים?',
+   tip:'ריצוף הוא כיסוי שטח בלי רווחים ובלי חפיפות.\n<strong>ריבוע</strong> — הזווית הפנימית שלו 90°.',
+   example:'<span class="math">360° ÷ 90° = 4</span>\n4 ריבועים נפגשים בכל קדקוד → אפשר לרצף! ✅',
+   gen:function(){return qCanTessellate('square')}},
+
+  /* 2 */ {title:'ריצוף במשולשים',instruction:'האם משולש שווה-צלעות מרצף?',
+   tip:'<strong>משולש שווה-צלעות</strong> — כל הזוויות שוות ל-60°.',
+   example:'<span class="math">360° ÷ 60° = 6</span>\n6 משולשים נפגשים בכל קדקוד → אפשר לרצף! ✅',
+   gen:function(){return qCanTessellate('triangle')}},
+
+  /* 3 */ {title:'ריצוף במשושים',instruction:'האם משושה משוכלל מרצף?',
+   tip:'<strong>משושה משוכלל</strong> — 6 צלעות שוות, כל זווית = 120°.',
+   example:'<span class="math">360° ÷ 120° = 3</span>\n3 משושים נפגשים בכל קדקוד → אפשר לרצף! ✅',
+   gen:function(){return qCanTessellate('hexagon')}},
+
+  /* 4 */ {title:'מחומש — לא מרצף!',instruction:'לא כל מצולע משוכלל מרצף...',
+   tip:'<strong>מחומש משוכלל</strong> — 5 צלעות שוות, כל זווית = 108°.\nכדי לרצף, 360 חייב להתחלק בזווית בלי שארית.',
+   example:'<span class="math">360° ÷ 108° = 3.33...</span>\nזה לא מספר שלם → אי אפשר לרצף! ❌',
+   gen:function(){return qCanTessellate('pentagon')}},
+
+  /* 5 */ {title:'למה לא ניתן לרצף?',instruction:'הסבירו למה צורה מסוימת לא מרצפת',
+   tip:'הסיבה תמיד אותו דבר: אם <strong>הזווית הפנימית לא מחלקת את 360°</strong>, אי אפשר לרצף.\nכי סביב כל קדקוד חייבים בדיוק 360°.',
+   example:'מתומן: זווית 135°\n<span class="math">360° ÷ 135° = 2.66...</span> → לא שלם ❌',
+   gen:function(){return qWhyNot()}},
+
+  /* 6 */ {title:'כמה צורות בקדקוד?',instruction:'חשבו: 360° חלקי הזווית הפנימית',
+   tip:'<strong>הנוסחה:</strong> מספר הצורות שנפגשות בקדקוד = 360° ÷ זווית פנימית.\nזה עובד רק כשהתוצאה מספר שלם!',
+   example:'ריבוע: <span class="math">360° ÷ 90° = 4</span> צורות\nמשולש: <span class="math">360° ÷ 60° = 6</span> צורות',
+   gen:function(){return qAngleCalc()}},
+
+  /* 7 */ {title:'זיהוי צורה מריצוף',instruction:'לפי הנתונים — מהי הצורה?',
+   tip:'אם אומרים לכם כמה צורות נפגשות בקדקוד ומה הזווית — אפשר לזהות!\n<strong>6 צורות, 60°</strong> = משולש\n<strong>4 צורות, 90°</strong> = ריבוע\n<strong>3 צורות, 120°</strong> = משושה',
+   example:'3 צורות × 120° = 360° → משושה משוכלל!',
+   gen:function(){return qIdentifyShape()}},
+
+  /* 8 */ {title:'זוויות פנימיות',instruction:'חשבו את הזווית הפנימית של מצולע משוכלל',
+   tip:'<strong>נוסחה:</strong> זווית פנימית = <span class="math">(n-2) × 180 ÷ n</span>\nכאשר n = מספר הצלעות.',
+   example:'משולש (n=3): <span class="math">(3-2)×180÷3 = 60°</span>\nריבוע (n=4): <span class="math">(4-2)×180÷4 = 90°</span>\nמחומש (n=5): <span class="math">(5-2)×180÷5 = 108°</span>',
+   gen:function(){return qInteriorAngle()}},
+
+  /* 9 */ {title:'מחלק את 360°?',instruction:'בדקו אם זווית נתונה מחלקת את 360°',
+   tip:'ריצוף אפשרי רק אם 360° מתחלק בזווית הפנימית <strong>בלי שארית</strong>.\nבדקו: האם התוצאה מספר שלם?',
+   example:'<span class="math">360 ÷ 90 = 4</span> → שלם ✅\n<span class="math">360 ÷ 108 = 3.33...</span> → לא שלם ❌',
+   gen:function(){return qDivides360()}},
+
+  /* 10 */ {title:'מי כן מרצף?',instruction:'בחרו את הצורה שמרצפת מבין 4 אפשרויות',
+   tip:'רק 3 מצולעים משוכללים מרצפים: <strong>משולש, ריבוע ומשושה</strong>.\nהם היחידים שהזווית הפנימית שלהם מחלקת את 360°.',
+   example:'משולש 60° ✅, ריבוע 90° ✅, משושה 120° ✅\nכל השאר — לא מרצפים!',
+   gen:function(){return qPickTiling()}},
+
+  /* 11 */ {title:'מי לא מרצף?',instruction:'מצאו את הצורה שלא מרצפת!',
+   tip:'<strong>לא מרצפים:</strong> מחומש (108°), מתומן (135°), משובע (128.57°) ועוד.\nרק משולש, ריבוע ומשושה כן מרצפים.',
+   example:'מחומש: <span class="math">360÷108 = 3.33...</span> ❌\nמתומן: <span class="math">360÷135 = 2.66...</span> ❌',
+   gen:function(){return qPickNonTiling()}},
+
+  /* 12 */ {title:'מעורבב — זוויות וריצוף',instruction:'שאלות מגוונות על ריצוף וזוויות!',
+   tip:'שלבו את כל מה שלמדתם:\n• נוסחת זווית פנימית\n• האם 360° מתחלק בזווית?\n• כמה צורות בקדקוד?',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[qCanTessellate,qAngleCalc,qInteriorAngle,qWhyNot,qDivides360];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  /* 13 */ {title:'אתגר — זיהוי וחישוב',instruction:'שאלות מאתגרות יותר!',
+   tip:'בשאלות קשות יותר — תצטרכו לחשב את הזווית ואז לבדוק אם מרצפת.',
+   example:'💪 אתם יכולים!',
+   gen:function(){
+     var types=[qIdentifyShape,function(){return qInteriorAngle()},qPickTiling,qPickNonTiling,function(){return qWhyNot()}];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  /* 14 */ {title:'סופר אתגר!',instruction:'כל הסוגים — ברמה גבוהה!',
+   tip:'🏆 זכרו: רק 3 מצולעים משוכללים מרצפים!\nהנוסחה: <span class="math">(n-2)×180÷n</span>',
+   example:'🌟 💪 🏆',
+   gen:function(){
+     var types=[qCanTessellate,function(){return qWhyNot()},qAngleCalc,qIdentifyShape,function(){return qInteriorAngle()},qDivides360,qPickTiling,qPickNonTiling];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  /* 15 */ {title:'מאסטר ריצוף!',instruction:'הרמה הכי קשה — כל הסוגים!',
+   tip:'🏆 אין עליכם! שלטתם בריצוף במצולעים משוכללים!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[qCanTessellate,function(){return qWhyNot()},qAngleCalc,qIdentifyShape,function(){return qInteriorAngle()},qDivides360,qPickTiling,qPickNonTiling];
+     return types[rr(0,types.length-1)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

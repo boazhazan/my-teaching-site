@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>שטח משולש — כיתה ה' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#7c3aed;--primary-dark:#6d28d9;--primary-light:#ede9fe;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#6d28d9 0%,#7c3aed 50%,#a78bfa 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(124,58,237,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:2.2rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;direction:ltr;unicode-bidi:embed}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.shape-diagram{text-align:center;margin:12px 0}.shape-diagram svg{max-width:220px;width:100%}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:1.8rem;padding:6px 20px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">📐</div><div><h1>שטח משולש</h1><div class="subtitle">כיתה ה' — צלע × גובה ÷ 2</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">שטח משולש — כיתה ה' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>📐 שטח משולש</h2><p><strong>הנוסחה:</strong> שטח משולש = צלע × גובה ÷ 2</p><p>🔹 <strong>למה חלקי 2?</strong> כי משולש הוא חצי ממלבן! אם נצייר מלבן עם אותה צלע ואותו גובה, המשולש הוא בדיוק חציו.</p><p>🔹 <strong>מציאת גובה:</strong> אם ידוע השטח והצלע — גובה = שטח × 2 ÷ צלע</p><p>🔹 <strong>מציאת צלע:</strong> אם ידוע השטח והגובה — צלע = שטח × 2 ÷ גובה</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+
+/* Make 4 unique numeric options including correct answer */
+function makeOpts(correct,min,max){
+  var s=new Set();s.add(correct);
+  while(s.size<4){
+    var off=rr(1,Math.max(5,Math.floor(correct*0.4)));
+    var v=correct+(rr(0,1)?off:-off);
+    if(v>=min&&v!==correct) s.add(v);
+  }
+  /* if still not 4 (e.g. correct is very small), add sequentials */
+  var c=1;while(s.size<4){var v2=correct+c;if(v2>=min)s.add(v2);c++}
+  return shuffle(Array.from(s));
+}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: Area of triangle — base * height / 2 */
+function qAreaTriangle(bMin,bMax,hMin,hMax){
+  var b,h,att=0;
+  do{b=rr(bMin,bMax);h=rr(hMin,hMax);att++}while(att<100&&(b*h)%2!==0);
+  var area=b*h/2;
+  return{type:'choice',qText:'משולש עם צלע <strong>'+b+'</strong> וגובה <strong>'+h+'</strong>. מהו השטח?',display:'<div class="num-display"><span class="big-num">'+b+' × '+h+' ÷ 2 = ?</span></div>',answer:String(area),options:makeOpts(area,1,9999).map(String),colClass:'cols-4',explain:'שטח = '+b+' × '+h+' ÷ 2 = '+(b*h)+' ÷ 2 = '+area};
+}
+
+/* Type 2: Triangle from rectangle — cut diagonally */
+function qTriangleFromRect(){
+  var a=rr(4,18),b=rr(3,14),att=0;
+  while((a*b)%2!==0&&att<100){a=rr(4,18);b=rr(3,14);att++}
+  var area=a*b/2;
+  return{type:'choice',qText:'מלבן עם צלעות <strong>'+a+'</strong> ו-<strong>'+b+'</strong> חתכנו באלכסון. מהו שטח כל משולש?',display:'<div class="num-display"><span class="big-num">'+a+' × '+b+' ÷ 2 = ?</span></div>',answer:String(area),options:makeOpts(area,1,9999).map(String),colClass:'cols-4',explain:'שטח המלבן = '+a+' × '+b+' = '+(a*b)+'. חצי = '+(a*b)+' ÷ 2 = '+area};
+}
+
+/* Type 3: Find height — given area and base */
+function qFindHeight(){
+  var h=rr(3,15),b=rr(4,20);
+  var area=b*h/2;
+  return{type:'choice',qText:'שטח המשולש <strong>'+area+'</strong>, הצלע <strong>'+b+'</strong>. מהו הגובה?',display:'<div class="num-display"><span class="big-num">'+area+' × 2 ÷ '+b+' = ?</span></div>',answer:String(h),options:makeOpts(h,1,999).map(String),colClass:'cols-4',explain:'גובה = שטח × 2 ÷ צלע = '+area+' × 2 ÷ '+b+' = '+(area*2)+' ÷ '+b+' = '+h};
+}
+
+/* Type 4: Find base — given area and height */
+function qFindBase(){
+  var b=rr(4,20),h=rr(3,15);
+  var area=b*h/2;
+  return{type:'choice',qText:'שטח המשולש <strong>'+area+'</strong>, הגובה <strong>'+h+'</strong>. מהי הצלע?',display:'<div class="num-display"><span class="big-num">'+area+' × 2 ÷ '+h+' = ?</span></div>',answer:String(b),options:makeOpts(b,1,999).map(String),colClass:'cols-4',explain:'צלע = שטח × 2 ÷ גובה = '+area+' × 2 ÷ '+h+' = '+(area*2)+' ÷ '+h+' = '+b};
+}
+
+/* Type 5: Three heights — given area from one pair, find height for another base */
+function qThreeHeights(){
+  var b1=rr(4,16),h1=rr(3,12),att=0;
+  while((b1*h1)%2!==0&&att<100){b1=rr(4,16);h1=rr(3,12);att++}
+  var area=b1*h1/2;
+  /* second base must divide 2*area evenly */
+  var b2,h2;att=0;
+  do{b2=rr(4,20);h2=(area*2)/b2;att++}while(att<200&&(b2===b1||h2!==Math.floor(h2)||h2<1));
+  if(h2!==Math.floor(h2)||h2<1){b2=area*2/b1===h1?b1+2:b1;h2=(area*2)/b2;if(h2!==Math.floor(h2)){b2=2;h2=area}}
+  return{type:'choice',qText:'משולש: צלע <strong>'+b1+'</strong>, גובה <strong>'+h1+'</strong> → שטח = <strong>'+area+'</strong>. צלע אחרת אורכה <strong>'+b2+'</strong>. מהו הגובה אליה?',display:'<div class="num-display"><span class="big-num">'+area+' × 2 ÷ '+b2+' = ?</span></div>',answer:String(h2),options:makeOpts(h2,1,999).map(String),colClass:'cols-4',explain:'השטח = '+area+'. גובה לצלע '+b2+' = '+area+' × 2 ÷ '+b2+' = '+(area*2)+' ÷ '+b2+' = '+h2};
+}
+
+/* Type 6: Composite shape — rectangle + triangle on top */
+function qAreaComposite(){
+  var rw=rr(6,16),rh=rr(4,12),th=rr(3,10);
+  /* triangle base = rectangle width, ensure integer triangle area */
+  while((rw*th)%2!==0){th=rr(3,10)}
+  var rectArea=rw*rh;
+  var triArea=rw*th/2;
+  var total=rectArea+triArea;
+  return{type:'choice',qText:'צורה מורכבת: מלבן <strong>'+rw+'×'+rh+'</strong> ומעליו משולש עם צלע <strong>'+rw+'</strong> וגובה <strong>'+th+'</strong>. מהו השטח הכולל?',display:'<div class="num-display"><span class="big-num">'+rectArea+' + '+triArea+' = ?</span></div>',answer:String(total),options:makeOpts(total,1,9999).map(String),colClass:'cols-4',explain:'מלבן: '+rw+' × '+rh+' = '+rectArea+'. משולש: '+rw+' × '+th+' ÷ 2 = '+triArea+'. סה"כ: '+rectArea+' + '+triArea+' = '+total};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'קשר למלבן — חצי!',instruction:'מלבן שחותכים באלכסון — כל חצי הוא משולש',
+   tip:'אם חותכים מלבן באלכסון, מקבלים <strong>שני משולשים שווים</strong>.\nשטח כל משולש = שטח המלבן ÷ 2.',
+   example:'מלבן <span class="math">8 × 6 = 48</span>\nחתכנו באלכסון → שטח משולש = <span class="math">48 ÷ 2 = 24</span>',
+   gen:function(){return qTriangleFromRect()}},
+
+  {title:'שטח משולש — הנוסחה',instruction:'שטח = צלע × גובה ÷ 2',
+   tip:'<strong>הנוסחה:</strong> שטח משולש = צלע × גובה ÷ 2\nכופלים את הצלע בגובה, ומחלקים ב-2.',
+   example:'צלע <span class="math">6</span>, גובה <span class="math">4</span>\nשטח = <span class="math">6 × 4 ÷ 2 = 24 ÷ 2 = 12</span>',
+   gen:function(){return qAreaTriangle(4,12,3,10)}},
+
+  {title:'שטח משולש — תרגול',instruction:'עוד תרגול על הנוסחה',
+   tip:'זכרו: קודם כופלים צלע × גובה, ואז מחלקים ב-2.\nחשוב שהתוצאה תהיה מספר שלם!',
+   example:'צלע <span class="math">10</span>, גובה <span class="math">7</span>\nשטח = <span class="math">10 × 7 ÷ 2 = 70 ÷ 2 = 35</span>',
+   gen:function(){return qAreaTriangle(5,15,3,12)}},
+
+  {title:'שטח — מספרים גדולים',instruction:'מספרים יותר גדולים — אותה נוסחה!',
+   tip:'גם עם מספרים גדולים — הנוסחה אותו דבר:\nשטח = צלע × גובה ÷ 2',
+   example:'צלע <span class="math">16</span>, גובה <span class="math">14</span>\nשטח = <span class="math">16 × 14 ÷ 2 = 224 ÷ 2 = 112</span>',
+   gen:function(){return qAreaTriangle(10,20,8,15)}},
+
+  {title:'מציאת גובה',instruction:'ידוע השטח והצלע — מצאו את הגובה!',
+   tip:'<strong>גובה = שטח × 2 ÷ צלע</strong>\nקודם כופלים את השטח ב-2, ואז מחלקים בצלע.',
+   example:'שטח <span class="math">30</span>, צלע <span class="math">10</span>\nגובה = <span class="math">30 × 2 ÷ 10 = 60 ÷ 10 = 6</span>',
+   gen:function(){return qFindHeight()}},
+
+  {title:'מציאת צלע',instruction:'ידוע השטח והגובה — מצאו את הצלע!',
+   tip:'<strong>צלע = שטח × 2 ÷ גובה</strong>\nקודם כופלים את השטח ב-2, ואז מחלקים בגובה.',
+   example:'שטח <span class="math">24</span>, גובה <span class="math">8</span>\nצלע = <span class="math">24 × 2 ÷ 8 = 48 ÷ 8 = 6</span>',
+   gen:function(){return qFindBase()}},
+
+  {title:'3 גבהים — אותו שטח!',instruction:'למשולש יש 3 צלעות ו-3 גבהים — השטח תמיד אותו דבר!',
+   tip:'אם ידוע השטח מצלע אחת + גובה אליה,\nאפשר למצוא את הגובה לצלע אחרת:\nגובה = שטח × 2 ÷ צלע',
+   example:'צלע <span class="math">10</span>, גובה <span class="math">6</span> → שטח <span class="math">30</span>\nצלע אחרת: <span class="math">12</span>. גובה = <span class="math">30 × 2 ÷ 12 = 5</span>',
+   gen:function(){return qThreeHeights()}},
+
+  {title:'צורות מורכבות',instruction:'מלבן + משולש = צורה מורכבת!',
+   tip:'חלקו את הצורה לחלקים פשוטים:\n1. חשבו שטח המלבן: אורך × רוחב\n2. חשבו שטח המשולש: צלע × גובה ÷ 2\n3. חברו!',
+   example:'מלבן <span class="math">10 × 6 = 60</span>\nמשולש <span class="math">10 × 4 ÷ 2 = 20</span>\nסה"כ: <span class="math">60 + 20 = 80</span>',
+   gen:function(){return qAreaComposite()}},
+
+  {title:'מעורבב — נוסחה ומלבן',instruction:'שטח משולש ומלבנים חצויים',
+   tip:'זכרו: משולש = חצי מלבן!\nשטח = צלע × גובה ÷ 2',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){return rr(0,1)===0?qAreaTriangle(5,15,3,12):qTriangleFromRect()}},
+
+  {title:'מעורבב — מציאת מידות',instruction:'מצאו גובה או צלע חסרים!',
+   tip:'גובה = שטח × 2 ÷ צלע\nצלע = שטח × 2 ÷ גובה',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){return[qFindHeight,qFindBase][rr(0,1)]()}},
+
+  {title:'שטח + מציאת מידות',instruction:'חישוב שטח וגם מציאת נעלמים!',
+   tip:'שטח = צלע × גובה ÷ 2\nגובה = שטח × 2 ÷ צלע\nצלע = שטח × 2 ÷ גובה',
+   example:'💪 שלוש נוסחאות — אותו רעיון!',
+   gen:function(){return[function(){return qAreaTriangle(6,18,4,14)},qFindHeight,qFindBase][rr(0,2)]()}},
+
+  {title:'3 גבהים + צורות מורכבות',instruction:'אתגר עם גבהים שונים וצורות מורכבות!',
+   tip:'השטח תמיד זהה — לא משנה איזו צלע וגובה בוחרים.\nבצורה מורכבת: פרקו לחלקים!',
+   example:'🏆 בהצלחה!',
+   gen:function(){return[qThreeHeights,qAreaComposite][rr(0,1)]()}},
+
+  {title:'סופר מיקס!',instruction:'כל סוגי השאלות ביחד!',
+   tip:'כל הנוסחאות:\n• שטח = צלע × גובה ÷ 2\n• גובה = שטח × 2 ÷ צלע\n• צלע = שטח × 2 ÷ גובה',
+   example:'🌟 אתם מומחים!',
+   gen:function(){return[function(){return qAreaTriangle(5,20,3,15)},function(){return qTriangleFromRect()},qFindHeight,qFindBase,qThreeHeights,qAreaComposite][rr(0,5)]()}},
+
+  {title:'אתגר מתקדם!',instruction:'מספרים גדולים + כל סוגי השאלות!',
+   tip:'🏆 רמה מתקדמת — שלבו את כל מה שלמדתם!',
+   example:'💪🌟 אתם יכולים!',
+   gen:function(){return[function(){return qAreaTriangle(10,20,8,15)},function(){return qTriangleFromRect()},qFindHeight,qFindBase,qThreeHeights,qAreaComposite][rr(0,5)]()}},
+
+  {title:'מאסטר שטח המשולש!',instruction:'הרמה הכי קשה — כל הסוגים!',
+   tip:'🏆 אין עליכם! שלטתם בשטח המשולש!',
+   example:'🌟🌟🌟',
+   gen:function(){return[function(){return qAreaTriangle(10,20,8,15)},function(){return qTriangleFromRect()},qFindHeight,qFindBase,qThreeHeights,qAreaComposite][rr(0,5)]()}}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(q.answer+q.qText));seen.add(q.answer+q.qText);currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

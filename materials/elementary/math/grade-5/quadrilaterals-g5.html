@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>מרובעים — מיון וקשרים — כיתה ה' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#6d28d9;--primary-dark:#5b21b6;--primary-light:#ede9fe;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#5b21b6 0%,#6d28d9 50%,#7c3aed 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(109,40,217,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.shape-display{text-align:center;margin:16px 0;font-size:3rem}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:480px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🔷</div><div><h1>מרובעים — מיון וקשרים</h1><div class="subtitle">כיתה ה' — תכונות, מיון וקשרי הכלה</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">מרובעים — מיון וקשרים — כיתה ה' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>🔷 מרובעים — מיון וקשרים</h2>
+<p><strong>מרובע</strong> הוא מצולע (צורה סגורה) עם 4 צלעות ו-4 זוויות. סכום הזוויות בכל מרובע = <strong>360°</strong>.</p>
+<p>🔹 <strong>ריבוע</strong> — 4 צלעות שוות + 4 זוויות ישרות (90°). 4 צירי סימטריה. אלכסונים שווים, מאונכים וחוצים זה את זה.</p>
+<p>🔹 <strong>מלבן</strong> — צלעות נגדיות שוות + 4 זוויות ישרות. 2 צירי סימטריה. אלכסונים שווים וחוצים זה את זה.</p>
+<p>🔹 <strong>מעוין</strong> — 4 צלעות שוות + זוויות נגדיות שוות (לא בהכרח 90°). 2 צירי סימטריה. אלכסונים מאונכים וחוצים זה את זה.</p>
+<p>🔹 <strong>מקבילית</strong> — צלעות נגדיות שוות ומקבילות + זוויות נגדיות שוות. 0 צירי סימטריה. אלכסונים חוצים זה את זה.</p>
+<p>🔹 <strong>טרפז</strong> — זוג אחד בלבד של צלעות מקבילות. טרפז שווה-שוקיים: ציר סימטריה אחד.</p>
+<p>🔹 <strong>דלתון</strong> — 2 זוגות של צלעות סמוכות שוות. ציר סימטריה אחד. אלכסון אחד חוצה את השני בניצב.</p>
+<p><strong>קשרי הכלה:</strong><br>• כל ריבוע הוא גם מלבן, גם מעוין, וגם מקבילית.<br>• כל מלבן הוא מקבילית.<br>• כל מעוין הוא מקבילית.<br>• כל מקבילית היא טרפז.</p>
+<p>15 רמות — מהקל אל הקשה!</p>
+<button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function pick(a){return a[rr(0,a.length-1)]}
+
+/* ========== SHAPE DATA ========== */
+var SHAPES={
+  'ריבוע':{
+    props:['4 צלעות שוות','4 זוויות ישרות (90°)','צלעות נגדיות מקבילות','אלכסונים שווים ומאונכים'],
+    symmetry:4,
+    diagEqual:true, diagPerp:true, diagBisect:true,
+    eachAngle:90,
+    emoji:'🟦',
+    isAlso:['מלבן','מעוין','מקבילית','טרפז']
+  },
+  'מלבן':{
+    props:['צלעות נגדיות שוות','4 זוויות ישרות (90°)','צלעות נגדיות מקבילות','אלכסונים שווים'],
+    symmetry:2,
+    diagEqual:true, diagPerp:false, diagBisect:true,
+    eachAngle:90,
+    emoji:'🟧',
+    isAlso:['מקבילית','טרפז']
+  },
+  'מעוין':{
+    props:['4 צלעות שוות','זוויות נגדיות שוות','צלעות נגדיות מקבילות','אלכסונים מאונכים'],
+    symmetry:2,
+    diagEqual:false, diagPerp:true, diagBisect:true,
+    eachAngle:null,
+    emoji:'🔶',
+    isAlso:['מקבילית','טרפז']
+  },
+  'מקבילית':{
+    props:['צלעות נגדיות שוות ומקבילות','זוויות נגדיות שוות','2 זוגות צלעות מקבילות','אלכסונים חוצים זה את זה'],
+    symmetry:0,
+    diagEqual:false, diagPerp:false, diagBisect:true,
+    eachAngle:null,
+    emoji:'🟪',
+    isAlso:['טרפז']
+  },
+  'טרפז':{
+    props:['זוג אחד בלבד של צלעות מקבילות','4 צלעות','סכום זוויות = 360°','לפחות זוג אחד של צלעות מקבילות'],
+    symmetry:0,
+    diagEqual:false, diagPerp:false, diagBisect:false,
+    eachAngle:null,
+    emoji:'🔻',
+    isAlso:[]
+  },
+  'דלתון':{
+    props:['2 זוגות של צלעות סמוכות שוות','ציר סימטריה אחד','אלכסון אחד חוצה את השני בניצב','זוג אחד של זוויות נגדיות שוות'],
+    symmetry:1,
+    diagEqual:false, diagPerp:true, diagBisect:false,
+    eachAngle:null,
+    emoji:'🪁',
+    isAlso:[]
+  }
+};
+
+var SHAPE_NAMES=['ריבוע','מלבן','מעוין','מקבילית','טרפז','דלתון'];
+
+/* ========== PROPERTY BANKS ========== */
+var IDENTIFY_BANK=[
+  {desc:'4 צלעות שוות ו-4 זוויות ישרות',answer:'ריבוע'},
+  {desc:'צלעות נגדיות שוות ו-4 זוויות ישרות, אך לא כל הצלעות שוות',answer:'מלבן'},
+  {desc:'4 צלעות שוות, אך הזוויות לא בהכרח ישרות',answer:'מעוין'},
+  {desc:'צלעות נגדיות שוות ומקבילות, אך הזוויות לא בהכרח ישרות ולא כל הצלעות שוות',answer:'מקבילית'},
+  {desc:'זוג אחד בלבד של צלעות מקבילות',answer:'טרפז'},
+  {desc:'2 זוגות של צלעות סמוכות שוות',answer:'דלתון'},
+  {desc:'כל הצלעות שוות וכל הזוויות שוות',answer:'ריבוע'},
+  {desc:'צלעות נגדיות מקבילות, 4 זוויות ישרות, ואלכסונים שווים',answer:'מלבן'},
+  {desc:'4 צלעות שוות ואלכסונים מאונכים זה לזה',answer:'מעוין'},
+  {desc:'צלעות נגדיות שוות, זוויות נגדיות שוות, ואלכסונים חוצים זה את זה',answer:'מקבילית'},
+  {desc:'2 זוגות צלעות מקבילות וכל הצלעות שוות — אבל הזוויות לא 90°',answer:'מעוין'},
+  {desc:'4 זוויות ישרות ואלכסונים שווים אבל לא מאונכים',answer:'מלבן'},
+  {desc:'2 זוגות צלעות מקבילות, זוויות נגדיות שוות, אלכסונים לא שווים ולא מאונכים',answer:'מקבילית'},
+  {desc:'2 זוגות צלעות סמוכות שוות ואלכסון אחד חוצה את השני בניצב',answer:'דלתון'},
+  {desc:'4 צלעות שוות, 4 זוויות ישרות, 4 צירי סימטריה',answer:'ריבוע'},
+  {desc:'צלעות נגדיות שוות ומקבילות, 4 זוויות ישרות, 2 צירי סימטריה',answer:'מלבן'}
+];
+
+/* ========== INCLUSION BANK ========== */
+var INCLUSION_BANK=[
+  {q:'כל ריבוע הוא גם מלבן',answer:'כן',explain:'ריבוע הוא מקרה פרטי של מלבן — כי יש לו 4 זוויות ישרות וצלעות נגדיות שוות'},
+  {q:'כל מלבן הוא גם ריבוע',answer:'לא',explain:'מלבן לא חייב שכל צלעותיו שוות — רק ריבוע מקיים זאת'},
+  {q:'כל ריבוע הוא גם מעוין',answer:'כן',explain:'ריבוע הוא מקרה פרטי של מעוין — כי יש לו 4 צלעות שוות'},
+  {q:'כל מעוין הוא גם ריבוע',answer:'לא',explain:'מעוין לא חייב שזוויותיו ישרות — רק ריבוע מקיים זאת'},
+  {q:'כל מלבן הוא גם מקבילית',answer:'כן',explain:'מלבן הוא מקרה פרטי של מקבילית — צלעות נגדיות שוות ומקבילות'},
+  {q:'כל מקבילית היא גם מלבן',answer:'לא',explain:'מקבילית לא חייבת שזוויותיה ישרות — רק מלבן מקיים זאת'},
+  {q:'כל מעוין הוא גם מקבילית',answer:'כן',explain:'מעוין הוא מקרה פרטי של מקבילית — צלעות נגדיות מקבילות ושוות'},
+  {q:'כל מקבילית היא גם מעוין',answer:'לא',explain:'מקבילית לא חייבת שכל צלעותיה שוות — רק מעוין מקיים זאת'},
+  {q:'כל ריבוע הוא גם מקבילית',answer:'כן',explain:'ריבוע הוא מקרה פרטי של מקבילית — צלעות נגדיות שוות ומקבילות'},
+  {q:'כל מקבילית היא גם טרפז',answer:'כן',explain:'מקבילית היא טרפז כי יש לה לפחות זוג אחד של צלעות מקבילות (אפילו שניים!)'},
+  {q:'כל טרפז הוא גם מקבילית',answer:'לא',explain:'טרפז צריך רק זוג אחד של צלעות מקבילות, מקבילית צריכה שניים'},
+  {q:'כל דלתון הוא גם מקבילית',answer:'לא',explain:'דלתון לא חייב שצלעותיו הנגדיות מקבילות'},
+  {q:'כל ריבוע הוא גם טרפז',answer:'כן',explain:'ריבוע הוא מקבילית, וכל מקבילית היא טרפז — אז גם ריבוע הוא טרפז'},
+  {q:'כל טרפז הוא גם ריבוע',answer:'לא',explain:'טרפז לא חייב שכל צלעותיו שוות או שכל זוויותיו ישרות'},
+  {q:'כל דלתון הוא גם מעוין',answer:'לא',explain:'דלתון לא חייב שכל 4 צלעותיו שוות — רק 2 זוגות של צלעות סמוכות'},
+  {q:'כל מעוין שזוויותיו ישרות הוא ריבוע',answer:'כן',explain:'מעוין עם 4 זוויות ישרות = 4 צלעות שוות + 4 זוויות ישרות = ריבוע'}
+];
+
+/* ========== BUILD-BY-CONDITION BANK ========== */
+var BUILD_BANK=[
+  {desc:'מרובע עם 2 זוגות צלעות מקבילות',options:['מקבילית','טרפז','דלתון','משולש'],answer:'מקבילית'},
+  {desc:'מרובע שכל צלעותיו שוות וכל זוויותיו ישרות',options:['ריבוע','מלבן','מעוין','מקבילית'],answer:'ריבוע'},
+  {desc:'מרובע עם זוג אחד בלבד של צלעות מקבילות',options:['טרפז','מקבילית','מלבן','ריבוע'],answer:'טרפז'},
+  {desc:'מרובע עם 4 צלעות שוות (זוויות לא בהכרח ישרות)',options:['מעוין','מלבן','טרפז','דלתון'],answer:'מעוין'},
+  {desc:'מרובע עם 4 זוויות ישרות (צלעות לא בהכרח שוות)',options:['מלבן','ריבוע','מעוין','דלתון'],answer:'מלבן'},
+  {desc:'מרובע עם 2 זוגות של צלעות סמוכות שוות',options:['דלתון','מקבילית','טרפז','מלבן'],answer:'דלתון'},
+  {desc:'מרובע שהוא גם מלבן וגם מעוין',options:['ריבוע','מקבילית','טרפז','דלתון'],answer:'ריבוע'},
+  {desc:'מרובע שצלעותיו הנגדיות שוות אך זוויותיו לא בהכרח ישרות',options:['מקבילית','מלבן','טרפז','דלתון'],answer:'מקבילית'},
+  {desc:'מרובע עם בדיוק ציר סימטריה אחד ו-2 זוגות צלעות סמוכות שוות',options:['דלתון','מעוין','מקבילית','טרפז'],answer:'דלתון'},
+  {desc:'מרובע שאלכסוניו שווים, מאונכים וחוצים זה את זה',options:['ריבוע','מלבן','מעוין','מקבילית'],answer:'ריבוע'},
+  {desc:'מרובע שאלכסוניו שווים אך לא מאונכים',options:['מלבן','מעוין','מקבילית','דלתון'],answer:'מלבן'},
+  {desc:'מרובע שאלכסוניו מאונכים אך לא שווים (וחוצים זה את זה)',options:['מעוין','מלבן','טרפז','דלתון'],answer:'מעוין'}
+];
+
+/* ========== SYMMETRY BANK ========== */
+var SYMMETRY_BANK=[
+  {shape:'ריבוע',answer:'4',explain:'לריבוע 4 צירי סימטריה — 2 דרך אמצעי הצלעות ו-2 דרך האלכסונים'},
+  {shape:'מלבן',answer:'2',explain:'למלבן 2 צירי סימטריה — דרך אמצעי הצלעות הנגדיות'},
+  {shape:'מעוין',answer:'2',explain:'למעוין 2 צירי סימטריה — דרך האלכסונים'},
+  {shape:'מקבילית',answer:'0',explain:'למקבילית (שאינה מלבן או מעוין) אין צירי סימטריה כלל'},
+  {shape:'טרפז שווה-שוקיים',answer:'1',explain:'לטרפז שווה-שוקיים ציר סימטריה אחד — דרך אמצעי הבסיסים'},
+  {shape:'דלתון',answer:'1',explain:'לדלתון ציר סימטריה אחד — דרך האלכסון הראשי'}
+];
+
+/* ========== DIAGONAL BANK ========== */
+var DIAGONAL_BANK=[
+  {q:'אלכסוני הריבוע שווים זה לזה',answer:'כן',explain:'אלכסוני הריבוע שווים באורכם'},
+  {q:'אלכסוני הריבוע מאונכים זה לזה',answer:'כן',explain:'אלכסוני הריבוע נחתכים בזווית 90°'},
+  {q:'אלכסוני הריבוע חוצים זה את זה',answer:'כן',explain:'כל אלכסון חוצה את האלכסון השני'},
+  {q:'אלכסוני המלבן שווים זה לזה',answer:'כן',explain:'במלבן שני האלכסונים שווים באורכם'},
+  {q:'אלכסוני המלבן מאונכים זה לזה',answer:'לא',explain:'אלכסוני מלבן (שאינו ריבוע) לא מאונכים'},
+  {q:'אלכסוני המלבן חוצים זה את זה',answer:'כן',explain:'במלבן כל אלכסון חוצה את השני'},
+  {q:'אלכסוני המעוין שווים זה לזה',answer:'לא',explain:'במעוין (שאינו ריבוע) האלכסונים לא שווים'},
+  {q:'אלכסוני המעוין מאונכים זה לזה',answer:'כן',explain:'אלכסוני המעוין נחתכים בזווית 90°'},
+  {q:'אלכסוני המעוין חוצים זה את זה',answer:'כן',explain:'במעוין כל אלכסון חוצה את השני'},
+  {q:'אלכסוני המקבילית שווים זה לזה',answer:'לא',explain:'במקבילית (שאינה מלבן) האלכסונים לא שווים'},
+  {q:'אלכסוני המקבילית מאונכים זה לזה',answer:'לא',explain:'במקבילית (שאינה מעוין) האלכסונים לא מאונכים'},
+  {q:'אלכסוני המקבילית חוצים זה את זה',answer:'כן',explain:'במקבילית כל אלכסון חוצה את השני'},
+  {q:'אלכסוני הטרפז חוצים זה את זה',answer:'לא',explain:'בטרפז (שאינו מקבילית) האלכסונים לא חוצים זה את זה'},
+  {q:'בדלתון אלכסון אחד חוצה את השני בניצב',answer:'כן',explain:'האלכסון הראשי של הדלתון חוצה את האלכסון השני בניצב'},
+  {q:'אלכסוני הדלתון שווים זה לזה',answer:'לא',explain:'בדלתון (שאינו ריבוע) האלכסונים לא שווים'}
+];
+
+/* ========== ANGLE BANK ========== */
+var ANGLE_BANK=[
+  {q:'מהו סכום הזוויות בכל מרובע?',options:['360°','180°','270°','540°'],answer:'360°',explain:'סכום הזוויות בכל מרובע שווה ל-360°'},
+  {q:'כמה מעלות כל זווית במלבן?',options:['90°','60°','120°','45°'],answer:'90°',explain:'במלבן כל 4 הזוויות הן 90° (ישרות)'},
+  {q:'כמה מעלות כל זווית בריבוע?',options:['90°','60°','45°','120°'],answer:'90°',explain:'בריבוע כל 4 הזוויות הן 90°'},
+  {q:'במקבילית, אם זווית אחת היא 70°, מהי הזווית הנגדית לה?',options:['70°','110°','90°','140°'],answer:'70°',explain:'במקבילית זוויות נגדיות שוות, אז גם הנגדית היא 70°'},
+  {q:'במקבילית, אם זווית אחת היא 70°, מהי הזווית הסמוכה לה?',options:['110°','70°','90°','140°'],answer:'110°',explain:'במקבילית זוויות סמוכות משלימות ל-180°, אז 180° - 70° = 110°'},
+  {q:'במקבילית, אם זווית אחת היא 50°, מהי הזווית הסמוכה?',options:['130°','50°','90°','310°'],answer:'130°',explain:'זוויות סמוכות במקבילית משלימות ל-180°: 180° - 50° = 130°'},
+  {q:'במעוין, אם זווית אחת היא 60°, מהי הזווית הנגדית?',options:['60°','120°','90°','300°'],answer:'60°',explain:'במעוין (מקבילית) זוויות נגדיות שוות — 60°'},
+  {q:'במעוין, אם זווית אחת היא 60°, מהי הזווית הסמוכה?',options:['120°','60°','90°','300°'],answer:'120°',explain:'זוויות סמוכות משלימות ל-180°: 180° - 60° = 120°'},
+  {q:'כמה זוויות ישרות במלבן?',options:['4','2','1','0'],answer:'4',explain:'במלבן כל 4 הזוויות הן ישרות (90°)'},
+  {q:'כמה זוויות ישרות בריבוע?',options:['4','2','1','0'],answer:'4',explain:'בריבוע כל 4 הזוויות הן ישרות (90°)'},
+  {q:'כמה זוויות ישרות חייבות להיות במעוין?',options:['0','2','4','1'],answer:'0',explain:'מעוין לא חייב שתהיינה לו זוויות ישרות (אלא אם הוא ריבוע)'},
+  {q:'כמה זוויות ישרות חייבות להיות בטרפז?',options:['0','1','2','4'],answer:'0',explain:'טרפז לא חייב שתהיינה לו זוויות ישרות כלל'}
+];
+
+/* ========== QUESTION GENERATORS ========== */
+
+function qIdentifyByProperties(){
+  var item=pick(IDENTIFY_BANK);
+  var correct=item.answer;
+  var opts=[correct];
+  var pool=SHAPE_NAMES.filter(function(s){return s!==correct});
+  shuffle(pool);
+  for(var i=0;i<3&&i<pool.length;i++) opts.push(pool[i]);
+  opts=shuffle(opts);
+  return{type:'choice',qText:'איזה מרובע מתאים לתיאור?',display:'<div class="shape-display" style="font-size:1.1rem;font-weight:600;color:var(--primary-dark);background:var(--primary-light);border-radius:12px;padding:16px;margin:12px 0">'+item.desc+'</div>',answer:correct,options:opts,colClass:'cols-2',explain:'התשובה: '+correct};
+}
+
+function qInclusion(){
+  var item=pick(INCLUSION_BANK);
+  return{type:'choice',qText:item.q+' — נכון או לא?',display:'',answer:item.answer,options:['כן','לא'],colClass:'cols-2',explain:item.explain};
+}
+
+function qBuildByCondition(){
+  var item=pick(BUILD_BANK);
+  return{type:'choice',qText:item.desc,display:'',answer:item.answer,options:shuffle(item.options.slice()),colClass:'cols-2',explain:'התשובה: '+item.answer};
+}
+
+function qSymmetryInQuads(){
+  var item=pick(SYMMETRY_BANK);
+  var correct=item.answer;
+  var allOpts=['0','1','2','4'];
+  var opts=[correct];
+  for(var i=0;i<allOpts.length;i++){
+    if(allOpts[i]!==correct&&opts.length<4) opts.push(allOpts[i]);
+  }
+  opts=shuffle(opts);
+  return{type:'choice',qText:'כמה צירי סימטריה יש ל<strong>'+item.shape+'</strong>?',display:'',answer:correct,options:opts,colClass:'cols-4',explain:item.explain};
+}
+
+function qDiagonalProperties(){
+  var item=pick(DIAGONAL_BANK);
+  return{type:'choice',qText:item.q+' — נכון או לא?',display:'',answer:item.answer,options:['כן','לא'],colClass:'cols-2',explain:item.explain};
+}
+
+function qCountAngles(){
+  var item=pick(ANGLE_BANK);
+  return{type:'choice',qText:item.q,display:'',answer:item.answer,options:shuffle(item.options.slice()),colClass:'cols-2',explain:item.explain};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'זיהוי לפי תכונות',instruction:'קראו את התיאור וזהו את המרובע',
+   tip:'כל מרובע מוגדר לפי צלעותיו, זוויותיו ותכונות מיוחדות.\n<strong>ריבוע</strong> — 4 צלעות שוות + 4 זוויות ישרות\n<strong>מלבן</strong> — צלעות נגדיות שוות + 4 זוויות ישרות\n<strong>מעוין</strong> — 4 צלעות שוות (זוויות לא בהכרח ישרות)',
+   example:'🔹 "4 צלעות שוות ו-4 זוויות ישרות" → ריבוע\n🔹 "צלעות נגדיות שוות ו-4 זוויות ישרות" → מלבן',
+   gen:function(){return qIdentifyByProperties()}},
+
+  {title:'תכונות — תרגול',instruction:'עוד שאלות זיהוי — שימו לב לפרטים!',
+   tip:'<strong>מקבילית</strong> — צלעות נגדיות שוות ומקבילות\n<strong>טרפז</strong> — זוג אחד בלבד של צלעות מקבילות\n<strong>דלתון</strong> — 2 זוגות של צלעות סמוכות שוות',
+   example:'🔹 "2 זוגות צלעות מקבילות, לא כל הצלעות שוות" → מקבילית\n🔹 "זוג אחד של צלעות מקבילות" → טרפז',
+   gen:function(){return qIdentifyByProperties()}},
+
+  {title:'קשרי הכלה — ריבוע ⊂ מלבן',instruction:'כל ריבוע הוא מלבן? כל מלבן הוא ריבוע?',
+   tip:'<strong>קשר הכלה</strong> אומר ש"כל X הוא גם Y" — כלומר X הוא מקרה פרטי של Y.\n• כל ריבוע הוא מלבן (כי יש לו 4 זוויות ישרות + צלעות נגדיות שוות)\n• אבל לא כל מלבן הוא ריבוע (כי לא חייב שכל צלעותיו שוות)',
+   example:'✅ כל ריבוע הוא מלבן — כן!\n❌ כל מלבן הוא ריבוע — לא!',
+   gen:function(){return qInclusion()}},
+
+  {title:'קשרי הכלה — ריבוע ⊂ מעוין',instruction:'ריבוע, מעוין, מקבילית — מי מכיל את מי?',
+   tip:'• כל ריבוע הוא מעוין (4 צלעות שוות)\n• כל מעוין הוא מקבילית (צלעות נגדיות מקבילות)\n• כל מלבן הוא מקבילית\n• כל מקבילית היא טרפז',
+   example:'✅ כל ריבוע הוא מעוין — כן!\n✅ כל מעוין הוא מקבילית — כן!\n❌ כל מקבילית היא מעוין — לא!',
+   gen:function(){return qInclusion()}},
+
+  {title:'בנייה לפי תנאים',instruction:'איזה מרובע מתאים לתנאים?',
+   tip:'חשבו מה מבדיל בין המרובעים:\n• <strong>מקבילית</strong> = 2 זוגות צלעות מקבילות\n• <strong>מלבן</strong> = מקבילית + 4 זוויות ישרות\n• <strong>מעוין</strong> = מקבילית + 4 צלעות שוות\n• <strong>ריבוע</strong> = מלבן + מעוין = הכל!',
+   example:'🔹 "2 זוגות צלעות מקבילות" → מקבילית\n🔹 "4 צלעות שוות + 4 זוויות ישרות" → ריבוע',
+   gen:function(){return qBuildByCondition()}},
+
+  {title:'סכום זוויות',instruction:'מה גודל הזוויות במרובעים?',
+   tip:'<strong>סכום הזוויות בכל מרובע = 360°</strong>\n• במלבן ובריבוע: כל זווית = 90°\n• במקבילית: זוויות נגדיות שוות, זוויות סמוכות משלימות ל-180°',
+   example:'🔹 סכום זוויות בכל מרובע = 360°\n🔹 במקבילית: 70° + 110° + 70° + 110° = 360°',
+   gen:function(){return qCountAngles()}},
+
+  {title:'סימטריה במרובעים',instruction:'כמה צירי סימטריה יש לכל מרובע?',
+   tip:'<strong>ריבוע</strong> — 4 צירי סימטריה\n<strong>מלבן</strong> — 2 צירי סימטריה\n<strong>מעוין</strong> — 2 צירי סימטריה\n<strong>מקבילית</strong> — 0 צירי סימטריה\n<strong>טרפז שווה-שוקיים</strong> — 1\n<strong>דלתון</strong> — 1',
+   example:'🔹 ריבוע: 4 צירים (2 דרך אמצעי הצלעות + 2 אלכסונים)\n🔹 מלבן: 2 צירים (דרך אמצעי הצלעות)',
+   gen:function(){return qSymmetryInQuads()}},
+
+  {title:'אלכסונים — תכונות',instruction:'אלכסונים שווים? מאונכים? חוצים?',
+   tip:'<strong>ריבוע</strong> — אלכסונים שווים, מאונכים, חוצים זה את זה\n<strong>מלבן</strong> — שווים וחוצים, אך לא מאונכים\n<strong>מעוין</strong> — מאונכים וחוצים, אך לא שווים\n<strong>מקבילית</strong> — חוצים בלבד\n<strong>דלתון</strong> — אלכסון ראשי חוצה את השני בניצב',
+   example:'🔹 "אלכסוני המלבן שווים?" → כן\n🔹 "אלכסוני המלבן מאונכים?" → לא',
+   gen:function(){return qDiagonalProperties()}},
+
+  /* Levels 9-15: mixed, increasing difficulty */
+  {title:'מעורבב — זיהוי וקשרים',instruction:'שאלות מגוונות!',
+   tip:'שלבו את כל מה שלמדתם על תכונות המרובעים וקשרי ההכלה ביניהם.',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[qIdentifyByProperties,qInclusion,qBuildByCondition];
+     return pick(types)();
+   }},
+
+  {title:'מעורבב — תכונות וסימטריה',instruction:'זוויות, סימטריה ואלכסונים!',
+   tip:'זכרו:\n• סכום זוויות = 360°\n• זוויות סמוכות במקבילית משלימות ל-180°\n• צירי סימטריה: ריבוע 4, מלבן/מעוין 2, מקבילית 0',
+   example:'🏆 בהצלחה!',
+   gen:function(){
+     var types=[qCountAngles,qSymmetryInQuads,qDiagonalProperties];
+     return pick(types)();
+   }},
+
+  {title:'מעורבב — כל הסוגים!',instruction:'כל סוגי השאלות ביחד!',
+   tip:'השתמשו בכל הכלים: תכונות, קשרי הכלה, זוויות, סימטריה ואלכסונים.',
+   example:'💪 אתם יכולים!',
+   gen:function(){
+     var types=[qIdentifyByProperties,qInclusion,qBuildByCondition,qCountAngles,qSymmetryInQuads,qDiagonalProperties];
+     return pick(types)();
+   }},
+
+  {title:'אתגר — קשרי הכלה מתקדם',instruction:'שאלות קשות על יחסי הכלה!',
+   tip:'זכרו את השרשרת:\n<strong>ריבוע ⊂ מלבן ⊂ מקבילית ⊂ טרפז</strong>\n<strong>ריבוע ⊂ מעוין ⊂ מקבילית ⊂ טרפז</strong>\nהדלתון עומד בנפרד.',
+   example:'🔹 "כל ריבוע הוא טרפז" → כן!\n🔹 "כל דלתון הוא מקבילית" → לא!',
+   gen:function(){
+     var types=[qInclusion,qBuildByCondition,qInclusion];
+     return pick(types)();
+   }},
+
+  {title:'אתגר — אלכסונים וסימטריה',instruction:'שאלות מאתגרות!',
+   tip:'השוואה בין המרובעים:\n• אלכסונים שווים: ריבוע ✅ מלבן ✅ | מעוין ❌ מקבילית ❌\n• אלכסונים מאונכים: ריבוע ✅ מעוין ✅ | מלבן ❌ מקבילית ❌\n• אלכסונים חוצים: ריבוע ✅ מלבן ✅ מעוין ✅ מקבילית ✅ | טרפז ❌',
+   example:'🌟 רמה גבוהה!',
+   gen:function(){
+     var types=[qDiagonalProperties,qSymmetryInQuads,qCountAngles];
+     return pick(types)();
+   }},
+
+  {title:'סופר אתגר!',instruction:'כל הסוגים — שאלות קשות!',
+   tip:'🏆 אתם מומחים למרובעים! שלבו את כל הידע.',
+   example:'🌟 💪 🏆',
+   gen:function(){
+     var types=[qIdentifyByProperties,qInclusion,qBuildByCondition,qCountAngles,qSymmetryInQuads,qDiagonalProperties];
+     return pick(types)();
+   }},
+
+  {title:'מאסטר!',instruction:'הרמה הכי קשה — כל הסוגים!',
+   tip:'🏆 אין עליכם! שלטתם במרובעים!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[qIdentifyByProperties,qInclusion,qBuildByCondition,qCountAngles,qSymmetryInQuads,qDiagonalProperties];
+     return pick(types)();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<80&&seen.has(q.qText+q.answer));seen.add(q.qText+q.answer);currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

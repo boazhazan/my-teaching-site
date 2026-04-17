@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>זוויות — מדידה ואומדן — כיתה ה' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#0891b2;--primary-dark:#0e7490;--primary-light:#cffafe;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#0e7490 0%,#0891b2 50%,#06b6d4 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(8,145,178,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:3rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.svg-wrap{text-align:center;margin:12px 0}
+.svg-wrap svg{max-width:100%}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">📐</div><div><h1>זוויות — מדידה ואומדן</h1><div class="subtitle">כיתה ה' — מעלות, אומדן ושושנת רוחות</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">זוויות — מדידה ואומדן — כיתה ה' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>📐 זוויות — מדידה ואומדן</h2><p><strong>סוגי זוויות:</strong></p><p>🔹 <strong>זווית חדה</strong> — קטנה מ-90°<br>🔹 <strong>זווית ישרה</strong> — בדיוק 90°<br>🔹 <strong>זווית קהה</strong> — גדולה מ-90° וקטנה מ-180°<br>🔹 <strong>זווית שטוחה</strong> — בדיוק 180°</p><p><strong>שעון:</strong> בכל שעה המחוגים זזים 30°.<br>🔸 3:00 → 90° | 🔸 6:00 → 180°<br>🔸 1:00 → 30° | 🔸 4:00 → 120°</p><p><strong>שושנת רוחות:</strong><br>🔸 צפון→מזרח = 90° | 🔸 צפון→דרום = 180°<br>🔸 צפון→צפון-מזרח = 45°</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+
+/* ========== SVG DRAWING ========== */
+function drawAngle(deg,size,showLabel){
+  var s=size||140,cx=s*0.3,cy=s*0.7,r=s*0.45;
+  var rad=deg*Math.PI/180;
+  var x2=cx+r*Math.cos(-rad),y2=cy+r*Math.sin(-rad);
+  var ar=r*0.3;
+  var arcEnd_x=cx+ar*Math.cos(-rad),arcEnd_y=cy+ar*Math.sin(-rad);
+  var large=deg>180?1:0;
+  var svg='<div class="svg-wrap"><svg width="'+s+'" height="'+s+'" viewBox="0 0 '+s+' '+s+'">';
+  svg+='<line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+r)+'" y2="'+cy+'" stroke="var(--primary)" stroke-width="3" stroke-linecap="round"/>';
+  svg+='<line x1="'+cx+'" y1="'+cy+'" x2="'+x2+'" y2="'+y2+'" stroke="var(--primary)" stroke-width="3" stroke-linecap="round"/>';
+  svg+='<path d="M '+(cx+ar)+' '+cy+' A '+ar+' '+ar+' 0 '+large+' 0 '+arcEnd_x+' '+arcEnd_y+'" fill="none" stroke="var(--error)" stroke-width="2"/>';
+  if(showLabel){
+    var mid=deg/2;var lx=cx+ar*1.7*Math.cos(-mid*Math.PI/180),ly=cy+ar*1.7*Math.sin(-mid*Math.PI/180);
+    svg+='<text x="'+lx+'" y="'+ly+'" font-size="13" fill="var(--text)" font-weight="700" text-anchor="middle" dominant-baseline="middle">'+deg+'°</text>';
+  }
+  svg+='<circle cx="'+cx+'" cy="'+cy+'" r="3" fill="var(--primary)"/>';
+  svg+='</svg></div>';
+  return svg;
+}
+
+function drawClock(hour){
+  var s=150,cx=s/2,cy=s/2,rFace=s*0.42,rHour=s*0.25,rMin=s*0.36;
+  var svg='<div class="svg-wrap"><svg width="'+s+'" height="'+s+'" viewBox="0 0 '+s+' '+s+'">';
+  svg+='<circle cx="'+cx+'" cy="'+cy+'" r="'+rFace+'" fill="#f0f9ff" stroke="var(--primary)" stroke-width="3"/>';
+  for(var i=1;i<=12;i++){
+    var a=(i*30-90)*Math.PI/180;
+    var tx=cx+rFace*0.82*Math.cos(a),ty=cy+rFace*0.82*Math.sin(a);
+    svg+='<text x="'+tx+'" y="'+ty+'" font-size="11" fill="var(--text)" font-weight="700" text-anchor="middle" dominant-baseline="middle">'+i+'</text>';
+  }
+  /* minute hand at 12 */
+  svg+='<line x1="'+cx+'" y1="'+cy+'" x2="'+cx+'" y2="'+(cy-rMin)+'" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round"/>';
+  /* hour hand */
+  var ha=(hour*30-90)*Math.PI/180;
+  var hx=cx+rHour*Math.cos(ha),hy=cy+rHour*Math.sin(ha);
+  svg+='<line x1="'+cx+'" y1="'+cy+'" x2="'+hx+'" y2="'+hy+'" stroke="var(--primary-dark)" stroke-width="3.5" stroke-linecap="round"/>';
+  svg+='<circle cx="'+cx+'" cy="'+cy+'" r="4" fill="var(--primary)"/>';
+  svg+='</svg></div>';
+  return svg;
+}
+
+function drawCompass(targetDir){
+  var s=160,cx=s/2,cy=s/2,r=s*0.4;
+  var dirs=[
+    {label:'צפון',short:'N',deg:-90},
+    {label:'צפון-מזרח',short:'NE',deg:-45},
+    {label:'מזרח',short:'E',deg:0},
+    {label:'דרום-מזרח',short:'SE',deg:45},
+    {label:'דרום',short:'S',deg:90},
+    {label:'דרום-מערב',short:'SW',deg:135},
+    {label:'מערב',short:'W',deg:180},
+    {label:'צפון-מערב',short:'NW',deg:-135}
+  ];
+  var svg='<div class="svg-wrap"><svg width="'+s+'" height="'+s+'" viewBox="0 0 '+s+' '+s+'">';
+  svg+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="#f0f9ff" stroke="var(--primary)" stroke-width="2"/>';
+  for(var i=0;i<dirs.length;i++){
+    var d=dirs[i],a=d.deg*Math.PI/180;
+    var ex=cx+r*0.85*Math.cos(a),ey=cy+r*0.85*Math.sin(a);
+    var lx=cx+(r+12)*Math.cos(a),ly=cy+(r+12)*Math.sin(a);
+    svg+='<line x1="'+cx+'" y1="'+cy+'" x2="'+ex+'" y2="'+ey+'" stroke="'+(d.short==='N'?'var(--error)':'#94a3b8')+'" stroke-width="'+(d.short==='N'?2.5:1)+'"/>';
+    var fs=d.short.length>1?9:11;
+    svg+='<text x="'+lx+'" y="'+ly+'" font-size="'+fs+'" fill="var(--text)" font-weight="700" text-anchor="middle" dominant-baseline="middle">'+d.short+'</text>';
+  }
+  /* highlight target direction with arc from N */
+  if(targetDir){
+    var td=null;
+    for(var j=0;j<dirs.length;j++){if(dirs[j].label===targetDir){td=dirs[j];break}}
+    if(td&&td.short!=='N'){
+      var arcR=r*0.4;
+      var startA=-90*Math.PI/180;
+      var endA=td.deg*Math.PI/180;
+      var sx=cx+arcR*Math.cos(startA),sy=cy+arcR*Math.sin(startA);
+      var exx=cx+arcR*Math.cos(endA),eyy=cy+arcR*Math.sin(endA);
+      var angleDiff=td.deg-(-90);if(angleDiff<0)angleDiff+=360;
+      var lg=angleDiff>180?1:0;
+      svg+='<path d="M '+sx+' '+sy+' A '+arcR+' '+arcR+' 0 '+lg+' 1 '+exx+' '+eyy+'" fill="none" stroke="var(--error)" stroke-width="2" stroke-dasharray="4,3"/>';
+    }
+  }
+  svg+='<circle cx="'+cx+'" cy="'+cy+'" r="3" fill="var(--primary)"/>';
+  svg+='</svg></div>';
+  return svg;
+}
+
+/* ========== ANGLE HELPERS ========== */
+function angleType(deg){
+  if(deg<90) return 'חדה';
+  if(deg===90) return 'ישרה';
+  if(deg<180) return 'קהה';
+  if(deg===180) return 'שטוחה';
+  return 'רפלקסית';
+}
+
+function angleTypeExplain(deg){
+  if(deg<90) return 'זווית חדה — קטנה מ-90°';
+  if(deg===90) return 'זווית ישרה — בדיוק 90°';
+  if(deg<180) return 'זווית קהה — בין 90° ל-180°';
+  if(deg===180) return 'זווית שטוחה — בדיוק 180°';
+  return '';
+}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: Identify angle degree — show SVG with label, ask type or degree */
+function qIdentifyAngleDeg(targetDeg){
+  var askType=rr(0,1)===0;
+  if(askType){
+    var correct=angleType(targetDeg);
+    var allTypes=['חדה','ישרה','קהה','שטוחה'];
+    var options=[correct];
+    for(var i=0;i<allTypes.length;i++){if(allTypes[i]!==correct&&options.length<4)options.push(allTypes[i])}
+    options=shuffle(options);
+    return{type:'choice',qText:'מהו <strong>סוג</strong> הזווית?',display:drawAngle(targetDeg,140,true),answer:correct,options:options,colClass:'cols-4',explain:targetDeg+'° — '+angleTypeExplain(targetDeg)};
+  }else{
+    var correct2=targetDeg+'°';
+    var wrongs=new Set();
+    wrongs.add((targetDeg+30)+'°');wrongs.add((targetDeg-30>0?targetDeg-30:targetDeg+15)+'°');wrongs.add((targetDeg+45<=180?targetDeg+45:targetDeg-15)+'°');
+    wrongs.delete(correct2);
+    var wArr=Array.from(wrongs).slice(0,3);
+    while(wArr.length<3){var w=rr(1,18)*10;if(w+'°'!==correct2&&wArr.indexOf(w+'°')===-1)wArr.push(w+'°')}
+    var options2=shuffle([correct2].concat(wArr));
+    return{type:'choice',qText:'כמה <strong>מעלות</strong> בזווית?',display:drawAngle(targetDeg,140,true),answer:correct2,options:options2,colClass:'cols-4',explain:'הזווית היא '+targetDeg+'° — '+angleTypeExplain(targetDeg)};
+  }
+}
+
+/* Type 2: Estimate angle — no label */
+function qEstimateAngle(){
+  var angles=[20,30,40,45,50,60,70,80,90,100,110,120,130,140,150,160,170,180];
+  var deg=angles[rr(0,angles.length-1)];
+  var correct=deg+'°';
+  var wrongs=new Set();
+  var offsets=[20,30,40,45,50,60];
+  for(var i=0;i<offsets.length;i++){
+    var w1=deg+offsets[i],w2=deg-offsets[i];
+    if(w1>0&&w1<=180)wrongs.add(w1+'°');
+    if(w2>0&&w2<=180)wrongs.add(w2+'°');
+  }
+  wrongs.delete(correct);
+  var wArr=shuffle(Array.from(wrongs)).slice(0,3);
+  while(wArr.length<3){var r2=rr(1,18)*10;if(r2+'°'!==correct&&wArr.indexOf(r2+'°')===-1)wArr.push(r2+'°')}
+  var options=shuffle([correct].concat(wArr));
+  return{type:'choice',qText:'שערו: כמה <strong>מעלות</strong> בערך בזווית?',display:drawAngle(deg,150,false),answer:correct,options:options,colClass:'cols-4',explain:'הזווית היא '+deg+'° — '+angleTypeExplain(deg)};
+}
+
+/* Type 3: Compare angles — which is largest/smallest */
+function qCompareAngles(){
+  var count=rr(3,4);
+  var angArr=[];
+  var seen=new Set();
+  while(angArr.length<count){
+    var a=rr(1,17)*10;
+    if(!seen.has(a)){seen.add(a);angArr.push(a)}
+  }
+  var askLargest=rr(0,1)===0;
+  var sorted=angArr.slice().sort(function(a,b){return a-b});
+  var correct,qTxt;
+  if(askLargest){
+    correct=sorted[sorted.length-1]+'°';
+    qTxt='מהי הזווית <strong>הגדולה ביותר</strong>?';
+  }else{
+    correct=sorted[0]+'°';
+    qTxt='מהי הזווית <strong>הקטנה ביותר</strong>?';
+  }
+  var svgHtml='<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px">';
+  for(var i=0;i<angArr.length;i++){
+    svgHtml+='<div style="text-align:center">'+drawAngle(angArr[i],100,true)+'</div>';
+  }
+  svgHtml+='</div>';
+  var options=shuffle(angArr.map(function(v){return v+'°'}));
+  return{type:'choice',qText:qTxt,display:svgHtml,answer:correct,options:options,colClass:count===4?'cols-4':'cols-3',explain:'הזוויות לפי סדר: '+sorted.join('°, ')+'°'};
+}
+
+/* Type 4: Clock angle */
+function qClockAngle(){
+  var clockData=[
+    {hour:1,deg:30},{hour:2,deg:60},{hour:3,deg:90},{hour:4,deg:120},
+    {hour:5,deg:150},{hour:6,deg:180},{hour:9,deg:90},{hour:10,deg:60},{hour:11,deg:30}
+  ];
+  var item=clockData[rr(0,clockData.length-1)];
+  var correct=item.deg+'°';
+  var wrongs=new Set();
+  wrongs.add((item.deg+30)+'°');wrongs.add((item.deg-30>0?item.deg-30:item.deg+60)+'°');wrongs.add((item.deg+60<=180?item.deg+60:item.deg-60>0?item.deg-60:30)+'°');
+  wrongs.delete(correct);
+  var wArr=Array.from(wrongs).slice(0,3);
+  while(wArr.length<3){var w=rr(1,6)*30;if(w+'°'!==correct&&wArr.indexOf(w+'°')===-1)wArr.push(w+'°')}
+  var options=shuffle([correct].concat(wArr));
+  return{type:'choice',qText:'השעה <strong>'+item.hour+':00</strong> — מה הזווית בין המחוגים?',display:drawClock(item.hour),answer:correct,options:options,colClass:'cols-4',explain:'כל שעה = 30°. '+item.hour+' שעות × 30° = '+item.deg+'°'};
+}
+
+/* Type 5: Compass direction */
+function qCompassDirection(){
+  var compassData=[
+    {from:'צפון',to:'מזרח',deg:90},
+    {from:'צפון',to:'דרום',deg:180},
+    {from:'צפון',to:'מערב',deg:270},
+    {from:'צפון',to:'צפון-מזרח',deg:45},
+    {from:'צפון',to:'דרום-מזרח',deg:135},
+    {from:'צפון',to:'דרום-מערב',deg:225},
+    {from:'צפון',to:'צפון-מערב',deg:315},
+    {from:'מזרח',to:'דרום',deg:90},
+    {from:'מזרח',to:'מערב',deg:180}
+  ];
+  var item=compassData[rr(0,compassData.length-1)];
+  /* normalize: only show <=180 for simple questions */
+  var displayDeg=item.deg>180?360-item.deg:item.deg;
+  var correct=displayDeg+'°';
+  var wrongs=new Set();
+  wrongs.add((displayDeg+45)+'°');wrongs.add((displayDeg-45>0?displayDeg-45:displayDeg+90)+'°');wrongs.add((displayDeg+90<=360?displayDeg+90:displayDeg-90>0?displayDeg-90:45)+'°');
+  wrongs.delete(correct);
+  var wArr=Array.from(wrongs).slice(0,3);
+  while(wArr.length<3){var w=rr(1,8)*45;if(w+'°'!==correct&&wArr.indexOf(w+'°')===-1)wArr.push(w+'°')}
+  var options=shuffle([correct].concat(wArr));
+  var direction=item.deg<=180?item.to:item.to;
+  return{type:'choice',qText:'כמה מעלות מ<strong>'+item.from+'</strong> ל<strong>'+item.to+'</strong>?',display:drawCompass(item.to),answer:correct,options:options,colClass:'cols-4',explain:'מ'+item.from+' ל'+item.to+' = '+displayDeg+'°'};
+}
+
+/* Type 6: Angle type classification */
+function qAngleTypes(){
+  var deg=rr(1,179);
+  /* avoid exactly 90 half the time to ensure variety */
+  if(deg===90&&rr(0,1)===0)deg=rr(91,170);
+  var correct=angleType(deg);
+  var allTypes=['חדה','ישרה','קהה','שטוחה'];
+  var options=[correct];
+  for(var i=0;i<allTypes.length;i++){if(allTypes[i]!==correct&&options.length<4)options.push(allTypes[i])}
+  options=shuffle(options);
+  return{type:'choice',qText:'זווית של <strong>'+deg+'°</strong> היא:',display:drawAngle(deg,140,true),answer:correct,options:options,colClass:'cols-4',explain:deg+'° — '+angleTypeExplain(deg)};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'זווית ישרה = 90°',instruction:'הכירו את הזווית הישרה!',
+   tip:'<strong>זווית ישרה</strong> היא בדיוק <strong>90°</strong>.\nהיא נראית כמו פינה של ריבוע.',
+   example:'📐 הפינה של דף נייר = 90° (זווית ישרה)',
+   gen:function(){return qIdentifyAngleDeg(90)}},
+
+  {title:'חצי ישרה = 45°',instruction:'מהי חצי מזווית ישרה?',
+   tip:'<strong>45°</strong> = חצי מ-90°.\nהיא בדיוק באמצע בין 0° ל-90°.',
+   example:'אם נקפל את פינת הדף באלכסון — נקבל 45°!',
+   gen:function(){return qIdentifyAngleDeg(45)}},
+
+  {title:'30° ו-60°',instruction:'זוויות חדות חשובות!',
+   tip:'<strong>30°</strong> = שליש מ-90°.\n<strong>60°</strong> = שני שלישים מ-90°.\nשתיהן זוויות חדות (קטנות מ-90°).',
+   example:'במשולש שווה-צלעות כל זווית = 60°',
+   gen:function(){return qIdentifyAngleDeg([30,60][rr(0,1)])}},
+
+  {title:'זווית שטוחה = 180°',instruction:'מהי זווית שטוחה?',
+   tip:'<strong>זווית שטוחה</strong> = <strong>180°</strong>.\nשני הקרניים יוצרים קו ישר.',
+   example:'180° = קו ישר. שתי זוויות ישרות ביחד!',
+   gen:function(){return qIdentifyAngleDeg(180)}},
+
+  {title:'אומדן זוויות',instruction:'שערו כמה מעלות בזווית!',
+   tip:'השוו לזוויות שאתם מכירים:\n• 90° = פינת ריבוע\n• 45° = חצי מזווית ישרה\n• 180° = קו ישר',
+   example:'אם הזווית קטנה מפינת ריבוע — היא פחות מ-90°',
+   gen:function(){return qEstimateAngle()}},
+
+  {title:'השוואת זוויות',instruction:'מצאו את הגדולה או הקטנה ביותר!',
+   tip:'ככל שהקרניים "פתוחות" יותר — הזווית גדולה יותר.\nהשוו למספר המעלות שרשום.',
+   example:'70° < 90° < 120° < 150°',
+   gen:function(){return qCompareAngles()}},
+
+  {title:'זוויות בשעון',instruction:'מהי הזווית בין מחוגי השעון?',
+   tip:'בכל <strong>שעה</strong> מחוג השעות זז <strong>30°</strong>.\n• 3:00 → 90°\n• 6:00 → 180°',
+   example:'בשעה 2:00: מחוג השעות ב-2 = 2×30° = 60°',
+   gen:function(){return qClockAngle()}},
+
+  {title:'שושנת רוחות',instruction:'כמה מעלות בין כיווני הרוחות?',
+   tip:'<strong>שושנת הרוחות</strong> מחולקת ל-360°.\n• צפון→מזרח = 90°\n• כיוון ביניים (צפון-מזרח) = 45°',
+   example:'מצפון למזרח = 90°\nמצפון לצפון-מזרח = 45°',
+   gen:function(){return qCompassDirection()}},
+
+  {title:'סוגי זוויות',instruction:'זהו את סוג הזווית!',
+   tip:'<strong>חדה</strong> — פחות מ-90°\n<strong>ישרה</strong> — בדיוק 90°\n<strong>קהה</strong> — בין 90° ל-180°\n<strong>שטוחה</strong> — בדיוק 180°',
+   example:'75° → חדה | 90° → ישרה | 120° → קהה | 180° → שטוחה',
+   gen:function(){return qAngleTypes()}},
+
+  {title:'מעורבב — סוגים ואומדן',instruction:'שאלות מגוונות!',
+   tip:'שלבו את כל מה שלמדתם!\nזכרו את הזוויות המיוחדות: 30°, 45°, 60°, 90°, 120°, 150°, 180°.',
+   example:'🎲 כל שאלה היא הפתעה!',
+   gen:function(){
+     var types=[qEstimateAngle,qAngleTypes,function(){return qIdentifyAngleDeg([30,45,60,90,120,150,180][rr(0,6)])}];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  {title:'מעורבב — שעון ורוחות',instruction:'זוויות בחיים האמיתיים!',
+   tip:'שעון: כל שעה = 30°.\nמצפן: כיוון ראשי = 90°, כיוון ביניים = 45°.',
+   example:'🕐 + 🧭 = ⭐',
+   gen:function(){
+     var types=[qClockAngle,qCompassDirection];
+     return types[rr(0,1)]();
+   }},
+
+  {title:'אתגר — כל הסוגים',instruction:'שאלות מכל הנושאים!',
+   tip:'השתמשו בכל הכלים:\n• סיווג זוויות\n• אומדן\n• שעון ומצפן',
+   example:'💪 אתם יכולים!',
+   gen:function(){
+     var types=[qEstimateAngle,qCompareAngles,qClockAngle,qCompassDirection,qAngleTypes];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  {title:'אתגר — השוואה ואומדן',instruction:'שאלות קשות יותר!',
+   tip:'נסו לדייק! השוו לזוויות שאתם מכירים.',
+   example:'🏆 בהצלחה!',
+   gen:function(){
+     var types=[qEstimateAngle,qCompareAngles,qAngleTypes,function(){return qIdentifyAngleDeg([30,45,60,90,120,150,180][rr(0,6)])}];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  {title:'סופר אתגר!',instruction:'כל השאלות — רמה גבוהה!',
+   tip:'🏆 אתם מומחים לזוויות!',
+   example:'🌟 💪 🏆',
+   gen:function(){
+     var types=[qEstimateAngle,qCompareAngles,qClockAngle,qCompassDirection,qAngleTypes,function(){return qIdentifyAngleDeg([30,45,60,90,120,150,180][rr(0,6)])}];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  {title:'מאסטר!',instruction:'הרמה הקשה ביותר — כל הנושאים!',
+   tip:'🏆 אין עליכם! שלטתם בכל הנושא!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[qEstimateAngle,qCompareAngles,qClockAngle,qCompassDirection,qAngleTypes,function(){return qIdentifyAngleDeg([30,45,60,90,120,150,180][rr(0,6)])},function(){
+       /* bonus: complementary angle */
+       var a=rr(1,8)*10;var comp=90-a;
+       if(comp<=0){a=30;comp=60}
+       var correct=comp+'°';
+       var wrongs=new Set();wrongs.add((comp+20)+'°');wrongs.add((comp-10>0?comp-10:comp+30)+'°');wrongs.add((180-a)+'°');wrongs.delete(correct);
+       var wArr=Array.from(wrongs).slice(0,3);
+       while(wArr.length<3){var w=rr(1,17)*10;if(w+'°'!==correct&&wArr.indexOf(w+'°')===-1)wArr.push(w+'°')}
+       var options=shuffle([correct].concat(wArr));
+       return{type:'choice',qText:'זווית של '+a+'° וזווית נוספת משלימות ל-90°. מהי הזווית הנוספת?',display:drawAngle(a,130,true),answer:correct,options:options,colClass:'cols-4',explain:a+'° + '+comp+'° = 90°'}
+     }];
+     return types[rr(0,types.length-1)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

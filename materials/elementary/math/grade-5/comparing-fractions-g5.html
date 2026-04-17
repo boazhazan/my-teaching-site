@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>השוואת שברים — כיתה ה' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#dc2626;--primary-dark:#b91c1c;--primary-light:#fee2e2;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#b91c1c 0%,#dc2626 50%,#ef4444 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(220,38,38,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.frac-display{text-align:center;margin:16px 0;font-size:1.8rem;font-weight:800;direction:ltr;unicode-bidi:embed}
+.frac-display .vs{margin:0 12px;color:var(--text-light);font-size:1.2rem;direction:rtl;unicode-bidi:embed}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;direction:ltr;unicode-bidi:embed}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.frac-display{font-size:1.4rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">⚖️</div><div><h1>השוואת שברים</h1><div class="subtitle">כיתה ה' — מכנה משותף ודרכים נוספות</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">השוואת שברים — כיתה ה' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>⚖️ השוואת שברים</h2><p><strong>איך משווים שברים?</strong> יש כמה דרכים:</p><p>🔹 <strong>אותו מכנה</strong> — מי שהמונה שלו גדול יותר, הוא הגדול!<br>🔹 <strong>אותו מונה</strong> — מי שהמכנה שלו קטן יותר, הוא הגדול!<br>🔹 <strong>מכנה משותף</strong> — מרחיבים לאותו מכנה ומשווים מונים<br>🔹 <strong>השוואה לחצי</strong> — אם אחד גדול מחצי והשני קטן, ברור מי גדול<br>🔹 <strong>השוואה ל-1</strong> — אם אחד גדול מ-1 והשני קטן, ברור!</p><p>לדוגמה:<br>🔸 <span class="math">3/5</span> מול <span class="math">2/5</span> — אותו מכנה → <span class="math">3/5</span> גדול יותר<br>🔸 <span class="math">2/3</span> מול <span class="math">2/7</span> — אותו מונה → <span class="math">2/3</span> גדול (מכנה קטן = חלק גדול)<br>🔸 <span class="math">3/4</span> מול <span class="math">5/6</span> — מכנה משותף 12: <span class="math">9/12</span> מול <span class="math">10/12</span> → <span class="math">5/6</span> גדול</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function gcd(a,b){while(b){var t=b;b=a%b;a=t}return a}
+function lcm(a,b){return(a*b)/gcd(a,b)}
+function fracHTML(n,d){return '<span style="display:inline-flex;flex-direction:column;align-items:center;direction:ltr;unicode-bidi:embed;font-weight:800;vertical-align:middle;margin:0 4px"><span style="border-bottom:2px solid var(--text);padding:0 8px;line-height:1.3">'+n+'</span><span style="padding:0 8px;line-height:1.3">'+d+'</span></span>'}
+function fracStr(n,d){return n+'/'+d}
+function fracVal(n,d){return n/d}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: Same denominator — who's bigger? */
+function qCompareSameDenom(){
+  var d=rr(2,12);
+  var a,b;
+  do{a=rr(1,d-1);b=rr(1,d-1)}while(a===b);
+  var fA=fracHTML(a,d),fB=fracHTML(b,d);
+  var correct=a>b?fracStr(a,d):fracStr(b,d);
+  var optA=fracStr(a,d),optB=fracStr(b,d);
+  var winner=a>b?a:b;
+  return{type:'choice',qText:'מי גדול יותר?',display:'<div class="frac-display">'+fA+'<span class="vs">או</span>'+fB+'</div>',answer:correct,options:[optA,optB],colClass:'cols-2',explain:'אותו מכנה ('+d+') → המונה הגדול יותר ('+winner+') קובע!'};
+}
+
+/* Type 2: Same numerator — who's bigger? */
+function qCompareSameNumer(){
+  var n=rr(1,8);
+  var dA,dB;
+  do{dA=rr(n+1,12);dB=rr(n+1,12)}while(dA===dB);
+  var fA=fracHTML(n,dA),fB=fracHTML(n,dB);
+  var correct=dA<dB?fracStr(n,dA):fracStr(n,dB);
+  var optA=fracStr(n,dA),optB=fracStr(n,dB);
+  var smallerD=Math.min(dA,dB);
+  return{type:'choice',qText:'מי גדול יותר?',display:'<div class="frac-display">'+fA+'<span class="vs">או</span>'+fB+'</div>',answer:correct,options:[optA,optB],colClass:'cols-2',explain:'אותו מונה ('+n+') → המכנה הקטן יותר ('+smallerD+') נותן חלק גדול יותר!'};
+}
+
+/* Type 3: Compare by finding common denominator */
+function qCompareByCommonDenom(){
+  var dA,dB,nA,nB,att=0;
+  do{
+    dA=rr(2,9);dB=rr(2,9);att++;
+  }while((dA===dB||dA%dB===0||dB%dA===0)&&att<50);
+  nA=rr(1,dA-1);
+  do{nB=rr(1,dB-1)}while(fracVal(nA,dA)===fracVal(nB,dB));
+  var fA=fracHTML(nA,dA),fB=fracHTML(nB,dB);
+  var cd=lcm(dA,dB);
+  var eA=nA*(cd/dA),eB=nB*(cd/dB);
+  var correct=fracVal(nA,dA)>fracVal(nB,dB)?fracStr(nA,dA):fracStr(nB,dB);
+  var optA=fracStr(nA,dA),optB=fracStr(nB,dB);
+  return{type:'choice',qText:'מי גדול יותר?',display:'<div class="frac-display">'+fA+'<span class="vs">או</span>'+fB+'</div>',answer:correct,options:[optA,optB],colClass:'cols-2',explain:'מכנה משותף '+cd+': '+fracStr(eA,cd)+' מול '+fracStr(eB,cd)+' → '+(eA>eB?fracStr(nA,dA):fracStr(nB,dB))+' גדול יותר!'};
+}
+
+/* Type 4: Compare to 1/2 */
+function qCompareToHalf(){
+  /* one fraction > 1/2, one < 1/2 */
+  var dBig,nBig,dSmall,nSmall,att=0;
+  do{
+    dBig=rr(3,10);nBig=rr(Math.ceil(dBig/2)+1,dBig-1);att++;
+  }while(nBig<=dBig/2&&att<50);
+  att=0;
+  do{
+    dSmall=rr(3,10);nSmall=rr(1,Math.floor(dSmall/2)-1);att++;
+  }while(nSmall>=dSmall/2&&att<50);
+  if(nSmall<1)nSmall=1;
+  /* Ensure big > 1/2 and small < 1/2 */
+  if(fracVal(nBig,dBig)<=0.5){nBig=Math.ceil(dBig/2)+1;if(nBig>=dBig)nBig=dBig-1}
+  if(fracVal(nSmall,dSmall)>=0.5){nSmall=1}
+  var fA=fracHTML(nBig,dBig),fB=fracHTML(nSmall,dSmall);
+  var correct=fracStr(nBig,dBig);
+  var optA=fracStr(nBig,dBig),optB=fracStr(nSmall,dSmall);
+  /* randomize display order */
+  var pair=shuffle([[fA,optA],[fB,optB]]);
+  return{type:'choice',qText:'מי גדול יותר?',display:'<div class="frac-display">'+pair[0][0]+'<span class="vs">או</span>'+pair[1][0]+'</div>',answer:correct,options:[pair[0][1],pair[1][1]],colClass:'cols-2',explain:fracStr(nBig,dBig)+' גדול מחצי, '+fracStr(nSmall,dSmall)+' קטן מחצי → '+fracStr(nBig,dBig)+' גדול יותר!'};
+}
+
+/* Type 5: Compare to 1 — one > 1, one < 1 */
+function qCompareToOne(){
+  var dBig=rr(2,8),nBig=rr(dBig+1,dBig+5);
+  var dSmall=rr(2,8),nSmall=rr(1,dSmall-1);
+  var fA=fracHTML(nBig,dBig),fB=fracHTML(nSmall,dSmall);
+  var correct=fracStr(nBig,dBig);
+  var optA=fracStr(nBig,dBig),optB=fracStr(nSmall,dSmall);
+  var pair=shuffle([[fA,optA],[fB,optB]]);
+  return{type:'choice',qText:'מי גדול יותר?',display:'<div class="frac-display">'+pair[0][0]+'<span class="vs">או</span>'+pair[1][0]+'</div>',answer:correct,options:[pair[0][1],pair[1][1]],colClass:'cols-2',explain:fracStr(nBig,dBig)+' גדול מ-1, '+fracStr(nSmall,dSmall)+' קטן מ-1 → '+fracStr(nBig,dBig)+' גדול יותר!'};
+}
+
+/* Type 6: Who's closer to 1? */
+function qCompareCloserTo1(){
+  var dA,nA,dB,nB;
+  do{
+    dA=rr(3,10);nA=dA-rr(1,Math.min(3,dA-1));
+    dB=rr(3,10);nB=dB-rr(1,Math.min(3,dB-1));
+  }while(nA===nB&&dA===dB || Math.abs(1-fracVal(nA,dA))===Math.abs(1-fracVal(nB,dB)));
+  var compA=1-fracVal(nA,dA),compB=1-fracVal(nB,dB);
+  var fA=fracHTML(nA,dA),fB=fracHTML(nB,dB);
+  var correct=compA<compB?fracStr(nA,dA):fracStr(nB,dB);
+  var optA=fracStr(nA,dA),optB=fracStr(nB,dB);
+  var winner=compA<compB?[nA,dA]:[nB,dB];
+  var wComp=compA<compB?compA:compB;
+  return{type:'choice',qText:'מי קרוב יותר ל-1?',display:'<div class="frac-display">'+fA+'<span class="vs">או</span>'+fB+'</div>',answer:correct,options:[optA,optB],colClass:'cols-2',explain:'ל-'+fracStr(nA,dA)+' חסר '+fracStr(dA-nA,dA)+', ל-'+fracStr(nB,dB)+' חסר '+fracStr(dB-nB,dB)+' → '+correct+' קרוב יותר ל-1!'};
+}
+
+/* Type 7: Order 4 fractions from smallest to largest */
+function qOrderFractions(){
+  var fracs=[],vals=[];
+  var usedVals=new Set();
+  while(fracs.length<4){
+    var d=rr(2,8),n=rr(1,d);
+    var v=fracVal(n,d);
+    var key=n+'/'+d;
+    if(usedVals.has(v))continue;
+    usedVals.add(v);
+    fracs.push({n:n,d:d,str:fracStr(n,d),val:v,html:fracHTML(n,d)});
+  }
+  var sorted=fracs.slice().sort(function(a,b){return a.val-b.val});
+  var correctOrder=sorted.map(function(f){return f.str}).join(' < ');
+  /* Generate 3 wrong orderings */
+  var options=[correctOrder];
+  var attempts=0;
+  while(options.length<4&&attempts<100){
+    var shuffled=shuffle(fracs.slice());
+    var order=shuffled.map(function(f){return f.str}).join(' < ');
+    if(options.indexOf(order)===-1) options.push(order);
+    attempts++;
+  }
+  options=shuffle(options);
+  var displayHTML=fracs.map(function(f){return f.html}).join('  ');
+  return{type:'choice',qText:'סדרו מהקטן לגדול:',display:'<div class="frac-display" style="flex-wrap:wrap;display:flex;justify-content:center;gap:8px">'+displayHTML+'</div>',answer:correctOrder,options:options,colClass:'cols-2',explain:'הסדר הנכון: '+correctOrder};
+}
+
+/* Type 8: Find a fraction between two fractions */
+function qFindFractionBetween(){
+  var dLow,nLow,dHigh,nHigh;
+  var att=0;
+  do{
+    dLow=rr(2,6);nLow=rr(1,dLow-1);
+    dHigh=rr(2,6);nHigh=rr(1,dHigh-1);
+    att++;
+  }while((fracVal(nLow,dLow)>=fracVal(nHigh,dHigh)||fracVal(nHigh,dHigh)-fracVal(nLow,dLow)<0.1)&&att<80);
+  var vLow=fracVal(nLow,dLow),vHigh=fracVal(nHigh,dHigh);
+  /* Find correct answer: fraction between */
+  var correctFrac=null;
+  var allCandidates=[];
+  for(var cd=2;cd<=12;cd++){
+    for(var cn=1;cn<cd;cn++){
+      var cv=fracVal(cn,cd);
+      if(cv>vLow&&cv<vHigh){
+        allCandidates.push({n:cn,d:cd,str:fracStr(cn,cd),val:cv});
+      }
+    }
+  }
+  if(allCandidates.length===0){
+    /* fallback — just use midpoint approximate */
+    return qCompareByCommonDenom();
+  }
+  correctFrac=allCandidates[rr(0,allCandidates.length-1)];
+  /* wrong options: fractions NOT between */
+  var wrongs=[];
+  for(var wd=2;wd<=10;wd++){
+    for(var wn=1;wn<wd;wn++){
+      var wv=fracVal(wn,wd);
+      if(wv<=vLow||wv>=vHigh){
+        wrongs.push({n:wn,d:wd,str:fracStr(wn,wd),val:wv});
+      }
+    }
+  }
+  shuffle(wrongs);
+  var wrongOpts=wrongs.slice(0,3).map(function(f){return f.str});
+  while(wrongOpts.length<3) wrongOpts.push(fracStr(nLow,dLow));
+  var options=shuffle([correctFrac.str].concat(wrongOpts));
+  return{type:'choice',qText:'מצאו שבר שנמצא בין '+fracHTML(nLow,dLow)+' לבין '+fracHTML(nHigh,dHigh),display:'',answer:correctFrac.str,options:options,colClass:'cols-4',explain:correctFrac.str+' נמצא בין '+fracStr(nLow,dLow)+' ל-'+fracStr(nHigh,dHigh)+'!'};
+}
+
+/* Type 9: Find fractions smaller than a given fraction */
+function qFindSmaller(){
+  var d=rr(3,8),n=rr(2,d-1);
+  var target=fracVal(n,d);
+  /* Generate one correct option (smaller) */
+  var smaller=[];
+  for(var cd=2;cd<=10;cd++){
+    for(var cn=1;cn<cd;cn++){
+      if(fracVal(cn,cd)<target) smaller.push({str:fracStr(cn,cd),val:fracVal(cn,cd)});
+    }
+  }
+  if(smaller.length===0) return qCompareSameDenom();
+  var correct=smaller[rr(0,smaller.length-1)];
+  /* 3 wrong options (>= target) */
+  var bigger=[];
+  for(var bd=2;bd<=10;bd++){
+    for(var bn=1;bn<=bd;bn++){
+      if(fracVal(bn,bd)>=target) bigger.push({str:fracStr(bn,bd),val:fracVal(bn,bd)});
+    }
+  }
+  shuffle(bigger);
+  var wrongOpts=bigger.slice(0,3).map(function(f){return f.str});
+  while(wrongOpts.length<3) wrongOpts.push(fracStr(n+1,d));
+  var options=shuffle([correct.str].concat(wrongOpts));
+  return{type:'choice',qText:'מי <strong>קטן</strong> מ-'+fracHTML(n,d)+'?',display:'',answer:correct.str,options:options,colClass:'cols-4',explain:correct.str+' קטן מ-'+fracStr(n,d)+'!'};
+}
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'אותו מכנה (חזרה)',instruction:'כשהמכנה זהה — המונה הגדול קובע!',
+   tip:'כשלשני השברים <strong>אותו מכנה</strong>, מסתכלים על המונה.\nמי שהמונה שלו גדול יותר — הוא השבר הגדול!',
+   example:'<span class="math">3/7</span> מול <span class="math">5/7</span> → מכנה זהה (7), מונה 5 > 3 → <span class="math">5/7</span> גדול!',
+   gen:function(){return qCompareSameDenom()}},
+
+  {title:'אותו מונה',instruction:'כשהמונה זהה — המכנה הקטן קובע!',
+   tip:'כשלשני השברים <strong>אותו מונה</strong>, מסתכלים על המכנה.\nמכנה קטן = חלקים גדולים → שבר גדול יותר!',
+   example:'<span class="math">3/5</span> מול <span class="math">3/8</span> → מונה זהה (3), מכנה 5 < 8 → <span class="math">3/5</span> גדול!\nחמישיות גדולות משמיניות.',
+   gen:function(){return qCompareSameNumer()}},
+
+  {title:'מכנה משותף',instruction:'מרחיבים לאותו מכנה ומשווים!',
+   tip:'כשהמכנים שונים: מוצאים <strong>מכנה משותף</strong> (כ.מ.מ), מרחיבים את שני השברים, ואז משווים מונים.',
+   example:'<span class="math">2/3</span> מול <span class="math">3/4</span>\nמכנה משותף 12:\n<span class="math">8/12</span> מול <span class="math">9/12</span> → <span class="math">3/4</span> גדול!',
+   gen:function(){return qCompareByCommonDenom()}},
+
+  {title:'השוואה ל-½',instruction:'משווים כל שבר לחצי!',
+   tip:'אם שבר אחד <strong>גדול מ-½</strong> והשני <strong>קטן מ-½</strong> — ברור מי גדול!\n\nשבר גדול מ-½ כשהמונה גדול מחצי המכנה.',
+   example:'<span class="math">1/3</span> קטן מ-½ (כי 1 < 3÷2)\n<span class="math">3/5</span> גדול מ-½ (כי 3 > 5÷2)\nלכן <span class="math">3/5</span> > <span class="math">1/3</span>',
+   gen:function(){return qCompareToHalf()}},
+
+  {title:'השוואה ל-1',instruction:'אם אחד גדול מ-1 והשני קטן — קל!',
+   tip:'שבר <strong>גדול מ-1</strong> כשהמונה גדול מהמכנה.\nשבר <strong>קטן מ-1</strong> כשהמונה קטן מהמכנה.\nאם אחד גדול מ-1 והשני קטן — הגדול מ-1 מנצח!',
+   example:'<span class="math">5/4</span> > 1 (כי 5 > 4)\n<span class="math">2/3</span> < 1 (כי 2 < 3)\nלכן <span class="math">5/4</span> > <span class="math">2/3</span>',
+   gen:function(){return qCompareToOne()}},
+
+  {title:'קרוב יותר ל-1',instruction:'מי קרוב יותר ל-1? משווים את ההשלמות!',
+   tip:'כדי לבדוק מי קרוב יותר ל-1, בודקים <strong>כמה חסר</strong> לכל שבר עד 1.\nמי שחסר לו פחות — קרוב יותר!',
+   example:'<span class="math">4/5</span> → חסר <span class="math">1/5</span>\n<span class="math">7/8</span> → חסר <span class="math">1/8</span>\n<span class="math">1/8</span> < <span class="math">1/5</span> → <span class="math">7/8</span> קרוב יותר ל-1!',
+   gen:function(){return qCompareCloserTo1()}},
+
+  {title:'סידור מהקטן לגדול',instruction:'סדרו 4 שברים מהקטן לגדול!',
+   tip:'השתמשו בכל השיטות שלמדתם: מכנה משותף, השוואה לחצי, ועוד.\nמצאו קודם את הקטן ביותר ואת הגדול ביותר.',
+   example:'<span class="math">1/4, 1/2, 3/4, 1/3</span>\nסדר: <span class="math">1/4 < 1/3 < 1/2 < 3/4</span>',
+   gen:function(){return qOrderFractions()}},
+
+  {title:'שבר ביניים',instruction:'מצאו שבר שנמצא בין שני שברים!',
+   tip:'כדי למצוא שבר בין שניים, אפשר:\n• להרחיב את שניהם למכנה משותף ולחפש מונה באמצע\n• לנסות שברים פשוטים ולבדוק',
+   example:'בין <span class="math">1/4</span> ל-<span class="math">1/2</span>:\nמכנה משותף 4: בין <span class="math">1/4</span> ל-<span class="math">2/4</span>\nמרחיבים ל-8: בין <span class="math">2/8</span> ל-<span class="math">4/8</span> → <span class="math">3/8</span> מתאים!',
+   gen:function(){return qFindFractionBetween()}},
+
+  {title:'מצאו שברים קטנים מ...',instruction:'מי קטן מהשבר הנתון?',
+   tip:'כדי לבדוק אם שבר קטן מאחר, אפשר:\n• למצוא מכנה משותף\n• להשוות לחצי\n• להשתמש באינטואיציה',
+   example:'מי קטן מ-<span class="math">3/4</span>?\n<span class="math">1/2 = 2/4</span> → כן, 2 < 3 → קטן!\n<span class="math">5/6</span> → מכנה משותף 12: <span class="math">10/12</span> מול <span class="math">9/12</span> → לא, גדול!',
+   gen:function(){return qFindSmaller()}},
+
+  {title:'מעורבב — שיטות השוואה',instruction:'שאלות מגוונות!',
+   tip:'שלבו את כל השיטות: אותו מכנה, אותו מונה, מכנה משותף, השוואה לחצי ול-1.',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[qCompareSameDenom,qCompareSameNumer,qCompareByCommonDenom,qCompareToHalf,qCompareToOne];
+     return types[rr(0,4)]();
+   }},
+
+  {title:'סידור + ביניים',instruction:'שאלות סידור ומציאת שבר ביניים!',
+   tip:'השתמשו בכל הכלים!',
+   example:'💪 בהצלחה!',
+   gen:function(){
+     var types=[qOrderFractions,qFindFractionBetween,qFindSmaller];
+     return types[rr(0,2)]();
+   }},
+
+  {title:'כל הסוגים!',instruction:'שאלות מכל הסוגים!',
+   tip:'כל שיטות ההשוואה שלמדתם!',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[qCompareSameDenom,qCompareSameNumer,qCompareByCommonDenom,qCompareToHalf,qCompareToOne,qCompareCloserTo1,qOrderFractions,qFindFractionBetween];
+     return types[rr(0,7)]();
+   }},
+
+  {title:'אתגר — השוואות מורכבות',instruction:'מכנים גדולים יותר ושילובים!',
+   tip:'השתמשו במכנה משותף גם עם מספרים גדולים. אל תשכחו את כל השיטות!',
+   example:'🏆 אתם יכולים!',
+   gen:function(){
+     var types=[qCompareByCommonDenom,qCompareCloserTo1,qOrderFractions,qFindFractionBetween,qFindSmaller];
+     return types[rr(0,4)]();
+   }},
+
+  {title:'סופר אתגר!',instruction:'שאלות קשות — כל הסוגים!',
+   tip:'🏆 אתם מומחים להשוואת שברים!',
+   example:'🌟 💪 🏆',
+   gen:function(){
+     var types=[qCompareSameNumer,qCompareByCommonDenom,qCompareToHalf,qCompareCloserTo1,qOrderFractions,qFindFractionBetween,qFindSmaller];
+     return types[rr(0,6)]();
+   }},
+
+  {title:'מאסטר!',instruction:'הרמה הכי קשה — כל הסוגים!',
+   tip:'🏆 אין עליכם! שלטתם בהשוואת שברים!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[qCompareSameDenom,qCompareSameNumer,qCompareByCommonDenom,qCompareToHalf,qCompareToOne,qCompareCloserTo1,qOrderFractions,qFindFractionBetween,qFindSmaller];
+     return types[rr(0,8)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=6;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)"><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

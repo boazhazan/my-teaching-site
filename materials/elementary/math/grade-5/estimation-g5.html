@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>אומדן ומספרים גדולים — כיתה ה' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#059669;--primary-dark:#047857;--primary-light:#d1fae5;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#047857 0%,#059669 50%,#10b981 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(5,150,105,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:2.2rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.05rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;line-height:1.5}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:.95rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:1.8rem;padding:6px 20px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🎯</div><div><h1>אומדן ומספרים גדולים</h1><div class="subtitle">כיתה ה' — הערכה, סבירות ואומדן כמויות</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">אומדן ומספרים גדולים — כיתה ה' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>🎯 אומדן ומספרים גדולים</h2><p><strong>מה זה אומדן?</strong> אומדן זה הערכה — לא חישוב מדויק, אלא ניחוש חכם שקרוב לתשובה האמיתית.</p><p>🔹 <strong>מי גדול?</strong> — משווים בין שני ביטויים בלי לחשב בדיוק. עיגול למספרים עגולים עוזר!<br>🔹 <strong>סביר?</strong> — בודקים אם תשובה הגיונית על ידי עיגול וחישוב מהיר<br>🔹 <strong>אומדן כמויות</strong> — כמה מילים בעמוד? כמה תלמידים בבית ספר? ידע כללי עוזר!<br>🔹 <strong>מדויק או מקורב?</strong> — "5 שערים" זה מדויק, "10,000 צופים" זה מקורב<br>🔹 <strong>אומדן גובה/עובי</strong> — הערכת מידות פיזיות בעולם האמיתי</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function fmtNum(n){return n.toLocaleString('he-IL')}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* --- Type 1: qEstimateBigger --- */
+/* "Which is bigger?" — two expressions, estimate without calculating */
+function qEstimateBigger(difficulty){
+  /* difficulty: 1=easy (small nums), 2=medium, 3=hard */
+  var exprA,exprB,valA,valB,textA,textB;
+  var kind=rr(1,4);
+  if(difficulty<=1){
+    /* simple: multiplication vs addition */
+    if(kind<=2){
+      var a=rr(10,50),b=rr(10,30);
+      valA=a*b; textA=fmtNum(a)+' \u00D7 '+fmtNum(b);
+      var c=rr(100,500),d=rr(100,500);
+      valB=c+d; textB=fmtNum(c)+' + '+fmtNum(d);
+    }else{
+      var a=rr(5,20),b=rr(5,20);
+      valA=a*b; textA=fmtNum(a)+' \u00D7 '+fmtNum(b);
+      var c=rr(2,10),d=rr(2,10);
+      valB=c*d; textB=fmtNum(c)+' \u00D7 '+fmtNum(d);
+    }
+  }else if(difficulty===2){
+    if(kind<=2){
+      var a=rr(30,99),b=rr(10,50);
+      valA=a*b; textA=fmtNum(a)+' \u00D7 '+fmtNum(b);
+      var c=rr(500,2000),d=rr(500,2000);
+      valB=c+d; textB=fmtNum(c)+' + '+fmtNum(d);
+    }else if(kind===3){
+      var a=rr(20,80),b=rr(20,80);
+      valA=a*b; textA=fmtNum(a)+' \u00D7 '+fmtNum(b);
+      var c=rr(10,40),d=rr(10,40);
+      valB=c*d; textB=fmtNum(c)+' \u00D7 '+fmtNum(d);
+    }else{
+      var a=rr(100,999),b=rr(2,9);
+      valA=a*b; textA=fmtNum(a)+' \u00D7 '+fmtNum(b);
+      var c=rr(1000,5000),d=rr(100,500);
+      valB=c-d; textB=fmtNum(c)+' \u2212 '+fmtNum(d);
+    }
+  }else{
+    if(kind<=2){
+      var a=rr(50,200),b=rr(30,100);
+      valA=a*b; textA=fmtNum(a)+' \u00D7 '+fmtNum(b);
+      var c=rr(1000,9999),d=rr(1000,9999);
+      valB=c+d; textB=fmtNum(c)+' + '+fmtNum(d);
+    }else{
+      var a=rr(100,500),b=rr(10,50);
+      valA=a*b; textA=fmtNum(a)+' \u00D7 '+fmtNum(b);
+      var c=rr(50,300),d=rr(10,50);
+      valB=c*d; textB=fmtNum(c)+' \u00D7 '+fmtNum(d);
+    }
+  }
+  /* make sure they're not equal */
+  if(valA===valB) valA+=rr(1,50);
+  var bigger=(valA>valB)?textA:textB;
+  var options=shuffle([textA,textB]);
+  return{type:'choice',qText:'מי גדול יותר? (בלי לחשב בדיוק!)',display:'',answer:bigger,options:options,colClass:'cols-2',explain:'הערכה: <span class="math">'+textA+'</span> \u2248 '+fmtNum(valA)+', <span class="math">'+textB+'</span> \u2248 '+fmtNum(valB)};
+}
+
+/* --- Type 2: qEstimateQuantity --- */
+/* Real-world quantity estimation */
+var quantityBank=[
+  {q:'כמה מילים יש בערך בעמוד אחד של ספר?',correct:'250 עד 350',wrongs:['10 עד 30','2,000 עד 3,000','50 עד 80'],explain:'בעמוד רגיל של ספר יש בערך 250-350 מילים'},
+  {q:'כמה תלמידים יש בערך בבית ספר יסודי?',correct:'400 עד 800',wrongs:['20 עד 50','50 עד 100','5,000 עד 10,000'],explain:'בבית ספר יסודי ממוצע יש כ-400-800 תלמידים'},
+  {q:'כמה ימים יש בשנה?',correct:'365 עד 366',wrongs:['100 עד 200','250 עד 300','400 עד 500'],explain:'בשנה רגילה יש 365 ימים, בשנה מעוברת 366'},
+  {q:'כמה דקות יש ביום שלם?',correct:'1,440',wrongs:['240','600','10,000'],explain:'24 שעות כפול 60 דקות = 1,440 דקות'},
+  {q:'כמה שיניים יש למבוגר?',correct:'32',wrongs:['12','20','50'],explain:'למבוגר יש 32 שיניים'},
+  {q:'כמה שעות יש בשבוע?',correct:'168',wrongs:['24','84','700'],explain:'7 ימים כפול 24 שעות = 168 שעות'},
+  {q:'כמה מדינות יש בערך בעולם?',correct:'190 עד 200',wrongs:['30 עד 50','500 עד 600','1,000 עד 2,000'],explain:'יש כ-195 מדינות מוכרות בעולם'},
+  {q:'כמה עצמות יש בגוף האדם הבוגר?',correct:'206',wrongs:['50','100','500'],explain:'בגוף האדם הבוגר יש 206 עצמות'},
+  {q:'כמה תלמידים יש בערך בכיתה רגילה?',correct:'25 עד 35',wrongs:['5 עד 10','50 עד 70','100 עד 150'],explain:'בכיתה רגילה יש בערך 25-35 תלמידים'},
+  {q:'כמה שניות יש בשעה?',correct:'3,600',wrongs:['60','360','36,000'],explain:'60 דקות כפול 60 שניות = 3,600 שניות'},
+  {q:'כמה גרם יש בקילוגרם?',correct:'1,000',wrongs:['100','500','10,000'],explain:'קילוגרם = 1,000 גרם'},
+  {q:'כמה מילימטר יש במטר?',correct:'1,000',wrongs:['10','100','10,000'],explain:'מטר = 100 ס"מ = 1,000 מ"מ'},
+  {q:'כמה עמודים יש בערך בספר ילדים?',correct:'100 עד 250',wrongs:['10 עד 20','500 עד 800','1,000 עד 2,000'],explain:'ספר ילדים ממוצע מכיל כ-100-250 עמודים'},
+  {q:'כמה אנשים חיים בערך בישראל?',correct:'כ-10 מיליון',wrongs:['כ-1 מיליון','כ-100 מיליון','כ-500,000'],explain:'בישראל חיים כ-10 מיליון אנשים'},
+  {q:'כמה ס"מ יש במטר?',correct:'100',wrongs:['10','50','1,000'],explain:'מטר = 100 סנטימטר'},
+  {q:'כמה ליטר דם יש בממוצע בגוף ילד?',correct:'3 עד 4',wrongs:['0.5 עד 1','10 עד 15','20 עד 30'],explain:'בגוף ילד יש כ-3-4 ליטר דם'}
+];
+
+function qEstimateQuantity(){
+  var item=quantityBank[rr(0,quantityBank.length-1)];
+  var options=shuffle([item.correct].concat(item.wrongs));
+  return{type:'choice',qText:item.q,display:'',answer:item.correct,options:options,colClass:'cols-2',explain:item.explain};
+}
+
+/* --- Type 3: qReasonableResult --- */
+/* Is this result reasonable? */
+function qReasonableResult(difficulty){
+  var a,b,fakeResult,realResult,reasonable,stem,explain;
+  if(difficulty<=1){
+    a=rr(10,50);b=rr(10,50);
+    realResult=a*b;
+    /* make obviously wrong result */
+    if(rr(0,1)===0){
+      fakeResult=a+b; /* way too small */
+      reasonable=false;
+      stem=fmtNum(a)+' \u00D7 '+fmtNum(b)+' = '+fmtNum(fakeResult);
+      explain='עיגול: '+fmtNum(Math.round(a/10)*10)+' \u00D7 '+fmtNum(Math.round(b/10)*10)+' = '+fmtNum(Math.round(a/10)*10*Math.round(b/10)*10)+'. התוצאה '+fmtNum(fakeResult)+' קטנה מדי!';
+    }else{
+      fakeResult=realResult;
+      reasonable=true;
+      stem=fmtNum(a)+' \u00D7 '+fmtNum(b)+' = '+fmtNum(fakeResult);
+      explain='עיגול: '+fmtNum(Math.round(a/10)*10)+' \u00D7 '+fmtNum(Math.round(b/10)*10)+' = '+fmtNum(Math.round(a/10)*10*Math.round(b/10)*10)+'. התוצאה '+fmtNum(fakeResult)+' סבירה!';
+    }
+  }else if(difficulty===2){
+    a=rr(30,99);b=rr(10,50);
+    realResult=a*b;
+    if(rr(0,1)===0){
+      /* wrong by factor of 10 */
+      fakeResult=Math.round(realResult/10);
+      reasonable=false;
+      stem=fmtNum(a)+' \u00D7 '+fmtNum(b)+' = '+fmtNum(fakeResult);
+      explain='עיגול: '+fmtNum(Math.round(a/10)*10)+' \u00D7 '+fmtNum(Math.round(b/10)*10)+' \u2248 '+fmtNum(Math.round(a/10)*10*(Math.round(b/10)*10))+'. התוצאה '+fmtNum(fakeResult)+' קטנה מדי!';
+    }else{
+      fakeResult=realResult;
+      reasonable=true;
+      stem=fmtNum(a)+' \u00D7 '+fmtNum(b)+' = '+fmtNum(fakeResult);
+      explain='עיגול: '+fmtNum(Math.round(a/10)*10)+' \u00D7 '+fmtNum(Math.round(b/10)*10)+' \u2248 '+fmtNum(Math.round(a/10)*10*(Math.round(b/10)*10))+'. התוצאה סבירה!';
+    }
+  }else{
+    a=rr(100,500);b=rr(10,99);
+    realResult=a*b;
+    var coin=rr(0,2);
+    if(coin===0){
+      fakeResult=Math.round(realResult/100);
+      reasonable=false;
+      explain='הערכה: '+fmtNum(Math.round(a/100)*100)+' \u00D7 '+fmtNum(Math.round(b/10)*10)+' \u2248 '+fmtNum(Math.round(a/100)*100*(Math.round(b/10)*10))+'. התוצאה '+fmtNum(fakeResult)+' קטנה מאוד!';
+    }else if(coin===1){
+      fakeResult=realResult*10;
+      reasonable=false;
+      explain='הערכה: '+fmtNum(Math.round(a/100)*100)+' \u00D7 '+fmtNum(Math.round(b/10)*10)+' \u2248 '+fmtNum(Math.round(a/100)*100*(Math.round(b/10)*10))+'. התוצאה '+fmtNum(fakeResult)+' גדולה מדי!';
+    }else{
+      fakeResult=realResult;
+      reasonable=true;
+      explain='הערכה: '+fmtNum(Math.round(a/100)*100)+' \u00D7 '+fmtNum(Math.round(b/10)*10)+' \u2248 '+fmtNum(Math.round(a/100)*100*(Math.round(b/10)*10))+'. התוצאה סבירה!';
+    }
+    stem=fmtNum(a)+' \u00D7 '+fmtNum(b)+' = '+fmtNum(fakeResult);
+  }
+  var correct=reasonable?'כן, סביר':'לא, לא סביר';
+  return{type:'choice',qText:'האם התוצאה סבירה?',display:'<div class="num-display"><span class="big-num" style="font-size:1.6rem">'+stem+'</span></div>',answer:correct,options:['כן, סביר','לא, לא סביר'],colClass:'cols-2',explain:explain};
+}
+
+/* --- Type 4: qExactVsApprox --- */
+/* Is the number exact or approximate? */
+var exactApproxBank=[
+  {text:'בכיתה שלנו יש 28 תלמידים',correct:'מספר מדויק',explain:'אפשר לספור את התלמידים בדיוק — 28 זה מדויק'},
+  {text:'במשחק הכדורגל היו כ-10,000 צופים',correct:'מספר מקורב',explain:'"כ-10,000" — לא ספרו כל צופה, זו הערכה'},
+  {text:'קניתי 3 מחברות',correct:'מספר מדויק',explain:'3 מחברות — מספר מדויק, אפשר לספור'},
+  {text:'בעיר גרים כ-50,000 תושבים',correct:'מספר מקורב',explain:'"כ-50,000" — המספר המדויק משתנה כל הזמן, זו הערכה'},
+  {text:'לכלב יש 4 רגליים',correct:'מספר מדויק',explain:'4 רגליים — עובדה מדויקת'},
+  {text:'בספרייה יש כ-20,000 ספרים',correct:'מספר מקורב',explain:'"כ-20,000" — הערכה, לא ספרו כל ספר'},
+  {text:'יש לי 5 אחים ואחיות',correct:'מספר מדויק',explain:'5 אחים — אפשר לספור בדיוק'},
+  {text:'הפגנה עם כ-100,000 משתתפים',correct:'מספר מקורב',explain:'"כ-100,000" — הערכה, קשה לספור בדיוק'},
+  {text:'בכיתה יש 12 בנים ו-16 בנות',correct:'מספר מדויק',explain:'ספרו בדיוק — 12 בנים ו-16 בנות'},
+  {text:'ביער יש כ-2,000 עצים',correct:'מספר מקורב',explain:'"כ-2,000" — לא ספרו כל עץ, זו הערכה'},
+  {text:'הזמנתי 2 פיצות',correct:'מספר מדויק',explain:'2 פיצות — מספר מדויק'},
+  {text:'באגם יש כ-500 דגים',correct:'מספר מקורב',explain:'"כ-500" — לא ספרו כל דג, זו הערכה'},
+  {text:'בתיבה יש 24 צבעים',correct:'מספר מדויק',explain:'24 צבעים — ספרו בדיוק'},
+  {text:'באוטובוס נסעו כ-40 נוסעים',correct:'מספר מקורב',explain:'"כ-40" — הערכה, לא ספרו בדיוק'},
+  {text:'קיבלתי ציון 95 במבחן',correct:'מספר מדויק',explain:'95 — ציון מדויק'},
+  {text:'למסיבה הגיעו בערך 200 אורחים',correct:'מספר מקורב',explain:'"בערך 200" — הערכה'}
+];
+
+function qExactVsApprox(){
+  var item=exactApproxBank[rr(0,exactApproxBank.length-1)];
+  return{type:'choice',qText:'מדויק או מקורב?',display:'<div class="num-display"><span class="big-num" style="font-size:1.2rem;direction:rtl;unicode-bidi:normal;padding:12px 20px">'+item.text+'</span></div>',answer:item.correct,options:['מספר מדויק','מספר מקורב'],colClass:'cols-2',explain:item.explain};
+}
+
+/* --- Type 5: qEstimateHeight --- */
+/* Real-world physical estimation */
+var heightBank=[
+  {q:'מגדל מ-1,000 דפים. כמה גבוה בערך?',correct:'כ-10 ס"מ',wrongs:['כ-1 ס"מ','כ-1 מטר','כ-10 מטר'],explain:'כל דף בעובי 0.1 מ"מ בערך, אז 1,000 דפים \u2248 10 ס"מ'},
+  {q:'כמה גבוה בניין של 10 קומות?',correct:'כ-30 מטר',wrongs:['כ-10 מטר','כ-100 מטר','כ-3 מטר'],explain:'כל קומה כ-3 מטר, אז 10 קומות \u2248 30 מטר'},
+  {q:'כמה ארוך מגרש כדורגל?',correct:'כ-100 מטר',wrongs:['כ-20 מטר','כ-500 מטר','כ-1 ק"מ'],explain:'מגרש כדורגל אורכו כ-100-110 מטר'},
+  {q:'כמה שוקל תפוח ממוצע?',correct:'כ-200 גרם',wrongs:['כ-20 גרם','כ-1 ק"ג','כ-2 ק"ג'],explain:'תפוח ממוצע שוקל כ-150-200 גרם'},
+  {q:'כמה גבוה ילד בכיתה ה\' בממוצע?',correct:'כ-140 ס"מ',wrongs:['כ-100 ס"מ','כ-180 ס"מ','כ-200 ס"מ'],explain:'ילד בן 10-11 גובהו בממוצע כ-135-145 ס"מ'},
+  {q:'כמה שוקלת חבילת חלב?',correct:'כ-1 ק"ג',wrongs:['כ-100 גרם','כ-5 ק"ג','כ-10 ק"ג'],explain:'ליטר חלב שוקל כ-1 קילוגרם'},
+  {q:'מה רוחב מטבע של 1 שקל?',correct:'כ-2 ס"מ',wrongs:['כ-5 מ"מ','כ-5 ס"מ','כ-10 ס"מ'],explain:'מטבע של 1 שקל ברוחב כ-2 ס"מ (18 מ"מ)'},
+  {q:'כמה ארוך אוטובוס עירוני?',correct:'כ-12 מטר',wrongs:['כ-3 מטר','כ-30 מטר','כ-50 מטר'],explain:'אוטובוס עירוני רגיל אורכו כ-12 מטר'},
+  {q:'כמה שוקל ילד בכיתה ה\' בממוצע?',correct:'כ-35 ק"ג',wrongs:['כ-10 ק"ג','כ-70 ק"ג','כ-100 ק"ג'],explain:'ילד בכיתה ה\' שוקל בממוצע כ-30-40 ק"ג'},
+  {q:'כמה מים נכנסים באמבטיה מלאה?',correct:'כ-200 ליטר',wrongs:['כ-10 ליטר','כ-50 ליטר','כ-2,000 ליטר'],explain:'אמבטיה ממוצעת מכילה כ-150-250 ליטר'},
+  {q:'כמה גבוהה דלת רגילה?',correct:'כ-2 מטר',wrongs:['כ-1 מטר','כ-3 מטר','כ-5 מטר'],explain:'דלת סטנדרטית גובהה כ-2 מטר (200 ס"מ)'},
+  {q:'כמה שוקלת סוכריה?',correct:'כ-5 גרם',wrongs:['כ-50 גרם','כ-100 גרם','כ-1 גרם'],explain:'סוכריה קטנה שוקלת כ-3-7 גרם'},
+  {q:'כמה ארוך עיפרון חדש?',correct:'כ-19 ס"מ',wrongs:['כ-5 ס"מ','כ-30 ס"מ','כ-50 ס"מ'],explain:'עיפרון רגיל חדש אורכו כ-19 ס"מ'},
+  {q:'כמה שוקל כדורגל?',correct:'כ-400 גרם',wrongs:['כ-50 גרם','כ-2 ק"ג','כ-5 ק"ג'],explain:'כדורגל רשמי שוקל כ-400-450 גרם'},
+  {q:'כמה אורך כף יד של ילד?',correct:'כ-15 ס"מ',wrongs:['כ-5 ס"מ','כ-30 ס"מ','כ-50 ס"מ'],explain:'כף יד של ילד אורכה כ-13-16 ס"מ'}
+];
+
+function qEstimateHeight(){
+  var item=heightBank[rr(0,heightBank.length-1)];
+  var options=shuffle([item.correct].concat(item.wrongs));
+  return{type:'choice',qText:item.q,display:'',answer:item.correct,options:options,colClass:'cols-2',explain:item.explain};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  /* 1 */ {title:'מי גדול? (ללא חישוב)',instruction:'העריכו מי גדול יותר — בלי מחשבון!',
+   tip:'כדי להשוות בלי לחשב, אפשר <strong>לעגל</strong> כל מספר למספר עגול קרוב.\nלדוגמה: 48 \u00D7 21 \u2248 50 \u00D7 20 = 1,000.',
+   example:'מי גדול: <span class="math">48 \u00D7 21</span> או <span class="math">300 + 400</span>?\n48 \u00D7 21 \u2248 50 \u00D7 20 = 1,000\n300 + 400 = 700\nלכן: 48 \u00D7 21 גדול יותר!',
+   gen:function(){return qEstimateBigger(1)}},
+
+  /* 2 */ {title:'סביר?',instruction:'בדקו אם התוצאה הגיונית!',
+   tip:'כשרואים תרגיל, אפשר <strong>לעגל</strong> ולחשב מהר.\nאם התוצאה הנתונה רחוקה מאוד מההערכה — היא לא סבירה!',
+   example:'<span class="math">47 \u00D7 18 = 126</span>. סביר?\n50 \u00D7 20 = 1,000 → התוצאה 126 קטנה מדי!\nלא סביר! ❌',
+   gen:function(){return qReasonableResult(1)}},
+
+  /* 3 */ {title:'אומדן כמויות — ידע כללי',instruction:'כמה זה בערך? השתמשו בידע שלכם!',
+   tip:'אומדן כמויות דורש <strong>ידע כללי</strong> על העולם.\nחשבו על דברים שאתם מכירים והשוו.',
+   example:'כמה מילים בעמוד ספר?\nבשורה יש בערך 10 מילים, בעמוד 25-30 שורות\n10 \u00D7 30 = 300 מילים בערך',
+   gen:function(){return qEstimateQuantity()}},
+
+  /* 4 */ {title:'אומדן כמויות — חפצים ומידות',instruction:'כמה זה בערך? חשבו על גדלים ומשקלים!',
+   tip:'כשמעריכים כמות, חשבו על דבר דומה שאתם <strong>כן</strong> יודעים את הגודל שלו.',
+   example:'כמה שוקלת חבילת חלב?\nליטר מים שוקל 1 ק"ג, חלב דומה למים → כ-1 ק"ג',
+   gen:function(){return qEstimateHeight()}},
+
+  /* 5 */ {title:'מדויק או מקורב?',instruction:'זה מספר מדויק או הערכה?',
+   tip:'<strong>מספר מדויק</strong> — ספרנו או מדדנו בדיוק (3 ילדים, ציון 95).\n<strong>מספר מקורב</strong> — הערכה, בערך, "כ-..." (כ-10,000 צופים).',
+   example:'"בכיתה 28 תלמידים" → <strong>מדויק</strong> (ספרנו)\n"בהופעה כ-5,000 אנשים" → <strong>מקורב</strong> (הערכה)',
+   gen:function(){return qExactVsApprox()}},
+
+  /* 6 */ {title:'אומדן גובה ועובי',instruction:'כמה גבוה? כמה כבד? כמה ארוך?',
+   tip:'חשבו על דברים מוכרים:\n• דלת \u2248 2 מטר\n• עיפרון \u2248 19 ס"מ\n• ליטר מים \u2248 1 ק"ג',
+   example:'מגדל מ-1,000 דפים?\nדף \u2248 0.1 מ"מ\n1,000 \u00D7 0.1 = 100 מ"מ = 10 ס"מ',
+   gen:function(){return qEstimateHeight()}},
+
+  /* 7 */ {title:'מי גדול? (מספרים גדולים)',instruction:'השוואה עם מספרים גדולים — רק הערכה!',
+   tip:'עם מספרים גדולים, עגלו למאות או לאלפים.\nלדוגמה: 312 \u00D7 48 \u2248 300 \u00D7 50 = 15,000.',
+   example:'<span class="math">312 \u00D7 48</span> או <span class="math">5,000 + 8,000</span>?\n312 \u00D7 48 \u2248 300 \u00D7 50 = 15,000\n5,000 + 8,000 = 13,000\nלכן: 312 \u00D7 48 גדול יותר!',
+   gen:function(){return qEstimateBigger(2)}},
+
+  /* 8 */ {title:'סביר? (מספרים גדולים)',instruction:'האם התוצאה הגיונית? מספרים יותר גדולים!',
+   tip:'עגלו את שני המספרים ובדקו.\nאם התוצאה הנתונה שונה מאוד מהעיגול — לא סביר!',
+   example:'<span class="math">82 \u00D7 39 = 320</span>. סביר?\n80 \u00D7 40 = 3,200 → 320 קטן פי 10!\nלא סביר! ❌',
+   gen:function(){return qReasonableResult(2)}},
+
+  /* 9 */ {title:'מעורבב — אומדן כמויות ומידות',instruction:'שאלות מגוונות על כמויות ומידות!',
+   tip:'השתמשו בידע הכללי שלכם ובאומדן חכם.',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[qEstimateQuantity,qEstimateHeight,qExactVsApprox];
+     return types[rr(0,2)]();
+   }},
+
+  /* 10 */ {title:'מעורבב — סבירות והשוואה',instruction:'סביר? מי גדול? הכל ביחד!',
+   tip:'עיגול מהיר + שכל ישר = אומדן מצוין!',
+   example:'⚡ חשבו מהר!',
+   gen:function(){
+     var types=[function(){return qEstimateBigger(2)},function(){return qReasonableResult(2)},qExactVsApprox];
+     return types[rr(0,2)]();
+   }},
+
+  /* 11 */ {title:'אתגר — מי גדול? (קשה)',instruction:'מספרים ענקיים — רק הערכה!',
+   tip:'עגלו בנדיבות — למאות או לאלפים.\nהמטרה היא לדעת מי <strong>גדול יותר</strong>, לא לחשב בדיוק.',
+   example:'<span class="math">189 \u00D7 52</span> \u2248 <span class="math">200 \u00D7 50</span> = 10,000\nקל להשוות עכשיו!',
+   gen:function(){return qEstimateBigger(3)}},
+
+  /* 12 */ {title:'אתגר — סביר? (קשה)',instruction:'מספרים גדולים — בדקו סבירות!',
+   tip:'עגלו למספרים נוחים וחשבו בראש.\nתשובה שקטנה פי 10 או גדולה פי 10 — בוודאות לא סבירה!',
+   example:'💪 סמכו על האומדן שלכם!',
+   gen:function(){return qReasonableResult(3)}},
+
+  /* 13 */ {title:'מעורבב — כל הסוגים!',instruction:'כל מה שלמדתם — ביחד!',
+   tip:'🏆 אתם מומחים לאומדן!',
+   example:'🌟 כל שאלה היא הפתעה!',
+   gen:function(){
+     var types=[function(){return qEstimateBigger(2)},function(){return qReasonableResult(2)},qEstimateQuantity,qExactVsApprox,qEstimateHeight];
+     return types[rr(0,4)]();
+   }},
+
+  /* 14 */ {title:'סופר אתגר!',instruction:'שאלות קשות מכל הסוגים!',
+   tip:'🏆 אין עליכם! שלטתם באומדן!',
+   example:'🌟 💪 🏆',
+   gen:function(){
+     var types=[function(){return qEstimateBigger(3)},function(){return qReasonableResult(3)},qEstimateQuantity,qExactVsApprox,qEstimateHeight];
+     return types[rr(0,4)]();
+   }},
+
+  /* 15 */ {title:'מאסטר אומדן!',instruction:'הרמה הכי קשה — כל הסוגים!',
+   tip:'🏆 אלופי האומדן! אתם יודעים להעריך כמו מדענים!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[function(){return qEstimateBigger(3)},function(){return qReasonableResult(3)},qEstimateQuantity,qExactVsApprox,qEstimateHeight];
+     return types[rr(0,4)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=6;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='\u05E8\u05DE\u05D4 '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='\u05E8\u05DE\u05D4 '+(currentLevel+1)+' \u05DE\u05EA\u05D5\u05DA '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='\u25B2 \u05D4\u05E1\u05EA\u05E8';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)"><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['\u05DE\u05E6\u05D5\u05D9\u05DF! \u2B50','\u05E0\u05DB\u05D5\u05DF! \uD83C\uDFAF','\u05D9\u05D5\u05E4\u05D9! \u2728','\u05DE\u05D3\u05D4\u05D9\u05DD! \uD83C\uDF1F'][rr(0,3)];
+    if(q.explain) praise+=' \u2014 '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF, \u05E0\u05E1\u05D5 \u05E9\u05D5\u05D1! \uD83D\uDCAA';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='\uD83C\uDFC6';document.getElementById('lcTitle').textContent='\u05DE\u05D5\u05E9\u05DC\u05DD!';document.getElementById('lcSub').textContent='\u05DB\u05DC \u05D4\u05EA\u05E9\u05D5\u05D1\u05D5\u05EA \u05E0\u05DB\u05D5\u05E0\u05D5\u05EA!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='\uD83C\uDF89';document.getElementById('lcTitle').textContent='\u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3!';document.getElementById('lcSub').textContent='\u05DB\u05DE\u05E2\u05D8 \u05DE\u05D5\u05E9\u05DC\u05DD!'}
+  else{document.getElementById('lcEmoji').textContent='\uD83D\uDCAA';document.getElementById('lcTitle').textContent='\u05E1\u05D9\u05D9\u05DE\u05EA\u05DD!';document.getElementById('lcSub').textContent='\u05DB\u05D3\u05D0\u05D9 \u05DC\u05E0\u05E1\u05D5\u05EA \u05E9\u05D5\u05D1'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'\u25BC \u05D4\u05E6\u05D2 \u05D8\u05D9\u05E4':'\u25B2 \u05D4\u05E1\u05EA\u05E8'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

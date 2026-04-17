@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>שטח מלבן ומקבילית — כיתה ה' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#dc2626;--primary-dark:#b91c1c;--primary-light:#fee2e2;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#b91c1c 0%,#dc2626 50%,#ef4444 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(220,38,38,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:2.2rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;direction:ltr;unicode-bidi:embed}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:1.8rem;padding:6px 20px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">📐</div><div><h1>שטח מלבן ומקבילית</h1><div class="subtitle">כיתה ה' — נוסחאות, יחידות שטח ושטח פנים</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">שטח מלבן ומקבילית — כיתה ה' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>📐 שטח מלבן ומקבילית</h2><p><strong>נוסחאות חשובות:</strong></p><p>🔹 <strong>שטח מלבן</strong> = אורך × רוחב<br>🔹 <strong>שטח מקבילית</strong> = בסיס × גובה (הגובה האנכי — לא הצלע!)<br>🔹 <strong>שטח פנים תיבה</strong> = 2(ab + ac + bc)</p><p><strong>יחידות שטח:</strong><br>🔸 1 מ"ר = 10,000 סמ"ר<br>🔸 1 דונם = 1,000 מ"ר</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function fmtNum(n){return n.toLocaleString('he-IL')}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: Rectangle area */
+function qAreaRect(minD,maxD){
+  var a=rr(minD,maxD),b=rr(minD,maxD);
+  while(b===a) b=rr(minD,maxD);
+  var area=a*b;
+  var wrongs=new Set();
+  wrongs.add(a+b);          /* perimeter-ish trap */
+  wrongs.add(2*(a+b));      /* perimeter */
+  wrongs.add(area+rr(1,5));
+  wrongs.add(area-rr(1,5));
+  wrongs.add(area+a);
+  wrongs.add(area+b);
+  wrongs.delete(area);wrongs.delete(0);
+  var wArr=Array.from(wrongs).filter(function(v){return v>0}).slice(0,3);
+  while(wArr.length<3){var f=area+rr(-10,10);if(f>0&&f!==area&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var correct=fmtNum(area)+' סמ"ר';
+  var options=[correct];
+  for(var i=0;i<3;i++) options.push(fmtNum(wArr[i])+' סמ"ר');
+  options=shuffle(options);
+  return{type:'choice',qText:'מהו שטח מלבן שאורכו <strong>'+a+' ס"מ</strong> ורוחבו <strong>'+b+' ס"מ</strong>?',display:'<div class="num-display"><span class="big-num">'+a+' × '+b+'</span></div>',answer:correct,options:options,colClass:'cols-2',explain:'שטח מלבן = אורך × רוחב = '+a+' × '+b+' = '+fmtNum(area)+' סמ"ר'};
+}
+
+/* Type 2: Parallelogram area */
+function qAreaParallelogram(minD,maxD){
+  var base=rr(minD,maxD),height=rr(minD,maxD);
+  var slant=height+rr(1,4); /* slant side > height */
+  var area=base*height;
+  var trap=base*slant; /* common mistake */
+  var wrongs=new Set();
+  wrongs.add(trap);
+  wrongs.add(2*(base+slant));
+  wrongs.add(area+rr(1,8));
+  wrongs.add(area-rr(1,8));
+  wrongs.add(base*base);
+  wrongs.delete(area);wrongs.delete(0);
+  var wArr=Array.from(wrongs).filter(function(v){return v>0}).slice(0,3);
+  while(wArr.length<3){var f=area+rr(-12,12);if(f>0&&f!==area&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var correct=fmtNum(area)+' סמ"ר';
+  var options=[correct];
+  for(var i=0;i<3;i++) options.push(fmtNum(wArr[i])+' סמ"ר');
+  options=shuffle(options);
+  return{type:'choice',qText:'מקבילית: בסיס <strong>'+base+' ס"מ</strong>, גובה <strong>'+height+' ס"מ</strong>, צלע צד <strong>'+slant+' ס"מ</strong>. מהו השטח?',display:'<div class="num-display"><span class="big-num">'+base+' × '+height+'</span></div>',answer:correct,options:options,colClass:'cols-2',explain:'שטח מקבילית = בסיס × גובה = '+base+' × '+height+' = '+fmtNum(area)+' סמ"ר (לא כופלים בצלע הצד!)'};
+}
+
+/* Type 3: Unit conversion */
+function qAreaUnits(){
+  var type=rr(1,4);
+  var val,correct,unit,qText,explain;
+  if(type===1){
+    val=rr(1,9);
+    correct=fmtNum(val*10000)+' סמ"ר';
+    qText='כמה סמ"ר יש ב-<strong>'+val+' מ"ר</strong>?';
+    explain='1 מ"ר = 10,000 סמ"ר, לכן '+val+' מ"ר = '+fmtNum(val*10000)+' סמ"ר';
+  }else if(type===2){
+    val=rr(1,9);
+    correct=fmtNum(val*1000)+' מ"ר';
+    qText='כמה מ"ר יש ב-<strong>'+val+' דונם</strong>?';
+    explain='1 דונם = 1,000 מ"ר, לכן '+val+' דונם = '+fmtNum(val*1000)+' מ"ר';
+  }else if(type===3){
+    val=rr(2,8)*10000;
+    correct=fmtNum(val/10000)+' מ"ר';
+    qText='<strong>'+fmtNum(val)+' סמ"ר</strong> = ? מ"ר';
+    explain=fmtNum(val)+' ÷ 10,000 = '+fmtNum(val/10000)+' מ"ר';
+  }else{
+    val=rr(2,8)*1000;
+    correct=fmtNum(val/1000)+' דונם';
+    qText='<strong>'+fmtNum(val)+' מ"ר</strong> = ? דונם';
+    explain=fmtNum(val)+' ÷ 1,000 = '+fmtNum(val/1000)+' דונם';
+  }
+  /* Generate wrong answers by parsing correct */
+  var cNum=parseInt(correct.replace(/[^0-9]/g,''));
+  var cUnit=correct.replace(/[0-9,]/g,'').trim();
+  var wrongs=new Set();
+  if(type===1){
+    wrongs.add(fmtNum(val*1000)+' סמ"ר');
+    wrongs.add(fmtNum(val*100)+' סמ"ר');
+    wrongs.add(fmtNum(val*100000)+' סמ"ר');
+  }else if(type===2){
+    wrongs.add(fmtNum(val*10000)+' מ"ר');
+    wrongs.add(fmtNum(val*100)+' מ"ר');
+    wrongs.add(fmtNum(val*10)+' מ"ר');
+  }else if(type===3){
+    wrongs.add(fmtNum(val/1000)+' מ"ר');
+    wrongs.add(fmtNum(val/100)+' מ"ר');
+    wrongs.add(fmtNum(val/100000>0?val/100000:val*10)+' מ"ר');
+  }else{
+    wrongs.add(fmtNum(val/10000)+' דונם');
+    wrongs.add(fmtNum(val/100)+' דונם');
+    wrongs.add(fmtNum(val/10)+' דונם');
+  }
+  wrongs.delete(correct);
+  var wArr=Array.from(wrongs).slice(0,3);
+  var options=shuffle([correct].concat(wArr));
+  return{type:'choice',qText:qText,display:'',answer:correct,options:options,colClass:'cols-2',explain:explain};
+}
+
+/* Type 4: Surface area of box */
+function qSurfaceArea(minD,maxD){
+  var a=rr(minD,maxD),b=rr(minD,maxD),c=rr(minD,maxD);
+  while(b===a) b=rr(minD,maxD);
+  while(c===a||c===b) c=rr(minD,maxD);
+  var sa=2*(a*b+a*c+b*c);
+  var wrongs=new Set();
+  wrongs.add(a*b+a*c+b*c);      /* forgot ×2 */
+  wrongs.add(a*b*c);             /* volume instead */
+  wrongs.add(2*(a+b+c));         /* perimeter-ish */
+  wrongs.add(sa+rr(2,10));
+  wrongs.add(sa-rr(2,10));
+  wrongs.delete(sa);wrongs.delete(0);
+  var wArr=Array.from(wrongs).filter(function(v){return v>0}).slice(0,3);
+  while(wArr.length<3){var f=sa+rr(-15,15);if(f>0&&f!==sa&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var correct=fmtNum(sa)+' סמ"ר';
+  var options=[correct];
+  for(var i=0;i<3;i++) options.push(fmtNum(wArr[i])+' סמ"ר');
+  options=shuffle(options);
+  return{type:'choice',qText:'שטח פנים של תיבה עם מידות: <strong>'+a+'</strong>, <strong>'+b+'</strong>, <strong>'+c+'</strong> ס"מ?',display:'<div class="num-display"><span class="big-num">2('+a+'·'+b+' + '+a+'·'+c+' + '+b+'·'+c+')</span></div>',answer:correct,options:options,colClass:'cols-2',explain:'שטח פנים = 2('+a+'×'+b+' + '+a+'×'+c+' + '+b+'×'+c+') = 2('+a*b+' + '+a*c+' + '+b*c+') = 2×'+((a*b)+(a*c)+(b*c))+' = '+fmtNum(sa)+' סמ"ר'};
+}
+
+/* Type 5: Area vs Perimeter comparison */
+function qAreaVsPerimeter(){
+  /* Find two rectangles with same area but different perimeters */
+  var area,a1,b1,a2,b2;
+  for(var att=0;att<200;att++){
+    area=rr(12,60);
+    /* find two factor pairs */
+    var pairs=[];
+    for(var i=1;i<=Math.sqrt(area);i++){
+      if(area%i===0) pairs.push([i,area/i]);
+    }
+    if(pairs.length>=2){
+      var p1=pairs[0],p2=pairs[1];
+      if(2*(p1[0]+p1[1])!==2*(p2[0]+p2[1])){
+        a1=p1[0];b1=p1[1];a2=p2[0];b2=p2[1];break;
+      }
+    }
+  }
+  if(!a1){a1=3;b1=8;a2=4;b2=6;area=24}
+  var perim1=2*(a1+b1),perim2=2*(a2+b2);
+  var correct=(perim1===perim2)?'כן, ההיקף שווה':'לא, ההיקף שונה';
+  var options=['כן, ההיקף שווה','לא, ההיקף שונה'];
+  return{type:'choice',qText:'מלבן <strong>'+a1+'×'+b1+'</strong> ומלבן <strong>'+a2+'×'+b2+'</strong>. לשניהם שטח <strong>'+fmtNum(area)+'</strong>. האם גם ההיקף שווה?',display:'',answer:correct,options:options,colClass:'cols-2',explain:'מלבן '+a1+'×'+b1+': היקף = '+perim1+'. מלבן '+a2+'×'+b2+': היקף = '+perim2+'. '+((perim1===perim2)?'ההיקף שווה!':'ההיקף שונה — שטח שווה לא אומר היקף שווה!')};
+}
+
+/* Type 6: Find missing side */
+function qFindSide(){
+  var side1=rr(3,15),side2=rr(3,15);
+  while(side2===side1) side2=rr(3,15);
+  var area=side1*side2;
+  /* Ask for side2 given area and side1 */
+  var correct=side2;
+  var wrongs=new Set();
+  wrongs.add(side1);
+  wrongs.add(area-side1);
+  wrongs.add(correct+rr(1,3));
+  wrongs.add(Math.abs(correct-rr(1,3)));
+  wrongs.add(area/2);
+  wrongs.delete(correct);wrongs.delete(0);
+  var wArr=Array.from(wrongs).filter(function(v){return v>0&&v===Math.floor(v)}).slice(0,3);
+  while(wArr.length<3){var f=correct+rr(-4,4);if(f>0&&f!==correct&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var cStr=correct+' ס"מ';
+  var options=[cStr];
+  for(var i=0;i<3;i++) options.push(wArr[i]+' ס"מ');
+  options=shuffle(options);
+  return{type:'choice',qText:'שטח מלבן = <strong>'+fmtNum(area)+' סמ"ר</strong>. אורכו <strong>'+side1+' ס"מ</strong>. מהו הרוחב?',display:'<div class="num-display"><span class="big-num">'+fmtNum(area)+' ÷ '+side1+' = ?</span></div>',answer:cStr,options:options,colClass:'cols-4',explain:'רוחב = שטח ÷ אורך = '+fmtNum(area)+' ÷ '+side1+' = '+correct+' ס"מ'};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'שטח מלבן — פשוט',instruction:'חשבו את השטח: אורך × רוחב',
+   tip:'<strong>שטח מלבן</strong> = אורך × רוחב.\nהתוצאה נמדדת ב<strong>יחידות ריבועיות</strong> (סמ"ר, מ"ר...).',
+   example:'מלבן <span class="math">4 × 5</span> ← שטח = <span class="math">20 סמ"ר</span>\nמלבן <span class="math">3 × 7</span> ← שטח = <span class="math">21 סמ"ר</span>',
+   gen:function(){return qAreaRect(3,10)}},
+
+  {title:'שטח מלבן — תרגול',instruction:'מלבנים עם מספרים יותר גדולים!',
+   tip:'אותה נוסחה — שטח = אורך × רוחב.\nנסו לחשב בראש או בכתב.',
+   example:'מלבן <span class="math">8 × 12</span> ← שטח = <span class="math">96 סמ"ר</span>\nמלבן <span class="math">15 × 6</span> ← שטח = <span class="math">90 סמ"ר</span>',
+   gen:function(){return qAreaRect(5,20)}},
+
+  {title:'מציאת צלע חסרה',instruction:'נתון השטח וצלע אחת — מצאו את השנייה!',
+   tip:'אם שטח = אורך × רוחב, אז:\n<strong>רוחב = שטח ÷ אורך</strong>.\nפשוט מחלקים!',
+   example:'שטח = <span class="math">48 סמ"ר</span>, אורך = <span class="math">8 ס"מ</span>\nרוחב = <span class="math">48 ÷ 8 = 6 ס"מ</span>',
+   gen:function(){return qFindSide()}},
+
+  {title:'שטח מקבילית — היכרות',instruction:'בסיס × גובה — לא הצלע!',
+   tip:'<strong>שטח מקבילית</strong> = בסיס × גובה.\nשימו לב: <strong>הגובה</strong> הוא הקו האנכי, לא צלע הצד!',
+   example:'בסיס <span class="math">6</span>, גובה <span class="math">4</span>, צלע צד <span class="math">5</span>\nשטח = <span class="math">6 × 4 = 24 סמ"ר</span> (לא 6×5!)',
+   gen:function(){return qAreaParallelogram(3,10)}},
+
+  {title:'שטח מקבילית — תרגול',instruction:'מספרים גדולים יותר!',
+   tip:'זכרו: <strong>לא לכפול בצלע הצד!</strong>\nהגובה תמיד אנכי לבסיס.',
+   example:'בסיס <span class="math">12</span>, גובה <span class="math">8</span>, צלע צד <span class="math">10</span>\nשטח = <span class="math">12 × 8 = 96 סמ"ר</span>',
+   gen:function(){return qAreaParallelogram(5,18)}},
+
+  {title:'יחידות שטח',instruction:'המרה בין סמ"ר, מ"ר ודונם',
+   tip:'<strong>1 מ"ר = 10,000 סמ"ר</strong> (100 × 100)\n<strong>1 דונם = 1,000 מ"ר</strong>\nכדי לעבור ליחידה גדולה — מחלקים. ליחידה קטנה — כופלים.',
+   example:'<span class="math">3 מ"ר = 30,000 סמ"ר</span>\n<span class="math">5 דונם = 5,000 מ"ר</span>\n<span class="math">40,000 סמ"ר = 4 מ"ר</span>',
+   gen:function(){return qAreaUnits()}},
+
+  {title:'שטח = היקף?',instruction:'שטח שווה → היקף שווה? לא בהכרח!',
+   tip:'שני מלבנים יכולים להיות עם <strong>אותו שטח</strong> אבל <strong>היקף שונה</strong>.\nהיקף מלבן = 2 × (אורך + רוחב).',
+   example:'מלבן <span class="math">3×8</span>: שטח=24, היקף=22\nמלבן <span class="math">4×6</span>: שטח=24, היקף=20\nשטח שווה — היקף שונה!',
+   gen:function(){return qAreaVsPerimeter()}},
+
+  {title:'שטח פנים תיבה',instruction:'חשבו את שטח הפנים של תיבה!',
+   tip:'<strong>שטח פנים תיבה</strong> = 2(ab + ac + bc)\nלתיבה 6 פאות — 3 זוגות של מלבנים זהים.\nכופלים כל זוג ומחברים, ואז ×2.',
+   example:'תיבה <span class="math">3, 4, 5</span>:\n<span class="math">2(3×4 + 3×5 + 4×5) = 2(12+15+20) = 2×47 = 94 סמ"ר</span>',
+   gen:function(){return qSurfaceArea(2,7)}},
+
+  {title:'מלבן + מקבילית',instruction:'שאלות מעורבבות על מלבן ומקבילית!',
+   tip:'מלבן: שטח = אורך × רוחב\nמקבילית: שטח = בסיס × גובה\nשימו לב לאיזו צורה מדובר!',
+   example:'🎲 שאלות מגוונות!',
+   gen:function(){
+     var types=[function(){return qAreaRect(5,18)},function(){return qAreaParallelogram(5,16)},function(){return qFindSide()}];
+     return types[rr(0,2)]();
+   }},
+
+  {title:'יחידות + מציאת צלע',instruction:'המרות ומציאת צלע חסרה!',
+   tip:'השתמשו בנוסחאות:\n• רוחב = שטח ÷ אורך\n• 1 מ"ר = 10,000 סמ"ר\n• 1 דונם = 1,000 מ"ר',
+   example:'🧮 שלבו בין כל הנוסחאות!',
+   gen:function(){
+     var types=[function(){return qAreaUnits()},function(){return qFindSide()},function(){return qAreaRect(8,20)}];
+     return types[rr(0,2)]();
+   }},
+
+  {title:'מעורבב — כל הסוגים!',instruction:'כל מה שלמדנו — באקראי!',
+   tip:'הרמה הזו כוללת את כל סוגי השאלות.\nקראו בעיון — איזו צורה? מה מבקשים?',
+   example:'🎲 כל שאלה היא הפתעה!',
+   gen:function(){
+     var types=[function(){return qAreaRect(5,20)},function(){return qAreaParallelogram(5,16)},function(){return qAreaUnits()},function(){return qFindSide()},function(){return qAreaVsPerimeter()}];
+     return types[rr(0,4)]();
+   }},
+
+  {title:'שטח פנים + מעורבב',instruction:'שאלות עם תיבה ושאר הצורות!',
+   tip:'שטח פנים תיבה = 2(ab + ac + bc)\nזכרו: ×2 בסוף!',
+   example:'💪 התמודדו עם מגוון שאלות!',
+   gen:function(){
+     var types=[function(){return qSurfaceArea(2,8)},function(){return qAreaRect(8,20)},function(){return qAreaParallelogram(5,18)},function(){return qFindSide()}];
+     return types[rr(0,3)]();
+   }},
+
+  {title:'אתגר — מספרים גדולים!',instruction:'מלבנים ומקביליות עם מספרים גדולים!',
+   tip:'אותן נוסחאות — רק כפל יותר מורכב.\nהשתמשו בכתב אם צריך!',
+   example:'מלבן <span class="math">15 × 18 = 270 סמ"ר</span>\nמקבילית <span class="math">14 × 12 = 168 סמ"ר</span>',
+   gen:function(){
+     var types=[function(){return qAreaRect(10,20)},function(){return qAreaParallelogram(8,20)},function(){return qSurfaceArea(3,10)},function(){return qAreaUnits()},function(){return qAreaVsPerimeter()}];
+     return types[rr(0,4)]();
+   }},
+
+  {title:'סופר אתגר!',instruction:'כל הסוגים — מספרים גדולים!',
+   tip:'🏆 אתם כמעט מומחים!',
+   example:'🌟 💪 🏆',
+   gen:function(){
+     var types=[function(){return qAreaRect(10,20)},function(){return qAreaParallelogram(10,20)},function(){return qSurfaceArea(3,10)},function(){return qAreaUnits()},function(){return qFindSide()},function(){return qAreaVsPerimeter()}];
+     return types[rr(0,5)]();
+   }},
+
+  {title:'מאסטר!',instruction:'הרמה הקשה ביותר — כל הסוגים!',
+   tip:'🏆 אין עליכם! שלטתם בשטחים!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[function(){return qAreaRect(12,20)},function(){return qAreaParallelogram(10,20)},function(){return qSurfaceArea(4,12)},function(){return qAreaUnits()},function(){return qFindSide()},function(){return qAreaVsPerimeter()}];
+     return types[rr(0,5)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>משמעות השבר העשרוני — כיתה ה' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#16a34a;--primary-dark:#15803d;--primary-light:#dcfce7;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#16a34a 0%,#22c55e 50%,#4ade80 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(22,163,74,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:3rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.big-num .hl{color:var(--error);text-decoration:underline;text-underline-offset:6px}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;direction:ltr;unicode-bidi:embed}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:2.2rem;padding:6px 20px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🔢</div><div><h1>משמעות השבר העשרוני</h1><div class="subtitle">כיתה ה' — עשיריות, מאיות ואלפיות</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">משמעות השבר העשרוני — כיתה ה' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>🔢 משמעות השבר העשרוני</h2><p><strong>מהו שבר עשרוני?</strong> דרך לכתוב חלקים של שלם באמצעות נקודה עשרונית.</p><p>🔹 <strong>עשיריות</strong> — ספרה ראשונה אחרי הנקודה. לדוגמה: <span class="math">0.3</span> = 3 עשיריות = <span class="math">3/10</span><br>🔹 <strong>מאיות</strong> — ספרה שנייה אחרי הנקודה. לדוגמה: <span class="math">0.07</span> = 7 מאיות = <span class="math">7/100</span><br>🔹 <strong>אלפיות</strong> — ספרה שלישית אחרי הנקודה. לדוגמה: <span class="math">0.005</span> = 5 אלפיות = <span class="math">5/1000</span></p><p>לדוגמה:<br>🔸 <span class="math">0.73</span> = 7 עשיריות ו-3 מאיות<br>🔸 <span class="math">0.250</span> = <span class="math">0.25</span> (אפס בסוף לא משנה את הערך)<br>🔸 <span class="math">50%</span> = <span class="math">0.5</span> = חצי</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function d(v){return '<span style="direction:ltr;unicode-bidi:embed;font-weight:700">'+v+'</span>'}
+function fracHTML(n,den){return '<span style="display:inline-flex;flex-direction:column;align-items:center;direction:ltr;unicode-bidi:embed;font-weight:800;vertical-align:middle;margin:0 4px"><span style="border-bottom:2px solid var(--text);padding:0 8px;line-height:1.3">'+n+'</span><span style="padding:0 8px;line-height:1.3">'+den+'</span></span>'}
+
+/* Hebrew word maps */
+var onesW=['אפס','אחת','שתיים','שלוש','ארבע','חמש','שש','שבע','שמונה','תשע'];
+var teensW=['עשר','אחת-עשרה','שתים-עשרה','שלוש-עשרה','ארבע-עשרה','חמש-עשרה','שש-עשרה','שבע-עשרה','שמונה-עשרה','תשע-עשרה'];
+var tensW=['','עשר','עשרים','שלושים','ארבעים','חמישים','שישים','שבעים','שמונים','תשעים'];
+
+function digitWord(d){return onesW[d]}
+
+/* Describe a decimal in words */
+function descTenths(t){return digitWord(t)+' עשיריות'}
+function descHundredths(h){
+  if(h<10) return digitWord(h)+' מאיות';
+  if(h<20) return teensW[h-10]+' מאיות';
+  var t=Math.floor(h/10),u=h%10;
+  if(u===0) return tensW[t]+' מאיות';
+  return tensW[t]+' ו'+digitWord(u)+' מאיות';
+}
+function descThousandths(th){
+  if(th<10) return digitWord(th)+' אלפיות';
+  if(th<20) return teensW[th-10]+' אלפיות';
+  if(th<100){var t2=Math.floor(th/10),u2=th%10;if(u2===0)return tensW[t2]+' אלפיות';return tensW[t2]+' ו'+digitWord(u2)+' אלפיות';}
+  var h=Math.floor(th/100),rem=th%100;
+  var hW=(h===1?'מאה':(h===2?'מאתיים':digitWord(h)+' מאות'));
+  if(rem===0) return hW+' אלפיות';
+  if(rem<10) return hW+' ו'+digitWord(rem)+' אלפיות';
+  if(rem<20) return hW+' ו'+teensW[rem-10]+' אלפיות';
+  var t3=Math.floor(rem/10),u3=rem%10;
+  if(u3===0) return hW+' ו'+tensW[t3]+' אלפיות';
+  return hW+' '+tensW[t3]+' ו'+digitWord(u3)+' אלפיות';
+}
+
+/* Full description: break decimal into tenths + hundredths + thousandths */
+function fullDesc(decStr){
+  var parts=decStr.split('.');
+  var frac=parts[1]||'0';
+  while(frac.length<3) frac+='0';
+  var t=parseInt(frac[0]),h=parseInt(frac[1]),th=parseInt(frac[2]);
+  var segs=[];
+  if(t>0) segs.push(digitWord(t)+' עשיריות');
+  if(h>0) segs.push(digitWord(h)+' מאיות');
+  if(th>0) segs.push(digitWord(th)+' אלפיות');
+  if(segs.length===0) return 'אפס';
+  if(segs.length===1) return segs[0];
+  return segs.slice(0,-1).join(', ')+' ו'+segs[segs.length-1];
+}
+
+/* Compact description: as a single unit (73 hundredths) */
+function compactDesc(decStr){
+  var parts=decStr.split('.');
+  var frac=parts[1]||'0';
+  /* remove trailing zeros for compact */
+  var trimmed=frac.replace(/0+$/,'')||'0';
+  var len=trimmed.length;
+  var num=parseInt(trimmed);
+  if(len===1) return descTenths(num);
+  if(len===2) return descHundredths(num);
+  return descThousandths(num);
+}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: Read decimal in words */
+function qReadDecimal(mode){
+  var decStr,correct,wrongs;
+  if(mode==='tenths'){
+    var t=rr(1,9);
+    decStr='0.'+t;
+    correct=descTenths(t);
+    var w1=rr(1,9);while(w1===t)w1=rr(1,9);
+    wrongs=[descTenths(w1), digitWord(t)+' מאיות', digitWord(t)+' אלפיות'];
+  } else if(mode==='hundredths'){
+    var t2=rr(1,9),h2=rr(1,9);
+    decStr='0.'+t2+h2;
+    var asNum=t2*10+h2;
+    correct=fullDesc(decStr);
+    wrongs=[descHundredths(asNum), digitWord(h2)+' עשיריות ו'+digitWord(t2)+' מאיות', descThousandths(asNum)];
+  } else {
+    var t3=rr(1,9),h3=rr(0,9),th3=rr(1,9);
+    decStr='0.'+t3+h3+th3;
+    correct=fullDesc(decStr);
+    var asNum3=t3*100+h3*10+th3;
+    wrongs=[descThousandths(asNum3), digitWord(th3)+' עשיריות, '+digitWord(h3)+' מאיות ו'+digitWord(t3)+' אלפיות', descHundredths(t3*10+h3)+' ו'+digitWord(th3)+' עשיריות'];
+  }
+  /* filter duplicates and ensure 4 unique options */
+  var options=[correct];
+  for(var i=0;i<wrongs.length;i++){if(wrongs[i]!==correct&&options.indexOf(wrongs[i])===-1)options.push(wrongs[i])}
+  while(options.length<4){var extra=digitWord(rr(1,9))+' '+['עשיריות','מאיות','אלפיות'][rr(0,2)];if(options.indexOf(extra)===-1)options.push(extra)}
+  options=shuffle(options);
+  return{type:'choice',qText:'כתבו במילים: '+d(decStr),display:'<div class="num-display"><span class="big-num">'+decStr+'</span></div>',answer:correct,options:options,colClass:'cols-2',explain:d(decStr)+' = '+correct};
+}
+
+/* Type 2: Write decimal in digits from words */
+function qWriteDecimal(){
+  var type=rr(0,2);
+  var decStr,desc;
+  if(type===0){
+    var t=rr(1,9);decStr='0.'+t;desc=descTenths(t);
+  } else if(type===1){
+    var t2=rr(1,9),h2=rr(1,9);decStr='0.'+t2+h2;desc=fullDesc(decStr);
+  } else {
+    var t3=rr(1,9),h3=rr(0,9),th3=rr(1,9);decStr='0.'+t3+h3+th3;desc=fullDesc(decStr);
+  }
+  var wrongs=new Set();
+  /* generate plausible wrong answers */
+  for(var att=0;att<50&&wrongs.size<3;att++){
+    var w;
+    if(type===0){w='0.'+rr(1,9)}
+    else if(type===1){w='0.'+rr(1,9)+rr(0,9)}
+    else{w='0.'+rr(1,9)+rr(0,9)+rr(1,9)}
+    if(w!==decStr) wrongs.add(w);
+  }
+  var options=shuffle([decStr].concat(Array.from(wrongs)));
+  return{type:'choice',qText:'כתבו בספרות: <strong>'+desc+'</strong>',display:'',answer:decStr,options:options,colClass:'cols-4',explain:desc+' = '+d(decStr)};
+}
+
+/* Type 3: Digit value in decimal */
+function qDigitValueDec(){
+  var t=rr(1,9),h=rr(1,9),th=rr(1,9);
+  var decStr='0.'+t+h+th;
+  var pos=rr(0,2);
+  var digit,correctVal,hlIdx;
+  if(pos===0){digit=t;correctVal=digit+' עשיריות';hlIdx=0}
+  else if(pos===1){digit=h;correctVal=digit+' מאיות';hlIdx=1}
+  else{digit=th;correctVal=digit+' אלפיות';hlIdx=2}
+  var wrongs=[digit+' עשיריות',digit+' מאיות',digit+' אלפיות'];
+  wrongs=wrongs.filter(function(w){return w!==correctVal});
+  wrongs.push(digit+'');
+  wrongs=wrongs.filter(function(w){return w!==correctVal});
+  var options=shuffle([correctVal].concat(wrongs.slice(0,3)));
+  while(options.length<4){var e=rr(1,9)+' '+['עשיריות','מאיות','אלפיות'][rr(0,2)];if(options.indexOf(e)===-1)options.push(e)}
+  options=shuffle(options.slice(0,4));
+  /* highlight the digit in display */
+  var chars=decStr.split('');
+  var fracPart=chars.slice(2);/* after '0.' */
+  fracPart[hlIdx]='<span class="hl">'+fracPart[hlIdx]+'</span>';
+  var hlStr='0.'+fracPart.join('');
+  return{type:'choice',qText:'מהו ערך הספרה <strong>'+digit+'</strong> ב-'+d(decStr)+'?',display:'<div class="num-display"><span class="big-num">'+hlStr+'</span></div>',answer:correctVal,options:options,colClass:'cols-2',explain:'הספרה '+digit+' נמצאת במקום ה'+['עשיריות','מאיות','אלפיות'][pos]+', לכן ערכה הוא '+correctVal};
+}
+
+/* Type 4: Decimal to fraction */
+function qDecimalToFraction(){
+  var type=rr(0,2);
+  var decStr,num,den,correct;
+  if(type===0){
+    num=rr(1,9);den=10;decStr='0.'+num;
+  } else if(type===1){
+    num=rr(1,99);while(num%10===0)num=rr(1,99);
+    den=100;decStr='0.'+(num<10?'0'+num:num);
+  } else {
+    num=rr(1,999);while(num%10===0)num=rr(1,999);
+    den=1000;decStr='0.'+(num<10?'00'+num:(num<100?'0'+num:num));
+  }
+  correct=fracHTML(num,den);
+  var wrongs=[];
+  /* wrong denominators */
+  var allDens=[10,100,1000];
+  for(var i=0;i<allDens.length;i++){if(allDens[i]!==den)wrongs.push(fracHTML(num,allDens[i]))}
+  /* wrong numerator */
+  var wn=num*10;if(wn<=1000)wrongs.push(fracHTML(wn,den));
+  wrongs=wrongs.filter(function(w){return w!==correct});
+  var options=shuffle([correct].concat(wrongs.slice(0,3)));
+  while(options.length<4){
+    var rn=rr(1,den-1),rd=[10,100,1000][rr(0,2)];
+    var cand=fracHTML(rn,rd);
+    if(options.indexOf(cand)===-1)options.push(cand);
+  }
+  options=shuffle(options.slice(0,4));
+  return{type:'choice',qText:d(decStr)+' = ?',display:'<div class="num-display"><span class="big-num">'+decStr+'</span></div>',answer:correct,options:options,colClass:'cols-4',explain:d(decStr)+' = '+correct};
+}
+
+/* Type 5: Decimal equality (0.73 = 0.730?) */
+function qDecimalEqual(){
+  var isEqual=rr(0,1)===1;
+  var t=rr(1,9),h=rr(0,9);
+  var dec1,dec2,correct,explain;
+  if(isEqual){
+    if(rr(0,1)===0){
+      dec1='0.'+t+h;dec2='0.'+t+h+'0';
+    } else {
+      dec1='0.'+t;dec2='0.'+t+'0';
+    }
+    correct='כן';
+    explain='הוספת אפס בסוף (מימין) לא משנה את ערך המספר: '+d(dec1)+' = '+d(dec2);
+  } else {
+    var t2=rr(1,9);while(t2===t&&h===0)t2=rr(1,9);
+    if(rr(0,1)===0){
+      dec1='0.'+t+h;dec2='0.'+t2+h;
+      if(dec1===dec2){t2=t===9?t-1:t+1;dec2='0.'+t2+h}
+    } else {
+      var h2=rr(0,9);while(h2===h&&t2===t)h2=rr(0,9);
+      dec1='0.'+t+h;dec2='0.'+t+h2;
+      if(dec1===dec2){h2=h===9?h-1:h+1;dec2='0.'+t+h2}
+    }
+    correct='לא';
+    explain=d(dec1)+' ≠ '+d(dec2)+' — הערכים שונים';
+  }
+  return{type:'choice',qText:'האם '+d(dec1)+' = '+d(dec2)+' ?',display:'<div class="num-display"><span class="big-num">'+dec1+' = '+dec2+' ?</span></div>',answer:correct,options:['כן','לא'],colClass:'cols-2',explain:explain};
+}
+
+/* Type 6: Percent intro */
+function qPercentIntro(){
+  var pairs=[
+    {pct:'10%',dec:'0.1',frac:fracHTML(1,10),descH:'עשירית'},
+    {pct:'20%',dec:'0.2',frac:fracHTML(2,10),descH:'שתי עשיריות'},
+    {pct:'25%',dec:'0.25',frac:fracHTML(1,4),descH:'רבע'},
+    {pct:'50%',dec:'0.5',frac:fracHTML(1,2),descH:'חצי'},
+    {pct:'75%',dec:'0.75',frac:fracHTML(3,4),descH:'שלושה רבעים'},
+    {pct:'100%',dec:'1.0',frac:fracHTML(1,1),descH:'שלם'}
+  ];
+  var idx=rr(0,pairs.length-1);
+  var p=pairs[idx];
+  var qType=rr(0,1);
+  var correct,options,qText,display;
+  if(qType===0){
+    /* percent → decimal */
+    qText=d(p.pct)+' = ? (בשבר עשרוני)';
+    correct=p.dec;
+    var wrongs=new Set();
+    for(var i=0;i<pairs.length;i++){if(pairs[i].dec!==correct)wrongs.add(pairs[i].dec)}
+    wrongs.add('0.'+(rr(1,9)));
+    options=shuffle([correct].concat(Array.from(wrongs).slice(0,3)));
+    display='<div class="num-display"><span class="big-num" style="font-size:2.5rem">'+p.pct+'</span></div>';
+  } else {
+    /* percent → fraction */
+    qText=d(p.pct)+' = ? (בשבר פשוט)';
+    correct=p.frac;
+    var wrongF=[];
+    for(var j=0;j<pairs.length;j++){if(pairs[j].frac!==correct)wrongF.push(pairs[j].frac)}
+    options=shuffle([correct].concat(wrongF.slice(0,3)));
+    display='<div class="num-display"><span class="big-num" style="font-size:2.5rem">'+p.pct+'</span></div>';
+  }
+  return{type:'choice',qText:qText,display:display,answer:correct,options:options.slice(0,4),colClass:'cols-4',explain:d(p.pct)+' = '+d(p.dec)+' = '+p.frac};
+}
+
+/* Type 7: Place decimal point */
+function qPlaceDecimalPoint(){
+  /* pick a target range and a number */
+  var ranges=[
+    {lo:0.1,hi:1,loTxt:'0.1',hiTxt:'1'},
+    {lo:1,hi:10,loTxt:'1',hiTxt:'10'},
+    {lo:10,hi:100,loTxt:'10',hiTxt:'100'},
+    {lo:100,hi:1000,loTxt:'100',hiTxt:'1000'}
+  ];
+  var rIdx=rr(0,ranges.length-1);
+  var range=ranges[rIdx];
+  /* pick digits that produce a valid number in range */
+  var digits,attempts=0,result;
+  do{
+    if(rIdx===0){digits=rr(1,9);result=digits/10}
+    else if(rIdx===1){digits=rr(10,99);result=digits/10}
+    else if(rIdx===2){digits=rr(100,999);result=digits/10}
+    else{digits=rr(1000,9999);result=digits/10}
+    attempts++;
+  }while(attempts<100&&(result<range.lo||result>=range.hi));
+  var correctStr=String(result);
+  /* generate wrong placements */
+  var wrongs=new Set();
+  var dStr=String(digits);
+  for(var i=0;i<=dStr.length;i++){
+    var candidate;
+    if(i===0) candidate='0.'+dStr;
+    else if(i===dStr.length) candidate=dStr+'.0';
+    else candidate=dStr.slice(0,i)+'.'+dStr.slice(i);
+    /* normalize: remove trailing .0 if integer */
+    var val=parseFloat(candidate);
+    candidate=String(val);
+    if(candidate!==correctStr) wrongs.add(candidate);
+  }
+  var wArr=Array.from(wrongs).slice(0,3);
+  while(wArr.length<3){var f=String(parseFloat(dStr)/Math.pow(10,rr(0,3)));if(f!==correctStr&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var options=shuffle([correctStr].concat(wArr.slice(0,3)));
+  return{type:'choice',qText:'הספרות הן <strong>'+dStr+'</strong>. מקמו את הנקודה כדי לקבל מספר בין '+d(range.loTxt)+' ל-'+d(range.hiTxt),display:'<div class="num-display"><span class="big-num" style="font-size:2.2rem">'+dStr+' → ?</span></div>',answer:correctStr,options:options.slice(0,4),colClass:'cols-4',explain:'התשובה היא '+d(correctStr)+' שנמצא בין '+d(range.loTxt)+' ל-'+d(range.hiTxt)};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'עשיריות — קריאה במילים',instruction:'קראו את השבר העשרוני וכתבו במילים',
+   tip:'<strong>עשיריות</strong> — ספרה אחת אחרי הנקודה.\nלדוגמה: '+d('0.3')+' = 3 עשיריות.',
+   example:d('0.7')+' = שבע עשיריות\n'+d('0.2')+' = שתיים עשיריות',
+   gen:function(){return qReadDecimal('tenths')}},
+
+  {title:'מאיות — קריאה במילים',instruction:'שתי ספרות אחרי הנקודה!',
+   tip:'<strong>מאיות</strong> — שתי ספרות אחרי הנקודה.\nהספרה הראשונה = עשיריות, השנייה = מאיות.',
+   example:d('0.73')+' = 7 עשיריות ו-3 מאיות\n'+d('0.15')+' = אחת עשיריות ו-5 מאיות',
+   gen:function(){return qReadDecimal('hundredths')}},
+
+  {title:'אלפיות — קריאה במילים',instruction:'שלוש ספרות אחרי הנקודה!',
+   tip:'<strong>אלפיות</strong> — שלוש ספרות אחרי הנקודה.\nעשיריות → מאיות → אלפיות.',
+   example:d('0.125')+' = אחת עשיריות, שתיים מאיות ו-5 אלפיות\n'+d('0.009')+' = 9 אלפיות',
+   gen:function(){return qReadDecimal('thousandths')}},
+
+  {title:'ערך ספרה',instruction:'מהו ערך הספרה המסומנת?',
+   tip:'<strong>ערך הספרה</strong> תלוי ב<strong>מיקומה</strong>:\nספרה ראשונה אחרי הנקודה = עשיריות\nספרה שנייה = מאיות\nספרה שלישית = אלפיות',
+   example:'ב-'+d('0.735')+': הספרה 7 = 7 עשיריות, 3 = 3 מאיות, 5 = 5 אלפיות',
+   gen:function(){return qDigitValueDec()}},
+
+  {title:'כתיבה בספרות',instruction:'הפכו מילים למספר עשרוני',
+   tip:'קודם זהו את המקום (עשיריות / מאיות / אלפיות),\nואז כתבו את הספרות במקום הנכון.',
+   example:'שלוש עשיריות וחמש מאיות = '+d('0.35')+'\nשבע מאיות = '+d('0.07'),
+   gen:function(){return qWriteDecimal()}},
+
+  {title:'מעבר לשבר פשוט',instruction:'הפכו שבר עשרוני לשבר פשוט',
+   tip:'<strong>שבר עשרוני → שבר פשוט:</strong>\nעשיריות → מחלקים ב-10\nמאיות → מחלקים ב-100\nאלפיות → מחלקים ב-1000',
+   example:d('0.3')+' = '+fracHTML(3,10)+'\n'+d('0.25')+' = '+fracHTML(25,100),
+   gen:function(){return qDecimalToFraction()}},
+
+  {title:'שוויון עשרוניים',instruction:'האם שני המספרים שווים?',
+   tip:'<strong>כלל חשוב:</strong> הוספת אפסים <strong>מימין</strong> (בסוף) לא משנה את הערך!\n'+d('0.5')+' = '+d('0.50')+' = '+d('0.500'),
+   example:d('0.7')+' = '+d('0.70')+' ← כן!\n'+d('0.7')+' ≠ '+d('0.07')+' ← לא!',
+   gen:function(){return qDecimalEqual()}},
+
+  {title:'אחוזים — היכרות ראשונה',instruction:'מהו הערך של האחוז?',
+   tip:'<strong>אחוז = חלקים ממאה.</strong>\n'+d('50%')+' = '+fracHTML(50,100)+' = '+fracHTML(1,2)+' = '+d('0.5')+'\n'+d('25%')+' = '+fracHTML(25,100)+' = '+fracHTML(1,4)+' = '+d('0.25'),
+   example:d('10%')+' = '+d('0.1')+'\n'+d('75%')+' = '+d('0.75'),
+   gen:function(){return qPercentIntro()}},
+
+  {title:'מיקום נקודה עשרונית',instruction:'מקמו את הנקודה כדי לקבל מספר בטווח!',
+   tip:'חשבו: איפה לשים את הנקודה כדי שהמספר יהיה בטווח הנכון?\nנסו כל אפשרות בראש.',
+   example:'הספרות 325, טווח 1–10 → '+d('3.25')+'\nהספרות 325, טווח 10–100 → '+d('32.5'),
+   gen:function(){return qPlaceDecimalPoint()}},
+
+  /* 10-15: Mixed levels */
+  {title:'מעורבב — עשיריות ומאיות',instruction:'שאלות מגוונות!',
+   tip:'שלבו את כל מה שלמדתם על עשיריות ומאיות!',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[function(){return qReadDecimal('tenths')},function(){return qReadDecimal('hundredths')},function(){return qDigitValueDec()},function(){return qWriteDecimal()},function(){return qDecimalToFraction()}];
+     return types[rr(0,4)]();
+   }},
+
+  {title:'מעורבב — כל סוגי הספרות',instruction:'עשיריות, מאיות ואלפיות!',
+   tip:'שלושה מקומות: עשיריות, מאיות, אלפיות.\nזכרו: ערך הספרה תלוי במיקומה!',
+   example:'💪 בהצלחה!',
+   gen:function(){
+     var types=[function(){return qReadDecimal(['tenths','hundredths','thousandths'][rr(0,2)])},function(){return qDigitValueDec()},function(){return qWriteDecimal()},function(){return qDecimalEqual()}];
+     return types[rr(0,3)]();
+   }},
+
+  {title:'שברים ושוויון',instruction:'שברים פשוטים ושוויון עשרוניים!',
+   tip:'זכרו:\n• עשרוני → שבר פשוט: סופרים ספרות אחרי הנקודה\n• אפס בסוף = אותו ערך',
+   example:d('0.250')+' = '+d('0.25')+' = '+fracHTML(25,100),
+   gen:function(){
+     var types=[function(){return qDecimalToFraction()},function(){return qDecimalEqual()},function(){return qDigitValueDec()},function(){return qReadDecimal('hundredths')}];
+     return types[rr(0,3)]();
+   }},
+
+  {title:'אחוזים ומיקום נקודה',instruction:'אחוזים ומיקום נקודה עשרונית!',
+   tip:'אחוזים = חלקים ממאה.\nמיקום הנקודה קובע את גודל המספר!',
+   example:'🏆 אתם מתקדמים!',
+   gen:function(){
+     var types=[function(){return qPercentIntro()},function(){return qPlaceDecimalPoint()},function(){return qDecimalToFraction()},function(){return qDecimalEqual()}];
+     return types[rr(0,3)]();
+   }},
+
+  {title:'סופר מעורבב',instruction:'כל סוגי השאלות ביחד!',
+   tip:'🏆 כל מה שלמדתם — בערבוב אחד!',
+   example:'💪 אתם יכולים!',
+   gen:function(){
+     var types=[function(){return qReadDecimal(['tenths','hundredths','thousandths'][rr(0,2)])},function(){return qWriteDecimal()},function(){return qDigitValueDec()},function(){return qDecimalToFraction()},function(){return qDecimalEqual()},function(){return qPercentIntro()},function(){return qPlaceDecimalPoint()}];
+     return types[rr(0,6)]();
+   }},
+
+  {title:'מאסטר!',instruction:'הרמה הכי קשה — כל הסוגים!',
+   tip:'🏆 אין עליכם! שלטתם בשברים עשרוניים!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[function(){return qReadDecimal('thousandths')},function(){return qWriteDecimal()},function(){return qDigitValueDec()},function(){return qDecimalToFraction()},function(){return qDecimalEqual()},function(){return qPercentIntro()},function(){return qPlaceDecimalPoint()}];
+     return types[rr(0,6)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=6;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+='<br>'+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

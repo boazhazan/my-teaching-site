@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ניתוח סיכויים — כיתה ד' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#c2410c;--primary-dark:#9a3412;--primary-light:#fff7ed;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#9a3412 0%,#c2410c 50%,#ea580c 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(194,65,12,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.visual-display{text-align:center;margin:12px 0;font-size:1.6rem;letter-spacing:2px;line-height:1.8}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🎲</div><div><h1>ניתוח סיכויים</h1><div class="subtitle">כיתה ד' — אפשרי, בלתי אפשרי, ודאי</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">ניתוח סיכויים — כיתה ד' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>🎲 ניתוח סיכויים</h2><p><strong>מהי הסתברות?</strong> הסתברות היא הסיכוי שמשהו יקרה.</p><p>🔹 <strong>ודאי</strong> — יקרה בוודאות! (למשל: השמש תזרח מחר)<br>🔹 <strong>אפשרי</strong> — יכול לקרות ויכול שלא (למשל: ירד גשם מחר)<br>🔹 <strong>בלתי אפשרי</strong> — לא יכול לקרות בשום אופן (למשל: נפגוש דינוזאור ברחוב)</p><p>🔸 <strong>הטלת קובייה:</strong> יש 6 תוצאות אפשריות (1-6). אי אפשר לקבל 7!<br>🔸 <strong>שקית סוכריות:</strong> ככל שיש יותר סוכריות מצבע מסוים, הסיכוי לשלוף אותן גדול יותר.</p><p>🔸 <strong>תמיד</strong> = ודאי | <strong>אולי</strong> = אפשרי | <strong>לעולם לא</strong> = בלתי אפשרי</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function pick(a){return a[rr(0,a.length-1)]}
+
+/* ========== EVENT POOLS ========== */
+var certainEvents=[
+  'השמש תזרח מחר בבוקר',
+  'אחרי יום שני יגיע יום שלישי',
+  'אם אזרוק כדור לאוויר — הוא ייפול חזרה',
+  'מים יזרמו מלמעלה למטה',
+  'אחרי הלילה יגיע יום',
+  'בשבוע יש 7 ימים',
+  'אחרי החורף יגיע האביב',
+  'כדור שנזרק לאוויר ייפול למטה',
+  'היום יהפוך ללילה',
+  'לכל משולש יש 3 צלעות',
+  'מספר זוגי מתחלק ב-2',
+  'אם נספור מ-1 עד 10, נעבור דרך 5',
+  'השמש שוקעת בערב',
+  'אחרי 12 בצהריים יגיע 1 בצהריים'
+];
+var impossibleEvents=[
+  'נפגוש דינוזאור חי ברחוב',
+  'נטוס בלי כנפיים ובלי מטוס',
+  'נמצא פינגווין במדבר סהרה',
+  'נזרוק קובייה ונקבל 7',
+  'נהפוך מים לשוקולד בלחיצת כפתור',
+  'הירח ייפול על הראש שלנו',
+  'נמצא שלג רותח',
+  'חתול ידבר בעברית',
+  'דג ירוץ על הכביש',
+  'נקפוא מים בתוך תנור לוהט',
+  'עץ יעוף לשמיים',
+  'נזרוק מטבע ונקבל 3 צדדים',
+  'נראה את השמש בלילה חשוך',
+  'ילד בכיתה ד\' יהיה בן 50'
+];
+var possibleEvents=[
+  'ירד גשם מחר',
+  'נזכה בהגרלה',
+  'הקבוצה שלנו תנצח במשחק',
+  'מחר יהיה חם מאוד',
+  'נמצא חתול ברחוב',
+  'חבר יביא עוגה לבית הספר',
+  'נקבל ציון 100 במבחן',
+  'יהיה שלג בחורף',
+  'נראה קשת בענן אחרי הגשם',
+  'נפגוש חבר ישן בקניון',
+  'המורה תיתן שיעורי בית',
+  'נמצא שקל על הרצפה',
+  'הכלב ינבח כשיראה חתול',
+  'נתקע בפקק בדרך לבית הספר'
+];
+
+/* Dice events */
+var diceEvents=[
+  {text:'בהטלת קובייה, לקבל את המספר 4',answer:'אפשרי',explain:'בקובייה יש מספרים 1-6, אז 4 אפשרי'},
+  {text:'בהטלת קובייה, לקבל מספר קטן מ-7',answer:'ודאי',explain:'כל המספרים בקובייה (1-6) קטנים מ-7'},
+  {text:'בהטלת קובייה, לקבל את המספר 8',answer:'בלתי אפשרי',explain:'בקובייה יש רק מספרים 1-6'},
+  {text:'בהטלת קובייה, לקבל מספר גדול מ-0',answer:'ודאי',explain:'כל המספרים בקובייה (1-6) גדולים מ-0'},
+  {text:'בהטלת קובייה, לקבל את המספר 0',answer:'בלתי אפשרי',explain:'בקובייה אין 0, רק 1-6'},
+  {text:'בהטלת קובייה, לקבל מספר זוגי',answer:'אפשרי',explain:'2, 4, 6 הם זוגיים — אפשרי אבל לא ודאי'},
+  {text:'בהטלת קובייה, לקבל מספר גדול מ-6',answer:'בלתי אפשרי',explain:'המספר הגדול ביותר בקובייה הוא 6'},
+  {text:'בהטלת קובייה, לקבל מספר בין 1 ל-6',answer:'ודאי',explain:'כל המספרים בקובייה הם 1-6, אז זה בטוח'},
+  {text:'בהטלת קובייה, לקבל מספר אי-זוגי',answer:'אפשרי',explain:'1, 3, 5 הם אי-זוגיים — אפשרי'},
+  {text:'בהטלת קובייה, לקבל מספר שמתחלק ב-3',answer:'אפשרי',explain:'3 ו-6 מתחלקים ב-3 — אפשרי'}
+];
+
+/* More-likely pairs for dice */
+var moreLikelyDice=[
+  {text:'בהטלת קובייה, מה יותר סביר?',optA:'מספר קטן מ-5',optB:'המספר 6',answer:'מספר קטן מ-5',explain:'יש 4 מספרים קטנים מ-5 (1,2,3,4) לעומת תוצאה אחת (6)'},
+  {text:'בהטלת קובייה, מה יותר סביר?',optA:'מספר זוגי',optB:'המספר 1',answer:'מספר זוגי',explain:'יש 3 מספרים זוגיים (2,4,6) לעומת תוצאה אחת (1)'},
+  {text:'בהטלת קובייה, מה יותר סביר?',optA:'מספר גדול מ-4',optB:'מספר קטן מ-4',answer:'מספר קטן מ-4',explain:'יש 3 מספרים קטנים מ-4 (1,2,3) לעומת 2 גדולים מ-4 (5,6)'},
+  {text:'בהטלת קובייה, מה יותר סביר?',optA:'מספר גדול מ-2',optB:'מספר קטן מ-3',answer:'מספר גדול מ-2',explain:'יש 4 מספרים גדולים מ-2 (3,4,5,6) לעומת 2 קטנים מ-3 (1,2)'},
+  {text:'בהטלת קובייה, מה יותר סביר?',optA:'מספר שמתחלק ב-2',optB:'המספר 5',answer:'מספר שמתחלק ב-2',explain:'יש 3 מספרים שמתחלקים ב-2 (2,4,6) לעומת תוצאה אחת (5)'}
+];
+
+/* Always/Never/Maybe descriptions */
+var alwaysNeverMaybe=[
+  {text:'השמש תזרח מחר',answer:'תמיד (ודאי)',explain:'השמש זורחת כל בוקר — זה ודאי'},
+  {text:'נוריד גשם מהשמיים בלחיצת כפתור',answer:'לעולם לא (בלתי אפשרי)',explain:'אי אפשר לשלוט במזג האוויר בלחיצת כפתור'},
+  {text:'מחר ירד גשם',answer:'אולי (אפשרי)',explain:'לפעמים יורד גשם ולפעמים לא — תלוי במזג האוויר'},
+  {text:'בשנה יש 12 חודשים',answer:'תמיד (ודאי)',explain:'תמיד יש 12 חודשים בשנה'},
+  {text:'ננצח בכל משחק שנשחק',answer:'אולי (אפשרי)',explain:'אפשר לנצח ואפשר להפסיד — לא בטוח'},
+  {text:'אבן תרחף באוויר בלי שום עזרה',answer:'לעולם לא (בלתי אפשרי)',explain:'הכבידה מושכת אבנים למטה — לא יכול לקרות'},
+  {text:'ביום שישי הבא יהיה שבת',answer:'תמיד (ודאי)',explain:'אחרי יום שישי תמיד מגיע יום שבת'},
+  {text:'נפגוש את הנשיא ברחוב',answer:'אולי (אפשרי)',explain:'זה לא סביר במיוחד, אבל אפשרי'},
+  {text:'דג יטפס על עץ',answer:'לעולם לא (בלתי אפשרי)',explain:'דגים חיים במים ולא יכולים לטפס'},
+  {text:'נראה ציפור עפה בשמיים',answer:'אולי (אפשרי)',explain:'יש סיכוי טוב, אבל לא ודאי בכל רגע'},
+  {text:'אחרי 9 יבוא 10',answer:'תמיד (ודאי)',explain:'בספירה, אחרי 9 תמיד בא 10'},
+  {text:'נמצא אוצר זהב בחצר הבית',answer:'אולי (אפשרי)',explain:'לא סביר, אבל תיאורטית אפשרי'},
+  {text:'חתול ינהג במכונית',answer:'לעולם לא (בלתי אפשרי)',explain:'חתולים לא יכולים לנהוג'},
+  {text:'נזרוק מטבע ונקבל עץ או פלי',answer:'תמיד (ודאי)',explain:'למטבע יש רק שני צדדים — אחד מהם בטוח יצא'}
+];
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: Classify event — certain / possible / impossible */
+function qClassifyEvent(pool){
+  var type,event;
+  if(pool==='simple'){
+    type=rr(0,2);
+  } else {
+    type=rr(0,2);
+  }
+  if(type===0){event=pick(certainEvents);var correct='ודאי'}
+  else if(type===1){event=pick(possibleEvents);var correct='אפשרי'}
+  else{event=pick(impossibleEvents);var correct='בלתי אפשרי'}
+  return{type:'choice',qText:'מה הסיכוי שזה יקרה?',display:'<div class="visual-display" style="font-size:1.1rem;font-weight:600;color:var(--primary-dark)">'+event+'</div>',answer:correct,options:shuffle(['ודאי','אפשרי','בלתי אפשרי']),colClass:'cols-3',explain:correct==='ודאי'?'זה יקרה בוודאות — אי אפשר אחרת!':correct==='אפשרי'?'זה יכול לקרות, אבל לא בטוח':'זה לא יכול לקרות בשום אופן'};
+}
+
+/* Type 2: More likely — dice */
+function qMoreLikely(){
+  var item=pick(moreLikelyDice);
+  return{type:'choice',qText:item.text,display:'<div class="visual-display">🎲</div>',answer:item.answer,options:shuffle([item.optA,item.optB]),colClass:'cols-2',explain:item.explain};
+}
+
+/* Type 3: Dice probability — certain/possible/impossible */
+function qDiceProbability(){
+  var item=pick(diceEvents);
+  return{type:'choice',qText:'מה הסיכוי?',display:'<div class="visual-display" style="font-size:1.1rem;font-weight:600;color:var(--primary-dark)">'+item.text+'</div>',answer:item.answer,options:shuffle(['ודאי','אפשרי','בלתי אפשרי']),colClass:'cols-3',explain:item.explain};
+}
+
+/* Type 4: Candy bag — which color more likely */
+function qCandyBag(complex){
+  var colors=[
+    {name:'אדום',emoji:'🔴'},
+    {name:'כחול',emoji:'🔵'},
+    {name:'ירוק',emoji:'🟢'},
+    {name:'צהוב',emoji:'🟡'},
+    {name:'סגול',emoji:'🟣'}
+  ];
+  var c1idx=rr(0,4),c2idx;
+  do{c2idx=rr(0,4)}while(c2idx===c1idx);
+  var c1=colors[c1idx],c2=colors[c2idx];
+  var n1,n2;
+  if(complex){
+    n1=rr(4,10);
+    do{n2=rr(4,10)}while(n2===n1);
+  } else {
+    n1=rr(3,8);
+    do{n2=rr(1,8)}while(n2===n1);
+  }
+  var more=n1>n2?c1:c2;
+  var moreN=n1>n2?n1:n2;
+  var lessN=n1>n2?n2:n1;
+  var visual='';
+  for(var i=0;i<n1;i++) visual+=c1.emoji;
+  visual+=' ';
+  for(var i=0;i<n2;i++) visual+=c2.emoji;
+  return{type:'choice',qText:'בשקית יש '+n1+' סוכריות '+c1.name+' ו-'+n2+' '+c2.name+'.<br>מה יותר סביר לשלוף?',display:'<div class="visual-display">'+visual+'</div>',answer:'סוכרייה '+more.name,options:shuffle(['סוכרייה '+c1.name,'סוכרייה '+c2.name]),colClass:'cols-2',explain:'יש '+moreN+' סוכריות '+more.name+' ורק '+lessN+' מהצבע השני — אז '+more.name+' יותר סביר!'};
+}
+
+/* Type 5: Always / Never / Maybe */
+function qAlwaysNeverMaybe(){
+  var item=pick(alwaysNeverMaybe);
+  return{type:'choice',qText:'מה נכון לגבי המשפט הבא?',display:'<div class="visual-display" style="font-size:1.1rem;font-weight:600;color:var(--primary-dark)">'+item.text+'</div>',answer:item.answer,options:shuffle(['תמיד (ודאי)','אולי (אפשרי)','לעולם לא (בלתי אפשרי)']),colClass:'cols-3',explain:item.explain};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'ודאי / אפשרי / בלתי אפשרי',instruction:'סווגו את האירוע — האם הוא ודאי, אפשרי, או בלתי אפשרי?',
+   tip:'<strong>ודאי</strong> — יקרה בטוח, תמיד!\n<strong>אפשרי</strong> — יכול לקרות, אבל לא בטוח.\n<strong>בלתי אפשרי</strong> — לא יכול לקרות בשום אופן.',
+   example:'🌅 "השמש תזרח מחר" → ודאי\n🌧️ "ירד גשם מחר" → אפשרי\n🦕 "נפגוש דינוזאור" → בלתי אפשרי',
+   gen:function(){return qClassifyEvent('simple')}},
+
+  {title:'סיווג — תרגול',instruction:'עוד תרגול בסיווג אירועים!',
+   tip:'חשבו: האם זה <strong>תמיד</strong> קורה? <strong>לפעמים</strong>? או <strong>אף פעם</strong>?',
+   example:'"אחרי יום שני יגיע יום שלישי" → ודאי ✅\n"נמצא חתול ברחוב" → אפשרי 🤔\n"נטוס בלי כנפיים" → בלתי אפשרי ❌',
+   gen:function(){return qClassifyEvent('simple')}},
+
+  {title:'סיווג — מגוון',instruction:'אירועים מגוונים — סווגו נכון!',
+   tip:'טיפ: אם משהו קורה <strong>לפעמים כן ולפעמים לא</strong> — הוא אפשרי.\nאם הוא קורה <strong>תמיד בלי יוצא מן הכלל</strong> — הוא ודאי.',
+   example:'"המורה תיתן שיעורי בית" → אפשרי\n"בשבוע יש 7 ימים" → ודאי\n"דג ירוץ על הכביש" → בלתי אפשרי',
+   gen:function(){return qClassifyEvent('complex')}},
+
+  {title:'מה יותר סביר? — קובייה',instruction:'בהטלת קובייה, מה הסיכוי יותר גבוה?',
+   tip:'בקובייה יש 6 מספרים: 1, 2, 3, 4, 5, 6.\nככל שיש <strong>יותר תוצאות</strong> שמתאימות — הסיכוי <strong>יותר גבוה</strong>!',
+   example:'"מספר קטן מ-5" (1,2,3,4) — 4 אפשרויות\n"המספר 6" — אפשרות אחת בלבד\nאז מספר קטן מ-5 יותר סביר!',
+   gen:function(){return qMoreLikely()}},
+
+  {title:'מה יותר סביר? — שקית',instruction:'איזו סוכרייה יותר סביר לשלוף מהשקית?',
+   tip:'ככל שיש <strong>יותר סוכריות</strong> מצבע מסוים, כך הסיכוי לשלוף אותן <strong>גדול יותר</strong>!',
+   example:'שקית עם 5 🔴 ו-2 🔵\nיותר סביר: 🔴 (יש יותר אדומות!)',
+   gen:function(){return qCandyBag(false)}},
+
+  {title:'הטלת קובייה',instruction:'מה הסיכוי בהטלת קובייה?',
+   tip:'בקובייה רגילה יש רק מספרים <strong>1 עד 6</strong>.\nכל מספר בתוך הטווח — <strong>אפשרי</strong>.\nמספר מחוץ לטווח (כמו 0 או 7) — <strong>בלתי אפשרי</strong>.\nמשהו שתמיד נכון (כמו "מספר קטן מ-7") — <strong>ודאי</strong>.',
+   example:'"לקבל 3" → אפשרי ✅\n"לקבל 7" → בלתי אפשרי ❌\n"לקבל מספר בין 1 ל-6" → ודאי!',
+   gen:function(){return qDiceProbability()}},
+
+  {title:'שקית סוכריות — מורכב',instruction:'שקיות עם הרבה סוכריות!',
+   tip:'ספרו כמה יש מכל צבע. הצבע שיש ממנו <strong>הכי הרבה</strong> — הסיכוי לשלוף אותו <strong>הכי גדול</strong>.',
+   example:'שקית עם 7 🟢 ו-4 🟡\nיותר סביר: 🟢 (7 מול 4)',
+   gen:function(){return qCandyBag(true)}},
+
+  {title:'תמיד / לעולם לא / אולי',instruction:'בחרו: תמיד, אולי, או לעולם לא?',
+   tip:'<strong>תמיד (ודאי)</strong> — קורה כל פעם, בלי יוצא מן הכלל.\n<strong>אולי (אפשרי)</strong> — לפעמים כן, לפעמים לא.\n<strong>לעולם לא (בלתי אפשרי)</strong> — לא יכול לקרות.',
+   example:'"ביום שישי הבא יהיה שבת" → תמיד (ודאי)\n"נפגוש את הנשיא ברחוב" → אולי (אפשרי)\n"חתול ינהג במכונית" → לעולם לא (בלתי אפשרי)',
+   gen:function(){return qAlwaysNeverMaybe()}},
+
+  /* 9-15: mixed levels */
+  {title:'מעורבב — סיווג + קובייה',instruction:'שאלות מגוונות!',
+   tip:'זכרו: ודאי = תמיד, אפשרי = לפעמים, בלתי אפשרי = אף פעם.\nבקובייה יש 1-6 בלבד!',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){return[function(){return qClassifyEvent('complex')},function(){return qDiceProbability()}][rr(0,1)]()}},
+
+  {title:'מעורבב — שקית + סיווג',instruction:'סוכריות ואירועים!',
+   tip:'שימו לב: בשקית — סופרים כמויות. באירועים — חושבים אם זה תמיד/לפעמים/אף פעם.',
+   example:'🍬 + 🎲 = 💡',
+   gen:function(){return[function(){return qCandyBag(rr(0,1)===0)},function(){return qClassifyEvent('complex')}][rr(0,1)]()}},
+
+  {title:'מעורבב — קובייה + שקית',instruction:'קוביות וסוכריות!',
+   tip:'בקובייה: חשבו כמה תוצאות מתאימות מתוך 6.\nבשקית: חשבו כמה יש מכל צבע.',
+   example:'🎲🍬 בהצלחה!',
+   gen:function(){return[function(){return qMoreLikely()},function(){return qCandyBag(true)},function(){return qDiceProbability()}][rr(0,2)]()}},
+
+  {title:'אתגר — כל הסוגים!',instruction:'כל מה שלמדתם — בשאלות מגוונות!',
+   tip:'שלבו את כל הידע:\n• סיווג אירועים\n• קובייה (1-6)\n• שקית סוכריות\n• תמיד/אולי/לעולם לא',
+   example:'💪 אתם יכולים!',
+   gen:function(){return[function(){return qClassifyEvent('complex')},function(){return qMoreLikely()},function(){return qDiceProbability()},function(){return qCandyBag(true)},function(){return qAlwaysNeverMaybe()}][rr(0,4)]()}},
+
+  {title:'סופר מעורבב!',instruction:'הכל ביחד — בהצלחה!',
+   tip:'🏆 אתם כבר מומחים! חשבו טוב לפני שעונים.',
+   example:'🌟 🎲 🍬',
+   gen:function(){return[function(){return qClassifyEvent('complex')},function(){return qMoreLikely()},function(){return qDiceProbability()},function(){return qCandyBag(true)},function(){return qAlwaysNeverMaybe()}][rr(0,4)]()}},
+
+  {title:'מאסטר הסתברות!',instruction:'הרמה הכי קשה — הראו מה אתם יודעים!',
+   tip:'🏆 שלטתם בניתוח סיכויים! הראו שאתם מומחים.',
+   example:'🌟🌟🌟',
+   gen:function(){return[function(){return qClassifyEvent('complex')},function(){return qMoreLikely()},function(){return qDiceProbability()},function(){return qCandyBag(true)},function(){return qAlwaysNeverMaybe()}][rr(0,4)]()}},
+
+  {title:'גרנד מאסטר!',instruction:'אלופי ההסתברות!',
+   tip:'🏆🏆🏆 אין עליכם!',
+   example:'🌟🌟🌟🌟🌟',
+   gen:function(){return[function(){return qClassifyEvent('complex')},function(){return qMoreLikely()},function(){return qDiceProbability()},function(){return qCandyBag(true)},function(){return qAlwaysNeverMaybe()}][rr(0,4)]()}}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=6;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

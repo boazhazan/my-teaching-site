@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>מספרים עד מיליון — כיתה ד' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#16a34a;--primary-dark:#15803d;--primary-light:#dcfce7;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#16a34a 0%,#22c55e 50%,#4ade80 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(22,163,74,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:3rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.big-num .hl{color:var(--error);text-decoration:underline;text-underline-offset:6px}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;direction:ltr;unicode-bidi:embed}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.answer-btn.rtl-btn{direction:rtl;unicode-bidi:normal}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:2.2rem;padding:6px 20px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🏗️</div><div><h1>מספרים עד מיליון</h1><div class="subtitle">כיתה ד' — קריאה, כתיבה ומבנה עשרוני</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">מספרים עד מיליון — כיתה ד' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>🏗️ מספרים עד מיליון</h2><p><strong>מערכת המספרים העשרונית</strong> — כל ספרה במספר יש לה ערך לפי המיקום שלה:</p><p>🔹 <strong>יחידות</strong> — הספרה הכי ימנית<br>🔹 <strong>עשרות</strong> — הספרה השנייה מימין<br>🔹 <strong>מאות</strong> — הספרה השלישית מימין<br>🔹 <strong>אלפים</strong> — הספרה הרביעית מימין<br>🔹 <strong>עשרות אלפים</strong> — הספרה החמישית מימין<br>🔹 <strong>מאות אלפים</strong> — הספרה השישית מימין<br>🔹 <strong>מיליונים</strong> — הספרה השביעית מימין</p><p>לדוגמה:<br>🔸 <strong>523,417</strong><br>7 יחידות, 1 עשרות, 4 מאות, 3 אלפים, 2 עשרות אלפים, 5 מאות אלפים</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function fmtNum(n){return n.toLocaleString('he-IL')}
+
+/* ========== HEBREW NUMBER WORDS ========== */
+var onesF=['אפס','אחת','שתיים','שלוש','ארבע','חמש','שש','שבע','שמונה','תשע'];
+var onesM=['אפס','אחד','שניים','שלושה','ארבעה','חמישה','שישה','שבעה','שמונה','תשעה'];
+var teens=['עשר','אחת עשרה','שתים עשרה','שלוש עשרה','ארבע עשרה','חמש עשרה','שש עשרה','שבע עשרה','שמונה עשרה','תשע עשרה'];
+var tensW=['','עשר','עשרים','שלושים','ארבעים','חמישים','שישים','שבעים','שמונים','תשעים'];
+var hundredsW=['','מאה','מאתיים','שלוש מאות','ארבע מאות','חמש מאות','שש מאות','שבע מאות','שמונה מאות','תשע מאות'];
+
+/* Convert number 0-999 to Hebrew words */
+function wordsUnder1000(n){
+  if(n===0) return '';
+  var parts=[];
+  var h=Math.floor(n/100);
+  var rem=n%100;
+  if(h>0) parts.push(hundredsW[h]);
+  if(rem>=10&&rem<=19){
+    parts.push(teens[rem-10]);
+  }else{
+    var t=Math.floor(rem/10);
+    var u=rem%10;
+    if(t>0) parts.push(tensW[t]);
+    if(u>0) parts.push(onesF[u]);
+  }
+  return parts.join(' ו');
+}
+
+/* Convert full number to Hebrew words (up to millions) */
+function numToWords(n){
+  if(n===0) return 'אפס';
+  if(n===1000000) return 'מיליון';
+  var parts=[];
+  /* millions */
+  var mil=Math.floor(n/1000000);
+  if(mil>0){
+    if(mil===1) parts.push('מיליון');
+    else if(mil===2) parts.push('שני מיליון');
+    else parts.push(onesF[mil]+' מיליון');
+  }
+  n=n%1000000;
+  /* thousands */
+  var th=Math.floor(n/1000);
+  if(th>0){
+    if(th===1) parts.push('אלף');
+    else if(th===2) parts.push('אלפיים');
+    else if(th>=3&&th<=9) parts.push(onesM[th]+' אלפים');
+    else if(th===10) parts.push('עשרת אלפים');
+    else{
+      /* 11-999 thousands */
+      parts.push(wordsUnder1000(th)+' אלף');
+    }
+  }
+  var rem=n%1000;
+  if(rem>0){
+    var w=wordsUnder1000(rem);
+    if(parts.length>0){
+      /* "ו" before remainder unless it's a round hundred (300, 500 etc.) that has sub-parts */
+      /* In Hebrew convention: אלף ומאה, אלף ומאתיים, אלף שלוש מאות, עשרת אלפים וחמש מאות */
+      /* Simplified: add "ו" when remainder is single-component (exact hundred or <100) */
+      if(rem<=100||(rem%100===0)) parts.push('ו'+w);
+      else parts.push(w);
+    }
+    else parts.push(w);
+  }
+  return parts.join(' ');
+}
+
+/* Place names */
+var placeNames=['יחידות','עשרות','מאות','אלפים','עשרות אלפים','מאות אלפים','מיליונים'];
+function getDigitAt(n,pos){return Math.floor(n/Math.pow(10,pos))%10}
+function placeValue(n,pos){return getDigitAt(n,pos)*Math.pow(10,pos)}
+
+/* Highlight digit at position (0=ones) in formatted number */
+function hlDigit(n,pos){
+  var s=String(n);
+  var digitIdx=s.length-1-pos;
+  var formatted='';
+  var rawIdx=0;
+  var chars=fmtNum(n);
+  /* map formatted chars back to raw digits */
+  var raw=String(n);
+  var fi=0,ri=0;
+  var result='';
+  for(var ci=0;ci<chars.length;ci++){
+    if(chars[ci]===','||chars[ci]==='.'){result+=chars[ci];continue}
+    if(ri===digitIdx){result+='<span class="hl">'+chars[ci]+'</span>'}
+    else{result+=chars[ci]}
+    ri++;
+  }
+  return result;
+}
+
+/* Generate wrong options for digit value */
+function digitValueWrongs(correct,digit,pos){
+  var wrongs=new Set();
+  /* digit * wrong place values */
+  for(var p=0;p<6;p++){
+    var v=digit*Math.pow(10,p);
+    if(v!==correct&&v>0) wrongs.add(v);
+  }
+  /* same place, different digit */
+  for(var d=1;d<=9;d++){
+    var v2=d*Math.pow(10,pos);
+    if(v2!==correct) wrongs.add(v2);
+  }
+  return Array.from(wrongs);
+}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: Read a large number — pick Hebrew words */
+function qReadLargeNumber(min,max){
+  var n=rr(min,max);
+  var correct=numToWords(n);
+  var wrongs=new Set();
+  var att=0;
+  while(wrongs.size<3&&att<80){
+    var w=rr(min,max);
+    if(w!==n) wrongs.add(numToWords(w));
+    att++;
+  }
+  /* fallback: tweak original */
+  while(wrongs.size<3){
+    var delta=[1000,10000,100000,500,50,5][rr(0,5)];
+    var tw=n+delta*(rr(0,1)?1:-1);
+    if(tw>=min&&tw<=max&&tw!==n) wrongs.add(numToWords(tw));
+    else wrongs.add(numToWords(rr(min,max)));
+  }
+  var options=shuffle([correct].concat(Array.from(wrongs).slice(0,3)));
+  return{type:'choice',qText:'קראו את המספר:',display:'<div class="num-display"><span class="big-num">'+fmtNum(n)+'</span></div>',answer:correct,options:options,colClass:'cols-2',rtlBtns:true};
+}
+
+/* Type 2: Hebrew words → digits */
+function qWriteDigits(min,max){
+  var n=rr(min,max);
+  var words=numToWords(n);
+  var correct=fmtNum(n);
+  var wrongs=new Set();
+  var att=0;
+  while(wrongs.size<3&&att<80){
+    var w=rr(min,max);
+    if(w!==n) wrongs.add(fmtNum(w));
+    att++;
+  }
+  while(wrongs.size<3){
+    var delta=[1000,10000,100][rr(0,2)];
+    var tw=n+delta*(rr(0,1)?1:-1);
+    if(tw>0&&tw!==n) wrongs.add(fmtNum(tw));
+  }
+  var options=shuffle([correct].concat(Array.from(wrongs).slice(0,3)));
+  return{type:'choice',qText:'כתבו בספרות: <strong>'+words+'</strong>',display:'',answer:correct,options:options,colClass:'cols-2'};
+}
+
+/* Type 3: What is the VALUE of digit D in number N? */
+function qDigitValue(min,max){
+  var n=rr(min,max);
+  var s=String(n);
+  /* pick a non-zero digit position */
+  var positions=[];
+  for(var p=0;p<s.length;p++){
+    var pos=s.length-1-p;
+    if(parseInt(s[pos])!==0) positions.push(p);
+  }
+  if(positions.length===0) positions=[0];
+  var chosenPos=positions[rr(0,positions.length-1)];
+  var digit=getDigitAt(n,chosenPos);
+  var correct=fmtNum(digit*Math.pow(10,chosenPos));
+  var wArr=digitValueWrongs(digit*Math.pow(10,chosenPos),digit,chosenPos);
+  shuffle(wArr);
+  var wrongs=wArr.slice(0,3).map(fmtNum);
+  while(wrongs.length<3){
+    var fake=rr(1,9)*Math.pow(10,rr(0,5));
+    if(fmtNum(fake)!==correct&&wrongs.indexOf(fmtNum(fake))===-1) wrongs.push(fmtNum(fake));
+  }
+  var options=shuffle([correct].concat(wrongs.slice(0,3)));
+  return{type:'choice',qText:'מהו <strong>ערך</strong> הספרה <strong>'+digit+'</strong> במספר?',display:'<div class="num-display"><span class="big-num">'+hlDigit(n,chosenPos)+'</span></div>',answer:correct,options:options,colClass:'cols-2'};
+}
+
+/* Type 4: What does digit D REPRESENT (place name)? */
+function qPlaceValue(min,max){
+  var n=rr(min,max);
+  var s=String(n);
+  var positions=[];
+  for(var p=0;p<s.length;p++){
+    if(getDigitAt(n,p)!==0) positions.push(p);
+  }
+  if(positions.length===0) positions=[0];
+  var chosenPos=positions[rr(0,positions.length-1)];
+  var digit=getDigitAt(n,chosenPos);
+  var correct=placeNames[chosenPos];
+  /* build wrong options from other place names */
+  var allPlaces=[];
+  for(var i=0;i<Math.min(s.length+1,placeNames.length);i++){
+    if(placeNames[i]!==correct) allPlaces.push(placeNames[i]);
+  }
+  shuffle(allPlaces);
+  var wrongs=allPlaces.slice(0,3);
+  while(wrongs.length<3){wrongs.push(placeNames[rr(0,5)])}
+  var options=shuffle([correct].concat(wrongs));
+  return{type:'choice',qText:'מה מייצגת הספרה <strong>'+digit+'</strong> במספר?',display:'<div class="num-display"><span class="big-num">'+hlDigit(n,chosenPos)+'</span></div>',answer:correct,options:options,colClass:'cols-2',rtlBtns:true};
+}
+
+/* Type 5: Compare two large numbers */
+function qCompareLarge(min,max){
+  var a=rr(min,max),b=rr(min,max);
+  var att2=0;
+  while(a===b&&att2<50){b=rr(min,max);att2++}
+  var correct=a>b?'>':a<b?'<':'=';
+  var options=['<','>','='];
+  return{type:'choice',qText:'השוו:',display:'<div class="num-display"><span class="big-num">'+fmtNum(a)+'</span> <span style="font-size:2rem;margin:0 12px;color:var(--primary)">?</span> <span class="big-num">'+fmtNum(b)+'</span></div>',answer:correct,options:options,colClass:'cols-3'};
+}
+
+/* Type 6: Order 4 numbers from smallest to largest */
+function qOrderLarge(min,max){
+  var nums=[];var seen=new Set();
+  while(nums.length<4){
+    var x=rr(min,max);
+    if(!seen.has(x)){seen.add(x);nums.push(x)}
+  }
+  var sorted=nums.slice().sort(function(a,b){return a-b});
+  var correct=sorted.map(fmtNum).join(' < ');
+  /* generate wrong orderings */
+  var wrongs=new Set();
+  var att3=0;
+  while(wrongs.size<3&&att3<60){
+    var shuffled=shuffle(nums.slice());
+    var s=shuffled.map(fmtNum).join(' < ');
+    if(s!==correct) wrongs.add(s);
+    att3++;
+  }
+  var options=shuffle([correct].concat(Array.from(wrongs).slice(0,3)));
+  return{type:'choice',qText:'סדרו מהקטן לגדול:',display:'<div class="num-display" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">'+nums.map(function(x){return '<span class="big-num" style="font-size:1.8rem;padding:6px 16px">'+fmtNum(x)+'</span>'}).join('')+'</div>',answer:correct,options:options,colClass:'cols-2'};
+}
+
+/* Type 7: Sequence with gap — find missing number */
+function qSequenceLarge(min,max){
+  var gaps=[1000,10000,100000,5000,50000];
+  var gap=gaps[rr(0,gaps.length-1)];
+  var start=rr(min,Math.max(min,max-gap*5));
+  start=Math.round(start/gap)*gap;
+  if(start<min) start=min;
+  var seq=[];
+  for(var i=0;i<5;i++) seq.push(start+i*gap);
+  /* pick which one to hide */
+  var hideIdx=rr(1,3);
+  var correct=fmtNum(seq[hideIdx]);
+  var display='<div class="num-display" style="font-size:1.5rem;font-weight:700;direction:ltr;unicode-bidi:embed">';
+  for(var j=0;j<seq.length;j++){
+    if(j===hideIdx) display+='<span style="color:var(--error);font-size:2rem">❓</span>';
+    else display+='<span class="math">'+fmtNum(seq[j])+'</span>';
+    if(j<seq.length-1) display+=' , ';
+  }
+  display+='</div>';
+  var wrongs=new Set();
+  wrongs.add(fmtNum(seq[hideIdx]+gap));
+  wrongs.add(fmtNum(seq[hideIdx]-gap));
+  wrongs.add(fmtNum(seq[hideIdx]+gap*2));
+  var att4=0;
+  while(wrongs.size<3&&att4<20){wrongs.add(fmtNum(rr(min,max)));att4++}
+  wrongs.delete(correct);
+  var options=shuffle([correct].concat(Array.from(wrongs).slice(0,3)));
+  return{type:'choice',qText:'מצאו את המספר החסר בסדרה:',display:display,answer:correct,options:options,colClass:'cols-2'};
+}
+
+/* Type 8: Is there a largest number? */
+function qNoLargest(){
+  var bigN=rr(100000,999999);
+  var scenarios=[
+    {stem:'מה קורה אם מוסיפים 1 ל-'+fmtNum(bigN)+'?',correct:'מקבלים '+fmtNum(bigN+1),wrong:'אי אפשר, זה המספר הכי גדול'},
+    {stem:'האם יש מספר הכי גדול?',correct:'לא! תמיד אפשר להוסיף 1',wrong:'כן, זה מיליון'},
+    {stem:'מה המספר שבא אחרי '+fmtNum(999999)+'?',correct:fmtNum(1000000),wrong:'אין מספר כזה'},
+    {stem:'האם '+fmtNum(bigN)+' הוא המספר הגדול ביותר שקיים?',correct:'לא, '+fmtNum(bigN+1)+' גדול ממנו',wrong:'כן, אין מספר יותר גדול'}
+  ];
+  var sc=scenarios[rr(0,scenarios.length-1)];
+  var options=shuffle([sc.correct,sc.wrong]);
+  return{type:'choice',qText:sc.stem,display:'',answer:sc.correct,options:options,colClass:'cols-2',rtlBtns:true,explain:'תמיד אפשר להוסיף 1 לכל מספר ולקבל מספר גדול יותר!'};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'אלפים (חזרה)',instruction:'קראו מספרים עד 9,999',
+   tip:'מספרים בני 4 ספרות: <strong>אלפים, מאות, עשרות, יחידות</strong>.\nקוראים מהספרה השמאלית לימנית.',
+   example:'<span class="math">3,456</span> → שלושת אלפים ארבע מאות חמישים ושש',
+   gen:function(){return qReadLargeNumber(1000,9999)}},
+
+  {title:'עשרות אלפים',instruction:'קראו מספרים עד 99,999',
+   tip:'כשיש 5 ספרות, הספרה השמאלית מייצגת <strong>עשרות אלפים</strong>.\nלדוגמה: 50,000 = חמישים אלף.',
+   example:'<span class="math">42,800</span> → ארבעים ושניים אלף ושמונה מאות',
+   gen:function(){return qReadLargeNumber(10000,99999)}},
+
+  {title:'מאות אלפים',instruction:'קראו מספרים עד 999,999',
+   tip:'כשיש 6 ספרות, הספרה השמאלית מייצגת <strong>מאות אלפים</strong>.\nלדוגמה: 300,000 = שלוש מאות אלף.',
+   example:'<span class="math">523,417</span> → חמש מאות עשרים ושלושה אלף ארבע מאות ושבע עשרה',
+   gen:function(){return qReadLargeNumber(100000,999999)}},
+
+  {title:'ערך ספרה — גדול',instruction:'מהו הערך של ספרה מסוימת?',
+   tip:'ערך הספרה = הספרה × המיקום שלה.\n<strong>דוגמה:</strong> הספרה 5 בעשרות אלפים → ערכה 50,000.',
+   example:'במספר <span class="math">253,417</span>:\nהספרה 5 → עשרות אלפים → ערכה <span class="math">50,000</span>',
+   gen:function(){return qDigitValue(10000,999999)}},
+
+  {title:'כתיבה במילים → ספרות',instruction:'כתבו את המספר בספרות',
+   tip:'קראו את המילים בזהירות — <strong>אלפים</strong>, <strong>מאות</strong>, <strong>עשרות</strong>, <strong>יחידות</strong>.\nחברו את הערכים.',
+   example:'שלוש מאות חמישים ושניים אלף → <span class="math">352,000</span>\nעשרים אלף וחמש מאות → <span class="math">20,500</span>',
+   gen:function(){return qWriteDigits(10000,999999)}},
+
+  {title:'כתיבה בספרות → מילים',instruction:'קראו את המספר במילים',
+   tip:'הסתכלו על כל קבוצת ספרות:\n<strong>מאות אלפים | עשרות אלפים | אלפים | מאות | עשרות | יחידות</strong>',
+   example:'<span class="math">145,200</span> → מאה ארבעים וחמישה אלף ומאתיים',
+   gen:function(){return qReadLargeNumber(100000,999999)}},
+
+  {title:'השוואת מספרים גדולים',instruction:'מי יותר גדול?',
+   tip:'קודם בודקים <strong>מספר הספרות</strong> — מספר עם יותר ספרות הוא יותר גדול.\nאם אותו מספר ספרות — משווים ספרה ספרה משמאל לימין.',
+   example:'<span class="math">85,000</span> > <span class="math">8,500</span> (5 ספרות > 4 ספרות)\n<span class="math">352,000</span> < <span class="math">425,000</span> (ספרה ראשונה: 3 < 4)',
+   gen:function(){return qCompareLarge(10000,999999)}},
+
+  {title:'סידור מספרים גדולים',instruction:'סדרו מהקטן לגדול',
+   tip:'קודם מסדרים לפי <strong>מספר ספרות</strong>.\nאם אותו מספר ספרות — משווים ספרה ספרה משמאל.',
+   example:'סדרו: <span class="math">5,200</span> , <span class="math">52,000</span> , <span class="math">520</span> , <span class="math">520,000</span>\nתשובה: <span class="math">520 < 5,200 < 52,000 < 520,000</span>',
+   gen:function(){return qOrderLarge(1000,999999)}},
+
+  {title:'סדרות',instruction:'מצאו את המספר החסר',
+   tip:'מצאו את <strong>הדילוג הקבוע</strong> בין המספרים.\nבדקו: כמה מוסיפים כל פעם? 1,000? 10,000? 100,000?',
+   example:'<span class="math">10,000 , 20,000 , ❓ , 40,000</span>\nדילוג של 10,000 → <span class="math">30,000</span>',
+   gen:function(){return qSequenceLarge(1000,900000)}},
+
+  {title:'אין מספר הכי גדול!',instruction:'חשבו — האם יש סוף למספרים?',
+   tip:'<strong>אין מספר הכי גדול!</strong>\nלכל מספר אפשר להוסיף 1 ולקבל מספר גדול יותר.\nגם אחרי מיליון יש מיליון ואחד, ואז מיליון ושתיים...',
+   example:'999,999 + 1 = 1,000,000\n1,000,000 + 1 = 1,000,001\nתמיד אפשר להמשיך! ♾️',
+   gen:function(){return qNoLargest()}},
+
+  {title:'מעורבב — קריאה וכתיבה',instruction:'שאלות מגוונות על קריאה וכתיבה!',
+   tip:'שלבו את כל מה שלמדתם!\nקראו בזהירות — מילים או ספרות.',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[function(){return qReadLargeNumber(1000,999999)},function(){return qWriteDigits(1000,999999)},function(){return qReadLargeNumber(100000,999999)}];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  {title:'מעורבב — ערך מקום',instruction:'ערכי ספרות ומיקומים!',
+   tip:'זכרו: הערך של ספרה תלוי ב<strong>מיקום</strong> שלה!\nאותה ספרה יכולה לייצג יחידות, עשרות, מאות ועוד.',
+   example:'הספרה 3 יכולה לייצג:\n3 (יחידות), 30 (עשרות), 300 (מאות), 3,000 (אלפים)...',
+   gen:function(){
+     var types=[function(){return qDigitValue(10000,999999)},function(){return qPlaceValue(10000,999999)}];
+     return types[rr(0,1)]();
+   }},
+
+  {title:'מעורבב — השוואה וסידור',instruction:'השוואות, סדרות וסידור!',
+   tip:'שאלות מגוונות — תהיו מוכנים לכל דבר! 🏆',
+   example:'💪 בהצלחה!',
+   gen:function(){
+     var types=[function(){return qCompareLarge(10000,999999)},function(){return qOrderLarge(10000,999999)},function(){return qSequenceLarge(10000,900000)}];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  {title:'סופר מעורבב!',instruction:'כל הסוגים — שאלות מאתגרות!',
+   tip:'🏆 אתם מומחים למספרים גדולים!',
+   example:'🌟 💪 🏆',
+   gen:function(){
+     var types=[function(){return qReadLargeNumber(100000,999999)},function(){return qWriteDigits(100000,999999)},function(){return qDigitValue(100000,999999)},function(){return qPlaceValue(100000,999999)},function(){return qCompareLarge(100000,999999)},function(){return qSequenceLarge(10000,900000)}];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  {title:'מאסטר!',instruction:'הרמה הכי קשה — כל הסוגים!',
+   tip:'🏆 אין עליכם! שלטתם במספרים עד מיליון!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[function(){return qReadLargeNumber(100000,999999)},function(){return qWriteDigits(100000,999999)},function(){return qDigitValue(100000,999999)},function(){return qPlaceValue(100000,999999)},function(){return qCompareLarge(100000,999999)},function(){return qOrderLarge(10000,999999)},function(){return qSequenceLarge(10000,900000)},function(){return qNoLargest()}];
+     return types[rr(0,types.length-1)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=6;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        var btnClass='answer-btn'+(q.rtlBtns?' rtl-btn':'');
+        h+='<button class="'+btnClass+'" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.textContent=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>מצולעים ואלכסונים — כיתה ד' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#0891b2;--primary-dark:#0e7490;--primary-light:#cffafe;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#0e7490 0%,#0891b2 50%,#06b6d4 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(8,145,178,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.shape-display{text-align:center;margin:16px 0}.shape-display svg{max-width:160px}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.answer-btn .mini-svg{display:block;margin:0 auto 4px}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.shape-display svg{max-width:120px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🔷</div><div><h1>מצולעים ואלכסונים</h1><div class="subtitle">כיתה ד' — חזרה על מצולעים + אלכסון</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">מצולעים ואלכסונים — כיתה ד' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>🔷 מצולעים ואלכסונים</h2><p><strong>מצולע</strong> הוא צורה סגורה שמורכבת מקטעים ישרים. שם המצולע נקבע לפי מספר הצלעות:</p><p>🔹 <strong>משולש</strong> — 3 צלעות, 3 קדקודים<br>🔹 <strong>מרובע</strong> — 4 צלעות, 4 קדקודים<br>🔹 <strong>מחומש</strong> — 5 צלעות, 5 קדקודים<br>🔹 <strong>משושה</strong> — 6 צלעות, 6 קדקודים</p><p><strong>אלכסון</strong> הוא קטע המחבר שני קדקודים שאינם שכנים (לא צלע!).</p><p>🔸 <strong>כמה אלכסונים?</strong><br>משולש — 0 אלכסונים<br>מרובע — 2 אלכסונים<br>מחומש — 5 אלכסונים<br>משושה — 9 אלכסונים</p><p>הנוסחה: n &times; (n &minus; 3) &divide; 2</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+
+/* ========== SVG HELPERS ========== */
+function polyPoints(n,cx,cy,r){var pts=[];for(var i=0;i<n;i++){var a=2*Math.PI*i/n-Math.PI/2;pts.push(Math.round(cx+r*Math.cos(a))+','+Math.round(cy+r*Math.sin(a)))}return pts.join(' ')}
+function polyPtsArr(n,cx,cy,r){var pts=[];for(var i=0;i<n;i++){var a=2*Math.PI*i/n-Math.PI/2;pts.push([Math.round(cx+r*Math.cos(a)),Math.round(cy+r*Math.sin(a))])}return pts}
+
+/* Make concave polygon (dent one vertex inward) */
+function concavePtsArr(n,cx,cy,r){var pts=polyPtsArr(n,cx,cy,r);var idx=rr(1,n-1);pts[idx]=[Math.round(cx+(r*0.25)*Math.cos(2*Math.PI*idx/n-Math.PI/2)),Math.round(cy+(r*0.25)*Math.sin(2*Math.PI*idx/n-Math.PI/2))];return pts}
+
+function ptsToStr(pts){return pts.map(function(p){return p[0]+','+p[1]}).join(' ')}
+
+function svgPolygon(n,w){
+  w=w||120;
+  var cx=60,cy=60,r=50;
+  var pts=polyPoints(n,cx,cy,r);
+  return '<svg viewBox="0 0 120 120" width="'+w+'"><polygon points="'+pts+'" fill="none" stroke="var(--primary)" stroke-width="3"/></svg>';
+}
+
+function svgPolygonWithDiags(n,w){
+  w=w||120;
+  var cx=60,cy=60,r=50;
+  var pts=polyPtsArr(n,cx,cy,r);
+  var svg='<svg viewBox="0 0 120 120" width="'+w+'">';
+  svg+='<polygon points="'+ptsToStr(pts)+'" fill="none" stroke="var(--primary)" stroke-width="3"/>';
+  /* draw diagonals */
+  for(var i=0;i<n;i++){for(var j=i+2;j<n;j++){if(i===0&&j===n-1)continue;svg+='<line x1="'+pts[i][0]+'" y1="'+pts[i][1]+'" x2="'+pts[j][0]+'" y2="'+pts[j][1]+'" stroke="var(--error)" stroke-width="2" stroke-dasharray="4,3"/>'}}
+  svg+='</svg>';
+  return svg;
+}
+
+function svgPolygonWithSegment(n,v1,v2,w){
+  w=w||100;
+  var cx=60,cy=60,r=50;
+  var pts=polyPtsArr(n,cx,cy,r);
+  var svg='<svg viewBox="0 0 120 120" width="'+w+'">';
+  svg+='<polygon points="'+ptsToStr(pts)+'" fill="none" stroke="var(--primary)" stroke-width="3"/>';
+  svg+='<line x1="'+pts[v1][0]+'" y1="'+pts[v1][1]+'" x2="'+pts[v2][0]+'" y2="'+pts[v2][1]+'" stroke="var(--error)" stroke-width="2.5"/>';
+  /* dots on endpoints */
+  svg+='<circle cx="'+pts[v1][0]+'" cy="'+pts[v1][1]+'" r="4" fill="var(--error)"/>';
+  svg+='<circle cx="'+pts[v2][0]+'" cy="'+pts[v2][1]+'" r="4" fill="var(--error)"/>';
+  svg+='</svg>';
+  return svg;
+}
+
+var polygonNames={3:'משולש',4:'מרובע',5:'מחומש',6:'משושה'};
+var polygonDiags={3:0,4:2,5:5,6:9};
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* 1. Identify polygon by SVG */
+function qIdentifyPolygon(){
+  var sides=[3,4,5,6];
+  var n=sides[rr(0,3)];
+  var correct=polygonNames[n];
+  var opts=shuffle(['משולש','מרובע','מחומש','משושה']);
+  return{type:'choice',qText:'מה שם הצורה?',display:'<div class="shape-display">'+svgPolygon(n,140)+'</div>',answer:correct,options:opts,colClass:'cols-4',explain:'לצורה יש '+n+' צלעות — זהו '+correct};
+}
+
+/* 2. Count sides or vertices */
+function qCountSidesVertices(){
+  var sides=[3,4,5,6];
+  var n=sides[rr(0,3)];
+  var askSides=rr(0,1)===0;
+  var label=askSides?'צלעות':'קדקודים';
+  var correct=String(n);
+  var wrongs=new Set();
+  for(var i=0;i<sides.length;i++){if(String(sides[i])!==correct)wrongs.add(String(sides[i]))}
+  var opts=shuffle([correct].concat(Array.from(wrongs).slice(0,3)));
+  return{type:'choice',qText:'כמה <strong>'+label+'</strong> יש לצורה?',display:'<div class="shape-display">'+svgPolygon(n,140)+'</div>',answer:correct,options:opts,colClass:'cols-4',explain:'ל'+polygonNames[n]+' יש '+n+' '+label};
+}
+
+/* 3. Is the marked segment a diagonal? */
+function qIsDiagonal(){
+  var sides=[4,5,6];
+  var n=sides[rr(0,2)];
+  /* pick two vertices */
+  var v1=rr(0,n-1);
+  var isDiag=rr(0,1)===0;
+  var v2;
+  if(isDiag){
+    /* non-adjacent */
+    var candidates=[];
+    for(var i=0;i<n;i++){if(i!==v1&&i!==(v1+1)%n&&i!==(v1-1+n)%n)candidates.push(i)}
+    if(candidates.length===0){isDiag=false;v2=(v1+1)%n}
+    else{v2=candidates[rr(0,candidates.length-1)]}
+  }else{
+    v2=(v1+1)%n;
+  }
+  var correct=isDiag?'כן, זה אלכסון':'לא, זו צלע';
+  return{type:'choice',qText:'האם הקטע המסומן הוא <strong>אלכסון</strong>?',display:'<div class="shape-display">'+svgPolygonWithSegment(n,v1,v2,140)+'</div>',answer:correct,options:['כן, זה אלכסון','לא, זו צלע'],colClass:'cols-2',explain:isDiag?'אלכסון מחבר שני קדקודים שאינם שכנים':'צלע מחברת שני קדקודים שכנים — זה לא אלכסון'};
+}
+
+/* 4. Count diagonals */
+function qCountDiagonals(forceN){
+  var n=forceN||[3,4,5,6][rr(0,3)];
+  var correct=String(polygonDiags[n]);
+  var wrongs=new Set();
+  wrongs.add(String(n));wrongs.add(String(n-1));wrongs.add(String(polygonDiags[n]+1));wrongs.add(String(polygonDiags[n]+2));
+  if(polygonDiags[n]>0)wrongs.add(String(polygonDiags[n]-1));
+  wrongs.delete(correct);
+  var wArr=Array.from(wrongs).filter(function(v){return parseInt(v)>=0}).slice(0,3);
+  while(wArr.length<3){var f=String(rr(0,12));if(f!==correct&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var opts=shuffle([correct].concat(wArr));
+  return{type:'choice',qText:'כמה <strong>אלכסונים</strong> יש ב'+polygonNames[n]+'?',display:'<div class="shape-display">'+svgPolygonWithDiags(n,140)+'</div>',answer:correct,options:opts,colClass:'cols-4',explain:'ב'+polygonNames[n]+' ('+n+' צלעות) יש '+correct+' אלכסונים'};
+}
+
+/* 5. Which drawing shows a correct diagonal? */
+function qDrawDiagonal(){
+  var sides=[4,5,6];
+  var n=sides[rr(0,2)];
+  /* build one correct (diagonal) and 3 wrong (sides) */
+  var pts=polyPtsArr(n,60,60,50);
+  /* find all diagonals */
+  var diags=[];
+  for(var i=0;i<n;i++){for(var j=i+2;j<n;j++){if(i===0&&j===n-1)continue;diags.push([i,j])}}
+  var diagPair=diags[rr(0,diags.length-1)];
+  /* find some sides */
+  var sidesList=[];
+  for(var k=0;k<n;k++){sidesList.push([k,(k+1)%n])}
+  shuffle(sidesList);
+  var wrongPairs=sidesList.slice(0,3);
+  /* make sure we have 3 wrong */
+  while(wrongPairs.length<3){wrongPairs.push(sidesList[0])}
+  var correctSvg=svgPolygonWithSegment(n,diagPair[0],diagPair[1],90);
+  var wrongSvgs=wrongPairs.map(function(p){return svgPolygonWithSegment(n,p[0],p[1],90)});
+  /* assign labels */
+  var labels=['א','ב','ג','ד'];
+  var items=[{svg:correctSvg,isDiag:true}];
+  wrongSvgs.forEach(function(s){items.push({svg:s,isDiag:false})});
+  shuffle(items);
+  var correctLabel='';
+  var opts=[];
+  var displayHtml='<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;max-width:300px;margin:12px auto">';
+  items.forEach(function(it,idx){
+    if(it.isDiag)correctLabel=labels[idx];
+    displayHtml+='<div style="text-align:center"><div style="font-weight:800;margin-bottom:2px">'+labels[idx]+'</div>'+it.svg+'</div>';
+    opts.push(labels[idx]);
+  });
+  displayHtml+='</div>';
+  return{type:'choice',qText:'באיזה ציור <strong>האלכסון</strong> מסומן נכון?',display:displayHtml,answer:correctLabel,options:opts,colClass:'cols-4',explain:'אלכסון מחבר שני קדקודים שאינם שכנים — תשובה '+correctLabel};
+}
+
+/* 6. Diagonal inside or outside (convex vs concave) */
+function qDiagonalInsideOutside(){
+  var sides=[4,5,6];
+  var n=sides[rr(0,2)];
+  var isConvex=rr(0,1)===0;
+  var cx=60,cy=60,r=50;
+  var pts;
+  if(isConvex){
+    pts=polyPtsArr(n,cx,cy,r);
+  }else{
+    pts=concavePtsArr(n,cx,cy,r);
+  }
+  /* pick a diagonal */
+  var diags=[];
+  for(var i=0;i<n;i++){for(var j=i+2;j<n;j++){if(i===0&&j===n-1)continue;diags.push([i,j])}}
+  var dp=diags[rr(0,diags.length-1)];
+  /* for concave, check if midpoint of diagonal is inside polygon */
+  var mx=(pts[dp[0]][0]+pts[dp[1]][0])/2;
+  var my=(pts[dp[0]][1]+pts[dp[1]][1])/2;
+  var inside=pointInPolygon(mx,my,pts);
+  var correct=inside?'בתוך המצולע':'מחוץ למצולע';
+  var svg='<svg viewBox="0 0 120 120" width="140">';
+  svg+='<polygon points="'+ptsToStr(pts)+'" fill="rgba(8,145,178,0.1)" stroke="var(--primary)" stroke-width="3"/>';
+  svg+='<line x1="'+pts[dp[0]][0]+'" y1="'+pts[dp[0]][1]+'" x2="'+pts[dp[1]][0]+'" y2="'+pts[dp[1]][1]+'" stroke="var(--error)" stroke-width="2.5"/>';
+  svg+='<circle cx="'+pts[dp[0]][0]+'" cy="'+pts[dp[0]][1]+'" r="4" fill="var(--error)"/>';
+  svg+='<circle cx="'+pts[dp[1]][0]+'" cy="'+pts[dp[1]][1]+'" r="4" fill="var(--error)"/>';
+  svg+='</svg>';
+  return{type:'choice',qText:'האלכסון המסומן עובר <strong>בתוך</strong> המצולע או <strong>מחוצה לו</strong>?',display:'<div class="shape-display">'+svg+'</div>',answer:correct,options:['בתוך המצולע','מחוץ למצולע'],colClass:'cols-2',explain:isConvex?'במצולע קמור כל האלכסונים עוברים בתוכו':'במצולע קעור ייתכן שאלכסון יעבור מחוצה לו'};
+}
+
+/* Point in polygon (ray casting) */
+function pointInPolygon(x,y,pts){
+  var inside=false;
+  for(var i=0,j=pts.length-1;i<pts.length;j=i++){
+    var xi=pts[i][0],yi=pts[i][1],xj=pts[j][0],yj=pts[j][1];
+    if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))inside=!inside;
+  }
+  return inside;
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'זיהוי מצולעים (חזרה)',instruction:'מה שם הצורה?',
+   tip:'שם המצולע נקבע לפי מספר הצלעות שלו:\n• 3 צלעות = משולש\n• 4 צלעות = מרובע\n• 5 צלעות = מחומש\n• 6 צלעות = משושה',
+   example:'צורה עם 5 צלעות → <strong>מחומש</strong>',
+   gen:function(){return qIdentifyPolygon()}},
+
+  {title:'צלעות וקדקודים',instruction:'ספרו צלעות או קדקודים',
+   tip:'במצולע, מספר הצלעות <strong>שווה</strong> למספר הקדקודים!\nקדקוד = נקודת מפגש של שתי צלעות.',
+   example:'למרובע יש 4 צלעות ו-4 קדקודים',
+   gen:function(){return qCountSidesVertices()}},
+
+  {title:'מהו אלכסון?',instruction:'האם הקטע המסומן הוא אלכסון?',
+   tip:'<strong>אלכסון</strong> = קטע שמחבר שני קדקודים שאינם שכנים.\n<strong>צלע</strong> = קטע שמחבר שני קדקודים שכנים.\nאם הקטע הוא חלק מהמסגרת של הצורה — זו צלע, לא אלכסון!',
+   example:'במרובע: קטע בין שני קדקודים נגדיים = אלכסון ✅\nקטע בין שני קדקודים שכנים = צלע ❌',
+   gen:function(){return qIsDiagonal()}},
+
+  {title:'אלכסון — תרגול',instruction:'זהו אם זה אלכסון או צלע',
+   tip:'שימו לב: אלכסון חוצה את <strong>פנים</strong> המצולע.\nצלע היא חלק מה<strong>מסגרת</strong> של המצולע.',
+   example:'אלכסון = חותך את הצורה מבפנים 🔀\nצלע = חלק מהשפה 🔲',
+   gen:function(){return qIsDiagonal()}},
+
+  {title:'ציירו אלכסון',instruction:'מצאו את הציור שבו האלכסון מסומן נכון',
+   tip:'חפשו את הציור שבו הקטע האדום עובר <strong>בתוך</strong> הצורה ומחבר שני קדקודים <strong>לא שכנים</strong>.',
+   example:'אם הקטע האדום הוא חלק מהמסגרת — זו צלע, לא אלכסון!',
+   gen:function(){return qDrawDiagonal()}},
+
+  {title:'ספירת אלכסונים — מרובע',instruction:'כמה אלכסונים יש במרובע?',
+   tip:'במרובע (4 צלעות) יש בדיוק <strong>2 אלכסונים</strong>.\nכל אלכסון מחבר שני קדקודים נגדיים.',
+   example:'🔲 מרובע → 2 אלכסונים',
+   gen:function(){return qCountDiagonals(4)}},
+
+  {title:'ספירת אלכסונים — מחומש',instruction:'כמה אלכסונים יש במחומש?',
+   tip:'במחומש (5 צלעות) יש <strong>5 אלכסונים</strong>.\nמכל קדקוד יוצאים 2 אלכסונים.',
+   example:'⬠ מחומש → 5 אלכסונים',
+   gen:function(){return qCountDiagonals(5)}},
+
+  {title:'ספירת אלכסונים — משושה',instruction:'כמה אלכסונים יש במשושה?',
+   tip:'במשושה (6 צלעות) יש <strong>9 אלכסונים</strong>.\nמכל קדקוד יוצאים 3 אלכסונים.',
+   example:'⬡ משושה → 9 אלכסונים',
+   gen:function(){return qCountDiagonals(6)}},
+
+  {title:'אלכסון בפנים או בחוץ?',instruction:'האם האלכסון עובר בתוך המצולע?',
+   tip:'במצולע <strong>קמור</strong> (בלי "שקע") — כל האלכסונים בתוכו.\nבמצולע <strong>קעור</strong> (עם "שקע") — יש אלכסונים שיוצאים החוצה!',
+   example:'ריבוע = קמור → אלכסון בפנים ✅\nצורה עם שקע = קעור → אלכסון יכול לצאת החוצה',
+   gen:function(){return qDiagonalInsideOutside()}},
+
+  {title:'מעורבב — זיהוי וספירה',instruction:'שאלות מגוונות!',
+   tip:'זכרו:\n• שם המצולע = לפי מספר הצלעות\n• אלכסון = מחבר קדקודים לא שכנים\n• משולש: 0, מרובע: 2, מחומש: 5, משושה: 9',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[qIdentifyPolygon,qCountSidesVertices,function(){return qCountDiagonals()},qIsDiagonal];
+     return types[rr(0,3)]();
+   }},
+
+  {title:'מעורבב — אלכסונים',instruction:'כל סוגי שאלות האלכסון!',
+   tip:'אלכסון = קטע בין קדקודים לא שכנים.\nמשולש: 0, מרובע: 2, מחומש: 5, משושה: 9.',
+   example:'💪 בהצלחה!',
+   gen:function(){
+     var types=[qIsDiagonal,function(){return qCountDiagonals()},qDrawDiagonal,qDiagonalInsideOutside];
+     return types[rr(0,3)]();
+   }},
+
+  {title:'אתגר — זיהוי + אלכסונים',instruction:'שאלות מאתגרות!',
+   tip:'שלבו את כל מה שלמדתם!',
+   example:'🏆 אתם יכולים!',
+   gen:function(){
+     var types=[qIdentifyPolygon,qCountSidesVertices,qIsDiagonal,function(){return qCountDiagonals()},qDrawDiagonal];
+     return types[rr(0,4)]();
+   }},
+
+  {title:'אתגר — הכל ביחד',instruction:'כל הנושאים!',
+   tip:'מצולעים + אלכסונים + ספירה + קמור/קעור',
+   example:'🌟 כל שאלה היא הפתעה!',
+   gen:function(){
+     var types=[qIdentifyPolygon,qCountSidesVertices,qIsDiagonal,function(){return qCountDiagonals()},qDrawDiagonal,qDiagonalInsideOutside];
+     return types[rr(0,5)]();
+   }},
+
+  {title:'סופר אתגר!',instruction:'הרמה הכי קשה!',
+   tip:'🏆 אתם מומחים למצולעים ואלכסונים!',
+   example:'🌟 💪 🏆',
+   gen:function(){
+     var types=[qIdentifyPolygon,qCountSidesVertices,qIsDiagonal,function(){return qCountDiagonals()},qDrawDiagonal,qDiagonalInsideOutside];
+     return types[rr(0,5)]();
+   }},
+
+  {title:'מאסטר!',instruction:'אין עליכם!',
+   tip:'🏆 שלטתם בכל הנושא!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[qIdentifyPolygon,qCountSidesVertices,qIsDiagonal,function(){return qCountDiagonals()},qDrawDiagonal,qDiagonalInsideOutside];
+     return types[rr(0,5)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.options)+q.answer));seen.add(JSON.stringify(q.options)+q.answer);currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

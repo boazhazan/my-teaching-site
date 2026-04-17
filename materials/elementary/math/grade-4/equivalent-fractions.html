@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>שמות שונים לשבר — כיתה ד' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#0891b2;--primary-dark:#0e7490;--primary-light:#cffafe;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#0e7490 0%,#0891b2 50%,#06b6d4 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(8,145,178,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.visual-area{text-align:center;margin:16px 0}
+.frac{direction:ltr;unicode-bidi:embed;display:inline-flex;flex-direction:column;align-items:center;font-weight:800;font-size:1.5rem;color:var(--primary);vertical-align:middle;margin:0 6px}.frac .frac-num,.frac .frac-den{line-height:1.2}.frac .frac-line{width:100%;min-width:24px;height:3px;background:var(--primary);border-radius:2px;margin:2px 0}
+.big-frac{font-size:2.2rem}.big-frac .frac-line{height:4px}
+.circle-vis{display:inline-block;width:80px;height:80px;border-radius:50%;border:3px solid var(--primary);position:relative;overflow:hidden;background:#fff;vertical-align:middle;margin:0 8px}
+.rect-vis{display:inline-grid;border:3px solid var(--primary);border-radius:8px;overflow:hidden;vertical-align:middle;margin:0 8px}
+.rect-vis .cell{width:28px;height:28px;border:1px solid var(--border);background:#fff}.rect-vis .cell.filled{background:var(--primary-light)}
+.vis-pair{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;margin:12px 0}
+.vis-label{font-size:.85rem;color:var(--text-light);font-weight:600;margin-top:4px}
+.equals-sign{font-size:2rem;font-weight:900;color:var(--accent);vertical-align:middle}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;direction:ltr;unicode-bidi:embed}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.circle-vis{width:60px;height:60px}.big-frac{font-size:1.8rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🔄</div><div><h1>שמות שונים לשבר</h1><div class="subtitle">כיתה ד' — שברים שווים</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">שמות שונים לשבר — כיתה ד' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>🔄 שמות שונים לשבר</h2><p><strong>מה זה שברים שווים?</strong> לפעמים אותה כמות בדיוק יכולה להיכתב בשמות שונים!</p><p>🔹 <span class="math">1/2</span> = <span class="math">2/4</span> = <span class="math">3/6</span> — כולם חצי!<br>🔹 <span class="math">1/3</span> = <span class="math">2/6</span> = <span class="math">3/9</span> — כולם שליש!</p><p><strong>איך מוצאים שבר שווה?</strong><br>🔸 מכפילים את המונה ואת המכנה <strong>באותו מספר</strong>:<br><span class="math">1/2</span> × <span class="math">3/3</span> = <span class="math">3/6</span><br>🔸 מחלקים את המונה ואת המכנה <strong>באותו מספר</strong>:<br><span class="math">4/8</span> ÷ <span class="math">4/4</span> = <span class="math">1/2</span></p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+/* Fraction helpers */
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=b;b=a%b;a=t}return a}
+function simplify(n,d){var g=gcd(n,d);return[n/g,d/g]}
+function fracEq(a,b){var sa=simplify(a[0],a[1]),sb=simplify(b[0],b[1]);return sa[0]===sb[0]&&sa[1]===sb[1]}
+function fracStr(n,d){return n+'/'+d}
+
+/* Visual builders */
+function makeCircleSVG(num,den,size){
+  size=size||80;
+  var r=size/2-2;
+  var cx=size/2,cy=size/2;
+  var html='<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'" style="vertical-align:middle">';
+  /* background circle */
+  html+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="#fff" stroke="var(--primary)" stroke-width="3"/>';
+  /* filled slices */
+  for(var i=0;i<den;i++){
+    var startA=(i/den)*360-90;
+    var endA=((i+1)/den)*360-90;
+    var startR=startA*Math.PI/180;
+    var endR=endA*Math.PI/180;
+    var x1=cx+r*Math.cos(startR),y1=cy+r*Math.sin(startR);
+    var x2=cx+r*Math.cos(endR),y2=cy+r*Math.sin(endR);
+    var large=(endA-startA>180)?1:0;
+    var fill=i<num?'var(--primary-light)':'#fff';
+    var stroke=i<num?'var(--primary)':'var(--border)';
+    html+='<path d="M'+cx+','+cy+' L'+x1.toFixed(2)+','+y1.toFixed(2)+' A'+r+','+r+' 0 '+large+',1 '+x2.toFixed(2)+','+y2.toFixed(2)+' Z" fill="'+fill+'" stroke="'+stroke+'" stroke-width="1.5"/>';
+  }
+  html+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="var(--primary)" stroke-width="3"/>';
+  html+='</svg>';
+  return html;
+}
+
+function makeRectVis(num,den){
+  /* grid: 1 row x den cells */
+  var cols=den<=6?den:(den<=12?Math.ceil(den/2):Math.ceil(den/3));
+  var rows=Math.ceil(den/cols);
+  var html='<div class="rect-vis" style="grid-template-columns:repeat('+cols+',1fr)">';
+  for(var i=0;i<den;i++){
+    html+='<div class="cell'+(i<num?' filled':'')+'"></div>';
+  }
+  html+='</div>';
+  return html;
+}
+
+function makeFracHTML(n,d,big){
+  var cls=big?'frac big-frac':'frac';
+  return '<span class="'+cls+'"><span class="frac-num">'+n+'</span><span class="frac-line"></span><span class="frac-den">'+d+'</span></span>';
+}
+
+/* Nice fraction pairs for exercises */
+var easyPairs=[[1,2,2,4],[1,2,3,6],[1,2,4,8],[1,3,2,6],[1,3,3,9],[1,4,2,8],[2,3,4,6],[2,4,1,2],[2,5,4,10],[3,4,6,8],[2,6,1,3],[3,6,1,2],[4,8,1,2],[3,9,1,3],[2,8,1,4],[5,10,1,2],[4,6,2,3],[6,8,3,4],[4,10,2,5],[6,9,2,3]];
+
+/* Generate a random equivalent pair */
+function randEquivPair(){
+  var bases=[[1,2],[1,3],[1,4],[2,3],[2,5],[3,4],[3,5],[1,5],[2,7],[3,7]];
+  var b=bases[rr(0,bases.length-1)];
+  var mult=rr(2,5);
+  return[b[0],b[1],b[0]*mult,b[1]*mult];
+}
+
+/* Generate wrong fraction (not equivalent to n/d) */
+function wrongFrac(n,d){
+  for(var att=0;att<100;att++){
+    var wn=rr(1,10),wd=rr(2,12);
+    if(!fracEq([n,d],[wn,wd])&&wn<wd) return[wn,wd];
+  }
+  return[n+1,d+1]; /* fallback */
+}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: Find equivalent fraction */
+function qFindEquivalent(){
+  var p=randEquivPair();
+  var n=p[0],d=p[1],en=p[2],ed=p[3];
+  var correct=fracStr(en,ed);
+  var opts=[correct];
+  var seen=new Set();seen.add(correct);
+  while(opts.length<4){
+    var w=wrongFrac(n,d);
+    var ws=fracStr(w[0],w[1]);
+    if(!seen.has(ws)){seen.add(ws);opts.push(ws)}
+  }
+  opts=shuffle(opts);
+  return{type:'choice',qText:'מצאו שבר <strong>שווה</strong> ל-'+makeFracHTML(n,d,false),display:'<div class="vis-pair">'+makeCircleSVG(n,d,90)+'<span class="equals-sign">=</span>'+makeCircleSVG(en,ed,90)+'</div>',answer:correct,options:opts,colClass:'cols-4',explain:fracStr(n,d)+' = '+fracStr(en,ed)+' — הכפלנו מונה ומכנה ב-'+(en/n)};
+}
+
+/* Type 2: Match pairs */
+function qMatchPairs(){
+  var p=randEquivPair();
+  var n=p[0],d=p[1],en=p[2],ed=p[3];
+  var correct=fracStr(en,ed);
+  var opts=[correct];
+  var seen=new Set();seen.add(correct);
+  while(opts.length<4){
+    var w=wrongFrac(n,d);
+    var ws=fracStr(w[0],w[1]);
+    if(!seen.has(ws)){seen.add(ws);opts.push(ws)}
+  }
+  opts=shuffle(opts);
+  return{type:'choice',qText:'מי שווה ל-'+makeFracHTML(n,d,false)+'?',display:'<div class="visual-area">'+makeFracHTML(n,d,true)+'</div>',answer:correct,options:opts,colClass:'cols-4',explain:fracStr(n,d)+' = '+fracStr(en,ed)};
+}
+
+/* Type 3: Visual equivalent — are they equal? */
+function qVisualEquivalent(){
+  var isEqual=rr(0,1)===1;
+  var p=randEquivPair();
+  var n1=p[0],d1=p[1],n2,d2;
+  if(isEqual){
+    n2=p[2];d2=p[3];
+  }else{
+    var w=wrongFrac(n1,d1);
+    n2=w[0];d2=w[1];
+  }
+  var correct=isEqual?'כן, שווים!':'לא, שונים!';
+  var useCircle=rr(0,1)===1;
+  var vis1=useCircle?makeCircleSVG(n1,d1,90):makeRectVis(n1,d1);
+  var vis2=useCircle?makeCircleSVG(n2,d2,90):makeRectVis(n2,d2);
+  return{type:'choice',qText:'האם '+makeFracHTML(n1,d1,false)+' ו-'+makeFracHTML(n2,d2,false)+' <strong>שווים</strong>?',display:'<div class="vis-pair"><div style="text-align:center">'+vis1+'<div class="vis-label">'+fracStr(n1,d1)+'</div></div><span class="equals-sign">?</span><div style="text-align:center">'+vis2+'<div class="vis-label">'+fracStr(n2,d2)+'</div></div></div>',answer:correct,options:['כן, שווים!','לא, שונים!'],colClass:'cols-2',explain:isEqual?fracStr(n1,d1)+' = '+fracStr(n2,d2)+' — אותה כמות!':fracStr(n1,d1)+' ≠ '+fracStr(n2,d2)+' — כמויות שונות'};
+}
+
+/* Type 4: Missing numerator/denominator */
+function qMissingEquivalent(){
+  var p=randEquivPair();
+  var n=p[0],d=p[1],en=p[2],ed=p[3];
+  var missingNum=rr(0,1)===1; /* true = missing numerator, false = missing denominator */
+  var qText,correct,displayHTML;
+  if(missingNum){
+    qText='השלימו: '+makeFracHTML(n,d,false)+' = '+makeFracHTML('?',ed,false);
+    correct=String(en);
+    displayHTML='<div class="visual-area" style="font-size:1.8rem;font-weight:800;direction:ltr;unicode-bidi:embed">'+makeFracHTML(n,d,true)+' <span class="equals-sign">=</span> '+makeFracHTML('?',ed,true)+'</div>';
+  }else{
+    qText='השלימו: '+makeFracHTML(n,d,false)+' = '+makeFracHTML(en,'?',false);
+    correct=String(ed);
+    displayHTML='<div class="visual-area" style="font-size:1.8rem;font-weight:800;direction:ltr;unicode-bidi:embed">'+makeFracHTML(n,d,true)+' <span class="equals-sign">=</span> '+makeFracHTML(en,'?',true)+'</div>';
+  }
+  var opts=[correct];
+  var seen=new Set();seen.add(correct);
+  while(opts.length<4){
+    var w=String(rr(1,12));
+    if(!seen.has(w)){seen.add(w);opts.push(w)}
+  }
+  opts=shuffle(opts);
+  var mult=en/n;
+  return{type:'choice',qText:qText,display:displayHTML,answer:correct,options:opts,colClass:'cols-4',explain:fracStr(n,d)+' = '+fracStr(en,ed)+' (הכפלנו ב-'+mult+')'};
+}
+
+/* Type 5: Which is equal? */
+function qWhichIsEqual(){
+  var p=randEquivPair();
+  var n=p[0],d=p[1],en=p[2],ed=p[3];
+  var correct=fracStr(en,ed);
+  var opts=[correct];
+  var seen=new Set();seen.add(correct);
+  while(opts.length<4){
+    var w=wrongFrac(n,d);
+    var ws=fracStr(w[0],w[1]);
+    if(!seen.has(ws)){seen.add(ws);opts.push(ws)}
+  }
+  opts=shuffle(opts);
+  return{type:'choice',qText:'מי שווה ל-'+makeFracHTML(n,d,false)+'?',display:'<div class="visual-area">'+makeCircleSVG(n,d,100)+'</div>',answer:correct,options:opts,colClass:'cols-4',explain:fracStr(n,d)+' = '+fracStr(en,ed)};
+}
+
+/* Type 6: Natural number as fraction */
+function qNaturalAsFraction(){
+  var whole=rr(1,10);
+  var dens=[1,2,3,4,5];
+  var chosenD=dens[rr(0,dens.length-1)];
+  var correct;
+  if(chosenD===1){
+    correct=fracStr(whole,1);
+    var qText='כתבו את <strong>'+whole+'</strong> כשבר עם מכנה 1';
+  }else{
+    correct=fracStr(whole*chosenD,chosenD);
+    var qText='כתבו את <strong>'+whole+'</strong> כשבר עם מכנה '+chosenD;
+  }
+  var opts=[correct];
+  var seen=new Set();seen.add(correct);
+  while(opts.length<4){
+    var wn=rr(1,whole*6);
+    var wd=chosenD===1?1:rr(1,10);
+    var ws=fracStr(wn,wd);
+    if(!seen.has(ws)&&ws!==correct){seen.add(ws);opts.push(ws)}
+  }
+  opts=shuffle(opts);
+  return{type:'choice',qText:qText,display:'<div class="visual-area" style="font-size:2.5rem;font-weight:900;color:var(--primary)">'+whole+'</div>',answer:correct,options:opts,colClass:'cols-4',explain:whole+' = '+correct};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'חצי = 2 רבעים (ויזואל)',instruction:'הסתכלו על הציורים — האם הם שווים?',
+   tip:'<strong>שבר שווה</strong> = אותה כמות בדיוק, רק מחולקת לחלקים אחרים.\nחצי עוגה = 2 רבעי עוגה!',
+   example:'<span class="math">1/2</span> = <span class="math">2/4</span> — אותה כמות!',
+   gen:function(){
+     var pairs=[[1,2,2,4],[1,2,3,6],[2,4,1,2]];
+     var p=pairs[rr(0,pairs.length-1)];
+     var isEqual=rr(0,3)>0;
+     var n1=p[0],d1=p[1],n2,d2;
+     if(isEqual){n2=p[2];d2=p[3]}else{var w=wrongFrac(n1,d1);n2=w[0];d2=w[1]}
+     var correct=isEqual?'כן, שווים!':'לא, שונים!';
+     return{type:'choice',qText:'האם '+makeFracHTML(n1,d1,false)+' ו-'+makeFracHTML(n2,d2,false)+' <strong>שווים</strong>?',display:'<div class="vis-pair"><div style="text-align:center">'+makeCircleSVG(n1,d1,100)+'<div class="vis-label">'+fracStr(n1,d1)+'</div></div><span class="equals-sign">?</span><div style="text-align:center">'+makeCircleSVG(n2,d2,100)+'<div class="vis-label">'+fracStr(n2,d2)+'</div></div></div>',answer:correct,options:['כן, שווים!','לא, שונים!'],colClass:'cols-2',explain:isEqual?fracStr(n1,d1)+' = '+fracStr(n2,d2)+' — אותה כמות!':fracStr(n1,d1)+' ≠ '+fracStr(n2,d2)+' — כמויות שונות'}
+   }},
+
+  {title:'שברים שווים — ויזואל',instruction:'השוו ציורים — שווים או לא?',
+   tip:'מסתכלים על החלק הצבוע.\nאם אותה כמות צבועה — השברים שווים!',
+   example:'<span class="math">1/3</span> = <span class="math">2/6</span>\nשליש = 2 שישיות',
+   gen:function(){return qVisualEquivalent()}},
+
+  {title:'מצאו שבר שווה',instruction:'בחרו את השבר השווה מבין 4 אפשרויות',
+   tip:'כדי למצוא שבר שווה — מכפילים מונה ומכנה <strong>באותו מספר</strong>.\n<span class="math">1/2</span> × <span class="math">3/3</span> = <span class="math">3/6</span>',
+   example:'<span class="math">1/3</span> → כופלים ב-2 → <span class="math">2/6</span> ✅',
+   gen:function(){return qFindEquivalent()}},
+
+  {title:'מצאו שבר שווה — תרגול',instruction:'עוד תרגול — מצאו שברים שווים!',
+   tip:'זכרו: מונה ומכנה מוכפלים (או מחולקים) <strong>באותו מספר</strong>!',
+   example:'<span class="math">2/5</span> × <span class="math">2/2</span> = <span class="math">4/10</span> ✅',
+   gen:function(){return qFindEquivalent()}},
+
+  {title:'השלמת מונה/מכנה',instruction:'מה המספר החסר?',
+   tip:'אם המכנה הוכפל — המונה צריך להיות מוכפל באותו מספר!\n<span class="math">1/2 = ?/6</span> — המכנה הוכפל ב-3, אז המונה = 1×3 = 3',
+   example:'<span class="math">1/2 = 3/6</span> (הכפלנו ב-3)',
+   gen:function(){return qMissingEquivalent()}},
+
+  {title:'השלמה — תרגול',instruction:'עוד השלמות — מונה או מכנה!',
+   tip:'מצאו באיזה מספר הכפילו/חילקו, ועשו אותו דבר לצד השני!',
+   example:'<span class="math">2/3 = 4/?</span> — המונה הוכפל ב-2, אז ? = 3×2 = 6',
+   gen:function(){return qMissingEquivalent()}},
+
+  {title:'מי שווה ל...?',instruction:'בחרו מבין 4 — מי שווה?',
+   tip:'בדקו כל אפשרות: הכפילו או חלקו מונה ומכנה באותו מספר.',
+   example:'מי שווה ל-<span class="math">1/4</span>?\n<span class="math">2/8</span> ✅ (הכפלנו ב-2)',
+   gen:function(){return qWhichIsEqual()}},
+
+  {title:'התאמת זוגות',instruction:'מצאו את הזוג השווה!',
+   tip:'שני שברים שווים אם הצמצום שלהם נותן את אותו שבר.',
+   example:'<span class="math">4/6</span> = <span class="math">2/3</span> (חילקנו ב-2)',
+   gen:function(){return qMatchPairs()}},
+
+  {title:'מספר טבעי כשבר',instruction:'כתבו מספר רגיל בצורת שבר!',
+   tip:'כל מספר אפשר לכתוב כשבר!\n<span class="math">3 = 3/1</span>\n<span class="math">3 = 6/2</span> (כופלים מונה ומכנה)',
+   example:'<span class="math">5 = 5/1 = 10/2 = 15/3</span>',
+   gen:function(){return qNaturalAsFraction()}},
+
+  {title:'מעורבב — ויזואל',instruction:'שאלות מגוונות עם ציורים!',
+   tip:'השתמשו בציורים כדי לבדוק — האם אותה כמות צבועה?',
+   example:'🎨 הסתכלו טוב על הציורים!',
+   gen:function(){
+     var types=[qVisualEquivalent,qFindEquivalent,qWhichIsEqual];
+     return types[rr(0,2)]();
+   }},
+
+  {title:'מעורבב — חישוב',instruction:'כל סוגי השאלות — בלי ציורים!',
+   tip:'הכפלה וחילוק של מונה ומכנה באותו מספר!',
+   example:'💪 חשבו בראש!',
+   gen:function(){
+     var types=[qMatchPairs,qMissingEquivalent,qWhichIsEqual,qNaturalAsFraction];
+     return types[rr(0,3)]();
+   }},
+
+  {title:'כל הסוגים',instruction:'מכל סוג קצת!',
+   tip:'שלבו את כל מה שלמדתם — ויזואל, חישוב, השלמה!',
+   example:'🌟 אתם כבר מומחים!',
+   gen:function(){
+     var types=[qVisualEquivalent,qFindEquivalent,qMissingEquivalent,qWhichIsEqual,qMatchPairs,qNaturalAsFraction];
+     return types[rr(0,5)]();
+   }},
+
+  {title:'תרגול',instruction:'עוד ועוד תרגול!',
+   tip:'ככל שמתרגלים יותר — השברים הופכים לקלים!',
+   example:'🎯 קדימה!',
+   gen:function(){
+     var types=[qFindEquivalent,qMissingEquivalent,qWhichIsEqual,qMatchPairs,qNaturalAsFraction];
+     return types[rr(0,4)]();
+   }},
+
+  {title:'אתגר',instruction:'שאלות קשות יותר!',
+   tip:'נסו לפתור בלי עזרה — אתם יכולים!',
+   example:'💪 בהצלחה!',
+   gen:function(){
+     var types=[qMissingEquivalent,qWhichIsEqual,qMatchPairs,qNaturalAsFraction,qFindEquivalent];
+     return types[rr(0,4)]();
+   }},
+
+  {title:'סופר-אתגר!',instruction:'הרמה הכי קשה!',
+   tip:'🏆 אתם אלופים בשברים שווים!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[qFindEquivalent,qMissingEquivalent,qWhichIsEqual,qMatchPairs,qNaturalAsFraction,qVisualEquivalent];
+     return types[rr(0,5)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=6;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.textContent=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

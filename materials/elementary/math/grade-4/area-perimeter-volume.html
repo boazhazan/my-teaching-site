@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>שטח, היקף ונפח — כיתה ד' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#0284c7;--primary-dark:#0369a1;--primary-light:#e0f2fe;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#0284c7 0%,#0ea5e9 50%,#38bdf8 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(2,132,199,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:3rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:2.2rem;padding:6px 20px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">📐</div><div><h1>שטח, היקף ונפח</h1><div class="subtitle">כיתה ד' — נוסחאות מלבן ונפח תיבה</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">שטח, היקף ונפח — כיתה ד' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>📐 שטח, היקף ונפח</h2><p><strong>שטח מלבן:</strong> אורך × רוחב<br>דוגמה: מלבן <span class="math">4×3</span> → שטח = <span class="math">12</span> סמ"ר</p><p><strong>היקף מלבן:</strong> <span class="math">2 × (אורך + רוחב)</span><br>דוגמה: מלבן <span class="math">4×3</span> → היקף = <span class="math">2×(4+3) = 14</span> ס"מ</p><p><strong>נפח תיבה:</strong> אורך × רוחב × גובה<br>דוגמה: תיבה <span class="math">4×3×2</span> → נפח = <span class="math">24</span> סמ"ק</p><p><strong>שטח פנים של תיבה:</strong> <span class="math">2×(אב + בג + אג)</span><br>שש פאות — כל זוג פאות נגדיות שווה.</p><p><strong>יחידות:</strong><br>🔹 שטח: סמ"ר (cm²), מ"ר (m²)<br>🔹 נפח: סמ"ק (cm³), דצמ"ק (dm³)<br>🔹 <span class="math">1</span> ליטר = <span class="math">1</span> דצמ"ק<br>🔹 <span class="math">1</span> מיליליטר = <span class="math">1</span> סמ"ק</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+
+/* Generate unique wrong options near the correct answer */
+function wrongNear(correct,count,min){
+  min=min||1;
+  var s=new Set();s.add(correct);
+  var offsets=[-3,-2,-1,1,2,3,4,5,-4,-5,6,-6,7,8,10,12];
+  for(var i=0;i<offsets.length&&s.size<count+1;i++){
+    var v=correct+offsets[i];
+    if(v>=min&&!s.has(v))s.add(v);
+  }
+  /* fallback if still not enough */
+  var att=0;
+  while(s.size<count+1&&att<100){
+    var v=correct+rr(-15,15);att++;
+    if(v>=min&&!s.has(v))s.add(v);
+  }
+  s.delete(correct);
+  return Array.from(s).slice(0,count);
+}
+
+/* SVG rectangle diagram */
+function svgRect(a,b){
+  var w=Math.min(a*14,130),h=Math.min(b*14,90);
+  if(w<40)w=40;if(h<30)h=30;
+  return '<svg viewBox="0 0 210 '+(h+50)+'" width="190" style="display:block;margin:0 auto 8px">'
+    +'<rect x="30" y="15" width="'+w+'" height="'+h+'" fill="var(--primary-light)" stroke="var(--primary)" stroke-width="2" rx="2"/>'
+    +'<text x="'+(30+w/2)+'" y="'+(15+h+18)+'" text-anchor="middle" font-size="14" font-weight="700" fill="var(--text)">'+a+' ס&quot;מ</text>'
+    +'<text x="'+(30+w+10)+'" y="'+(15+h/2+5)+'" text-anchor="start" font-size="14" font-weight="700" fill="var(--text)">'+b+' ס&quot;מ</text>'
+    +'</svg>';
+}
+
+/* SVG box (3D-ish) diagram */
+function svgBox(a,b,c){
+  var w=Math.min(a*12,100),h=Math.min(c*12,70),d=Math.min(b*8,40);
+  if(w<40)w=40;if(h<30)h=30;if(d<15)d=15;
+  var x0=20,y0=d+10;
+  return '<svg viewBox="0 0 '+(x0+w+d+30)+' '+(y0+h+25)+'" width="200" style="display:block;margin:0 auto 8px">'
+    /* front face */
+    +'<rect x="'+x0+'" y="'+y0+'" width="'+w+'" height="'+h+'" fill="var(--primary-light)" stroke="var(--primary)" stroke-width="2"/>'
+    /* top face */
+    +'<polygon points="'+x0+','+y0+' '+(x0+d)+','+(y0-d)+' '+(x0+w+d)+','+(y0-d)+' '+(x0+w)+','+y0+'" fill="rgba(2,132,199,0.15)" stroke="var(--primary)" stroke-width="2"/>'
+    /* right face */
+    +'<polygon points="'+(x0+w)+','+y0+' '+(x0+w+d)+','+(y0-d)+' '+(x0+w+d)+','+(y0+h-d)+' '+(x0+w)+','+(y0+h)+'" fill="rgba(2,132,199,0.25)" stroke="var(--primary)" stroke-width="2"/>'
+    /* labels */
+    +'<text x="'+(x0+w/2)+'" y="'+(y0+h+18)+'" text-anchor="middle" font-size="13" font-weight="700" fill="var(--text)">'+a+'</text>'
+    +'<text x="'+(x0+w+d/2+8)+'" y="'+(y0-d/2+2)+'" text-anchor="start" font-size="13" font-weight="700" fill="var(--text)">'+b+'</text>'
+    +'<text x="'+(x0+w+d+8)+'" y="'+(y0+h/2-d/2+5)+'" text-anchor="start" font-size="13" font-weight="700" fill="var(--text)">'+c+'</text>'
+    +'</svg>';
+}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* 1. Area of rectangle */
+function qAreaRect(){
+  var a=rr(2,12),b=rr(2,10);
+  if(a===b){b=a+rr(1,3)} /* avoid square */
+  var correct=a*b;
+  var wrongs=wrongNear(correct,3,1);
+  var options=shuffle([String(correct)].concat(wrongs.map(String)));
+  return{type:'choice',qText:'מהו <strong>שטח</strong> המלבן?',display:svgRect(a,b),answer:String(correct),options:options,colClass:'cols-4',explain:'שטח = '+a+' × '+b+' = '+correct+' סמ"ר'};
+}
+
+/* 2. Perimeter of rectangle */
+function qPerimeterRect(){
+  var a=rr(2,12),b=rr(2,10);
+  if(a===b){b=a+rr(1,3)}
+  var correct=2*(a+b);
+  var wrongs=wrongNear(correct,3,4);
+  var options=shuffle([String(correct)].concat(wrongs.map(String)));
+  return{type:'choice',qText:'מהו <strong>היקף</strong> המלבן?',display:svgRect(a,b),answer:String(correct),options:options,colClass:'cols-4',explain:'היקף = 2 × ('+a+' + '+b+') = 2 × '+(a+b)+' = '+correct+' ס"מ'};
+}
+
+/* 3. Composite L-shape area */
+function qAreaComposite(){
+  /* Build L-shape from two rectangles */
+  var a1=rr(3,8),b1=rr(2,5);
+  var a2=rr(2,5),b2=rr(2,4);
+  /* Ensure they form an L */
+  if(a2>=a1)a2=a1-1;if(a2<1)a2=1;
+  var area1=a1*b1,area2=a2*b2;
+  var correct=area1+area2;
+  var wrongs=wrongNear(correct,3,2);
+  var options=shuffle([String(correct)].concat(wrongs.map(String)));
+  /* SVG L-shape */
+  var sc=10;
+  var tw=Math.max(a1,a2)*sc,th=(b1+b2)*sc;
+  var svg='<svg viewBox="0 0 '+(tw+60)+' '+(th+50)+'" width="200" style="display:block;margin:0 auto 8px">'
+    +'<path d="M20,10 L'+(20+a1*sc)+',10 L'+(20+a1*sc)+','+(10+b1*sc)+' L'+(20+a2*sc)+','+(10+b1*sc)+' L'+(20+a2*sc)+','+(10+(b1+b2)*sc)+' L20,'+(10+(b1+b2)*sc)+' Z" fill="var(--primary-light)" stroke="var(--primary)" stroke-width="2"/>'
+    /* dimension labels */
+    +'<text x="'+(20+a1*sc/2)+'" y="8" text-anchor="middle" font-size="11" font-weight="700" fill="var(--text)">'+a1+'</text>'
+    +'<text x="'+(20+a1*sc+8)+'" y="'+(10+b1*sc/2)+'" text-anchor="start" font-size="11" font-weight="700" fill="var(--text)">'+b1+'</text>'
+    +'<text x="'+(20+a2*sc/2)+'" y="'+(10+(b1+b2)*sc+15)+'" text-anchor="middle" font-size="11" font-weight="700" fill="var(--text)">'+a2+'</text>'
+    +'<text x="12" y="'+(10+(b1+b2/2)*sc)+'" text-anchor="end" font-size="11" font-weight="700" fill="var(--text)">'+b2+'</text>'
+    /* dashed line separating the two rectangles */
+    +'<line x1="20" y1="'+(10+b1*sc)+'" x2="'+(20+a2*sc)+'" y2="'+(10+b1*sc)+'" stroke="var(--primary)" stroke-width="1" stroke-dasharray="4,3"/>'
+    +'</svg>';
+  return{type:'choice',qText:'מהו <strong>השטח</strong> של הצורה המורכבת?',display:svg,answer:String(correct),options:options,colClass:'cols-4',explain:'מחלקים לשני מלבנים: '+a1+'×'+b1+' = '+area1+' ועוד '+a2+'×'+b2+' = '+area2+'. סה"כ '+correct+' סמ"ר'};
+}
+
+/* 4. Maximum area given perimeter */
+function qMaxAreaGivenPerimeter(){
+  var half=rr(4,12); /* half-perimeter */
+  var perim=half*2;
+  /* Max area is when it's a square (if half is even) or closest to square */
+  var side=half/2;
+  var correct;
+  if(half%2===0){
+    correct=side*side; /* perfect square */
+  }else{
+    var s1=Math.floor(side),s2=Math.ceil(side);
+    correct=s1*s2;
+  }
+  var wrongs=wrongNear(correct,3,1);
+  var options=shuffle([String(correct)].concat(wrongs.map(String)));
+  return{type:'choice',qText:'היקף מלבן הוא <strong>'+perim+' ס"מ</strong>. מהו השטח <strong>המרבי</strong> האפשרי?',display:'',answer:String(correct),options:options,colClass:'cols-4',explain:'חצי היקף = '+half+'. שטח מרבי כש'+((half%2===0)?'ריבוע '+side+'×'+side+' = '+correct:'קרוב לריבוע: '+Math.floor(side)+'×'+Math.ceil(side)+' = '+correct)+' סמ"ר'};
+}
+
+/* 5. Volume of box */
+function qVolumeBox(){
+  var a=rr(2,8),b=rr(2,6),c=rr(2,5);
+  var correct=a*b*c;
+  var wrongs=wrongNear(correct,3,2);
+  var options=shuffle([String(correct)].concat(wrongs.map(String)));
+  return{type:'choice',qText:'מהו <strong>נפח</strong> התיבה?',display:svgBox(a,b,c),answer:String(correct),options:options,colClass:'cols-4',explain:'נפח = '+a+' × '+b+' × '+c+' = '+correct+' סמ"ק'};
+}
+
+/* 6. Build box from 24 cubes — how many ways? */
+function qBuildBox24(){
+  var target=rr(0,2);
+  var cubes=[24,12,36][target];
+  /* Find all distinct ordered triplets (a<=b<=c) */
+  var ways=[];
+  for(var a=1;a<=cubes;a++){
+    if(cubes%a!==0)continue;
+    for(var b=a;b<=cubes/a;b++){
+      if((cubes/a)%b!==0)continue;
+      var c=cubes/(a*b);
+      if(c>=b)ways.push(a+'×'+b+'×'+c);
+    }
+  }
+  var correct=ways.length;
+  var wrongs=wrongNear(correct,3,1);
+  var options=shuffle([String(correct)].concat(wrongs.map(String)));
+  return{type:'choice',qText:'יש '+cubes+' קוביות. בכמה דרכים אפשר לבנות מהן <strong>תיבה</strong>?',display:'<div class="num-display"><span class="big-num" style="font-size:2rem">'+cubes+' 🧊</span></div>',answer:String(correct),options:options,colClass:'cols-4',explain:'הדרכים: '+ways.join(' ,  ')+ ' — סה"כ '+correct+' דרכים'};
+}
+
+/* 7. Surface area of box */
+function qSurfaceArea(){
+  var a=rr(2,7),b=rr(2,6),c=rr(2,5);
+  var correct=2*(a*b+b*c+a*c);
+  var wrongs=wrongNear(correct,3,6);
+  var options=shuffle([String(correct)].concat(wrongs.map(String)));
+  return{type:'choice',qText:'מהו <strong>שטח הפנים</strong> של התיבה?',display:svgBox(a,b,c),answer:String(correct),options:options,colClass:'cols-4',explain:'שטח פנים = 2×('+a+'×'+b+' + '+b+'×'+c+' + '+a+'×'+c+') = 2×('+(a*b)+' + '+(b*c)+' + '+(a*c)+') = '+correct+' סמ"ר'};
+}
+
+/* 8. Volume units conversion */
+function qVolumeUnits(){
+  var types=[
+    {q:'כמה <strong>סמ"ק</strong> ב-<strong>ליטר</strong> אחד?',a:'1,000',w:['100','10,000','500']},
+    {q:'<strong>ליטר</strong> אחד שווה ל-?',a:'1 דצמ"ק',w:['1 סמ"ק','10 סמ"ק','100 סמ"ק']},
+    {q:'<strong>מיליליטר</strong> אחד שווה ל-?',a:'1 סמ"ק',w:['1 דצמ"ק','10 סמ"ק','0.1 סמ"ק']},
+    {q:'כמה <strong>מיליליטר</strong> בליטר?',a:'1,000',w:['100','10,000','500']},
+    {q:'כמה <strong>ליטר</strong> ב-<strong>2,000</strong> סמ"ק?',a:'2',w:['20','200','0.2']},
+    {q:'כמה <strong>סמ"ק</strong> ב-<strong>3</strong> ליטר?',a:'3,000',w:['300','30','30,000']}
+  ];
+  var t=types[rr(0,types.length-1)];
+  var options=shuffle([t.a].concat(t.w));
+  return{type:'choice',qText:t.q,display:'',answer:t.a,options:options,colClass:'cols-2'};
+}
+
+/* 9. Paint a room — surface area calculation */
+function qPaintRoom(){
+  var l=rr(3,6),w=rr(3,5),h=rr(2,4);
+  /* walls only (4 walls, no floor/ceiling) */
+  var correct=2*h*(l+w);
+  var wrongs=wrongNear(correct,3,4);
+  var options=shuffle([String(correct)].concat(wrongs.map(String)));
+  return{type:'choice',qText:'חדר באורך '+l+' מ\', רוחב '+w+' מ\' וגובה '+h+' מ\'. מהו <strong>שטח הקירות</strong> לצביעה?',display:svgBox(l,w,h),answer:String(correct),options:options,colClass:'cols-4',explain:'שטח 4 קירות = 2 × '+h+' × ('+l+' + '+w+') = 2 × '+h+' × '+(l+w)+' = '+correct+' מ"ר'};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'שטח מלבן — נוסחה',instruction:'שטח = אורך × רוחב',
+   tip:'<strong>שטח</strong> מודד כמה מקום הצורה תופסת.\nנוסחה: <span class="math">שטח = אורך × רוחב</span>',
+   example:'מלבן <span class="math">5×3</span>:\nשטח = <span class="math">5 × 3 = 15</span> סמ"ר',
+   gen:function(){return qAreaRect()}},
+
+  {title:'שטח מלבן — תרגול',instruction:'חשבו שטח של מלבנים שונים',
+   tip:'זכרו: <span class="math">שטח = אורך × רוחב</span>\nהתשובה ביחידות <strong>סמ"ר</strong> (סנטימטר רבוע).',
+   example:'מלבן <span class="math">7×4</span>:\nשטח = <span class="math">7 × 4 = 28</span> סמ"ר',
+   gen:function(){return qAreaRect()}},
+
+  {title:'היקף מלבן',instruction:'היקף = סכום כל הצלעות',
+   tip:'<strong>היקף</strong> = אורך כל הגבול מסביב לצורה.\n<span class="math">היקף = 2 × (אורך + רוחב)</span>',
+   example:'מלבן <span class="math">6×4</span>:\nהיקף = <span class="math">2 × (6+4) = 2 × 10 = 20</span> ס"מ',
+   gen:function(){return qPerimeterRect()}},
+
+  {title:'שטח + היקף מעורבב',instruction:'שטח או היקף? קראו בעיון!',
+   tip:'<strong>שטח</strong> = אורך × רוחב (סמ"ר)\n<strong>היקף</strong> = 2 × (אורך + רוחב) (ס"מ)\nשימו לב מה השאלה מבקשת!',
+   example:'שטח ≠ היקף! תמיד קראו את השאלה.',
+   gen:function(){return rr(0,1)?qAreaRect():qPerimeterRect()}},
+
+  {title:'שטח צורה מורכבת',instruction:'חלקו לשני מלבנים וחברו!',
+   tip:'צורת <strong>L</strong> — מחלקים לשני מלבנים,\nמחשבים שטח של כל אחד ומחברים.',
+   example:'צורת L: מלבן <span class="math">5×3</span> + מלבן <span class="math">2×4</span>\nשטח = <span class="math">15 + 8 = 23</span> סמ"ר',
+   gen:function(){return qAreaComposite()}},
+
+  {title:'שטח מרבי בהיקף נתון',instruction:'באיזה מלבן השטח הכי גדול?',
+   tip:'כשההיקף קבוע, <strong>ריבוע</strong> נותן שטח מרבי!\nכלומר: הכי משתלם כשאורך = רוחב.',
+   example:'היקף 16 ס"מ → חצי = 8\nריבוע <span class="math">4×4 = 16</span> סמ"ר — שטח מרבי!',
+   gen:function(){return qMaxAreaGivenPerimeter()}},
+
+  {title:'נפח תיבה — נוסחה',instruction:'נפח = אורך × רוחב × גובה',
+   tip:'<strong>נפח</strong> מודד כמה מקום התיבה תופסת בתוכה.\n<span class="math">נפח = אורך × רוחב × גובה</span>',
+   example:'תיבה <span class="math">4×3×2</span>:\nנפח = <span class="math">4 × 3 × 2 = 24</span> סמ"ק',
+   gen:function(){return qVolumeBox()}},
+
+  {title:'נפח — תרגול',instruction:'חשבו נפח של תיבות שונות',
+   tip:'<span class="math">נפח = אורך × רוחב × גובה</span>\nהתשובה ביחידות <strong>סמ"ק</strong> (סנטימטר מעוקב).',
+   example:'תיבה <span class="math">5×2×3</span>:\nנפח = <span class="math">5 × 2 × 3 = 30</span> סמ"ק',
+   gen:function(){return qVolumeBox()}},
+
+  {title:'בנו תיבה מקוביות',instruction:'בכמה דרכים אפשר לבנות תיבה?',
+   tip:'צריך למצוא את כל הדרכים לפרק מספר ל-3 גורמים.\nלדוגמה: <span class="math">12 = 1×2×6 = 1×3×4 = 2×2×3</span>',
+   example:'<span class="math">24</span> קוביות:\n<span class="math">1×1×24, 1×2×12, 1×3×8, 1×4×6, 2×2×6, 2×3×4</span> — 6 דרכים!',
+   gen:function(){return qBuildBox24()}},
+
+  {title:'שטח פנים של תיבה',instruction:'שטח כל 6 הפאות יחד',
+   tip:'<span class="math">שטח פנים = 2×(אב + בג + אג)</span>\nלתיבה 6 פאות — 3 זוגות של פאות זהות.',
+   example:'תיבה <span class="math">3×2×4</span>:\n<span class="math">2×(6+8+12) = 2×26 = 52</span> סמ"ר',
+   gen:function(){return qSurfaceArea()}},
+
+  {title:'יחידות נפח',instruction:'ליטר, מיליליטר, סמ"ק, דצמ"ק',
+   tip:'<strong>1 ליטר = 1 דצמ"ק = 1,000 סמ"ק</strong>\n<strong>1 מיליליטר = 1 סמ"ק</strong>',
+   example:'בקבוק 2 ליטר = <span class="math">2,000</span> סמ"ק\nכוסית 250 מ"ל = <span class="math">250</span> סמ"ק',
+   gen:function(){return qVolumeUnits()}},
+
+  {title:'צביעת חדר',instruction:'שטח קירות = שטח פנים (בלי רצפה ותקרה)',
+   tip:'שטח 4 קירות = <span class="math">2 × גובה × (אורך + רוחב)</span>\n2 קירות ארוכים + 2 קירות קצרים.',
+   example:'חדר <span class="math">4×3×3</span>:\nקירות = <span class="math">2×3×(4+3) = 42</span> מ"ר',
+   gen:function(){return qPaintRoom()}},
+
+  {title:'מעורבב — שטח והיקף',instruction:'שטח, היקף, צורות מורכבות — הכל!',
+   tip:'זכרו:\n• שטח = אורך × רוחב\n• היקף = 2×(אורך + רוחב)\n• צורה מורכבת — מחלקים למלבנים',
+   example:'קראו כל שאלה בעיון! 🎯',
+   gen:function(){
+     var types=[qAreaRect,qPerimeterRect,qAreaComposite,qMaxAreaGivenPerimeter];
+     return types[rr(0,3)]();
+   }},
+
+  {title:'מעורבב — נפח ושטח פנים',instruction:'נפח, שטח פנים, יחידות, קוביות!',
+   tip:'• נפח = א×ב×ג\n• שטח פנים = 2×(אב+בג+אג)\n• 1 ליטר = 1,000 סמ"ק',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[qVolumeBox,qSurfaceArea,qVolumeUnits,qBuildBox24,qPaintRoom];
+     return types[rr(0,4)]();
+   }},
+
+  {title:'מאסטר! — הכל ביחד',instruction:'כל הנושאים — שטח, היקף, נפח ועוד!',
+   tip:'🏆 אתם מומחים! שטח, היקף, נפח, שטח פנים, יחידות — הכל!',
+   example:'🌟 💪 🏆',
+   gen:function(){
+     var types=[qAreaRect,qPerimeterRect,qAreaComposite,qMaxAreaGivenPerimeter,qVolumeBox,qBuildBox24,qSurfaceArea,qVolumeUnits,qPaintRoom];
+     return types[rr(0,8)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>שאלות כוללות — כיתה ד' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#0284c7;--primary-dark:#0369a1;--primary-light:#e0f2fe;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#0284c7 0%,#0ea5e9 50%,#38bdf8 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(2,132,199,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary);line-height:1.7}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;direction:ltr;unicode-bidi:embed}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🧩</div><div><h1>שאלות כוללות</h1><div class="subtitle">כיתה ד' — שאלות חד ודו-שלביות</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">שאלות כוללות — כיתה ד' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>🧩 שאלות כוללות — כיתה ד'</h2><p><strong>איך פותרים שאלה מילולית?</strong></p><p>🔹 <strong>קראו בעיון</strong> — הבינו מה נתון ומה שואלים.<br>🔹 <strong>זהו את הפעולה</strong> — חיבור? חיסור? כפל? חילוק?<br>🔹 <strong>חד-שלבית או דו-שלבית?</strong> — האם צריך פעולה אחת או שתיים?<br>🔹 <strong>כתבו ביטוי</strong> — רשמו את התרגיל לפני שמחשבים.</p><p><strong>מילות מפתח:</strong><br>🔸 "סך הכל", "ביחד" → חיבור או כפל<br>🔸 "כמה נשאר?", "ההפרש" → חיסור<br>🔸 "חלקו שווה", "כמה לכל אחד?" → חילוק<br>🔸 "קנו X פריטים ב-Y כל אחד" → כפל</p><p>15 רמות מהקל אל הקשה — בהצלחה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function fmtNum(n){return n.toLocaleString('he-IL')}
+
+/* Generate wrong options around correct answer */
+function wrongOpts(correct,count,minDelta,maxDelta){
+  var s=new Set();s.add(correct);
+  var att=0;
+  while(s.size<count+1&&att<200){
+    var d=rr(minDelta,maxDelta);
+    if(rr(0,1))d=-d;
+    var w=correct+d;
+    if(w>0&&!s.has(w))s.add(w);
+    att++;
+  }
+  s.delete(correct);
+  return Array.from(s).slice(0,count);
+}
+
+/* Build 4 option array from correct and wrongs */
+function makeOpts(correct,wrongs){
+  var opts=[String(fmtNum(correct))];
+  wrongs.forEach(function(w){opts.push(String(fmtNum(w)))});
+  while(opts.length<4){opts.push(String(fmtNum(correct+rr(1,50))))}
+  return shuffle(opts);
+}
+
+/* contexts for word problems */
+var ctxNames=['דנה','יוסי','מיכל','אורי','נועה','רון','שירה','אלון','מאיה','תום'];
+var ctxPlaces=['בית הספר','המכולת','חנות הספרים','הסופרמרקט','חנות הצעצועים','המאפייה'];
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* --- Type 1: One-step word problem --- */
+function qOneStep(ops){
+  var op=ops[rr(0,ops.length-1)];
+  var stem,correct,explain;
+  var name=ctxNames[rr(0,ctxNames.length-1)];
+
+  if(op==='add'){
+    var a=rr(100,4000),b=rr(100,4000);
+    correct=a+b;
+    var scenarios=[
+      'בספרייה יש '+fmtNum(a)+' ספרים בעברית ו-'+fmtNum(b)+' ספרים באנגלית. כמה ספרים יש בספרייה?',
+      name+' אסף/ה '+fmtNum(a)+' מדבקות. קיבל/ה עוד '+fmtNum(b)+'. כמה מדבקות יש ל'+name+' עכשיו?',
+      'באולם ישבו '+fmtNum(a)+' אנשים. הגיעו עוד '+fmtNum(b)+'. כמה אנשים יש עכשיו באולם?'
+    ];
+    stem=scenarios[rr(0,scenarios.length-1)];
+    explain=fmtNum(a)+' + '+fmtNum(b)+' = '+fmtNum(correct);
+  }
+  else if(op==='sub'){
+    var big=rr(1000,8000),small=rr(100,big-100);
+    correct=big-small;
+    var scenarios=[
+      'בחנות היו '+fmtNum(big)+' מוצרים. נמכרו '+fmtNum(small)+'. כמה נשארו?',
+      name+' חסך/ה '+fmtNum(big)+' ש"ח. קנה/תה מתנה ב-'+fmtNum(small)+' ש"ח. כמה נשאר?',
+      'באגם היו '+fmtNum(big)+' דגים. דייגים תפסו '+fmtNum(small)+'. כמה דגים נשארו?'
+    ];
+    stem=scenarios[rr(0,scenarios.length-1)];
+    explain=fmtNum(big)+' - '+fmtNum(small)+' = '+fmtNum(correct);
+  }
+  else if(op==='mul'){
+    var a=rr(3,12),b=rr(100,999);
+    correct=a*b;
+    var scenarios=[
+      'הזמינו '+fmtNum(a)+' ארגזים. בכל ארגז '+fmtNum(b)+' בקבוקות. כמה בקבוקות בסך הכל?',
+      'ב-'+fmtNum(a)+' כיתות יש '+fmtNum(b)+' תלמידים בכל כיתה. כמה תלמידים בסך הכל?',
+      name+' קנה/תה '+fmtNum(a)+' חולצות. כל חולצה עלתה '+fmtNum(b)+' ש"ח. כמה שילם/ה?'
+    ];
+    stem=scenarios[rr(0,scenarios.length-1)];
+    explain=fmtNum(a)+' × '+fmtNum(b)+' = '+fmtNum(correct);
+  }
+  else{ /* div */
+    var divisor=rr(3,12);
+    var quotient=rr(50,500);
+    var total=divisor*quotient;
+    correct=quotient;
+    var scenarios=[
+      'מנהל משלם '+fmtNum(total)+' ש"ח ל-'+fmtNum(divisor)+' עובדים שווה בשווה. כמה מקבל כל עובד?',
+      fmtNum(total)+' ממתקים חולקו שווה בשווה ל-'+fmtNum(divisor)+' ילדים. כמה קיבל כל ילד?',
+      'במחסן יש '+fmtNum(total)+' מוצרים. מחלקים אותם ל-'+fmtNum(divisor)+' משלוחים שווים. כמה בכל משלוח?'
+    ];
+    stem=scenarios[rr(0,scenarios.length-1)];
+    explain=fmtNum(total)+' ÷ '+fmtNum(divisor)+' = '+fmtNum(correct);
+  }
+
+  var wrongs=wrongOpts(correct,3,Math.max(5,Math.floor(correct*0.05)),Math.max(50,Math.floor(correct*0.3)));
+  var opts=makeOpts(correct,wrongs);
+  return{type:'choice',qText:stem,display:'',answer:fmtNum(correct),options:opts,colClass:'cols-2',explain:explain};
+}
+
+/* --- Type 2: Two-step a - (b × c) --- */
+function qTwoStepMulSub(){
+  var b=rr(10,50),c=rr(3,9);
+  var product=b*c;
+  var a=product+rr(20,200);
+  var correct=a-product;
+  var name=ctxNames[rr(0,ctxNames.length-1)];
+
+  var scenarios=[
+    'ל'+name+' יש '+fmtNum(a)+' ש"ח. קנה/תה '+fmtNum(b)+' מחברות, כל מחברת עולה '+fmtNum(c)+' ש"ח. כמה כסף נשאר?',
+    'בקופה היו '+fmtNum(a)+' ש"ח. קנו '+fmtNum(b)+' בלונים ב-'+fmtNum(c)+' ש"ח כל אחד. כמה נשאר בקופה?',
+    name+' הכין/ה '+fmtNum(a)+' עוגיות. חילק/ה '+fmtNum(b)+' שקיות עם '+fmtNum(c)+' עוגיות בכל שקית. כמה עוגיות נשארו?'
+  ];
+  var stem=scenarios[rr(0,scenarios.length-1)];
+  var explain=fmtNum(b)+' × '+fmtNum(c)+' = '+fmtNum(product)+', ואז '+fmtNum(a)+' - '+fmtNum(product)+' = '+fmtNum(correct);
+
+  var wrongs=wrongOpts(correct,3,5,Math.max(20,Math.floor(correct*0.3)));
+  var opts=makeOpts(correct,wrongs);
+  return{type:'choice',qText:stem,display:'',answer:fmtNum(correct),options:opts,colClass:'cols-2',explain:explain};
+}
+
+/* --- Type 3: Two-step (a - b) ÷ c --- */
+function qTwoStepSubDiv(){
+  var c=rr(3,9);
+  var quotient=rr(10,80);
+  var diff=c*quotient;
+  var b=rr(20,200);
+  var a=diff+b;
+  var correct=quotient;
+  var name=ctxNames[rr(0,ctxNames.length-1)];
+
+  var scenarios=[
+    'יש '+fmtNum(a)+' שתילים. '+name+' לקח/ה '+fmtNum(b)+' שתילים. את השאר חילקו שווה בשווה ל-'+fmtNum(c)+' ערוגות. כמה שתילים בכל ערוגה?',
+    'במחסן היו '+fmtNum(a)+' ספרים. נמכרו '+fmtNum(b)+'. את השאר ארזו ב-'+fmtNum(c)+' ארגזים שווים. כמה ספרים בכל ארגז?',
+    name+' אסף/ה '+fmtNum(a)+' גולות. נתן/ה '+fmtNum(b)+' לחבר. את השאר חילק/ה ל-'+fmtNum(c)+' קופסאות. כמה בכל קופסה?'
+  ];
+  var stem=scenarios[rr(0,scenarios.length-1)];
+  var explain=fmtNum(a)+' - '+fmtNum(b)+' = '+fmtNum(diff)+', ואז '+fmtNum(diff)+' ÷ '+fmtNum(c)+' = '+fmtNum(correct);
+
+  var wrongs=wrongOpts(correct,3,3,Math.max(15,Math.floor(correct*0.3)));
+  var opts=makeOpts(correct,wrongs);
+  return{type:'choice',qText:stem,display:'',answer:fmtNum(correct),options:opts,colClass:'cols-2',explain:explain};
+}
+
+/* --- Type 4: Two-step a × b + c --- */
+function qTwoStepMulAdd(){
+  var a=rr(3,9),b=rr(20,150),c=rr(10,200);
+  var correct=a*b+c;
+  var name=ctxNames[rr(0,ctxNames.length-1)];
+
+  var scenarios=[
+    name+' קנה/תה '+fmtNum(a)+' חבילות עם '+fmtNum(b)+' דפים כל אחת, ועוד '+fmtNum(c)+' דפים נפרדים. כמה דפים בסך הכל?',
+    'ב-'+fmtNum(a)+' שולחנות ישבו '+fmtNum(b)+' אורחים בכל שולחן, ועוד '+fmtNum(c)+' אורחים עמדו. כמה אורחים היו?',
+    'הזמינו '+fmtNum(a)+' מגשים עם '+fmtNum(b)+' כריכים כל אחד ועוד '+fmtNum(c)+' כריכים נוספים. כמה כריכים בסך הכל?'
+  ];
+  var stem=scenarios[rr(0,scenarios.length-1)];
+  var explain=fmtNum(a)+' × '+fmtNum(b)+' = '+fmtNum(a*b)+', ואז '+fmtNum(a*b)+' + '+fmtNum(c)+' = '+fmtNum(correct);
+
+  var wrongs=wrongOpts(correct,3,10,Math.max(30,Math.floor(correct*0.2)));
+  var opts=makeOpts(correct,wrongs);
+  return{type:'choice',qText:stem,display:'',answer:fmtNum(correct),options:opts,colClass:'cols-2',explain:explain};
+}
+
+/* --- Type 5: Write expression --- */
+function qWriteExpression(){
+  var variant=rr(0,3);
+  var stem,correctExpr,explain;
+
+  if(variant===0){
+    var total=rr(200,999),perBus=rr(30,60);
+    /* make total divisible for cleaner expression */
+    total=perBus*rr(5,20);
+    stem=fmtNum(total)+' תלמידים יוצאים לטיול באוטובוסים של '+fmtNum(perBus)+' מקומות. כמה אוטובוסים צריך? בחרו את הביטוי המתאים.';
+    correctExpr=fmtNum(total)+' \u00F7 '+fmtNum(perBus);
+    explain='צריך לחלק את מספר התלמידים במספר המקומות באוטובוס';
+    var w1=fmtNum(total)+' \u00D7 '+fmtNum(perBus);
+    var w2=fmtNum(total)+' + '+fmtNum(perBus);
+    var w3=fmtNum(total)+' - '+fmtNum(perBus);
+    var opts=shuffle([correctExpr,w1,w2,w3]);
+    return{type:'choice',qText:stem,display:'',answer:correctExpr,options:opts,colClass:'cols-2',explain:explain};
+  }
+  else if(variant===1){
+    var price=rr(10,50),qty=rr(5,20);
+    stem='כל מחברת עולה '+fmtNum(price)+' ש"ח. '+ctxNames[rr(0,ctxNames.length-1)]+' קנה/תה '+fmtNum(qty)+' מחברות. כמה שילם/ה? בחרו את הביטוי.';
+    correctExpr=fmtNum(price)+' \u00D7 '+fmtNum(qty);
+    explain='כפל — מחיר כפול כמות';
+    var w1=fmtNum(price)+' + '+fmtNum(qty);
+    var w2=fmtNum(price)+' \u00F7 '+fmtNum(qty);
+    var w3=fmtNum(price)+' - '+fmtNum(qty);
+    var opts=shuffle([correctExpr,w1,w2,w3]);
+    return{type:'choice',qText:stem,display:'',answer:correctExpr,options:opts,colClass:'cols-2',explain:explain};
+  }
+  else if(variant===2){
+    var a=rr(500,3000),b=rr(100,a-100);
+    stem='בחנות היו '+fmtNum(a)+' מוצרים. נמכרו '+fmtNum(b)+'. כמה נשארו? בחרו את הביטוי.';
+    correctExpr=fmtNum(a)+' - '+fmtNum(b);
+    explain='חיסור — כמה נשאר';
+    var w1=fmtNum(a)+' + '+fmtNum(b);
+    var w2=fmtNum(a)+' \u00D7 '+fmtNum(b);
+    var w3=fmtNum(b)+' - '+fmtNum(a);
+    var opts=shuffle([correctExpr,w1,w2,w3]);
+    return{type:'choice',qText:stem,display:'',answer:correctExpr,options:opts,colClass:'cols-2',explain:explain};
+  }
+  else{
+    var a=rr(1000,5000),b=rr(500,3000);
+    stem='במגרש חניה היו '+fmtNum(a)+' מכוניות. הגיעו עוד '+fmtNum(b)+'. כמה מכוניות יש? בחרו את הביטוי.';
+    correctExpr=fmtNum(a)+' + '+fmtNum(b);
+    explain='חיבור — ביחד';
+    var w1=fmtNum(a)+' - '+fmtNum(b);
+    var w2=fmtNum(a)+' \u00D7 '+fmtNum(b);
+    var w3=fmtNum(a)+' \u00F7 '+fmtNum(b);
+    var opts=shuffle([correctExpr,w1,w2,w3]);
+    return{type:'choice',qText:stem,display:'',answer:correctExpr,options:opts,colClass:'cols-2',explain:explain};
+  }
+}
+
+/* --- Type 6: Theater/Bus multi-step --- */
+function qTheater(){
+  var variant=rr(0,1);
+  if(variant===0){
+    /* theater seating */
+    var capacity=rr(10,20)*100; /* 1000-2000 */
+    var g1=rr(200,Math.floor(capacity*0.4));
+    var g2=rr(200,Math.floor(capacity*0.4));
+    var g3=rr(50,Math.floor(capacity*0.2));
+    var total=g1+g2+g3;
+    var enoughStr=total<=capacity?'כן, יש מקום לכולם':'לא, אין מספיק מקומות';
+    var diff=capacity-total;
+
+    var stem='באולם יש '+fmtNum(capacity)+' מקומות. הגיעו '+fmtNum(g1)+' ילדים, '+fmtNum(g2)+' הורים ו-'+fmtNum(g3)+' מורים. האם יש מקום לכולם?';
+    var explain=fmtNum(g1)+' + '+fmtNum(g2)+' + '+fmtNum(g3)+' = '+fmtNum(total)+'. '+(total<=capacity?'יש '+fmtNum(diff)+' מקומות פנויים':'חסרים '+fmtNum(-diff)+' מקומות');
+    var opts=shuffle(['כן, יש מקום לכולם','לא, אין מספיק מקומות']);
+    /* add two more distractors */
+    opts.push('צריך עוד מידע');
+    opts.push('בדיוק מתאים, אין מקומות פנויים');
+    opts=shuffle(opts);
+    return{type:'choice',qText:stem,display:'',answer:enoughStr,options:opts,colClass:'cols-2',explain:explain};
+  }
+  else{
+    /* bus trip */
+    var students=rr(100,500);
+    var perBus=rr(30,55);
+    var buses=Math.ceil(students/perBus);
+    var stem='יש '+fmtNum(students)+' תלמידים. בכל אוטובוס '+fmtNum(perBus)+' מקומות. כמה אוטובוסים צריך כדי שכולם ייסעו?';
+    var explain=fmtNum(students)+' ÷ '+fmtNum(perBus)+' = '+fmtNum(students/perBus).substring(0,5)+'... → צריך '+fmtNum(buses)+' אוטובוסים (מעגלים למעלה)';
+    var wrongs=wrongOpts(buses,3,1,3);
+    var opts=makeOpts(buses,wrongs);
+    return{type:'choice',qText:stem,display:'',answer:fmtNum(buses),options:opts,colClass:'cols-2',explain:explain};
+  }
+}
+
+/* --- Type 7: Money problems --- */
+function qMoneyTime(mode){
+  if(mode==='money'){
+    var variant=rr(0,2);
+    var name=ctxNames[rr(0,ctxNames.length-1)];
+    if(variant===0){
+      /* total spending */
+      var items=[{name:'עפרון',price:rr(2,8)},{name:'מחברת',price:rr(8,20)},{name:'מחק',price:rr(3,7)},{name:'סרגל',price:rr(5,15)}];
+      var it1=items[rr(0,items.length-1)],it2=items[rr(0,items.length-1)];
+      while(it2.name===it1.name) it2=items[rr(0,items.length-1)];
+      var q1=rr(2,6),q2=rr(2,6);
+      var correct=it1.price*q1+it2.price*q2;
+      var stem=name+' קנה/תה '+fmtNum(q1)+' '+it1.name+'ים ב-'+fmtNum(it1.price)+' ש"ח כל אחד, ו-'+fmtNum(q2)+' '+it2.name+'ים ב-'+fmtNum(it2.price)+' ש"ח כל אחד. כמה שילם/ה בסך הכל?';
+      var explain=fmtNum(q1)+' × '+fmtNum(it1.price)+' = '+fmtNum(it1.price*q1)+', '+fmtNum(q2)+' × '+fmtNum(it2.price)+' = '+fmtNum(it2.price*q2)+' → '+fmtNum(it1.price*q1)+' + '+fmtNum(it2.price*q2)+' = '+fmtNum(correct)+' ש"ח';
+      var wrongs=wrongOpts(correct,3,3,30);
+      var opts=makeOpts(correct,wrongs);
+      return{type:'choice',qText:stem,display:'',answer:fmtNum(correct),options:opts,colClass:'cols-2',explain:explain};
+    }
+    else if(variant===1){
+      /* change */
+      var paid=[50,100,200][rr(0,2)];
+      var price=rr(10,paid-5);
+      var correct=paid-price;
+      var stem=name+' שילם/ה '+fmtNum(paid)+' ש"ח על מוצר שעלה '+fmtNum(price)+' ש"ח. כמה עודף קיבל/ה?';
+      var explain=fmtNum(paid)+' - '+fmtNum(price)+' = '+fmtNum(correct)+' ש"ח';
+      var wrongs=wrongOpts(correct,3,2,20);
+      var opts=makeOpts(correct,wrongs);
+      return{type:'choice',qText:stem,display:'',answer:fmtNum(correct),options:opts,colClass:'cols-2',explain:explain};
+    }
+    else{
+      /* equal sharing of money */
+      var friends=rr(3,8);
+      var each=rr(10,100);
+      var total=friends*each;
+      var correct=each;
+      var stem=fmtNum(total)+' ש"ח חולקו שווה בשווה בין '+fmtNum(friends)+' חברים. כמה קיבל כל אחד?';
+      var explain=fmtNum(total)+' ÷ '+fmtNum(friends)+' = '+fmtNum(correct)+' ש"ח';
+      var wrongs=wrongOpts(correct,3,2,20);
+      var opts=makeOpts(correct,wrongs);
+      return{type:'choice',qText:stem,display:'',answer:fmtNum(correct),options:opts,colClass:'cols-2',explain:explain};
+    }
+  }
+  else{
+    /* time mode */
+    var variant=rr(0,2);
+    var name=ctxNames[rr(0,ctxNames.length-1)];
+    if(variant===0){
+      /* total minutes */
+      var hours=rr(2,5),extra=rr(10,50);
+      var correct=hours*60+extra;
+      var stem=name+' למד/ה '+fmtNum(hours)+' שעות ועוד '+fmtNum(extra)+' דקות. כמה דקות בסך הכל?';
+      var explain=fmtNum(hours)+' × 60 = '+fmtNum(hours*60)+', ואז '+fmtNum(hours*60)+' + '+fmtNum(extra)+' = '+fmtNum(correct)+' דקות';
+      var wrongs=wrongOpts(correct,3,10,60);
+      var opts=makeOpts(correct,wrongs);
+      return{type:'choice',qText:stem,display:'',answer:fmtNum(correct),options:opts,colClass:'cols-2',explain:explain};
+    }
+    else if(variant===1){
+      /* how many hours */
+      var totalMin=rr(2,8)*60;
+      var correct=totalMin/60;
+      var stem='שיעור ספורט נמשך '+fmtNum(totalMin)+' דקות. כמה שעות זה?';
+      var explain=fmtNum(totalMin)+' ÷ 60 = '+fmtNum(correct)+' שעות';
+      var wrongs=wrongOpts(correct,3,1,3);
+      var opts=makeOpts(correct,wrongs);
+      return{type:'choice',qText:stem,display:'',answer:fmtNum(correct),options:opts,colClass:'cols-2',explain:explain};
+    }
+    else{
+      /* elapsed time */
+      var lessons=rr(3,7),minPer=rr(30,50);
+      var correct=lessons*minPer;
+      var hrs=Math.floor(correct/60),mins=correct%60;
+      var stem='ב-'+fmtNum(lessons)+' שיעורים, כל שיעור '+fmtNum(minPer)+' דקות. כמה דקות בסך הכל?';
+      var explain=fmtNum(lessons)+' × '+fmtNum(minPer)+' = '+fmtNum(correct)+' דקות';
+      var wrongs=wrongOpts(correct,3,10,50);
+      var opts=makeOpts(correct,wrongs);
+      return{type:'choice',qText:stem,display:'',answer:fmtNum(correct),options:opts,colClass:'cols-2',explain:explain};
+    }
+  }
+}
+
+/* --- Type 8: Measurement problems (length/weight) --- */
+function qMeasure(){
+  var variant=rr(0,2);
+  var name=ctxNames[rr(0,ctxNames.length-1)];
+  if(variant===0){
+    /* meters to cm */
+    var meters=rr(2,9),extraCm=rr(10,90);
+    var correct=meters*100+extraCm;
+    var stem='חבל באורך '+fmtNum(meters)+' מטרים ו-'+fmtNum(extraCm)+' ס"מ. מה אורכו בס"מ?';
+    var explain=fmtNum(meters)+' × 100 = '+fmtNum(meters*100)+', ואז '+fmtNum(meters*100)+' + '+fmtNum(extraCm)+' = '+fmtNum(correct)+' ס"מ';
+    var wrongs=wrongOpts(correct,3,10,100);
+    var opts=makeOpts(correct,wrongs);
+    return{type:'choice',qText:stem,display:'',answer:fmtNum(correct),options:opts,colClass:'cols-2',explain:explain};
+  }
+  else if(variant===1){
+    /* kg to grams total */
+    var kg=rr(2,8),g=rr(100,900);
+    var correct=kg*1000+g;
+    var stem='תיק שוקל '+fmtNum(kg)+' ק"ג ו-'+fmtNum(g)+' גרם. כמה גרם זה?';
+    var explain=fmtNum(kg)+' × 1,000 = '+fmtNum(kg*1000)+', ואז '+fmtNum(kg*1000)+' + '+fmtNum(g)+' = '+fmtNum(correct)+' גרם';
+    var wrongs=wrongOpts(correct,3,100,500);
+    var opts=makeOpts(correct,wrongs);
+    return{type:'choice',qText:stem,display:'',answer:fmtNum(correct),options:opts,colClass:'cols-2',explain:explain};
+  }
+  else{
+    /* divide length equally */
+    var pieces=rr(3,8);
+    var each=rr(10,50);
+    var total=pieces*each;
+    var correct=each;
+    var stem='חוט באורך '+fmtNum(total)+' ס"מ חולק ל-'+fmtNum(pieces)+' חלקים שווים. מה אורך כל חלק?';
+    var explain=fmtNum(total)+' ÷ '+fmtNum(pieces)+' = '+fmtNum(correct)+' ס"מ';
+    var wrongs=wrongOpts(correct,3,2,15);
+    var opts=makeOpts(correct,wrongs);
+    return{type:'choice',qText:stem,display:'',answer:fmtNum(correct),options:opts,colClass:'cols-2',explain:explain};
+  }
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'חד-שלבית — חיבור/חיסור',instruction:'פתרו שאלות מילוליות עם חיבור או חיסור',
+   tip:'קראו את השאלה בעיון. חפשו מילות מפתח:\n• "ביחד", "סך הכל", "הצטרפו" → <strong>חיבור</strong>\n• "כמה נשאר?", "ההפרש", "נמכרו" → <strong>חיסור</strong>',
+   example:'בספרייה 1,200 ספרים. קנו עוד 350.\n<span class="math">1,200 + 350 = 1,550</span> ספרים',
+   gen:function(){return qOneStep(['add','sub'])}},
+
+  {title:'חד-שלבית — כפל/חילוק',instruction:'פתרו שאלות מילוליות עם כפל או חילוק',
+   tip:'• "כל אחד... כמה ביחד?" → <strong>כפל</strong>\n• "חילקו שווה", "כמה לכל אחד?" → <strong>חילוק</strong>',
+   example:'5 ארגזים, 120 בקבוקות בכל ארגז:\n<span class="math">5 × 120 = 600</span> בקבוקות',
+   gen:function(){return qOneStep(['mul','div'])}},
+
+  {title:'דו-שלבית: a-(b×c)',instruction:'קודם כופלים, אחר כך מחסרים',
+   tip:'<strong>שני שלבים:</strong>\n1. חשבו את הכפל: b × c\n2. הפחיתו מהסכום הכולל: a - (b×c)\nעקבו אחרי סדר הפעולות!',
+   example:'300 ש"ח, קנו 35 מתנות ב-6 ש"ח:\n<span class="math">35 × 6 = 210</span>\n<span class="math">300 - 210 = 90</span> ש"ח',
+   gen:function(){return qTwoStepMulSub()}},
+
+  {title:'דו-שלבית: (a-b)÷c',instruction:'קודם מחסרים, אחר כך מחלקים',
+   tip:'<strong>שני שלבים:</strong>\n1. חשבו את ההפרש: a - b\n2. חלקו את התוצאה: (a-b) ÷ c',
+   example:'270 שתילים, 90 נלקחו, השאר ל-6 ערוגות:\n<span class="math">270 - 90 = 180</span>\n<span class="math">180 ÷ 6 = 30</span>',
+   gen:function(){return qTwoStepSubDiv()}},
+
+  {title:'דו-שלבית: a×b+c',instruction:'קודם כופלים, אחר כך מחברים',
+   tip:'<strong>שני שלבים:</strong>\n1. חשבו את הכפל: a × b\n2. הוסיפו: a×b + c',
+   example:'4 מגשים × 25 כריכים + 10 נוספים:\n<span class="math">4 × 25 = 100</span>\n<span class="math">100 + 10 = 110</span>',
+   gen:function(){return qTwoStepMulAdd()}},
+
+  {title:'כתיבת ביטוי מתמטי',instruction:'בחרו את הביטוי שמתאים לשאלה',
+   tip:'לא צריך לחשב — רק לבחור את <strong>הביטוי הנכון</strong>!\n• כמה ביחד? → חיבור (+)\n• כמה נשאר? → חיסור (-)\n• כמה בסך הכל? → כפל (×)\n• כמה לכל אחד? → חילוק (÷)',
+   example:'843 תלמידים, אוטובוס של 51:\n→ הביטוי: <span class="math">843 ÷ 51</span>',
+   gen:function(){return qWriteExpression()}},
+
+  {title:'שאלות תיאטרון/אוטובוס',instruction:'שאלות על מקומות ישיבה, הסעות וקיבולת',
+   tip:'• <strong>האם יש מקום?</strong> → חברו את כל הקבוצות והשוו לקיבולת\n• <strong>כמה אוטובוסים?</strong> → חלקו ועגלו למעלה!',
+   example:'1,700 מקומות. הגיעו 843+611+129=1,583.\n1,583 < 1,700 → יש מקום! ✅',
+   gen:function(){return qTheater()}},
+
+  {title:'שאלות כסף',instruction:'חשבו מחירים, עודף וחלוקת כסף',
+   tip:'<strong>כסף:</strong>\n• מחיר × כמות = סה"כ לתשלום\n• שילמתי - עלות = עודף\n• סה"כ ÷ מספר אנשים = חלק של כל אחד',
+   example:'3 חולצות × 45 ש"ח + 2 גרביים × 12 ש"ח:\n<span class="math">135 + 24 = 159</span> ש"ח',
+   gen:function(){return qMoneyTime('money')}},
+
+  {title:'שאלות זמן',instruction:'חשבו שעות, דקות והמרות',
+   tip:'<strong>זכרו:</strong>\n• שעה = 60 דקות\n• כדי להמיר שעות לדקות: שעות × 60\n• כדי להמיר דקות לשעות: דקות ÷ 60',
+   example:'3 שעות ו-25 דקות:\n<span class="math">3 × 60 + 25 = 205</span> דקות',
+   gen:function(){return qMoneyTime('time')}},
+
+  {title:'שאלות מידות',instruction:'אורך ומשקל — המרות וחלוקה',
+   tip:'<strong>המרות חשובות:</strong>\n• 1 מטר = 100 ס"מ\n• 1 ק"ג = 1,000 גרם\nכדי להמיר: כפלו ביחידה הקטנה, ואז חברו.',
+   example:'2 מטרים ו-35 ס"מ:\n<span class="math">2 × 100 + 35 = 235</span> ס"מ',
+   gen:function(){return qMeasure()}},
+
+  {title:'מעורבב — חד ודו-שלביות',instruction:'כל הסוגים — התכוננו!',
+   tip:'קראו כל שאלה בזהירות — האם היא חד-שלבית או דו-שלבית?\nאם דו-שלבית: מה השלב הראשון? מה השני?',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[function(){return qOneStep(['add','sub','mul','div'])},function(){return qTwoStepMulSub()},function(){return qTwoStepSubDiv()},function(){return qTwoStepMulAdd()}];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  {title:'מעורבב — ביטויים ותיאטרון',instruction:'שאלות ביטוי, תיאטרון ואוטובוס',
+   tip:'בשאלות ביטוי — לא צריך לחשב, רק לבחור.\nבשאלות תיאטרון/אוטובוס — חברו קודם ואז השוו.',
+   example:'🎭 🚌 ✏️',
+   gen:function(){
+     var types=[function(){return qWriteExpression()},function(){return qTheater()},function(){return qTwoStepMulSub()},function(){return qTwoStepSubDiv()}];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  {title:'מעורבב — כסף וזמן',instruction:'כסף, זמן ומידות — הכל ביחד',
+   tip:'השתמשו בהמרות שלמדתם.\nזכרו: שעה=60 דקות, מטר=100 ס"מ, ק"ג=1,000 גרם.',
+   example:'💰 ⏰ 📏',
+   gen:function(){
+     var types=[function(){return qMoneyTime('money')},function(){return qMoneyTime('time')},function(){return qMeasure()},function(){return qTwoStepMulAdd()}];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  {title:'אתגר!',instruction:'שאלות מכל הסוגים — רמה גבוהה!',
+   tip:'קראו בעיון, זהו את הפעולות, ופתרו צעד-צעד. 💪',
+   example:'💪 אתם יכולים!',
+   gen:function(){
+     var types=[function(){return qOneStep(['mul','div'])},function(){return qTwoStepMulSub()},function(){return qTwoStepSubDiv()},function(){return qTwoStepMulAdd()},function(){return qWriteExpression()},function(){return qTheater()},function(){return qMoneyTime('money')},function(){return qMoneyTime('time')},function(){return qMeasure()}];
+     return types[rr(0,types.length-1)]();
+   }},
+
+  {title:'מאסטר!',instruction:'הרמה הכי קשה — כל הסוגים!',
+   tip:'🏆 הגעתם לרמה האחרונה! כל שאלה יכולה להיות מכל סוג.',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[function(){return qOneStep(['add','sub','mul','div'])},function(){return qTwoStepMulSub()},function(){return qTwoStepSubDiv()},function(){return qTwoStepMulAdd()},function(){return qWriteExpression()},function(){return qTheater()},function(){return qMoneyTime('money')},function(){return qMoneyTime('time')},function(){return qMeasure()}];
+     return types[rr(0,types.length-1)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='\u05E8\u05DE\u05D4 '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='\u05E8\u05DE\u05D4 '+(currentLevel+1)+' \u05DE\u05EA\u05D5\u05DA '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='\u25B2 \u05D4\u05E1\u05EA\u05E8';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q)));seen.add(JSON.stringify(q));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)"><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['\u05DE\u05E6\u05D5\u05D9\u05DF! \u2B50','\u05E0\u05DB\u05D5\u05DF! \uD83C\uDFAF','\u05D9\u05D5\u05E4\u05D9! \u2728','\u05DE\u05D3\u05D4\u05D9\u05DD! \uD83C\uDF1F'][rr(0,3)];
+    if(q.explain) praise+=' \u2014 '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF, \u05E0\u05E1\u05D5 \u05E9\u05D5\u05D1! \uD83D\uDCAA';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='\uD83C\uDFC6';document.getElementById('lcTitle').textContent='\u05DE\u05D5\u05E9\u05DC\u05DD!';document.getElementById('lcSub').textContent='\u05DB\u05DC \u05D4\u05EA\u05E9\u05D5\u05D1\u05D5\u05EA \u05E0\u05DB\u05D5\u05E0\u05D5\u05EA!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='\uD83C\uDF89';document.getElementById('lcTitle').textContent='\u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3!';document.getElementById('lcSub').textContent='\u05DB\u05DE\u05E2\u05D8 \u05DE\u05D5\u05E9\u05DC\u05DD!'}
+  else{document.getElementById('lcEmoji').textContent='\uD83D\uDCAA';document.getElementById('lcTitle').textContent='\u05E1\u05D9\u05D9\u05DE\u05EA\u05DD!';document.getElementById('lcSub').textContent='\u05DB\u05D3\u05D0\u05D9 \u05DC\u05E0\u05E1\u05D5\u05EA \u05E9\u05D5\u05D1'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'\u25BC \u05D4\u05E6\u05D2 \u05D8\u05D9\u05E4':'\u25B2 \u05D4\u05E1\u05EA\u05E8'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

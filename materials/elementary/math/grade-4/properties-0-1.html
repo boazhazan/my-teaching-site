@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>תכונות ה-0 וה-1 — כיתה ד' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#1e3a5f;--primary-dark:#172e4a;--primary-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#1e3a5f 0%,#2563eb 50%,#3b82f6 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(30,58,95,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:2.5rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:2rem;padding:6px 20px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">0️⃣</div><div><h1>תכונות ה-0 וה-1</h1><div class="subtitle">כיתה ד' — כללים חשובים בחשבון</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">תכונות ה-0 וה-1 — כיתה ד' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>0️⃣ תכונות ה-0 וה-1</h2><p><strong>0 בחיבור ובחיסור:</strong><br>🔹 כל מספר ועוד 0 שווה לעצמו: <span class="math">a + 0 = a</span><br>🔹 כל מספר פחות 0 שווה לעצמו: <span class="math">a - 0 = a</span><br>0 הוא <strong>איבר הניטרלי</strong> של חיבור!</p><p><strong>0 בכפל:</strong><br>🔹 כל מספר כפול 0 שווה 0: <span class="math">a × 0 = 0</span><br>🔹 גם אם יש הרבה מספרים בשרשרת — אם אחד מהם 0, התוצאה 0!</p><p><strong>0 בחילוק:</strong><br>🔹 0 חלקי כל מספר שווה 0: <span class="math">0 ÷ a = 0</span><br>🔹 אבל <strong>אי אפשר לחלק ב-0!</strong> <span class="math">a ÷ 0</span> — חסר משמעות!</p><p><strong>1 בכפל ובחילוק:</strong><br>🔹 כל מספר כפול 1 שווה לעצמו: <span class="math">a × 1 = a</span><br>🔹 כל מספר חלקי 1 שווה לעצמו: <span class="math">a ÷ 1 = a</span><br>1 הוא <strong>איבר הניטרלי</strong> של כפל!</p><p><strong>חילוק עצמי:</strong><br>🔹 כל מספר (שאינו 0) חלקי עצמו שווה 1: <span class="math">a ÷ a = 1</span></p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+
+/* Generate unique wrong options near correct answer */
+function wrongNear(correct,count,min,max){
+  var s=new Set();s.add(correct);
+  var tries=0;
+  while(s.size<count+1&&tries<200){
+    var d=rr(1,Math.max(5,Math.abs(correct)+3));
+    var w=rr(0,1)?correct+d:correct-d;
+    if(w>=min&&w<=max&&!s.has(w))s.add(w);
+    tries++;
+  }
+  /* fallback */
+  while(s.size<count+1){var f=rr(min,max);if(!s.has(f))s.add(f)}
+  s.delete(correct);
+  return Array.from(s).slice(0,count);
+}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: a+0=? / 0+a=? / a-0=? */
+function qZeroAdd(){
+  var a=rr(10,999);
+  var forms=[
+    {stem:a+' + 0 = ?',ans:a,explain:a+' + 0 = '+a+' — חיבור 0 לא משנה את המספר'},
+    {stem:'0 + '+a+' = ?',ans:a,explain:'0 + '+a+' = '+a+' — חיבור 0 לא משנה את המספר'},
+    {stem:a+' - 0 = ?',ans:a,explain:a+' - 0 = '+a+' — חיסור 0 לא משנה את המספר'}
+  ];
+  var f=forms[rr(0,2)];
+  var wrongs=wrongNear(f.ans,3,0,f.ans+20);
+  var options=shuffle([String(f.ans)].concat(wrongs.map(String)));
+  return{type:'choice',qText:'חשבו:',display:'<div class="num-display"><span class="big-num">'+f.stem+'</span></div>',answer:String(f.ans),options:options,colClass:'cols-4',explain:f.explain};
+}
+
+/* Type 2: a×0=? / multi-factor with 0 */
+function qZeroMul(){
+  var a=rr(2,99);
+  if(rr(0,1)===0){
+    /* simple: a×0 or 0×a */
+    var order=rr(0,1);
+    var stem=order?a+' \u00D7 0 = ?':'0 \u00D7 '+a+' = ?';
+    var wrongs=wrongNear(0,3,0,a+5).filter(function(w){return w!==0});
+    while(wrongs.length<3){var w=rr(1,a+10);if(wrongs.indexOf(w)===-1)wrongs.push(w)}
+    wrongs=wrongs.slice(0,3);
+    var options=shuffle(['0'].concat(wrongs.map(String)));
+    return{type:'choice',qText:'חשבו:',display:'<div class="num-display"><span class="big-num">'+stem+'</span></div>',answer:'0',options:options,colClass:'cols-4',explain:'כל מספר כפול 0 שווה 0!'};
+  }else{
+    /* chain: e.g. 6×0×3×5 = ? */
+    var nums=[rr(2,9),0,rr(2,9),rr(2,9)];
+    shuffle(nums);
+    /* make sure 0 is somewhere inside */
+    if(nums.indexOf(0)===-1)nums[rr(0,3)]=0;
+    var stem=nums.join(' \u00D7 ')+' = ?';
+    var fakeProduct=1;for(var i=0;i<nums.length;i++){if(nums[i]!==0)fakeProduct*=nums[i]}
+    var wrongs=[fakeProduct,rr(1,50),rr(1,30)];
+    wrongs=wrongs.filter(function(w){return w!==0});
+    var unique=new Set(wrongs);
+    while(unique.size<3){unique.add(rr(1,60))}
+    wrongs=Array.from(unique).slice(0,3);
+    var options=shuffle(['0'].concat(wrongs.map(String)));
+    return{type:'choice',qText:'חשבו:',display:'<div class="num-display"><span class="big-num">'+stem+'</span></div>',answer:'0',options:options,colClass:'cols-4',explain:'יש 0 בשרשרת הכפל — התוצאה תמיד 0!'};
+  }
+}
+
+/* Type 3: 0÷a=? or a÷0=? */
+function qZeroDiv(mode){
+  /* mode: 'zero_num' → 0÷a, 'div_by_zero' → a÷0, 'mixed' → random */
+  if(mode==='mixed')mode=rr(0,1)?'zero_num':'div_by_zero';
+  var a=rr(2,50);
+  if(mode==='zero_num'){
+    var stem='0 \u00F7 '+a+' = ?';
+    var wrongs=[a,1,rr(2,20)];
+    wrongs=wrongs.filter(function(w){return w!==0});
+    var unique=new Set(wrongs);while(unique.size<3){unique.add(rr(1,30))}
+    wrongs=Array.from(unique).slice(0,3);
+    var options=shuffle(['0'].concat(wrongs.map(String)));
+    return{type:'choice',qText:'חשבו:',display:'<div class="num-display"><span class="big-num">'+stem+'</span></div>',answer:'0',options:options,colClass:'cols-4',explain:'0 חלקי כל מספר שווה 0!'};
+  }else{
+    var stem=a+' \u00F7 0 = ?';
+    var options=shuffle(['\u05D0\u05D9 \u05D0\u05E4\u05E9\u05E8!',String(a),'0',String(a*0||1)]);
+    /* ensure no duplicates */
+    var opSet=new Set(options);
+    if(opSet.size<4){opSet.add('\u05D7\u05E1\u05E8 \u05DE\u05E9\u05DE\u05E2\u05D5\u05EA');options=Array.from(opSet).slice(0,4)}
+    return{type:'choice',qText:'חשבו:',display:'<div class="num-display"><span class="big-num">'+stem+'</span></div>',answer:'\u05D0\u05D9 \u05D0\u05E4\u05E9\u05E8!',options:options,colClass:'cols-2',explain:'\u05D0\u05D9 \u05D0\u05E4\u05E9\u05E8 \u05DC\u05D7\u05DC\u05E7 \u05D1-0! \u05D6\u05D4 \u05DC\u05D0 \u05DE\u05D5\u05D2\u05D3\u05E8.'};
+  }
+}
+
+/* Type 4: a×1=? / 1×a=? / a÷1=? */
+function qOneMul(mode){
+  /* mode: 'mul' → a×1 or 1×a, 'div' → a÷1, 'mixed' → random */
+  if(mode==='mixed')mode=rr(0,1)?'mul':'div';
+  var a=rr(2,999);
+  var stem,explain;
+  if(mode==='mul'){
+    var order=rr(0,1);
+    stem=order?a+' \u00D7 1 = ?':'1 \u00D7 '+a+' = ?';
+    explain=a+' \u00D7 1 = '+a+' \u2014 \u05DB\u05E4\u05DC \u05D1-1 \u05DC\u05D0 \u05DE\u05E9\u05E0\u05D4 \u05D0\u05EA \u05D4\u05DE\u05E1\u05E4\u05E8';
+  }else{
+    stem=a+' \u00F7 1 = ?';
+    explain=a+' \u00F7 1 = '+a+' \u2014 \u05D7\u05D9\u05DC\u05D5\u05E7 \u05D1-1 \u05DC\u05D0 \u05DE\u05E9\u05E0\u05D4 \u05D0\u05EA \u05D4\u05DE\u05E1\u05E4\u05E8';
+  }
+  var wrongs=wrongNear(a,3,0,a+20);
+  var options=shuffle([String(a)].concat(wrongs.map(String)));
+  return{type:'choice',qText:'\u05D7\u05E9\u05D1\u05D5:',display:'<div class="num-display"><span class="big-num">'+stem+'</span></div>',answer:String(a),options:options,colClass:'cols-4',explain:explain};
+}
+
+/* Type 5: a÷a=? */
+function qDivBySelf(){
+  var a=rr(2,999);
+  var stem=a+' \u00F7 '+a+' = ?';
+  var wrongs=[0,a,rr(2,10)];
+  wrongs=wrongs.filter(function(w){return w!==1});
+  var unique=new Set(wrongs);while(unique.size<3){unique.add(rr(2,20))}
+  wrongs=Array.from(unique).slice(0,3);
+  var options=shuffle(['1'].concat(wrongs.map(String)));
+  return{type:'choice',qText:'\u05D7\u05E9\u05D1\u05D5:',display:'<div class="num-display"><span class="big-num">'+stem+'</span></div>',answer:'1',options:options,colClass:'cols-4',explain:a+' \u00F7 '+a+' = 1 \u2014 \u05DB\u05DC \u05DE\u05E1\u05E4\u05E8 \u05D7\u05DC\u05E7\u05D9 \u05E2\u05E6\u05DE\u05D5 \u05E9\u05D5\u05D5\u05D4 1!'};
+}
+
+/* Type 6: True/False about 0 and 1 properties */
+function qCompare01(){
+  var statements=[
+    {text:'0 \u05D1\u05D7\u05D9\u05D1\u05D5\u05E8 \u05D4\u05D5\u05D0 \u05DB\u05DE\u05D5 1 \u05D1\u05DB\u05E4\u05DC \u2014 \u05E9\u05E0\u05D9\u05D4\u05DD \u05DC\u05D0 \u05DE\u05E9\u05E0\u05D9\u05DD \u05D0\u05EA \u05D4\u05DE\u05E1\u05E4\u05E8',ans:'\u05E0\u05DB\u05D5\u05DF',explain:'a+0=a \u05D5\u05D2\u05DD a\u00D71=a \u2014 \u05E9\u05E0\u05D9\u05D4\u05DD \u05D0\u05D9\u05D1\u05E8\u05D9 \u05E0\u05D9\u05D8\u05E8\u05DC\u05D9\u05D9\u05DD \u05D1\u05E4\u05E2\u05D5\u05DC\u05D4 \u05E9\u05DC\u05D4\u05DD'},
+    {text:'\u05DB\u05E4\u05DC \u05D1-0 \u05EA\u05DE\u05D9\u05D3 \u05E0\u05D5\u05EA\u05DF 0',ans:'\u05E0\u05DB\u05D5\u05DF',explain:'a\u00D70 = 0 \u2014 \u05EA\u05DE\u05D9\u05D3!'},
+    {text:'\u05D0\u05E4\u05E9\u05E8 \u05DC\u05D7\u05DC\u05E7 \u05DB\u05DC \u05DE\u05E1\u05E4\u05E8 \u05D1-0',ans:'\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF',explain:'\u05D0\u05D9 \u05D0\u05E4\u05E9\u05E8 \u05DC\u05D7\u05DC\u05E7 \u05D1-0 \u2014 \u05D6\u05D4 \u05DC\u05D0 \u05DE\u05D5\u05D2\u05D3\u05E8!'},
+    {text:'0 \u05D7\u05DC\u05E7\u05D9 \u05DB\u05DC \u05DE\u05E1\u05E4\u05E8 \u05E9\u05D5\u05D5\u05D4 0',ans:'\u05E0\u05DB\u05D5\u05DF',explain:'0\u00F7a = 0 \u2014 \u05EA\u05DE\u05D9\u05D3!'},
+    {text:'\u05DB\u05DC \u05DE\u05E1\u05E4\u05E8 \u05D7\u05DC\u05E7\u05D9 \u05E2\u05E6\u05DE\u05D5 \u05E9\u05D5\u05D5\u05D4 1',ans:'\u05E0\u05DB\u05D5\u05DF',explain:'a\u00F7a = 1 (\u05DB\u05E9 a\u22600)'},
+    {text:'\u05DB\u05E4\u05DC \u05D1-1 \u05DE\u05E9\u05E0\u05D4 \u05D0\u05EA \u05D4\u05DE\u05E1\u05E4\u05E8',ans:'\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF',explain:'a\u00D71 = a \u2014 \u05DB\u05E4\u05DC \u05D1-1 \u05DC\u05D0 \u05DE\u05E9\u05E0\u05D4 \u05D0\u05EA \u05D4\u05DE\u05E1\u05E4\u05E8!'},
+    {text:'\u05D7\u05D9\u05DC\u05D5\u05E7 \u05D1-1 \u05DE\u05E9\u05E0\u05D4 \u05D0\u05EA \u05D4\u05DE\u05E1\u05E4\u05E8',ans:'\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF',explain:'a\u00F71 = a \u2014 \u05D7\u05D9\u05DC\u05D5\u05E7 \u05D1-1 \u05DC\u05D0 \u05DE\u05E9\u05E0\u05D4 \u05D0\u05EA \u05D4\u05DE\u05E1\u05E4\u05E8!'},
+    {text:'0 + 0 = 0',ans:'\u05E0\u05DB\u05D5\u05DF',explain:'0 + 0 \u05D0\u05DB\u05DF \u05E9\u05D5\u05D5\u05D4 0!'},
+    {text:'5 \u00D7 0 \u00D7 100 = 500',ans:'\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF',explain:'\u05D9\u05E9 0 \u05D1\u05E9\u05E8\u05E9\u05E8\u05EA \u05D4\u05DB\u05E4\u05DC \u2014 \u05D4\u05EA\u05D5\u05E6\u05D0\u05D4 0!'},
+    {text:'7 \u00F7 7 = 7',ans:'\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF',explain:'7\u00F77 = 1 \u2014 \u05DE\u05E1\u05E4\u05E8 \u05D7\u05DC\u05E7\u05D9 \u05E2\u05E6\u05DE\u05D5 \u05EA\u05DE\u05D9\u05D3 \u05E9\u05D5\u05D5\u05D4 1!'}
+  ];
+  var s=statements[rr(0,statements.length-1)];
+  return{type:'choice',qText:'\u05E0\u05DB\u05D5\u05DF \u05D0\u05D5 \u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF?',display:'<div class="num-display"><span class="big-num" style="font-size:1.5rem;padding:14px 24px">'+s.text+'</span></div>',answer:s.ans,options:['\u05E0\u05DB\u05D5\u05DF','\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF'],colClass:'cols-2',explain:s.explain};
+}
+
+/* Type 7: Which rule was used? */
+function qWhichRule(){
+  var rules=[
+    {calc:'45 + 0 = 45',rule:'\u05D7\u05D9\u05D1\u05D5\u05E8 0',explain:'\u05D7\u05D9\u05D1\u05D5\u05E8 0 \u05DC\u05D0 \u05DE\u05E9\u05E0\u05D4 \u05D0\u05EA \u05D4\u05DE\u05E1\u05E4\u05E8'},
+    {calc:'88 - 0 = 88',rule:'\u05D7\u05D9\u05E1\u05D5\u05E8 0',explain:'\u05D7\u05D9\u05E1\u05D5\u05E8 0 \u05DC\u05D0 \u05DE\u05E9\u05E0\u05D4 \u05D0\u05EA \u05D4\u05DE\u05E1\u05E4\u05E8'},
+    {calc:'7 \u00D7 0 = 0',rule:'\u05DB\u05E4\u05DC \u05D1-0',explain:'\u05DB\u05DC \u05DE\u05E1\u05E4\u05E8 \u05DB\u05E4\u05D5\u05DC 0 \u05E9\u05D5\u05D5\u05D4 0'},
+    {calc:'0 \u00F7 12 = 0',rule:'\u05D7\u05D9\u05DC\u05D5\u05E7 0 \u05D1\u05DE\u05E1\u05E4\u05E8',explain:'0 \u05D7\u05DC\u05E7\u05D9 \u05DB\u05DC \u05DE\u05E1\u05E4\u05E8 = 0'},
+    {calc:'9 \u00D7 1 = 9',rule:'\u05DB\u05E4\u05DC \u05D1-1',explain:'\u05DB\u05E4\u05DC \u05D1-1 \u05DC\u05D0 \u05DE\u05E9\u05E0\u05D4 \u05D0\u05EA \u05D4\u05DE\u05E1\u05E4\u05E8'},
+    {calc:'15 \u00F7 1 = 15',rule:'\u05D7\u05D9\u05DC\u05D5\u05E7 \u05D1-1',explain:'\u05D7\u05D9\u05DC\u05D5\u05E7 \u05D1-1 \u05DC\u05D0 \u05DE\u05E9\u05E0\u05D4 \u05D0\u05EA \u05D4\u05DE\u05E1\u05E4\u05E8'},
+    {calc:'6 \u00F7 6 = 1',rule:'\u05D7\u05D9\u05DC\u05D5\u05E7 \u05E2\u05E6\u05DE\u05D9',explain:'\u05DE\u05E1\u05E4\u05E8 \u05D7\u05DC\u05E7\u05D9 \u05E2\u05E6\u05DE\u05D5 = 1'},
+    {calc:'123 + 0 = 123',rule:'\u05D7\u05D9\u05D1\u05D5\u05E8 0',explain:'\u05D7\u05D9\u05D1\u05D5\u05E8 0 \u2014 \u05D4\u05DE\u05E1\u05E4\u05E8 \u05E0\u05E9\u05D0\u05E8 \u05DB\u05DE\u05D5 \u05E9\u05D4\u05D5\u05D0'},
+    {calc:'50 \u00D7 0 \u00D7 3 = 0',rule:'\u05DB\u05E4\u05DC \u05D1-0',explain:'\u05D9\u05E9 0 \u05D1\u05E9\u05E8\u05E9\u05E8\u05EA \u2014 \u05D4\u05EA\u05D5\u05E6\u05D0\u05D4 0'},
+    {calc:'1 \u00D7 48 = 48',rule:'\u05DB\u05E4\u05DC \u05D1-1',explain:'\u05DB\u05E4\u05DC \u05D1-1 \u05DC\u05D0 \u05DE\u05E9\u05E0\u05D4 \u05D0\u05EA \u05D4\u05DE\u05E1\u05E4\u05E8'},
+    {calc:'20 \u00F7 20 = 1',rule:'\u05D7\u05D9\u05DC\u05D5\u05E7 \u05E2\u05E6\u05DE\u05D9',explain:'\u05DE\u05E1\u05E4\u05E8 \u05D7\u05DC\u05E7\u05D9 \u05E2\u05E6\u05DE\u05D5 = 1'},
+    {calc:'0 \u00D7 999 = 0',rule:'\u05DB\u05E4\u05DC \u05D1-0',explain:'\u05DB\u05DC \u05DE\u05E1\u05E4\u05E8 \u05DB\u05E4\u05D5\u05DC 0 \u05E9\u05D5\u05D5\u05D4 0'}
+  ];
+  var r=rules[rr(0,rules.length-1)];
+  var allRules=['\u05D7\u05D9\u05D1\u05D5\u05E8 0','\u05D7\u05D9\u05E1\u05D5\u05E8 0','\u05DB\u05E4\u05DC \u05D1-0','\u05D7\u05D9\u05DC\u05D5\u05E7 0 \u05D1\u05DE\u05E1\u05E4\u05E8','\u05DB\u05E4\u05DC \u05D1-1','\u05D7\u05D9\u05DC\u05D5\u05E7 \u05D1-1','\u05D7\u05D9\u05DC\u05D5\u05E7 \u05E2\u05E6\u05DE\u05D9'];
+  var options=[r.rule];
+  var others=allRules.filter(function(x){return x!==r.rule});
+  shuffle(others);
+  for(var i=0;i<3&&i<others.length;i++)options.push(others[i]);
+  options=shuffle(options);
+  return{type:'choice',qText:'\u05D0\u05D9\u05D6\u05D4 \u05DB\u05DC\u05DC \u05E9\u05D9\u05DE\u05E9 \u05DB\u05D0\u05DF?',display:'<div class="num-display"><span class="big-num" style="font-size:1.8rem;padding:14px 24px">'+r.calc+'</span></div>',answer:r.rule,options:options,colClass:'cols-2',explain:r.explain};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'\u05D7\u05D9\u05D1\u05D5\u05E8/\u05D7\u05D9\u05E1\u05D5\u05E8 0',instruction:'\u05DE\u05D4 \u05E7\u05D5\u05E8\u05D4 \u05DB\u05E9\u05DE\u05D7\u05D1\u05E8\u05D9\u05DD \u05D0\u05D5 \u05DE\u05D7\u05E1\u05E8\u05D9\u05DD 0?',
+   tip:'\u05DB\u05DC \u05DE\u05E1\u05E4\u05E8 \u05D5\u05E2\u05D5\u05D3 0 \u05E9\u05D5\u05D5\u05D4 \u05DC\u05E2\u05E6\u05DE\u05D5: <span class="math">a + 0 = a</span>\n\u05DB\u05DC \u05DE\u05E1\u05E4\u05E8 \u05E4\u05D7\u05D5\u05EA 0 \u05E9\u05D5\u05D5\u05D4 \u05DC\u05E2\u05E6\u05DE\u05D5: <span class="math">a - 0 = a</span>',
+   example:'<span class="math">57 + 0 = 57</span>\n<span class="math">0 + 34 = 34</span>\n<span class="math">100 - 0 = 100</span>',
+   gen:function(){return qZeroAdd()}},
+
+  {title:'\u05DB\u05E4\u05DC \u05D1-0',instruction:'\u05DE\u05D4 \u05E7\u05D5\u05E8\u05D4 \u05DB\u05E9\u05DB\u05D5\u05E4\u05DC\u05D9\u05DD \u05D1-0?',
+   tip:'\u05DB\u05DC \u05DE\u05E1\u05E4\u05E8 \u05DB\u05E4\u05D5\u05DC 0 \u05E9\u05D5\u05D5\u05D4 0: <span class="math">a \u00D7 0 = 0</span>\n\u05D2\u05DD \u05D0\u05DD \u05D9\u05E9 \u05D4\u05E8\u05D1\u05D4 \u05DE\u05E1\u05E4\u05E8\u05D9\u05DD \u05D1\u05E9\u05E8\u05E9\u05E8\u05EA \u2014 \u05D0\u05DD \u05D0\u05D7\u05D3 \u05DE\u05D4\u05DD 0, \u05D4\u05EA\u05D5\u05E6\u05D0\u05D4 0!',
+   example:'<span class="math">8 \u00D7 0 = 0</span>\n<span class="math">5 \u00D7 0 \u00D7 3 = 0</span>',
+   gen:function(){return qZeroMul()}},
+
+  {title:'\u05D7\u05D9\u05DC\u05D5\u05E7 0 \u05D1\u05DE\u05E1\u05E4\u05E8',instruction:'0 \u05D7\u05DC\u05E7\u05D9 \u05DE\u05E1\u05E4\u05E8 \u05E9\u05D5\u05D5\u05D4...',
+   tip:'0 \u05D7\u05DC\u05E7\u05D9 \u05DB\u05DC \u05DE\u05E1\u05E4\u05E8 \u05EA\u05DE\u05D9\u05D3 \u05E9\u05D5\u05D5\u05D4 0: <span class="math">0 \u00F7 a = 0</span>',
+   example:'<span class="math">0 \u00F7 5 = 0</span>\n<span class="math">0 \u00F7 100 = 0</span>',
+   gen:function(){return qZeroDiv('zero_num')}},
+
+  {title:'\u05D0\u05D9 \u05D0\u05E4\u05E9\u05E8 \u05DC\u05D7\u05DC\u05E7 \u05D1-0!',instruction:'\u05DE\u05D4 \u05E7\u05D5\u05E8\u05D4 \u05DB\u05E9\u05DE\u05D7\u05DC\u05E7\u05D9\u05DD \u05D1-0?',
+   tip:'<strong>\u05D0\u05D9 \u05D0\u05E4\u05E9\u05E8 \u05DC\u05D7\u05DC\u05E7 \u05D1-0!</strong>\n\u05D6\u05D4 \u05D4\u05DB\u05DC\u05DC \u05D4\u05D7\u05E9\u05D5\u05D1 \u05D1\u05D9\u05D5\u05EA\u05E8: <span class="math">a \u00F7 0</span> \u05D4\u05D5\u05D0 \u05D7\u05E1\u05E8 \u05DE\u05E9\u05DE\u05E2\u05D5\u05EA.',
+   example:'<span class="math">5 \u00F7 0 = ?</span> \u2192 \u05D0\u05D9 \u05D0\u05E4\u05E9\u05E8!\n<span class="math">100 \u00F7 0 = ?</span> \u2192 \u05D0\u05D9 \u05D0\u05E4\u05E9\u05E8!',
+   gen:function(){return qZeroDiv('div_by_zero')}},
+
+  {title:'\u05DB\u05E4\u05DC \u05D1-1',instruction:'\u05DE\u05D4 \u05E7\u05D5\u05E8\u05D4 \u05DB\u05E9\u05DB\u05D5\u05E4\u05DC\u05D9\u05DD \u05D1-1?',
+   tip:'\u05DB\u05DC \u05DE\u05E1\u05E4\u05E8 \u05DB\u05E4\u05D5\u05DC 1 \u05E9\u05D5\u05D5\u05D4 \u05DC\u05E2\u05E6\u05DE\u05D5: <span class="math">a \u00D7 1 = a</span>\n1 \u05D4\u05D5\u05D0 \u05D0\u05D9\u05D1\u05E8 \u05D4\u05E0\u05D9\u05D8\u05E8\u05DC\u05D9 \u05E9\u05DC \u05DB\u05E4\u05DC!',
+   example:'<span class="math">42 \u00D7 1 = 42</span>\n<span class="math">1 \u00D7 99 = 99</span>',
+   gen:function(){return qOneMul('mul')}},
+
+  {title:'\u05D7\u05D9\u05DC\u05D5\u05E7 \u05D1-1',instruction:'\u05DE\u05D4 \u05E7\u05D5\u05E8\u05D4 \u05DB\u05E9\u05DE\u05D7\u05DC\u05E7\u05D9\u05DD \u05D1-1?',
+   tip:'\u05DB\u05DC \u05DE\u05E1\u05E4\u05E8 \u05D7\u05DC\u05E7\u05D9 1 \u05E9\u05D5\u05D5\u05D4 \u05DC\u05E2\u05E6\u05DE\u05D5: <span class="math">a \u00F7 1 = a</span>',
+   example:'<span class="math">56 \u00F7 1 = 56</span>\n<span class="math">200 \u00F7 1 = 200</span>',
+   gen:function(){return qOneMul('div')}},
+
+  {title:'\u05D7\u05D9\u05DC\u05D5\u05E7 \u05E2\u05E6\u05DE\u05D9 = 1',instruction:'\u05DE\u05E1\u05E4\u05E8 \u05D7\u05DC\u05E7\u05D9 \u05E2\u05E6\u05DE\u05D5 \u05E9\u05D5\u05D5\u05D4...',
+   tip:'\u05DB\u05DC \u05DE\u05E1\u05E4\u05E8 (\u05E9\u05D0\u05D9\u05E0\u05D5 0) \u05D7\u05DC\u05E7\u05D9 \u05E2\u05E6\u05DE\u05D5 \u05E9\u05D5\u05D5\u05D4 1: <span class="math">a \u00F7 a = 1</span>',
+   example:'<span class="math">8 \u00F7 8 = 1</span>\n<span class="math">250 \u00F7 250 = 1</span>',
+   gen:function(){return qDivBySelf()}},
+
+  {title:'\u05D4\u05E9\u05D5\u05D5\u05D0\u05EA \u05EA\u05DB\u05D5\u05E0\u05D5\u05EA 0 \u05D5-1',instruction:'\u05E0\u05DB\u05D5\u05DF \u05D0\u05D5 \u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF?',
+   tip:'\u05D6\u05DB\u05E8\u05D5 \u05D0\u05EA \u05DB\u05DC \u05D4\u05DB\u05DC\u05DC\u05D9\u05DD \u05E9\u05DC\u05DE\u05D3\u05EA\u05DD \u2014\n\u05D5\u05EA\u05D7\u05DC\u05D9\u05D8\u05D5 \u05D0\u05DD \u05D4\u05DE\u05E9\u05E4\u05D8 \u05E0\u05DB\u05D5\u05DF \u05D0\u05D5 \u05DC\u05D0.',
+   example:'\u05E0\u05DB\u05D5\u05DF: "\u05DB\u05E4\u05DC \u05D1-0 \u05EA\u05DE\u05D9\u05D3 \u05E0\u05D5\u05EA\u05DF 0"\n\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF: "\u05DB\u05E4\u05DC \u05D1-1 \u05DE\u05E9\u05E0\u05D4 \u05D0\u05EA \u05D4\u05DE\u05E1\u05E4\u05E8"',
+   gen:function(){return qCompare01()}},
+
+  {title:'\u05D0\u05D9\u05D6\u05D4 \u05DB\u05DC\u05DC?',instruction:'\u05D6\u05D4\u05D5 \u05D0\u05EA \u05D4\u05DB\u05DC\u05DC \u05E9\u05E9\u05D9\u05DE\u05E9 \u05D1\u05EA\u05E8\u05D2\u05D9\u05DC!',
+   tip:'\u05D4\u05E1\u05EA\u05DB\u05DC\u05D5 \u05E2\u05DC \u05D4\u05EA\u05E8\u05D2\u05D9\u05DC \u05D5\u05E0\u05E1\u05D5 \u05DC\u05D4\u05D1\u05D9\u05DF \u05D0\u05D9\u05D6\u05D4 \u05DB\u05DC\u05DC \u05E9\u05DC 0 \u05D0\u05D5 1 \u05E9\u05D9\u05DE\u05E9 \u05DB\u05D0\u05DF.',
+   example:'<span class="math">9 \u00D7 1 = 9</span> \u2192 \u05DB\u05E4\u05DC \u05D1-1\n<span class="math">7 \u00D7 0 = 0</span> \u2192 \u05DB\u05E4\u05DC \u05D1-0',
+   gen:function(){return qWhichRule()}},
+
+  /* Levels 10-15: mixed */
+  {title:'\u05DE\u05E2\u05D5\u05E8\u05D1\u05D1 \u2014 0 \u05D1\u05D7\u05D9\u05D1\u05D5\u05E8 \u05D5\u05DB\u05E4\u05DC',instruction:'\u05E9\u05D0\u05DC\u05D5\u05EA \u05DE\u05D2\u05D5\u05D5\u05E0\u05D5\u05EA \u05E2\u05DC 0!',
+   tip:'\u05D6\u05DB\u05E8\u05D5:\n\u2022 <span class="math">a + 0 = a</span>, <span class="math">a - 0 = a</span>\n\u2022 <span class="math">a \u00D7 0 = 0</span>',
+   example:'\u05DB\u05DC \u05E9\u05D0\u05DC\u05D4 \u05D4\u05D9\u05D0 \u05D4\u05E4\u05EA\u05E2\u05D4! \uD83C\uDFB2',
+   gen:function(){return[qZeroAdd,qZeroMul][rr(0,1)]()}},
+
+  {title:'\u05DE\u05E2\u05D5\u05E8\u05D1\u05D1 \u2014 0 \u05D1\u05D7\u05D9\u05DC\u05D5\u05E7',instruction:'\u05E9\u05D0\u05DC\u05D5\u05EA \u05E2\u05DC \u05D7\u05D9\u05DC\u05D5\u05E7 \u05D5-0!',
+   tip:'\u05D6\u05DB\u05E8\u05D5:\n\u2022 <span class="math">0 \u00F7 a = 0</span>\n\u2022 <span class="math">a \u00F7 0</span> \u2014 \u05D0\u05D9 \u05D0\u05E4\u05E9\u05E8!',
+   example:'\u05E9\u05D9\u05DE\u05D5 \u05DC\u05D1 \u2014 \u05D0\u05D9 \u05D0\u05E4\u05E9\u05E8 \u05DC\u05D7\u05DC\u05E7 \u05D1-0! \u26A0\uFE0F',
+   gen:function(){return qZeroDiv('mixed')}},
+
+  {title:'\u05DE\u05E2\u05D5\u05E8\u05D1\u05D1 \u2014 1 \u05D1\u05DB\u05E4\u05DC \u05D5\u05D7\u05D9\u05DC\u05D5\u05E7',instruction:'\u05E9\u05D0\u05DC\u05D5\u05EA \u05E2\u05DC 1!',
+   tip:'\u05D6\u05DB\u05E8\u05D5:\n\u2022 <span class="math">a \u00D7 1 = a</span>, <span class="math">a \u00F7 1 = a</span>\n\u2022 <span class="math">a \u00F7 a = 1</span>',
+   example:'\u05DB\u05DC \u05E9\u05D0\u05DC\u05D4 \u05D4\u05D9\u05D0 \u05D4\u05E4\u05EA\u05E2\u05D4! \uD83C\uDFB2',
+   gen:function(){return[function(){return qOneMul('mixed')},qDivBySelf][rr(0,1)]()}},
+
+  {title:'\u05DE\u05E2\u05D5\u05E8\u05D1\u05D1 \u2014 \u05DB\u05DC \u05D4\u05DB\u05DC\u05DC\u05D9\u05DD!',instruction:'\u05E9\u05D0\u05DC\u05D5\u05EA \u05DE\u05DB\u05DC \u05D4\u05E1\u05D5\u05D2\u05D9\u05DD!',
+   tip:'\u05DB\u05DC \u05D4\u05DB\u05DC\u05DC\u05D9\u05DD \u05E9\u05DC\u05DE\u05D3\u05EA\u05DD \u2014 \u05D4\u05D2\u05D9\u05E2 \u05D4\u05D6\u05DE\u05DF \u05DC\u05D4\u05E9\u05EA\u05DE\u05E9 \u05D1\u05D4\u05DD!',
+   example:'\uD83C\uDFB2 \u05D4\u05E4\u05EA\u05E2\u05D5\u05EA!',
+   gen:function(){var g=[qZeroAdd,qZeroMul,function(){return qZeroDiv('mixed')},function(){return qOneMul('mixed')},qDivBySelf,qCompare01,qWhichRule];return g[rr(0,g.length-1)]()}},
+
+  {title:'\u05D0\u05EA\u05D2\u05E8!',instruction:'\u05E9\u05D0\u05DC\u05D5\u05EA \u05DE\u05D0\u05EA\u05D2\u05E8\u05D5\u05EA!',
+   tip:'\u05E9\u05DC\u05D1\u05D5 \u05D0\u05EA \u05DB\u05DC \u05D4\u05DB\u05DC\u05DC\u05D9\u05DD!',
+   example:'\uD83D\uDCAA \u05D0\u05EA\u05DD \u05D9\u05DB\u05D5\u05DC\u05D9\u05DD!',
+   gen:function(){var g=[qZeroAdd,qZeroMul,function(){return qZeroDiv('mixed')},function(){return qOneMul('mixed')},qDivBySelf,qCompare01,qWhichRule];return g[rr(0,g.length-1)]()}},
+
+  {title:'\u05DE\u05D0\u05E1\u05D8\u05E8!',instruction:'\u05D4\u05E8\u05DE\u05D4 \u05D4\u05DB\u05D9 \u05E7\u05E9\u05D4 \u2014 \u05DB\u05DC \u05D4\u05E1\u05D5\u05D2\u05D9\u05DD!',
+   tip:'\uD83C\uDFC6 \u05D0\u05D9\u05DF \u05E2\u05DC\u05D9\u05DB\u05DD! \u05E9\u05DC\u05D8\u05EA\u05DD \u05D1\u05EA\u05DB\u05D5\u05E0\u05D5\u05EA 0 \u05D5-1!',
+   example:'\uD83C\uDF1F\uD83C\uDF1F\uD83C\uDF1F',
+   gen:function(){var g=[qZeroAdd,qZeroMul,function(){return qZeroDiv('mixed')},function(){return qOneMul('mixed')},qDivBySelf,qCompare01,qWhichRule];return g[rr(0,g.length-1)]()}}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=6;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' \uD83D\uDD12':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='\u05E8\u05DE\u05D4 '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='\u05E8\u05DE\u05D4 '+(currentLevel+1)+' \u05DE\u05EA\u05D5\u05DA '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='\u25B2 \u05D4\u05E1\u05EA\u05E8';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['\u05DE\u05E6\u05D5\u05D9\u05DF! \u2B50','\u05E0\u05DB\u05D5\u05DF! \uD83C\uDFAF','\u05D9\u05D5\u05E4\u05D9! \u2728','\u05DE\u05D3\u05D4\u05D9\u05DD! \uD83C\uDF1F'][rr(0,3)];
+    if(q.explain) praise+=' \u2014 '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF, \u05E0\u05E1\u05D5 \u05E9\u05D5\u05D1! \uD83D\uDCAA';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='\uD83C\uDFC6';document.getElementById('lcTitle').textContent='\u05DE\u05D5\u05E9\u05DC\u05DD!';document.getElementById('lcSub').textContent='\u05DB\u05DC \u05D4\u05EA\u05E9\u05D5\u05D1\u05D5\u05EA \u05E0\u05DB\u05D5\u05E0\u05D5\u05EA!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='\uD83C\uDF89';document.getElementById('lcTitle').textContent='\u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3!';document.getElementById('lcSub').textContent='\u05DB\u05DE\u05E2\u05D8 \u05DE\u05D5\u05E9\u05DC\u05DD!'}
+  else{document.getElementById('lcEmoji').textContent='\uD83D\uDCAA';document.getElementById('lcTitle').textContent='\u05E1\u05D9\u05D9\u05DE\u05EA\u05DD!';document.getElementById('lcSub').textContent='\u05DB\u05D3\u05D0\u05D9 \u05DC\u05E0\u05E1\u05D5\u05EA \u05E9\u05D5\u05D1'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'\u25BC \u05D4\u05E6\u05D2 \u05D8\u05D9\u05E4':'\u25B2 \u05D4\u05E1\u05EA\u05E8'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

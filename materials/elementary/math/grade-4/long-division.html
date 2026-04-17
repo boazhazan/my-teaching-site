@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>חילוק ארוך — כיתה ד' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#92400e;--primary-dark:#78350f;--primary-light:#fef3c7;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#78350f 0%,#92400e 50%,#b45309 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(146,64,14,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:3rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.div-display{direction:ltr;text-align:center;font-family:monospace;font-size:1.8rem;font-weight:800;margin:16px 0}
+.div-display .op-q{color:var(--primary)}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:2.2rem;padding:6px 20px}.div-display{font-size:1.4rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">➗</div><div><h1>חילוק ארוך</h1><div class="subtitle">כיתה ד' — מחלק חד-ספרתי ועשרת שלמה</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">חילוק ארוך — כיתה ד' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>➗ חילוק ארוך</h2><p><strong>איך מחלקים בחילוק ארוך?</strong> עובדים ספרה-ספרה משמאל לימין!</p><p>🔹 <strong>שלב 1 — מחלקים:</strong> כמה פעמים המחלק נכנס בספרה הראשונה (או בשתי הספרות הראשונות)?<br>🔹 <strong>שלב 2 — כופלים:</strong> כופלים את המנה בספרה × המחלק<br>🔹 <strong>שלב 3 — מחסרים:</strong> מחסרים את התוצאה<br>🔹 <strong>שלב 4 — מורידים:</strong> מורידים את הספרה הבאה ומתחילים מחדש</p><p>🔸 <strong>שארית:</strong> מה שנשאר בסוף — תמיד קטנה מהמחלק!<br>לדוגמה: <span class="math">17 ÷ 5 = 3</span> שארית <span class="math">2</span> (כי 3×5=15, ו-17-15=2)</p><p>🔸 <strong>חילוק בעשרות שלמות:</strong> מחלקים ב-10, 20, 30... מורידים אפס מהמחולק ומהמחלק!<br>לדוגמה: <span class="math">450 ÷ 30 = 45 ÷ 3 = 15</span></p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function fmtNum(n){return n.toLocaleString('he-IL')}
+
+/* Division display HTML */
+function divHTML(dividend,divisor){
+  return '<div class="div-display"><span class="op-q">?</span> = <span>'+fmtNum(dividend)+'</span> ÷ <span>'+fmtNum(divisor)+'</span></div>';
+}
+
+/* Generate unique wrong answers near correct */
+function wrongs(correct,count,min,max){
+  var s=new Set();s.add(correct);
+  /* nearby first */
+  var offsets=[-3,-2,-1,1,2,3,-5,5,-10,10];
+  for(var i=0;i<offsets.length&&s.size<count+1;i++){
+    var v=correct+offsets[i];
+    if(v>=min&&v<=max) s.add(v);
+  }
+  while(s.size<count+1){var v=rr(min,max);s.add(v)}
+  s.delete(correct);
+  return Array.from(s).slice(0,count);
+}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* 1. qOralDiv — mental division from times tables */
+function qOralDiv(){
+  var d=rr(2,9);
+  var q_=rr(2,9);
+  var dividend=d*q_;
+  var correct=q_;
+  var w=wrongs(correct,3,1,20);
+  var options=shuffle([String(correct)].concat(w.map(String)));
+  return{type:'choice',qText:'חשבו בעל פה:',display:divHTML(dividend,d),answer:String(correct),options:options,colClass:'cols-4',explain:fmtNum(dividend)+' ÷ '+d+' = '+correct+' (כי '+d+' × '+correct+' = '+fmtNum(dividend)+')'};
+}
+
+/* 2. qLongDiv1Digit — single-digit divisor, 2-4 digit dividend, no remainder */
+function qLongDiv1Digit(digits){
+  var d=rr(2,9);
+  var minQ=digits===2?Math.ceil(10/d):digits===3?Math.ceil(100/d):Math.ceil(1000/d);
+  var maxQ=digits===2?Math.floor(99/d):digits===3?Math.floor(999/d):Math.floor(9999/d);
+  var q_=rr(minQ,maxQ);
+  var dividend=d*q_;
+  var correct=q_;
+  var lo=Math.max(1,correct-10);
+  var hi=correct+10;
+  var w=wrongs(correct,3,lo,hi);
+  var options=shuffle([String(correct)].concat(w.map(String)));
+  return{type:'choice',qText:'חלקו:',display:divHTML(dividend,d),answer:String(correct),options:options,colClass:'cols-4',explain:fmtNum(dividend)+' ÷ '+d+' = '+fmtNum(correct)+' (כי '+d+' × '+fmtNum(correct)+' = '+fmtNum(dividend)+')'};
+}
+
+/* 3. qLongDivTens — divisor is a round ten */
+function qLongDivTens(){
+  var tens=[10,20,30,40,50];
+  var d=tens[rr(0,tens.length-1)];
+  var q_=rr(3,30);
+  var dividend=d*q_;
+  var correct=q_;
+  var lo=Math.max(1,correct-8);
+  var hi=correct+8;
+  var w=wrongs(correct,3,lo,hi);
+  var options=shuffle([String(correct)].concat(w.map(String)));
+  var simpleD=d/10;
+  var simpleDividend=dividend/10;
+  return{type:'choice',qText:'חלקו בעשרת שלמה:',display:divHTML(dividend,d),answer:String(correct),options:options,colClass:'cols-4',explain:fmtNum(dividend)+' ÷ '+fmtNum(d)+' = '+fmtNum(simpleDividend)+' ÷ '+simpleD+' = '+fmtNum(correct)};
+}
+
+/* 4. qDivWithRemainder — division with remainder */
+function qDivWithRemainder(){
+  var d=rr(2,9);
+  var q_=rr(10,99);
+  var r=rr(1,d-1);
+  var dividend=d*q_+r;
+  var correctStr=q_+' שארית '+r;
+  /* generate wrong options */
+  var opts=[correctStr];
+  var used=new Set();used.add(correctStr);
+  /* wrong quotient */
+  var wq=q_+rr(-2,2);if(wq===q_)wq=q_+1;
+  var wr=rr(1,d-1);if(wr===r)wr=(r%( d-1))+1;
+  var s1=wq+' שארית '+wr;if(!used.has(s1)){opts.push(s1);used.add(s1)}
+  /* right quotient, wrong remainder */
+  var wr2=rr(1,d-1);if(wr2===r)wr2=(r%(d-1))+1;
+  var s2=q_+' שארית '+wr2;if(!used.has(s2)){opts.push(s2);used.add(s2)}
+  /* wrong both */
+  var wq2=q_+rr(1,3);var wr3=rr(1,d-1);
+  var s3=wq2+' שארית '+wr3;if(!used.has(s3)){opts.push(s3);used.add(s3)}
+  /* fill if needed */
+  while(opts.length<4){
+    var fq=q_+rr(-3,3);var fr=rr(0,d-1);if(fq===q_&&fr===r)continue;
+    var fs=fq+' שארית '+fr;if(!used.has(fs)){opts.push(fs);used.add(fs)}
+  }
+  opts=shuffle(opts.slice(0,4));
+  return{type:'choice',qText:'חלקו ומצאו שארית:',display:divHTML(dividend,d),answer:correctStr,options:opts,colClass:'cols-2',explain:fmtNum(dividend)+' ÷ '+d+' = '+q_+' ושארית '+r+' (כי '+d+' × '+q_+' = '+fmtNum(d*q_)+', ו-'+fmtNum(dividend)+' - '+fmtNum(d*q_)+' = '+r+')'};
+}
+
+/* 5. qDivDistrib — distributive property in division */
+function qDivDistrib(){
+  var d=rr(2,9);
+  /* pick two parts that are each divisible by d */
+  var p1=d*rr(2,9);
+  var p2=d*rr(2,9);
+  var dividend=p1+p2;
+  var correct=dividend/d;
+  var part1Res=p1/d;
+  var part2Res=p2/d;
+  var lo=Math.max(1,correct-8);
+  var hi=correct+8;
+  var w=wrongs(correct,3,lo,hi);
+  var options=shuffle([String(correct)].concat(w.map(String)));
+  return{type:'choice',qText:'פלגו וחלקו: <strong>('+fmtNum(p1)+' + '+fmtNum(p2)+') ÷ '+d+'</strong>',display:'<div class="div-display">'+fmtNum(p1)+' ÷ '+d+' + '+fmtNum(p2)+' ÷ '+d+' = <span class="op-q">?</span></div>',answer:String(correct),options:options,colClass:'cols-4',explain:'('+fmtNum(p1)+' + '+fmtNum(p2)+') ÷ '+d+' = '+part1Res+' + '+part2Res+' = '+correct};
+}
+
+/* 6. qAdjustDividend — how much to add so it divides evenly */
+function qAdjustDividend(){
+  var d=rr(2,9);
+  var n,remainder;
+  for(var att=0;att<100;att++){
+    n=rr(20,99);
+    remainder=n%d;
+    if(remainder!==0) break;
+  }
+  var correct=d-remainder;
+  var w=wrongs(correct,3,1,d*2);
+  var options=shuffle([String(correct)].concat(w.map(String)));
+  return{type:'choice',qText:'בכמה צריך <strong>להגדיל</strong> את '+fmtNum(n)+' כדי שיתחלק ב-'+d+' ללא שארית?',display:'<div class="div-display">'+fmtNum(n)+' + <span class="op-q">?</span> → מתחלק ב-'+d+'</div>',answer:String(correct),options:options,colClass:'cols-4',explain:fmtNum(n)+' + '+correct+' = '+fmtNum(n+correct)+', ו-'+fmtNum(n+correct)+' ÷ '+d+' = '+((n+correct)/d)};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'חילוק בעל פה (לוח כפל)',instruction:'חלקו בעזרת לוח הכפל!',
+   tip:'חילוק הוא ההפך מכפל!\nאם <span class="math">3 × 7 = 21</span> אז <span class="math">21 ÷ 3 = 7</span>.',
+   example:'<span class="math">36 ÷ 4 = ?</span>\nחושבים: 4 כפול כמה שווה 36?\n4 × 9 = 36 → התשובה: <span class="math">9</span>',
+   gen:function(){return qOralDiv()}},
+
+  {title:'חילוק 2 ספרות ÷ חד (בלי שארית)',instruction:'חלקו מספר דו-ספרתי במחלק חד-ספרתי',
+   tip:'עובדים בחילוק ארוך ספרה-ספרה:\n1. כמה פעמים המחלק נכנס בספרה הראשונה?\n2. כופלים ומחסרים\n3. מורידים את הספרה הבאה',
+   example:'<span class="math">84 ÷ 4 = ?</span>\n8 ÷ 4 = 2, מורידים 4\n4 ÷ 4 = 1 → תשובה: <span class="math">21</span>',
+   gen:function(){return qLongDiv1Digit(2)}},
+
+  {title:'חילוק 2 ספרות (עם שארית)',instruction:'חלקו ומצאו מנה ושארית!',
+   tip:'כשהחילוק לא יוצא בדיוק — יש שארית!\nהשארית תמיד <strong>קטנה מהמחלק</strong>.',
+   example:'<span class="math">17 ÷ 5 = 3</span> שארית <span class="math">2</span>\nכי 5 × 3 = 15, ו-17 - 15 = 2',
+   gen:function(){return qDivWithRemainder()}},
+
+  {title:'חילוק 3 ספרות ÷ חד',instruction:'מספרים תלת-ספרתיים — אותה שיטה!',
+   tip:'בחילוק 3 ספרות, עובדים משמאל לימין:\n• מחלקים את הספרה הראשונה (או שתיים ראשונות)\n• כופלים, מחסרים, מורידים ספרה\n• חוזרים עד שגומרים',
+   example:'<span class="math">246 ÷ 3 = ?</span>\n2 ÷ 3 → לא נכנס, לוקחים 24\n24 ÷ 3 = 8, מורידים 6\n6 ÷ 3 = 2 → תשובה: <span class="math">82</span>',
+   gen:function(){return qLongDiv1Digit(3)}},
+
+  {title:'חילוק 3 ספרות — תרגול',instruction:'עוד תרגול עם 3 ספרות!',
+   tip:'טיפ: אם הספרה הראשונה קטנה מהמחלק — לקחו שתי ספרות ביחד!',
+   example:'<span class="math">156 ÷ 6 = ?</span>\n15 ÷ 6 = 2 (שארית 3), מורידים 6\n36 ÷ 6 = 6 → תשובה: <span class="math">26</span>',
+   gen:function(){return qLongDiv1Digit(3)}},
+
+  {title:'פילוג בחילוק',instruction:'פלגו את המחולק ואז חלקו!',
+   tip:'אפשר לפרק את המחולק לשני חלקים שכל אחד מתחלק במחלק:\n<span class="math">(a + b) ÷ d = a÷d + b÷d</span>',
+   example:'<span class="math">51 ÷ 3 = ?</span>\nפילוג: (30 + 21) ÷ 3\n= 30÷3 + 21÷3\n= 10 + 7 = <span class="math">17</span>',
+   gen:function(){return qDivDistrib()}},
+
+  {title:'חילוק ÷ עשרת שלמה',instruction:'חלקו בעשרות: 10, 20, 30...',
+   tip:'כשמחלקים בעשרת שלמה — מורידים אפס מהמחולק ומהמחלק!\n<span class="math">450 ÷ 30 = 45 ÷ 3 = 15</span>',
+   example:'<span class="math">840 ÷ 20 = ?</span>\nמורידים אפס: 84 ÷ 2 = <span class="math">42</span>',
+   gen:function(){return qLongDivTens()}},
+
+  {title:'חילוק ÷ עשרת — תרגול',instruction:'עוד תרגול עם עשרות שלמות!',
+   tip:'זכרו: מחלקים ב-10 → מורידים אפס אחד\nלדוגמה: <span class="math">600 ÷ 20 = 60 ÷ 2 = 30</span>',
+   example:'<span class="math">350 ÷ 50 = ?</span>\n35 ÷ 5 = <span class="math">7</span>',
+   gen:function(){return qLongDivTens()}},
+
+  {title:'התאמת מחולק',instruction:'כמה להוסיף כדי שיתחלק בדיוק?',
+   tip:'מחשבים את השארית, ואז כמה חסר עד המחלק:\nצריך להוסיף = מחלק - שארית',
+   example:'<span class="math">81 ÷ 5</span> → שארית 1\nצריך להוסיף: 5 - 1 = <span class="math">4</span>\n81 + 4 = 85, ו-85 ÷ 5 = 17 ✅',
+   gen:function(){return qAdjustDividend()}},
+
+  {title:'מעורבב — חילוק בסיסי',instruction:'שאלות מגוונות!',
+   tip:'השתמשו בכל מה שלמדתם! חילוק ארוך, שארית, ופילוג.',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[qOralDiv,function(){return qLongDiv1Digit(2)},qDivWithRemainder,qDivDistrib];
+     return types[rr(0,3)]();
+   }},
+
+  {title:'מעורבב — 3 ספרות + עשרות',instruction:'חילוק 3 ספרות וחילוק בעשרות!',
+   tip:'זכרו: 3 ספרות — עובדים ספרה אחרי ספרה.\nעשרות — מורידים אפס!',
+   example:'💪 בהצלחה!',
+   gen:function(){
+     var types=[function(){return qLongDiv1Digit(3)},qLongDivTens,qDivWithRemainder];
+     return types[rr(0,2)]();
+   }},
+
+  {title:'מעורבב — כל הסוגים',instruction:'כל סוגי החילוק ביחד!',
+   tip:'קחו את הזמן, חשבו לפני שעונים!',
+   example:'🎯 כל שאלה שונה!',
+   gen:function(){
+     var types=[qOralDiv,function(){return qLongDiv1Digit(2)},function(){return qLongDiv1Digit(3)},qLongDivTens,qDivWithRemainder,qDivDistrib,qAdjustDividend];
+     return types[rr(0,6)]();
+   }},
+
+  {title:'אתגר — חילוק 4 ספרות',instruction:'חלקו מספרים בני 4 ספרות!',
+   tip:'אותה שיטה — רק עם עוד ספרה!\nסבלנות וריכוז — תצליחו!',
+   example:'<span class="math">1,236 ÷ 3 = ?</span>\n12 ÷ 3 = 4, מורידים 3\n3 ÷ 3 = 1, מורידים 6\n6 ÷ 3 = 2 → תשובה: <span class="math">412</span>',
+   gen:function(){
+     var types=[function(){return qLongDiv1Digit(4)},qDivWithRemainder,qLongDivTens];
+     return types[rr(0,2)]();
+   }},
+
+  {title:'סופר אתגר!',instruction:'שאלות קשות מכל הסוגים!',
+   tip:'🏆 אתם מומחים לחילוק!',
+   example:'🌟 💪 🏆',
+   gen:function(){
+     var types=[function(){return qLongDiv1Digit(3)},function(){return qLongDiv1Digit(4)},qLongDivTens,qDivWithRemainder,qDivDistrib,qAdjustDividend];
+     return types[rr(0,5)]();
+   }},
+
+  {title:'מאסטר!',instruction:'הרמה הכי קשה — הוכיחו שאתם שולטים!',
+   tip:'🏆 אין עליכם! שלטתם בחילוק ארוך!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[qOralDiv,function(){return qLongDiv1Digit(2)},function(){return qLongDiv1Digit(3)},function(){return qLongDiv1Digit(4)},qLongDivTens,qDivWithRemainder,qDivDistrib,qAdjustDividend];
+     return types[rr(0,7)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)"><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

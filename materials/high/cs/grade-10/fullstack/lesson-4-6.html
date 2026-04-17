@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ExecuteScalar, DataReader ו-SQL Injection | Full-Stack Development | בועז חזן</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);--unit-color:#059669}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}.topbar a:hover{text-decoration:underline}
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}.lesson-header{margin-bottom:32px}.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+.lesson-section{margin-bottom:40px}.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}.lesson-section p{line-height:1.8;margin-bottom:12px}.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+.code-block{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.6;white-space:pre}.code-block .keyword{color:#818cf8}.code-block .string{color:#fbbf24}.code-block .function{color:#38bdf8}.code-block .comment{color:#64748b;font-style:italic}.code-block .type{color:#67e8f9}.code-block .danger{color:#f87171;font-weight:700}
+.inline-code{direction:ltr;unicode-bidi:embed;background:#f1f5f9;padding:2px 8px;border-radius:4px;font-family:'Courier New',monospace;font-size:.88rem;color:var(--primary-dark);display:inline}
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}.lesson-tip.danger{background:#fee2e2;border-right-color:#ef4444}.lesson-tip strong{display:block;margin-bottom:4px}.lesson-tip p{margin:0;font-size:.95rem}
+.method-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.9rem}.method-table th{background:var(--unit-color);color:#fff;padding:10px 14px;text-align:right;font-weight:700}.method-table td{padding:10px 14px;border-bottom:1px solid var(--border)}.method-table tr:nth-child(even){background:var(--bg-soft)}
+.quiz-container{background:var(--bg-soft);border:2px solid var(--border);border-radius:12px;padding:24px;margin:20px 0}.quiz-container h3{font-size:1.1rem;font-weight:800;margin-bottom:16px;color:var(--unit-color)}.quiz-question{font-weight:700;font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.quiz-options{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}.quiz-options label{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg);border:2px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;line-height:1.6}.quiz-options label:hover{border-color:var(--unit-color)}.quiz-options label.correct{border-color:var(--success);background:#d1fae5}.quiz-options label.incorrect{border-color:var(--error);background:#fee2e2}.quiz-options label.show-correct{border-color:var(--success);background:#d1fae5}
+.quiz-check-btn{padding:10px 24px;background:var(--unit-color);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:.95rem;font-weight:600;cursor:pointer}.quiz-check-btn:disabled{opacity:.5;cursor:not-allowed}
+.quiz-feedback{display:none;margin-top:12px;padding:12px 16px;border-radius:8px;font-weight:600;font-size:.95rem}.quiz-feedback.correct{display:block;background:#d1fae5;color:#065f46}.quiz-feedback.incorrect{display:block;background:#fee2e2;color:#991b1b}
+.quiz-fill-input{direction:ltr;unicode-bidi:embed;padding:8px 12px;border:2px solid var(--border);border-radius:6px;font-family:'Courier New',monospace;font-size:.95rem;width:220px}.quiz-fill-input.correct{border-color:var(--success);background:#d1fae5}.quiz-fill-input.incorrect{border-color:var(--error);background:#fee2e2}
+.completion-banner{background:linear-gradient(135deg,#059669 0%,#047857 100%);color:#fff;border-radius:16px;padding:40px 32px;text-align:center;margin:40px 0}.completion-banner h2{font-size:1.8rem;font-weight:900;margin-bottom:12px}.completion-banner p{font-size:1.1rem;opacity:.9;max-width:500px;margin:0 auto 20px}.completion-banner .emoji{font-size:3rem;margin-bottom:16px;display:block}.completion-link{display:inline-block;padding:12px 28px;background:#fff;color:#059669;border-radius:8px;font-weight:700;text-decoration:none;font-size:1rem;transition:transform .2s}.completion-link:hover{transform:scale(1.05)}
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}.lesson-nav a:hover{border-color:var(--unit-color);color:var(--unit-color)}
+@media(max-width:768px){.lesson-title{font-size:1.5rem}.lesson-nav{flex-direction:column}.code-block{font-size:.8rem;padding:12px}.method-table{font-size:.8rem}.completion-banner{padding:28px 20px}.completion-banner h2{font-size:1.4rem}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="topbar-title">Full-Stack Development</div><a href="../../../../../materials.html">← חזרה לחומרי לימוד</a></div>
+
+<div class="lesson-container">
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#059669">יחידה 4: SQL & ADO.NET</span>
+    <h1 class="lesson-title">שיעור 4.6 — ExecuteScalar, DataReader ו-SQL Injection</h1>
+    <p class="lesson-subtitle">שיטות שאילתה נוספות ואבטחת מידע</p>
+  </div>
+
+  <div data-premium>
+
+  <div class="lesson-section">
+    <h2>1. ExecuteScalar — ערך בודד</h2>
+    <p>מחזיר את הערך הראשון בשורה הראשונה. מתאים ל-COUNT, MAX, MIN, login check.</p>
+    <div class="code-block"><span class="comment">// כמה תלמידים יש?</span>
+<span class="keyword">string</span> query = <span class="string">"SELECT COUNT(*) FROM Students"</span>;
+<span class="type">SqlCommand</span> cmd = <span class="keyword">new</span> <span class="type">SqlCommand</span>(query, con);
+con.<span class="function">Open</span>();
+<span class="keyword">int</span> count = (<span class="keyword">int</span>)cmd.<span class="function">ExecuteScalar</span>();
+con.<span class="function">Close</span>();
+<span class="comment">// count = 42</span></div>
+
+    <h3>שימוש ל-Login</h3>
+    <div class="code-block"><span class="keyword">string</span> query = <span class="string">"SELECT COUNT(*) FROM Users WHERE Username=@u AND Password=@p"</span>;
+cmd.Parameters.<span class="function">AddWithValue</span>(<span class="string">"@u"</span>, Username);
+cmd.Parameters.<span class="function">AddWithValue</span>(<span class="string">"@p"</span>, Password);
+<span class="keyword">int</span> found = (<span class="keyword">int</span>)cmd.<span class="function">ExecuteScalar</span>();
+
+<span class="keyword">if</span> (found > <span class="string">0</span>)
+    <span class="comment">// Login success!</span>
+<span class="keyword">else</span>
+    <span class="comment">// Login failed</span></div>
+  </div>
+
+  <div class="lesson-section">
+    <h2>2. DataReader — קריאה קדימה בלבד</h2>
+    <p>DataReader קורא שורות אחת-אחת, בלי לטעון הכל לזיכרון. מהיר ויעיל!</p>
+    <div class="code-block"><span class="type">SqlDataReader</span> reader = cmd.<span class="function">ExecuteReader</span>();
+
+<span class="keyword">while</span> (reader.<span class="function">Read</span>())
+{
+    <span class="keyword">string</span> name = reader.<span class="function">GetString</span>(<span class="string">0</span>);    <span class="comment">// עמודה 0</span>
+    <span class="keyword">int</span> grade = reader.<span class="function">GetInt32</span>(<span class="string">1</span>);      <span class="comment">// עמודה 1</span>
+    <span class="function">Console.WriteLine</span>(<span class="string">$"{name}: {grade}"</span>);
+}
+reader.<span class="function">Close</span>();</div>
+    <div class="lesson-tip">
+      <strong>Forward-only</strong>
+      <p>DataReader יכול רק להתקדם — אין אפשרות לחזור לשורה קודמת. אם צריך לנווט חופשי, השתמשו ב-DataTable.</p>
+    </div>
+  </div>
+
+  <div class="lesson-section">
+    <h2>3. SQL Injection — התקפת הזרקה</h2>
+    <div class="lesson-tip danger">
+      <strong>סכנה!</strong>
+      <p>SQL Injection היא אחת ההתקפות הנפוצות ביותר באינטרנט. כל מפתח חייב להכיר אותה!</p>
+    </div>
+    <p>כשמשרשרים קלט משתמש ישירות לשאילתה:</p>
+    <div class="code-block"><span class="comment">// ❌ מסוכן!!</span>
+<span class="keyword">string</span> query = <span class="string">"SELECT * FROM Users WHERE Username='"</span> + username + <span class="string">"'"</span>;
+
+<span class="comment">// אם המשתמש מקליד:  ' OR 1=1 --</span>
+<span class="comment">// השאילתה הופכת ל:</span>
+<span class="danger">SELECT * FROM Users WHERE Username='' OR 1=1 --'</span>
+
+<span class="comment">// 1=1 תמיד TRUE → מחזיר את כל המשתמשים!</span>
+<span class="comment">// -- הופך את השאר להערה</span></div>
+  </div>
+
+  <div class="lesson-section">
+    <h2>4. SqlParameter — הפתרון</h2>
+    <div class="code-block"><span class="comment">// ✓ בטוח!</span>
+<span class="keyword">string</span> query = <span class="string">"SELECT * FROM Users WHERE Username=@user AND Password=@pass"</span>;
+<span class="type">SqlCommand</span> cmd = <span class="keyword">new</span> <span class="type">SqlCommand</span>(query, con);
+cmd.Parameters.<span class="function">AddWithValue</span>(<span class="string">"@user"</span>, username);
+cmd.Parameters.<span class="function">AddWithValue</span>(<span class="string">"@pass"</span>, password);</div>
+    <div class="lesson-tip success">
+      <strong>כלל הזהב</strong>
+      <p>לעולם אל תשרשרו קלט משתמש לתוך SQL! תמיד השתמשו ב-<span class="inline-code">SqlParameter</span>. הפרמטר מטופל כ<strong>ערך</strong>, לא כ<strong>קוד SQL</strong>.</p>
+    </div>
+  </div>
+
+  <div class="lesson-section">
+    <h2>5. סיכום שיטות ADO.NET</h2>
+    <table class="method-table">
+      <tr><th>שיטה</th><th>מחזיר</th><th>שימוש</th></tr>
+      <tr><td>Disconnected (DataSet)</td><td>DataTable</td><td>הצגת נתונים, CRUD דרך adapter</td></tr>
+      <tr><td>ExecuteNonQuery</td><td>int (שורות שהושפעו)</td><td>INSERT, UPDATE, DELETE</td></tr>
+      <tr><td>ExecuteScalar</td><td>object (ערך בודד)</td><td>COUNT, Login check, MAX</td></tr>
+      <tr><td>DataReader</td><td>SqlDataReader</td><td>קריאת שורות — מהיר, forward-only</td></tr>
+    </table>
+  </div>
+
+  <!-- Quizzes -->
+  <div class="quiz-container">
+    <h3>שאלה 1</h3>
+    <p class="quiz-question">מה מחזיר ExecuteScalar?</p>
+    <div class="quiz-options" id="quiz1-options">
+      <label><input type="radio" name="quiz1" value="0"> DataTable עם כל התוצאות</label>
+      <label><input type="radio" name="quiz1" value="1"> הערך הראשון בשורה הראשונה</label>
+      <label><input type="radio" name="quiz1" value="2"> מספר השורות שהושפעו</label>
+      <label><input type="radio" name="quiz1" value="3"> true או false</label>
+    </div>
+    <button class="quiz-check-btn" onclick="checkQuiz('quiz1',1)">בדיקה</button>
+    <div class="quiz-feedback" id="quiz1-feedback"></div>
+  </div>
+
+  <div class="quiz-container">
+    <h3>שאלה 2</h3>
+    <p class="quiz-question">מה הופך את DataReader למהיר?</p>
+    <div class="quiz-options" id="quiz2-options">
+      <label><input type="radio" name="quiz2" value="0"> הוא שומר הכל בזיכרון</label>
+      <label><input type="radio" name="quiz2" value="1"> הוא forward-only ו-read-only — אין overhead של DataTable</label>
+      <label><input type="radio" name="quiz2" value="2"> הוא משתמש ב-caching</label>
+    </div>
+    <button class="quiz-check-btn" onclick="checkQuiz('quiz2',1)">בדיקה</button>
+    <div class="quiz-feedback" id="quiz2-feedback"></div>
+  </div>
+
+  <div class="quiz-container">
+    <h3>שאלה 3</h3>
+    <p class="quiz-question">השלימו למניעת SQL Injection:</p>
+    <div style="direction:ltr;text-align:left;background:#1e293b;color:#e2e8f0;border-radius:8px;padding:16px;margin:12px 0;font-family:'Courier New',monospace;font-size:.88rem">cmd.Parameters.AddWithValue("@name", ________);</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <input type="text" id="fill1" class="quiz-fill-input" placeholder="...">
+      <button class="quiz-check-btn" onclick="checkFill('fill1',['name','Name','username','Username'],'quiz3')">בדיקה</button>
+    </div>
+    <div class="quiz-feedback" id="quiz3-feedback"></div>
+  </div>
+
+  <div class="quiz-container">
+    <h3>שאלה 4</h3>
+    <p class="quiz-question">מה עושה <span class="inline-code">' OR 1=1 --</span> בשאילתה לא מוגנת?</p>
+    <div class="quiz-options" id="quiz4-options">
+      <label><input type="radio" name="quiz4" value="0"> גורם לשגיאת תחביר</label>
+      <label><input type="radio" name="quiz4" value="1"> עוקף את תנאי ה-WHERE — מחזיר את כל השורות</label>
+      <label><input type="radio" name="quiz4" value="2"> מוחק את הטבלה</label>
+      <label><input type="radio" name="quiz4" value="3"> לא עושה כלום</label>
+    </div>
+    <button class="quiz-check-btn" onclick="checkQuiz('quiz4',1)">בדיקה</button>
+    <div class="quiz-feedback" id="quiz4-feedback"></div>
+  </div>
+
+  <!-- Completion Banner -->
+  <div class="completion-banner">
+    <span class="emoji">&#127891;</span>
+    <h2>סיימת את הקורס!</h2>
+    <p>כל הכבוד! עברת את כל 20 השיעורים — מ-HTML בסיסי ועד אבטחת מידע ושאילתות מתקדמות. אתה מוכן לבנות אתרים אמיתיים!</p>
+    <a href="course.html" class="completion-link">&#127968; חזרה לעמוד הקורס</a>
+  </div>
+
+  <div class="lesson-nav">
+    <a href="lesson-4-5.html">&rarr; שיעור קודם: 4.5</a>
+    <a href="course.html">&#127968; חזרה לעמוד הקורס</a>
+  </div>
+
+  </div>
+</div>
+
+<script>
+function checkQuiz(qid,ci){var o=document.getElementById(qid+'-options'),f=document.getElementById(qid+'-feedback'),s=o.querySelector('input:checked'),ls=o.querySelectorAll('label'),b=o.parentElement.querySelector('.quiz-check-btn');if(!s){f.className='quiz-feedback incorrect';f.textContent='יש לבחור תשובה!';f.style.display='block';return;}var i=parseInt(s.value);for(var x=0;x<ls.length;x++)ls[x].classList.remove('correct','incorrect','show-correct');if(i===ci){s.parentElement.classList.add('correct');f.className='quiz-feedback correct';f.textContent='נכון!';}else{s.parentElement.classList.add('incorrect');ls[ci].classList.add('show-correct');f.className='quiz-feedback incorrect';f.textContent='לא נכון — התשובה הנכונה מסומנת בירוק.';}f.style.display='block';var rs=o.querySelectorAll('input');for(var j=0;j<rs.length;j++)rs[j].disabled=true;b.disabled=true;}
+function checkFill(id,ca,qid){var inp=document.getElementById(id),f=document.getElementById(qid+'-feedback'),b=inp.closest('.quiz-container').querySelector('.quiz-check-btn'),v=inp.value.trim();if(!v){f.className='quiz-feedback incorrect';f.textContent='הקלד/י תשובה!';f.style.display='block';return;}var ok=false;for(var i=0;i<ca.length;i++){if(v===ca[i]){ok=true;break;}}if(ok){inp.classList.add('correct');f.className='quiz-feedback correct';f.textContent='נכון!';inp.readOnly=true;b.disabled=true;}else{inp.classList.add('incorrect');f.className='quiz-feedback incorrect';f.textContent='לא נכון, נסו שוב.';}f.style.display='block';}
+</script>
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

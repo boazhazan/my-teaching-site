@@ -3,608 +3,198 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>עבודה בשיטה המקושרת (Connected) | Full-Stack Development</title>
+<title>סינון, מיון ו-asp-page-handler | Full-Stack Development | בועז חזן</title>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
-  --accent:#f59e0b;--accent-dark:#d97706;
-  --text:#1e293b;--text-light:#64748b;
-  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
-  --success:#10b981;--error:#ef4444;
-  --radius:12px;--radius-sm:8px;
-  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
-  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
-}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);--unit-color:#059669}
 body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
-
-/* Topbar */
 .topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
-.topbar-title{font-weight:800;font-size:1.1rem;color:#059669}
-.topbar a{color:#059669;text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
 .topbar a:hover{text-decoration:underline}
-
-/* Lesson layout */
 .lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
 .lesson-header{margin-bottom:32px}
 .lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
 .lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
 .lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
-
-/* Sections */
 .lesson-section{margin-bottom:40px}
 .lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
 .lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
 .lesson-section p{line-height:1.8;margin-bottom:12px}
 .lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
-
-/* Code blocks */
 .code-block{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.6;white-space:pre}
 .code-block .keyword{color:#818cf8}
 .code-block .string{color:#fbbf24}
 .code-block .function{color:#38bdf8}
 .code-block .comment{color:#64748b;font-style:italic}
-.code-block .type{color:#34d399}
-.code-block .number{color:#f472b6}
-
-/* Tip boxes */
+.code-block .tag{color:#f472b6}
+.code-block .attr{color:#a78bfa}
+.code-block .value{color:#34d399}
+.code-block .type{color:#67e8f9}
+.code-block .razor{color:#f59e0b;font-weight:700}
+.inline-code{direction:ltr;unicode-bidi:embed;background:#f1f5f9;padding:2px 8px;border-radius:4px;font-family:'Courier New',monospace;font-size:.88rem;color:var(--primary-dark);display:inline}
 .lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
 .lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
 .lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
-.lesson-tip.error{background:#fee2e2;border-right-color:var(--error)}
 .lesson-tip strong{display:block;margin-bottom:4px}
 .lesson-tip p{margin:0;font-size:.95rem}
-
-/* Comparison boxes */
-.compare-container{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0}
-.compare-box{border-radius:12px;padding:20px;border:2px solid}
-.compare-box.danger{border-color:var(--error);background:#fef2f2}
-.compare-box.safe{border-color:var(--success);background:#f0fdf4}
-.compare-box h4{margin-bottom:8px;font-size:1rem}
-.compare-box.danger h4{color:var(--error)}
-.compare-box.safe h4{color:var(--success)}
-.compare-box .code-block{font-size:.8rem;padding:14px;margin:8px 0 0}
-
-/* Diagram */
-.diagram{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:24px 0;padding:24px;background:var(--bg);border-radius:12px;border:1px solid var(--border)}
-.diagram-box{padding:12px 20px;border-radius:10px;font-weight:700;text-align:center;color:#fff;font-size:.9rem}
-.diagram-arrow{font-size:1.3rem;color:var(--text-light)}
-
-/* Quiz */
 .quiz-container{background:var(--bg-soft);border:2px solid var(--border);border-radius:12px;padding:24px;margin:20px 0}
-.quiz-question{font-weight:700;font-size:1.05rem;margin-bottom:16px}
-.quiz-question code{background:#1e293b;color:#e2e8f0;padding:2px 8px;border-radius:4px;font-size:.9rem;direction:ltr;display:inline;unicode-bidi:embed}
-.quiz-options label{display:block;padding:10px 16px;margin:6px 0;background:#fff;border:2px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s}
-.quiz-options label:hover{border-color:var(--primary)}
-.quiz-options input[type="radio"]{margin-left:8px}
-.quiz-options label.correct{background:#d1fae5;border-color:#10b981}
-.quiz-options label.incorrect{background:#fee2e2;border-color:#ef4444}
-.quiz-check-btn{margin-top:12px;padding:10px 24px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-family:inherit;font-weight:600;cursor:pointer}
-.quiz-check-btn:hover{background:var(--primary-dark)}
-.quiz-feedback{margin-top:12px;padding:12px 16px;border-radius:8px;font-weight:600;display:none}
-.quiz-feedback.show{display:block}
-.quiz-feedback.correct{background:#d1fae5;color:#065f46}
-.quiz-feedback.incorrect{background:#fee2e2;color:#991b1b}
-
-/* Fill-in code */
-.fill-code-container{background:#1e293b;border-radius:8px;padding:20px;margin:16px 0;direction:ltr;text-align:left;font-family:'Courier New',monospace;font-size:.9rem;color:#e2e8f0;line-height:1.8}
-.fill-code-input{background:#334155;border:1px dashed #f59e0b;color:#fbbf24;padding:2px 8px;border-radius:4px;font-family:inherit;font-size:inherit;width:120px;text-align:center}
-.fill-check-btn{margin-top:12px;padding:10px 24px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-family:inherit;font-weight:600;cursor:pointer}
-.fill-check-btn:hover{background:var(--primary-dark)}
-.fill-feedback{margin-top:12px;padding:12px 16px;border-radius:8px;font-weight:600;display:none}
-.fill-feedback.show{display:block}
-.fill-feedback.correct{background:#d1fae5;color:#065f46}
-.fill-feedback.incorrect{background:#fee2e2;color:#991b1b}
-
-/* Completion banner */
-.completion-banner{background:linear-gradient(135deg,#059669,#10b981);color:#fff;border-radius:12px;padding:32px;text-align:center;margin:32px 0}
-.completion-banner h2{font-size:1.6rem;margin-bottom:8px}
-.completion-banner p{opacity:.9;margin-bottom:16px}
-.completion-banner a{display:inline-block;padding:12px 32px;background:#fff;color:#059669;border-radius:8px;font-weight:700;text-decoration:none;transition:all .2s}
-.completion-banner a:hover{background:#f0fdf4}
-
-/* Nav */
+.quiz-container h3{font-size:1.1rem;font-weight:800;margin-bottom:16px;color:var(--unit-color)}
+.quiz-question{font-weight:700;font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.quiz-options{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-options label{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg);border:2px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;line-height:1.6}
+.quiz-options label:hover{border-color:var(--unit-color);background:rgba(5,150,105,.05)}
+.quiz-options label.correct{border-color:var(--success);background:#d1fae5}
+.quiz-options label.incorrect{border-color:var(--error);background:#fee2e2}
+.quiz-options label.show-correct{border-color:var(--success);background:#d1fae5}
+.quiz-check-btn{padding:10px 24px;background:var(--unit-color);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:.95rem;font-weight:600;cursor:pointer}
+.quiz-check-btn:hover{opacity:.9}
+.quiz-check-btn:disabled{opacity:.5;cursor:not-allowed}
+.quiz-feedback{display:none;margin-top:12px;padding:12px 16px;border-radius:8px;font-weight:600;font-size:.95rem}
+.quiz-feedback.correct{display:block;background:#d1fae5;color:#065f46}
+.quiz-feedback.incorrect{display:block;background:#fee2e2;color:#991b1b}
+.quiz-code{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:16px;margin:12px 0;font-family:'Courier New',monospace;font-size:.88rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.5;white-space:pre}
+.quiz-fill-input{direction:ltr;unicode-bidi:embed;padding:8px 12px;border:2px solid var(--border);border-radius:6px;font-family:'Courier New',monospace;font-size:.95rem;width:220px}
+.quiz-fill-input.correct{border-color:var(--success);background:#d1fae5}
+.quiz-fill-input.incorrect{border-color:var(--error);background:#fee2e2}
 .lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
 .lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
-.lesson-nav a:hover{border-color:#059669;color:#059669}
-
-/* Method summary table */
-.method-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.95rem}
-.method-table th{background:#059669;color:#fff;padding:10px 14px;text-align:right;font-weight:700}
-.method-table td{padding:10px 14px;border-bottom:1px solid var(--border)}
-.method-table tr:nth-child(even) td{background:var(--bg-soft)}
-.method-table code{direction:ltr;unicode-bidi:embed;background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:.85rem}
-
-@media(max-width:768px){
-  .lesson-title{font-size:1.5rem}
-  .lesson-nav{flex-direction:column}
-  .code-block{font-size:.8rem;padding:12px}
-  .compare-container{grid-template-columns:1fr}
-  .diagram{flex-direction:column}
-  .fill-code-container{font-size:.8rem;padding:12px}
-}
+.lesson-nav a:hover{border-color:var(--unit-color);color:var(--unit-color)}
+@media(max-width:768px){.lesson-title{font-size:1.5rem}.lesson-nav{flex-direction:column}.code-block,.quiz-code{font-size:.8rem;padding:12px}}
 </style>
 </head>
 <body>
 
-<!-- Topbar -->
 <div class="topbar">
-  <span class="topbar-title">Full-Stack Development</span>
-  <a href="course.html">&larr; חזרה לקורס</a>
+  <div class="topbar-title">Full-Stack Development</div>
+  <a href="../../../../../materials.html">← חזרה לחומרי לימוד</a>
 </div>
 
-<!-- Lesson Content -->
 <div class="lesson-container">
-
-  <!-- Header -->
   <div class="lesson-header">
-    <span class="lesson-unit-badge" style="background:#059669">יחידה 4: SQL &amp; ADO.NET</span>
-    <h1 class="lesson-title">עבודה בשיטה המקושרת (Connected)</h1>
-    <p class="lesson-subtitle">ExecuteNonQuery, ExecuteScalar ואבטחה מפני SQL Injection</p>
+    <span class="lesson-unit-badge" style="background:#059669">יחידה 4: SQL & ADO.NET</span>
+    <h1 class="lesson-title">שיעור 4.3 — סינון, מיון ו-asp-page-handler</h1>
+    <p class="lesson-subtitle">WHERE LIKE, ORDER BY, מספר טפסים בדף אחד</p>
   </div>
 
-  <!-- Premium content wrapper -->
   <div data-premium>
 
-  <!-- Section 1: Connected Method -->
   <div class="lesson-section">
-    <h2>1. שיטת עבודה Connected</h2>
+    <h2>1. מספר טפסים בדף — asp-page-handler</h2>
+    <p>מה קורה כשיש שני טפסים באותו דף — גם סינון וגם מיון? איך השרת יודע מאיזה טופס הגיעה הבקשה?</p>
+    <p>הפתרון: <span class="inline-code">asp-page-handler</span> שמנתב כל טופס ל-handler נפרד.</p>
+    <div class="code-block"><span class="comment">&lt;!-- טופס סינון → OnPostFilter() --&gt;</span>
+<span class="tag">&lt;form</span> <span class="attr">method</span>=<span class="value">"post"</span> <span class="attr">asp-page-handler</span>=<span class="value">"Filter"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">asp-for</span>=<span class="value">"SearchText"</span> <span class="attr">placeholder</span>=<span class="value">"חפש שם..."</span><span class="tag"> /&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="value">"submit"</span><span class="tag">&gt;</span>סנן<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span>
 
-    <p>בשיעור הקודם למדנו את <strong>שיטת העבודה הלא מקושרת (Disconnected)</strong> — שבה מביאים את כל הנתונים לזיכרון המחשב באמצעות <code>DataSet</code> ו-<code>DataAdapter</code>, ורק אז עובדים איתם. השיטה הזו מתאימה ל<strong>קריאת נתונים</strong> (SELECT).</p>
+<span class="comment">&lt;!-- טופס מיון → OnPostSort() --&gt;</span>
+<span class="tag">&lt;form</span> <span class="attr">method</span>=<span class="value">"post"</span> <span class="attr">asp-page-handler</span>=<span class="value">"Sort"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;select</span> <span class="attr">asp-for</span>=<span class="value">"SortBy"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="value">"Name"</span><span class="tag">&gt;</span>שם<span class="tag">&lt;/option&gt;</span>
+    <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="value">"Grade"</span><span class="tag">&gt;</span>ציון<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;/select&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="value">"submit"</span><span class="tag">&gt;</span>מיין<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span></div>
+  </div>
 
-    <p>עכשיו נלמד את <strong>שיטת העבודה המקושרת (Connected)</strong>. בשיטה הזו, אנחנו פותחים חיבור ישיר לבסיס הנתונים, מבצעים את הפעולה, ו<strong>סוגרים את החיבור מיד</strong>. השיטה הזו מתאימה לפעולות שמשנות נתונים: <strong>INSERT</strong>, <strong>UPDATE</strong> ו-<strong>DELETE</strong>.</p>
-
-    <h3>מה ההבדל בין שתי השיטות?</h3>
-
-    <table class="method-table">
-      <thead>
-        <tr><th>שיטה</th><th>מתי משתמשים?</th><th>מתודה מרכזית</th><th>מה מחזירה?</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Disconnected</strong></td>
-          <td>קריאת נתונים (SELECT)</td>
-          <td><code>GetData()</code></td>
-          <td><code>DataTable</code> עם הנתונים</td>
-        </tr>
-        <tr>
-          <td><strong>Connected</strong></td>
-          <td>שינוי נתונים (INSERT / UPDATE / DELETE)</td>
-          <td><code>Execute()</code></td>
-          <td><code>int</code> — מספר שורות שהושפעו</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <h3>תרשים: זרימת Connected</h3>
-
-    <div class="diagram">
-      <div class="diagram-box" style="background:#2563eb">C# Code</div>
-      <div class="diagram-arrow">&rarr;</div>
-      <div class="diagram-box" style="background:#059669">Open()</div>
-      <div class="diagram-arrow">&rarr;</div>
-      <div class="diagram-box" style="background:#d97706">Execute</div>
-      <div class="diagram-arrow">&rarr;</div>
-      <div class="diagram-box" style="background:#059669">Close()</div>
-      <div class="diagram-arrow">&rarr;</div>
-      <div class="diagram-box" style="background:#7c3aed">Result</div>
+  <div class="lesson-section">
+    <h2>2. סינון — WHERE LIKE</h2>
+    <div class="code-block"><span class="keyword">public void</span> <span class="function">OnPostFilter</span>()
+{
+    <span class="keyword">string</span> query = <span class="string">"SELECT * FROM Students WHERE Name LIKE @search"</span>;
+    <span class="type">SqlCommand</span> cmd = <span class="keyword">new</span> <span class="type">SqlCommand</span>(query, con);
+    cmd.Parameters.<span class="function">AddWithValue</span>(<span class="string">"@search"</span>, <span class="string">"%" + SearchText + "%"</span>);
+    <span class="comment">// Fill DataTable...</span>
+}</div>
+    <div class="lesson-tip warning">
+      <strong>אבטחה!</strong>
+      <p>תמיד השתמשו ב-<span class="inline-code">SqlParameter</span> ולא בשרשור מחרוזות. <span class="inline-code">"%" + SearchText + "%"</span> בטוח כי הוא עובר כפרמטר.</p>
     </div>
+  </div>
 
+  <div class="lesson-section">
+    <h2>3. מיון — ORDER BY</h2>
+    <div class="code-block"><span class="keyword">public void</span> <span class="function">OnPostSort</span>()
+{
+    <span class="comment">// Whitelist — מגן מפני SQL Injection!</span>
+    <span class="keyword">var</span> allowed = <span class="keyword">new</span>[] { <span class="string">"Name"</span>, <span class="string">"Grade"</span>, <span class="string">"City"</span> };
+    <span class="keyword">string</span> col = allowed.<span class="function">Contains</span>(SortBy) ? SortBy : <span class="string">"Name"</span>;
+
+    <span class="keyword">string</span> query = <span class="string">$"SELECT * FROM Students ORDER BY {col}"</span>;
+    <span class="comment">// Fill DataTable...</span>
+}</div>
     <div class="lesson-tip">
-      <strong>למה Connected ולא Disconnected לשינויים?</strong>
-      <p>כש-INSERT/UPDATE/DELETE — אין צורך להביא נתונים לזיכרון. אנחנו רק שולחים פקודה לDB ומקבלים חזרה מספר (כמה שורות הושפעו). לכן חיבור ישיר יותר יעיל ופשוט.</p>
+      <strong>למה Whitelist?</strong>
+      <p>שם עמודה לא ניתן להעביר כ-SqlParameter. לכן בודקים שהערך נמצא ברשימה מותרת — אחרת משתמש זדוני יכול להזריק SQL.</p>
     </div>
   </div>
 
-  <!-- Section 2: ExecuteNonQuery -->
   <div class="lesson-section">
-    <h2>2. ExecuteNonQuery</h2>
-
-    <p>המתודה <code>ExecuteNonQuery</code> משמשת לביצוע פקודות SQL ש<strong>לא מחזירות נתונים</strong> — כלומר INSERT, UPDATE ו-DELETE. היא מחזירה <code>int</code> — מספר השורות שהושפעו מהפקודה.</p>
-
-    <h3>מתודת Execute במחלקת Helper</h3>
-
-    <div class="code-block"><span class="keyword">public static</span> <span class="type">int</span> <span class="function">Execute</span>(<span class="type">string</span> query)
+    <h2>4. שילוב סינון + מיון</h2>
+    <div class="code-block"><span class="keyword">public void</span> <span class="function">OnPostFilterAndSort</span>()
 {
-    <span class="keyword">using</span> (<span class="type">SqlConnection</span> conn = <span class="keyword">new</span> <span class="type">SqlConnection</span>(connStr))
-    {
-        conn.<span class="function">Open</span>();
-        <span class="type">SqlCommand</span> cmd = <span class="keyword">new</span> <span class="type">SqlCommand</span>(query, conn);
-        <span class="keyword">return</span> cmd.<span class="function">ExecuteNonQuery</span>();
-    }
+    <span class="keyword">var</span> allowed = <span class="keyword">new</span>[] { <span class="string">"Name"</span>, <span class="string">"Grade"</span>, <span class="string">"City"</span> };
+    <span class="keyword">string</span> col = allowed.<span class="function">Contains</span>(SortBy) ? SortBy : <span class="string">"Name"</span>;
+
+    <span class="keyword">string</span> query = <span class="string">$"SELECT * FROM Students WHERE Name LIKE @search ORDER BY {col}"</span>;
+    <span class="type">SqlCommand</span> cmd = <span class="keyword">new</span> <span class="type">SqlCommand</span>(query, con);
+    cmd.Parameters.<span class="function">AddWithValue</span>(<span class="string">"@search"</span>, <span class="string">"%" + SearchText + "%"</span>);
+    <span class="comment">// Fill DataTable...</span>
 }</div>
-
-    <p>בואו נפרק את הקוד שורה אחרי שורה:</p>
-
-    <ul>
-      <li><strong><code>using (SqlConnection conn = ...)</code></strong> — פותח חיבור לDB. בלוק <code>using</code> מבטיח שהחיבור ייסגר אוטומטית בסוף, גם אם יש שגיאה.</li>
-      <li><strong><code>conn.Open()</code></strong> — פותח את החיבור בפועל. שימו לב: בשיטה ה-Disconnected, <code>Fill()</code> פתח וסגר את החיבור אוטומטית. כאן <strong>אנחנו חייבים לפתוח ידנית</strong> עם <code>Open()</code>.</li>
-      <li><strong><code>SqlCommand cmd = new SqlCommand(query, conn)</code></strong> — יוצר אובייקט פקודה שמכיל את שאילתת ה-SQL ואת החיבור שדרכו תבוצע.</li>
-      <li><strong><code>cmd.ExecuteNonQuery()</code></strong> — מבצע את הפקודה ומחזיר כמה שורות הושפעו.</li>
-    </ul>
-
-    <h3>דוגמת שימוש</h3>
-
-    <div class="code-block"><span class="comment">// הוספת משתמש חדש</span>
-<span class="type">int</span> rows = Helper.<span class="function">Execute</span>(
-    <span class="string">"INSERT INTO Users (Name, Age) VALUES ('</span><span class="string">דני</span><span class="string">', 16)"</span>);
-
-<span class="keyword">if</span> (rows > <span class="number">0</span>)
-    Message = <span class="string">"המשתמש נוסף בהצלחה!"</span>;
-<span class="keyword">else</span>
-    Message = <span class="string">"שגיאה בהוספה"</span>;</div>
-
-    <div class="lesson-tip success">
-      <strong>כלל אצבע</strong>
-      <p>אם <code>ExecuteNonQuery</code> מחזיר 0 — הפקודה הצליחה אבל אף שורה לא הושפעה (למשל, WHERE לא מצא התאמה). אם מחזיר מספר חיובי — כמות השורות שנוספו/עודכנו/נמחקו.</p>
-    </div>
-
-    <h3>דוגמאות נוספות</h3>
-
-    <div class="code-block"><span class="comment">// עדכון גיל משתמש</span>
-<span class="type">int</span> rows = Helper.<span class="function">Execute</span>(
-    <span class="string">"UPDATE Users SET Age = 17 WHERE Name = '</span><span class="string">דני</span><span class="string">'"</span>);
-
-<span class="comment">// מחיקת משתמש</span>
-<span class="type">int</span> rows = Helper.<span class="function">Execute</span>(
-    <span class="string">"DELETE FROM Users WHERE Id = 5"</span>);</div>
   </div>
 
-  <!-- Section 3: ExecuteScalar -->
-  <div class="lesson-section">
-    <h2>3. ExecuteScalar</h2>
-
-    <p>לפעמים אנחנו צריכים לקבל מהDB <strong>ערך בודד</strong> — תא אחד בלבד. למשל: כמה משתמשים רשומים? האם שם המשתמש כבר תפוס? האם הסיסמה נכונה? בשביל זה יש את <code>ExecuteScalar</code>.</p>
-
-    <p><code>ExecuteScalar</code> מחזירה <code>object</code> — את הערך של <strong>התא הראשון בשורה הראשונה</strong> בתוצאה. אם אין תוצאה — מחזירה <code>null</code>.</p>
-
-    <h3>מתודת Scalar במחלקת Helper</h3>
-
-    <div class="code-block"><span class="keyword">public static</span> <span class="type">object</span> <span class="function">Scalar</span>(<span class="type">string</span> query)
-{
-    <span class="keyword">using</span> (<span class="type">SqlConnection</span> conn = <span class="keyword">new</span> <span class="type">SqlConnection</span>(connStr))
-    {
-        conn.<span class="function">Open</span>();
-        <span class="type">SqlCommand</span> cmd = <span class="keyword">new</span> <span class="type">SqlCommand</span>(query, conn);
-        <span class="keyword">return</span> cmd.<span class="function">ExecuteScalar</span>();
-    }
-}</div>
-
-    <p>שימו לב שהמבנה כמעט זהה ל-<code>Execute</code> — ההבדל היחיד הוא שכאן אנחנו קוראים ל-<code>ExecuteScalar()</code> במקום <code>ExecuteNonQuery()</code>, ומחזירים <code>object</code> במקום <code>int</code>.</p>
-
-    <h3>דוגמת שימוש: ספירת משתמשים</h3>
-
-    <div class="code-block"><span class="comment">// כמה משתמשים יש בטבלה?</span>
-<span class="type">int</span> count = (<span class="type">int</span>)Helper.<span class="function">Scalar</span>(
-    <span class="string">"SELECT COUNT(*) FROM Users"</span>);
-
-Message = <span class="string">"יש "</span> + count + <span class="string">" משתמשים רשומים"</span>;</div>
-
-    <div class="lesson-tip warning">
-      <strong>חובה לבצע המרה (Casting)!</strong>
-      <p>מכיוון ש-<code>Scalar</code> מחזירה <code>object</code>, חייבים להמיר לטיפוס הנכון. <code>COUNT(*)</code> מחזיר <code>int</code>, לכן נכתוב <code>(int)Helper.Scalar(...)</code>. אם שוכחים את ההמרה — תהיה שגיאת compilation.</p>
+  <!-- Quizzes -->
+  <div class="quiz-container">
+    <h3>שאלה 1</h3>
+    <p class="quiz-question">מה עושה <span class="inline-code">asp-page-handler="Filter"</span> בטופס?</p>
+    <div class="quiz-options" id="quiz1-options">
+      <label><input type="radio" name="quiz1" value="0"> מסנן HTML</label>
+      <label><input type="radio" name="quiz1" value="1"> מנתב את ה-POST ל-OnPostFilter()</label>
+      <label><input type="radio" name="quiz1" value="2"> מוסיף CSS filter</label>
+      <label><input type="radio" name="quiz1" value="3"> מאמת את הטופס</label>
     </div>
-
-    <h3>דוגמת שימוש: בדיקת Login</h3>
-
-    <div class="code-block"><span class="comment">// בדיקת כניסה — האם שם המשתמש והסיסמה קיימים?</span>
-<span class="type">object</span> result = Helper.<span class="function">Scalar</span>(
-    <span class="string">"SELECT COUNT(*) FROM Users "</span> +
-    <span class="string">"WHERE Username='admin' AND Password='1234'"</span>);
-
-<span class="keyword">if</span> ((<span class="type">int</span>)result > <span class="number">0</span>)
-    Message = <span class="string">"התחברת בהצלחה!"</span>;
-<span class="keyword">else</span>
-    Message = <span class="string">"שם משתמש או סיסמה שגויים"</span>;</div>
-
-    <p>הרעיון: שולחים שאילתה שסופרת כמה שורות מתאימות. אם התוצאה גדולה מ-0 — המשתמש קיים והסיסמה נכונה.</p>
-
-    <h3>סיכום שלוש המתודות</h3>
-
-    <table class="method-table">
-      <thead>
-        <tr><th>מתודה</th><th>מה עושה</th><th>מחזירה</th><th>מתי?</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><code>GetData(query)</code></td>
-          <td>מביאה טבלת נתונים</td>
-          <td><code>DataTable</code></td>
-          <td>SELECT — הצגת נתונים</td>
-        </tr>
-        <tr>
-          <td><code>Execute(query)</code></td>
-          <td>מבצעת פקודה ללא החזרת נתונים</td>
-          <td><code>int</code></td>
-          <td>INSERT / UPDATE / DELETE</td>
-        </tr>
-        <tr>
-          <td><code>Scalar(query)</code></td>
-          <td>מחזירה ערך בודד</td>
-          <td><code>object</code></td>
-          <td>COUNT, Login, בדיקת קיום</td>
-        </tr>
-      </tbody>
-    </table>
+    <button class="quiz-check-btn" onclick="checkQuiz('quiz1',1)">בדיקה</button>
+    <div class="quiz-feedback" id="quiz1-feedback"></div>
   </div>
 
-  <!-- Section 4: SQL Injection -->
-  <div class="lesson-section">
-    <h2>4. אבטחה — SQL Injection</h2>
-
-    <p>זהו אחד מנושאי האבטחה <strong>הקריטיים ביותר</strong> בפיתוח ווב. הבנה של ההתקפה הזו והגנה מפניה היא <strong>חובה של כל מפתח</strong>.</p>
-
-    <h3>מה זה SQL Injection?</h3>
-
-    <p><strong>SQL Injection (הזרקת SQL)</strong> היא התקפה שבה תוקף מזין קוד SQL זדוני לתוך שדות קלט (כמו שדה שם משתמש בטופס התחברות), במטרה לגרום לשרת להריץ שאילתות שלא תוכננו מראש.</p>
-
-    <h3>דוגמה להתקפה</h3>
-
-    <p>נניח שיש לנו דף Login פשוט שמקבל שם משתמש וסיסמה ובודק אותם מול בסיס הנתונים:</p>
-
-    <div class="code-block"><span class="comment">// קוד פגיע! אל תכתבו ככה!</span>
-<span class="type">string</span> query = <span class="string">"SELECT * FROM Users WHERE Username='"</span> + username + <span class="string">"' AND Password='"</span> + password + <span class="string">"'"</span>;</div>
-
-    <p>אם המשתמש מזין שם משתמש רגיל כמו <code>admin</code> וסיסמה <code>1234</code>, השאילתה תיראה כך:</p>
-
-    <div class="code-block"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Users <span class="keyword">WHERE</span> Username=<span class="string">'admin'</span> <span class="keyword">AND</span> Password=<span class="string">'1234'</span></div>
-
-    <p>אבל מה קורה אם תוקף מזין בשדה שם המשתמש את הערך הבא?</p>
-
-    <div class="code-block"><span class="string">' OR 1=1 --</span></div>
-
-    <p>השאילתה שתיווצר תיראה כך:</p>
-
-    <div class="code-block"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Users <span class="keyword">WHERE</span> Username=<span class="string">''</span> <span class="keyword">OR</span> <span class="number">1</span>=<span class="number">1</span> <span class="comment">--' AND Password='...'</span></div>
-
-    <p>מה קרה כאן?</p>
-
-    <ul>
-      <li><code>' OR 1=1</code> — סוגר את המחרוזת של ה-Username, ומוסיף תנאי שתמיד אמיתי (1=1)</li>
-      <li><code>--</code> — הערה (comment) ב-SQL, שמבטלת את כל המשך השאילתה (כולל בדיקת הסיסמה!)</li>
-      <li>התוצאה: השאילתה מחזירה <strong>את כל המשתמשים</strong> — והתוקף מצליח להתחבר בלי סיסמה!</li>
-    </ul>
-
-    <div class="lesson-tip error">
-      <strong>SQL Injection מאפשר לתוקף:</strong>
-      <p>לקרוא מידע רגיש (סיסמאות, פרטים אישיים), לשנות נתונים, למחוק טבלאות שלמות, ובמקרים קיצוניים — להשתלט על השרת. זו אחת מ-10 ההתקפות הנפוצות ביותר באינטרנט (OWASP Top 10).</p>
+  <div class="quiz-container">
+    <h3>שאלה 2</h3>
+    <p class="quiz-question">כתבו SQL שמוצא את כל התלמידים ששמם מכיל "כהן":</p>
+    <div class="quiz-code">SELECT * FROM Students WHERE Name LIKE ________</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <input type="text" id="fill1" class="quiz-fill-input" placeholder="'%...%'">
+      <button class="quiz-check-btn" onclick="checkFill('fill1',[\"'%כהן%'\"],'quiz2')">בדיקה</button>
     </div>
-
-    <h3>השוואה: קוד פגיע מול קוד מאובטח</h3>
-
-    <div class="compare-container">
-      <div class="compare-box danger">
-        <h4>&#10060; קוד פגיע (שרשור מחרוזות)</h4>
-        <div class="code-block"><span class="type">string</span> query =
-  <span class="string">"SELECT * FROM Users "</span> +
-  <span class="string">"WHERE Username='"</span> +
-  username + <span class="string">"'"</span>;</div>
-        <p style="font-size:.85rem;color:var(--error);margin-top:8px">הקלט מוזרק ישירות לשאילתה!</p>
-      </div>
-      <div class="compare-box safe">
-        <h4>&#9989; קוד מאובטח (Parameters)</h4>
-        <div class="code-block"><span class="type">string</span> query =
-  <span class="string">"SELECT * FROM Users "</span> +
-  <span class="string">"WHERE Username=@name"</span>;
-cmd.Parameters.<span class="function">AddWithValue</span>(
-  <span class="string">"@name"</span>, username);</div>
-        <p style="font-size:.85rem;color:var(--success);margin-top:8px">הקלט עובר סינון אוטומטי!</p>
-      </div>
-    </div>
-
-    <h3>איך Parameters מגינים?</h3>
-
-    <p>כשמשתמשים ב-<strong>Parameters</strong> (פרמטרים), ה-SQL Server מפריד בין <strong>מבנה השאילתה</strong> לבין <strong>הערכים</strong>. גם אם התוקף מזין <code>' OR 1=1 --</code>, SQL Server יתייחס לזה כ<strong>מחרוזת טקסט רגילה</strong> ולא כקוד SQL. הערך פשוט לא יימצא בטבלה — והשאילתה תחזיר 0 תוצאות.</p>
-
-    <div class="lesson-tip warning">
-      <strong>כלל הזהב של אבטחה:</strong>
-      <p>לעולם אל תשרשרו קלט משתמש ישירות לשאילתת SQL! תמיד השתמשו בפרמטרים (<code>@param</code> + <code>AddWithValue</code>). זה חל על כל מקום שיש בו קלט — טפסים, URL, קבצי Cookie ועוד.</p>
-    </div>
-
-    <h3>מתודות Helper מעודכנות עם Parameters</h3>
-
-    <p>כעת נעדכן את המתודות שלנו כך שיתמכו בפרמטרים:</p>
-
-    <div class="code-block"><span class="keyword">public static</span> <span class="type">int</span> <span class="function">Execute</span>(<span class="type">string</span> query, <span class="keyword">params</span> <span class="type">SqlParameter</span>[] parameters)
-{
-    <span class="keyword">using</span> (<span class="type">SqlConnection</span> conn = <span class="keyword">new</span> <span class="type">SqlConnection</span>(connStr))
-    {
-        conn.<span class="function">Open</span>();
-        <span class="type">SqlCommand</span> cmd = <span class="keyword">new</span> <span class="type">SqlCommand</span>(query, conn);
-        cmd.Parameters.<span class="function">AddRange</span>(parameters);
-        <span class="keyword">return</span> cmd.<span class="function">ExecuteNonQuery</span>();
-    }
-}</div>
-
-    <div class="code-block"><span class="keyword">public static</span> <span class="type">object</span> <span class="function">Scalar</span>(<span class="type">string</span> query, <span class="keyword">params</span> <span class="type">SqlParameter</span>[] parameters)
-{
-    <span class="keyword">using</span> (<span class="type">SqlConnection</span> conn = <span class="keyword">new</span> <span class="type">SqlConnection</span>(connStr))
-    {
-        conn.<span class="function">Open</span>();
-        <span class="type">SqlCommand</span> cmd = <span class="keyword">new</span> <span class="type">SqlCommand</span>(query, conn);
-        cmd.Parameters.<span class="function">AddRange</span>(parameters);
-        <span class="keyword">return</span> cmd.<span class="function">ExecuteScalar</span>();
-    }
-}</div>
-
-    <h3>דוגמת שימוש מאובטחת</h3>
-
-    <div class="code-block"><span class="comment">// Login מאובטח עם Parameters</span>
-<span class="type">string</span> query = <span class="string">"SELECT COUNT(*) FROM Users "</span> +
-               <span class="string">"WHERE Username=@user AND Password=@pass"</span>;
-
-<span class="type">object</span> result = Helper.<span class="function">Scalar</span>(query,
-    <span class="keyword">new</span> <span class="type">SqlParameter</span>(<span class="string">"@user"</span>, username),
-    <span class="keyword">new</span> <span class="type">SqlParameter</span>(<span class="string">"@pass"</span>, password));
-
-<span class="keyword">if</span> ((<span class="type">int</span>)result > <span class="number">0</span>)
-    Message = <span class="string">"התחברת בהצלחה!"</span>;
-<span class="keyword">else</span>
-    Message = <span class="string">"שם משתמש או סיסמה שגויים"</span>;</div>
-
+    <div class="quiz-feedback" id="quiz2-feedback"></div>
   </div>
 
-  <!-- Quizzes Section -->
-  <div class="lesson-section">
-    <h2>&#128221; בדקו את עצמכם</h2>
-
-    <!-- Quiz 1 — What will print -->
-    <div class="quiz-container" id="quiz1">
-      <div class="quiz-question">שאלה 1: מה יודפס?
-        <div class="code-block" style="margin-top:12px"><span class="type">object</span> result = Helper.<span class="function">Scalar</span>(
-    <span class="string">"SELECT COUNT(*) FROM Users WHERE Age > 16"</span>);
-Console.<span class="function">WriteLine</span>(<span class="string">"מספר: "</span> + result);</div>
-        <p style="font-size:.9rem;color:var(--text-light);margin-top:8px">נתון: טבלת Users מכילה גילאים: 16, 17, 15, 16, 18</p>
-      </div>
-      <div class="quiz-options">
-        <label><input type="radio" name="q1" value="a"> מספר: 3</label>
-        <label><input type="radio" name="q1" value="b"> מספר: 2</label>
-        <label><input type="radio" name="q1" value="c"> מספר: 5</label>
-        <label><input type="radio" name="q1" value="d"> מספר: 0</label>
-      </div>
-      <button class="quiz-check-btn" onclick="checkQuiz('quiz1','b')">בדוק תשובה</button>
-      <div class="quiz-feedback" id="quiz1-feedback"></div>
+  <div class="quiz-container">
+    <h3>שאלה 3</h3>
+    <p class="quiz-question">למה משתמשים ב-SqlParameter במקום שרשור מחרוזות?</p>
+    <div class="quiz-options" id="quiz3-options">
+      <label><input type="radio" name="quiz3" value="0"> ביצועים טובים יותר</label>
+      <label><input type="radio" name="quiz3" value="1"> מניעת SQL Injection</label>
+      <label><input type="radio" name="quiz3" value="2"> קריאות קוד</label>
+      <label><input type="radio" name="quiz3" value="3"> תאימות לדפדפנים</label>
     </div>
-
-    <!-- Quiz 2 — Fill-in -->
-    <div class="quiz-container" id="quiz2">
-      <div class="quiz-question">שאלה 2: השלימו את המתודה למחיקת משתמש לפי ID:</div>
-      <div class="fill-code-container">
-<span style="color:#818cf8">public static</span> <span style="color:#34d399">int</span> <span style="color:#38bdf8">DeleteUser</span>(<span style="color:#34d399">int</span> id)
-{
-    <span style="color:#34d399">string</span> query = <span style="color:#fbbf24">"DELETE FROM Users WHERE Id = @id"</span>;
-    <span style="color:#34d399">SqlParameter</span> param = <span style="color:#818cf8">new</span> <span style="color:#34d399">SqlParameter</span>(<span style="color:#fbbf24">"@id"</span>, <input class="fill-code-input" id="fill2" placeholder="___">);
-    <span style="color:#818cf8">return</span> <span style="color:#38bdf8">Execute</span>(query, param);
-}
-      </div>
-      <button class="fill-check-btn" onclick="checkFill('quiz2','fill2','id')">בדוק תשובה</button>
-      <div class="fill-feedback" id="quiz2-feedback"></div>
-    </div>
-
-    <!-- Quiz 3 — MC -->
-    <div class="quiz-container" id="quiz3">
-      <div class="quiz-question">שאלה 3: למה SQL Injection מסוכן?</div>
-      <div class="quiz-options">
-        <label><input type="radio" name="q3" value="a"> כי הוא מאט את בסיס הנתונים</label>
-        <label><input type="radio" name="q3" value="b"> כי תוקף יכול לקרוא, לשנות או למחוק נתונים דרך שדות קלט</label>
-        <label><input type="radio" name="q3" value="c"> כי הוא גורם לשגיאות תחביר ב-C#</label>
-        <label><input type="radio" name="q3" value="d"> כי הוא חוסם את החיבור לDB</label>
-      </div>
-      <button class="quiz-check-btn" onclick="checkQuiz('quiz3','b')">בדוק תשובה</button>
-      <div class="quiz-feedback" id="quiz3-feedback"></div>
-    </div>
-
-    <!-- Quiz 4 — Fill-in (two blanks) -->
-    <div class="quiz-container" id="quiz4">
-      <div class="quiz-question">שאלה 4: תקנו את הקוד כך שישתמש ב-Parameters:</div>
-      <p style="font-size:.9rem;color:var(--text-light);margin-bottom:12px">קוד פגיע (לפני):</p>
-      <div class="code-block" style="margin-top:0;font-size:.85rem"><span class="type">string</span> query = <span class="string">"SELECT * FROM Users WHERE Username='"</span> + username + <span class="string">"' AND Password='"</span> + password + <span class="string">"'"</span>;</div>
-      <p style="font-size:.9rem;color:var(--text-light);margin-bottom:8px">השלימו את הגרסה המאובטחת:</p>
-      <div class="fill-code-container">
-<span style="color:#34d399">string</span> query = <span style="color:#fbbf24">"SELECT * FROM Users WHERE Username=</span><input class="fill-code-input" id="fill4a" placeholder="______"><span style="color:#fbbf24"> AND Password=</span><input class="fill-code-input" id="fill4b" placeholder="______"><span style="color:#fbbf24">"</span>;
-cmd.Parameters.<span style="color:#38bdf8">AddWithValue</span>(<span style="color:#fbbf24">"@user"</span>, username);
-cmd.Parameters.<span style="color:#38bdf8">AddWithValue</span>(<span style="color:#fbbf24">"@pass"</span>, password);
-      </div>
-      <button class="fill-check-btn" onclick="checkFillDouble('quiz4','fill4a','fill4b','@user','@pass')">בדוק תשובה</button>
-      <div class="fill-feedback" id="quiz4-feedback"></div>
-    </div>
+    <button class="quiz-check-btn" onclick="checkQuiz('quiz3',1)">בדיקה</button>
+    <div class="quiz-feedback" id="quiz3-feedback"></div>
   </div>
 
-  <!-- Completion Banner -->
-  <div class="completion-banner">
-    <h2>&#127942; סיימתם את הקורס!</h2>
-    <p>כל הכבוד! השלמתם את קורס Full-Stack Development — מ-HTML בסיסי ועד SQL מאובטח עם ADO.NET.</p>
-    <p>המשיכו לתרגל, לבנות פרויקטים, ולהתקדם. הדרך רק מתחילה!</p>
-    <a href="course.html">&#8592; חזרה לעמוד הקורס</a>
-  </div>
-
-  <!-- Lesson Navigation -->
   <div class="lesson-nav">
-    <a href="lesson-4-2.html">&rarr; השיעור הקודם: 4.2</a>
-    <a href="course.html">&#127968; חזרה לעמוד הקורס</a>
+    <a href="lesson-4-2.html">&rarr; שיעור קודם: 4.2</a>
+    <a href="lesson-4-4.html">שיעור הבא: 4.4 &larr;</a>
   </div>
 
   </div><!-- /data-premium -->
-
 </div>
 
 <script>
-// MC Quiz checker
-function checkQuiz(quizId, correct) {
-  var container = document.getElementById(quizId);
-  var selected = container.querySelector('input[type="radio"]:checked');
-  var feedback = document.getElementById(quizId + '-feedback');
-  if (!selected) {
-    feedback.textContent = 'בחרו תשובה!';
-    feedback.className = 'quiz-feedback show incorrect';
-    return;
-  }
-  var labels = container.querySelectorAll('.quiz-options label');
-  for (var i = 0; i < labels.length; i++) {
-    var radio = labels[i].querySelector('input[type="radio"]');
-    labels[i].classList.remove('correct', 'incorrect');
-    if (radio.value === correct) labels[i].classList.add('correct');
-    else if (radio.checked) labels[i].classList.add('incorrect');
-    radio.disabled = true;
-  }
-  if (selected.value === correct) {
-    feedback.textContent = 'נכון! כל הכבוד!';
-    feedback.className = 'quiz-feedback show correct';
-  } else {
-    feedback.textContent = 'לא נכון. נסו שוב (רעננו את הדף).';
-    feedback.className = 'quiz-feedback show incorrect';
-  }
-}
-
-// Single fill-in checker
-function checkFill(quizId, inputId, answer) {
-  var input = document.getElementById(inputId);
-  var feedback = document.getElementById(quizId + '-feedback');
-  var val = input.value.trim();
-  if (!val) {
-    feedback.textContent = 'מלאו את התשובה!';
-    feedback.className = 'fill-feedback show incorrect';
-    return;
-  }
-  if (val === answer) {
-    feedback.textContent = 'נכון! כל הכבוד!';
-    feedback.className = 'fill-feedback show correct';
-    input.style.borderColor = '#10b981';
-    input.style.color = '#10b981';
-  } else {
-    feedback.textContent = 'לא נכון. התשובה הנכונה: ' + answer;
-    feedback.className = 'fill-feedback show incorrect';
-    input.style.borderColor = '#ef4444';
-  }
-}
-
-// Double fill-in checker
-function checkFillDouble(quizId, inputId1, inputId2, answer1, answer2) {
-  var input1 = document.getElementById(inputId1);
-  var input2 = document.getElementById(inputId2);
-  var feedback = document.getElementById(quizId + '-feedback');
-  var val1 = input1.value.trim();
-  var val2 = input2.value.trim();
-  if (!val1 || !val2) {
-    feedback.textContent = 'מלאו את שני השדות!';
-    feedback.className = 'fill-feedback show incorrect';
-    return;
-  }
-  var ok1 = val1 === answer1;
-  var ok2 = val2 === answer2;
-  input1.style.borderColor = ok1 ? '#10b981' : '#ef4444';
-  input1.style.color = ok1 ? '#10b981' : '#ef4444';
-  input2.style.borderColor = ok2 ? '#10b981' : '#ef4444';
-  input2.style.color = ok2 ? '#10b981' : '#ef4444';
-  if (ok1 && ok2) {
-    feedback.textContent = 'נכון! כל הכבוד!';
-    feedback.className = 'fill-feedback show correct';
-  } else {
-    feedback.textContent = 'לא נכון. התשובות הנכונות: ' + answer1 + ' ו-' + answer2;
-    feedback.className = 'fill-feedback show incorrect';
-  }
-}
+function checkQuiz(qid,ci){var o=document.getElementById(qid+'-options'),f=document.getElementById(qid+'-feedback'),s=o.querySelector('input:checked'),ls=o.querySelectorAll('label'),b=o.parentElement.querySelector('.quiz-check-btn');if(!s){f.className='quiz-feedback incorrect';f.textContent='יש לבחור תשובה!';f.style.display='block';return;}var i=parseInt(s.value);for(var x=0;x<ls.length;x++)ls[x].classList.remove('correct','incorrect','show-correct');if(i===ci){s.parentElement.classList.add('correct');f.className='quiz-feedback correct';f.textContent='נכון!';}else{s.parentElement.classList.add('incorrect');ls[ci].classList.add('show-correct');f.className='quiz-feedback incorrect';f.textContent='לא נכון — התשובה הנכונה מסומנת בירוק.';}f.style.display='block';var rs=o.querySelectorAll('input');for(var j=0;j<rs.length;j++)rs[j].disabled=true;b.disabled=true;}
+function checkFill(id,ca,qid){var inp=document.getElementById(id),f=document.getElementById(qid+'-feedback'),b=inp.closest('.quiz-container').querySelector('.quiz-check-btn'),v=inp.value.trim();if(!v){f.className='quiz-feedback incorrect';f.textContent='הקלד/י תשובה!';f.style.display='block';return;}var ok=false;for(var i=0;i<ca.length;i++){if(v===ca[i]){ok=true;break;}}if(ok){inp.classList.add('correct');f.className='quiz-feedback correct';f.textContent='נכון!';inp.readOnly=true;b.disabled=true;}else{inp.classList.add('incorrect');f.className='quiz-feedback incorrect';f.textContent='לא נכון. רמז: השתמשו ב-% משני הצדדים.';}f.style.display='block';}
 </script>
 <script src="../../../../../js/auth-gate.js"></script>
 <script src="../../../../../js/ask-teacher-btn.js"></script>

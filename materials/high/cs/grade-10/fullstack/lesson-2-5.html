@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>מחרוזות וביטויים רגולריים | Full-Stack Development | בועז חזן</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);--unit-color:#d97706}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+.code-block{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.6;white-space:pre}
+.code-block .keyword{color:#818cf8}
+.code-block .string{color:#fbbf24}
+.code-block .function{color:#38bdf8}
+.code-block .comment{color:#64748b;font-style:italic}
+code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:.88em;direction:ltr;unicode-bidi:embed}
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+.ref-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.9rem}
+.ref-table th{background:var(--unit-color);color:#fff;padding:10px 14px;text-align:right;font-weight:700}
+.ref-table td{padding:10px 14px;border-bottom:1px solid var(--border)}
+.ref-table tr:nth-child(even){background:var(--bg-soft)}
+.code-editor-container{border:2px solid var(--border);border-radius:12px;overflow:hidden;margin:20px 0}
+.code-editor-header{background:#1e293b;color:#fff;padding:10px 16px;font-size:.85rem;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.code-editor-textarea{width:100%;min-height:300px;padding:16px;font-family:'Courier New',monospace;font-size:.9rem;border:none;resize:vertical;direction:ltr;text-align:left;background:#0f172a;color:#e2e8f0;line-height:1.6;tab-size:2}
+.code-editor-textarea:focus{outline:none}
+.code-editor-preview iframe{width:100%;min-height:80px;border:none;display:none}
+.console-panel{background:#0f172a;color:#e2e8f0;padding:12px 16px;font-family:'Courier New',monospace;font-size:.85rem;min-height:100px;max-height:200px;overflow-y:auto;direction:ltr;text-align:left}
+.console-line{padding:2px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.console-error{color:#f87171}
+.code-editor-run{padding:8px 20px;background:#10b981;color:#fff;border:none;border-radius:6px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.85rem}
+.code-editor-run:hover{background:#059669}
+.code-editor-reset{padding:8px 16px;background:transparent;color:#94a3b8;border:1px solid #475569;border-radius:6px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.85rem}
+.exercise-box{background:var(--bg);border:2px solid var(--unit-color);border-radius:12px;padding:24px;margin:24px 0}
+.exercise-box h3{color:var(--unit-color);margin-bottom:12px}
+.exercise-box ol{margin:8px 0 0 24px;line-height:2.2}
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--unit-color);color:var(--unit-color)}
+@media(max-width:768px){.lesson-title{font-size:1.5rem}.lesson-nav{flex-direction:column}.code-block{font-size:.8rem;padding:12px}.ref-table{font-size:.8rem}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">Full-Stack Development</div>
+  <a href="../../../../../materials.html">← חזרה לחומרי לימוד</a>
+</div>
+
+<div class="lesson-container">
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#d97706">יחידה 2: JavaScript</span>
+    <h1 class="lesson-title">שיעור 2.5 — מחרוזות וביטויים רגולריים</h1>
+    <p class="lesson-subtitle">String Methods, ASCII, RegExp</p>
+  </div>
+
+  <div data-premium>
+
+  <div class="lesson-section">
+    <h2>1. שיטות מחרוזת בסיסיות</h2>
+    <table class="ref-table">
+      <tr><th>שיטה</th><th>תיאור</th><th>דוגמה</th><th>תוצאה</th></tr>
+      <tr><td><code>.length</code></td><td>אורך</td><td><code>"שלום".length</code></td><td>4</td></tr>
+      <tr><td><code>.charAt(i)</code></td><td>תו במיקום i</td><td><code>"Hello".charAt(1)</code></td><td>"e"</td></tr>
+      <tr><td><code>.indexOf(s)</code></td><td>מיקום ראשון</td><td><code>"Hello".indexOf("l")</code></td><td>2</td></tr>
+      <tr><td><code>.lastIndexOf(s)</code></td><td>מיקום אחרון</td><td><code>"Hello".lastIndexOf("l")</code></td><td>3</td></tr>
+      <tr><td><code>.slice(a,b)</code></td><td>חיתוך</td><td><code>"Hello".slice(1,4)</code></td><td>"ell"</td></tr>
+      <tr><td><code>.includes(s)</code></td><td>מכיל?</td><td><code>"Hello".includes("ell")</code></td><td>true</td></tr>
+    </table>
+    <div class="code-block"><span class="keyword">let</span> str = <span class="string">"Hello, World!"</span>;
+<span class="function">console.log</span>(str.length);          <span class="comment">// 13</span>
+<span class="function">console.log</span>(str.<span class="function">charAt</span>(<span class="string">0</span>));       <span class="comment">// "H"</span>
+<span class="function">console.log</span>(str.<span class="function">indexOf</span>(<span class="string">"World"</span>)); <span class="comment">// 7</span>
+<span class="function">console.log</span>(str.<span class="function">slice</span>(<span class="string">7</span>, <span class="string">12</span>));   <span class="comment">// "World"</span></div>
+  </div>
+
+  <div class="lesson-section">
+    <h2>2. עוד שיטות שימושיות</h2>
+    <table class="ref-table">
+      <tr><th>שיטה</th><th>תיאור</th><th>דוגמה</th></tr>
+      <tr><td><code>.toUpperCase()</code></td><td>לאותיות גדולות</td><td><code>"hello".toUpperCase()</code> → "HELLO"</td></tr>
+      <tr><td><code>.toLowerCase()</code></td><td>לאותיות קטנות</td><td><code>"HELLO".toLowerCase()</code> → "hello"</td></tr>
+      <tr><td><code>.trim()</code></td><td>הסרת רווחים מקצוות</td><td><code>"  hi  ".trim()</code> → "hi"</td></tr>
+      <tr><td><code>.split(d)</code></td><td>פיצול למערך</td><td><code>"a,b,c".split(",")</code> → ["a","b","c"]</td></tr>
+      <tr><td><code>.replace(a,b)</code></td><td>החלפה</td><td><code>"hi".replace("hi","bye")</code> → "bye"</td></tr>
+    </table>
+
+    <h3>ASCII</h3>
+    <div class="code-block"><span class="comment">// קוד ASCII של תו</span>
+<span class="function">console.log</span>(<span class="string">"A"</span>.<span class="function">charCodeAt</span>(<span class="string">0</span>)); <span class="comment">// 65</span>
+<span class="function">console.log</span>(<span class="string">"a"</span>.<span class="function">charCodeAt</span>(<span class="string">0</span>)); <span class="comment">// 97</span>
+
+<span class="comment">// תו מקוד ASCII</span>
+<span class="function">console.log</span>(String.<span class="function">fromCharCode</span>(<span class="string">72</span>, <span class="string">101</span>)); <span class="comment">// "He"</span></div>
+  </div>
+
+  <div class="lesson-section">
+    <h2>3. מבוא ל-RegExp</h2>
+    <p><strong>ביטוי רגולרי</strong> (Regular Expression) הוא דפוס לחיפוש טקסט. כמו "חפש מספרי טלפון" או "בדוק אם זה אימייל תקין".</p>
+    <div class="code-block"><span class="comment">// יצירת RegExp</span>
+<span class="keyword">let</span> pattern = <span class="string">/hello/</span>;          <span class="comment">// literal</span>
+<span class="keyword">let</span> pattern2 = <span class="keyword">new</span> <span class="function">RegExp</span>(<span class="string">"hello"</span>); <span class="comment">// constructor</span>
+
+<span class="comment">// test() — מחזיר true/false</span>
+<span class="function">console.log</span>(<span class="string">/hello/</span>.<span class="function">test</span>(<span class="string">"say hello world"</span>)); <span class="comment">// true</span>
+<span class="function">console.log</span>(<span class="string">/hello/</span>.<span class="function">test</span>(<span class="string">"say goodbye"</span>));    <span class="comment">// false</span>
+
+<span class="comment">// עוגנים: ^ (תחילה), $ (סוף)</span>
+<span class="function">console.log</span>(<span class="string">/^hello/</span>.<span class="function">test</span>(<span class="string">"hello world"</span>)); <span class="comment">// true — מתחיל ב-hello</span>
+<span class="function">console.log</span>(<span class="string">/world$/</span>.<span class="function">test</span>(<span class="string">"hello world"</span>)); <span class="comment">// true — מסתיים ב-world</span></div>
+  </div>
+
+  <div class="lesson-section">
+    <h2>4. תווים מיוחדים וכמתים</h2>
+    <table class="ref-table">
+      <tr><th>דפוס</th><th>משמעות</th><th>דוגמה</th></tr>
+      <tr><td><code>[a-z]</code></td><td>אות קטנה אחת</td><td><code>/[a-z]/</code> מתאים ל-"a"</td></tr>
+      <tr><td><code>[A-Z]</code></td><td>אות גדולה אחת</td><td><code>/[A-Z]/</code> מתאים ל-"B"</td></tr>
+      <tr><td><code>[0-9]</code> / <code>\d</code></td><td>ספרה אחת</td><td><code>/\d/</code> מתאים ל-"5"</td></tr>
+      <tr><td><code>\w</code></td><td>תו מילה (a-z, 0-9, _)</td><td><code>/\w+/</code></td></tr>
+      <tr><td><code>\s</code></td><td>רווח/טאב/שורה חדשה</td><td><code>/\s/</code></td></tr>
+      <tr><td><code>.</code></td><td>כל תו (חוץ מ-\n)</td><td><code>/a.b/</code> מתאים ל-"axb"</td></tr>
+      <tr><td><code>+</code></td><td>1 או יותר</td><td><code>/\d+/</code> — מספרים</td></tr>
+      <tr><td><code>*</code></td><td>0 או יותר</td><td><code>/\d*/</code></td></tr>
+      <tr><td><code>?</code></td><td>0 או 1</td><td><code>/colou?r/</code></td></tr>
+      <tr><td><code>{n}</code></td><td>בדיוק n פעמים</td><td><code>/\d{3}/</code> — 3 ספרות</td></tr>
+      <tr><td><code>{n,m}</code></td><td>בין n ל-m פעמים</td><td><code>/\d{2,4}/</code></td></tr>
+    </table>
+  </div>
+
+  <div class="lesson-section">
+    <h2>5. דפוסים מעשיים</h2>
+    <div class="code-block"><span class="comment">// טלפון ישראלי: 05X-XXXXXXX</span>
+<span class="keyword">let</span> phonePattern = <span class="string">/^0[2-9]\d{7,8}$/</span>;
+<span class="function">console.log</span>(phonePattern.<span class="function">test</span>(<span class="string">"0521234567"</span>)); <span class="comment">// true</span>
+<span class="function">console.log</span>(phonePattern.<span class="function">test</span>(<span class="string">"12345"</span>));      <span class="comment">// false</span>
+
+<span class="comment">// אימייל (פשוט)</span>
+<span class="keyword">let</span> emailPattern = <span class="string">/^[\w.-]+@[\w.-]+\.\w{2,}$/</span>;
+<span class="function">console.log</span>(emailPattern.<span class="function">test</span>(<span class="string">"user@mail.com"</span>));  <span class="comment">// true</span>
+<span class="function">console.log</span>(emailPattern.<span class="function">test</span>(<span class="string">"not-email"</span>));      <span class="comment">// false</span>
+
+<span class="comment">// סיסמה חזקה: 8+ תווים, אות גדולה, קטנה, ספרה</span>
+<span class="keyword">function</span> <span class="function">isStrongPassword</span>(pass) {
+  <span class="keyword">return</span> pass.length >= <span class="string">8</span> &&
+    <span class="string">/[A-Z]/</span>.<span class="function">test</span>(pass) &&
+    <span class="string">/[a-z]/</span>.<span class="function">test</span>(pass) &&
+    <span class="string">/\d/</span>.<span class="function">test</span>(pass);
+}</div>
+    <div class="lesson-tip success">
+      <strong>טיפ</strong>
+      <p>ביטויים רגולריים הם כלי חזק מאוד. בשיעור הבא (2.6) נשתמש בהם לאימות טפסים שלמים!</p>
+    </div>
+  </div>
+
+  <!-- Code Editor -->
+  <div class="lesson-section">
+    <h2>6. נסו בעצמכם</h2>
+    <div class="code-editor-container">
+      <div class="code-editor-header">
+        <span>script.js</span>
+        <div style="display:flex;gap:8px">
+          <button class="code-editor-reset" onclick="resetCode()">איפוס</button>
+          <button class="code-editor-run" onclick="runCode()">&#9654; הרצה</button>
+        </div>
+      </div>
+      <textarea id="codeEditor" class="code-editor-textarea">// שיטות מחרוזת
+let text = "  Hello, World!  ";
+console.log("מקור: '" + text + "'");
+console.log("trim: '" + text.trim() + "'");
+console.log("uppercase: " + text.trim().toUpperCase());
+console.log("slice(0,5): " + text.trim().slice(0, 5));
+console.log("split: " + "a,b,c,d".split(","));
+
+// ביטויים רגולריים
+let phone = "0521234567";
+let email = "test@mail.co.il";
+let badEmail = "not-an-email";
+
+console.log("\n--- RegExp ---");
+console.log(phone + " טלפון תקין? " + /^0[2-9]\d{7,8}$/.test(phone));
+console.log(email + " אימייל תקין? " + /^[\w.-]+@[\w.-]+\.\w{2,}$/.test(email));
+console.log(badEmail + " אימייל תקין? " + /^[\w.-]+@[\w.-]+\.\w{2,}$/.test(badEmail));
+
+// סיסמה חזקה?
+function isStrong(p) {
+  return p.length >= 8 && /[A-Z]/.test(p) && /[a-z]/.test(p) && /\d/.test(p);
+}
+console.log("\n--- סיסמאות ---");
+console.log("Abc12345 חזקה? " + isStrong("Abc12345"));
+console.log("weak חזקה? " + isStrong("weak"));</textarea>
+      <div class="code-editor-preview"><iframe id="previewFrame"></iframe></div>
+      <div class="console-panel" id="consolePanel"></div>
+    </div>
+  </div>
+
+  <div class="exercise-box">
+    <h3>אתגר</h3>
+    <ol>
+      <li>כתבו פונקציה שמקבלת מחרוזת ומחזירה אותה הפוך ("hello" → "olleh")</li>
+      <li>כתבו regex שמזהה תעודת זהות ישראלית (9 ספרות)</li>
+      <li>כתבו פונקציה שסופרת כמה תווים מסוג מסוים יש במחרוזת</li>
+    </ol>
+  </div>
+
+  <div class="lesson-nav">
+    <a href="lesson-2-4.html">&rarr; שיעור קודם: 2.4</a>
+    <a href="lesson-2-6.html">שיעור הבא: 2.6 &larr;</a>
+  </div>
+
+  </div><!-- /data-premium -->
+</div>
+
+<script>
+var editor=document.getElementById('codeEditor'),consoleEl=document.getElementById('consolePanel'),iframe=document.getElementById('previewFrame'),DEFAULT_CODE=editor.value;
+window.addEventListener('message',function(e){if(e.data&&e.data.type==='console')appendConsole(e.data.text,'');if(e.data&&e.data.type==='console-error')appendConsole(e.data.text,'console-error');});
+editor.addEventListener('keydown',function(e){if(e.key==='Tab'){e.preventDefault();var s=this.selectionStart,end=this.selectionEnd;this.value=this.value.substring(0,s)+'  '+this.value.substring(end);this.selectionStart=this.selectionEnd=s+2;}});
+function appendConsole(t,c){var l=document.createElement('div');l.className='console-line'+(c?' '+c:'');l.textContent=t;consoleEl.appendChild(l);consoleEl.scrollTop=consoleEl.scrollHeight;}
+function runCode(){consoleEl.innerHTML='';var code=editor.value;var interceptor='<script>\n(function(){var _l=console.log;console.log=function(){var a=Array.from(arguments).map(function(x){if(typeof x==="object")try{return JSON.stringify(x)}catch(e){return String(x)}return String(x)}).join(" ");_l.apply(console,arguments);parent.postMessage({type:"console",text:a},"*");};window.onerror=function(m,s,l){parent.postMessage({type:"console-error",text:"Error (line "+l+"): "+m},"*");}})();\n<\/script>\n';var html='<!DOCTYPE html><html><body>'+interceptor+'<script>\n'+code+'\n<\/script></body></html>';var d=iframe.contentDocument||iframe.contentWindow.document;d.open();d.write(html);d.close();}
+function resetCode(){editor.value=DEFAULT_CODE;consoleEl.innerHTML='';}
+window.addEventListener('DOMContentLoaded',function(){setTimeout(runCode,300);});
+</script>
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>אירועים ועבודה עם DOM | Full-Stack Development | בועז חזן</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);--unit-color:#d97706}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+.code-block{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.6;white-space:pre}
+.code-block .keyword{color:#818cf8}
+.code-block .string{color:#fbbf24}
+.code-block .function{color:#38bdf8}
+.code-block .comment{color:#64748b;font-style:italic}
+.code-block .tag{color:#f472b6}
+.code-block .attr{color:#a78bfa}
+.code-block .value{color:#34d399}
+code{background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:.88em;direction:ltr;unicode-bidi:embed}
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+.ref-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.9rem}
+.ref-table th{background:var(--unit-color);color:#fff;padding:10px 14px;text-align:right;font-weight:700}
+.ref-table td{padding:10px 14px;border-bottom:1px solid var(--border)}
+.ref-table tr:nth-child(even){background:var(--bg-soft)}
+.code-editor-container{border:2px solid var(--border);border-radius:12px;overflow:hidden;margin:20px 0}
+.code-editor-header{background:#1e293b;color:#fff;padding:10px 16px;font-size:.85rem;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.code-editor-textarea{width:100%;min-height:320px;padding:16px;font-family:'Courier New',monospace;font-size:.9rem;border:none;resize:vertical;direction:ltr;text-align:left;background:#0f172a;color:#e2e8f0;line-height:1.6;tab-size:2}
+.code-editor-textarea:focus{outline:none}
+.code-editor-preview{border-top:2px solid var(--border);min-height:120px;background:#fff}
+.code-editor-preview iframe{width:100%;min-height:250px;border:none}
+.code-editor-run{padding:8px 20px;background:#10b981;color:#fff;border:none;border-radius:6px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.85rem}
+.code-editor-run:hover{background:#059669}
+.code-editor-reset{padding:8px 16px;background:transparent;color:#94a3b8;border:1px solid #475569;border-radius:6px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.85rem}
+.exercise-box{background:var(--bg);border:2px solid var(--unit-color);border-radius:12px;padding:24px;margin:24px 0}
+.exercise-box h3{color:var(--unit-color);margin-bottom:12px}
+.exercise-box ol{margin:8px 0 0 24px;line-height:2.2}
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--unit-color);color:var(--unit-color)}
+@media(max-width:768px){.lesson-title{font-size:1.5rem}.lesson-nav{flex-direction:column}.code-block{font-size:.8rem;padding:12px}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">Full-Stack Development</div>
+  <a href="../../../../../materials.html">← חזרה לחומרי לימוד</a>
+</div>
+
+<div class="lesson-container">
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#d97706">יחידה 2: JavaScript</span>
+    <h1 class="lesson-title">שיעור 2.4 — אירועים ועבודה עם DOM</h1>
+    <p class="lesson-subtitle">onclick, getElementById, innerHTML, addEventListener</p>
+  </div>
+
+  <div data-premium>
+
+  <div class="lesson-section">
+    <h2>1. מה הם אירועים?</h2>
+    <p><strong>אירוע</strong> הוא כל דבר שקורה בדף — לחיצה, הקלדה, תזוזת עכבר. ב-JavaScript אנחנו "מקשיבים" לאירועים ומגיבים.</p>
+    <table class="ref-table">
+      <tr><th>אירוע</th><th>מתי קורה</th></tr>
+      <tr><td><code>onclick</code></td><td>לחיצה על אלמנט</td></tr>
+      <tr><td><code>ondblclick</code></td><td>לחיצה כפולה</td></tr>
+      <tr><td><code>onchange</code></td><td>שינוי ערך (select, input)</td></tr>
+      <tr><td><code>onmouseover</code></td><td>עכבר נכנס לאלמנט</td></tr>
+      <tr><td><code>onmouseout</code></td><td>עכבר יוצא מאלמנט</td></tr>
+      <tr><td><code>onfocus</code></td><td>שדה קלט מקבל פוקוס</td></tr>
+      <tr><td><code>onblur</code></td><td>שדה קלט מאבד פוקוס</td></tr>
+    </table>
+    <div class="code-block"><span class="comment">&lt;!-- אירוע inline --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">onclick</span>=<span class="value">"alert('לחצת!')"</span><span class="tag">&gt;</span>לחץ עליי<span class="tag">&lt;/button&gt;</span></div>
+  </div>
+
+  <div class="lesson-section">
+    <h2>2. אירועי מקלדת</h2>
+    <p>שלושה אירועים: <code>onkeydown</code> (מקש נלחץ), <code>onkeyup</code> (מקש שוחרר), <code>onkeypress</code> (תו הוקלד).</p>
+    <div class="code-block"><span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"text"</span> <span class="attr">id</span>=<span class="value">"myInput"</span> <span class="attr">onkeydown</span>=<span class="value">"showKey(event)"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;p</span> <span class="attr">id</span>=<span class="value">"output"</span><span class="tag">&gt;&lt;/p&gt;</span>
+
+<span class="tag">&lt;script&gt;</span>
+<span class="keyword">function</span> <span class="function">showKey</span>(event) {
+  document.<span class="function">getElementById</span>(<span class="string">"output"</span>).innerHTML =
+    <span class="string">"מקש: "</span> + event.key + <span class="string">" | קוד: "</span> + event.keyCode;
+}
+<span class="tag">&lt;/script&gt;</span></div>
+  </div>
+
+  <div class="lesson-section">
+    <h2>3. עבודה עם DOM</h2>
+    <p>ה-DOM (Document Object Model) הוא ייצוג של דף ה-HTML כאובייקטים. עם JS אנחנו יכולים לגשת לכל אלמנט ולשנות אותו.</p>
+
+    <h3>שיטות גישה</h3>
+    <div class="code-block"><span class="comment">// גישה לפי ID</span>
+<span class="keyword">let</span> el = document.<span class="function">getElementById</span>(<span class="string">"myDiv"</span>);
+
+<span class="comment">// שינוי תוכן HTML</span>
+el.innerHTML = <span class="string">"&lt;b&gt;שלום!&lt;/b&gt;"</span>;
+
+<span class="comment">// שינוי טקסט בלבד (בטוח יותר)</span>
+el.textContent = <span class="string">"שלום!"</span>;
+
+<span class="comment">// קריאת/שינוי ערך של input</span>
+<span class="keyword">let</span> val = document.<span class="function">getElementById</span>(<span class="string">"nameInput"</span>).value;
+document.<span class="function">getElementById</span>(<span class="string">"nameInput"</span>).value = <span class="string">"ערך חדש"</span>;</div>
+
+    <div class="lesson-tip">
+      <strong>innerHTML לעומת textContent</strong>
+      <p><code>innerHTML</code> מפרש HTML (יכול ליצור אלמנטים חדשים). <code>textContent</code> מציג טקסט גולמי. לטקסט רגיל — עדיף textContent.</p>
+    </div>
+  </div>
+
+  <div class="lesson-section">
+    <h2>4. שינוי עיצוב דרך JS</h2>
+    <div class="code-block"><span class="keyword">let</span> box = document.<span class="function">getElementById</span>(<span class="string">"box"</span>);
+
+<span class="comment">// שינוי ישיר</span>
+box.style.color = <span class="string">"red"</span>;
+box.style.backgroundColor = <span class="string">"#dbeafe"</span>;
+box.style.fontSize = <span class="string">"20px"</span>;
+box.style.padding = <span class="string">"12px"</span>;
+
+<span class="comment">// שימוש ב-classList</span>
+box.classList.<span class="function">add</span>(<span class="string">"active"</span>);
+box.classList.<span class="function">remove</span>(<span class="string">"hidden"</span>);
+box.classList.<span class="function">toggle</span>(<span class="string">"dark-mode"</span>); <span class="comment">// מוסיף/מסיר</span></div>
+
+    <div class="lesson-tip success">
+      <strong>classList עדיף!</strong>
+      <p>שינוי ישיר ב-<code>style</code> מוסיף inline CSS. עדיף להגדיר class ב-CSS ולהשתמש ב-<code>classList.toggle()</code> לניקיון.</p>
+    </div>
+  </div>
+
+  <div class="lesson-section">
+    <h2>5. addEventListener — הגישה המודרנית</h2>
+    <p>במקום <code>onclick</code> ב-HTML, הגישה המומלצת היא <code>addEventListener</code> ב-JS:</p>
+    <div class="code-block"><span class="keyword">let</span> btn = document.<span class="function">getElementById</span>(<span class="string">"myBtn"</span>);
+
+btn.<span class="function">addEventListener</span>(<span class="string">"click"</span>, <span class="keyword">function</span>() {
+  <span class="function">alert</span>(<span class="string">"לחצת!"</span>);
+});
+
+<span class="comment">// אפשר לחבר כמה מאזינים לאותו אלמנט!</span>
+btn.<span class="function">addEventListener</span>(<span class="string">"click"</span>, <span class="keyword">function</span>() {
+  <span class="function">console.log</span>(<span class="string">"גם אני רץ!"</span>);
+});</div>
+    <p>סוגי אירועים: <code>'click'</code>, <code>'input'</code>, <code>'change'</code>, <code>'keydown'</code>, <code>'mouseover'</code>, <code>'submit'</code></p>
+  </div>
+
+  <!-- Code Editor -->
+  <div class="lesson-section">
+    <h2>6. נסו בעצמכם</h2>
+    <p>דף אינטראקטיבי — כפתור שמשנה צבע ושדה שמציג טקסט בזמן אמת:</p>
+    <div class="code-editor-container">
+      <div class="code-editor-header">
+        <span>index.html</span>
+        <div style="display:flex;gap:8px">
+          <button class="code-editor-reset" onclick="resetCode()">איפוס</button>
+          <button class="code-editor-run" onclick="runCode()">&#9654; הרצה</button>
+        </div>
+      </div>
+      <textarea id="codeEditor" class="code-editor-textarea"><!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<style>
+  body { font-family: Arial; padding: 20px; }
+  #colorBox { width: 200px; height: 100px; background: #2563eb;
+    border-radius: 12px; margin: 16px 0; transition: background 0.3s; }
+  button { padding: 10px 20px; font-size: 1rem; cursor: pointer;
+    border: none; border-radius: 6px; background: #d97706; color: #fff; }
+  #liveText { font-size: 1.5rem; font-weight: bold; color: #1e293b; margin-top: 12px; }
+</style>
+</head>
+<body>
+  <h2>אירועים ו-DOM</h2>
+
+  <button id="colorBtn">שנה צבע</button>
+  <div id="colorBox"></div>
+
+  <label>הקלד משהו: <input type="text" id="nameInput"></label>
+  <p id="liveText">...</p>
+
+  <script>
+    var colors = ["#2563eb","#d97706","#10b981","#ef4444","#7c3aed"];
+    var index = 0;
+
+    document.getElementById("colorBtn").addEventListener("click", function() {
+      index = (index + 1) % colors.length;
+      document.getElementById("colorBox").style.backgroundColor = colors[index];
+    });
+
+    document.getElementById("nameInput").addEventListener("input", function() {
+      document.getElementById("liveText").textContent =
+        this.value ? "שלום, " + this.value + "!" : "...";
+    });
+  </script>
+</body>
+</html></textarea>
+      <div class="code-editor-preview">
+        <iframe id="previewFrame"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <div class="exercise-box">
+    <h3>אתגר</h3>
+    <ol>
+      <li>הוסיפו 3 סליידרים (input range) עבור R, G, B — ושנו את צבע הרקע של <code>colorBox</code> בזמן אמת</li>
+      <li>הוסיפו כפתור "מצב לילה" שמחליף את צבע הרקע של body בין לבן לכהה</li>
+      <li>הוסיפו ספירה שמראה כמה פעמים לחצו על הכפתור</li>
+    </ol>
+  </div>
+
+  <div class="lesson-nav">
+    <a href="lesson-2-3.html">&rarr; שיעור קודם: 2.3</a>
+    <a href="lesson-2-5.html">שיעור הבא: 2.5 &larr;</a>
+  </div>
+
+  </div><!-- /data-premium -->
+</div>
+
+<script>
+var editor=document.getElementById('codeEditor'),iframe=document.getElementById('previewFrame'),DEFAULT_CODE=editor.value;
+editor.addEventListener('keydown',function(e){if(e.key==='Tab'){e.preventDefault();var s=this.selectionStart,end=this.selectionEnd;this.value=this.value.substring(0,s)+'  '+this.value.substring(end);this.selectionStart=this.selectionEnd=s+2;}});
+function runCode(){var code=editor.value;var doc=iframe.contentDocument||iframe.contentWindow.document;doc.open();doc.write(code);doc.close();iframe.style.height='320px';}
+function resetCode(){editor.value=DEFAULT_CODE;runCode();}
+window.addEventListener('DOMContentLoaded',function(){runCode();});
+</script>
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

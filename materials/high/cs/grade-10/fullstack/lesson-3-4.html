@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ניהול מצב (Session) ואבטחה | Full-Stack Development | בועז חזן</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#7c3aed;--primary-dark:#6d28d9;--primary-light:#ede9fe;--accent:#f59e0b;--accent-dark:#d97706;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06)}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+
+/* Topbar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Lesson layout */
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+
+/* Sections */
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+
+/* Code blocks */
+.code-block{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.6;white-space:pre}
+.code-block .comment{color:#64748b;font-style:italic}
+.code-block .keyword{color:#818cf8}
+.code-block .string{color:#fbbf24}
+.code-block .type{color:#67e8f9}
+.code-block .method{color:#34d399}
+.code-block .tag{color:#f472b6}
+.code-block .attr{color:#a78bfa}
+.code-block .value{color:#34d399}
+
+/* Tips */
+.lesson-tip{background:var(--primary-light);border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+
+/* Diagram */
+.diagram-container{background:var(--bg);border:2px solid var(--border);border-radius:var(--radius);padding:24px;margin:20px 0;text-align:center}
+.diagram-row{display:flex;justify-content:center;align-items:center;gap:16px;margin:16px 0;flex-wrap:wrap}
+.diagram-box{background:var(--bg-soft);border:2px solid var(--border);border-radius:var(--radius-sm);padding:14px 20px;font-weight:600;font-size:.9rem;min-width:120px;text-align:center}
+.diagram-box.browser{background:#dbeafe;border-color:#2563eb;color:#1d4ed8}
+.diagram-box.server{background:var(--primary-light);border-color:var(--primary);color:var(--primary-dark)}
+.diagram-arrow{font-size:1.5rem;color:var(--text-light);font-weight:700}
+.diagram-label{font-size:.8rem;color:var(--text-light);margin-top:4px}
+.diagram-note{font-size:.85rem;color:var(--text-light);margin-top:8px;font-style:italic}
+
+/* Flow steps */
+.flow-steps{display:flex;flex-direction:column;gap:8px;margin:16px 0}
+.flow-step{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm)}
+.flow-step-num{background:var(--primary);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0}
+.flow-step-text{font-size:.95rem}
+
+/* Quiz */
+.quiz-box{background:var(--bg);border:2px solid var(--primary);border-radius:var(--radius);padding:24px;margin:24px 0}
+.quiz-box h3{color:var(--primary);margin-bottom:16px;font-size:1.1rem}
+.quiz-box p{margin-bottom:12px}
+.quiz-options{list-style:none;margin:12px 0 16px;padding:0}
+.quiz-options li{padding:10px 16px;margin:6px 0;border:2px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all .2s;font-size:.95rem}
+.quiz-options li:hover{border-color:var(--primary);background:var(--primary-light)}
+.quiz-options li.correct{border-color:var(--success);background:#d1fae5;color:#065f46}
+.quiz-options li.wrong{border-color:var(--error);background:#fee2e2;color:#991b1b}
+.quiz-options li.disabled{pointer-events:none;opacity:.7}
+.quiz-feedback{padding:12px 16px;border-radius:var(--radius-sm);font-weight:600;font-size:.95rem;display:none;margin-top:8px}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:#d1fae5;color:#065f46;border:1px solid var(--success)}
+.quiz-feedback.wrong{background:#fee2e2;color:#991b1b;border:1px solid var(--error)}
+
+/* Fill-in quiz */
+.quiz-fill{margin:12px 0 16px}
+.quiz-fill-code{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:20px;margin:12px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.8;white-space:pre}
+.quiz-fill-input{background:#374151;color:#fbbf24;border:2px dashed #6366f1;border-radius:4px;padding:4px 12px;font-family:'Courier New',monospace;font-size:.9rem;min-width:260px;text-align:left;direction:ltr}
+.quiz-fill-input:focus{outline:none;border-color:#818cf8}
+.quiz-fill-btn{padding:8px 20px;background:var(--primary);color:#fff;border:none;border-radius:6px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.85rem;margin-top:8px}
+.quiz-fill-btn:hover{background:var(--primary-dark)}
+
+/* Nav */
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--primary);color:var(--primary)}
+
+/* Responsive */
+@media(max-width:768px){
+  .lesson-title{font-size:1.5rem}
+  .lesson-nav{flex-direction:column}
+  .code-block,.quiz-fill-code{font-size:.8rem;padding:12px}
+  .diagram-row{flex-direction:column;gap:8px}
+  .diagram-arrow{transform:rotate(90deg)}
+  .quiz-fill-input{min-width:180px;font-size:.8rem}
+}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <div class="topbar-title">Full-Stack Development</div>
+  <a href="course.html">← חזרה לקורס</a>
+</div>
+
+<!-- Lesson Header -->
+<div class="lesson-container">
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#7c3aed">יחידה 3: ASP.NET Core Razor Pages</span>
+    <h1 class="lesson-title">ניהול מצב (Session) ואבטחה</h1>
+    <p class="lesson-subtitle">Statelessness, אובייקט Session, מערכת Login/Logout ואבטחת דפים</p>
+  </div>
+
+  <!-- Premium content wrapper -->
+  <div data-premium>
+
+    <!-- Section 1: Statelessness Problem -->
+    <div class="lesson-section">
+      <h2>1. בעיית ה-Statelessness</h2>
+      <p>פרוטוקול <strong>HTTP</strong> הוא פרוטוקול <strong>Stateless</strong> — כלומר, <strong>חסר מצב</strong>. כל בקשה (Request) שנשלחת לשרת היא עצמאית לחלוטין. השרת לא "זוכר" שום דבר מהבקשה הקודמת.</p>
+      <p>מבחינת השרת, כל בקשה מגיעה מלקוח זר. גם אם לפני שנייה שלחת בקשה והשרת החזיר לך תשובה — בבקשה הבאה, הוא לא יודע מי אתה.</p>
+
+      <div class="lesson-tip">
+        <strong>💡 אנלוגיה — מוכר בחנות</strong>
+        <p>דמיינו מוכר בחנות שסובל מאובדן זיכרון לטווח קצר. כל פעם שאתם ניגשים אליו, הוא לא מזהה אתכם — גם אם יצאתם מהחנות לפני רגע. כדי להוכיח מי אתם, תצטרכו להציג תעודת זהות בכל פעם מחדש. ככה בדיוק HTTP עובד.</p>
+      </div>
+
+      <p>זה יוצר בעיות משמעותיות:</p>
+      <ul>
+        <li><strong>איך לשמור שמשתמש מחובר?</strong> — אחרי שהמשתמש מזין שם וסיסמה, איך נזכור שהוא כבר אומת?</li>
+        <li><strong>איך לזכור מה בעגלת הקניות?</strong> — אם כל בקשה עצמאית, העגלה "נמחקת" בין דף לדף</li>
+        <li><strong>איך להתאים תוכן אישי?</strong> — אם לא יודעים מי המשתמש, אי אפשר להציג לו תוכן רלוונטי</li>
+      </ul>
+
+      <div class="diagram-container">
+        <p style="font-weight:700;margin-bottom:12px">שתי בקשות מאותו דפדפן — השרת רואה אותן כלקוחות שונים</p>
+        <div class="diagram-row">
+          <div class="diagram-box browser">🌐 דפדפן<br><span class="diagram-label">בקשה #1: "הצג פרופיל"</span></div>
+          <div class="diagram-arrow">→</div>
+          <div class="diagram-box server">🖥️ שרת<br><span class="diagram-label">מי אתה? 🤷</span></div>
+        </div>
+        <div class="diagram-row">
+          <div class="diagram-box browser">🌐 דפדפן<br><span class="diagram-label">בקשה #2: "הוסף לעגלה"</span></div>
+          <div class="diagram-arrow">→</div>
+          <div class="diagram-box server">🖥️ שרת<br><span class="diagram-label">מי אתה?? 🤷</span></div>
+        </div>
+        <div class="diagram-note">השרת לא יודע ששתי הבקשות הגיעו מאותו משתמש!</div>
+      </div>
+
+      <p>הפתרון? אנחנו צריכים מנגנון שישמור <strong>מידע על המשתמש בין בקשות</strong>. וזה בדיוק מה ש-<strong>Session</strong> עושה.</p>
+    </div>
+
+    <!-- Section 2: Session Object -->
+    <div class="lesson-section">
+      <h2>2. אובייקט Session</h2>
+      <p><strong>Session</strong> הוא מנגנון שמאפשר לשרת לשמור נתונים <strong>בזיכרון השרת</strong>, עבור כל משתמש בנפרד.</p>
+      <p>איך זה עובד?</p>
+      <ol>
+        <li>כשמשתמש מגיע לאתר בפעם הראשונה, השרת יוצר <strong>Session ID</strong> ייחודי</li>
+        <li>ה-Session ID נשמר אצל המשתמש כ-<strong>Cookie</strong> (קובץ טקסט קטן בדפדפן)</li>
+        <li>בכל בקשה עתידית, הדפדפן שולח את ה-Cookie אוטומטית</li>
+        <li>השרת קורא את ה-Session ID מה-Cookie, ויודע איזה נתונים שייכים למשתמש הזה</li>
+      </ol>
+
+      <div class="diagram-container">
+        <p style="font-weight:700;margin-bottom:12px">איך Session עובד</p>
+        <div class="diagram-row">
+          <div class="diagram-box browser">🌐 דפדפן<br><span class="diagram-label">בקשה + Cookie: ID=abc123</span></div>
+          <div class="diagram-arrow">→</div>
+          <div class="diagram-box server">🖥️ שרת<br><span class="diagram-label">abc123 → {user: "בועז"}</span></div>
+        </div>
+        <div class="diagram-note">השרת מזהה את המשתמש בזכות ה-Session ID שבתוך ה-Cookie</div>
+      </div>
+
+      <h3>הגדרת Session ב-ASP.NET Core</h3>
+      <p>כדי להשתמש ב-Session, צריך להוסיף כמה שורות לקובץ <code>Program.cs</code>:</p>
+      <div class="code-block"><span class="comment">// Program.cs - הגדרה</span>
+<span class="keyword">var</span> builder = WebApplication.<span class="method">CreateBuilder</span>(args);
+
+builder.Services.<span class="method">AddRazorPages</span>();
+builder.Services.<span class="method">AddDistributedMemoryCache</span>();  <span class="comment">// נדרש ל-Session</span>
+builder.Services.<span class="method">AddSession</span>();                   <span class="comment">// הוספת שירות Session</span>
+
+<span class="keyword">var</span> app = builder.<span class="method">Build</span>();
+
+app.<span class="method">UseStaticFiles</span>();
+app.<span class="method">UseRouting</span>();
+app.<span class="method">UseSession</span>();                               <span class="comment">// הפעלת Session middleware</span>
+
+app.<span class="method">MapRazorPages</span>();
+app.<span class="method">Run</span>();</div>
+
+      <h3>שמירה וקריאה מ-Session</h3>
+      <p>בתוך דפי Razor (קבצי <code>.cshtml.cs</code>), משתמשים בפקודות הבאות:</p>
+      <div class="code-block"><span class="comment">// שמירה ל-Session</span>
+HttpContext.Session.<span class="method">SetString</span>(<span class="string">"username"</span>, <span class="string">"בועז"</span>);
+HttpContext.Session.<span class="method">SetInt32</span>(<span class="string">"age"</span>, 25);
+
+<span class="comment">// קריאה מ-Session</span>
+<span class="type">string</span> name = HttpContext.Session.<span class="method">GetString</span>(<span class="string">"username"</span>);  <span class="comment">// "בועז"</span>
+<span class="type">int?</span> age = HttpContext.Session.<span class="method">GetInt32</span>(<span class="string">"age"</span>);            <span class="comment">// 25</span>
+
+<span class="comment">// מחיקת ערך ספציפי</span>
+HttpContext.Session.<span class="method">Remove</span>(<span class="string">"username"</span>);
+
+<span class="comment">// מחיקת כל ה-Session</span>
+HttpContext.Session.<span class="method">Clear</span>();</div>
+
+      <h3>דוגמה מלאה: שמירת שם משתמש</h3>
+      <div class="code-block"><span class="comment">// בדף .cshtml.cs</span>
+<span class="keyword">public class</span> <span class="type">WelcomeModel</span> : <span class="type">PageModel</span>
+{
+    <span class="keyword">public</span> <span class="type">string</span> UserName { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+    <span class="keyword">public void</span> <span class="method">OnPost</span>()
+    {
+        <span class="type">string</span> username = Request.Form[<span class="string">"username"</span>];
+        HttpContext.Session.<span class="method">SetString</span>(<span class="string">"user"</span>, username);
+    }
+
+    <span class="keyword">public void</span> <span class="method">OnGet</span>()
+    {
+        <span class="type">string</span> user = HttpContext.Session.<span class="method">GetString</span>(<span class="string">"user"</span>);
+        <span class="keyword">if</span> (user == <span class="keyword">null</span>)
+        {
+            UserName = <span class="string">"אורח"</span>;
+        }
+        <span class="keyword">else</span>
+        {
+            UserName = user;
+        }
+    }
+}</div>
+
+      <div class="lesson-tip">
+        <strong>💡 חשוב לזכור</strong>
+        <p>Session נמחק כשהמשתמש סוגר את הדפדפן או אחרי timeout (ברירת מחדל: 20 דקות ללא פעילות). אם צריך לשמור מידע לטווח ארוך, צריך בסיס נתונים.</p>
+      </div>
+    </div>
+
+    <!-- Section 3: Login/Logout System -->
+    <div class="lesson-section">
+      <h2>3. מערכת Login/Logout</h2>
+      <p>עכשיו שאנחנו מבינים איך Session עובד, בואו נבנה מערכת כניסה (Login) ויציאה (Logout) שלמה.</p>
+
+      <h3>תהליך Login — שלב אחרי שלב</h3>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-step-num">1</div>
+          <div class="flow-step-text">המשתמש ממלא שם וסיסמה בטופס Login</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">2</div>
+          <div class="flow-step-text">הטופס נשלח לשרת בבקשת POST</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">3</div>
+          <div class="flow-step-text">השרת בודק האם שם המשתמש והסיסמה נכונים</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">4</div>
+          <div class="flow-step-text">אם נכון — השרת שומר את השם ב-Session</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">5</div>
+          <div class="flow-step-text">השרת מפנה (Redirect) את המשתמש לדף הראשי</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-step-num">6</div>
+          <div class="flow-step-text">הדפדפן מציג את הדף הראשי עם "שלום [שם]"</div>
+        </div>
+      </div>
+
+      <h3>דף Login — קוד מלא</h3>
+      <div class="code-block"><span class="comment">// Login.cshtml.cs</span>
+<span class="keyword">public class</span> <span class="type">LoginModel</span> : <span class="type">PageModel</span>
+{
+    <span class="keyword">public</span> <span class="type">string</span> ErrorMessage { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+    <span class="keyword">public void</span> <span class="method">OnGet</span>()
+    {
+        <span class="comment">// הצגת טופס ההתחברות</span>
+    }
+
+    <span class="keyword">public void</span> <span class="method">OnPost</span>()
+    {
+        <span class="type">string</span> user = Request.Form[<span class="string">"username"</span>];
+        <span class="type">string</span> pass = Request.Form[<span class="string">"password"</span>];
+
+        <span class="keyword">if</span> (user == <span class="string">"admin"</span> &amp;&amp; pass == <span class="string">"1234"</span>)
+        {
+            HttpContext.Session.<span class="method">SetString</span>(<span class="string">"user"</span>, user);
+            Response.<span class="method">Redirect</span>(<span class="string">"/Index"</span>);
+        }
+        <span class="keyword">else</span>
+        {
+            ErrorMessage = <span class="string">"שם משתמש או סיסמה שגויים"</span>;
+        }
+    }
+}</div>
+
+      <h3>דף Login — טופס ה-HTML</h3>
+      <div class="code-block"><span class="comment">&lt;!-- Login.cshtml --&gt;</span>
+<span class="tag">@page</span>
+<span class="tag">@model</span> LoginModel
+
+<span class="tag">&lt;h2&gt;</span>התחברות<span class="tag">&lt;/h2&gt;</span>
+
+<span class="tag">&lt;form</span> <span class="attr">method</span>=<span class="string">"post"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;label&gt;</span>שם משתמש:<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">required</span> <span class="tag">/&gt;</span>
+
+    <span class="tag">&lt;label&gt;</span>סיסמה:<span class="tag">&lt;/label&gt;</span>
+    <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">required</span> <span class="tag">/&gt;</span>
+
+    <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="string">"submit"</span><span class="tag">&gt;</span>כניסה<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span>
+
+<span class="keyword">@if</span> (!<span class="type">string</span>.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <span class="tag">&lt;p</span> <span class="attr">style</span>=<span class="string">"color:red"</span><span class="tag">&gt;</span>@Model.ErrorMessage<span class="tag">&lt;/p&gt;</span>
+}</div>
+
+      <h3>Logout — ניקוי ה-Session</h3>
+      <p>כשהמשתמש לוחץ "התנתק", מנקים את ה-Session ומפנים לדף הבית:</p>
+      <div class="code-block"><span class="comment">// Logout.cshtml.cs</span>
+<span class="keyword">public class</span> <span class="type">LogoutModel</span> : <span class="type">PageModel</span>
+{
+    <span class="keyword">public void</span> <span class="method">OnGet</span>()
+    {
+        HttpContext.Session.<span class="method">Clear</span>();         <span class="comment">// מחיקת כל נתוני ה-Session</span>
+        Response.<span class="method">Redirect</span>(<span class="string">"/Index"</span>);          <span class="comment">// חזרה לדף הראשי</span>
+    }
+}</div>
+
+      <h3>תפריט דינמי — "התחבר" או "שלום [שם]"</h3>
+      <p>ניתן להציג תפריט שונה למשתמש מחובר ולמשתמש אורח:</p>
+      <div class="code-block"><span class="comment">&lt;!-- _Layout.cshtml (תבנית האתר) --&gt;</span>
+<span class="keyword">@if</span> (Context.Session.<span class="method">GetString</span>(<span class="string">"user"</span>) != <span class="keyword">null</span>)
+{
+    <span class="tag">&lt;span&gt;</span>שלום @Context.Session.<span class="method">GetString</span>(<span class="string">"user"</span>)!<span class="tag">&lt;/span&gt;</span>
+    <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="string">"/Logout"</span><span class="tag">&gt;</span>התנתק<span class="tag">&lt;/a&gt;</span>
+}
+<span class="keyword">else</span>
+{
+    <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="string">"/Login"</span><span class="tag">&gt;</span>התחבר<span class="tag">&lt;/a&gt;</span>
+}</div>
+
+      <div class="lesson-tip success">
+        <strong>✅ סיכום — Login/Logout</strong>
+        <p><strong>Login:</strong> בדיקת שם+סיסמה → שמירה ב-Session → Redirect לדף הראשי.<br><strong>Logout:</strong> ניקוי Session → Redirect לדף הבית.<br><strong>תפריט:</strong> בדיקה אם יש ערך ב-Session → הצגת "שלום" או "התחבר".</p>
+      </div>
+    </div>
+
+    <!-- Section 4: Page Security -->
+    <div class="lesson-section">
+      <h2>4. אבטחת דפים</h2>
+      <p>עכשיו שיש לנו מערכת Login, אנחנו צריכים <strong>להגן על דפים</strong> שמיועדים רק למשתמשים מחוברים. למשל: דף פרופיל, דף הזמנות, לוח בקרה.</p>
+
+      <h3>בדיקה בתחילת OnGet</h3>
+      <p>הדרך הפשוטה ביותר: בכל דף מוגן, לבדוק בתחילת <code>OnGet</code> האם יש Session פעיל. אם אין — להפנות לדף Login:</p>
+      <div class="code-block"><span class="comment">// Profile.cshtml.cs — דף מוגן</span>
+<span class="keyword">public class</span> <span class="type">ProfileModel</span> : <span class="type">PageModel</span>
+{
+    <span class="keyword">public</span> <span class="type">string</span> UserName { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+    <span class="keyword">public void</span> <span class="method">OnGet</span>()
+    {
+        <span class="keyword">if</span> (HttpContext.Session.<span class="method">GetString</span>(<span class="string">"user"</span>) == <span class="keyword">null</span>)
+        {
+            Response.<span class="method">Redirect</span>(<span class="string">"/Login"</span>);
+            <span class="keyword">return</span>;
+        }
+
+        <span class="comment">// המשתמש מחובר — להמשיך כרגיל</span>
+        UserName = HttpContext.Session.<span class="method">GetString</span>(<span class="string">"user"</span>);
+    }
+}</div>
+
+      <h3>הפרדת הרשאות: Admin vs User</h3>
+      <p>לפעמים רוצים להבדיל בין משתמש רגיל למנהל (Admin). ניתן לשמור את התפקיד ב-Session:</p>
+      <div class="code-block"><span class="comment">// בזמן Login — שמירת התפקיד</span>
+<span class="keyword">if</span> (user == <span class="string">"admin"</span>)
+{
+    HttpContext.Session.<span class="method">SetString</span>(<span class="string">"role"</span>, <span class="string">"admin"</span>);
+}
+<span class="keyword">else</span>
+{
+    HttpContext.Session.<span class="method">SetString</span>(<span class="string">"role"</span>, <span class="string">"user"</span>);
+}
+
+<span class="comment">// בדף ניהול — בדיקת הרשאה</span>
+<span class="keyword">public void</span> <span class="method">OnGet</span>()
+{
+    <span class="type">string</span> role = HttpContext.Session.<span class="method">GetString</span>(<span class="string">"role"</span>);
+    <span class="keyword">if</span> (role != <span class="string">"admin"</span>)
+    {
+        Response.<span class="method">Redirect</span>(<span class="string">"/AccessDenied"</span>);
+        <span class="keyword">return</span>;
+    }
+
+    <span class="comment">// רק מנהל מגיע לכאן</span>
+}</div>
+
+      <div class="lesson-tip warning">
+        <strong>⚠️ אזהרת אבטחה חשובה!</strong>
+        <p>אל תשמרו סיסמאות בטקסט גלוי! בדוגמאות כאן השתמשנו ב-<code>"1234"</code> לצורך הלמידה, אבל <strong>בפרויקט אמיתי חובה להצפין (hash) סיסמאות</strong> לפני שמירה בבסיס הנתונים. ספריות כמו <code>BCrypt</code> עושות את זה בקלות.</p>
+      </div>
+
+      <div class="lesson-tip">
+        <strong>💡 סיכום — 4 עקרונות אבטחה בסיסיים</strong>
+        <p>
+          1. <strong>בדיקת Session</strong> בכל דף מוגן — אם אין, redirect ל-Login<br>
+          2. <strong>הפרדת הרשאות</strong> — Admin ו-User לא רואים אותם דפים<br>
+          3. <strong>הצפנת סיסמאות</strong> — לעולם לא לשמור סיסמה כטקסט רגיל<br>
+          4. <strong>ניקוי Session</strong> — ב-Logout חובה לעשות <code>Clear()</code>
+        </p>
+      </div>
+    </div>
+
+    <!-- Comprehension Quizzes -->
+    <div class="lesson-section">
+      <h2>בדיקת הבנה</h2>
+      <p>בחנו את עצמכם — ענו על השאלות הבאות כדי לוודא שהבנתם את החומר:</p>
+
+      <!-- Quiz 1: MC -->
+      <div class="quiz-box" id="quiz1">
+        <h3>שאלה 1: למה HTTP נחשב Stateless?</h3>
+        <ul class="quiz-options" id="quiz1-options">
+          <li onclick="checkQuiz1(this,0)">א) כי הוא לא מצליח לשמור קבצים</li>
+          <li onclick="checkQuiz1(this,1)">ב) כי כל בקשה היא עצמאית — השרת לא זוכר בקשות קודמות</li>
+          <li onclick="checkQuiz1(this,2)">ג) כי הוא עובד רק עם HTML סטטי</li>
+          <li onclick="checkQuiz1(this,3)">ד) כי הוא דורש חיבור קבוע לאינטרנט</li>
+        </ul>
+        <div class="quiz-feedback" id="quiz1-feedback"></div>
+      </div>
+
+      <!-- Quiz 2: What will display -->
+      <div class="quiz-box" id="quiz2">
+        <h3>שאלה 2: מה יוצג?</h3>
+        <p>נתון הקוד הבא. אם המשתמש כבר התחבר בשם <strong>"דני"</strong>, מה יוצג?</p>
+        <div class="code-block"><span class="keyword">public void</span> <span class="method">OnGet</span>()
+{
+    <span class="type">string</span> name = HttpContext.Session.<span class="method">GetString</span>(<span class="string">"user"</span>);
+    <span class="keyword">if</span> (name != <span class="keyword">null</span>)
+        WelcomeMessage = <span class="string">"שלום "</span> + name + <span class="string">"!"</span>;
+    <span class="keyword">else</span>
+        WelcomeMessage = <span class="string">"אורח/ת יקר/ה, אנא התחבר/י"</span>;
+}</div>
+        <ul class="quiz-options" id="quiz2-options">
+          <li onclick="checkQuiz2(this,0)">א) "אורח/ת יקר/ה, אנא התחבר/י"</li>
+          <li onclick="checkQuiz2(this,1)">ב) "שלום דני!"</li>
+          <li onclick="checkQuiz2(this,2)">ג) "שלום null!"</li>
+          <li onclick="checkQuiz2(this,3)">ד) שגיאה — name לא מוגדר</li>
+        </ul>
+        <div class="quiz-feedback" id="quiz2-feedback"></div>
+      </div>
+
+      <!-- Quiz 3: Fill in -->
+      <div class="quiz-box" id="quiz3">
+        <h3>שאלה 3: השלימו את הקוד</h3>
+        <p>השלימו את ה-<code>OnPost</code> כך שישמור שם משתמש ב-Session אחרי Login מוצלח:</p>
+        <div class="quiz-fill">
+          <div class="quiz-fill-code"><span class="keyword">public void</span> <span class="method">OnPost</span>()
+{
+    <span class="type">string</span> user = Request.Form[<span class="string">"username"</span>];
+    <span class="type">string</span> pass = Request.Form[<span class="string">"password"</span>];
+    <span class="keyword">if</span> (CheckPassword(user, pass))
+    {
+        <input type="text" class="quiz-fill-input" id="quiz3-input" placeholder='השלימו כאן...' dir="ltr">(<span class="string">"user"</span>, user);
+        Response.<span class="method">Redirect</span>(<span class="string">"/Index"</span>);
+    }
+}</div>
+          <button class="quiz-fill-btn" onclick="checkQuiz3()">בדיקה</button>
+        </div>
+        <div class="quiz-feedback" id="quiz3-feedback"></div>
+      </div>
+
+      <!-- Quiz 4: Order steps (as MC) -->
+      <div class="quiz-box" id="quiz4">
+        <h3>שאלה 4: סדרו את תהליך ה-Login</h3>
+        <p>מה הסדר הנכון של השלבים בתהליך Login?</p>
+        <ol style="margin:8px 0 12px 24px;line-height:2;font-size:.9rem;color:var(--text-light)">
+          <li>המשתמש ממלא שם וסיסמה בטופס</li>
+          <li>הטופס נשלח לשרת (POST)</li>
+          <li>השרת בודק שם וסיסמה</li>
+          <li>השרת שומר את השם ב-Session</li>
+          <li>השרת מפנה (redirect) לדף הראשי</li>
+          <li>הדפדפן מציג את הדף הראשי עם "שלום [שם]"</li>
+        </ol>
+        <p>בחרו את הסדר הנכון:</p>
+        <ul class="quiz-options" id="quiz4-options">
+          <li onclick="checkQuiz4(this,0)">א) 1 → 2 → 3 → 4 → 5 → 6</li>
+          <li onclick="checkQuiz4(this,1)">ב) 1 → 3 → 2 → 4 → 6 → 5</li>
+          <li onclick="checkQuiz4(this,2)">ג) 2 → 1 → 3 → 5 → 4 → 6</li>
+          <li onclick="checkQuiz4(this,3)">ד) 1 → 2 → 4 → 3 → 5 → 6</li>
+        </ul>
+        <div class="quiz-feedback" id="quiz4-feedback"></div>
+      </div>
+    </div>
+
+    <!-- Lesson Navigation -->
+    <div class="lesson-nav">
+      <a href="lesson-3-3.html">→ שיעור קודם: 3.3</a>
+      <a href="lesson-4-1.html">הבא: שפת SQL ←</a>
+    </div>
+
+  </div><!-- end data-premium -->
+</div><!-- end lesson-container -->
+
+<script>
+/* Quiz 1 — MC: Why is HTTP stateless? Correct: index 1 (ב) */
+function checkQuiz1(el,idx){
+  var opts=document.querySelectorAll('#quiz1-options li');
+  var fb=document.getElementById('quiz1-feedback');
+  for(var i=0;i<opts.length;i++) opts[i].classList.add('disabled');
+  if(idx===1){
+    el.classList.add('correct');
+    fb.textContent='נכון! HTTP הוא Stateless כי כל בקשה עצמאית — השרת לא שומר מידע בין בקשות.';
+    fb.className='quiz-feedback show correct';
+  }else{
+    el.classList.add('wrong');
+    opts[1].classList.add('correct');
+    fb.textContent='לא נכון. התשובה הנכונה: כל בקשה היא עצמאית — השרת לא זוכר בקשות קודמות.';
+    fb.className='quiz-feedback show wrong';
+  }
+}
+
+/* Quiz 2 — What will display? Correct: index 1 (ב) */
+function checkQuiz2(el,idx){
+  var opts=document.querySelectorAll('#quiz2-options li');
+  var fb=document.getElementById('quiz2-feedback');
+  for(var i=0;i<opts.length;i++) opts[i].classList.add('disabled');
+  if(idx===1){
+    el.classList.add('correct');
+    fb.textContent='נכון! המשתמש כבר מחובר בשם "דני", אז GetString("user") מחזיר "דני" ומוצג "שלום דני!".';
+    fb.className='quiz-feedback show correct';
+  }else{
+    el.classList.add('wrong');
+    opts[1].classList.add('correct');
+    fb.textContent='לא נכון. כיוון ש"דני" כבר מחובר, name לא null ולכן יוצג: "שלום דני!".';
+    fb.className='quiz-feedback show wrong';
+  }
+}
+
+/* Quiz 3 — Fill in: HttpContext.Session.SetString */
+function checkQuiz3(){
+  var input=document.getElementById('quiz3-input');
+  var fb=document.getElementById('quiz3-feedback');
+  var val=input.value.trim().replace(/\s+/g,'');
+  var correct='HttpContext.Session.SetString';
+  if(val===correct||val===correct.replace(/\./g,'. ')||val.toLowerCase()===correct.toLowerCase()){
+    input.style.borderColor='#10b981';
+    input.style.background='#064e3b';
+    fb.textContent='מצוין! HttpContext.Session.SetString היא הפקודה לשמירת מחרוזת ב-Session.';
+    fb.className='quiz-feedback show correct';
+  }else{
+    input.style.borderColor='#ef4444';
+    input.style.background='#450a0a';
+    fb.textContent='לא בדיוק. התשובה הנכונה: HttpContext.Session.SetString';
+    fb.className='quiz-feedback show wrong';
+  }
+}
+
+/* Quiz 4 — Order steps. Correct: index 0 (א) — 1→2→3→4→5→6 */
+function checkQuiz4(el,idx){
+  var opts=document.querySelectorAll('#quiz4-options li');
+  var fb=document.getElementById('quiz4-feedback');
+  for(var i=0;i<opts.length;i++) opts[i].classList.add('disabled');
+  if(idx===0){
+    el.classList.add('correct');
+    fb.textContent='מושלם! הסדר הנכון: טופס → POST → בדיקה → שמירה ב-Session → Redirect → הצגה.';
+    fb.className='quiz-feedback show correct';
+  }else{
+    el.classList.add('wrong');
+    opts[0].classList.add('correct');
+    fb.textContent='לא נכון. הסדר הנכון הוא: 1→2→3→4→5→6 — קודם הטופס נשלח, אז השרת בודק, שומר, מפנה, ואז הדפדפן מציג.';
+    fb.className='quiz-feedback show wrong';
+  }
+}
+</script>
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

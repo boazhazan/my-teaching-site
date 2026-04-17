@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>אימות טפסים (Form Validation) | Full-Stack Development</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+
+/* Topbar */
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--accent-dark)}
+.topbar a{color:var(--accent-dark);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+
+/* Lesson layout */
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+
+/* Sections */
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+
+/* Code blocks */
+.code-block{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.6;white-space:pre}
+.code-block .tag{color:#f472b6}
+.code-block .attr{color:#a78bfa}
+.code-block .value{color:#34d399}
+.code-block .comment{color:#64748b;font-style:italic}
+.code-block .keyword{color:#93c5fd}
+.code-block .string{color:#34d399}
+.code-block .func{color:#fbbf24}
+.code-block .regex{color:#f472b6}
+
+/* Tip boxes */
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip.error{background:#fee2e2;border-right-color:var(--error)}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+
+/* Code editor */
+.code-editor-container{border:2px solid var(--border);border-radius:12px;overflow:hidden;margin:20px 0}
+.code-editor-header{background:#1e293b;color:#fff;padding:10px 16px;font-size:.85rem;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.code-editor-textarea{width:100%;min-height:400px;padding:16px;font-family:'Courier New',monospace;font-size:.9rem;border:none;resize:vertical;direction:ltr;text-align:left;background:#0f172a;color:#e2e8f0;line-height:1.6;tab-size:2}
+.code-editor-textarea:focus{outline:none}
+.code-editor-preview{border-top:2px solid var(--border);min-height:200px;background:#fff}
+.code-editor-preview iframe{width:100%;min-height:200px;border:none}
+.code-editor-run{padding:8px 20px;background:#10b981;color:#fff;border:none;border-radius:6px;font-family:inherit;font-weight:600;cursor:pointer;font-size:.85rem}
+.code-editor-run:hover{background:#059669}
+
+/* Exercise box */
+.exercise-box{background:var(--bg);border:2px solid var(--accent-dark);border-radius:12px;padding:24px;margin:24px 0}
+.exercise-box h3{color:var(--accent-dark);margin-bottom:12px}
+
+/* Validation rules table */
+.rules-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.95rem}
+.rules-table th{background:var(--accent-dark);color:#fff;padding:10px 14px;text-align:right;font-weight:700}
+.rules-table td{padding:10px 14px;border-bottom:1px solid var(--border)}
+.rules-table tr:nth-child(even) td{background:var(--bg-soft)}
+.rules-table code{direction:ltr;unicode-bidi:embed;background:#f1f5f9;padding:2px 6px;border-radius:4px;font-size:.85rem}
+
+/* Nav */
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--accent-dark);color:var(--accent-dark)}
+
+@media(max-width:768px){
+  .lesson-title{font-size:1.5rem}
+  .lesson-nav{flex-direction:column}
+  .code-block{font-size:.8rem;padding:12px}
+  .rules-table{font-size:.85rem}
+}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <span class="topbar-title">Full-Stack Development</span>
+  <a href="course.html">&larr; חזרה לקורס</a>
+</div>
+
+<!-- Lesson Content -->
+<div class="lesson-container">
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#d97706">יחידה 2: JavaScript</span>
+    <h1 class="lesson-title">אימות טפסים (Form Validation)</h1>
+    <p class="lesson-subtitle">בדיקת קלט משתמש בצד הלקוח — שם משתמש, אימייל, סיסמה וטלפון</p>
+  </div>
+
+  <!-- Premium content wrapper -->
+  <div data-premium>
+
+  <!-- Section 1: Why Client-Side Validation? -->
+  <div class="lesson-section">
+    <h2>1. למה לבדוק בצד לקוח?</h2>
+
+    <p>כשמשתמש ממלא טופס באתר (הרשמה, יצירת קשר, הזמנה), התוכן שהוא מזין לא תמיד תקין. אולי הוא שכח למלא שדה חובה, הזין אימייל בפורמט שגוי, או בחר סיסמה חלשה מדי. <strong>אימות טפסים</strong> (Form Validation) הוא התהליך שבו אנחנו בודקים את הקלט לפני שהוא נשלח.</p>
+
+    <p>אימות בצד הלקוח (Client-Side Validation) — כלומר בדיקה ש-JavaScript מבצעת בדפדפן — מספק שני יתרונות משמעותיים:</p>
+
+    <ul>
+      <li><strong>חוסך פנייה מיותרת לשרת</strong> — במקום לשלוח את הנתונים לשרת, לחכות לתשובה, ורק אז לגלות שהאימייל לא תקין — אפשר לזהות את הבעיה מיד, לפני השליחה.</li>
+      <li><strong>חוויית משתמש טובה יותר</strong> — המשתמש מקבל משוב מיידי ויודע בדיוק מה צריך לתקן. לא צריך לחכות לטעינת דף חדש עם הודעת שגיאה.</li>
+    </ul>
+
+    <div class="lesson-tip warning">
+      <strong>&#9888;&#65039; אזהרה חשובה!</strong>
+      <p>ולידציה בצד הלקוח היא <strong>בדיקה ראשונית בלבד</strong>. השרת <strong>חייב</strong> לבדוק שוב את כל הנתונים! למה? כי כל מי שמבין JavaScript יכול לעקוף את הבדיקות בדפדפן (למשל דרך ה-DevTools). <strong>לעולם אל תסמוך רק על ולידציה בצד הלקוח.</strong></p>
+    </div>
+
+    <p>אז למה בכלל לבדוק בצד הלקוח אם השרת גם בודק? כי זה משפר את חוויית השימוש. רוב המשתמשים הם לגיטימיים, והם יעריכו משוב מהיר. הבדיקה בשרת היא רשת הביטחון.</p>
+  </div>
+
+  <!-- Section 2: Validation Rules -->
+  <div class="lesson-section">
+    <h2>2. חוקי אימות</h2>
+
+    <p>לפני שכותבים קוד, צריך להגדיר <strong>חוקים</strong> — מה נחשב קלט תקין לכל שדה. הנה חוקים אופייניים לטופס הרשמה:</p>
+
+    <table class="rules-table">
+      <thead>
+        <tr><th>שדה</th><th>חוקי אימות</th><th>דוגמה תקינה</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>שם משתמש</strong></td>
+          <td>חייב להתחיל באות, לפחות 3 תווים</td>
+          <td><code>david123</code></td>
+        </tr>
+        <tr>
+          <td><strong>סיסמה</strong></td>
+          <td>6-12 תווים, חייבת ספרה + תו מיוחד</td>
+          <td><code>Pass@5x</code></td>
+        </tr>
+        <tr>
+          <td><strong>אימייל</strong></td>
+          <td>פורמט תקין (user@domain.com)</td>
+          <td><code>david@school.co.il</code></td>
+        </tr>
+        <tr>
+          <td><strong>טלפון</strong></td>
+          <td>10 ספרות, מתחיל ב-05</td>
+          <td><code>0521234567</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>בואו נראה איך מתרגמים כל חוק לבדיקה ב-JavaScript:</p>
+
+    <h3>בדיקת שם משתמש</h3>
+    <div class="code-block"><span class="keyword">function</span> <span class="func">isValidUsername</span>(value) {
+  <span class="comment">// חייב להתחיל באות (גדולה או קטנה)</span>
+  <span class="comment">// אחריה לפחות 2 תווים נוספים (סה"כ 3+)</span>
+  <span class="keyword">if</span> (value.length &lt; 3) <span class="keyword">return</span> <span class="keyword">false</span>;
+  <span class="keyword">let</span> firstChar = value[0];
+  <span class="keyword">if</span> (!((firstChar &gt;= <span class="string">'a'</span> &amp;&amp; firstChar &lt;= <span class="string">'z'</span>) ||
+        (firstChar &gt;= <span class="string">'A'</span> &amp;&amp; firstChar &lt;= <span class="string">'Z'</span>))) {
+    <span class="keyword">return</span> <span class="keyword">false</span>;
+  }
+  <span class="keyword">return</span> <span class="keyword">true</span>;
+}</div>
+
+    <h3>בדיקת סיסמה</h3>
+    <div class="code-block"><span class="keyword">function</span> <span class="func">isValidPassword</span>(value) {
+  <span class="comment">// אורך: 6-12 תווים</span>
+  <span class="keyword">if</span> (value.length &lt; 6 || value.length &gt; 12) <span class="keyword">return</span> <span class="keyword">false</span>;
+
+  <span class="comment">// חייבת לכלול לפחות ספרה אחת</span>
+  <span class="keyword">let</span> hasDigit = <span class="keyword">false</span>;
+  <span class="keyword">for</span> (<span class="keyword">let</span> ch <span class="keyword">of</span> value) {
+    <span class="keyword">if</span> (ch &gt;= <span class="string">'0'</span> &amp;&amp; ch &lt;= <span class="string">'9'</span>) hasDigit = <span class="keyword">true</span>;
+  }
+
+  <span class="comment">// חייבת לכלול תו מיוחד</span>
+  <span class="keyword">let</span> specials = <span class="string">"!@#$%^&amp;*"</span>;
+  <span class="keyword">let</span> hasSpecial = <span class="keyword">false</span>;
+  <span class="keyword">for</span> (<span class="keyword">let</span> ch <span class="keyword">of</span> value) {
+    <span class="keyword">if</span> (specials.includes(ch)) hasSpecial = <span class="keyword">true</span>;
+  }
+
+  <span class="keyword">return</span> hasDigit &amp;&amp; hasSpecial;
+}</div>
+
+    <p>הגישה הזו עובדת, אבל הקוד ארוך ומסורבל. בסעיף הבא נלמד כלי הרבה יותר חזק ותמציתי: <strong>ביטויים רגולריים (RegEx)</strong>.</p>
+  </div>
+
+  <!-- Section 3: RegEx -->
+  <div class="lesson-section">
+    <h2>3. ביטויים רגולריים (RegEx)</h2>
+
+    <p><strong>ביטוי רגולרי</strong> (Regular Expression, או בקיצור <strong>RegEx</strong>) הוא <strong>תבנית</strong> (pattern) לבדיקת טקסט. במקום לכתוב לולאות ותנאים ארוכים, אפשר להגדיר תבנית בשורה אחת שאומרת "הטקסט חייב להיראות ככה".</p>
+
+    <p>ב-JavaScript כותבים ביטוי רגולרי בין שני סלאשים <code>/</code>:</p>
+
+    <div class="code-block"><span class="keyword">let</span> pattern = <span class="regex">/^[a-zA-Z]/</span>;  <span class="comment">// מתחיל באות</span></div>
+
+    <h3>תבניות חשובות</h3>
+
+    <table class="rules-table">
+      <thead>
+        <tr><th>תבנית</th><th>משמעות</th><th>דוגמה</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>/^[a-zA-Z]/</code></td>
+          <td>מתחיל באות (אנגלית)</td>
+          <td><code>"david"</code> &#10004; &nbsp; <code>"123abc"</code> &#10008;</td>
+        </tr>
+        <tr>
+          <td><code>/[!@#$%]/</code></td>
+          <td>מכיל תו מיוחד</td>
+          <td><code>"hi@5"</code> &#10004; &nbsp; <code>"hello"</code> &#10008;</td>
+        </tr>
+        <tr>
+          <td><code>/^\d{10}$/</code></td>
+          <td>בדיוק 10 ספרות</td>
+          <td><code>"0521234567"</code> &#10004; &nbsp; <code>"052123"</code> &#10008;</td>
+        </tr>
+        <tr>
+          <td><code>/^[\w.-]+@[\w.-]+\.\w{2,}$/</code></td>
+          <td>פורמט אימייל</td>
+          <td><code>"a@b.co"</code> &#10004; &nbsp; <code>"abc"</code> &#10008;</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>פירוק הסימנים</h3>
+    <ul>
+      <li><code>^</code> — תחילת המחרוזת ("חייב להתחיל ב...")</li>
+      <li><code>$</code> — סוף המחרוזת ("חייב להסתיים ב...")</li>
+      <li><code>[a-zA-Z]</code> — תו אחד מתוך הטווח (אות קטנה או גדולה)</li>
+      <li><code>\d</code> — ספרה (0-9), שווה ערך ל-<code>[0-9]</code></li>
+      <li><code>\w</code> — תו "מילה" — אות, ספרה, או קו תחתון</li>
+      <li><code>{N}</code> — בדיוק N פעמים. <code>{2,}</code> = לפחות 2 פעמים</li>
+      <li><code>+</code> — פעם אחת או יותר</li>
+      <li><code>.</code> — כל תו (חוץ מירידת שורה). לנקודה ממש: <code>\.</code></li>
+    </ul>
+
+    <h3>שימוש ב-<code dir="ltr" style="unicode-bidi:embed">test()</code></h3>
+
+    <p>המתודה <code dir="ltr" style="unicode-bidi:embed">regex.test(string)</code> מחזירה <code>true</code> אם המחרוזת תואמת את התבנית, ו-<code>false</code> אחרת:</p>
+
+    <div class="code-block"><span class="keyword">let</span> emailPattern = <span class="regex">/^[\w.-]+@[\w.-]+\.\w{2,}$/</span>;
+
+emailPattern.<span class="func">test</span>(<span class="string">"david@school.co.il"</span>);  <span class="comment">// true</span>
+emailPattern.<span class="func">test</span>(<span class="string">"not-an-email"</span>);        <span class="comment">// false</span>
+emailPattern.<span class="func">test</span>(<span class="string">"@missing.com"</span>);         <span class="comment">// false</span></div>
+
+    <p>עכשיו נשכתב את הבדיקות מסעיף 2 בצורה תמציתית:</p>
+
+    <div class="code-block"><span class="comment">// שם משתמש: מתחיל באות, לפחות 3 תווים</span>
+<span class="regex">/^[a-zA-Z].{2,}$/</span>.<span class="func">test</span>(username)
+
+<span class="comment">// סיסמה: 6-12 תווים</span>
+<span class="regex">/^.{6,12}$/</span>.<span class="func">test</span>(password)
+
+<span class="comment">// סיסמה: חייבת ספרה</span>
+<span class="regex">/\d/</span>.<span class="func">test</span>(password)
+
+<span class="comment">// סיסמה: חייבת תו מיוחד</span>
+<span class="regex">/[!@#$%^&amp;*]/</span>.<span class="func">test</span>(password)
+
+<span class="comment">// אימייל: פורמט בסיסי</span>
+<span class="regex">/^[\w.-]+@[\w.-]+\.\w{2,}$/</span>.<span class="func">test</span>(email)
+
+<span class="comment">// טלפון: 10 ספרות, מתחיל ב-05</span>
+<span class="regex">/^05\d{8}$/</span>.<span class="func">test</span>(phone)</div>
+
+    <div class="lesson-tip success">
+      <strong>&#10004;&#65039; שימו לב להבדל</strong>
+      <p>עם RegEx — כל בדיקה היא <strong>שורה אחת</strong> במקום פונקציה שלמה עם לולאות ותנאים. זה קוד הרבה יותר קריא ותחזוקתי.</p>
+    </div>
+  </div>
+
+  <!-- Section 4: onsubmit -->
+  <div class="lesson-section">
+    <h2>4. שימוש ב-<code dir="ltr" style="unicode-bidi:embed">onsubmit</code></h2>
+
+    <p>אז יש לנו חוקים ויש לנו RegEx. עכשיו צריך לחבר את הכל: כשהמשתמש לוחץ "שלח" — לבדוק את כל השדות, ואם משהו לא תקין — <strong>לעצור את שליחת הטופס</strong> ולהציג הודעות שגיאה.</p>
+
+    <h3>העיקרון: <code dir="ltr" style="unicode-bidi:embed">return false</code> עוצר שליחה</h3>
+
+    <p>נוסיף לטופס את המאפיין <code dir="ltr" style="unicode-bidi:embed">onsubmit</code> שמפעיל פונקציית בדיקה:</p>
+
+    <div class="code-block"><span class="tag">&lt;form</span> <span class="attr">onsubmit</span>=<span class="value">"return validate()"</span><span class="tag">&gt;</span>
+  ...
+  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="value">"submit"</span><span class="tag">&gt;</span>שלח<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span></div>
+
+    <p>אם הפונקציה <code dir="ltr" style="unicode-bidi:embed">validate()</code> מחזירה <code>false</code> — הטופס <strong>לא יישלח</strong>. אם היא מחזירה <code>true</code> — הטופס יישלח כרגיל.</p>
+
+    <h3>הצגת שגיאות ליד כל שדה</h3>
+
+    <p>לכל שדה בטופס נוסיף <code dir="ltr" style="unicode-bidi:embed">&lt;span class="error"&gt;</code> עם הודעת שגיאה, שכברירת מחדל מוסתר (<code dir="ltr" style="unicode-bidi:embed">display:none</code>). כשהבדיקה נכשלת — נחשוף אותו:</p>
+
+    <div class="code-block"><span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="value">"form-group"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;label&gt;</span>שם משתמש:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"text"</span> <span class="attr">id</span>=<span class="value">"username"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="value">"error"</span> <span class="attr">id</span>=<span class="value">"usernameErr"</span><span class="tag">&gt;</span>
+    חייב להתחיל באות, לפחות 3 תווים
+  <span class="tag">&lt;/span&gt;</span>
+<span class="tag">&lt;/div&gt;</span></div>
+
+    <h3>פונקציית ולידציה מלאה</h3>
+
+    <p>הנה דוגמה מלאה שבודקת שם משתמש, אימייל וסיסמה:</p>
+
+    <div class="code-block"><span class="keyword">function</span> <span class="func">validate</span>() {
+  <span class="keyword">let</span> valid = <span class="keyword">true</span>;
+
+  <span class="comment">// --- שם משתמש ---</span>
+  <span class="keyword">let</span> user = document.<span class="func">getElementById</span>(<span class="string">"username"</span>).value;
+  <span class="keyword">if</span> (!<span class="regex">/^[a-zA-Z].{2,}$/</span>.<span class="func">test</span>(user)) {
+    document.<span class="func">getElementById</span>(<span class="string">"usernameErr"</span>).style.display = <span class="string">"block"</span>;
+    document.<span class="func">getElementById</span>(<span class="string">"username"</span>).className = <span class="string">"invalid"</span>;
+    valid = <span class="keyword">false</span>;
+  } <span class="keyword">else</span> {
+    document.<span class="func">getElementById</span>(<span class="string">"usernameErr"</span>).style.display = <span class="string">"none"</span>;
+    document.<span class="func">getElementById</span>(<span class="string">"username"</span>).className = <span class="string">"valid"</span>;
+  }
+
+  <span class="comment">// --- אימייל ---</span>
+  <span class="keyword">let</span> email = document.<span class="func">getElementById</span>(<span class="string">"email"</span>).value;
+  <span class="keyword">if</span> (!<span class="regex">/^[\w.-]+@[\w.-]+\.\w{2,}$/</span>.<span class="func">test</span>(email)) {
+    document.<span class="func">getElementById</span>(<span class="string">"emailErr"</span>).style.display = <span class="string">"block"</span>;
+    document.<span class="func">getElementById</span>(<span class="string">"email"</span>).className = <span class="string">"invalid"</span>;
+    valid = <span class="keyword">false</span>;
+  } <span class="keyword">else</span> {
+    document.<span class="func">getElementById</span>(<span class="string">"emailErr"</span>).style.display = <span class="string">"none"</span>;
+    document.<span class="func">getElementById</span>(<span class="string">"email"</span>).className = <span class="string">"valid"</span>;
+  }
+
+  <span class="comment">// --- סיסמה ---</span>
+  <span class="keyword">let</span> pass = document.<span class="func">getElementById</span>(<span class="string">"password"</span>).value;
+  <span class="keyword">if</span> (!<span class="regex">/^.{6,12}$/</span>.<span class="func">test</span>(pass) ||
+      !<span class="regex">/\d/</span>.<span class="func">test</span>(pass) ||
+      !<span class="regex">/[!@#$%^&amp;*]/</span>.<span class="func">test</span>(pass)) {
+    document.<span class="func">getElementById</span>(<span class="string">"passErr"</span>).style.display = <span class="string">"block"</span>;
+    document.<span class="func">getElementById</span>(<span class="string">"password"</span>).className = <span class="string">"invalid"</span>;
+    valid = <span class="keyword">false</span>;
+  } <span class="keyword">else</span> {
+    document.<span class="func">getElementById</span>(<span class="string">"passErr"</span>).style.display = <span class="string">"none"</span>;
+    document.<span class="func">getElementById</span>(<span class="string">"password"</span>).className = <span class="string">"valid"</span>;
+  }
+
+  <span class="keyword">return</span> valid;  <span class="comment">// true = שלח, false = עצור</span>
+}</div>
+
+    <div class="lesson-tip">
+      <strong>&#128161; דפוס חשוב</strong>
+      <p>שימו לב לדפוס: מתחילים עם <code dir="ltr" style="unicode-bidi:embed">let valid = true</code>, ובכל בדיקה שנכשלת מסמנים <code dir="ltr" style="unicode-bidi:embed">valid = false</code>. בסוף מחזירים את <code dir="ltr" style="unicode-bidi:embed">valid</code>. ככה כל השגיאות מוצגות בו-זמנית, ולא רק הראשונה.</p>
+    </div>
+
+    <h3>משוב ויזואלי: גבולות ירוקים ואדומים</h3>
+
+    <p>שדה תקין מקבל גבול ירוק (<code dir="ltr" style="unicode-bidi:embed">class="valid"</code>), שדה שגוי מקבל גבול אדום (<code dir="ltr" style="unicode-bidi:embed">class="invalid"</code>). ב-CSS:</p>
+
+    <div class="code-block"><span class="attr">input.valid</span>   { <span class="keyword">border-color</span>: <span class="value">green</span>; }
+<span class="attr">input.invalid</span> { <span class="keyword">border-color</span>: <span class="value">red</span>; }
+<span class="attr">.error</span>         { <span class="keyword">color</span>: <span class="value">red</span>; <span class="keyword">font-size</span>: <span class="value">14px</span>; <span class="keyword">display</span>: <span class="value">none</span>; }</div>
+
+    <p>שילוב של גבול צבעוני + הודעת טקסט ברורה נותן למשתמש את המשוב הכי טוב: הוא רואה <strong>מה</strong> לא תקין ו<strong>למה</strong>.</p>
+  </div>
+
+  <!-- Live Code Editor -->
+  <div class="lesson-section">
+    <h2>&#128421;&#65039; עורך קוד חי</h2>
+    <p>הזמן שלכם לנסות! הקוד למטה מכיל טופס הרשמה בסיסי עם ולידציה על שם משתמש. <strong>המשימה שלכם:</strong> להשלים את הוולידציה גם לאימייל ולסיסמה. ערכו ולחצו "הרץ" כדי לבדוק:</p>
+
+    <div class="code-editor-container">
+      <div class="code-editor-header">
+        <span>validation.html</span>
+        <button class="code-editor-run" onclick="runCode()">&#9654; הרץ</button>
+      </div>
+      <textarea id="codeEditor" class="code-editor-textarea">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;style&gt;
+    body { font-family: Arial; direction: rtl; padding: 20px; }
+    .form-group { margin: 15px 0; }
+    label { display: block; font-weight: bold; margin-bottom: 5px; }
+    input { width: 100%; padding: 8px; border: 2px solid #ddd; border-radius: 6px; font-size: 16px; }
+    .error { color: red; font-size: 14px; display: none; }
+    input.invalid { border-color: red; }
+    input.valid { border-color: green; }
+    button { background: #2563eb; color: white; padding: 10px 30px; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }
+    button:hover { background: #1d4ed8; }
+    .success-msg { color: green; font-size: 18px; font-weight: bold; display: none; margin-top: 15px; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;&#x1f4dd; &#x05d8;&#x05d5;&#x05e4;&#x05e1; &#x05d4;&#x05e8;&#x05e9;&#x05de;&#x05d4;&lt;/h1&gt;
+  &lt;form onsubmit="return validate()"&gt;
+    &lt;div class="form-group"&gt;
+      &lt;label&gt;&#x05e9;&#x05dd; &#x05de;&#x05e9;&#x05ea;&#x05de;&#x05e9;:&lt;/label&gt;
+      &lt;input type="text" id="username"&gt;
+      &lt;span class="error" id="usernameErr"&gt;&#x05d7;&#x05d9;&#x05d9;&#x05d1; &#x05dc;&#x05d4;&#x05ea;&#x05d7;&#x05d9;&#x05dc; &#x05d1;&#x05d0;&#x05d5;&#x05ea;, &#x05dc;&#x05e4;&#x05d7;&#x05d5;&#x05ea; 3 &#x05ea;&#x05d5;&#x05d5;&#x05d9;&#x05dd;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group"&gt;
+      &lt;label&gt;&#x05d0;&#x05d9;&#x05de;&#x05d9;&#x05d9;&#x05dc;:&lt;/label&gt;
+      &lt;input type="text" id="email"&gt;
+      &lt;span class="error" id="emailErr"&gt;&#x05e4;&#x05d5;&#x05e8;&#x05de;&#x05d8; &#x05d0;&#x05d9;&#x05de;&#x05d9;&#x05d9;&#x05dc; &#x05dc;&#x05d0; &#x05ea;&#x05e7;&#x05d9;&#x05df;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="form-group"&gt;
+      &lt;label&gt;&#x05e1;&#x05d9;&#x05e1;&#x05de;&#x05d4;:&lt;/label&gt;
+      &lt;input type="password" id="password"&gt;
+      &lt;span class="error" id="passErr"&gt;6-12 &#x05ea;&#x05d5;&#x05d5;&#x05d9;&#x05dd;, &#x05d7;&#x05d9;&#x05d9;&#x05d1;&#x05ea; &#x05e1;&#x05e4;&#x05e8;&#x05d4; &#x05d5;&#x05ea;&#x05d5; &#x05de;&#x05d9;&#x05d5;&#x05d7;&#x05d3;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;button type="submit"&gt;&#x05d4;&#x05e8;&#x05e9;&#x05de;&#x05d4;&lt;/button&gt;
+  &lt;/form&gt;
+  &lt;div class="success-msg" id="successMsg"&gt;&#x2705; &#x05d4;&#x05d8;&#x05d5;&#x05e4;&#x05e1; &#x05ea;&#x05e7;&#x05d9;&#x05df;!&lt;/div&gt;
+
+  &lt;script&gt;
+    function validate() {
+      let valid = true;
+
+      // --- Username check ---
+      let user = document.getElementById("username").value;
+      if (!/^[a-zA-Z].{2,}$/.test(user)) {
+        document.getElementById("usernameErr").style.display = "block";
+        document.getElementById("username").className = "invalid";
+        valid = false;
+      } else {
+        document.getElementById("usernameErr").style.display = "none";
+        document.getElementById("username").className = "valid";
+      }
+
+      // --- Email check ---
+      // TODO: add email validation using RegEx
+      // Hint: /^[\w.-]+@[\w.-]+\.\w{2,}$/
+
+      // --- Password check ---
+      // TODO: add password validation
+      // Hint: check length (6-12), has digit, has special char
+
+      if (valid) {
+        document.getElementById("successMsg").style.display = "block";
+      } else {
+        document.getElementById("successMsg").style.display = "none";
+      }
+
+      return false; // prevent actual form submission in preview
+    }
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+      <div class="code-editor-preview">
+        <iframe id="previewFrame" title="תצוגה מקדימה"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exercise -->
+  <div class="lesson-section">
+    <div class="exercise-box">
+      <h3>&#128221; תרגיל: בניית דף הרשמה מלא</h3>
+      <p>בנו טופס הרשמה מלא בעורך הקוד למעלה (מחקו את הקוד הקיים והתחילו מאפס, או הרחיבו אותו). הטופס צריך לכלול את כל השדות הבאים:</p>
+      <ol>
+        <li><strong>שם מלא</strong> — לפחות 2 תווים</li>
+        <li><strong>אימייל</strong> — פורמט תקין (<code dir="ltr" style="unicode-bidi:embed">user@domain.com</code>)</li>
+        <li><strong>טלפון</strong> — 10 ספרות, מתחיל ב-05</li>
+        <li><strong>סיסמה</strong> — 6-12 תווים, חייבת ספרה + תו מיוחד</li>
+        <li><strong>אישור סיסמה</strong> — חייב להיות זהה לסיסמה</li>
+        <li><strong>תאריך לידה</strong> — חייב להיות בן 10 לפחות (חשבו: להשוות תאריכים)</li>
+      </ol>
+      <p style="margin-top:12px">לכל שדה:</p>
+      <ul>
+        <li>הוסיפו <strong>הודעת שגיאה ייחודית</strong> שמסבירה בדיוק מה לא תקין</li>
+        <li>סמנו את השדה ב<strong>גבול אדום</strong> (invalid) או <strong>ירוק</strong> (valid)</li>
+        <li>הציגו <strong>הודעת הצלחה</strong> אם כל השדות תקינים</li>
+      </ul>
+      <p style="margin-top:12px;color:var(--text-light);font-size:.9rem"><strong>בונוס:</strong> הוסיפו "מד חוזק סיסמה" (password strength meter) — פס צבעוני שמשתנה מאדום (חלש) לירוק (חזק) בזמן ההקלדה.</p>
+    </div>
+  </div>
+
+  </div><!-- /data-premium -->
+
+  <!-- Lesson Navigation -->
+  <div class="lesson-nav">
+    <a href="lesson-2-5.html">&#8594; שיעור קודם: 2.5</a>
+    <a href="lesson-3-1.html">השיעור הבא &larr;</a>
+  </div>
+
+</div>
+
+<script>
+function runCode(){
+  var code=document.getElementById('codeEditor').value;
+  var iframe=document.getElementById('previewFrame');
+  iframe.srcdoc=code;
+}
+
+// Tab key support in textarea
+document.getElementById('codeEditor').addEventListener('keydown',function(e){
+  if(e.key==='Tab'){
+    e.preventDefault();
+    var start=this.selectionStart;
+    var end=this.selectionEnd;
+    this.value=this.value.substring(0,start)+'  '+this.value.substring(end);
+    this.selectionStart=this.selectionEnd=start+2;
+  }
+});
+
+// Auto-run on load
+document.addEventListener('DOMContentLoaded',function(){
+  runCode();
+});
+</script>
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

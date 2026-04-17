@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BindProperty, Tag Helpers וטפסים | Full-Stack Development | בועז חזן</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);--unit-color:#7c3aed}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+.code-block{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.6;white-space:pre}
+.code-block .keyword{color:#818cf8}
+.code-block .string{color:#fbbf24}
+.code-block .function{color:#38bdf8}
+.code-block .comment{color:#64748b;font-style:italic}
+.code-block .razor{color:#f59e0b;font-weight:700}
+.code-block .tag{color:#f472b6}
+.code-block .attr{color:#a78bfa}
+.code-block .value{color:#34d399}
+.code-block .type{color:#67e8f9}
+.inline-code{direction:ltr;unicode-bidi:embed;background:#f1f5f9;padding:2px 8px;border-radius:4px;font-family:'Courier New',monospace;font-size:.88rem;color:var(--primary-dark);display:inline}
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+.ref-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.9rem}
+.ref-table th{background:var(--unit-color);color:#fff;padding:10px 14px;text-align:right;font-weight:700}
+.ref-table td{padding:10px 14px;border-bottom:1px solid var(--border)}
+.ref-table tr:nth-child(even){background:var(--bg-soft)}
+.compare-container{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.compare-box{border-radius:8px;overflow:hidden}
+.compare-label{padding:8px 12px;font-size:.85rem;font-weight:700;color:#fff;text-align:center}
+.quiz-container{background:var(--bg-soft);border:2px solid var(--border);border-radius:12px;padding:24px;margin:20px 0}
+.quiz-container h3{font-size:1.1rem;font-weight:800;margin-bottom:16px;color:var(--unit-color)}
+.quiz-question{font-weight:700;font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.quiz-options{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.quiz-options label{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg);border:2px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;line-height:1.6}
+.quiz-options label:hover{border-color:var(--unit-color);background:rgba(124,58,237,.05)}
+.quiz-options label.correct{border-color:var(--success);background:#d1fae5}
+.quiz-options label.incorrect{border-color:var(--error);background:#fee2e2}
+.quiz-options label.show-correct{border-color:var(--success);background:#d1fae5}
+.quiz-check-btn{padding:10px 24px;background:var(--unit-color);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:.95rem;font-weight:600;cursor:pointer}
+.quiz-check-btn:hover{opacity:.9}
+.quiz-check-btn:disabled{opacity:.5;cursor:not-allowed}
+.quiz-feedback{display:none;margin-top:12px;padding:12px 16px;border-radius:8px;font-weight:600;font-size:.95rem}
+.quiz-feedback.correct{display:block;background:#d1fae5;color:#065f46}
+.quiz-feedback.incorrect{display:block;background:#fee2e2;color:#991b1b}
+.quiz-code{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:16px;margin:12px 0;font-family:'Courier New',monospace;font-size:.88rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.5;white-space:pre}
+.quiz-fill-input{direction:ltr;unicode-bidi:embed;padding:8px 12px;border:2px solid var(--border);border-radius:6px;font-family:'Courier New',monospace;font-size:.95rem;width:220px}
+.quiz-fill-input.correct{border-color:var(--success);background:#d1fae5}
+.quiz-fill-input.incorrect{border-color:var(--error);background:#fee2e2}
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--unit-color);color:var(--unit-color)}
+@media(max-width:768px){.lesson-title{font-size:1.5rem}.lesson-nav{flex-direction:column}.code-block,.quiz-code{font-size:.8rem;padding:12px}.compare-container{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">Full-Stack Development</div>
+  <a href="../../../../../materials.html">← חזרה לחומרי לימוד</a>
+</div>
+
+<div class="lesson-container">
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#7c3aed">יחידה 3: ASP.NET Core</span>
+    <h1 class="lesson-title">שיעור 3.3 — BindProperty וטפסים</h1>
+    <p class="lesson-subtitle">קבלת נתונים מטפסים, Tag Helpers, AntiForgeryToken</p>
+  </div>
+
+  <div data-premium>
+
+  <div class="lesson-section">
+    <h2>1. שלוש דרכים לקבל נתונים מטופס</h2>
+    <table class="ref-table">
+      <tr><th>שיטה</th><th>תחביר</th><th>יתרון/חיסרון</th></tr>
+      <tr><td>Request.Form</td><td><span class="inline-code">Request.Form["name"]</span></td><td>ישנה, ללא ולידציה</td></tr>
+      <tr><td>פרמטרים</td><td><span class="inline-code">OnPost(string name)</span></td><td>פשוט, מוגבל</td></tr>
+      <tr><td><strong>BindProperty</strong></td><td><span class="inline-code">[BindProperty]</span></td><td>מומלץ! two-way binding</td></tr>
+    </table>
+  </div>
+
+  <div class="lesson-section">
+    <h2>2. BindProperty</h2>
+    <p>מוסיפים <span class="inline-code">[BindProperty]</span> מעל property בקוד, והמערכת מחברת אוטומטית בין שדה הטופס ל-property.</p>
+
+    <div class="compare-container">
+      <div class="compare-box">
+        <div class="compare-label" style="background:#7c3aed">Login.cshtml.cs</div>
+        <div class="code-block" style="margin:0;border-radius:0 0 8px 8px"><span class="keyword">public class</span> <span class="type">LoginModel</span> : <span class="type">PageModel</span>
+{
+    [<span class="type">BindProperty</span>]
+    <span class="keyword">public string</span> Username { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+    [<span class="type">BindProperty</span>]
+    <span class="keyword">public string</span> Password { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+    <span class="keyword">public string</span> Message { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+    <span class="keyword">public void</span> <span class="function">OnPost</span>()
+    {
+        <span class="comment">// Username ו-Password כבר מלאים!</span>
+        Message = <span class="string">$"ברוכים הבאים, {Username}!"</span>;
+    }
+}</div>
+      </div>
+      <div class="compare-box">
+        <div class="compare-label" style="background:#059669">Login.cshtml</div>
+        <div class="code-block" style="margin:0;border-radius:0 0 8px 8px"><span class="tag">&lt;form</span> <span class="attr">method</span>=<span class="value">"post"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">asp-for</span>=<span class="value">"Username"</span><span class="tag"> /&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">asp-for</span>=<span class="value">"Password"</span>
+    <span class="attr">type</span>=<span class="value">"password"</span><span class="tag"> /&gt;</span>
+  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="value">"submit"</span><span class="tag">&gt;</span>התחבר<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;/form&gt;</span>
+
+<span class="razor">@if</span> (Model.Message != <span class="keyword">null</span>)
+{
+  <span class="tag">&lt;p&gt;</span><span class="razor">@Model.Message</span><span class="tag">&lt;/p&gt;</span>
+}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson-section">
+    <h2>3. Tag Helpers</h2>
+    <p>Tag Helpers הם תכונות מיוחדות של Razor שמייצרות HTML דינמי:</p>
+    <table class="ref-table">
+      <tr><th>Tag Helper</th><th>תפקיד</th><th>דוגמה</th></tr>
+      <tr><td><span class="inline-code">asp-for</span></td><td>מחבר input ל-Property</td><td><span class="inline-code">&lt;input asp-for="Name"&gt;</span></td></tr>
+      <tr><td><span class="inline-code">asp-page</span></td><td>קישור לדף Razor</td><td><span class="inline-code">&lt;a asp-page="/About"&gt;</span></td></tr>
+      <tr><td><span class="inline-code">asp-page-handler</span></td><td>ניתוב ל-handler ספציפי</td><td><span class="inline-code">&lt;form asp-page-handler="Login"&gt;</span></td></tr>
+      <tr><td><span class="inline-code">asp-route-*</span></td><td>העברת פרמטרים</td><td><span class="inline-code">&lt;a asp-route-id="5"&gt;</span></td></tr>
+    </table>
+  </div>
+
+  <div class="lesson-section">
+    <h2>4. AntiForgeryToken</h2>
+    <p><strong>CSRF</strong> (Cross-Site Request Forgery) — התקפה שבה אתר זדוני שולח טופס בשם המשתמש ללא ידיעתו.</p>
+    <p>ב-Razor Pages, כל <span class="inline-code">&lt;form method="post"&gt;</span> מוסיף אוטומטית שדה נסתר עם token ייחודי. השרת מוודא שה-token תואם — ואם לא, דוחה את הבקשה.</p>
+    <div class="lesson-tip success">
+      <strong>חדשות טובות!</strong>
+      <p>ב-Razor Pages, AntiForgeryToken פועל אוטומטית. לא צריך לעשות כלום — רק לא לשכוח <span class="inline-code">method="post"</span> בטופס.</p>
+    </div>
+  </div>
+
+  <!-- Quizzes -->
+  <div class="quiz-container">
+    <h3>בדקו את עצמכם — שאלה 1</h3>
+    <p class="quiz-question">איזה attribute גורם ל-property לקבל אוטומטית ערך מטופס?</p>
+    <div class="quiz-options" id="quiz1-options">
+      <label><input type="radio" name="quiz1" value="0"> [Required]</label>
+      <label><input type="radio" name="quiz1" value="1"> [BindProperty]</label>
+      <label><input type="radio" name="quiz1" value="2"> [HttpPost]</label>
+      <label><input type="radio" name="quiz1" value="3"> [FromForm]</label>
+    </div>
+    <button class="quiz-check-btn" onclick="checkQuiz('quiz1',1)">בדיקה</button>
+    <div class="quiz-feedback" id="quiz1-feedback"></div>
+  </div>
+
+  <div class="quiz-container">
+    <h3>שאלה 2</h3>
+    <p class="quiz-question">מה עושה <span class="inline-code">asp-for="Username"</span> ב-input?</p>
+    <div class="quiz-options" id="quiz2-options">
+      <label><input type="radio" name="quiz2" value="0"> מוסיף עיצוב CSS</label>
+      <label><input type="radio" name="quiz2" value="1"> מחבר את ה-input ל-property Username (name + value)</label>
+      <label><input type="radio" name="quiz2" value="2"> מוסיף ולידציה בצד לקוח</label>
+      <label><input type="radio" name="quiz2" value="3"> יוצר משתנה JS בשם Username</label>
+    </div>
+    <button class="quiz-check-btn" onclick="checkQuiz('quiz2',1)">בדיקה</button>
+    <div class="quiz-feedback" id="quiz2-feedback"></div>
+  </div>
+
+  <div class="quiz-container">
+    <h3>שאלה 3</h3>
+    <p class="quiz-question">השלימו את ה-Tag Helper לקישור לדף About:</p>
+    <div class="quiz-code">&lt;a asp-page="______"&gt;אודות&lt;/a&gt;</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <input type="text" id="fill1" class="quiz-fill-input" placeholder="/...">
+      <button class="quiz-check-btn" onclick="checkFill('fill1',['/About'],'quiz3')">בדיקה</button>
+    </div>
+    <div class="quiz-feedback" id="quiz3-feedback"></div>
+  </div>
+
+  <div class="quiz-container">
+    <h3>שאלה 4</h3>
+    <p class="quiz-question">למה צריך AntiForgeryToken?</p>
+    <div class="quiz-options" id="quiz4-options">
+      <label><input type="radio" name="quiz4" value="0"> לשיפור ביצועים</label>
+      <label><input type="radio" name="quiz4" value="1"> למניעת התקפות CSRF</label>
+      <label><input type="radio" name="quiz4" value="2"> לחיבור נתונים מטופס</label>
+      <label><input type="radio" name="quiz4" value="3"> ליצירת URLs ידידותיים</label>
+    </div>
+    <button class="quiz-check-btn" onclick="checkQuiz('quiz4',1)">בדיקה</button>
+    <div class="quiz-feedback" id="quiz4-feedback"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <a href="lesson-3-2.html">&rarr; שיעור קודם: 3.2</a>
+    <a href="lesson-3-4.html">שיעור הבא: 3.4 &larr;</a>
+  </div>
+
+  </div><!-- /data-premium -->
+</div>
+
+<script>
+function checkQuiz(quizId,correctIndex){var options=document.getElementById(quizId+'-options');var feedback=document.getElementById(quizId+'-feedback');var selected=options.querySelector('input[type="radio"]:checked');var labels=options.querySelectorAll('label');var btn=options.parentElement.querySelector('.quiz-check-btn');if(!selected){feedback.className='quiz-feedback incorrect';feedback.textContent='יש לבחור תשובה!';feedback.style.display='block';return;}var idx=parseInt(selected.value);for(var i=0;i<labels.length;i++)labels[i].classList.remove('correct','incorrect','show-correct');if(idx===correctIndex){selected.parentElement.classList.add('correct');feedback.className='quiz-feedback correct';feedback.textContent='נכון!';}else{selected.parentElement.classList.add('incorrect');labels[correctIndex].classList.add('show-correct');feedback.className='quiz-feedback incorrect';feedback.textContent='לא נכון — התשובה הנכונה מסומנת בירוק.';}feedback.style.display='block';var radios=options.querySelectorAll('input[type="radio"]');for(var j=0;j<radios.length;j++)radios[j].disabled=true;btn.disabled=true;}
+function checkFill(inputId,correctAnswers,quizId){var input=document.getElementById(inputId);var feedback=document.getElementById(quizId+'-feedback');var btn=input.closest('.quiz-container').querySelector('.quiz-check-btn');var val=input.value.trim();if(!val){feedback.className='quiz-feedback incorrect';feedback.textContent='הקלד/י תשובה!';feedback.style.display='block';return;}var ok=false;for(var i=0;i<correctAnswers.length;i++){if(val===correctAnswers[i]){ok=true;break;}}if(ok){input.classList.add('correct');feedback.className='quiz-feedback correct';feedback.textContent='נכון!';input.readOnly=true;btn.disabled=true;}else{input.classList.add('incorrect');feedback.className='quiz-feedback incorrect';feedback.textContent='לא נכון, נסו שוב.';}feedback.style.display='block';}
+</script>
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>השיטה המקושרת — Delete ו-Update | Full-Stack Development | בועז חזן</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);--unit-color:#059669}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}.topbar a:hover{text-decoration:underline}
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}.lesson-header{margin-bottom:32px}.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+.lesson-section{margin-bottom:40px}.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}.lesson-section p{line-height:1.8;margin-bottom:12px}.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+.code-block{background:#1e293b;color:#e2e8f0;border-radius:8px;padding:20px;margin:16px 0;font-family:'Courier New',monospace;font-size:.9rem;direction:ltr;text-align:left;overflow-x:auto;line-height:1.6;white-space:pre}.code-block .keyword{color:#818cf8}.code-block .string{color:#fbbf24}.code-block .function{color:#38bdf8}.code-block .comment{color:#64748b;font-style:italic}.code-block .type{color:#67e8f9}
+.inline-code{direction:ltr;unicode-bidi:embed;background:#f1f5f9;padding:2px 8px;border-radius:4px;font-family:'Courier New',monospace;font-size:.88rem;color:var(--primary-dark);display:inline}
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}.lesson-tip strong{display:block;margin-bottom:4px}.lesson-tip p{margin:0;font-size:.95rem}
+.diagram{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:24px 0;padding:24px;background:var(--bg);border-radius:12px;border:1px solid var(--border)}.diagram-box{padding:12px 20px;border-radius:10px;font-weight:700;text-align:center;color:#fff;font-size:.9rem;min-width:100px}.diagram-arrow{font-size:1.3rem;color:var(--text-light);font-weight:700}
+.quiz-container{background:var(--bg-soft);border:2px solid var(--border);border-radius:12px;padding:24px;margin:20px 0}.quiz-container h3{font-size:1.1rem;font-weight:800;margin-bottom:16px;color:var(--unit-color)}.quiz-question{font-weight:700;font-size:1.05rem;margin-bottom:16px;line-height:1.7}
+.quiz-options{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}.quiz-options label{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--bg);border:2px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;line-height:1.6}.quiz-options label:hover{border-color:var(--unit-color)}.quiz-options label.correct{border-color:var(--success);background:#d1fae5}.quiz-options label.incorrect{border-color:var(--error);background:#fee2e2}.quiz-options label.show-correct{border-color:var(--success);background:#d1fae5}
+.quiz-check-btn{padding:10px 24px;background:var(--unit-color);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:.95rem;font-weight:600;cursor:pointer}.quiz-check-btn:disabled{opacity:.5;cursor:not-allowed}
+.quiz-feedback{display:none;margin-top:12px;padding:12px 16px;border-radius:8px;font-weight:600;font-size:.95rem}.quiz-feedback.correct{display:block;background:#d1fae5;color:#065f46}.quiz-feedback.incorrect{display:block;background:#fee2e2;color:#991b1b}
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}.lesson-nav a:hover{border-color:var(--unit-color);color:var(--unit-color)}
+@media(max-width:768px){.lesson-title{font-size:1.5rem}.lesson-nav{flex-direction:column}.code-block{font-size:.8rem;padding:12px}.diagram{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="topbar-title">Full-Stack Development</div><a href="../../../../../materials.html">← חזרה לחומרי לימוד</a></div>
+
+<div class="lesson-container">
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#059669">יחידה 4: SQL & ADO.NET</span>
+    <h1 class="lesson-title">שיעור 4.5 — השיטה המקושרת: Delete ו-Update</h1>
+    <p class="lesson-subtitle">Connected Method, ExecuteNonQuery, asp-route</p>
+  </div>
+
+  <div data-premium>
+
+  <div class="lesson-section">
+    <h2>1. סקירת השיטה המקושרת</h2>
+    <p>בשיטה המקושרת (Connected), פותחים חיבור, מריצים פקודה ישירות, וסוגרים — בלי DataSet.</p>
+    <div class="diagram">
+      <div class="diagram-box" style="background:#059669">Open</div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-box" style="background:#2563eb">Execute</div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-box" style="background:#ef4444">Close</div>
+    </div>
+    <p>שימושי בעיקר לפעולות כתיבה: INSERT, UPDATE, DELETE — כשלא צריך לקרוא נתונים חזרה.</p>
+  </div>
+
+  <div class="lesson-section">
+    <h2>2. מחיקה (DELETE) עם ExecuteNonQuery</h2>
+    <div class="code-block"><span class="keyword">public void</span> <span class="function">OnPostDelete</span>(<span class="keyword">int</span> id)
+{
+    <span class="keyword">string</span> conStr = <span class="string">"..."</span>;
+    <span class="keyword">using</span> (<span class="type">SqlConnection</span> con = <span class="keyword">new</span> <span class="type">SqlConnection</span>(conStr))
+    {
+        <span class="keyword">string</span> query = <span class="string">"DELETE FROM Students WHERE Id = @id"</span>;
+        <span class="type">SqlCommand</span> cmd = <span class="keyword">new</span> <span class="type">SqlCommand</span>(query, con);
+        cmd.Parameters.<span class="function">AddWithValue</span>(<span class="string">"@id"</span>, id);
+
+        con.<span class="function">Open</span>();
+        cmd.<span class="function">ExecuteNonQuery</span>();
+        con.<span class="function">Close</span>();
+    }
+}</div>
+    <p>ב-HTML, העברת ה-ID מהטבלה לכפתור:</p>
+    <div class="code-block"><span class="comment">&lt;!-- asp-route-id מעביר את ה-ID --&gt;</span>
+&lt;form method="post" asp-page-handler="Delete"
+      asp-route-id="@row["Id"]"&gt;
+  &lt;button onclick="return confirm('למחוק?')"&gt;מחק&lt;/button&gt;
+&lt;/form&gt;</div>
+  </div>
+
+  <div class="lesson-section">
+    <h2>3. העברת פרמטרים עם asp-route</h2>
+    <div class="code-block"><span class="comment">&lt;!-- קישור לדף עריכה עם ID --&gt;</span>
+&lt;a asp-page="/Edit" asp-route-id="5"&gt;ערוך&lt;/a&gt;
+<span class="comment">&lt;!-- יוצר: /Edit?id=5 --&gt;</span>
+
+<span class="comment">// קבלה בצד השרת:</span>
+<span class="keyword">public void</span> <span class="function">OnGet</span>(<span class="keyword">int</span> id)
+{
+    <span class="comment">// id = 5</span>
+}</div>
+  </div>
+
+  <div class="lesson-section">
+    <h2>4. עדכון (UPDATE)</h2>
+    <p>זרימה דו-שלבית: OnGet טוען את הנתונים הנוכחיים, OnPost שומר את השינויים.</p>
+    <div class="code-block"><span class="comment">// OnGet — טוען נתונים קיימים לטופס</span>
+<span class="keyword">public void</span> <span class="function">OnGet</span>(<span class="keyword">int</span> id)
+{
+    <span class="keyword">string</span> query = <span class="string">"SELECT * FROM Students WHERE Id = @id"</span>;
+    <span class="comment">// Fill form fields from DataTable...</span>
+}
+
+<span class="comment">// OnPost — שומר את השינויים</span>
+<span class="keyword">public void</span> <span class="function">OnPost</span>()
+{
+    <span class="keyword">string</span> query = <span class="string">"UPDATE Students SET Name=@name, Grade=@grade WHERE Id=@id"</span>;
+    <span class="keyword">using</span> (<span class="type">SqlConnection</span> con = <span class="keyword">new</span> <span class="type">SqlConnection</span>(conStr))
+    {
+        <span class="type">SqlCommand</span> cmd = <span class="keyword">new</span> <span class="type">SqlCommand</span>(query, con);
+        cmd.Parameters.<span class="function">AddWithValue</span>(<span class="string">"@name"</span>, Name);
+        cmd.Parameters.<span class="function">AddWithValue</span>(<span class="string">"@grade"</span>, Grade);
+        cmd.Parameters.<span class="function">AddWithValue</span>(<span class="string">"@id"</span>, StudentId);
+        con.<span class="function">Open</span>();
+        cmd.<span class="function">ExecuteNonQuery</span>();
+    }
+}</div>
+  </div>
+
+  <div class="lesson-section">
+    <h2>5. טיפול בשגיאות — try/catch</h2>
+    <div class="code-block"><span class="keyword">try</span>
+{
+    con.<span class="function">Open</span>();
+    cmd.<span class="function">ExecuteNonQuery</span>();
+    Message = <span class="string">"הנתונים עודכנו בהצלחה!"</span>;
+}
+<span class="keyword">catch</span> (<span class="type">SqlException</span> ex)
+{
+    <span class="keyword">if</span> (ex.Number == <span class="string">2627</span>) <span class="comment">// UNIQUE constraint</span>
+        ErrorMessage = <span class="string">"ערך כפול — כבר קיים!"</span>;
+    <span class="keyword">else</span>
+        ErrorMessage = <span class="string">"שגיאה: "</span> + ex.Message;
+}
+<span class="keyword">finally</span>
+{
+    con.<span class="function">Close</span>();
+}</div>
+    <div class="lesson-tip success">
+      <strong>using = finally אוטומטי</strong>
+      <p>כשמשתמשים ב-<span class="inline-code">using</span>, החיבור נסגר אוטומטית גם אם יש שגיאה — לא צריך finally.</p>
+    </div>
+  </div>
+
+  <!-- Quizzes -->
+  <div class="quiz-container">
+    <h3>שאלה 1</h3>
+    <p class="quiz-question">איזו שיטה מריצה INSERT/UPDATE/DELETE בשיטה המקושרת?</p>
+    <div class="quiz-options" id="quiz1-options">
+      <label><input type="radio" name="quiz1" value="0"> ExecuteReader()</label>
+      <label><input type="radio" name="quiz1" value="1"> ExecuteNonQuery()</label>
+      <label><input type="radio" name="quiz1" value="2"> ExecuteScalar()</label>
+      <label><input type="radio" name="quiz1" value="3"> adapter.Update()</label>
+    </div>
+    <button class="quiz-check-btn" onclick="checkQuiz('quiz1',1)">בדיקה</button>
+    <div class="quiz-feedback" id="quiz1-feedback"></div>
+  </div>
+
+  <div class="quiz-container">
+    <h3>שאלה 2</h3>
+    <p class="quiz-question">למה כדאי להשתמש ב-<span class="inline-code">using</span> עם SqlConnection?</p>
+    <div class="quiz-options" id="quiz2-options">
+      <label><input type="radio" name="quiz2" value="0"> מאיץ את השאילתה</label>
+      <label><input type="radio" name="quiz2" value="1"> מבטיח שהחיבור ייסגר גם אם יש חריגה</label>
+      <label><input type="radio" name="quiz2" value="2"> מונע SQL Injection</label>
+    </div>
+    <button class="quiz-check-btn" onclick="checkQuiz('quiz2',1)">בדיקה</button>
+    <div class="quiz-feedback" id="quiz2-feedback"></div>
+  </div>
+
+  <div class="quiz-container">
+    <h3>שאלה 3</h3>
+    <p class="quiz-question">בזרימת Update, מה קורה ב-OnGet?</p>
+    <div class="quiz-options" id="quiz3-options">
+      <label><input type="radio" name="quiz3" value="0"> שומר את השינויים ל-DB</label>
+      <label><input type="radio" name="quiz3" value="1"> טוען את הנתונים הנוכחיים מה-DB לתוך הטופס</label>
+      <label><input type="radio" name="quiz3" value="2"> מוחק את הרשומה</label>
+    </div>
+    <button class="quiz-check-btn" onclick="checkQuiz('quiz3',1)">בדיקה</button>
+    <div class="quiz-feedback" id="quiz3-feedback"></div>
+  </div>
+
+  <div class="lesson-nav">
+    <a href="lesson-4-4.html">&rarr; שיעור קודם: 4.4</a>
+    <a href="lesson-4-6.html">שיעור הבא: 4.6 &larr;</a>
+  </div>
+
+  </div>
+</div>
+
+<script>
+function checkQuiz(qid,ci){var o=document.getElementById(qid+'-options'),f=document.getElementById(qid+'-feedback'),s=o.querySelector('input:checked'),ls=o.querySelectorAll('label'),b=o.parentElement.querySelector('.quiz-check-btn');if(!s){f.className='quiz-feedback incorrect';f.textContent='יש לבחור תשובה!';f.style.display='block';return;}var i=parseInt(s.value);for(var x=0;x<ls.length;x++)ls[x].classList.remove('correct','incorrect','show-correct');if(i===ci){s.parentElement.classList.add('correct');f.className='quiz-feedback correct';f.textContent='נכון!';}else{s.parentElement.classList.add('incorrect');ls[ci].classList.add('show-correct');f.className='quiz-feedback incorrect';f.textContent='לא נכון — התשובה הנכונה מסומנת בירוק.';}f.style.display='block';var rs=o.querySelectorAll('input');for(var j=0;j<rs.length;j++)rs[j].disabled=true;b.disabled=true;}
+</script>
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

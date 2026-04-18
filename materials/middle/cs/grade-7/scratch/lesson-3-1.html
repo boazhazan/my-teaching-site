@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>קלט ומשתנים | סקראץ' מאסטר</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06)}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+.exercise-box{background:var(--bg);border:2px solid var(--primary);border-radius:12px;padding:24px;margin:24px 0}
+.exercise-box h3{color:var(--primary);margin-bottom:12px}
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--primary);color:var(--primary)}
+.scratch-wrap{direction:ltr;text-align:left;background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin:16px 0;font-family:'Courier New',monospace}
+.sb{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-weight:700;color:#fff;font-size:.88rem;margin:4px 0;width:fit-content;line-height:1.4}
+.sb.hat{border-top:4px solid rgba(0,0,0,.15);border-radius:12px 12px 8px 8px;padding-top:10px}
+.sb .hole{display:inline-flex;align-items:center;background:rgba(255,255,255,.25);border-radius:16px;padding:2px 10px;font-weight:600;font-size:.82rem;min-width:30px;justify-content:center}
+.sb-indent{margin-left:24px}
+.sb.motion{background:#4C97FF}.sb.looks{background:#9966FF}.sb.sound{background:#CF63CF}.sb.events{background:#FFBF00;color:#333}.sb.control{background:#FFAB19;color:#333}.sb.sensing{background:#5CB1D6}.sb.operators{background:#59C059}.sb.variables{background:#FF8C1A}.sb.my-blocks{background:#FF6680}.sb.pen{background:#0fBD8C}
+@media(max-width:768px){.lesson-title{font-size:1.5rem}.lesson-nav{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <span class="topbar-title">סקראץ' מאסטר 🐱</span>
+  <a href="course.html">&larr; חזרה לקורס</a>
+</div>
+
+<!-- Lesson Content -->
+<div class="lesson-container">
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#7c3aed">יחידה 3: משתנים ותנאים</span>
+    <h1 class="lesson-title">קלט ומשתנים</h1>
+    <p class="lesson-subtitle">יצירת משתנים, שינוי ערכים, קלט מהמשתמש ומשחק Snake</p>
+  </div>
+
+  <!-- Section 1: What is a Variable? -->
+  <div class="lesson-section">
+    <h2>1. מה זה משתנה?</h2>
+
+    <p>דמיינו שיש לכם <strong>קופסה עם תווית</strong>. על הקופסה כתוב שם — למשל "ניקוד" — ובתוכה אפשר לשים ערך, כמו המספר 0. בכל רגע אפשר לפתוח את הקופסה, לראות מה בפנים, למחוק את הערך הישן ולכתוב ערך חדש. זה בדיוק <strong>משתנה</strong>!</p>
+
+    <p>אפשר לחשוב על משתנה גם כמו <strong>לוח מחיק</strong> — כותבים עליו מספר, מוחקים, וכותבים מספר אחר. השם של הלוח לא משתנה, אבל מה שרשום עליו יכול להשתנות בכל רגע.</p>
+
+    <p>לכל משתנה יש שני חלקים:</p>
+    <ul>
+      <li><strong>שם (Name)</strong> — התווית על הקופסה. למשל: "ניקוד", "חיים", "שם_שחקן"</li>
+      <li><strong>ערך (Value)</strong> — מה שנמצא בתוך הקופסה. למשל: 0, 3, "בועז"</li>
+    </ul>
+
+    <p>הערך יכול להשתנות במהלך התוכנית — ולכן קוראים לזה <strong>"משתנה"</strong>! כשהשחקן אוסף מטבע, הניקוד עולה ב-1. כשהוא מפסיד חיים, מספר החיים יורד ב-1. בלי משתנים, לא היינו יכולים לזכור שום דבר.</p>
+
+    <h3>דוגמאות למשתנים במשחקים</h3>
+    <ul>
+      <li><strong>ניקוד (score)</strong> — מתחיל ב-0, עולה כל פעם שהשחקן עושה משהו טוב</li>
+      <li><strong>חיים (lives)</strong> — מתחיל ב-3, יורד כשהשחקן נפגע</li>
+      <li><strong>שם שחקן</strong> — טקסט שהמשתמש מקליד בתחילת המשחק</li>
+      <li><strong>מהירות</strong> — מספר שקובע כמה מהר הדמות זזה</li>
+      <li><strong>רמה (level)</strong> — מתחיל ב-1, עולה כשהשחקן מתקדם</li>
+    </ul>
+
+    <div class="lesson-tip">
+      <strong>💡 למה חשוב לתת שם משמעותי?</strong>
+      <p>תמיד תנו למשתנה שם שמתאר מה הוא שומר. "ניקוד" הרבה יותר ברור מ-"x" או "דבר1". כשתחזרו לקוד אחרי שבוע — תודו לעצמכם!</p>
+    </div>
+  </div>
+
+  <!-- Section 2: Creating Variables in Scratch -->
+  <div class="lesson-section">
+    <h2>2. יצירת משתנה בסקראץ'</h2>
+
+    <p>בסקראץ', משתנים נמצאים בקטגוריית <strong>"משתנים"</strong> — הקטגוריה הכתומה. ככה יוצרים משתנה חדש:</p>
+
+    <ol>
+      <li>לחצו על הקטגוריה <strong>"משתנים"</strong> (כתום) בצד שמאל</li>
+      <li>לחצו על <strong>"צור משתנה"</strong> (Make a Variable)</li>
+      <li>תנו למשתנה <strong>שם משמעותי</strong> — למשל "ניקוד"</li>
+      <li>בחרו: <strong>"לכל הדמויות"</strong> (For all sprites) או <strong>"לדמות הזאת בלבד"</strong> (For this sprite only)</li>
+      <li>לחצו <strong>"אישור"</strong></li>
+    </ol>
+
+    <p>ברגע שיצרתם משתנה, מופיעים בלוקים חדשים שאפשר להשתמש בהם:</p>
+
+    <div class="scratch-wrap">
+      <div class="sb variables">set <span class="hole">ניקוד</span> to <span class="hole">0</span></div>
+      <div class="sb variables">change <span class="hole">ניקוד</span> by <span class="hole">1</span></div>
+      <div class="sb variables">show variable <span class="hole">ניקוד</span></div>
+      <div class="sb variables">hide variable <span class="hole">ניקוד</span></div>
+    </div>
+
+    <p>הבלוקים העיקריים:</p>
+    <ul>
+      <li><strong>קבע [ניקוד] ל-0</strong> — מגדיר את הערך של המשתנה. מוחק את מה שהיה קודם ושם ערך חדש</li>
+      <li><strong>שנה [ניקוד] ב-1</strong> — מוסיף (או מחסיר) מהערך הנוכחי. אם הניקוד הוא 5 ונשנה ב-1, הוא יהפוך ל-6</li>
+      <li><strong>הצג משתנה / הסתר משתנה</strong> — שולט אם המשתנה מוצג על הבמה או לא</li>
+    </ul>
+
+    <div class="lesson-tip warning">
+      <strong>⚠️ "קבע" לעומת "שנה" — אל תתבלבלו!</strong>
+      <p><strong>"קבע ל-"</strong> מחליף את הערך לחלוטין. <strong>"שנה ב-"</strong> מוסיף (או מחסיר) מהערך הקיים. אם הניקוד הוא 10: "קבע ל-5" ישנה ל-5, אבל "שנה ב-5" ישנה ל-15!</p>
+    </div>
+  </div>
+
+  <!-- Section 3: Displaying Variables on Stage -->
+  <div class="lesson-section">
+    <h2>3. הצגת משתנה על הבמה</h2>
+
+    <p>אחד הדברים הכי נוחים בסקראץ' — אפשר <strong>לראות את ערך המשתנה בזמן אמת</strong> על הבמה!</p>
+
+    <p>ליד שם המשתנה ברשימת הבלוקים יש <strong>תיבת סימון</strong> (checkbox). כשהיא מסומנת — המשתנה מוצג על הבמה. כשהיא לא מסומנת — הוא מוסתר.</p>
+
+    <h3>שלושה מצבי תצוגה</h3>
+    <p>אם תלחצו קליק ימני על צג המשתנה בבמה, תוכלו לבחור בין שלושה מצבים:</p>
+    <ul>
+      <li><strong>רגיל (normal readout)</strong> — מציג את השם והערך: <code>ניקוד: 10</code></li>
+      <li><strong>תצוגה גדולה (large readout)</strong> — מציג רק את הערך בגודל ענק — מושלם למשחקים!</li>
+      <li><strong>סליידר (slider)</strong> — מוסיף פס גלילה שמאפשר לשנות את הערך בעזרת העכבר</li>
+    </ul>
+
+    <div class="lesson-tip success">
+      <strong>✅ טיפ לדיבוג (ניפוי שגיאות)</strong>
+      <p>כשמשהו לא עובד כמו שציפיתם — הציגו את כל המשתנים על הבמה! ככה תוכלו לראות בדיוק מה הערך של כל משתנה בכל רגע, ולגלות איפה הבעיה. זה אחד הכלים הכי חזקים של מתכנת.</p>
+    </div>
+  </div>
+
+  <!-- Section 4: User Input — Ask and Wait -->
+  <div class="lesson-section">
+    <h2>4. קלט מהמשתמש — שאל והמתן</h2>
+
+    <p>עד עכשיו, כל הערכים בתוכניות שלנו נקבעו מראש על ידינו. אבל מה אם נרצה שה<strong>משתמש</strong> יכניס ערך? למשל — שיקליד את השם שלו?</p>
+
+    <p>לשם כך יש בלוק מיוחד בקטגוריית <strong>"חישה"</strong> (תכלת):</p>
+
+    <div class="scratch-wrap">
+      <div class="sb sensing">ask <span class="hole">?מה שמך</span> and wait</div>
+    </div>
+
+    <p>הבלוק <strong>"שאל ___ והמתן"</strong> עושה שלושה דברים:</p>
+    <ol>
+      <li>מציג את השאלה על הבמה</li>
+      <li>פותח תיבת קלט שבה המשתמש יכול להקליד תשובה</li>
+      <li>ממתין עד שהמשתמש לוחץ Enter או על כפתור ה-V</li>
+    </ol>
+
+    <p>התשובה שהמשתמש הקליד נשמרת במשתנה מיוחד ומובנה ששמו <strong>"תשובה" (answer)</strong>:</p>
+
+    <div class="scratch-wrap">
+      <div class="sb sensing" style="border-radius:16px;padding:4px 14px">answer</div>
+    </div>
+
+    <div class="lesson-tip warning">
+      <strong>⚠️ חשוב מאוד: "תשובה" היא זמנית!</strong>
+      <p>המשתנה "תשובה" נמחק ומוחלף בכל פעם שמשתמשים בבלוק "שאל והמתן". לכן, אם אתם צריכים לזכור את התשובה — <strong>שמרו אותה מיד למשתנה</strong> שלכם! אחרת היא תאבד.</p>
+    </div>
+
+    <h3>דוגמה: שואלים שם ומברכים</h3>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb sensing">ask <span class="hole">?מה שמך</span> and wait</div>
+      <div class="sb variables">set <span class="hole">שם</span> to <span class="hole">answer</span></div>
+      <div class="sb looks">say <span class="hole">join [!שלום ] [שם]</span> for <span class="hole">3</span> seconds</div>
+    </div>
+
+    <p>מה קורה כאן?</p>
+    <ol>
+      <li>כשלוחצים על הדגל הירוק — התוכנית מתחילה</li>
+      <li>מופיעה שאלה: "מה שמך?" — המשתמש מקליד תשובה</li>
+      <li>התשובה נשמרת במשתנה "שם" (כדי לא לאבד אותה)</li>
+      <li>הדמות אומרת "שלום [שם]!" למשך 3 שניות</li>
+    </ol>
+  </div>
+
+  <!-- Section 5: Combining Variables — Age Calculator -->
+  <div class="lesson-section">
+    <h2>5. שילוב משתנים בתוכנית — מחשבון גיל</h2>
+
+    <p>עכשיו נשלב את כל מה שלמדנו — משתנים, קלט, ופעולות חשבון — לתוכנית שלמה! נבנה <strong>מחשבון גיל</strong> ששואל את המשתמש פרטים ומחשב את הגיל שלו.</p>
+
+    <h3>מה התוכנית עושה?</h3>
+    <ol>
+      <li>שואלת את המשתמש מה השם שלו</li>
+      <li>שומרת את השם במשתנה</li>
+      <li>שואלת באיזו שנה הוא נולד</li>
+      <li>שומרת את שנת הלידה במשתנה</li>
+      <li>מחשבת את הגיל (2026 פחות שנת הלידה)</li>
+      <li>מציגה הודעה עם השם והגיל</li>
+    </ol>
+
+    <h3>הקוד המלא</h3>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb sensing">ask <span class="hole">?מה שמך</span> and wait</div>
+      <div class="sb variables">set <span class="hole">שם</span> to <span class="hole">answer</span></div>
+      <div class="sb sensing">ask <span class="hole">?באיזו שנה נולדת</span> and wait</div>
+      <div class="sb variables">set <span class="hole">שנת_לידה</span> to <span class="hole">answer</span></div>
+      <div class="sb variables">set <span class="hole">גיל</span> to <span class="hole">(2026) - (שנת_לידה)</span></div>
+      <div class="sb looks">say <span class="hole">join [שם] [ , אתה בן ] [גיל]</span> for <span class="hole">4</span> seconds</div>
+    </div>
+
+    <p>שימו לב לכמה דברים חשובים:</p>
+    <ul>
+      <li>אנחנו שואלים שאלה <strong>ומיד שומרים את התשובה</strong> למשתנה, לפני ששואלים שאלה נוספת</li>
+      <li>החישוב <code>2026 - שנת_לידה</code> משתמש בבלוק החיסור מקטגוריית "פעולות" (ירוק)</li>
+      <li>ההודעה הסופית <strong>מחברת</strong> (join) את השם, טקסט, והגיל לביטוי שלם</li>
+    </ul>
+
+    <div class="lesson-tip">
+      <strong>💡 נסו בעצמכם!</strong>
+      <p>פתחו את סקראץ' ובנו את התוכנית. נסו להוסיף עוד שאלה — למשל "מה העיר שלך?" — ולשלב אותה בהודעה הסופית: "שלום בועז מתל-אביב, אתה בן 13!"</p>
+    </div>
+  </div>
+
+  <!-- Section 6: Snake Game Concept -->
+  <div class="lesson-section">
+    <h2>6. משחק Snake — איך משתנים מאפשרים את זה?</h2>
+
+    <p>אחד המשחקים הקלאסיים ביותר הוא <strong>Snake</strong> (נחש) — הנחש זז על המסך, אוכל אוכל, גדל, ולא יכול לפגוע בעצמו. נשמע מורכב? בואו נראה איך <strong>משתנים</strong> הם הלב של המשחק!</p>
+
+    <h3>משתנים שצריך ל-Snake</h3>
+    <ul>
+      <li><strong>ניקוד</strong> — מתחיל ב-0, עולה ב-1 כל פעם שהנחש אוכל</li>
+      <li><strong>מהירות</strong> — מתחילה ב-5, עולה לאט ככל שהניקוד גדל (המשחק נהיה קשה יותר!)</li>
+      <li><strong>מיקום X</strong> — המיקום האופקי של ראש הנחש</li>
+      <li><strong>מיקום Y</strong> — המיקום האנכי של ראש הנחש</li>
+      <li><strong>כיוון</strong> — לאן הנחש זז (ימינה, שמאלה, למעלה, למטה)</li>
+    </ul>
+
+    <p>כל פעם שהנחש זז צעד אחד, המשתנים <strong>מיקום X</strong> ו-<strong>מיקום Y</strong> משתנים. כשהוא אוכל — <strong>הניקוד</strong> עולה. כשהניקוד גדל — <strong>המהירות</strong> עולה. בלי משתנים, אין דרך לזכור איפה הנחש נמצא, מה הניקוד, או כמה מהר הוא צריך לזוז!</p>
+
+    <div class="lesson-tip success">
+      <strong>✅ הרעיון המרכזי</strong>
+      <p>משתנים הם ה"זיכרון" של התוכנית. כל משחק, כל אפליקציה, כל תוכנה — משתמשים במשתנים כדי לזכור מידע ולעקוב אחרי מה שקורה. עכשיו שאתם יודעים מה זה משתנה — אתם יכולים לבנות דברים מדהימים!</p>
+    </div>
+  </div>
+
+  <!-- Section 7: Exercise -->
+  <div class="lesson-section">
+    <div class="exercise-box">
+      <h3>📝 תרגיל: בנו בסקראץ'</h3>
+      <p>פתחו את סקראץ' ונסו לבנות את התוכניות הבאות:</p>
+      <ol>
+        <li><strong>ברכת שלום אישית</strong> — צרו תוכנית ששואלת את המשתמש מה שמו ואז הדמות אומרת "שלום [שם], מה שלומך?"</li>
+        <li><strong>מחשבון חיבור</strong> — צרו תוכנית ששואלת שני מספרים ומציגה את הסכום שלהם. למשל: "הכנס מספר ראשון" → 5, "הכנס מספר שני" → 3, הדמות אומרת "התוצאה היא 8"</li>
+        <li><strong>מונה לחיצות</strong> — צרו משתנה "ניקוד" שמתחיל ב-0. כל פעם שלוחצים על הדמות, הניקוד עולה ב-1. הציגו את הניקוד על הבמה</li>
+      </ol>
+      <p style="margin-top:16px;color:var(--text-light);font-size:.9rem"><strong>בונוס:</strong> צרו חידון (quiz) עם 3 שאלות. לכל שאלה — בדקו אם התשובה נכונה (בעזרת בלוק "אם") ואם כן, הוסיפו 1 לניקוד. בסוף הציגו את הציון הסופי מתוך 3!</p>
+    </div>
+  </div>
+
+  <!-- Lesson Navigation -->
+  <div class="lesson-nav">
+    <a href="lesson-2-3.html">השיעור הקודם &rarr;</a>
+    <a href="lesson-3-2.html">השיעור הבא &larr;</a>
+  </div>
+
+</div>
+
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>מבוא לאלגוריתמיקה | סקראץ' מאסטר</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+.exercise-box{background:var(--bg);border:2px solid var(--primary);border-radius:12px;padding:24px;margin:24px 0}
+.exercise-box h3{color:var(--primary);margin-bottom:12px}
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--primary);color:var(--primary)}
+/* Scratch block styles */
+.scratch-wrap{direction:ltr;text-align:left;background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin:16px 0;font-family:'Courier New',monospace}
+.sb{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-weight:700;color:#fff;font-size:.88rem;margin:4px 0;width:fit-content;line-height:1.4}
+.sb.hat{border-top:4px solid rgba(0,0,0,.15);border-radius:12px 12px 8px 8px;padding-top:10px}
+.sb .hole{display:inline-flex;align-items:center;background:rgba(255,255,255,.25);border-radius:16px;padding:2px 10px;font-weight:600;font-size:.82rem;min-width:30px;justify-content:center}
+.sb-indent{margin-left:24px}
+.sb.motion{background:#4C97FF}
+.sb.looks{background:#9966FF}
+.sb.sound{background:#CF63CF}
+.sb.events{background:#FFBF00;color:#333}
+.sb.control{background:#FFAB19;color:#333}
+.sb.sensing{background:#5CB1D6}
+.sb.operators{background:#59C059}
+.sb.variables{background:#FF8C1A}
+.sb.my-blocks{background:#FF6680}
+.sb.pen{background:#0fBD8C}
+.flow-chart{display:flex;flex-direction:column;align-items:center;gap:0;margin:20px auto;max-width:300px}
+.flow-box{padding:12px 24px;border-radius:8px;font-weight:700;text-align:center;width:100%;font-size:.95rem}
+.flow-start{background:#d1fae5;color:#065f46;border-radius:24px}
+.flow-process{background:#dbeafe;color:#1e40af}
+.flow-decision{background:#fef3c7;color:#92400e;transform:rotate(0deg);clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);padding:28px 16px;min-height:80px;display:flex;align-items:center;justify-content:center}
+.flow-end{background:#fecdd3;color:#9f1239;border-radius:24px}
+.flow-arrow{font-size:1.3rem;color:var(--text-light);padding:4px 0}
+.flow-split{display:flex;gap:24px;width:100%;justify-content:center;margin:8px 0}
+.flow-branch{display:flex;flex-direction:column;align-items:center;gap:0;flex:1}
+.flow-label{font-size:.85rem;font-weight:600;color:var(--text-light);margin-bottom:4px}
+@media(max-width:768px){
+  .lesson-title{font-size:1.5rem}
+  .lesson-nav{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <span class="topbar-title">סקראץ' מאסטר 🐱</span>
+  <a href="course.html">&larr; חזרה לקורס</a>
+</div>
+
+<!-- Lesson Content -->
+<div class="lesson-container">
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#4C97FF">יחידה 1: הכרת סקראץ'</span>
+    <h1 class="lesson-title">מבוא לאלגוריתמיקה</h1>
+    <p class="lesson-subtitle">מהו אלגוריתם, שפת תכנות, תרשים זרימה וחשיבה לוגית</p>
+  </div>
+
+  <!-- Section 1: What is an Algorithm? -->
+  <div class="lesson-section">
+    <h2>1. מה זה אלגוריתם?</h2>
+
+    <p>דמיינו שאתם צריכים להסביר למישהו שמעולם לא בישל — איך מכינים חביתה. מה הייתם אומרים?</p>
+
+    <p>בטח הייתם נותנים הוראות מדויקות, צעד אחרי צעד: "קח ביצה", "שבור אותה לתוך קערה", "הוסף מעט מלח", "חמם מחבת עם שמן", "שפוך את הביצה למחבת", "חכה עד שהביצה מתגבשת", "הוצא מהמחבת". זה בדיוק <strong>אלגוריתם</strong>!</p>
+
+    <p><strong>אלגוריתם</strong> הוא סדרה של הוראות מדויקות וסדורות שמטרתן לפתור בעיה או לבצע משימה. כל הוראה ברורה, חד-משמעית, ואפשר לבצע אותה בלי לחשוב יותר מדי.</p>
+
+    <h3>דוגמאות מהחיים</h3>
+    <ul>
+      <li><strong>מתכון בישול</strong> — רשימת מרכיבים + שלבי הכנה מסודרים</li>
+      <li><strong>הנחיות ניווט (GPS)</strong> — "פנה ימינה, המשך 200 מטר, פנה שמאלה..." — הוראות צעד-אחרי-צעד שכל אחד יכול לעקוב אחריהן</li>
+      <li><strong>חציית כביש</strong> — עצור, הסתכל ימינה, הסתכל שמאלה, אם אין מכוניות — חצה</li>
+      <li><strong>שגרת בוקר</strong> — קום, התלבש, צחצח שיניים, אכול ארוחת בוקר, צא לבית הספר</li>
+    </ul>
+
+    <h3>מאפיינים של אלגוריתם טוב</h3>
+    <p>לא כל רצף הוראות הוא אלגוריתם. אלגוריתם אמיתי חייב לעמוד בכמה תנאים:</p>
+    <ol>
+      <li><strong>סופי</strong> — חייב להסתיים מתישהו (לא לרוץ לנצח)</li>
+      <li><strong>מסודר</strong> — יש סדר ברור לשלבים (שלב 1 לפני שלב 2)</li>
+      <li><strong>מדויק</strong> — כל הוראה חד-משמעית, לא ניתנת לפרשנות</li>
+      <li><strong>קלט ופלט</strong> — מקבל נתונים (קלט) ומייצר תוצאה (פלט)</li>
+    </ol>
+
+    <div class="lesson-tip">
+      <strong>💡 אנלוגיה: GPS</strong>
+      <p>חשבו על אלגוריתם כמו הוראות ניווט ב-GPS. כל צעד מדויק ("פנה ימינה אחרי 100 מטר"), יש סדר ברור, ובסוף מגיעים ליעד. אם הוראה אחת לא ברורה — נתקעים! אותו דבר בדיוק באלגוריתם.</p>
+    </div>
+  </div>
+
+  <!-- Section 2: Programming Languages -->
+  <div class="lesson-section">
+    <h2>2. שפת תכנות — למה צריך?</h2>
+
+    <p>אם אנחנו, בני אדם, יודעים לתאר אלגוריתמים בעברית — למה צריך שפת תכנות?</p>
+
+    <p>הסיבה פשוטה: <strong>מחשבים לא מבינים עברית, אנגלית, או שום שפה אנושית</strong>. מחשב מבין רק חשמל — פועל או כבוי, 1 או 0. שפת תכנות היא "מתרגמת" שמאפשרת לנו לכתוב הוראות בצורה שאנחנו מבינים, והמחשב ידע להפוך אותן לפעולות.</p>
+
+    <h3>השוואה: שפה מדוברת לעומת שפת תכנות</h3>
+    <ul>
+      <li><strong>שפה מדוברת</strong> (עברית, אנגלית) — יש דקדוק, מילים, משפטים. משמשת לתקשורת בין בני אדם.</li>
+      <li><strong>שפת תכנות</strong> (Scratch, Python, JavaScript) — יש תחביר (syntax), פקודות, מבנים. משמשת לתקשורת בין אדם למחשב.</li>
+    </ul>
+
+    <p>בדיוק כמו ששפה מדוברת דורשת כללי דקדוק, שפת תכנות דורשת כללי תחביר. טעות קטנה — והמחשב לא מבין מה רוצים ממנו!</p>
+
+    <h3>סוגי שפות תכנות</h3>
+    <ul>
+      <li><strong>שפות ויזואליות (חזותיות)</strong> — כמו <strong>Scratch</strong>! מתכנתים על ידי גרירת בלוקים צבעוניים ושילוב ביניהם, כמו פאזל. מושלם ללמידה — אי אפשר לעשות שגיאות תחביר!</li>
+      <li><strong>שפות טקסטואליות</strong> — כמו Python, JavaScript, Java. כותבים קוד בטקסט חופשי. גמישות מקסימלית, אבל דורשות דיוק בכתיבה.</li>
+    </ul>
+
+    <div class="lesson-tip success">
+      <strong>✅ למה Scratch?</strong>
+      <p>Scratch פותחה ב-MIT (המכון הטכנולוגי של מסצ'וסטס) במיוחד בשביל ללמד תכנות. במקום לכתוב קוד ולהתמודד עם שגיאות כתיב, אנחנו גוררים בלוקים צבעוניים ומחברים אותם — ומתמקדים ב<strong>חשיבה</strong> ולא בתחביר!</p>
+    </div>
+
+    <p>הנה דוגמה: כדי לגרום לדמות ב-Scratch ללכת ולומר משהו, פשוט מחברים בלוקים:</p>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb motion">move <span class="hole">10</span> steps</div>
+      <div class="sb looks">say <span class="hole">שלום!</span> for <span class="hole">2</span> seconds</div>
+    </div>
+
+    <p>קל, צבעוני, ואינטואיטיבי — זה Scratch!</p>
+  </div>
+
+  <!-- Section 3: Flowcharts -->
+  <div class="lesson-section">
+    <h2>3. תרשים זרימה</h2>
+
+    <p>לפני שמתחילים לתכנת, כדאי <strong>לתכנן</strong>. אחד הכלים הכי שימושיים לתכנון אלגוריתם הוא <strong>תרשים זרימה</strong> (Flowchart) — ייצוג ויזואלי של האלגוריתם באמצעות צורות וחיצים.</p>
+
+    <h3>הצורות הבסיסיות</h3>
+    <ul>
+      <li><strong>אליפסה (עיגול מוארך)</strong> — התחלה או סוף</li>
+      <li><strong>מלבן</strong> — פעולה / הוראה</li>
+      <li><strong>מעוין</strong> — תנאי / שאלה (כן/לא)</li>
+      <li><strong>חץ</strong> — כיוון הזרימה (מה בא אחרי מה)</li>
+    </ul>
+
+    <div class="lesson-tip">
+      <strong>💡 למה תרשים זרימה?</strong>
+      <p>תרשים זרימה עוזר לנו "לראות" את האלגוריתם. קל יותר לזהות בעיות ולשפר את הפתרון כשרואים אותו בצורה ויזואלית, במקום לקרוא רשימת הוראות ארוכה.</p>
+    </div>
+
+    <h3>דוגמה: האם לקחת מטרייה?</h3>
+    <p>נבנה תרשים זרימה לאלגוריתם פשוט: יוצאים מהבית — האם צריך לקחת מטרייה?</p>
+
+    <div class="flow-chart">
+      <div class="flow-box flow-start">התחלה</div>
+      <div class="flow-arrow">&#x2193;</div>
+      <div class="flow-box flow-decision">האם יורד גשם?</div>
+      <div class="flow-arrow">&#x2193;</div>
+      <div class="flow-split">
+        <div class="flow-branch">
+          <div class="flow-label">כן</div>
+          <div class="flow-box flow-process">קח מטרייה</div>
+          <div class="flow-arrow">&#x2193;</div>
+        </div>
+        <div class="flow-branch">
+          <div class="flow-label">לא</div>
+          <div class="flow-arrow">&#x2193;</div>
+        </div>
+      </div>
+      <div class="flow-box flow-process">צא מהבית</div>
+      <div class="flow-arrow">&#x2193;</div>
+      <div class="flow-box flow-end">סוף</div>
+    </div>
+
+    <p>שימו לב: המעוין (תנאי) תמיד מוביל לשני מסלולים — <strong>כן</strong> או <strong>לא</strong>. זה אחד הכלים החזקים ביותר בתכנות — היכולת לקבל החלטות!</p>
+
+    <div class="lesson-tip warning">
+      <strong>⚠️ טעות נפוצה</strong>
+      <p>כשמציירים תרשים זרימה — אל תשכחו את ה"סוף"! כל אלגוריתם חייב להסתיים. תרשים בלי נקודת סיום הוא כמו מתכון שאף פעם לא מגיע למנה מוכנה.</p>
+    </div>
+  </div>
+
+  <!-- Section 4: Algorithmic Thinking -->
+  <div class="lesson-section">
+    <h2>4. חשיבה אלגוריתמית</h2>
+
+    <p>חשיבה אלגוריתמית היא לא רק לכתוב קוד — היא דרך חשיבה שעוזרת לנו לפתור בעיות בצורה מסודרת ויעילה. זוהי מיומנות שמשמשת לא רק בתכנות, אלא בכל תחום בחיים!</p>
+
+    <p>חשיבה אלגוריתמית מורכבת מארבעה מרכיבים מרכזיים:</p>
+
+    <h3>פירוק (Decomposition)</h3>
+    <p>לקחת בעיה גדולה ולשבור אותה לחלקים קטנים יותר. במקום "להכין כריך" (בעיה גדולה), נפרק:</p>
+    <ol>
+      <li>קח שתי פרוסות לחם</li>
+      <li>מרח חמאה על פרוסה אחת</li>
+      <li>הוסף גבינה צהובה</li>
+      <li>הוסף עגבנייה חתוכה</li>
+      <li>סגור עם הפרוסה השנייה</li>
+    </ol>
+    <p>כל צעד קטן ופשוט — וביחד הם פותרים את הבעיה הגדולה!</p>
+
+    <h3>זיהוי דפוסים (Pattern Recognition)</h3>
+    <p>לשים לב לדברים שחוזרים על עצמם. למשל: אם כל בוקר אתם עושים את אותם הדברים (קימה, שטיפת פנים, לבוש, ארוחת בוקר) — זה דפוס! בתכנות נשתמש בזה כדי ליצור <strong>לולאות</strong> — פקודה שחוזרת על עצמה.</p>
+
+    <h3>הפשטה (Abstraction)</h3>
+    <p>להתעלם מפרטים לא רלוונטיים ולהתמקד במה שחשוב. כשאנחנו כותבים אלגוריתם להכנת כריך — לא חשוב אם הלחם הוא לבן או מקמח מלא, ולא חשוב אם הגבינה צהובה או לבנה. מה שחשוב הוא ה<strong>תהליך</strong>.</p>
+
+    <h3>תכנון פתרון שיטתי (Algorithm Design)</h3>
+    <p>אחרי שפירקנו, מצאנו דפוסים, והפשטנו — מגיע הזמן לתכנן את הפתרון צעד-אחרי-צעד. כאן נבנה את האלגוריתם עצמו.</p>
+
+    <div class="lesson-tip warning">
+      <strong>⚠️ הטעות הנפוצה ביותר</strong>
+      <p>דילוג על צעדים! מה שנראה לכם מובן מאליו — לא מובן למחשב כלל. לדוגמה: "תכין כריך" — מחשב לא יודע מה זה כריך. צריך להסביר כל פעולה בנפרד. כשכותבים אלגוריתם, דמיינו שאתם מסבירים לחייזר שמעולם לא ראה מטבח!</p>
+    </div>
+
+    <div class="lesson-tip success">
+      <strong>✅ דוגמה מעולם התכנות</strong>
+      <p>איך למצוא את המספר הגדול ביותר מתוך שלושה מספרים? פירוק: השווה שניים, זכור את הגדול, השווה אותו לשלישי. דפוס: השוואה חוזרת. הפשטה: לא חשוב אם זה 3, 7 ו-2 או 100, 55 ו-88 — התהליך זהה!</p>
+    </div>
+  </div>
+
+  <!-- Section 5: Exercise -->
+  <div class="lesson-section">
+    <div class="exercise-box">
+      <h3>📝 תרגיל: כתבו אלגוריתם</h3>
+      <p>בחרו אחת מהמשימות הבאות וכתבו עבורה אלגוריתם מפורט (ברשימה ממוספרת של צעדים):</p>
+      <ol>
+        <li><strong>הכנת כוס תה</strong> — מהרגע שנכנסתם למטבח ועד שאתם יושבים עם כוס תה מוכנה</li>
+        <li><strong>הכנה לבוקר בית ספר</strong> — מהרגע שהשעון מעורר מצלצל ועד שאתם יוצאים מהדלת</li>
+        <li><strong>מציאת המספר הגדול ביותר מתוך שלושה מספרים</strong> — קיבלתם שלושה מספרים, איך מוצאים את הגדול?</li>
+      </ol>
+      <p style="margin-top:16px"><strong>כללים:</strong></p>
+      <ul>
+        <li>כל צעד חייב להיות ברור וחד-משמעי</li>
+        <li>אל תדלגו על צעדים — גם את "המובנים מאליהם"</li>
+        <li>ודאו שהאלגוריתם מסתיים (יש סוף!)</li>
+      </ul>
+      <p style="margin-top:16px;color:var(--text-light);font-size:.9rem"><strong>בונוס:</strong> ציירו תרשים זרימה עבור האלגוריתם שכתבתם. השתמשו בצורות שלמדנו: אליפסה להתחלה/סוף, מלבן לפעולה, מעוין לתנאי, וחיצים לכיוון הזרימה.</p>
+    </div>
+  </div>
+
+  <!-- Lesson Navigation -->
+  <div class="lesson-nav">
+    <div></div>
+    <a href="lesson-1-2.html">השיעור הבא &larr;</a>
+  </div>
+
+</div>
+
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

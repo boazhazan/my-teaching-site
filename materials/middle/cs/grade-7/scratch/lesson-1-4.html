@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>שיעור 1.4 — ריבוי דמויות ושדר מסר | סקראץ' מאסטר</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06)}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+.exercise-box{background:var(--bg);border:2px solid var(--primary);border-radius:12px;padding:24px;margin:24px 0}
+.exercise-box h3{color:var(--primary);margin-bottom:12px}
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--primary);color:var(--primary)}
+.scratch-wrap{direction:ltr;text-align:left;background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin:16px 0;font-family:'Courier New',monospace}
+.sb{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-weight:700;color:#fff;font-size:.88rem;margin:4px 0;width:fit-content;line-height:1.4}
+.sb.hat{border-top:4px solid rgba(0,0,0,.15);border-radius:12px 12px 8px 8px;padding-top:10px}
+.sb .hole{display:inline-flex;align-items:center;background:rgba(255,255,255,.25);border-radius:16px;padding:2px 10px;font-weight:600;font-size:.82rem;min-width:30px;justify-content:center}
+.sb-indent{margin-left:24px}
+.sb.motion{background:#4C97FF}.sb.looks{background:#9966FF}.sb.sound{background:#CF63CF}.sb.events{background:#FFBF00;color:#333}.sb.control{background:#FFAB19;color:#333}.sb.sensing{background:#5CB1D6}.sb.operators{background:#59C059}.sb.variables{background:#FF8C1A}.sb.my-blocks{background:#FF6680}.sb.pen{background:#0fBD8C}
+@media(max-width:768px){.lesson-title{font-size:1.5rem}.lesson-nav{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">סקראץ' מאסטר 🐱</div>
+  <a href="course.html">← חזרה לקורס</a>
+</div>
+
+<div class="lesson-container">
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#4C97FF">יחידה 1: הכרת סקראץ'</span>
+    <h1 class="lesson-title">שיעור 1.4 — ריבוי דמויות ושדר מסר</h1>
+    <p class="lesson-subtitle">עבודה עם מספר דמויות, שכפול, שידור והאזנה להודעות</p>
+  </div>
+
+  <!-- Section 1: Working with Multiple Sprites -->
+  <div class="lesson-section">
+    <h2>1. עבודה עם מספר דמויות</h2>
+
+    <p>
+      עד עכשיו עבדנו בעיקר עם דמות אחת — החתול. אבל בפרויקטים אמיתיים יש בדרך כלל
+      <strong>כמה דמויות</strong> שפועלות יחד על הבמה. בואו נלמד איך מוסיפים ומנהלים
+      מספר דמויות בסקראץ'.
+    </p>
+
+    <h3>כלל חשוב: לכל דמות קוד משלה</h3>
+    <p>
+      בסקראץ', <strong>הסקריפטים (הקוד) שייכים לדמות</strong>. כשנלחץ על דמות ברשימת
+      הדמויות, נראה את הקוד <em>שלה בלבד</em>. קוד שכתבנו לחתול לא יופיע כשנבחר את
+      הכלב — כל דמות היא עצמאית לגמרי.
+    </p>
+
+    <h3>הוספת דמויות חדשות</h3>
+    <p>יש ארבע דרכים להוסיף דמות חדשה לפרויקט:</p>
+    <ul>
+      <li><strong>בחירה מספרייה 📚</strong> — עשרות דמויות מוכנות לשימוש</li>
+      <li><strong>ציור ✏️</strong> — ציור דמות מאפס בעורך הגרפי</li>
+      <li><strong>העלאה 📁</strong> — העלאת תמונה מהמחשב</li>
+      <li><strong>הפתעה 🎲</strong> — הגרלת דמות אקראית</li>
+    </ul>
+
+    <h3>ניהול הדמויות</h3>
+    <p>
+      כל דמות ברשימה מציגה תמונה ממוזערת שלה. לחיצה על דמות <strong>בוחרת אותה</strong>
+      ומציגה את הקוד, התחפושות והצלילים שלה. שימו לב שכל דמות כוללת:
+    </p>
+    <ul>
+      <li><strong>תחפושות</strong> — מראה חיצוני (אפשר כמה תחפושות לדמות אחת)</li>
+      <li><strong>צלילים</strong> — צלילים ייחודיים לדמות</li>
+      <li><strong>סקריפטים</strong> — הקוד שמפעיל את הדמות</li>
+    </ul>
+
+    <div class="lesson-tip">
+      <strong>💡 טיפ</strong>
+      <p>
+        חשבו על כל דמות כעל <strong>שחקן עצמאי</strong> עם התסריט שלו. כמו בהצגת
+        תיאטרון — לכל שחקן יש טקסט משלו, תלבושת משלו, ותזמון משלו.
+      </p>
+    </div>
+  </div>
+
+  <!-- Section 2: Duplicating Sprites -->
+  <div class="lesson-section">
+    <h2>2. שכפול דמויות</h2>
+
+    <p>
+      לפעמים נרצה ליצור דמות שנראית ומתנהגת בדיוק כמו דמות שכבר קיימת.
+      במקום לבנות אותה מאפס, אפשר <strong>לשכפל</strong> (Duplicate) את הדמות הקיימת.
+    </p>
+
+    <h3>איך משכפלים?</h3>
+    <p>
+      לחיצה ימנית על הדמות ברשימת הדמויות → בחירה ב-<strong>"שכפל"</strong> (Duplicate).
+      הפעולה יוצרת עותק חדש של הדמות <strong>כולל כל הקוד, התחפושות והצלילים שלה</strong>.
+    </p>
+
+    <h3>מתי משתמשים בשכפול?</h3>
+    <ul>
+      <li>יצירת מספר דמויות דומות (למשל 3 כדורים בצבעים שונים)</li>
+      <li>בניית קבוצת דמויות עם התנהגות בסיסית זהה</li>
+      <li>חיסכון בזמן — במקום לכתוב את אותו קוד שוב ושוב</li>
+    </ul>
+
+    <h3>עצמאות העותק</h3>
+    <p>
+      אחרי השכפול, כל עותק הוא <strong>עצמאי לחלוטין</strong>. שינוי בקוד או בתחפושת
+      של דמות אחת <strong>לא ישפיע</strong> על הדמות השנייה. זה כמו צילום מסמך — אחרי
+      הצילום אפשר לכתוב על המקור בלי לשנות את העותק.
+    </p>
+
+    <div class="lesson-tip warning">
+      <strong>⚠️ זהירות!</strong>
+      <p>
+        אחרי שכפול, ודאו שאתם עורכים את <strong>הדמות הנכונה</strong>. טעות נפוצה
+        היא לערוך בטעות את הדמות המקורית במקום את העותק, או להפך. תמיד בדקו
+        איזו דמות מסומנת ברשימה לפני שאתם משנים קוד.
+      </p>
+    </div>
+  </div>
+
+  <!-- Section 3: Layers and Positioning -->
+  <div class="lesson-section">
+    <h2>3. שכבות ומיקום</h2>
+
+    <p>
+      כשיש כמה דמויות על הבמה, חשוב לשלוט <strong>מי מופיע מלפנים ומי מאחור</strong>,
+      ו<strong>איפה בדיוק כל דמות ממוקמת</strong>.
+    </p>
+
+    <h3>שכבות — מי למעלה?</h3>
+    <p>
+      כל דמות נמצאת ב"שכבה" (Layer). דמות בשכבה עליונה תכסה דמות בשכבה תחתונה.
+      בסקראץ' יש שני בלוקים (מקטגוריית "מראה") לשליטה בשכבות:
+    </p>
+
+    <div class="scratch-wrap">
+      <div class="sb looks">go to <span class="hole">front ▾</span> layer</div>
+      <div class="sb looks">go <span class="hole">forward ▾</span> <span class="hole">1</span> layers</div>
+    </div>
+
+    <p>
+      הבלוק הראשון מעביר את הדמות <strong>לשכבה הקדמית ביותר</strong> (או האחורית, לפי
+      הבחירה). הבלוק השני מזיז את הדמות מספר שכבות קדימה או אחורה.
+    </p>
+
+    <h3>מיקום מדויק</h3>
+    <p>
+      אפשר לגרור דמות עם העכבר ישירות על הבמה, אבל לפעמים נרצה מיקום מדויק.
+      לזה משמש בלוק התנועה:
+    </p>
+
+    <div class="scratch-wrap">
+      <div class="sb motion">go to x: <span class="hole">0</span> y: <span class="hole">0</span></div>
+    </div>
+
+    <p>
+      הבלוק מעביר את הדמות לנקודה מדויקת על הבמה. נזכיר: הבמה היא מערכת צירים
+      — <strong>x</strong> (ימינה-שמאלה, מ-240- עד 240) ו-<strong>y</strong>
+      (למעלה-למטה, מ-180- עד 180). הנקודה (0,0) היא מרכז הבמה.
+    </p>
+
+    <div class="lesson-tip">
+      <strong>💡 טיפ</strong>
+      <p>
+        אפשר לראות את מיקום העכבר על הבמה בפינה הימנית-תחתונה של הבמה.
+        זה עוזר לתכנן איפה למקם כל דמות.
+      </p>
+    </div>
+  </div>
+
+  <!-- Section 4: Broadcast -->
+  <div class="lesson-section">
+    <h2>4. שדר מסר (Broadcast)</h2>
+
+    <p>
+      זהו <strong>הנושא המרכזי של השיעור</strong>. עד עכשיו, כל דמות פעלה לבד —
+      בלי קשר לדמויות אחרות. אבל מה אם נרצה שדמות אחת <strong>תגיד לדמויות אחרות
+      לעשות משהו</strong>?
+    </p>
+
+    <p>
+      לדוגמה: החתול אומר "שלום" → הכלב צריך להגיב. איך הכלב "יודע" שהחתול סיים
+      לדבר? התשובה: <strong>שידור הודעות (Broadcast)</strong>.
+    </p>
+
+    <h3>מה זה שידור?</h3>
+    <p>
+      <strong>שידור</strong> = שליחת הודעה שכל הדמויות בפרויקט יכולות "לשמוע".
+      זה כמו <strong>מכשיר קשר (ווקי-טוקי)</strong> — דמות אחת משדרת, וכל מי
+      שמאזין לאותה הודעה מגיב.
+    </p>
+
+    <h3>שני הבלוקים החשובים</h3>
+
+    <p><strong>בלוק שידור</strong> — שולח הודעה (מקטגוריית "אירועים", צהוב):</p>
+    <div class="scratch-wrap">
+      <div class="sb events">broadcast <span class="hole">message1 ▾</span></div>
+    </div>
+
+    <p><strong>בלוק קבלה</strong> — מופעל כשהודעה מתקבלת (בלוק כובע):</p>
+    <div class="scratch-wrap">
+      <div class="sb events hat">when I receive <span class="hole">message1 ▾</span></div>
+    </div>
+
+    <h3>איך זה עובד?</h3>
+    <ol>
+      <li>דמות א' משדרת הודעה בשם מסוים (למשל "תגובה")</li>
+      <li>ההודעה "נשלחת" לכל הדמויות בפרויקט</li>
+      <li>כל דמות שיש לה בלוק "כאשר אני מקבל" עם <strong>אותו שם הודעה</strong> — מתחילה להריץ את הקוד שמחובר אליו</li>
+      <li>דמויות שלא מאזינות לאותה הודעה — לא מושפעות</li>
+    </ol>
+
+    <h3>שימושים נפוצים</h3>
+    <ul>
+      <li><strong>תיאום בין דמויות</strong> — שיחה, אינטראקציה, תגובה הדדית</li>
+      <li><strong>מעבר בין סצנות</strong> — שידור "סצנה 2" שגורם לדמויות להתחלף</li>
+      <li><strong>הפעלת אירועים</strong> — כפתור שנלחץ ומשדר "התחל משחק"</li>
+      <li><strong>סנכרון</strong> — כל הדמויות מתחילות לרקוד יחד</li>
+    </ul>
+
+    <div class="lesson-tip success">
+      <strong>✅ כלל זהב</strong>
+      <p>
+        תנו <strong>שמות ברורים</strong> להודעות! במקום "message1" כתבו "תגובה_כלב"
+        או "התחל_סצנה_2". ככל שהפרויקט גדל, שמות ברורים יעזרו לכם להבין מה קורה.
+      </p>
+    </div>
+  </div>
+
+  <!-- Section 5: Broadcast and Wait -->
+  <div class="lesson-section">
+    <h2>5. שדר והמתן</h2>
+
+    <p>
+      יש גרסה מתקדמת של בלוק השידור — <strong>"שדר והמתן"</strong> (broadcast and wait):
+    </p>
+
+    <div class="scratch-wrap">
+      <div class="sb events">broadcast <span class="hole">message1 ▾</span> and wait</div>
+    </div>
+
+    <h3>מה ההבדל מ"שדר" רגיל?</h3>
+
+    <p>
+      <strong>"שדר" רגיל</strong> — שולח את ההודעה <strong>וממשיך מיד</strong> לבלוק
+      הבא, בלי לחכות שהמאזינים יסיימו.
+    </p>
+    <p>
+      <strong>"שדר והמתן"</strong> — שולח את ההודעה <strong>ומחכה</strong> עד שכל הדמויות
+      שקיבלו אותה <strong>יסיימו את הקוד שלהן</strong>, ורק אז ממשיך.
+    </p>
+
+    <h3>מתי להשתמש ב"שדר והמתן"?</h3>
+    <ul>
+      <li><strong>שיחה מסודרת</strong> — דמות א' מדברת, מחכה שדמות ב' תגיב, ואז ממשיכה</li>
+      <li><strong>רצף פעולות</strong> — שלב 1 חייב להסתיים לפני שלב 2</li>
+      <li><strong>אנימציה מתואמת</strong> — כל דמות מבצעת את חלקה לפי תור</li>
+    </ul>
+
+    <div class="lesson-tip">
+      <strong>💡 הבדל חשוב</strong>
+      <p>
+        <strong>"שדר"</strong> = שלח וזוז הלאה (מקבילי). <br>
+        <strong>"שדר והמתן"</strong> = שלח וחכה (סדרתי). <br>
+        אם צריך שדברים יקרו <strong>בסדר מסוים</strong> — השתמשו ב"שדר והמתן".
+      </p>
+    </div>
+  </div>
+
+  <!-- Section 6: Practical Project -->
+  <div class="lesson-section">
+    <h2>6. פרויקט מעשי: סיפור אינטראקטיבי</h2>
+
+    <p>
+      בואו נבנה סיפור קצר עם 2 דמויות שמנהלות שיחה, תוך שימוש בשידור הודעות ומעבר
+      בין רקעים. נשתמש בחתול 🐱 ובכלב 🐶.
+    </p>
+
+    <h3>שלב 1: הכנת הבמה</h3>
+    <ul>
+      <li>בחרו רקע מהספרייה (למשל "Room 1")</li>
+      <li>הוסיפו רקע שני (למשל "Garden") — ישמש לסצנה השנייה</li>
+      <li>וודאו שהרקע הראשון ("Room 1") מוצג בהתחלה</li>
+    </ul>
+
+    <h3>שלב 2: הוספת דמויות</h3>
+    <ul>
+      <li>דמות 1 — השתמשו בחתול הקיים (Sprite1)</li>
+      <li>דמות 2 — הוסיפו את הכלב (Dog) מהספרייה</li>
+      <li>מקמו את החתול בצד ימין ואת הכלב בצד שמאל של הבמה</li>
+    </ul>
+
+    <h3>שלב 3: קוד דמות 1 (חתול 🐱)</h3>
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🏴 clicked</div>
+      <div class="sb looks">say <span class="hole">!שלום! מה שלומך</span> for <span class="hole">2</span> seconds</div>
+      <div class="sb events">broadcast <span class="hole">תגובה ▾</span> and wait</div>
+      <div class="sb looks">say <span class="hole">!בוא נצא לגינה</span> for <span class="hole">2</span> seconds</div>
+      <div class="sb events">broadcast <span class="hole">מעבר_לגינה ▾</span></div>
+    </div>
+
+    <h3>שלב 4: קוד דמות 2 (כלב 🐶)</h3>
+    <div class="scratch-wrap">
+      <div class="sb events hat">when I receive <span class="hole">תגובה ▾</span></div>
+      <div class="sb looks">say <span class="hole">!מצוין, תודה</span> for <span class="hole">2</span> seconds</div>
+    </div>
+
+    <div class="scratch-wrap" style="margin-top:12px">
+      <div class="sb events hat">when I receive <span class="hole">מעבר_לגינה ▾</span></div>
+      <div class="sb looks">switch backdrop to <span class="hole">Garden ▾</span></div>
+      <div class="sb looks">say <span class="hole">!איזה כיף בחוץ</span> for <span class="hole">2</span> seconds</div>
+    </div>
+
+    <h3>מה קורה כשנלחץ על הדגל הירוק?</h3>
+    <ol>
+      <li>החתול אומר "שלום! מה שלומך!" ומחכה 2 שניות</li>
+      <li>החתול משדר "תגובה" <strong>ומחכה</strong> (שדר והמתן)</li>
+      <li>הכלב מקבל את ההודעה ואומר "מצוין, תודה!" למשך 2 שניות</li>
+      <li>הכלב סיים → החתול ממשיך ואומר "בוא נצא לגינה!"</li>
+      <li>החתול משדר "מעבר_לגינה" (שדר רגיל)</li>
+      <li>הכלב מקבל את ההודעה, מחליף רקע ל-Garden, ואומר "איזה כיף בחוץ!"</li>
+    </ol>
+
+    <div class="lesson-tip success">
+      <strong>✅ שימו לב</strong>
+      <p>
+        השידור הראשון הוא <strong>"שדר והמתן"</strong> — כי החתול צריך לחכות
+        שהכלב יגיב לפני שהוא ממשיך. השידור השני הוא <strong>"שדר" רגיל</strong>
+        — כי לחתול אין מה לעשות אחרי זה, אז אין צורך לחכות.
+      </p>
+    </div>
+  </div>
+
+  <!-- Section 7: Exercise -->
+  <div class="lesson-section">
+    <h2>7. תרגיל — בנו פרויקט משלכם!</h2>
+
+    <div class="exercise-box">
+      <h3>🎯 המשימה</h3>
+      <p>צרו פרויקט סקראץ' עם <strong>2 דמויות לפחות</strong> שמנהלות שיחה באמצעות שידור הודעות.</p>
+
+      <h3>הדרישות:</h3>
+      <ol>
+        <li><strong>שתי דמויות</strong> — בחרו 2 דמויות מהספרייה (או ציירו בעצמכם)</li>
+        <li><strong>שידור הודעה</strong> — דמות 1 שואלת שאלה ומשדרת הודעה</li>
+        <li><strong>קבלת הודעה</strong> — דמות 2 מקבלת את ההודעה ומגיבה</li>
+        <li><strong>מעבר רקע</strong> — הוסיפו לפחות רקע אחד נוסף, ושנו רקע במהלך "הסיפור"</li>
+      </ol>
+
+      <h3>⭐ בונוס</h3>
+      <ul>
+        <li>הוסיפו <strong>דמות שלישית</strong> שמגיבה לשיחה (למשל: ציפור שעפה כשהדמויות יוצאות החוצה)</li>
+        <li>השתמשו ב<strong>צלילים</strong> — הוסיפו אפקט קולי ברגע מעבר הסצנה</li>
+        <li>הוסיפו <strong>אנימציה</strong> — שינוי תחפושת, תנועה, או סיבוב</li>
+      </ul>
+
+      <div class="lesson-tip" style="margin-top:16px">
+        <strong>💡 רמז</strong>
+        <p>
+          תכננו קודם! כתבו על דף מה כל דמות צריכה לעשות ואילו הודעות תשדרו.
+          תנו שמות ברורים להודעות — זה יעזור לכם לא ללכת לאיבוד.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="lesson-nav">
+    <a href="lesson-1-3.html">→ שיעור קודם: 1.3</a>
+    <a href="lesson-2-1.html">שיעור הבא: 2.1 ←</a>
+  </div>
+
+</div>
+
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

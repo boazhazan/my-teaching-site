@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>מודולו — שארית החילוק | סקראץ' מאסטר</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06)}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+.exercise-box{background:var(--bg);border:2px solid var(--primary);border-radius:12px;padding:24px;margin:24px 0}
+.exercise-box h3{color:var(--primary);margin-bottom:12px}
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--primary);color:var(--primary)}
+.scratch-wrap{direction:ltr;text-align:left;background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin:16px 0;font-family:'Courier New',monospace}
+.sb{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-weight:700;color:#fff;font-size:.88rem;margin:4px 0;width:fit-content;line-height:1.4}
+.sb.hat{border-top:4px solid rgba(0,0,0,.15);border-radius:12px 12px 8px 8px;padding-top:10px}
+.sb .hole{display:inline-flex;align-items:center;background:rgba(255,255,255,.25);border-radius:16px;padding:2px 10px;font-weight:600;font-size:.82rem;min-width:30px;justify-content:center}
+.sb-indent{margin-left:24px}
+.sb.motion{background:#4C97FF}.sb.looks{background:#9966FF}.sb.sound{background:#CF63CF}.sb.events{background:#FFBF00;color:#333}.sb.control{background:#FFAB19;color:#333}.sb.sensing{background:#5CB1D6}.sb.operators{background:#59C059}.sb.variables{background:#FF8C1A}.sb.my-blocks{background:#FF6680}.sb.pen{background:#0fBD8C}
+@media(max-width:768px){.lesson-title{font-size:1.5rem}.lesson-nav{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <span class="topbar-title">סקראץ' מאסטר 🐱</span>
+  <a href="course.html">&larr; חזרה לקורס</a>
+</div>
+
+<!-- Lesson Content -->
+<div class="lesson-container">
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#7c3aed">יחידה 3: משתנים ותנאים</span>
+    <h1 class="lesson-title">מודולו — שארית החילוק</h1>
+    <p class="lesson-subtitle">אופרטור %, בדיקת זוגיות, חלוקת קבוצות ודפוסים מחזוריים</p>
+  </div>
+
+  <!-- Section 1: What is Modulo? -->
+  <div class="lesson-section">
+    <h2>1. מה זה מודולו?</h2>
+
+    <p><strong>מודולו</strong> (Modulo) הוא פעולה חשבונית שנותנת לנו את <strong>השארית</strong> של חלוקה. כשמחלקים מספר אחד במספר אחר, לפעמים החלוקה לא "יוצאת בול" — ונשאר שארית. בדיוק את השארית הזאת נותן לנו המודולו!</p>
+
+    <p>הסימן של מודולו הוא <strong>%</strong> (נקרא גם mod). בואו נראה דוגמאות:</p>
+
+    <ul>
+      <li><strong>7 % 3 = 1</strong> — כי 7 ÷ 3 = 2 ושארית 1 (3×2=6, נשאר 1)</li>
+      <li><strong>10 % 5 = 0</strong> — כי 10 ÷ 5 = 2 בדיוק, בלי שארית!</li>
+      <li><strong>13 % 4 = 1</strong> — כי 13 ÷ 4 = 3 ושארית 1 (4×3=12, נשאר 1)</li>
+      <li><strong>8 % 2 = 0</strong> — כי 8 ÷ 2 = 4 בדיוק, שארית 0</li>
+      <li><strong>15 % 4 = 3</strong> — כי 15 ÷ 4 = 3 ושארית 3 (4×3=12, נשאר 3)</li>
+    </ul>
+
+    <h3>אנלוגיה: חלוקת עוגיות בין חברים</h3>
+
+    <p>דמיינו שיש לכם <strong>7 עוגיות</strong> ואתם רוצים לחלק אותן שווה בשווה בין <strong>3 חברים</strong>. כל חבר מקבל 2 עוגיות (3×2=6), ונשארת <strong>עוגייה אחת</strong> שלא ניתן לחלק שווה. המודולו נותן לנו בדיוק את המספר הזה — כמה נשאר שלא ניתן לחלק!</p>
+
+    <p>עוד דרך לחשוב על זה: <strong>7 % 3</strong> — כמה נשאר מ-7 אחרי שהורדנו ממנו כמה שיותר "קבוצות" של 3?</p>
+
+    <div class="lesson-tip">
+      <strong>💡 כלל מהיר</strong>
+      <p>כשהשארית היא <strong>0</strong>, זה אומר שהמספר הראשון <strong>מתחלק בדיוק</strong> במספר השני. למשל: 10 % 5 = 0 → עשר מתחלק בדיוק בחמש.</p>
+    </div>
+  </div>
+
+  <!-- Section 2: Modulo Block in Scratch -->
+  <div class="lesson-section">
+    <h2>2. בלוק מודולו בסקראץ'</h2>
+
+    <p>בסקראץ', בלוק המודולו נמצא בקטגוריית <strong>"פעולות"</strong> (הירוקה). הוא נראה ככה:</p>
+
+    <div class="scratch-wrap">
+      <div class="sb operators"><span class="hole">7</span> mod <span class="hole">3</span></div>
+    </div>
+
+    <p>הבלוק מקבל שני מספרים ומחזיר את <strong>השארית</strong> של החלוקה ביניהם. בדוגמה למעלה, התוצאה תהיה <strong>1</strong>.</p>
+
+    <h3>איך להשתמש?</h3>
+    <ol>
+      <li>פתחו את קטגוריית <strong>"פעולות"</strong> (ירוק) בצד שמאל</li>
+      <li>גררו את הבלוק <strong>"(_) mod (_)"</strong> לאזור העבודה</li>
+      <li>הכניסו מספרים לתוך שני החורים — או גררו לשם משתנים!</li>
+      <li>השתמשו בתוצאה בתוך בלוקים אחרים (כמו "אמור" או "אם")</li>
+    </ol>
+
+    <h3>דוגמה: הצגת שארית על הבמה</h3>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb sensing">ask <span class="hole">?הכנס מספר</span> and wait</div>
+      <div class="sb variables">set <span class="hole">שארית</span> to <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">(answer) mod (3)</span></span></div>
+      <div class="sb looks">say <span class="hole">join [השארית של חלוקה ב-3 היא: ] [שארית]</span> for <span class="hole">3</span> seconds</div>
+    </div>
+
+    <p>בתוכנית הזו, המשתמש מכניס מספר, ואנחנו מחשבים את השארית של חלוקתו ב-3 ומציגים אותה.</p>
+
+    <div class="lesson-tip warning">
+      <strong>⚠️ שימו לב!</strong>
+      <p>בלוק mod מחזיר תמיד מספר בין <strong>0</strong> ל-<strong>(המחלק פחות 1)</strong>. למשל, mod 3 יכול להחזיר רק 0, 1, או 2. mod 5 יכול להחזיר רק 0, 1, 2, 3, או 4. זה הכלל!</p>
+    </div>
+  </div>
+
+  <!-- Section 3: Even/Odd Check -->
+  <div class="lesson-section">
+    <h2>3. בדיקת זוגיות — זוגי או אי-זוגי?</h2>
+
+    <p>אחד השימושים <strong>הכי נפוצים</strong> של מודולו בתכנות הוא <strong>בדיקת זוגיות</strong>. הרעיון פשוט:</p>
+
+    <ul>
+      <li>אם <strong>מספר % 2 = 0</strong> → המספר <strong>זוגי</strong> (מתחלק ב-2 בלי שארית)</li>
+      <li>אם <strong>מספר % 2 = 1</strong> → המספר <strong>אי-זוגי</strong> (יש שארית 1 בחלוקה ב-2)</li>
+    </ul>
+
+    <p>למה? כי מספר <strong>זוגי</strong> הוא מספר שאפשר לחלק לשני חלקים שווים בדיוק — כלומר אין שארית כשמחלקים ב-2. מספר <strong>אי-זוגי</strong> תמיד משאיר שארית 1.</p>
+
+    <h3>קוד סקראץ' — בודק זוגיות</h3>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb sensing">ask <span class="hole">?הכנס מספר</span> and wait</div>
+      <div class="sb control">if <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">((answer) mod (2)) = (0)</span></span> then</div>
+      <div class="sb-indent">
+        <div class="sb looks">say <span class="hole">!המספר זוגי</span> for <span class="hole">2</span> seconds</div>
+      </div>
+      <div class="sb control">else</div>
+      <div class="sb-indent">
+        <div class="sb looks">say <span class="hole">!המספר אי-זוגי</span> for <span class="hole">2</span> seconds</div>
+      </div>
+    </div>
+
+    <p>מה קורה כאן?</p>
+    <ol>
+      <li>המשתמש מכניס מספר</li>
+      <li>אנחנו בודקים: האם <strong>התשובה mod 2</strong> שווה ל-0?</li>
+      <li>אם כן — המספר זוגי! אם לא — המספר אי-זוגי!</li>
+    </ol>
+
+    <div class="lesson-tip success">
+      <strong>✅ זה דפוס קלאסי!</strong>
+      <p>בדיקת זוגיות עם mod 2 היא אחד הדפוסים הכי בסיסיים בתכנות. תראו אותה בכל שפת תכנות — Python, JavaScript, Java ועוד. עכשיו אתם כבר מכירים את הרעיון!</p>
+    </div>
+  </div>
+
+  <!-- Section 4: Splitting into Groups -->
+  <div class="lesson-section">
+    <h2>4. חלוקה לקבוצות</h2>
+
+    <p>שימוש מגניב נוסף של מודולו הוא <strong>חלוקה לקבוצות</strong>. הנה הרעיון:</p>
+
+    <ul>
+      <li><strong>mod 3</strong> מחזיר 0, 1, או 2 → מחלק לתוך <strong>3 קבוצות</strong></li>
+      <li><strong>mod 4</strong> מחזיר 0, 1, 2, או 3 → מחלק לתוך <strong>4 קבוצות</strong></li>
+      <li><strong>mod N</strong> מחזיר 0 עד N-1 → מחלק לתוך <strong>N קבוצות</strong></li>
+    </ul>
+
+    <h3>דוגמה מהחיים: חלוקת תלמידים לקבוצות</h3>
+
+    <p>נניח שבכיתה יש 30 תלמידים, ממוספרים 1 עד 30. רוצים לחלק אותם ל-<strong>5 קבוצות</strong>. פשוט מחשבים <strong>מספר_תלמיד % 5</strong>:</p>
+
+    <ul>
+      <li>תלמיד 1: 1 % 5 = <strong>1</strong> → קבוצה 1</li>
+      <li>תלמיד 2: 2 % 5 = <strong>2</strong> → קבוצה 2</li>
+      <li>תלמיד 3: 3 % 5 = <strong>3</strong> → קבוצה 3</li>
+      <li>תלמיד 4: 4 % 5 = <strong>4</strong> → קבוצה 4</li>
+      <li>תלמיד 5: 5 % 5 = <strong>0</strong> → קבוצה 0</li>
+      <li>תלמיד 6: 6 % 5 = <strong>1</strong> → קבוצה 1 (חוזר!)</li>
+      <li>תלמיד 7: 7 % 5 = <strong>2</strong> → קבוצה 2</li>
+      <li>... וכן הלאה</li>
+    </ul>
+
+    <p>שימו לב איך התוצאות <strong>חוזרות מחדש</strong> — 0, 1, 2, 3, 4, 0, 1, 2, 3, 4... זה בדיוק מה שמודולו עושה!</p>
+
+    <h3>שימושים נוספים</h3>
+    <ul>
+      <li><strong>חלוקה לצוותים</strong> — 20 שחקנים לתוך 4 צוותים</li>
+      <li><strong>חלוקת צבעים</strong> — אדום, כחול, ירוק, אדום, כחול, ירוק...</li>
+      <li><strong>חלוקת תורות</strong> — של מי התור? שחקן מספר (סיבוב % מספר_שחקנים)</li>
+    </ul>
+
+    <div class="lesson-tip">
+      <strong>💡 שימו לב לקבוצה 0</strong>
+      <p>כש-mod מחזיר 0, זו גם קבוצה לגיטימית! אם רוצים קבוצות שמתחילות מ-1 (ולא מ-0), אפשר להוסיף 1 לתוצאה: <strong>(מספר % 5) + 1</strong> ייתן קבוצות 1 עד 5.</p>
+    </div>
+  </div>
+
+  <!-- Section 5: Cyclic Patterns -->
+  <div class="lesson-section">
+    <h2>5. דפוסים מחזוריים</h2>
+
+    <p>מודולו מושלם ליצירת <strong>דפוסים שחוזרים על עצמם</strong>. בטבע ובחיים יש המון דוגמאות לדפוסים מחזוריים:</p>
+
+    <ul>
+      <li><strong>ימות השבוע</strong> — אחרי שבת חוזרים לראשון (יום % 7)</li>
+      <li><strong>רמזור</strong> — אדום, צהוב, ירוק, אדום, צהוב, ירוק... (מצב % 3)</li>
+      <li><strong>עונות השנה</strong> — אביב, קיץ, סתיו, חורף, אביב... (חודש % 4)</li>
+      <li><strong>שעון</strong> — אחרי 12 חוזרים ל-1 (שעה % 12)</li>
+    </ul>
+
+    <h3>דוגמה: רמזור — מחליף צבעים בלולאה</h3>
+
+    <p>בואו נבנה דמות שמשנה צבע כמו רמזור — מחזורית, שוב ושוב:</p>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb variables">set <span class="hole">מונה</span> to <span class="hole">0</span></div>
+      <div class="sb control">repeat <span class="hole">12</span></div>
+      <div class="sb-indent">
+        <div class="sb control">if <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">((מונה) mod (3)) = (0)</span></span> then</div>
+        <div class="sb-indent">
+          <div class="sb looks">set <span class="hole">color</span> effect to <span class="hole">0</span></div>
+        </div>
+        <div class="sb control">if <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">((מונה) mod (3)) = (1)</span></span> then</div>
+        <div class="sb-indent">
+          <div class="sb looks">set <span class="hole">color</span> effect to <span class="hole">50</span></div>
+        </div>
+        <div class="sb control">if <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">((מונה) mod (3)) = (2)</span></span> then</div>
+        <div class="sb-indent">
+          <div class="sb looks">set <span class="hole">color</span> effect to <span class="hole">100</span></div>
+        </div>
+        <div class="sb variables">change <span class="hole">מונה</span> by <span class="hole">1</span></div>
+        <div class="sb control">wait <span class="hole">0.5</span> seconds</div>
+      </div>
+    </div>
+
+    <p>מה קורה כאן?</p>
+    <ol>
+      <li>המונה מתחיל ב-0</li>
+      <li>בכל סיבוב של הלולאה, בודקים מה <strong>מונה % 3</strong>:</li>
+      <ul>
+        <li>אם התוצאה <strong>0</strong> — צבע ראשון (אדום)</li>
+        <li>אם התוצאה <strong>1</strong> — צבע שני (צהוב)</li>
+        <li>אם התוצאה <strong>2</strong> — צבע שלישי (ירוק)</li>
+      </ul>
+      <li>המונה עולה ב-1 בכל סיבוב</li>
+      <li>כש-מונה=3: 3%3=0 → חוזר לצבע הראשון! המחזור חוזר על עצמו</li>
+    </ol>
+
+    <h3>למה זה עובד?</h3>
+
+    <p>בואו נעקוב אחרי הערכים:</p>
+
+    <table style="width:100%;border-collapse:collapse;margin:12px 0;font-size:.95rem">
+      <tr style="background:var(--primary-light)">
+        <th style="padding:8px 12px;border:1px solid var(--border);text-align:right">מונה</th>
+        <th style="padding:8px 12px;border:1px solid var(--border);text-align:right">מונה % 3</th>
+        <th style="padding:8px 12px;border:1px solid var(--border);text-align:right">צבע</th>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;border:1px solid var(--border)">0</td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">0</td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">🔴 אדום</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;border:1px solid var(--border)">1</td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">1</td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">🟡 צהוב</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;border:1px solid var(--border)">2</td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">2</td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">🟢 ירוק</td>
+      </tr>
+      <tr style="background:var(--bg-soft)">
+        <td style="padding:8px 12px;border:1px solid var(--border)">3</td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">0</td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">🔴 אדום (חוזר!)</td>
+      </tr>
+      <tr style="background:var(--bg-soft)">
+        <td style="padding:8px 12px;border:1px solid var(--border)">4</td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">1</td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">🟡 צהוב</td>
+      </tr>
+      <tr style="background:var(--bg-soft)">
+        <td style="padding:8px 12px;border:1px solid var(--border)">5</td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">2</td>
+        <td style="padding:8px 12px;border:1px solid var(--border)">🟢 ירוק</td>
+      </tr>
+    </table>
+
+    <p>הדפוס חוזר על עצמו כל 3 צעדים — בלי קשר לגודל המונה. גם אם המונה הוא 100, 100 % 3 = 1 → צהוב. זה הכוח של מודולו!</p>
+
+    <div class="lesson-tip success">
+      <strong>✅ הרעיון המרכזי</strong>
+      <p>מודולו הופך מספר שגדל ללא הגבלה (מונה) לדפוס מחזורי קבוע. אם רוצים מחזור של N אפשרויות, משתמשים ב-<strong>mod N</strong>. המספרים יחזרו שוב ושוב: 0, 1, ..., N-1, 0, 1, ..., N-1...</p>
+    </div>
+  </div>
+
+  <!-- Section 6: Exercise -->
+  <div class="lesson-section">
+    <div class="exercise-box">
+      <h3>📝 תרגיל: בנו בסקראץ'</h3>
+      <p>פתחו את סקראץ' ונסו לבנות את התוכניות הבאות:</p>
+      <ol>
+        <li><strong>בודק זוגיות</strong> — צרו תוכנית ששואלת את המשתמש מספר ואומרת לו אם הוא <strong>זוגי</strong> או <strong>אי-זוגי</strong> (רמז: השתמשו ב-mod 2)</li>
+        <li><strong>בודק התחלקות ב-3</strong> — צרו תוכנית ששואלת מספר ואומרת אם הוא <strong>מתחלק ב-3</strong> או לא (רמז: אם mod 3 = 0, המספר מתחלק ב-3)</li>
+        <li><strong>החלפת צבעים בלולאה</strong> — צרו דמות שמשנה צבע כל 3 צעדים. השתמשו במונה ובבלוק mod כדי ליצור מחזור צבעים חוזר</li>
+      </ol>
+      <p style="margin-top:16px;color:var(--text-light);font-size:.9rem"><strong>בונוס — FizzBuzz:</strong> צרו תוכנית שסופרת מ-1 עד 30. לכל מספר: אם הוא מתחלק ב-3 — אמרו "Fizz", אם מתחלק ב-5 — אמרו "Buzz", אם מתחלק גם ב-3 וגם ב-5 — אמרו "FizzBuzz", ואם לא מתחלק באף אחד — אמרו את המספר עצמו. זה אחד התרגילים הקלאסיים ביותר בתכנות!</p>
+    </div>
+  </div>
+
+  <!-- Lesson Navigation -->
+  <div class="lesson-nav">
+    <a href="lesson-3-2.html">השיעור הקודם &rarr;</a>
+    <a href="lesson-3-4.html">השיעור הבא &larr;</a>
+  </div>
+
+</div>
+
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>שיעור 2.1 — ביצוע חוזר ומפעילים | סקראץ' מאסטר</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06)}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+.exercise-box{background:var(--bg);border:2px solid var(--primary);border-radius:12px;padding:24px;margin:24px 0}
+.exercise-box h3{color:var(--primary);margin-bottom:12px}
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--primary);color:var(--primary)}
+.scratch-wrap{direction:ltr;text-align:left;background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin:16px 0;font-family:'Courier New',monospace}
+.sb{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-weight:700;color:#fff;font-size:.88rem;margin:4px 0;width:fit-content;line-height:1.4}
+.sb.hat{border-top:4px solid rgba(0,0,0,.15);border-radius:12px 12px 8px 8px;padding-top:10px}
+.sb .hole{display:inline-flex;align-items:center;background:rgba(255,255,255,.25);border-radius:16px;padding:2px 10px;font-weight:600;font-size:.82rem;min-width:30px;justify-content:center}
+.sb-indent{margin-left:24px}
+.sb.motion{background:#4C97FF}.sb.looks{background:#9966FF}.sb.sound{background:#CF63CF}.sb.events{background:#FFBF00;color:#333}.sb.control{background:#FFAB19;color:#333}.sb.sensing{background:#5CB1D6}.sb.operators{background:#59C059}.sb.variables{background:#FF8C1A}.sb.my-blocks{background:#FF6680}.sb.pen{background:#0fBD8C}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:16px 0}
+.compare-col{background:var(--bg);border:2px solid var(--border);border-radius:12px;padding:16px;text-align:center}
+.compare-col h4{margin-bottom:12px;font-size:1rem;font-weight:700}
+.compare-col.better{border-color:var(--success)}
+.compare-col.better h4{color:var(--success)}
+.compare-col.worse h4{color:var(--text-light)}
+@media(max-width:768px){.lesson-title{font-size:1.5rem}.lesson-nav{flex-direction:column}.compare-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">סקראץ' מאסטר 🐱</div>
+  <a href="course.html">← חזרה לקורס</a>
+</div>
+
+<div class="lesson-container">
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#FFAB19">יחידה 2: לולאות ואקראיות</span>
+    <h1 class="lesson-title">ביצוע חוזר ומפעילים</h1>
+    <p class="lesson-subtitle">לולאת "חזור X פעמים", לולאת "לתמיד", ומפעילים (Events)</p>
+  </div>
+
+  <!-- Section 1 -->
+  <div class="lesson-section">
+    <h2>1. למה צריך ביצוע חוזר?</h2>
+
+    <p>
+      נניח שאנחנו רוצים לצייר ריבוע. ריבוע מורכב מ-4 צלעות, וכל צלע דורשת שני בלוקים: "לך X צעדים" ו"פנה 90 מעלות". בלי לולאה נצטרך <strong>8 בלוקים</strong> — אותן שתי פעולות שוב ושוב ושוב.
+    </p>
+    <p>
+      עם לולאה, אנחנו יכולים להגיד לסקראץ': <em>"חזור על הפעולה הזו 4 פעמים"</em> — ובמקום 8 בלוקים, נצטרך רק <strong>3</strong>.
+    </p>
+
+    <div class="compare-grid">
+      <div class="compare-col worse">
+        <h4>❌ בלי לולאה (8 בלוקים)</h4>
+        <div class="scratch-wrap" style="font-size:.82rem">
+          <div class="sb motion">go <span class="hole">100</span> steps</div>
+          <div class="sb motion">turn ⟳ <span class="hole">90</span> degrees</div>
+          <div class="sb motion">go <span class="hole">100</span> steps</div>
+          <div class="sb motion">turn ⟳ <span class="hole">90</span> degrees</div>
+          <div class="sb motion">go <span class="hole">100</span> steps</div>
+          <div class="sb motion">turn ⟳ <span class="hole">90</span> degrees</div>
+          <div class="sb motion">go <span class="hole">100</span> steps</div>
+          <div class="sb motion">turn ⟳ <span class="hole">90</span> degrees</div>
+        </div>
+      </div>
+      <div class="compare-col better">
+        <h4>✅ עם לולאה (3 בלוקים)</h4>
+        <div class="scratch-wrap" style="font-size:.82rem">
+          <div class="sb control">repeat <span class="hole">4</span></div>
+          <div class="sb motion sb-indent">go <span class="hole">100</span> steps</div>
+          <div class="sb motion sb-indent">turn ⟳ <span class="hole">90</span> degrees</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lesson-tip">
+      <strong>💡 עקרון DRY — Don't Repeat Yourself</strong>
+      <p>כלל בסיסי בתכנות: אם אתם מוצאים את עצמכם כותבים את אותו קוד שוב ושוב — כנראה שאתם צריכים לולאה! לולאות הופכות את הקוד לקצר יותר, נקי יותר, וקל יותר לשינוי. רוצים ריבוע גדול יותר? פשוט משנים מספר אחד במקום ארבעה.</p>
+    </div>
+  </div>
+
+  <!-- Section 2 -->
+  <div class="lesson-section">
+    <h2>2. לולאת "חזור ___ פעמים" (repeat)</h2>
+
+    <p>
+      הלולאה הנפוצה ביותר בסקראץ' היא <strong>"חזור ___ פעמים"</strong> (repeat). זהו בלוק כתום מקטגוריית <strong>בקרה</strong> (Control). הוא עוטף בלוקים אחרים ומריץ אותם מספר פעמים קבוע — לפי המספר שנכתוב בחור העגול.
+    </p>
+
+    <h3>איך זה עובד?</h3>
+    <ul>
+      <li>כל מה שבתוך הלולאה (הבלוקים "המוכלים") ירוץ שוב ושוב</li>
+      <li>המספר בחור העגול קובע כמה פעמים — 4 פעמים, 10 פעמים, 100 פעמים...</li>
+      <li>אחרי שהלולאה סיימה, הביצוע ממשיך לבלוק הבא שאחריה</li>
+    </ul>
+
+    <h3>דוגמה: ציור משושה (hexagon)</h3>
+    <p>
+      משושה הוא מצולע עם 6 צלעות. הזווית החיצונית שלו היא 60 מעלות (360 ÷ 6 = 60). אז נשתמש ב"חזור 6 פעמים":
+    </p>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🏴 clicked</div>
+      <div class="sb pen">erase all</div>
+      <div class="sb pen">pen down</div>
+      <div class="sb control">repeat <span class="hole">6</span></div>
+      <div class="sb motion sb-indent">go <span class="hole">60</span> steps</div>
+      <div class="sb motion sb-indent">turn ⟳ <span class="hole">60</span> degrees</div>
+    </div>
+
+    <div class="lesson-tip success">
+      <strong>🎯 הנוסחה לציור מצולעים משוכללים</strong>
+      <p>לכל מצולע משוכלל: "חזור N פעמים" כאשר N = מספר הצלעות. הזווית בכל פנייה = 360 ÷ N.<br>
+      ריבוע: N=4, זווית=90° | משולש: N=3, זווית=120° | משושה: N=6, זווית=60°</p>
+    </div>
+  </div>
+
+  <!-- Section 3 -->
+  <div class="lesson-section">
+    <h2>3. לולאת "לתמיד" (forever)</h2>
+
+    <p>
+      לפעמים אנחנו רוצים שפעולה תרוץ <strong>בלי הפסקה</strong> — עד שנלחץ על כפתור העצירה 🔴. לזה בדיוק מיועדת הלולאה <strong>"לתמיד"</strong> (forever).
+    </p>
+
+    <h3>מתי משתמשים ב"לתמיד"?</h3>
+    <ul>
+      <li><strong>תנועה רציפה</strong> — דמות שהולכת כל הזמן</li>
+      <li><strong>אנימציה</strong> — החלפת תחפושות בלופ אינסופי</li>
+      <li><strong>לולאת משחק</strong> — בדיקה מתמדת אם קרה משהו (פגיעה, ניקוד...)</li>
+      <li><strong>בקרת משתמש</strong> — הקשבה למקשים כל הזמן</li>
+    </ul>
+
+    <h3>דוגמה: חתול שמהלך בלי סוף</h3>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🏴 clicked</div>
+      <div class="sb control">forever</div>
+      <div class="sb motion sb-indent">go <span class="hole">10</span> steps</div>
+      <div class="sb motion sb-indent">if on edge, bounce</div>
+    </div>
+
+    <div class="lesson-tip warning">
+      <strong>⚠️ שימו לב!</strong>
+      <p>קוד שנמצא <strong>אחרי</strong> לולאת "לתמיד" לעולם לא ירוץ! הלולאה לא נגמרת אף פעם, אז סקראץ' לא מגיע לבלוקים שמתחתיה. אם צריך להריץ עוד קוד — שימו אותו ב-script נפרד עם מפעיל משלו.</p>
+    </div>
+  </div>
+
+  <!-- Section 4 -->
+  <div class="lesson-section">
+    <h2>4. מפעילים (Events / Hat blocks)</h2>
+
+    <p>
+      כל תוכנית בסקראץ' חייבת להתחיל ממשהו — מאיזה <strong>אירוע</strong> שמפעיל אותה. הבלוקים שמתחילים תוכניות נקראים <strong>בלוקים מפעילים</strong> (Hat blocks) — קל לזהות אותם לפי הקצה המעוגל שלהם למעלה 🎩.
+    </p>
+
+    <h3>המפעילים הנפוצים:</h3>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat" style="margin-bottom:12px">when 🏴 clicked</div>
+      <p style="direction:rtl;text-align:right;margin:0 0 16px;font-family:'Heebo',sans-serif;font-size:.9rem;color:var(--text-light)">
+        כאשר לוחצים על הדגל הירוק — המפעיל הנפוץ ביותר. מתחיל את התוכנית.
+      </p>
+
+      <div class="sb events hat" style="margin-bottom:12px">when <span class="hole">space ▾</span> key pressed</div>
+      <p style="direction:rtl;text-align:right;margin:0 0 16px;font-family:'Heebo',sans-serif;font-size:.9rem;color:var(--text-light)">
+        כאשר לוחצים על מקש מסוים — אפשר לבחור space, חצים, אותיות ועוד.
+      </p>
+
+      <div class="sb events hat" style="margin-bottom:12px">when this sprite clicked</div>
+      <p style="direction:rtl;text-align:right;margin:0 0 16px;font-family:'Heebo',sans-serif;font-size:.9rem;color:var(--text-light)">
+        כאשר לוחצים על הדמות הזו — מושלם למשחקי לחיצה!
+      </p>
+    </div>
+
+    <div class="lesson-tip">
+      <strong>💡 ריבוי סקריפטים = כוח-על!</strong>
+      <p>לכל דמות יכולים להיות <strong>מספר סקריפטים</strong>, כל אחד מתחיל ממפעיל שונה. כולם רצים <strong>במקביל</strong> (בו-זמנית)! למשל: סקריפט אחד מזיז את הדמות עם "לתמיד", וסקריפט שני מקשיב ללחיצה על מקש space כדי לקפוץ.</p>
+    </div>
+
+    <h3>דוגמה: דמות עם שני סקריפטים</h3>
+
+    <div class="compare-grid">
+      <div class="compare-col">
+        <h4>סקריפט 1: תנועה רציפה</h4>
+        <div class="scratch-wrap" style="font-size:.82rem">
+          <div class="sb events hat">when 🏴 clicked</div>
+          <div class="sb control">forever</div>
+          <div class="sb motion sb-indent">go <span class="hole">5</span> steps</div>
+          <div class="sb motion sb-indent">if on edge, bounce</div>
+        </div>
+      </div>
+      <div class="compare-col">
+        <h4>סקריפט 2: לחיצה על מקש</h4>
+        <div class="scratch-wrap" style="font-size:.82rem">
+          <div class="sb events hat">when <span class="hole">space ▾</span> key pressed</div>
+          <div class="sb looks">say <span class="hole">שלום!</span> for <span class="hole">2</span> secs</div>
+          <div class="sb sound">play sound <span class="hole">Meow ▾</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 5 -->
+  <div class="lesson-section">
+    <h2>5. פעולות מתמטיות בסקראץ'</h2>
+
+    <p>
+      הבלוקים הירוקים בקטגוריית <strong>פעולות</strong> (Operators) מאפשרים לנו לבצע חישובים. יש ארבע פעולות בסיסיות:
+    </p>
+
+    <div class="scratch-wrap">
+      <div class="sb operators" style="margin-bottom:8px"><span class="hole">…</span> + <span class="hole">…</span></div>
+      <div class="sb operators" style="margin-bottom:8px"><span class="hole">…</span> − <span class="hole">…</span></div>
+      <div class="sb operators" style="margin-bottom:8px"><span class="hole">…</span> × <span class="hole">…</span></div>
+      <div class="sb operators"><span class="hole">…</span> ÷ <span class="hole">…</span></div>
+    </div>
+
+    <h3>הבלוקים הירוקים נכנסים לתוך בלוקים אחרים</h3>
+    <p>
+      הבלוקים המתמטיים הם <strong>עגולים</strong> — מה שאומר שהם נכנסים לתוך חורים עגולים בבלוקים אחרים. למשל, אפשר לשים חישוב בתוך בלוק "אמור" כדי שהדמות תגיד את התוצאה:
+    </p>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🏴 clicked</div>
+      <div class="sb looks">say <span class="hole"><span class="sb operators" style="padding:4px 8px;margin:0;font-size:.78rem"><span class="hole">5</span> + <span class="hole">3</span></span></span> for <span class="hole">2</span> secs</div>
+    </div>
+    <p style="color:var(--text-light);font-size:.9rem;margin-top:4px">
+      → הדמות תגיד "8" למשך 2 שניות.
+    </p>
+
+    <h3>קינון — חישוב בתוך חישוב</h3>
+    <p>
+      אפשר לשים בלוק ירוק <strong>בתוך</strong> בלוק ירוק אחר! זה נקרא <strong>קינון</strong> (nesting). למשל, כדי לחשב (10 × 2) + 5:
+    </p>
+
+    <div class="scratch-wrap">
+      <div class="sb looks">say <span class="hole"><span class="sb operators" style="padding:4px 8px;margin:0;font-size:.78rem"><span class="hole"><span class="sb operators" style="padding:2px 6px;margin:0;font-size:.72rem"><span class="hole">10</span> × <span class="hole">2</span></span></span> + <span class="hole">5</span></span></span> for <span class="hole">2</span> secs</div>
+    </div>
+    <p style="color:var(--text-light);font-size:.9rem;margin-top:4px">
+      → סקראץ' מחשב קודם 10 × 2 = 20, ואז 20 + 5 = 25. הדמות תגיד "25".
+    </p>
+
+    <div class="lesson-tip">
+      <strong>💡 סדר החישוב</strong>
+      <p>סקראץ' מחשב מבפנים החוצה — בדיוק כמו סוגריים במתמטיקה. הביטוי הפנימי ביותר מחושב ראשון.</p>
+    </div>
+  </div>
+
+  <!-- Section 6 — Exercise -->
+  <div class="lesson-section">
+    <h2>6. תרגיל — נסו בעצמכם! 🚀</h2>
+
+    <div class="exercise-box">
+      <h3>משימה 1: משולש שווה-צלעות</h3>
+      <p>ציירו משולש שווה-צלעות באמצעות לולאת "חזור". כמה פעמים צריך לחזור? מהי הזווית?</p>
+      <div class="lesson-tip success" style="margin-top:12px">
+        <strong>🔑 רמז</strong>
+        <p>במשולש שווה-צלעות יש 3 צלעות. הזווית החיצונית = 360 ÷ 3 = 120°</p>
+      </div>
+    </div>
+
+    <div class="exercise-box" data-premium>
+      <h3>משימה 2: ציור עיגול</h3>
+      <p>עיגול הוא בעצם מצולע עם הרבה מאוד צלעות קטנטנות. נסו:</p>
+      <div class="scratch-wrap">
+        <div class="sb control">repeat <span class="hole">360</span></div>
+        <div class="sb motion sb-indent">go <span class="hole">1</span> steps</div>
+        <div class="sb motion sb-indent">turn ⟳ <span class="hole">1</span> degrees</div>
+      </div>
+      <p>מה קורה אם משנים את מספר הצעדים ל-2? ואם משנים את הזווית ל-2?</p>
+    </div>
+
+    <div class="exercise-box" data-premium>
+      <h3>משימה 3: חתול שמהלך בלי סוף</h3>
+      <p>השתמשו בלולאת "לתמיד" כדי לגרום לחתול להלך ברציפות ולהיקפץ מהקצוות.</p>
+      <ul>
+        <li>הוסיפו את הבלוק "אם בקצה, חזור" (if on edge, bounce) בתוך הלולאה</li>
+        <li>הגדירו את סגנון הסיבוב ל"שמאל-ימין" כדי שהחתול לא יתהפך</li>
+        <li>נסו מהירויות שונות — מה ההבדל בין 5 צעדים ל-15 צעדים?</li>
+      </ul>
+    </div>
+
+    <div class="exercise-box" data-premium>
+      <h3>⭐ משימת בונוס: ספירלה!</h3>
+      <p>ספירלה היא צורה שבה גודל הצעד משתנה בכל סיבוב. הרעיון: בכל חזרה, לך קצת יותר רחוק!</p>
+      <p>רמז: תצטרכו <strong>משתנה</strong> (שנלמד ביחידה הבאה), או שאפשר להשתמש בטריק — לשים את מספר החזרה בתוך "לך ___ צעדים". נסו את זה:</p>
+      <div class="scratch-wrap">
+        <div class="sb events hat">when 🏴 clicked</div>
+        <div class="sb pen">erase all</div>
+        <div class="sb pen">pen down</div>
+        <div class="sb control">repeat <span class="hole">100</span></div>
+        <div class="sb motion sb-indent">go <span class="hole">⬆ counter</span> steps</div>
+        <div class="sb motion sb-indent">turn ⟳ <span class="hole">90</span> degrees</div>
+      </div>
+      <p style="color:var(--text-light);font-size:.9rem">* בגרסה אמיתית, נחליף את ה-counter במשתנה שעולה ב-1 כל חזרה. ניתן גם לשנות את הזווית ל-91° לקבלת ספירלה מעניינת!</p>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="lesson-nav">
+    <a href="lesson-1-4.html">→ שיעור קודם: 1.4</a>
+    <a href="lesson-2-2.html">שיעור הבא: 2.2 ←</a>
+  </div>
+
+</div>
+
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

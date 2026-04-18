@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>רשימות | סקראץ' מאסטר</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06)}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}.topbar a:hover{text-decoration:underline}
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}.lesson-header{margin-bottom:32px}.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+.lesson-section{margin-bottom:40px}.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}.lesson-section p{line-height:1.8;margin-bottom:12px}.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}.lesson-tip strong{display:block;margin-bottom:4px}.lesson-tip p{margin:0;font-size:.95rem}
+.exercise-box{background:var(--bg);border:2px solid var(--primary);border-radius:12px;padding:24px;margin:24px 0}.exercise-box h3{color:var(--primary);margin-bottom:12px}
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}.lesson-nav a:hover{border-color:var(--primary);color:var(--primary)}
+.scratch-wrap{direction:ltr;text-align:left;background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin:16px 0;font-family:'Courier New',monospace}.sb{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-weight:700;color:#fff;font-size:.88rem;margin:4px 0;width:fit-content;line-height:1.4}.sb.hat{border-top:4px solid rgba(0,0,0,.15);border-radius:12px 12px 8px 8px;padding-top:10px}.sb .hole{display:inline-flex;align-items:center;background:rgba(255,255,255,.25);border-radius:16px;padding:2px 10px;font-weight:600;font-size:.82rem;min-width:30px;justify-content:center}.sb-indent{margin-left:24px}
+.sb.motion{background:#4C97FF}.sb.looks{background:#9966FF}.sb.sound{background:#CF63CF}.sb.events{background:#FFBF00;color:#333}.sb.control{background:#FFAB19;color:#333}.sb.sensing{background:#5CB1D6}.sb.operators{background:#59C059}.sb.variables{background:#FF8C1A}.sb.my-blocks{background:#FF6680}.sb.pen{background:#0fBD8C}
+@media(max-width:768px){.lesson-title{font-size:1.5rem}.lesson-nav{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <span class="topbar-title">סקראץ' מאסטר 🐱</span>
+  <a href="course.html">&larr; חזרה לקורס</a>
+</div>
+
+<!-- Lesson Content -->
+<div class="lesson-container">
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#e11d48">יחידה 5: מבני נתונים</span>
+    <h1 class="lesson-title">רשימות</h1>
+    <p class="lesson-subtitle">יצירת רשימות, הוספה ומחיקה, גישה לפי אינדקס ומסיבת ריקודים</p>
+  </div>
+
+  <!-- Section 1: What is a List? -->
+  <div class="lesson-section">
+    <h2>1. מה זו רשימה?</h2>
+
+    <p>רשימה (<strong>List</strong>) היא <strong>אוסף מסודר של פריטים</strong> — בדיוק כמו רשימת מטלות ממוספרת. בעוד משתנה רגיל מאחסן <strong>ערך אחד בלבד</strong> (למשל: ניקוד = 10), רשימה יכולה לאחסן <strong>הרבה ערכים</strong> בו-זמנית!</p>
+
+    <p>לכל פריט ברשימה יש <strong>אינדקס</strong> — מספר המקום שלו ברשימה. בסקראץ', האינדקס מתחיל מ-<strong>1</strong> (הפריט הראשון הוא פריט מספר 1, השני הוא מספר 2, וכן הלאה).</p>
+
+    <h3>אנלוגיה: מדפים ממוספרים</h3>
+    <p>דמיינו ארון עם מדפים ממוספרים. מדף 1 מכיל את הפריט הראשון, מדף 2 את השני, וכן הלאה. אתם יכולים <strong>להוסיף</strong> פריט למדף חדש, <strong>להוציא</strong> פריט ממדף מסוים, או <strong>לשאול</strong> "מה יש במדף מספר 3?".</p>
+
+    <h3>דוגמאות מהחיים</h3>
+    <ul>
+      <li><strong>רשימת קניות</strong> — לחם, חלב, ביצים, גבינה</li>
+      <li><strong>שמות תלמידים בכיתה</strong> — דני, יעל, נועה, אבי</li>
+      <li><strong>טבלת שיאים</strong> — 1500, 1200, 980, 750</li>
+      <li><strong>צבעים אהובים</strong> — אדום, כחול, ירוק</li>
+    </ul>
+
+    <div class="lesson-tip">
+      <strong>💡 משתנה מול רשימה</strong>
+      <p><strong>משתנה</strong> הוא כמו קופסה אחת — אפשר לשים בה דבר אחד בלבד. <strong>רשימה</strong> היא כמו שורה של קופסאות ממוספרות — כל קופסה מכילה פריט, ואפשר להוסיף עוד קופסאות כמה שרוצים!</p>
+    </div>
+  </div>
+
+  <!-- Section 2: Creating a List in Scratch -->
+  <div class="lesson-section">
+    <h2>2. יצירת רשימה בסקראץ'</h2>
+
+    <p>יצירת רשימה בסקראץ' היא קלה:</p>
+
+    <ol>
+      <li>לכו לקטגוריית <strong>"משתנים"</strong> (Variables) — הקטגוריה הכתומה</li>
+      <li>לחצו על <strong>"צור רשימה"</strong> (Make a List)</li>
+      <li>תנו לרשימה שם — למשל: <strong>"שמות"</strong>, <strong>"ציונים"</strong>, <strong>"תנועות"</strong></li>
+      <li>בחרו אם הרשימה <strong>"לכל הדמויות"</strong> (for all sprites) או <strong>"לדמות הזו בלבד"</strong> (for this sprite only)</li>
+      <li>לחצו <strong>אישור</strong></li>
+    </ol>
+
+    <p>ברגע שיצרתם רשימה, שני דברים קורים:</p>
+    <ul>
+      <li><strong>מוניטור רשימה</strong> מופיע על הבמה — חלון קטן שמציג את תוכן הרשימה בזמן אמת</li>
+      <li><strong>בלוקים חדשים</strong> מופיעים בקטגוריית "משתנים" — כל הפעולות שאפשר לעשות עם הרשימה</li>
+    </ul>
+
+    <div class="lesson-tip success">
+      <strong>✅ טיפ</strong>
+      <p>אפשר להוסיף פריטים ידנית דרך המוניטור על הבמה — לחצו על כפתור ה-<strong>+</strong> בתחתית המוניטור. זה שימושי לבדיקות מהירות!</p>
+    </div>
+  </div>
+
+  <!-- Section 3: List Blocks -->
+  <div class="lesson-section">
+    <h2>3. בלוקי רשימה</h2>
+
+    <p>כשיוצרים רשימה, מופיעים בלוקים חדשים בקטגוריית "משתנים". בואו נכיר את כולם:</p>
+
+    <h3>הוספה</h3>
+    <div class="scratch-wrap">
+      <div class="sb variables">add <span class="hole">thing</span> to <span class="hole">רשימה</span></div>
+    </div>
+    <p><strong>"הוסף ___ ל-[רשימה]"</strong> — מוסיף פריט <strong>בסוף</strong> הרשימה. הפריט מקבל אינדקס חדש (אחרי האחרון).</p>
+
+    <h3>מחיקה</h3>
+    <div class="scratch-wrap">
+      <div class="sb variables">delete <span class="hole">1</span> of <span class="hole">רשימה</span></div>
+    </div>
+    <p><strong>"מחק ___ מ-[רשימה]"</strong> — מוחק את הפריט במיקום שצוין. אפשר גם למחוק <strong>"הכל"</strong> (all) כדי לרוקן את הרשימה לגמרי.</p>
+
+    <h3>הכנסה במיקום</h3>
+    <div class="scratch-wrap">
+      <div class="sb variables">insert <span class="hole">thing</span> at <span class="hole">1</span> of <span class="hole">רשימה</span></div>
+    </div>
+    <p><strong>"הכנס ___ במקום ___ ב-[רשימה]"</strong> — מכניס פריט <strong>במיקום ספציפי</strong>. כל הפריטים שאחריו זזים מקום אחד קדימה.</p>
+
+    <h3>החלפה</h3>
+    <div class="scratch-wrap">
+      <div class="sb variables">replace item <span class="hole">1</span> of <span class="hole">רשימה</span> with <span class="hole">thing</span></div>
+    </div>
+    <p><strong>"החלף פריט ___ ב-[רשימה] ב-___"</strong> — מחליף את הפריט במיקום מסוים בפריט חדש (בלי לשנות את האינדקסים של שאר הפריטים).</p>
+
+    <h3>גישה לפריט</h3>
+    <div class="scratch-wrap">
+      <div class="sb variables" style="border-radius:16px">item <span class="hole">1</span> of <span class="hole">רשימה</span></div>
+    </div>
+    <p><strong>"פריט ___ ב-[רשימה]"</strong> — מחזיר את הערך של הפריט במיקום שצוין. זהו בלוק <strong>דיווח</strong> (reporter) — עגול, שאפשר לשלב בתוך בלוקים אחרים.</p>
+
+    <h3>אורך הרשימה</h3>
+    <div class="scratch-wrap">
+      <div class="sb variables" style="border-radius:16px">length of <span class="hole">רשימה</span></div>
+    </div>
+    <p><strong>"אורך של [רשימה]"</strong> — מחזיר את <strong>מספר הפריטים</strong> ברשימה. גם זה בלוק דיווח עגול.</p>
+
+    <h3>האם מכיל?</h3>
+    <div class="scratch-wrap">
+      <div class="sb variables" style="border-radius:16px;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,10px 100%,0 50%)"><span class="hole">רשימה</span> contains <span class="hole">thing</span> ?</div>
+    </div>
+    <p><strong>"[רשימה] מכילה ___?"</strong> — בודק אם הרשימה מכילה ערך מסוים. מחזיר <strong>אמת</strong> (true) או <strong>שקר</strong> (false). זהו בלוק <strong>בוליאני</strong> — בצורת משושה.</p>
+
+    <div class="lesson-tip warning">
+      <strong>⚠️ שימו לב לאינדקסים</strong>
+      <p>בסקראץ' האינדקס מתחיל מ-<strong>1</strong>, לא מ-0. הפריט הראשון הוא פריט 1. אם יש ברשימה 5 פריטים, האחרון הוא פריט 5 (או שאפשר להשתמש ב-"last").</p>
+    </div>
+  </div>
+
+  <!-- Section 4: Basic Examples -->
+  <div class="lesson-section">
+    <h2>4. דוגמאות בסיסיות</h2>
+
+    <h3>מילוי רשימה מקלט המשתמש</h3>
+    <p>נשאל את המשתמש 3 שמות ונכניס אותם לרשימה:</p>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb variables">delete <span class="hole">all</span> of <span class="hole">שמות</span></div>
+      <div class="sb control">repeat <span class="hole">3</span></div>
+      <div class="sb-indent">
+        <div class="sb sensing">ask <span class="hole">הכנס שם</span> and wait</div>
+        <div class="sb variables">add <span class="hole"><span class="sb sensing" style="margin:0;padding:4px 10px;font-size:.8rem">answer</span></span> to <span class="hole">שמות</span></div>
+      </div>
+      <div class="sb looks">say <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">join (נרשמו ) (join (<span class="sb variables" style="margin:0;padding:4px 8px;font-size:.78rem">length of שמות</span>) ( שמות))</span></span> for <span class="hole">2</span> seconds</div>
+    </div>
+
+    <p>התוכנית מוחקת קודם הכל את כל הפריטים הישנים, ואז שואלת 3 שמות ומוסיפה כל אחד לרשימה. בסוף, היא מציגה את מספר השמות שנרשמו.</p>
+
+    <h3>גישה לפריט ברשימה</h3>
+    <p>אחרי שמילאנו את הרשימה, אפשר לגשת לפריטים ספציפיים:</p>
+
+    <div class="scratch-wrap">
+      <div class="sb looks">say <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">join (הראשון: ) (<span class="sb variables" style="margin:0;padding:4px 8px;font-size:.78rem">item 1 of שמות</span>)</span></span> for <span class="hole">2</span> seconds</div>
+      <div class="sb looks">say <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">join (האחרון: ) (<span class="sb variables" style="margin:0;padding:4px 8px;font-size:.78rem">item (<span class="sb variables" style="margin:0;padding:3px 6px;font-size:.75rem">length of שמות</span>) of שמות</span>)</span></span> for <span class="hole">2</span> seconds</div>
+    </div>
+
+    <p>שימו לב לטריק: כדי לגשת <strong>לפריט האחרון</strong>, השתמשנו ב-"אורך של הרשימה" בתור האינדקס. אם יש 3 פריטים, אורך הרשימה הוא 3, ופריט 3 הוא האחרון. (אפשר גם פשוט לכתוב "last" — סקראץ' תומך בזה!)</p>
+
+    <div class="lesson-tip">
+      <strong>💡 "last" ו-"random"</strong>
+      <p>במקום מספר אינדקס, אפשר לכתוב בבלוק "פריט ___ ב-[רשימה]" את המילה <strong>"last"</strong> (אחרון) או <strong>"random"</strong> (אקראי). זה חוסך חישובים ומאוד שימושי!</p>
+    </div>
+  </div>
+
+  <!-- Section 5: Iterating Through a List -->
+  <div class="lesson-section">
+    <h2>5. סריקת רשימה (Iterating)</h2>
+
+    <p>הרבה פעמים נרצה <strong>לעבור על כל הפריטים</strong> ברשימה — אחד אחד, מההתחלה לסוף. לדוגמה: להציג כל שם, לבדוק כל ציון, או לחפש ערך מסוים.</p>
+
+    <p>הדפוס הבסיסי הוא:</p>
+    <ol>
+      <li>ליצור משתנה <strong>מונה</strong> (counter) — נקרא לו <strong>i</strong></li>
+      <li>להגדיר אותו ל-<strong>1</strong> (ההתחלה)</li>
+      <li>לחזור <strong>כמספר הפריטים ברשימה</strong> פעמים</li>
+      <li>בכל חזרה — להשתמש ב-<strong>"פריט i ב-[רשימה]"</strong> ולהגדיל את i ב-1</li>
+    </ol>
+
+    <h3>דוגמה: הצגת כל השמות</h3>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb variables">set <span class="hole">i</span> to <span class="hole">1</span></div>
+      <div class="sb control">repeat <span class="hole"><span class="sb variables" style="margin:0;padding:4px 8px;font-size:.8rem">length of שמות</span></span></div>
+      <div class="sb-indent">
+        <div class="sb looks">say <span class="hole"><span class="sb variables" style="margin:0;padding:4px 8px;font-size:.8rem">item (i) of שמות</span></span> for <span class="hole">1</span> seconds</div>
+        <div class="sb variables">change <span class="hole">i</span> by <span class="hole">1</span></div>
+      </div>
+    </div>
+
+    <p>אם הרשימה מכילה "דני", "יעל", "נועה" — הדמות תאמר "דני" (שנייה), "יעל" (שנייה), "נועה" (שנייה).</p>
+
+    <h3>דוגמה: חיפוש הציון הגבוה ביותר</h3>
+
+    <p>נניח שיש לנו רשימת "ציונים". נעבור על כולם ונמצא את הגבוה ביותר:</p>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb variables">set <span class="hole">מקסימום</span> to <span class="hole"><span class="sb variables" style="margin:0;padding:4px 8px;font-size:.8rem">item 1 of ציונים</span></span></div>
+      <div class="sb variables">set <span class="hole">i</span> to <span class="hole">2</span></div>
+      <div class="sb control">repeat <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">(<span class="sb variables" style="margin:0;padding:3px 6px;font-size:.75rem">length of ציונים</span>) - (1)</span></span></div>
+      <div class="sb-indent">
+        <div class="sb control">if <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">(<span class="sb variables" style="margin:0;padding:3px 6px;font-size:.75rem">item (i) of ציונים</span>) &gt; (מקסימום)</span></span> then</div>
+        <div class="sb-indent">
+          <div class="sb variables">set <span class="hole">מקסימום</span> to <span class="hole"><span class="sb variables" style="margin:0;padding:4px 8px;font-size:.8rem">item (i) of ציונים</span></span></div>
+        </div>
+        <div class="sb variables">change <span class="hole">i</span> by <span class="hole">1</span></div>
+      </div>
+      <div class="sb looks">say <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">join (הציון הגבוה ביותר: ) (מקסימום)</span></span> for <span class="hole">3</span> seconds</div>
+    </div>
+
+    <p>הטריק: מתחילים מהפריט הראשון כ"מקסימום זמני", ואז עוברים על שאר הפריטים. כל פעם שמוצאים ציון גבוה יותר — מעדכנים את המקסימום.</p>
+
+    <div class="lesson-tip">
+      <strong>💡 למה i מתחיל מ-2?</strong>
+      <p>כבר הגדרנו את הפריט הראשון כמקסימום, אז אין צורך לבדוק אותו שוב. מתחילים לסרוק מפריט 2, ולכן גם מספר החזרות הוא "אורך הרשימה פחות 1".</p>
+    </div>
+  </div>
+
+  <!-- Section 6: Dance Party Project -->
+  <div class="lesson-section">
+    <h2>6. פרויקט: מסיבת ריקודים 💃🕺</h2>
+
+    <p>בואו נבנה פרויקט מגניב שמשתמש ברשימות! <strong>מסיבת ריקודים</strong> — דמות שמבצעת תנועות ריקוד אקראיות מתוך רשימה.</p>
+
+    <h3>הרעיון</h3>
+    <p>ניצור רשימה של תנועות ריקוד: "קפוץ", "סובב", "הנף ידיים", "רקוד". בכל חזרה של הלולאה, הדמות תבחר תנועה <strong>אקראית</strong> מהרשימה ותבצע אותה!</p>
+
+    <h3>שלב 1: הגדרת רשימת התנועות</h3>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb variables">delete <span class="hole">all</span> of <span class="hole">תנועות</span></div>
+      <div class="sb variables">add <span class="hole">קפוץ</span> to <span class="hole">תנועות</span></div>
+      <div class="sb variables">add <span class="hole">סובב</span> to <span class="hole">תנועות</span></div>
+      <div class="sb variables">add <span class="hole">הנף ידיים</span> to <span class="hole">תנועות</span></div>
+      <div class="sb variables">add <span class="hole">רקוד</span> to <span class="hole">תנועות</span></div>
+    </div>
+
+    <h3>שלב 2: ביצוע תנועה לפי שם</h3>
+    <p>ניצור בלוק מותאם (<strong>My Block</strong>) שמקבל שם תנועה ומבצע אותה:</p>
+
+    <div class="scratch-wrap">
+      <div class="sb my-blocks hat">define <span class="hole">בצע תנועה</span> <span class="hole">שם</span></div>
+      <div class="sb-indent">
+        <div class="sb control">if <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">(שם) = (קפוץ)</span></span> then</div>
+        <div class="sb-indent">
+          <div class="sb motion">change y by <span class="hole">50</span></div>
+          <div class="sb control">wait <span class="hole">0.3</span> seconds</div>
+          <div class="sb motion">change y by <span class="hole">-50</span></div>
+        </div>
+        <div class="sb control">if <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">(שם) = (סובב)</span></span> then</div>
+        <div class="sb-indent">
+          <div class="sb motion">turn ⟳ <span class="hole">360</span> degrees</div>
+        </div>
+        <div class="sb control">if <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">(שם) = (הנף ידיים)</span></span> then</div>
+        <div class="sb-indent">
+          <div class="sb looks">next costume</div>
+          <div class="sb control">wait <span class="hole">0.3</span> seconds</div>
+          <div class="sb looks">next costume</div>
+        </div>
+        <div class="sb control">if <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">(שם) = (רקוד)</span></span> then</div>
+        <div class="sb-indent">
+          <div class="sb motion">glide <span class="hole">0.3</span> secs to x: <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">pick random (-50) to (50)</span></span> y: <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">pick random (-50) to (50)</span></span></div>
+        </div>
+      </div>
+    </div>
+
+    <h3>שלב 3: לולאת הריקוד</h3>
+    <p>נשלב הכל — בלולאה אינסופית, בוחרים תנועה אקראית מהרשימה ומבצעים אותה:</p>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← (אחרי מילוי הרשימה)</div>
+      <div class="sb control">forever</div>
+      <div class="sb-indent">
+        <div class="sb variables">set <span class="hole">תנועה נוכחית</span> to <span class="hole"><span class="sb variables" style="margin:0;padding:4px 8px;font-size:.8rem">item (random) of תנועות</span></span></div>
+        <div class="sb looks">say <span class="hole"><span class="sb variables" style="margin:0;padding:4px 8px;font-size:.8rem">תנועה נוכחית</span></span> for <span class="hole">0.5</span> seconds</div>
+        <div class="sb my-blocks">בצע תנועה <span class="hole"><span class="sb variables" style="margin:0;padding:4px 8px;font-size:.8rem">תנועה נוכחית</span></span></div>
+        <div class="sb control">wait <span class="hole">0.5</span> seconds</div>
+      </div>
+    </div>
+
+    <p>כל פעם הדמות בוחרת תנועה <strong>אקראית</strong> מהרשימה, מציגה את שמה, ומבצעת אותה. כל ריצה תיתן רצף שונה של תנועות!</p>
+
+    <div class="lesson-tip success">
+      <strong>✅ למה זה מגניב?</strong>
+      <p>הכוח של רשימות כאן הוא <strong>הגמישות</strong>. רוצים להוסיף תנועה חדשה? פשוט הוסיפו אותה לרשימה ותגדירו מה היא עושה — בלי לשנות את הלולאה הראשית! זה עיקרון חשוב: <strong>הנתונים (הרשימה) נפרדים מהלוגיקה (הלולאה)</strong>.</p>
+    </div>
+  </div>
+
+  <!-- Section 7: Exercise -->
+  <div class="lesson-section">
+    <div class="exercise-box">
+      <h3>📝 תרגיל: בנו בסקראץ'</h3>
+      <p>פתחו את סקראץ' ונסו לבנות את התוכניות הבאות:</p>
+      <ol>
+        <li><strong>רשימת חברים</strong> — צרו רשימה בשם "חברים". שאלו את המשתמש 5 שמות (בלולאה) והוסיפו כל אחד לרשימה. בסוף, עברו על הרשימה והציגו כל שם — הדמות תאמר "שלום, [שם]!" למשך שנייה, לכל שם</li>
+        <li><strong>טבלת שיאים</strong> — צרו רשימה בשם "ציונים". הוסיפו לרשימה 5 ציונים (מספרים) מהמשתמש. לאחר מכן, מצאו והציגו את <strong>הציון הגבוה ביותר</strong>. רמז: השתמשו בדפוס "חיפוש מקסימום" שלמדנו בסעיף 5</li>
+        <li><strong>בונוס — בוחר שמות אקראי:</strong> צרו רשימה עם שמות (כמה שרוצים). כשלוחצים על מקש הרווח, הדמות בוחרת שם <strong>אקראי</strong> מהרשימה ומכריזה עליו. רמז: השתמשו ב-<strong>"פריט random ב-[רשימה]"</strong></li>
+      </ol>
+      <p style="margin-top:16px;color:var(--text-light);font-size:.9rem"><strong>אתגר נוסף:</strong> שפרו את "בוחר השמות" כך שכל שם שנבחר <strong>נמחק מהרשימה</strong> (כדי שלא יחזור שוב). הגרלה תסתיים כשהרשימה ריקה — הדמות תאמר "נגמרו השמות!".</p>
+    </div>
+  </div>
+
+  <!-- Lesson Navigation -->
+  <div class="lesson-nav">
+    <a href="lesson-5-1.html">השיעור הקודם &rarr;</a>
+    <a href="lesson-5-3.html">השיעור הבא &larr;</a>
+  </div>
+
+</div>
+
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

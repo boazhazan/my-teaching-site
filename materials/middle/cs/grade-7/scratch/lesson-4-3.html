@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>בנה לבנה — חלק א' (My Blocks) | סקראץ' מאסטר</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06)}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}.topbar a:hover{text-decoration:underline}
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}.lesson-header{margin-bottom:32px}.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+.lesson-section{margin-bottom:40px}.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}.lesson-section p{line-height:1.8;margin-bottom:12px}.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}.lesson-tip strong{display:block;margin-bottom:4px}.lesson-tip p{margin:0;font-size:.95rem}
+.exercise-box{background:var(--bg);border:2px solid var(--primary);border-radius:12px;padding:24px;margin:24px 0}.exercise-box h3{color:var(--primary);margin-bottom:12px}
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}.lesson-nav a:hover{border-color:var(--primary);color:var(--primary)}
+.scratch-wrap{direction:ltr;text-align:left;background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin:16px 0;font-family:'Courier New',monospace}.sb{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-weight:700;color:#fff;font-size:.88rem;margin:4px 0;width:fit-content;line-height:1.4}.sb.hat{border-top:4px solid rgba(0,0,0,.15);border-radius:12px 12px 8px 8px;padding-top:10px}.sb .hole{display:inline-flex;align-items:center;background:rgba(255,255,255,.25);border-radius:16px;padding:2px 10px;font-weight:600;font-size:.82rem;min-width:30px;justify-content:center}.sb-indent{margin-left:24px}
+.sb.motion{background:#4C97FF}.sb.looks{background:#9966FF}.sb.sound{background:#CF63CF}.sb.events{background:#FFBF00;color:#333}.sb.control{background:#FFAB19;color:#333}.sb.sensing{background:#5CB1D6}.sb.operators{background:#59C059}.sb.variables{background:#FF8C1A}.sb.my-blocks{background:#FF6680}.sb.pen{background:#0fBD8C}
+@media(max-width:768px){.lesson-title{font-size:1.5rem}.lesson-nav{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <span class="topbar-title">סקראץ' מאסטר 🐱</span>
+  <a href="course.html">&larr; חזרה לקורס</a>
+</div>
+
+<!-- Lesson Content -->
+<div class="lesson-container">
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#059669">יחידה 4: לולאות תנאי ובנייה</span>
+    <h1 class="lesson-title">בנה לבנה — חלק א' (My Blocks)</h1>
+    <p class="lesson-subtitle">יצירת בלוקים מותאמים אישית, פרמטרים, ופירוק תוכנית לחלקים</p>
+  </div>
+
+  <!-- Section 1: Why Custom Blocks? -->
+  <div class="lesson-section">
+    <h2>1. למה ליצור בלוקים מותאמים?</h2>
+
+    <p>ככל שתוכניות הסקראץ' שלנו גדלות, הקוד נעשה <strong>ארוך וחוזר על עצמו</strong>. קשה לקרוא אותו, קשה לתחזק אותו, וכשיש באג — קשה למצוא אותו. דמיינו תוכנית עם 200 בלוקים בתסריט אחד ארוך ומבלבל!</p>
+
+    <p>בלוקים מותאמים אישית (<strong>My Blocks</strong>) מאפשרים לנו <strong>לארוז</strong> רצף של בלוקים לתוך בלוק חדש אחד — עם שם שאנחנו בוחרים. במקום לחזור על אותה סדרת בלוקים שוב ושוב, פשוט משתמשים בבלוק החדש!</p>
+
+    <h3>מה היתרונות?</h3>
+    <ul>
+      <li><strong>קוד קצר יותר</strong> — במקום 10 בלוקים חוזרים, בלוק אחד בלבד</li>
+      <li><strong>קוד קריא יותר</strong> — השם של הבלוק מסביר מה הוא עושה</li>
+      <li><strong>שימוש חוזר</strong> — בניתם פעם אחת, משתמשים כמה שרוצים</li>
+      <li><strong>קל לתקן</strong> — באג? מתקנים במקום אחד, והתיקון חל בכל מקום</li>
+    </ul>
+
+    <h3>אנלוגיה: מתכון קפה</h3>
+
+    <p>דמיינו שבכל פעם שמישהו מבקש קפה, אתם צריכים לומר: "קח כוס, מלא מים, חמם במיקרוגל, הוסף כפית קפה, הוסף סוכר, ערבב". זה מתיש! 😅</p>
+
+    <p>במקום זה, פשוט אומרים: <strong>"תכין קפה"</strong> — וכולם מבינים מה לעשות. זה בדיוק מה שבלוק מותאם עושה — נותן <strong>שם אחד</strong> לסדרה של פעולות.</p>
+
+    <div class="lesson-tip">
+      <strong>💡 מושג חשוב</strong>
+      <p>בעולם התכנות, הרעיון הזה נקרא <strong>פונקציה</strong> (function) או <strong>פרוצדורה</strong> (procedure). כמעט כל שפת תכנות בעולם — Python, JavaScript, Java — משתמשת ברעיון הזה. כשאתם לומדים My Blocks בסקראץ', אתם למעשה לומדים את אחד המושגים הכי חשובים בתכנות!</p>
+    </div>
+  </div>
+
+  <!-- Section 2: Creating a New Block -->
+  <div class="lesson-section">
+    <h2>2. יצירת בלוק חדש</h2>
+
+    <p>בואו ניצור את הבלוק המותאם הראשון שלנו — <strong>"צייר ריבוע"</strong>. ככה עושים את זה:</p>
+
+    <h3>צעד אחר צעד</h3>
+    <ol>
+      <li>לחצו על הקטגוריה <strong>"הבלוקים שלי"</strong> (My Blocks) — בצבע ורוד-אדום בתחתית הרשימה</li>
+      <li>לחצו על הכפתור <strong>"בנה לבנה"</strong> (Make a Block)</li>
+      <li>הקלידו שם לבלוק — למשל: <strong>צייר ריבוע</strong></li>
+      <li>לחצו <strong>אישור</strong> (OK)</li>
+      <li>בלוק <strong>"הגדר"</strong> (define) חדש יופיע באזור העבודה — כמו כובע. שימו מתחתיו את הבלוקים שעושים את הפעולה</li>
+      <li>הבלוק החדש שלכם מופיע כעת בפלטת הבלוקים — גררו אותו לכל מקום שצריך!</li>
+    </ol>
+
+    <h3>דוגמה: הגדרת "צייר ריבוע" ושימוש בו</h3>
+
+    <p style="margin-bottom:4px;font-weight:700;color:var(--text-light)">הגדרה:</p>
+    <div class="scratch-wrap">
+      <div class="sb my-blocks hat">define <span class="hole">צייר ריבוע</span></div>
+      <div class="sb-indent">
+        <div class="sb pen">pen down</div>
+        <div class="sb control">repeat <span class="hole">4</span></div>
+        <div class="sb-indent">
+          <div class="sb motion">move <span class="hole">100</span> steps</div>
+          <div class="sb motion">turn ⟳ <span class="hole">90</span> degrees</div>
+        </div>
+        <div class="sb pen">pen up</div>
+      </div>
+    </div>
+
+    <p style="margin-bottom:4px;font-weight:700;color:var(--text-light)">שימוש:</p>
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb pen">erase all</div>
+      <div class="sb my-blocks">צייר ריבוע</div>
+    </div>
+
+    <p>שימו לב כמה זה נקי! התסריט הראשי מכיל שלוש שורות בלבד. כל ההגיון של ציור ריבוע "חבוי" בתוך הבלוק המותאם. מי שקורא את הקוד מבין מיד — <strong>"מחק הכל, צייר ריבוע"</strong> — בלי להתעמק בפרטים.</p>
+
+    <div class="lesson-tip success">
+      <strong>✅ הידעתם?</strong>
+      <p>בלוק "הגדר" (define) עובד בדיוק כמו "כובע" רגיל — אבל הוא לא מופעל בלחיצה על הדגל או על הדמות. הוא מופעל <strong>רק</strong> כשמשתמשים בבלוק שיצרתם (גוררים אותו לתסריט ומפעילים).</p>
+    </div>
+  </div>
+
+  <!-- Section 3: Parameters -->
+  <div class="lesson-section">
+    <h2>3. פרמטרים (Inputs)</h2>
+
+    <p>הבלוק "צייר ריבוע" שלנו עובד מצוין — אבל הוא תמיד מצייר ריבוע <strong>באותו גודל</strong> (100 צעדים). מה אם רוצים ריבוע קטן יותר? או גדול יותר?</p>
+
+    <p>כאן נכנסים <strong>פרמטרים</strong> (Inputs) — ערכים שאנחנו <strong>מעבירים</strong> לבלוק כשמשתמשים בו. הפרמטר הופך למשתנה בתוך ההגדרה של הבלוק.</p>
+
+    <h3>איך מוסיפים פרמטר?</h3>
+    <ol>
+      <li>כשיוצרים בלוק חדש (או עורכים קיים), לחצו על <strong>"הוסף קלט"</strong> (Add an input)</li>
+      <li>בחרו סוג: <strong>מספר/טקסט</strong> (number or text) או <strong>בוליאני</strong> (boolean)</li>
+      <li>תנו לפרמטר שם (למשל: "גודל")</li>
+      <li>הפרמטר יופיע כעיגול בתוך בלוק ה-define — גררו אותו למקום הנכון בקוד</li>
+    </ol>
+
+    <h3>דוגמה: "צייר מצולע" עם פרמטרים</h3>
+
+    <p>בואו ניצור בלוק חזק יותר — <strong>צייר מצולע</strong> — שמקבל שני פרמטרים: <strong>מספר צלעות</strong> ו<strong>גודל</strong>.</p>
+
+    <p style="margin-bottom:4px;font-weight:700;color:var(--text-light)">הגדרה עם פרמטרים:</p>
+    <div class="scratch-wrap">
+      <div class="sb my-blocks hat">define <span class="hole">צייר מצולע</span> <span class="hole">צלעות</span> <span class="hole">גודל</span></div>
+      <div class="sb-indent">
+        <div class="sb pen">pen down</div>
+        <div class="sb control">repeat <span class="hole">צלעות</span></div>
+        <div class="sb-indent">
+          <div class="sb motion">move <span class="hole">גודל</span> steps</div>
+          <div class="sb motion">turn ⟳ <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">(360) / (צלעות)</span></span> degrees</div>
+        </div>
+        <div class="sb pen">pen up</div>
+      </div>
+    </div>
+
+    <p style="margin-bottom:4px;font-weight:700;color:var(--text-light)">שימוש — צורות שונות עם אותו בלוק:</p>
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb pen">erase all</div>
+      <div class="sb my-blocks">צייר מצולע <span class="hole">4</span> <span class="hole">100</span></div>
+      <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← ריבוע</div>
+      <div class="sb my-blocks">צייר מצולע <span class="hole">3</span> <span class="hole">80</span></div>
+      <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← משולש</div>
+      <div class="sb my-blocks">צייר מצולע <span class="hole">6</span> <span class="hole">60</span></div>
+      <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← משושה</div>
+    </div>
+
+    <p>בלוק אחד — שלוש צורות שונות! הפרמטרים מאפשרים לנו <strong>גמישות</strong>: אותה פונקציה, תוצאות שונות לפי הערכים שמעבירים.</p>
+
+    <div class="lesson-tip">
+      <strong>💡 חשבו על פרמטרים כמו "חורים" בבלוק</strong>
+      <p>כשאתם מגדירים בלוק, הפרמטר הוא "חור" ריק שממתין לערך. כשאתם משתמשים בבלוק, אתם "ממלאים" את החור בערך מסוים. בדיוק כמו פונקציה במתמטיקה: f(x) = 2x — ה-x הוא הפרמטר, ואתם ממלאים אותו: f(3) = 6, f(5) = 10.</p>
+    </div>
+  </div>
+
+  <!-- Section 4: Run Without Screen Refresh -->
+  <div class="lesson-section">
+    <h2>4. "הפעל בלי רענון מסך"</h2>
+
+    <p>כשיוצרים בלוק חדש, שמתם לב לאפשרות <strong>"הפעל בלי רענון מסך"</strong> (Run without screen refresh)? מה זה עושה?</p>
+
+    <h3>ההבדל</h3>
+    <ul>
+      <li><strong>בלי האפשרות הזו</strong> (ברירת מחדל) — סקראץ' מציג כל צעד ביניים. אם הבלוק מצייר ריבוע, תראו את העט זז צעד אחר צעד, פנייה אחר פנייה. זה נחמד אם רוצים לראות את התהליך.</li>
+      <li><strong>עם האפשרות הזו</strong> — הבלוק מתבצע <strong>מיידית</strong>, בלי אנימציה של שלבי ביניים. הצורה פשוט "מופיעה" על המסך. הרבה יותר מהיר!</li>
+    </ul>
+
+    <h3>מתי להשתמש?</h3>
+    <ul>
+      <li><strong>ציור</strong> — כמעט תמיד כדאי לסמן את האפשרות. מי רוצה לחכות לציור של כל צעד?</li>
+      <li><strong>חישובים</strong> — בהחלט. חישוב שרץ ברקע לא צריך לעדכן את המסך</li>
+      <li><strong>הדגמה/הוראה</strong> — דווקא <strong>לא</strong> לסמן. אם רוצים שהתלמיד יראה את תהליך הציור, שיהיה באיטיות</li>
+    </ul>
+
+    <div class="lesson-tip warning">
+      <strong>⚠️ שימו לב</strong>
+      <p>אם הבלוק שלכם מכיל לולאה אינסופית (forever) או לולאה ארוכה מאוד, סימון "הפעל בלי רענון מסך" עלול <strong>להקפיא את סקראץ'</strong> — כי הוא ינסה לסיים הכל בלי להציג כלום. השתמשו באפשרות הזו רק בבלוקים שמסתיימים!</p>
+    </div>
+  </div>
+
+  <!-- Section 5: Decomposition -->
+  <div class="lesson-section">
+    <h2>5. פירוק תוכנית לחלקים</h2>
+
+    <p>אחד הרעיונות <strong>הכי חשובים</strong> בתכנות נקרא <strong>פירוק</strong> (Decomposition) — לקחת בעיה גדולה ומורכבת ולפרק אותה לחלקים קטנים ופשוטים. כל חלק הופך לבלוק מותאם שעושה <strong>דבר אחד ספציפי</strong>.</p>
+
+    <h3>דוגמה: מבנה של משחק</h3>
+
+    <p>דמיינו שאתם בונים משחק. במקום תסריט ענק אחד של 100 בלוקים, אפשר לפרק אותו ככה:</p>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb my-blocks">אתחול</div>
+      <div class="sb control">forever</div>
+      <div class="sb-indent">
+        <div class="sb my-blocks">תנועה</div>
+        <div class="sb my-blocks">בדוק התנגשות</div>
+        <div class="sb my-blocks">עדכן ניקוד</div>
+      </div>
+    </div>
+
+    <p>כל אחד מהבלוקים האלה — <strong>אתחול</strong>, <strong>תנועה</strong>, <strong>בדוק התנגשות</strong>, <strong>עדכן ניקוד</strong> — הוא בלוק מותאם עם הגדרה משלו. התסריט הראשי נקרא כמו <strong>רשימת מטלות</strong> — ברור מיד מה קורה!</p>
+
+    <h3>היתרונות של פירוק</h3>
+
+    <ul>
+      <li><strong>קריאות</strong> — הקוד הראשי קריא כמו עברית: "אתחל, נוע, בדוק התנגשות, עדכן ניקוד"</li>
+      <li><strong>ניפוי באגים</strong> — משהו לא עובד? בודקים כל בלוק בנפרד. "התנועה עובדת? כן. ההתנגשות עובדת? לא — הבעיה שם!"</li>
+      <li><strong>עבודת צוות</strong> — חבר אחד עובד על "תנועה", אחר על "התנגשות" — בלי להפריע אחד לשני</li>
+      <li><strong>שינויים</strong> — רוצים לשנות איך התנועה עובדת? משנים רק את הבלוק "תנועה", בלי לגעת בשום דבר אחר</li>
+    </ul>
+
+    <h3>ככה נראים הבלוקים מאחורי הקלעים</h3>
+
+    <p style="margin-bottom:4px;font-weight:700;color:var(--text-light)">הגדרת "אתחול":</p>
+    <div class="scratch-wrap">
+      <div class="sb my-blocks hat">define <span class="hole">אתחול</span></div>
+      <div class="sb-indent">
+        <div class="sb variables">set <span class="hole">ניקוד</span> to <span class="hole">0</span></div>
+        <div class="sb variables">set <span class="hole">חיים</span> to <span class="hole">3</span></div>
+        <div class="sb motion">go to x: <span class="hole">0</span> y: <span class="hole">0</span></div>
+        <div class="sb looks">show</div>
+      </div>
+    </div>
+
+    <p style="margin-bottom:4px;font-weight:700;color:var(--text-light)">הגדרת "תנועה":</p>
+    <div class="scratch-wrap">
+      <div class="sb my-blocks hat">define <span class="hole">תנועה</span></div>
+      <div class="sb-indent">
+        <div class="sb control">if <span class="hole"><span class="sb sensing" style="margin:0;padding:4px 10px;font-size:.8rem">key (right arrow) pressed?</span></span> then</div>
+        <div class="sb-indent">
+          <div class="sb motion">change x by <span class="hole">5</span></div>
+        </div>
+        <div class="sb control">if <span class="hole"><span class="sb sensing" style="margin:0;padding:4px 10px;font-size:.8rem">key (left arrow) pressed?</span></span> then</div>
+        <div class="sb-indent">
+          <div class="sb motion">change x by <span class="hole">-5</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lesson-tip success">
+      <strong>✅ כלל אצבע: "תן שם לזה"</strong>
+      <p>אם יש לכם קטע קוד שאתם יכולים לתת לו <strong>שם ברור</strong> שמסביר מה הוא עושה (כמו "אתחול", "תנועה", "בדוק התנגשות") — כנראה כדאי להפוך אותו לבלוק מותאם. זה סימן טוב שהקוד עושה משהו מוגדר ועצמאי.</p>
+    </div>
+  </div>
+
+  <!-- Section 6: Exercise -->
+  <div class="lesson-section">
+    <div class="exercise-box">
+      <h3>📝 תרגיל: בנו בסקראץ'</h3>
+      <p>פתחו את סקראץ' ונסו לבנות את התוכניות הבאות:</p>
+      <ol>
+        <li><strong>בלוק "צייר ריבוע" עם פרמטר גודל</strong> — צרו בלוק מותאם בשם "צייר ריבוע" שמקבל פרמטר <strong>גודל</strong>. הבלוק מצייר ריבוע בגודל שנשלח אליו. השתמשו בו שלוש פעמים כדי לצייר 3 ריבועים בגדלים שונים (למשל: 50, 100, 150)</li>
+        <li><strong>בלוק "צייר מצולע" עם פרמטרים</strong> — צרו בלוק מותאם בשם "צייר מצולע" שמקבל שני פרמטרים: <strong>צלעות</strong> ו<strong>גודל</strong>. השתמשו בו לצייר משולש, ריבוע ומשושה — הכל עם אותו בלוק!</li>
+        <li><strong>פירוק תוכנית</strong> — קחו תוכנית קיימת שלכם (או בנו חדשה) ופרקו אותה לבלוקים מותאמים. התסריט הראשי צריך להכיל רק שמות של בלוקים — בלי פעולות ישירות</li>
+      </ol>
+      <p style="margin-top:16px;color:var(--text-light);font-size:.9rem"><strong>בונוס — בית מבלוקים:</strong> צרו בלוק מותאם בשם "צייר בית" שמקבל פרמטר <strong>גודל</strong>. הבלוק מצייר בית — ריבוע (הקירות) ומשולש מעליו (הגג). רמז: השתמשו בבלוק "צייר מצולע" שכבר בניתם, או צרו בלוקי עזר "צייר ריבוע" ו"צייר משולש" ושלבו אותם בתוך "צייר בית"!</p>
+    </div>
+  </div>
+
+  <!-- Lesson Navigation -->
+  <div class="lesson-nav">
+    <a href="lesson-4-2.html">השיעור הקודם &rarr;</a>
+    <a href="lesson-4-4.html">השיעור הבא &larr;</a>
+  </div>
+
+</div>
+
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

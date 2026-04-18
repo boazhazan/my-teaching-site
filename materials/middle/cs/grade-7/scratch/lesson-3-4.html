@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>משתנה מונה ומשתנה צובר | סקראץ' מאסטר</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06)}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}.topbar a:hover{text-decoration:underline}
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}.lesson-header{margin-bottom:32px}.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+.lesson-section{margin-bottom:40px}.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}.lesson-section p{line-height:1.8;margin-bottom:12px}.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}.lesson-tip strong{display:block;margin-bottom:4px}.lesson-tip p{margin:0;font-size:.95rem}
+.exercise-box{background:var(--bg);border:2px solid var(--primary);border-radius:12px;padding:24px;margin:24px 0}.exercise-box h3{color:var(--primary);margin-bottom:12px}
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}.lesson-nav a:hover{border-color:var(--primary);color:var(--primary)}
+.scratch-wrap{direction:ltr;text-align:left;background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin:16px 0;font-family:'Courier New',monospace}.sb{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-weight:700;color:#fff;font-size:.88rem;margin:4px 0;width:fit-content;line-height:1.4}.sb.hat{border-top:4px solid rgba(0,0,0,.15);border-radius:12px 12px 8px 8px;padding-top:10px}.sb .hole{display:inline-flex;align-items:center;background:rgba(255,255,255,.25);border-radius:16px;padding:2px 10px;font-weight:600;font-size:.82rem;min-width:30px;justify-content:center}.sb-indent{margin-left:24px}
+.sb.motion{background:#4C97FF}.sb.looks{background:#9966FF}.sb.sound{background:#CF63CF}.sb.events{background:#FFBF00;color:#333}.sb.control{background:#FFAB19;color:#333}.sb.sensing{background:#5CB1D6}.sb.operators{background:#59C059}.sb.variables{background:#FF8C1A}.sb.my-blocks{background:#FF6680}.sb.pen{background:#0fBD8C}
+.compare-table{width:100%;border-collapse:collapse;margin:16px 0}.compare-table th,.compare-table td{border:1px solid var(--border);padding:10px 14px;text-align:right}.compare-table th{background:var(--primary-light);font-weight:700;color:var(--primary-dark)}.compare-table td{background:var(--bg)}
+@media(max-width:768px){.lesson-title{font-size:1.5rem}.lesson-nav{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <span class="topbar-title">סקראץ' מאסטר 🐱</span>
+  <a href="course.html">&larr; חזרה לקורס</a>
+</div>
+
+<!-- Lesson Content -->
+<div class="lesson-container">
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#7c3aed">יחידה 3: משתנים ותנאים</span>
+    <h1 class="lesson-title">משתנה מונה ומשתנה צובר</h1>
+    <p class="lesson-subtitle">ספירה, סכימה, משחק פולשי החלל ודפוסי צבירה</p>
+  </div>
+
+  <!-- Section 1: What are Counter and Accumulator Patterns? -->
+  <div class="lesson-section">
+    <h2>1. מהם דפוסי מונה וצובר?</h2>
+
+    <p>בשיעורים הקודמים למדנו מה זה משתנה ואיך לשנות את הערך שלו. היום נלמד על שני <strong>דפוסים חשובים</strong> שחוזרים שוב ושוב בתכנות — ובמשחקים:</p>
+
+    <ul>
+      <li><strong>מונה (Counter)</strong> — משתנה שסופר כמה פעמים משהו קרה. עולה ב-1 בכל פעם</li>
+      <li><strong>צובר (Accumulator)</strong> — משתנה שצובר (סוכם) ערכים. מוסיף כמויות שונות בכל פעם</li>
+    </ul>
+
+    <p>שני הדפוסים עובדים באותו עיקרון:</p>
+    <ol>
+      <li><strong>אתחול</strong> — קובעים ערך התחלתי (בדרך כלל 0)</li>
+      <li><strong>לולאה / אירוע</strong> — כל פעם שמשהו קורה...</li>
+      <li><strong>עדכון</strong> — משנים את המשתנה</li>
+    </ol>
+
+    <p>ההבדל? <strong>מונה</strong> תמיד עולה ב-1 (כמות קבועה), ואילו <strong>צובר</strong> מוסיף כמויות שמשתנות — לפעמים 10, לפעמים 50, לפעמים את מה שהמשתמש הקליד.</p>
+
+    <div class="lesson-tip">
+      <strong>💡 למה זה חשוב?</strong>
+      <p>כמעט כל משחק או תוכנית משתמשים בדפוסים האלה. ניקוד, חיים, כסף, ספירת זמן, ממוצע ציונים — כולם מבוססים על מונה או צובר. ברגע שתזהו את הדפוס, תוכלו ליישם אותו בכל מצב!</p>
+    </div>
+  </div>
+
+  <!-- Section 2: Counter Variable -->
+  <div class="lesson-section">
+    <h2>2. משתנה מונה (Counter)</h2>
+
+    <p><strong>מונה</strong> הוא המקרה הפשוט ביותר — אנחנו רוצים לספור כמה פעמים משהו קרה. הדפוס תמיד אותו דבר:</p>
+
+    <ol>
+      <li><strong>אתחול:</strong> קבע את המונה ל-0</li>
+      <li><strong>בכל אירוע:</strong> שנה את המונה ב-1</li>
+    </ol>
+
+    <h3>דוגמאות לשימושים במונה</h3>
+    <ul>
+      <li><strong>ספירת לחיצות</strong> — כל לחיצה על הדמות = +1</li>
+      <li><strong>ספירת חיים</strong> — התחלה ב-3, כל פגיעה = −1</li>
+      <li><strong>ספירת סיבובים</strong> — כל סיבוב שלם = +1</li>
+      <li><strong>ספירת אויבים</strong> — כל אויב שהובס = +1</li>
+    </ul>
+
+    <h3>דוגמה: מונה לחיצות</h3>
+    <p>בואו נבנה תוכנית פשוטה שסופרת כמה פעמים לחצנו על הדמות:</p>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb variables">set <span class="hole">מונה</span> to <span class="hole">0</span></div>
+    </div>
+
+    <div class="scratch-wrap" style="margin-top:8px">
+      <div class="sb events hat">when this sprite clicked</div>
+      <div class="sb variables">change <span class="hole">מונה</span> by <span class="hole">1</span></div>
+      <div class="sb looks">say <span class="hole">מונה</span> for <span class="hole">1</span> seconds</div>
+    </div>
+
+    <p>מה קורה כאן?</p>
+    <ul>
+      <li>כשלוחצים על הדגל הירוק — המונה מתאפס ל-0</li>
+      <li>כל פעם שלוחצים על הדמות — המונה עולה ב-1 והדמות מציגה את הערך</li>
+      <li>לחיצה ראשונה: 0 → 1. לחיצה שנייה: 1 → 2. וכן הלאה</li>
+    </ul>
+
+    <div class="lesson-tip success">
+      <strong>✅ שימו לב לאתחול!</strong>
+      <p>בלי הבלוק "קבע מונה ל-0" בתחילת התוכנית, המונה ימשיך מאיפה שהוא הפסיק בהפעלה הקודמת. תמיד תזכרו לאתחל את המונה כשהתוכנית מתחילה!</p>
+    </div>
+  </div>
+
+  <!-- Section 3: Accumulator Variable -->
+  <div class="lesson-section">
+    <h2>3. משתנה צובר (Accumulator)</h2>
+
+    <p><strong>צובר</strong> דומה למונה, אבל במקום להוסיף תמיד 1 — אנחנו מוסיפים <strong>כמויות שונות</strong> בכל פעם. הדפוס:</p>
+
+    <ol>
+      <li><strong>אתחול:</strong> קבע את הסכום ל-0</li>
+      <li><strong>בכל אירוע:</strong> שנה את הסכום ב-(הערך הנוכחי)</li>
+    </ol>
+
+    <h3>דוגמאות לשימושים בצובר</h3>
+    <ul>
+      <li><strong>ניקוד כולל</strong> — אויב קטן = +10 נקודות, אויב גדול = +50 נקודות</li>
+      <li><strong>סכום כסף</strong> — קונים ומוכרים בסכומים שונים</li>
+      <li><strong>סכום מספרים</strong> — המשתמש מקליד מספרים ואנחנו סוכמים</li>
+    </ul>
+
+    <h3>דוגמה: מחשבון סכימה</h3>
+    <p>תוכנית שמבקשת מהמשתמש להכניס 5 מספרים ומציגה את הסכום שלהם:</p>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb variables">set <span class="hole">סכום</span> to <span class="hole">0</span></div>
+      <div class="sb control">repeat <span class="hole">5</span></div>
+      <div class="sb-indent">
+        <div class="sb sensing">ask <span class="hole">הכנס מספר</span> and wait</div>
+        <div class="sb variables">change <span class="hole">סכום</span> by <span class="hole">answer</span></div>
+      </div>
+      <div class="sb looks">say <span class="hole">join [הסכום הוא: ] [סכום]</span> for <span class="hole">3</span> seconds</div>
+    </div>
+
+    <p>מה קורה כאן?</p>
+    <ul>
+      <li>בהתחלה, הסכום מתאפס ל-0</li>
+      <li>הלולאה רצה 5 פעמים — כל פעם שואלת מספר ומוסיפה אותו לסכום</li>
+      <li>לדוגמה: אם הוכנסו 3, 7, 2, 10, 8 — הסכום יהיה 30</li>
+      <li>בסוף, הדמות מציגה את הסכום הכולל</li>
+    </ul>
+
+    <div class="lesson-tip warning">
+      <strong>⚠️ שימו לב להבדל!</strong>
+      <p>במונה כתבנו <strong>"שנה ב-1"</strong> (מספר קבוע). בצובר כתבנו <strong>"שנה ב-(תשובה)"</strong> (ערך שמשתנה). זה ההבדל המהותי בין שני הדפוסים!</p>
+    </div>
+  </div>
+
+  <!-- Section 4: Counter vs. Accumulator -->
+  <div class="lesson-section">
+    <h2>4. ההבדל בין מונה לצובר</h2>
+
+    <p>עכשיו שראינו את שני הדפוסים, בואו נשווה ביניהם:</p>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>מונה (Counter)</th>
+          <th>צובר (Accumulator)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>מטרה</strong></td>
+          <td>לספור כמה פעמים משהו קרה</td>
+          <td>לצבור / לסכום ערכים</td>
+        </tr>
+        <tr>
+          <td><strong>שינוי בכל צעד</strong></td>
+          <td>תמיד +1 (או −1)</td>
+          <td>כמות משתנה (+10, +50, +תשובה...)</td>
+        </tr>
+        <tr>
+          <td><strong>ערך התחלתי</strong></td>
+          <td>בדרך כלל 0</td>
+          <td>בדרך כלל 0</td>
+        </tr>
+        <tr>
+          <td><strong>דוגמאות</strong></td>
+          <td>חיים, לחיצות, סיבובים</td>
+          <td>ניקוד, סכום כסף, סכום מספרים</td>
+        </tr>
+        <tr>
+          <td><strong>הבלוק</strong></td>
+          <td>שנה [מונה] ב-<strong>1</strong></td>
+          <td>שנה [סכום] ב-<strong>(ערך)</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="lesson-tip">
+      <strong>💡 תובנה חשובה</strong>
+      <p>מונה הוא בעצם <strong>מקרה פרטי</strong> של צובר! מונה הוא צובר שתמיד מוסיף 1. אם תבינו את דפוס הצובר — תבינו גם את המונה.</p>
+    </div>
+  </div>
+
+  <!-- Section 5: Space Invaders Game -->
+  <div class="lesson-section">
+    <h2>5. משחק פולשי החלל (Space Invaders)</h2>
+
+    <p>בואו נראה איך שני הדפוסים — מונה וצובר — עובדים יחד <strong>באותו משחק</strong>! במשחק פולשי החלל יש לנו:</p>
+
+    <ul>
+      <li><strong>חיים (מונה יורד)</strong> — מתחילים עם 3 חיים, כל פגיעה מורידה 1</li>
+      <li><strong>ניקוד (צובר)</strong> — אויב קטן = +10 נקודות, אויב גדול = +50 נקודות</li>
+      <li><strong>זמן (מונה עולה)</strong> — סופר כמה שניות שרדנו</li>
+    </ul>
+
+    <h3>קוד ההתחלה</h3>
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb variables">set <span class="hole">ניקוד</span> to <span class="hole">0</span></div>
+      <div class="sb variables">set <span class="hole">חיים</span> to <span class="hole">3</span></div>
+    </div>
+
+    <h3>כאשר פוגעים באויב קטן (צובר — +10)</h3>
+    <div class="scratch-wrap">
+      <div class="sb variables">change <span class="hole">ניקוד</span> by <span class="hole">10</span></div>
+    </div>
+
+    <h3>כאשר פוגעים באויב גדול (צובר — +50)</h3>
+    <div class="scratch-wrap">
+      <div class="sb variables">change <span class="hole">ניקוד</span> by <span class="hole">50</span></div>
+    </div>
+
+    <h3>כאשר השחקן נפגע (מונה — −1)</h3>
+    <div class="scratch-wrap">
+      <div class="sb variables">change <span class="hole">חיים</span> by <span class="hole">-1</span></div>
+      <div class="sb control">if <span class="hole">(חיים) = (0)</span> then</div>
+      <div class="sb-indent">
+        <div class="sb looks">say <span class="hole">!Game Over</span> for <span class="hole">2</span> seconds</div>
+        <div class="sb control">stop <span class="hole">all</span></div>
+      </div>
+    </div>
+
+    <p>שימו לב למה שקורה כאן:</p>
+    <ul>
+      <li><strong>ניקוד</strong> הוא <strong>צובר</strong> — מוסיפים לו כמויות שונות (10 או 50)</li>
+      <li><strong>חיים</strong> הוא <strong>מונה יורד</strong> — מורידים ממנו 1 בכל פגיעה</li>
+      <li>כשהחיים מגיעים ל-0 — המשחק נגמר!</li>
+    </ul>
+
+    <div class="lesson-tip success">
+      <strong>✅ דפוסים בפעולה</strong>
+      <p>במשחק אחד יכולים לחיות כמה מונים וכמה צוברים יחד! המפתח הוא לזהות לכל משתנה: האם הוא סופר אירועים (מונה) או צובר ערכים (צובר)?</p>
+    </div>
+  </div>
+
+  <!-- Section 6: Average — Counter + Accumulator -->
+  <div class="lesson-section">
+    <h2>6. ממוצע — שילוב מונה וצובר</h2>
+
+    <p>אחד השימושים הכי מגניבים הוא <strong>חישוב ממוצע</strong>. כדי לחשב ממוצע, צריכים <strong>גם מונה וגם צובר</strong>:</p>
+
+    <ul>
+      <li><strong>מונה</strong> — כמה מספרים הוכנסו (ספירה)</li>
+      <li><strong>צובר</strong> — הסכום של כל המספרים</li>
+      <li><strong>ממוצע</strong> = סכום / כמות</li>
+    </ul>
+
+    <h3>דוגמה: מחשבון ממוצע</h3>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb variables">set <span class="hole">סכום</span> to <span class="hole">0</span></div>
+      <div class="sb variables">set <span class="hole">כמות</span> to <span class="hole">0</span></div>
+      <div class="sb control">repeat <span class="hole">5</span></div>
+      <div class="sb-indent">
+        <div class="sb sensing">ask <span class="hole">הכנס מספר</span> and wait</div>
+        <div class="sb variables">change <span class="hole">סכום</span> by <span class="hole">answer</span></div>
+        <div class="sb variables">change <span class="hole">כמות</span> by <span class="hole">1</span></div>
+      </div>
+      <div class="sb variables">set <span class="hole">ממוצע</span> to <span class="hole">(סכום) / (כמות)</span></div>
+      <div class="sb looks">say <span class="hole">join [הממוצע הוא: ] [ממוצע]</span> for <span class="hole">3</span> seconds</div>
+    </div>
+
+    <p>בואו נעקוב אחרי דוגמה. נניח שהמשתמש מכניס: 10, 20, 30, 40, 50</p>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>שלב</th>
+          <th>מספר שהוכנס</th>
+          <th>סכום (צובר)</th>
+          <th>כמות (מונה)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>התחלה</td><td>—</td><td>0</td><td>0</td></tr>
+        <tr><td>אחרי מספר 1</td><td>10</td><td>10</td><td>1</td></tr>
+        <tr><td>אחרי מספר 2</td><td>20</td><td>30</td><td>2</td></tr>
+        <tr><td>אחרי מספר 3</td><td>30</td><td>60</td><td>3</td></tr>
+        <tr><td>אחרי מספר 4</td><td>40</td><td>100</td><td>4</td></tr>
+        <tr><td>אחרי מספר 5</td><td>50</td><td>150</td><td>5</td></tr>
+      </tbody>
+    </table>
+
+    <p>בסוף: ממוצע = 150 / 5 = <strong>30</strong></p>
+
+    <div class="lesson-tip">
+      <strong>💡 שימו לב לשילוב</strong>
+      <p>בתוך הלולאה יש <strong>שתי פעולות עדכון</strong> — אחת לצובר ("שנה סכום ב-תשובה") ואחת למונה ("שנה כמות ב-1"). זה מה שמאפשר לנו לחשב ממוצע אחר כך!</p>
+    </div>
+  </div>
+
+  <!-- Section 7: Exercise -->
+  <div class="lesson-section">
+    <div class="exercise-box">
+      <h3>📝 תרגיל: בנו בסקראץ'</h3>
+      <p>פתחו את סקראץ' ונסו לבנות את התוכניות הבאות:</p>
+      <ol>
+        <li><strong>מונה לחיצות</strong> — צרו משתנה "מונה" שמתחיל ב-0. כל פעם שלוחצים על הדמות, המונה עולה ב-1 והערך מוצג על הבמה. הוסיפו גם הודעה ויזואלית של הדמות עם הערך הנוכחי</li>
+        <li><strong>מחשבון סכימה</strong> — צרו תוכנית ששואלת מהמשתמש 5 מספרים (אחד אחרי השני) וסוכמת אותם. בסוף, הדמות מציגה הודעה: "הסכום הוא: ___"</li>
+        <li><strong>מחשבון ממוצע</strong> — שפרו את תוכנית הסכימה כך שהיא גם מחשבת ומציגה את הממוצע של 5 המספרים. תצטרכו גם מונה וגם צובר!</li>
+      </ol>
+      <p style="margin-top:16px;color:var(--text-light);font-size:.9rem"><strong>בונוס:</strong> צרו מערכת ניקוד פשוטה למשחק פולשי החלל — 3 חיים, ניקוד שעולה ב-10 או 50 לפי סוג האויב, והודעת Game Over כשהחיים מגיעים ל-0!</p>
+    </div>
+  </div>
+
+  <!-- Lesson Navigation -->
+  <div class="lesson-nav">
+    <a href="lesson-3-3.html">השיעור הקודם &rarr;</a>
+    <a href="lesson-3-5.html">השיעור הבא &larr;</a>
+  </div>
+
+</div>
+
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

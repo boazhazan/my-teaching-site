@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>סביבת סקראץ' | סקראץ' מאסטר</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;
+  --accent:#f59e0b;--accent-dark:#d97706;
+  --text:#1e293b;--text-light:#64748b;
+  --bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;
+  --success:#10b981;--error:#ef4444;
+  --radius:12px;--radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);
+}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}
+.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}
+.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}
+.topbar a:hover{text-decoration:underline}
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}
+.lesson-header{margin-bottom:32px}
+.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}
+.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}
+.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+.lesson-section{margin-bottom:40px}
+.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}
+.lesson-section p{line-height:1.8;margin-bottom:12px}
+.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}
+.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}
+.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}
+.lesson-tip strong{display:block;margin-bottom:4px}
+.lesson-tip p{margin:0;font-size:.95rem}
+.exercise-box{background:var(--bg);border:2px solid var(--primary);border-radius:12px;padding:24px;margin:24px 0}
+.exercise-box h3{color:var(--primary);margin-bottom:12px}
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}
+.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}
+.lesson-nav a:hover{border-color:var(--primary);color:var(--primary)}
+.scratch-wrap{direction:ltr;text-align:left;background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin:16px 0;font-family:'Courier New',monospace}
+.sb{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-weight:700;color:#fff;font-size:.88rem;margin:4px 0;width:fit-content;line-height:1.4}
+.sb.hat{border-top:4px solid rgba(0,0,0,.15);border-radius:12px 12px 8px 8px;padding-top:10px}
+.sb .hole{display:inline-flex;align-items:center;background:rgba(255,255,255,.25);border-radius:16px;padding:2px 10px;font-weight:600;font-size:.82rem;min-width:30px;justify-content:center}
+.sb-indent{margin-left:24px}
+.sb.motion{background:#4C97FF}
+.sb.looks{background:#9966FF}
+.sb.sound{background:#CF63CF}
+.sb.events{background:#FFBF00;color:#333}
+.sb.control{background:#FFAB19;color:#333}
+.sb.sensing{background:#5CB1D6}
+.sb.operators{background:#59C059}
+.sb.variables{background:#FF8C1A}
+.sb.my-blocks{background:#FF6680}
+.sb.pen{background:#0fBD8C}
+.env-diagram{display:grid;grid-template-columns:1fr 2fr 1fr;gap:12px;margin:20px 0}
+.env-box{background:var(--bg);border:2px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.env-box h4{color:var(--primary);margin-bottom:8px;font-size:.95rem}
+.env-box p{font-size:.85rem;color:var(--text-light);margin:0}
+.env-box.highlight{border-color:var(--primary);background:var(--primary-light)}
+.category-list{list-style:none;margin:0;padding:0}
+.category-list li{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.category-list li:last-child{border-bottom:none}
+.cat-color{width:16px;height:16px;border-radius:4px;flex-shrink:0}
+.coord-diagram{background:var(--bg);border:2px solid var(--border);border-radius:var(--radius);padding:24px;margin:20px 0;text-align:center}
+.coord-diagram svg{max-width:100%;height:auto}
+@media(max-width:768px){
+  .lesson-title{font-size:1.5rem}
+  .lesson-nav{flex-direction:column}
+  .env-diagram{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <span class="topbar-title">סקראץ' מאסטר 🐱</span>
+  <a href="course.html">← חזרה לקורס</a>
+</div>
+
+<!-- Lesson Content -->
+<div class="lesson-container">
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#4C97FF">יחידה 1: הכרת סקראץ'</span>
+    <h1 class="lesson-title">סביבת סקראץ'</h1>
+    <p class="lesson-subtitle">הכרת הממשק, הבמה, רשימת הדמויות, אזור הבלוקים ואזור הקוד</p>
+  </div>
+
+  <!-- Section 1: מה זה סקראץ'? -->
+  <div class="lesson-section">
+    <h2>מה זה סקראץ'?</h2>
+    <p>
+      סקראץ' (Scratch) היא שפת תכנות ויזואלית שפותחה על ידי קבוצת המחקר
+      <strong>Lifelong Kindergarten</strong> ב-MIT Media Lab.
+      במקום לכתוב שורות קוד, בסקראץ' אנחנו <strong>גוררים בלוקים צבעוניים</strong>
+      ומחברים אותם זה לזה — כמו פאזל!
+    </p>
+    <p>
+      סקראץ' עובדת ישירות בדפדפן באתר
+      <a href="https://scratch.mit.edu" target="_blank" rel="noopener">scratch.mit.edu</a>
+      — אין צורך להתקין שום דבר. הגרסה הנוכחית היא <strong>Scratch 3.0</strong>,
+      והיא משמשת מיליוני ילדים ובני נוער ברחבי העולם ללמוד תכנות בצורה כיפית ויצירתית.
+    </p>
+    <div class="lesson-tip success">
+      <strong>💡 למה סקראץ'?</strong>
+      <p>סקראץ' מאפשרת להתמקד בחשיבה תכנותית — לוגיקה, לולאות, תנאים ומשתנים — בלי להתעסק עם שגיאות כתיב בקוד. אם הבלוקים מתחברים — התוכנית רצה!</p>
+    </div>
+  </div>
+
+  <!-- Section 2: חלקי הממשק -->
+  <div class="lesson-section">
+    <h2>חלקי הממשק</h2>
+    <p>כשנפתח פרויקט חדש בסקראץ', נראה ממשק שמחולק לשלושה אזורים עיקריים:</p>
+
+    <div class="env-diagram">
+      <div class="env-box">
+        <h4>📦 אזור הבלוקים</h4>
+        <p>כאן נמצאים כל הבלוקים מסודרים לפי קטגוריות צבעוניות. בוחרים קטגוריה וגוררים בלוקים לאזור הקוד.</p>
+      </div>
+      <div class="env-box highlight">
+        <h4>🧩 אזור הקוד</h4>
+        <p>האזור המרכזי והגדול ביותר. לכאן גוררים את הבלוקים ומחברים אותם יחד לתסריטים (scripts). כאן נבנית התוכנית!</p>
+      </div>
+      <div class="env-box">
+        <h4>🎬 הבמה</h4>
+        <p>כאן רואים את התוצאה — הדמויות זזות, מדברות ומגיבות לפי התוכנית שבנינו.</p>
+      </div>
+    </div>
+
+    <h3>רשימת הדמויות (Sprite List)</h3>
+    <p>
+      מתחת לבמה נמצאת <strong>רשימת הדמויות</strong>. כל דמות (Sprite) בפרויקט מופיעה כאן כתמונה ממוזערת.
+      אפשר ללחוץ על דמות כדי לבחור אותה ולערוך את הקוד שלה, לשכפל אותה, או למחוק אותה.
+      בפרויקט חדש כבר מופיעה דמות ברירת מחדל — <strong>החתול של סקראץ'</strong> 🐱.
+    </p>
+
+    <h3>רקעים (Backdrops)</h3>
+    <p>
+      ליד רשימת הדמויות יש אייקון של <strong>הבמה</strong>. לחיצה עליו מאפשרת לערוך את
+      <strong>הרקע</strong> של הפרויקט — לבחור רקע מוכן מהספרייה, לצייר רקע, להעלות תמונה, או אפילו לצלם עם המצלמה.
+    </p>
+
+    <div class="lesson-tip">
+      <strong>🎯 טיפ חשוב</strong>
+      <p>לכל דמות יש קוד משלה! כשלוחצים על דמות ברשימה, אזור הקוד מציג את הבלוקים של אותה דמות בלבד. וודאו שאתם עובדים על הדמות הנכונה לפני שמתחילים לגרור בלוקים.</p>
+    </div>
+  </div>
+
+  <!-- Section 3: קטגוריות הבלוקים -->
+  <div class="lesson-section">
+    <h2>קטגוריות הבלוקים</h2>
+    <p>הבלוקים בסקראץ' מחולקים ל-9 קטגוריות, כל אחת בצבע אחר. הנה הקטגוריות ודוגמה לבלוק מכל אחת:</p>
+
+    <h3>🔵 תנועה (Motion)</h3>
+    <p>בלוקים שמזיזים את הדמות על הבמה — הליכה, סיבוב ומיקום.</p>
+    <div class="scratch-wrap">
+      <div class="sb motion">move <span class="hole">10</span> steps</div>
+    </div>
+
+    <h3>🟣 מראה (Looks)</h3>
+    <p>שליטה במראה של הדמות — תחפושות, בועות דיבור, אפקטים חזותיים, גודל ונראות.</p>
+    <div class="scratch-wrap">
+      <div class="sb looks">say <span class="hole">Hello!</span> for <span class="hole">2</span> seconds</div>
+    </div>
+
+    <h3>🎵 צליל (Sound)</h3>
+    <p>השמעת צלילים ומוזיקה, שליטה בעוצמה ובקצב.</p>
+    <div class="scratch-wrap">
+      <div class="sb sound">play sound <span class="hole">Meow</span> until done</div>
+    </div>
+
+    <h3>🟡 אירועים (Events)</h3>
+    <p>בלוקי "כובע" שמתחילים תסריט — לחיצה על הדגל, לחיצת מקש, קבלת הודעה.</p>
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🏴 clicked</div>
+    </div>
+
+    <h3>🟠 בקרה (Control)</h3>
+    <p>לולאות (חזרות), תנאים (אם-אז), המתנה ועצירה.</p>
+    <div class="scratch-wrap">
+      <div class="sb control">repeat <span class="hole">10</span></div>
+    </div>
+
+    <h3>🔵 חישה (Sensing)</h3>
+    <p>זיהוי מגע, שאילת שאלות, מיקום העכבר, טיימר ועוד.</p>
+    <div class="scratch-wrap">
+      <div class="sb sensing">touching <span class="hole">mouse-pointer</span> ?</div>
+    </div>
+
+    <h3>🟢 פעולות (Operators)</h3>
+    <p>פעולות חשבון, השוואה, לוגיקה ועבודה עם טקסט.</p>
+    <div class="scratch-wrap">
+      <div class="sb operators"><span class="hole">  </span> + <span class="hole">  </span></div>
+    </div>
+
+    <h3>🟠 משתנים (Variables)</h3>
+    <p>יצירת משתנים ורשימות, שמירת ערכים ושימוש בהם בתוכנית.</p>
+    <div class="scratch-wrap">
+      <div class="sb variables">set <span class="hole">my variable</span> to <span class="hole">0</span></div>
+    </div>
+
+    <h3>🔴 הבלוקים שלי (My Blocks)</h3>
+    <p>יצירת בלוקים מותאמים אישית — פונקציות משלכם לשימוש חוזר.</p>
+    <div class="scratch-wrap">
+      <div class="sb my-blocks">define <span class="hole">my block</span></div>
+    </div>
+
+    <div class="lesson-tip">
+      <strong>🎯 טיפ</strong>
+      <p>הצבע של הבלוק תמיד תואם את הקטגוריה שלו. ככה קל לזהות במבט מה כל בלוק עושה — בלוק כחול? תנועה. סגול? מראה. צהוב? אירועים.</p>
+    </div>
+  </div>
+
+  <!-- Section 4: מערכת הצירים -->
+  <div class="lesson-section">
+    <h2>מערכת הצירים של הבמה</h2>
+    <p>
+      הבמה בסקראץ' היא משטח בגודל <strong>480 × 360 פיקסלים</strong>,
+      ויש לה מערכת צירים — בדיוק כמו בשיעור מתמטיקה!
+    </p>
+
+    <div class="coord-diagram">
+      <svg viewBox="0 0 400 300" width="400" height="300" xmlns="http://www.w3.org/2000/svg" style="direction:ltr">
+        <!-- Background -->
+        <rect x="0" y="0" width="400" height="300" fill="#f8fafc" rx="8"/>
+        <!-- Grid lines -->
+        <line x1="200" y1="20" x2="200" y2="280" stroke="#cbd5e1" stroke-width="2"/>
+        <line x1="20" y1="150" x2="380" y2="150" stroke="#cbd5e1" stroke-width="2"/>
+        <!-- Arrows -->
+        <polygon points="200,15 195,25 205,25" fill="#2563eb"/>
+        <polygon points="385,150 375,145 375,155" fill="#2563eb"/>
+        <!-- Labels -->
+        <text x="390" y="145" fill="#2563eb" font-size="14" font-weight="700" font-family="Heebo">X</text>
+        <text x="205" y="14" fill="#2563eb" font-size="14" font-weight="700" font-family="Heebo">Y</text>
+        <!-- Origin -->
+        <circle cx="200" cy="150" r="5" fill="#ef4444"/>
+        <text x="210" y="168" fill="#ef4444" font-size="13" font-weight="700" font-family="Heebo">(0, 0)</text>
+        <!-- Axis values -->
+        <text x="355" y="168" fill="#64748b" font-size="11" font-weight="600" font-family="Heebo">240</text>
+        <text x="25" y="168" fill="#64748b" font-size="11" font-weight="600" font-family="Heebo">-240</text>
+        <text x="210" y="35" fill="#64748b" font-size="11" font-weight="600" font-family="Heebo">180</text>
+        <text x="210" y="275" fill="#64748b" font-size="11" font-weight="600" font-family="Heebo">-180</text>
+        <!-- Cat icon at center -->
+        <text x="188" y="140" font-size="22">🐱</text>
+      </svg>
+    </div>
+
+    <ul>
+      <li><strong>ציר X</strong> (אופקי): מ-<strong>-240</strong> (שמאל) עד <strong>240</strong> (ימין)</li>
+      <li><strong>ציר Y</strong> (אנכי): מ-<strong>-180</strong> (למטה) עד <strong>180</strong> (למעלה)</li>
+      <li><strong>מרכז הבמה</strong>: הנקודה <strong>(0, 0)</strong></li>
+    </ul>
+
+    <div class="lesson-tip success">
+      <strong>🧮 קשר למתמטיקה</strong>
+      <p>מערכת הצירים של הבמה זהה למערכת הצירים שלומדים במתמטיקה! X הולך ימינה (חיובי) ושמאלה (שלילי), Y הולך למעלה (חיובי) ולמטה (שלילי). זו הזדמנות מעולה לתרגל קואורדינטות.</p>
+    </div>
+
+    <div class="lesson-tip warning">
+      <strong>⚠️ שימו לב</strong>
+      <p>בסקראץ' הנקודה (0, 0) נמצאת <strong>במרכז הבמה</strong>, ולא בפינה השמאלית-עליונה כמו במסכי מחשב רגילים. אל תתבלבלו!</p>
+    </div>
+  </div>
+
+  <!-- Section 5: התוכנית הראשונה שלך -->
+  <div class="lesson-section">
+    <h2>התוכנית הראשונה שלך</h2>
+    <p>בואו נבנה תוכנית פשוטה שגורמת לחתול לזוז ולדבר. הנה הבלוקים שנשתמש בהם:</p>
+
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🏴 clicked</div>
+      <div class="sb motion">move <span class="hole">100</span> steps</div>
+      <div class="sb looks">say <span class="hole">!שלום</span> for <span class="hole">2</span> seconds</div>
+    </div>
+
+    <h3>מה כל בלוק עושה?</h3>
+    <ol>
+      <li>
+        <strong>כאשר לוחצים על 🏴</strong> (אירועים) — זהו בלוק "כובע" שמתחיל את התוכנית. כשלוחצים על הדגל הירוק מעל הבמה, כל הבלוקים שמחוברים מתחתיו ירוצו לפי הסדר.
+      </li>
+      <li>
+        <strong>לך 100 צעדים</strong> (תנועה) — מזיז את הדמות 100 צעדים קדימה, בכיוון שהיא מסתכלת עליו.
+      </li>
+      <li>
+        <strong>אמור "!שלום" למשך 2 שניות</strong> (מראה) — מציג בועת דיבור עם הטקסט "!שלום" מעל הדמות למשך 2 שניות, ואז היא נעלמת.
+      </li>
+    </ol>
+
+    <div class="lesson-tip">
+      <strong>🎯 נסו בעצמכם</strong>
+      <p>היכנסו ל-<a href="https://scratch.mit.edu/projects/editor/" target="_blank" rel="noopener">עורך סקראץ'</a>, גררו את שלושת הבלוקים האלה ולחצו על הדגל הירוק. ראו מה קורה!</p>
+    </div>
+  </div>
+
+  <!-- Section 6: תרגיל -->
+  <div class="lesson-section">
+    <h2>תרגיל</h2>
+
+    <div class="exercise-box">
+      <h3>🏗️ בנו את התוכנית הבאה</h3>
+      <ol>
+        <li>היכנסו ל-<a href="https://scratch.mit.edu/projects/editor/" target="_blank" rel="noopener">scratch.mit.edu</a> וצרו פרויקט חדש.</li>
+        <li>גררו בלוק <strong>"כאשר לוחצים על 🏴"</strong> לאזור הקוד.</li>
+        <li>חברו בלוק <strong>"לך 100 צעדים"</strong> — החתול יתקדם ישר.</li>
+        <li>הוסיפו בלוק <strong>"הסתובב ↻ 90 מעלות"</strong> — החתול יפנה ימינה.</li>
+        <li>הוסיפו עוד בלוק <strong>"לך 100 צעדים"</strong> — החתול ימשיך בכיוון החדש.</li>
+        <li>בסיום, הוסיפו בלוק <strong>"אמור 'הגעתי!' למשך 2 שניות"</strong>.</li>
+      </ol>
+
+      <div class="scratch-wrap">
+        <div class="sb events hat">when 🏴 clicked</div>
+        <div class="sb motion">move <span class="hole">100</span> steps</div>
+        <div class="sb motion">turn ↻ <span class="hole">90</span> degrees</div>
+        <div class="sb motion">move <span class="hole">100</span> steps</div>
+        <div class="sb looks">say <span class="hole">!הגעתי</span> for <span class="hole">2</span> seconds</div>
+      </div>
+
+      <p style="margin-top:16px">לחצו על הדגל הירוק 🏴 וראו את החתול הולך בצורת "ר" (קו ישר ואז פנייה).</p>
+
+      <div class="lesson-tip success" style="margin-bottom:0">
+        <strong>⭐ בונוס</strong>
+        <p>הוסיפו בלוק <strong>"השמע צליל Meow עד הסיום"</strong> מקטגוריית הצליל לפני בלוק ה"אמור" — ככה החתול גם ימייע כשהוא מגיע!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="lesson-nav">
+    <a href="lesson-1-1.html">→ השיעור הקודם</a>
+    <a href="lesson-1-3.html">השיעור הבא ←</a>
+  </div>
+
+</div>
+
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

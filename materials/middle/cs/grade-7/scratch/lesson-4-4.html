@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>בנה לבנה — חלק ב' (מתקדם) | סקראץ' מאסטר</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--text:#1e293b;--text-light:#64748b;--bg:#ffffff;--bg-soft:#f8fafc;--border:#e2e8f0;--success:#10b981;--error:#ef4444;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06)}
+body{font-family:'Heebo',sans-serif;background:var(--bg-soft);color:var(--text);line-height:1.6}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow)}.topbar-title{font-weight:800;font-size:1.1rem;color:var(--primary-dark)}.topbar a{color:var(--primary);text-decoration:none;font-size:.85rem;font-weight:600}.topbar a:hover{text-decoration:underline}
+.lesson-container{max-width:800px;margin:0 auto;padding:24px 16px 60px}.lesson-header{margin-bottom:32px}.lesson-unit-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:.85rem;font-weight:600;color:#fff;margin-bottom:12px}.lesson-title{font-size:2rem;font-weight:900;margin-bottom:8px}.lesson-subtitle{font-size:1.1rem;color:var(--text-light)}
+.lesson-section{margin-bottom:40px}.lesson-section h2{font-size:1.4rem;font-weight:800;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}.lesson-section h3{font-size:1.15rem;font-weight:700;margin:16px 0 8px}.lesson-section p{line-height:1.8;margin-bottom:12px}.lesson-section ul,.lesson-section ol{margin:8px 0 16px 24px;line-height:2}
+.lesson-tip{background:#dbeafe;border-right:4px solid var(--primary);border-radius:8px;padding:16px 20px;margin:16px 0}.lesson-tip.warning{background:#fef3c7;border-right-color:var(--accent)}.lesson-tip.success{background:#d1fae5;border-right-color:#10b981}.lesson-tip strong{display:block;margin-bottom:4px}.lesson-tip p{margin:0;font-size:.95rem}
+.exercise-box{background:var(--bg);border:2px solid var(--primary);border-radius:12px;padding:24px;margin:24px 0}.exercise-box h3{color:var(--primary);margin-bottom:12px}
+.lesson-nav{display:flex;justify-content:space-between;gap:16px;margin:48px 0 32px;padding-top:24px;border-top:2px solid var(--border)}.lesson-nav a{display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--bg-soft);border:2px solid var(--border);border-radius:8px;color:var(--text);text-decoration:none;font-weight:600;transition:all .2s}.lesson-nav a:hover{border-color:var(--primary);color:var(--primary)}
+.scratch-wrap{direction:ltr;text-align:left;background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:16px 20px;margin:16px 0;font-family:'Courier New',monospace}.sb{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-weight:700;color:#fff;font-size:.88rem;margin:4px 0;width:fit-content;line-height:1.4}.sb.hat{border-top:4px solid rgba(0,0,0,.15);border-radius:12px 12px 8px 8px;padding-top:10px}.sb .hole{display:inline-flex;align-items:center;background:rgba(255,255,255,.25);border-radius:16px;padding:2px 10px;font-weight:600;font-size:.82rem;min-width:30px;justify-content:center}.sb-indent{margin-left:24px}
+.sb.motion{background:#4C97FF}.sb.looks{background:#9966FF}.sb.sound{background:#CF63CF}.sb.events{background:#FFBF00;color:#333}.sb.control{background:#FFAB19;color:#333}.sb.sensing{background:#5CB1D6}.sb.operators{background:#59C059}.sb.variables{background:#FF8C1A}.sb.my-blocks{background:#FF6680}.sb.pen{background:#0fBD8C}
+@media(max-width:768px){.lesson-title{font-size:1.5rem}.lesson-nav{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <span class="topbar-title">סקראץ' מאסטר 🐱</span>
+  <a href="course.html">&larr; חזרה לקורס</a>
+</div>
+
+<!-- Lesson Content -->
+<div class="lesson-container">
+
+  <!-- Header -->
+  <div class="lesson-header">
+    <span class="lesson-unit-badge" style="background:#059669">יחידה 4: לולאות תנאי ובנייה</span>
+    <h1 class="lesson-title">בנה לבנה — חלק ב' (מתקדם)</h1>
+    <p class="lesson-subtitle">בלוקים עם פרמטרים מרובים, רקורסיה ופרויקטים מורכבים</p>
+  </div>
+
+  <!-- Section 1: Recap -->
+  <div class="lesson-section">
+    <h2>1. חזרה — מה למדנו בחלק א'</h2>
+
+    <p>בשיעור הקודם למדנו איך <strong>ליצור בלוקים מותאמים</strong> (My Blocks) בסקראץ'. ראינו שאפשר:</p>
+
+    <ul>
+      <li><strong>ליצור בלוק חדש</strong> דרך "הבלוקים שלי" → "בנה לבנה"</li>
+      <li><strong>להוסיף פרמטרים</strong> (קלטים) כדי שהבלוק יהיה גמיש — למשל "צייר מצולע" עם פרמטרים של מספר צלעות וגודל</li>
+      <li><strong>לפרק תוכנית</strong> לחלקים ברורים — כל חלק הוא בלוק מותאם עם שם מובן</li>
+      <li>לסמן <strong>"הפעל בלי רענון מסך"</strong> כדי שהבלוק ירוץ מיידית ומהר</li>
+    </ul>
+
+    <p>בשיעור הזה נלך <strong>צעד קדימה</strong>: נלמד להוסיף פרמטרים מרובים, ליצור בלוקים שקוראים לבלוקים אחרים, להשתמש בקלט בוליאני, ואפילו נציץ לעולם ה<strong>רקורסיה</strong> — בלוק שקורא לעצמו! לבסוף נבנה פרויקט מורכב שלם: ציור עיר מבלוקים.</p>
+
+    <div class="lesson-tip">
+      <strong>💡 לפני שממשיכים</strong>
+      <p>אם אתם לא בטוחים שאתם שולטים בחומר של חלק א', חזרו לשיעור הקודם ותרגלו שוב. השיעור הזה בונה ישירות על מה שלמדנו שם.</p>
+    </div>
+  </div>
+
+  <!-- Section 2: Multiple Parameters -->
+  <div class="lesson-section">
+    <h2>2. בלוקים עם פרמטרים מרובים</h2>
+
+    <p>בחלק א' ראינו בלוקים עם פרמטר אחד או שניים. אבל אין מגבלה! אפשר להוסיף <strong>כמה פרמטרים שרוצים</strong>, ולשלב סוגים שונים: מספרים, טקסט, או שניהם.</p>
+
+    <h3>הוספת תוויות בין הפרמטרים</h3>
+
+    <p>כשיש הרבה פרמטרים, קשה לזכור מה כל אחד מייצג. הפתרון: להוסיף <strong>תוויות</strong> (labels) — טקסט קבוע בין הפרמטרים שמסביר מה כל אחד עושה.</p>
+
+    <p>למשל, במקום:</p>
+
+    <div class="scratch-wrap">
+      <div class="sb my-blocks">צייר <span class="hole">4</span> <span class="hole">100</span> <span class="hole">אדום</span></div>
+      <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← מה זה 4? מה זה 100? לא ברור</div>
+    </div>
+
+    <p>נכתוב ככה:</p>
+
+    <div class="scratch-wrap">
+      <div class="sb my-blocks">צייר מצולע עם <span class="hole">4</span> צלעות בגודל <span class="hole">100</span> בצבע <span class="hole">אדום</span></div>
+      <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← ברור! שם הבלוק מסביר הכל</div>
+    </div>
+
+    <p>כדי לעשות את זה, כשיוצרים את הבלוק לוחצים על <strong>"הוסף תווית"</strong> (Add label) ומקלידים את הטקסט הקבוע שרוצים בין הקלטים.</p>
+
+    <h3>דוגמה: "צייר מצולע בצבע" — 3 פרמטרים</h3>
+
+    <p>בואו ניצור בלוק שמצייר מצולע בכל צבע שנרצה:</p>
+
+    <p style="margin-bottom:4px;font-weight:700;color:var(--text-light)">הגדרה:</p>
+    <div class="scratch-wrap">
+      <div class="sb my-blocks hat">define <span class="hole">צייר מצולע בצבע</span> <span class="hole">צלעות</span> <span class="hole">גודל</span> <span class="hole">צבע</span></div>
+      <div class="sb-indent">
+        <div class="sb pen">set pen color to <span class="hole">צבע</span></div>
+        <div class="sb pen">pen down</div>
+        <div class="sb control">repeat <span class="hole">צלעות</span></div>
+        <div class="sb-indent">
+          <div class="sb motion">move <span class="hole">גודל</span> steps</div>
+          <div class="sb motion">turn ⟳ <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">(360) / (צלעות)</span></span> degrees</div>
+        </div>
+        <div class="sb pen">pen up</div>
+      </div>
+    </div>
+
+    <p style="margin-bottom:4px;font-weight:700;color:var(--text-light)">שימוש — ריבוע אדום, משולש כחול, משושה ירוק:</p>
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb pen">erase all</div>
+      <div class="sb my-blocks">צייר מצולע בצבע <span class="hole">4</span> <span class="hole">80</span> <span class="hole">אדום</span></div>
+      <div class="sb motion">move <span class="hole">120</span> steps</div>
+      <div class="sb my-blocks">צייר מצולע בצבע <span class="hole">3</span> <span class="hole">80</span> <span class="hole">כחול</span></div>
+      <div class="sb motion">move <span class="hole">120</span> steps</div>
+      <div class="sb my-blocks">צייר מצולע בצבע <span class="hole">6</span> <span class="hole">60</span> <span class="hole">ירוק</span></div>
+    </div>
+
+    <p>שלוש צורות שונות, בשלושה צבעים שונים — והכל עם בלוק אחד! ככל שמוסיפים יותר פרמטרים, הבלוק נעשה <strong>חזק וגמיש יותר</strong>.</p>
+
+    <div class="lesson-tip">
+      <strong>💡 כמה פרמטרים זה "יותר מדי"?</strong>
+      <p>כלל אצבע: אם יש לבלוק יותר מ-4-5 פרמטרים, כנראה שהוא עושה <strong>יותר מדי דברים</strong>. עדיף לפצל אותו לכמה בלוקים קטנים יותר. תוכנה טובה = בלוקים קטנים וממוקדים.</p>
+    </div>
+  </div>
+
+  <!-- Section 3: Blocks Calling Blocks -->
+  <div class="lesson-section">
+    <h2>3. בלוקים שקוראים לבלוקים</h2>
+
+    <p>אחד הדברים החזקים ביותר בבלוקים מותאמים: <strong>בלוק מותאם יכול להשתמש בבלוקים מותאמים אחרים</strong>. בדיוק כמו לגו — בונים חלקים קטנים, ואז משלבים אותם ליצירה גדולה יותר!</p>
+
+    <h3>דוגמה: "צייר בית" שמשתמש ב"צייר מצולע"</h3>
+
+    <p>יש לנו כבר בלוק "צייר מצולע". עכשיו נבנה בלוק "צייר בית" שמשתמש בו:</p>
+
+    <p style="margin-bottom:4px;font-weight:700;color:var(--text-light)">הגדרת "צייר בית":</p>
+    <div class="scratch-wrap">
+      <div class="sb my-blocks hat">define <span class="hole">צייר בית</span> <span class="hole">גודל</span></div>
+      <div class="sb-indent">
+        <div class="sb my-blocks">צייר מצולע בצבע <span class="hole">4</span> <span class="hole">גודל</span> <span class="hole">חום</span></div>
+        <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← קירות (ריבוע)</div>
+        <div class="sb motion">move <span class="hole">גודל</span> steps</div>
+        <div class="sb motion">turn ⟲ <span class="hole">30</span> degrees</div>
+        <div class="sb my-blocks">צייר מצולע בצבע <span class="hole">3</span> <span class="hole">גודל</span> <span class="hole">אדום</span></div>
+        <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← גג (משולש)</div>
+      </div>
+    </div>
+
+    <p style="margin-bottom:4px;font-weight:700;color:var(--text-light)">שימוש — שני בתים בגדלים שונים:</p>
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb pen">erase all</div>
+      <div class="sb motion">go to x: <span class="hole">-100</span> y: <span class="hole">-50</span></div>
+      <div class="sb my-blocks">צייר בית <span class="hole">80</span></div>
+      <div class="sb motion">go to x: <span class="hole">80</span> y: <span class="hole">-50</span></div>
+      <div class="sb my-blocks">צייר בית <span class="hole">120</span></div>
+    </div>
+
+    <p>שימו לב מה קורה כאן: "צייר בית" קורא ל"צייר מצולע בצבע", ו"צייר מצולע בצבע" מכיל את הלוגיקה של הציור. <strong>שכבות על שכבות</strong> — כל שכבה מסתירה את המורכבות שמתחתיה.</p>
+
+    <div class="lesson-tip success">
+      <strong>✅ עיקרון חשוב: הפשטה (Abstraction)</strong>
+      <p>כשבלוק קורא לבלוק אחר, אנחנו לא צריכים לדעת <strong>איך</strong> הבלוק הפנימי עובד — רק <strong>מה</strong> הוא עושה. זה נקרא <strong>הפשטה</strong> (Abstraction) — אחד הרעיונות הכי חשובים במדעי המחשב. כמו שאתם נוהגים במכונית בלי לדעת איך המנוע עובד מבפנים!</p>
+    </div>
+  </div>
+
+  <!-- Section 4: Boolean Input -->
+  <div class="lesson-section">
+    <h2>4. בלוק בוליאני (Boolean Input)</h2>
+
+    <p>עד עכשיו השתמשנו בפרמטרים מסוג <strong>מספר/טקסט</strong> (עיגול). אבל יש עוד סוג של פרמטר — <strong>בוליאני</strong> (boolean). הוא נראה כמו <strong>משושה</strong> (hexagon) ויכול לקבל רק שני ערכים: <strong>true</strong> (אמת) או <strong>false</strong> (שקר).</p>
+
+    <h3>מתי זה שימושי?</h3>
+
+    <p>כשרוצים שהבלוק יתנהג <strong>אחרת</strong> לפי אפשרות כן/לא. למשל: "לצייר ריבוע — מלא או ריק?"</p>
+
+    <h3>דוגמה: "צייר ריבוע" עם אפשרות מילוי</h3>
+
+    <p style="margin-bottom:4px;font-weight:700;color:var(--text-light)">הגדרה עם קלט בוליאני:</p>
+    <div class="scratch-wrap">
+      <div class="sb my-blocks hat">define <span class="hole">צייר ריבוע</span> <span class="hole">גודל</span> מלא? <span class="hole" style="border-radius:4px;background:rgba(255,255,255,.3)">מלא?</span></div>
+      <div class="sb-indent">
+        <div class="sb control">if <span class="hole" style="border-radius:4px"><span style="font-size:.82rem">מלא?</span></span> then</div>
+        <div class="sb-indent">
+          <div class="sb pen">set pen size to <span class="hole">גודל</span></div>
+          <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← עט עבה = מילוי</div>
+        </div>
+        <div class="sb control">else</div>
+        <div class="sb-indent">
+          <div class="sb pen">set pen size to <span class="hole">2</span></div>
+          <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← עט דק = מתאר בלבד</div>
+        </div>
+        <div class="sb pen">pen down</div>
+        <div class="sb control">repeat <span class="hole">4</span></div>
+        <div class="sb-indent">
+          <div class="sb motion">move <span class="hole">גודל</span> steps</div>
+          <div class="sb motion">turn ⟳ <span class="hole">90</span> degrees</div>
+        </div>
+        <div class="sb pen">pen up</div>
+      </div>
+    </div>
+
+    <p style="margin-bottom:4px;font-weight:700;color:var(--text-light)">שימוש:</p>
+    <div class="scratch-wrap">
+      <div class="sb my-blocks">צייר ריבוע <span class="hole">100</span> מלא? <span class="hole" style="border-radius:4px"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">true</span></span></div>
+      <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← ריבוע מלא</div>
+      <div class="sb my-blocks">צייר ריבוע <span class="hole">80</span> מלא? <span class="hole" style="border-radius:4px"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">false</span></span></div>
+      <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← ריבוע ריק (מתאר בלבד)</div>
+    </div>
+
+    <p>הקלט הבוליאני מאפשר לנו לשלוט בהתנהגות הבלוק בלי ליצור שני בלוקים נפרדים. <strong>בלוק אחד, שתי התנהגויות</strong> — לפי הערך שנעביר.</p>
+
+    <div class="lesson-tip">
+      <strong>💡 בוליאני בסקראץ'</strong>
+      <p>בסקראץ', ערכים בוליאניים מגיעים מבלוקים ירוקים בצורת משושה — כמו "נוגע ב...?", "מקש ... לחוץ?", או אופרטורים כמו "&lt;" ו-"&gt;". אפשר לגרור כל בלוק כזה אל תוך הקלט הבוליאני של הבלוק המותאם שלכם!</p>
+    </div>
+  </div>
+
+  <!-- Section 5: Recursion -->
+  <div class="lesson-section">
+    <h2>5. רקורסיה — מושג מתקדם</h2>
+
+    <p>מוכנים לרעיון שיפוצץ לכם את הראש? 🤯</p>
+
+    <p><strong>רקורסיה</strong> (Recursion) היא כשבלוק מותאם <strong>קורא לעצמו</strong> מתוך ההגדרה שלו. נשמע מוזר? זה בעצם מאוד הגיוני — ועוצמתי!</p>
+
+    <h3>דוגמה קלאסית: ספירלה</h3>
+
+    <p>נניח שרוצים לצייר ספירלה — כל צעד קצת יותר קטן מהקודם. אפשר לעשות את זה עם לולאה רגילה, אבל עם רקורסיה זה אלגנטי במיוחד:</p>
+
+    <p style="margin-bottom:4px;font-weight:700;color:var(--text-light)">הגדרה רקורסיבית:</p>
+    <div class="scratch-wrap">
+      <div class="sb my-blocks hat">define <span class="hole">ספירלה</span> <span class="hole">גודל</span></div>
+      <div class="sb-indent">
+        <div class="sb control">if <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">(גודל) &gt; (0)</span></span> then</div>
+        <div class="sb-indent">
+          <div class="sb motion">move <span class="hole">גודל</span> steps</div>
+          <div class="sb motion">turn ⟳ <span class="hole">90</span> degrees</div>
+          <div class="sb my-blocks">ספירלה <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">(גודל) - (5)</span></span></div>
+          <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← קריאה עצמית עם גודל קטן יותר!</div>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-bottom:4px;font-weight:700;color:var(--text-light)">הפעלה:</p>
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb pen">erase all</div>
+      <div class="sb pen">pen down</div>
+      <div class="sb my-blocks">ספירלה <span class="hole">100</span></div>
+    </div>
+
+    <h3>מה קורה כאן בפועל?</h3>
+    <ol>
+      <li>קוראים ל"ספירלה" עם גודל <strong>100</strong> — זז 100 צעדים, פונה 90°</li>
+      <li>הבלוק קורא לעצמו עם גודל <strong>95</strong> — זז 95 צעדים, פונה 90°</li>
+      <li>שוב קורא לעצמו עם <strong>90</strong> — זז 90 צעדים, פונה 90°</li>
+      <li>וכן הלאה... כל פעם הצעד קצר ב-5</li>
+      <li>כשהגודל מגיע ל-<strong>0 או פחות</strong> — התנאי "גודל &gt; 0" הוא שקר, הבלוק <strong>עוצר</strong></li>
+    </ol>
+
+    <p>התוצאה: ספירלה ריבועית יפהפייה! 🌀</p>
+
+    <div class="lesson-tip warning">
+      <strong>⚠️ אזהרה: תנאי עצירה הוא חובה!</strong>
+      <p>בלי תנאי עצירה, הבלוק יקרא לעצמו שוב ושוב <strong>לנצח</strong> — ויקפיא את סקראץ'. <strong>תמיד</strong> תוודאו שיש <code>if</code> שבודק מתי להפסיק. הרקורסיה חייבת <strong>להתכנס</strong> — כלומר, הפרמטר חייב להשתנות בכיוון שיגרום לתנאי העצירה להתקיים.</p>
+    </div>
+
+    <h3>עוד דוגמה: עץ רקורסיבי</h3>
+
+    <p>ציור עץ הוא דוגמה מפורסמת לרקורסיה. הרעיון: גזע → בסוף הגזע יוצאים שני ענפים → כל ענף הוא "עץ" קטן יותר!</p>
+
+    <p style="margin-bottom:4px;font-weight:700;color:var(--text-light)">הרעיון (פסאודו-קוד):</p>
+    <div class="scratch-wrap">
+      <div class="sb my-blocks hat">define <span class="hole">עץ</span> <span class="hole">אורך</span></div>
+      <div class="sb-indent">
+        <div class="sb control">if <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">(אורך) &gt; (10)</span></span> then</div>
+        <div class="sb-indent">
+          <div class="sb motion">move <span class="hole">אורך</span> steps</div>
+          <div class="sb motion">turn ⟲ <span class="hole">30</span> degrees</div>
+          <div class="sb my-blocks">עץ <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">(אורך) * (0.7)</span></span></div>
+          <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← ענף שמאלי</div>
+          <div class="sb motion">turn ⟳ <span class="hole">60</span> degrees</div>
+          <div class="sb my-blocks">עץ <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">(אורך) * (0.7)</span></span></div>
+          <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← ענף ימני</div>
+          <div class="sb motion">turn ⟲ <span class="hole">30</span> degrees</div>
+          <div class="sb motion">move <span class="hole"><span class="sb operators" style="margin:0;padding:4px 10px;font-size:.8rem">(אורך) * (-1)</span></span> steps</div>
+          <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← חזרה לבסיס</div>
+        </div>
+      </div>
+    </div>
+
+    <p>כל קריאה מציירת גזע ואז שני ענפים. כל ענף הוא עץ קטן יותר (70% מהגודל). כשהאורך קטן מ-10 — הרקורסיה עוצרת. התוצאה: עץ עם ענפים שמתפצלים שוב ושוב — יפהפה!</p>
+
+    <div class="lesson-tip success">
+      <strong>✅ רקורסיה בעולם האמיתי</strong>
+      <p>רקורסיה מופיעה בכל מקום בטבע ובמתמטיקה: עצים, פתיתי שלג, כרובית (כל חלק נראה כמו הכרובית השלמה!), סדרת פיבונאצ'י, ועוד. בתכנות, רקורסיה היא כלי עוצמתי שמאפשר לפתור בעיות מורכבות בצורה אלגנטית.</p>
+    </div>
+  </div>
+
+  <!-- Section 6: Complex Project - City -->
+  <div class="lesson-section">
+    <h2>6. פרויקט מורכב: ציור עיר</h2>
+
+    <p>בואו נשלב את כל מה שלמדנו — פרמטרים מרובים, בלוקים שקוראים לבלוקים, ופירוק — ונבנה ציור של <strong>עיר שלמה</strong>!</p>
+
+    <h3>שלב 1: בלוק "צייר חלון"</h3>
+    <p>ריבוע קטן — חלון של בניין:</p>
+    <div class="scratch-wrap">
+      <div class="sb my-blocks hat">define <span class="hole">צייר חלון</span> <span class="hole">גודל</span></div>
+      <div class="sb-indent">
+        <div class="sb pen">set pen color to <span class="hole">צהוב</span></div>
+        <div class="sb pen">pen down</div>
+        <div class="sb control">repeat <span class="hole">4</span></div>
+        <div class="sb-indent">
+          <div class="sb motion">move <span class="hole">גודל</span> steps</div>
+          <div class="sb motion">turn ⟳ <span class="hole">90</span> degrees</div>
+        </div>
+        <div class="sb pen">pen up</div>
+      </div>
+    </div>
+
+    <h3>שלב 2: בלוק "צייר בניין"</h3>
+    <p>מלבן גדול — גוף הבניין:</p>
+    <div class="scratch-wrap">
+      <div class="sb my-blocks hat">define <span class="hole">צייר בניין</span> <span class="hole">רוחב</span> <span class="hole">גובה</span> <span class="hole">צבע</span></div>
+      <div class="sb-indent">
+        <div class="sb pen">set pen color to <span class="hole">צבע</span></div>
+        <div class="sb pen">pen down</div>
+        <div class="sb motion">move <span class="hole">גובה</span> steps</div>
+        <div class="sb motion">turn ⟳ <span class="hole">90</span> degrees</div>
+        <div class="sb motion">move <span class="hole">רוחב</span> steps</div>
+        <div class="sb motion">turn ⟳ <span class="hole">90</span> degrees</div>
+        <div class="sb motion">move <span class="hole">גובה</span> steps</div>
+        <div class="sb motion">turn ⟳ <span class="hole">90</span> degrees</div>
+        <div class="sb motion">move <span class="hole">רוחב</span> steps</div>
+        <div class="sb pen">pen up</div>
+      </div>
+    </div>
+
+    <h3>שלב 3: בלוק "צייר בניין עם חלונות"</h3>
+    <p>משלב את "צייר בניין" ו"צייר חלון" ביחד:</p>
+    <div class="scratch-wrap">
+      <div class="sb my-blocks hat">define <span class="hole">בניין עם חלונות</span> <span class="hole">רוחב</span> <span class="hole">גובה</span> <span class="hole">צבע</span></div>
+      <div class="sb-indent">
+        <div class="sb my-blocks">צייר בניין <span class="hole">רוחב</span> <span class="hole">גובה</span> <span class="hole">צבע</span></div>
+        <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← שלד הבניין</div>
+        <div class="sb motion">move <span class="hole">20</span> steps</div>
+        <div class="sb motion">turn ⟳ <span class="hole">90</span> degrees</div>
+        <div class="sb motion">move <span class="hole">15</span> steps</div>
+        <div class="sb motion">turn ⟲ <span class="hole">90</span> degrees</div>
+        <div class="sb my-blocks">צייר חלון <span class="hole">15</span></div>
+        <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← חלון ראשון</div>
+        <div class="sb motion">turn ⟳ <span class="hole">90</span> degrees</div>
+        <div class="sb motion">move <span class="hole">25</span> steps</div>
+        <div class="sb motion">turn ⟲ <span class="hole">90</span> degrees</div>
+        <div class="sb my-blocks">צייר חלון <span class="hole">15</span></div>
+        <div style="color:#666;font-size:.8rem;margin:2px 0 2px 10px">← חלון שני</div>
+      </div>
+    </div>
+
+    <h3>שלב 4: בלוק "צייר עיר"</h3>
+    <p>קורא ל"בניין עם חלונות" כמה פעמים עם ערכים שונים:</p>
+    <div class="scratch-wrap">
+      <div class="sb events hat">when 🟢 clicked</div>
+      <div class="sb pen">erase all</div>
+      <div class="sb motion">go to x: <span class="hole">-200</span> y: <span class="hole">-100</span></div>
+      <div class="sb motion">point in direction <span class="hole">0</span></div>
+      <div class="sb my-blocks">בניין עם חלונות <span class="hole">60</span> <span class="hole">120</span> <span class="hole">אפור</span></div>
+      <div class="sb motion">go to x: <span class="hole">-100</span> y: <span class="hole">-100</span></div>
+      <div class="sb my-blocks">בניין עם חלונות <span class="hole">80</span> <span class="hole">180</span> <span class="hole">כחול</span></div>
+      <div class="sb motion">go to x: <span class="hole">20</span> y: <span class="hole">-100</span></div>
+      <div class="sb my-blocks">בניין עם חלונות <span class="hole">50</span> <span class="hole">100</span> <span class="hole">חום</span></div>
+      <div class="sb motion">go to x: <span class="hole">100</span> y: <span class="hole">-100</span></div>
+      <div class="sb my-blocks">בניין עם חלונות <span class="hole">70</span> <span class="hole">150</span> <span class="hole">ירוק</span></div>
+    </div>
+
+    <h3>מה השגנו?</h3>
+
+    <p>תוכנית שמציירת עיר שלמה עם 4 בניינים — וכל בניין עם חלונות. והתסריט הראשי? <strong>קריא ופשוט!</strong> לא צריך להבין איך מציירים מלבן או חלון — הבלוקים המותאמים מטפלים בזה.</p>
+
+    <ul>
+      <li><strong>"צייר חלון"</strong> — לבנה בסיסית (לא קוראת לאף בלוק אחר)</li>
+      <li><strong>"צייר בניין"</strong> — לבנה בסיסית</li>
+      <li><strong>"בניין עם חלונות"</strong> — קוראת ל"צייר בניין" ול"צייר חלון"</li>
+      <li><strong>התסריט הראשי</strong> — קורא ל"בניין עם חלונות" כמה פעמים</li>
+    </ul>
+
+    <p>זה בדיוק <strong>פירוק</strong> (Decomposition) + <strong>הפשטה</strong> (Abstraction) בפעולה!</p>
+
+    <div class="lesson-tip">
+      <strong>💡 אתגר נוסף</strong>
+      <p>נסו להרחיב את העיר: הוסיפו בלוק "צייר גג" (משולש), בלוק "צייר דלת", או אפילו "צייר עץ" (שני עיגולים ירוקים ומלבן חום). ככל שתוסיפו עוד "לבנים" — כך העיר שלכם תהפוך ליותר מפורטת ומעניינת!</p>
+    </div>
+  </div>
+
+  <!-- Section 7: Exercise -->
+  <div class="lesson-section">
+    <div class="exercise-box">
+      <h3>📝 תרגיל: בנו בסקראץ'</h3>
+      <p>פתחו את סקראץ' ונסו לבנות את התוכניות הבאות:</p>
+      <ol>
+        <li><strong>בלוק "צייר כוכב"</strong> — צרו בלוק מותאם בשם "צייר כוכב" שמקבל פרמטר <strong>גודל</strong>. הבלוק מצייר כוכב בן 5 קודקודים: חזרו 5 פעמים על "לך (גודל) צעדים, פנה ⟳ 144 מעלות". נסו גדלים שונים ובדקו שזה עובד!</li>
+        <li><strong>בלוק "צייר פרח"</strong> — צרו בלוק מותאם בשם "צייר פרח" שמשתמש בבלוק "צייר כוכב" שבניתם. הפרח מורכב מכמה כוכבים שמסובבים אחד ביחס לשני: חזרו 6 פעמים על "צייר כוכב (גודל), פנה ⟳ 60 מעלות"</li>
+        <li><strong>בונוס — ציור רקורסיבי:</strong> צרו בלוק רקורסיבי שמצייר ספירלה או עץ מתפצל. זכרו: תנאי עצירה הוא חובה! נסו לשחק עם הזוויות והגדלים כדי לקבל תוצאות מעניינות</li>
+      </ol>
+      <p style="margin-top:16px;color:var(--text-light);font-size:.9rem"><strong>רמז לכוכב:</strong> הזווית 144° עובדת כי 360° ÷ 5 = 72°, ואנחנו פונים 180° - 72° = 144° (ב"דילוג" על קודקוד). זה מה שיוצר את צורת הכוכב במקום מחומש רגיל.</p>
+    </div>
+  </div>
+
+  <!-- Lesson Navigation -->
+  <div class="lesson-nav">
+    <a href="lesson-4-3.html">השיעור הקודם &rarr;</a>
+    <a href="lesson-5-1.html">השיעור הבא &larr;</a>
+  </div>
+
+</div>
+
+<script src="../../../../../js/auth-gate.js"></script>
+<script src="../../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

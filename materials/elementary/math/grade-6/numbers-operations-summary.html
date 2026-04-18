@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>מספרים ופעולות — סיכום | כיתה ו' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#1e3a5f;--primary-dark:#172e4a;--primary-light:#dbeafe;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#1e3a5f 0%,#2563eb 50%,#3b82f6 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(30,58,95,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:2.2rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.05rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;direction:ltr;unicode-bidi:embed}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:.85em;line-height:1;margin:0 3px}.frac .frac-num{border-bottom:2px solid var(--text);padding:0 4px 2px}.frac .frac-den{padding:2px 4px 0}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:.95rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:1.8rem;padding:6px 16px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🔢</div><div><h1>מספרים ופעולות — סיכום</h1><div class="subtitle">כיתה ו' — חוקי פעולות, ייצוגים ומספרים מכוונים</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">מספרים ופעולות — סיכום — כיתה ו' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>🔢 מספרים ופעולות — סיכום</h2><p><strong>חוק הפילוג (חוק החלוקה):</strong><br>אפשר "לפרק" כפל למספרים נוחים:<br><span class="math">5 × 27 = 5 × 20 + 5 × 7 = 135</span></p><p><strong>חישוב בעל פה:</strong><br>שילוב שברים ועשרוניים — המרה למכנה משותף או לעשרוניים.<br><span class="math">1/4 + 0.25 = 0.25 + 0.25 = 0.5</span></p><p><strong>ייצוגים:</strong><br>אותו מספר יכול להיות שבר, עשרוני או אחוז:<br><span class="math">1/2 = 0.5 = 50%</span></p><p><strong>השלמת פעולה:</strong><br>מהו הסימן (+, −, ×, ÷) שהופך את הביטוי לנכון?<br>האם התוצאה גדלה, קטנה או נשארת?</p><p><strong>מספרים בין:</strong><br>בין כל שני שברים/עשרוניים יש אינסוף מספרים.<br>אפשר להמיר למכנה משותף ולמצוא ערכים ביניהם.</p><p><strong>מספרים מכוונים (שליליים):</strong><br>מספרים שליליים הם מתחת לאפס על ציר המספרים.<br>הפרש טמפרטורות: מ-<span class="math">\u200E-3°</span> ל-<span class="math">\u200E+5°</span> → עלייה של 8°.</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function ltrN(v){return '\u200E'+v}
+function fracHTML(n,d){return '<span class="frac"><span class="frac-num">'+n+'</span><span class="frac-den">'+d+'</span></span>'}
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=b;b=a%t;a=t}return a}
+function simplify(n,d){var g=gcd(n,d);return[n/g,d/g]}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* --- Type 1: Distributive law --- */
+function qDistributive(){
+  var presets=[
+    {a:5,b:27,p1:20,p2:7},
+    {a:4,b:36,p1:30,p2:6},
+    {a:3,b:48,p1:40,p2:8},
+    {a:6,b:15,p1:10,p2:5},
+    {a:7,b:13,p1:10,p2:3},
+    {a:8,b:25,p1:20,p2:5},
+    {a:9,b:12,p1:10,p2:2},
+    {a:4,b:53,p1:50,p2:3},
+    {a:3,b:29,p1:30,p2:-1},
+    {a:6,b:34,p1:30,p2:4},
+    {a:5,b:42,p1:40,p2:2},
+    {a:7,b:21,p1:20,p2:1},
+    {a:8,b:14,p1:10,p2:4},
+    {a:3,b:67,p1:70,p2:-3},
+    {a:5,b:18,p1:20,p2:-2}
+  ];
+  var p=presets[rr(0,presets.length-1)];
+  var correct=p.a*p.b;
+  var part1=p.a*p.p1;
+  var part2=p.a*p.p2;
+  var sign=p.p2>=0?'+':'-';
+  var absP2=Math.abs(p.p2);
+  var stem=p.a+' \u00D7 '+p.b+' = '+p.a+' \u00D7 '+p.p1+' '+sign+' '+p.a+' \u00D7 '+absP2+' = ?';
+  var wrongs=new Set();
+  wrongs.add(correct+p.a);wrongs.add(correct-p.a);wrongs.add(correct+10);wrongs.add(correct-10);wrongs.add(p.a*p.b+p.b);wrongs.add(Math.abs(correct*2));
+  wrongs.delete(correct);wrongs.delete(0);
+  var wArr=Array.from(wrongs).filter(function(v){return v>0}).slice(0,3);
+  while(wArr.length<3){var f=correct+rr(-15,15);if(f>0&&f!==correct&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var options=shuffle([String(correct)].concat(wArr.map(String)));
+  var explain=p.a+' \u00D7 '+p.p1+' = '+part1+', '+p.a+' \u00D7 '+absP2+' = '+Math.abs(part2)+' \u2192 '+part1+' '+sign+' '+Math.abs(part2)+' = '+correct;
+  return{type:'choice',qText:'חשבו עם חוק הפילוג:',display:'<div class="num-display"><span class="big-num">'+stem+'</span></div>',answer:String(correct),options:options,colClass:'cols-4',explain:explain};
+}
+
+/* --- Type 2: Mental calculation with fractions/decimals --- */
+function qMentalCalc(){
+  var presets=[
+    {stem:'1/4 + 0.2 + 0.75',answer:'1.2',explain:'1/4 = 0.25, 0.25 + 0.2 + 0.75 = 1.2',wrongs:['1.0','1.5','0.95']},
+    {stem:'(2/3 + 1/6) \u00D7 12',answer:'10',explain:'2/3 + 1/6 = 4/6 + 1/6 = 5/6, ו-5/6 \u00D7 12 = 10',wrongs:['8','12','9']},
+    {stem:'0.5 + 1/4 + 0.25',answer:'1',explain:'0.5 + 0.25 + 0.25 = 1',wrongs:['0.75','1.25','0.5']},
+    {stem:'3/4 - 0.5',answer:'0.25',explain:'3/4 = 0.75, 0.75 - 0.5 = 0.25',wrongs:['0.5','0.75','0.15']},
+    {stem:'1/2 + 1/3 + 1/6',answer:'1',explain:'3/6 + 2/6 + 1/6 = 6/6 = 1',wrongs:['5/6','7/6','2/3']},
+    {stem:'0.75 \u00D7 8',answer:'6',explain:'3/4 \u00D7 8 = 24/4 = 6',wrongs:['4','5','8']},
+    {stem:'2.5 \u00D7 4',answer:'10',explain:'2.5 \u00D7 4 = 10',wrongs:['8','12','9']},
+    {stem:'1/5 + 0.3 + 0.5',answer:'1',explain:'1/5 = 0.2, 0.2 + 0.3 + 0.5 = 1.0',wrongs:['0.8','1.1','0.9']},
+    {stem:'3/8 + 5/8',answer:'1',explain:'3/8 + 5/8 = 8/8 = 1',wrongs:['7/8','2','1/2']},
+    {stem:'0.1 \u00D7 50',answer:'5',explain:'0.1 \u00D7 50 = 5',wrongs:['0.5','50','10']},
+    {stem:'2/5 \u00D7 15',answer:'6',explain:'2/5 \u00D7 15 = 30/5 = 6',wrongs:['3','5','8']},
+    {stem:'1.5 + 2.5',answer:'4',explain:'1.5 + 2.5 = 4',wrongs:['3','3.5','5']},
+    {stem:'7/10 + 0.3',answer:'1',explain:'7/10 = 0.7, 0.7 + 0.3 = 1',wrongs:['0.73','10','0.1']},
+    {stem:'(1/2 + 1/2) \u00D7 6',answer:'6',explain:'1/2 + 1/2 = 1, 1 \u00D7 6 = 6',wrongs:['3','12','4']},
+    {stem:'0.25 \u00D7 20',answer:'5',explain:'1/4 \u00D7 20 = 5',wrongs:['4','2.5','10']}
+  ];
+  var p=presets[rr(0,presets.length-1)];
+  var options=shuffle([p.answer].concat(p.wrongs));
+  return{type:'choice',qText:'חשבו בעל פה:',display:'<div class="num-display"><span class="big-num">'+p.stem+'</span></div>',answer:p.answer,options:options,colClass:'cols-4',explain:p.explain};
+}
+
+/* --- Type 3: Match representation --- */
+function qMatchRepresentation(){
+  var items=[
+    {frac:'1/2',dec:'0.5',pct:'50%'},
+    {frac:'1/4',dec:'0.25',pct:'25%'},
+    {frac:'3/4',dec:'0.75',pct:'75%'},
+    {frac:'1/5',dec:'0.2',pct:'20%'},
+    {frac:'2/5',dec:'0.4',pct:'40%'},
+    {frac:'3/5',dec:'0.6',pct:'60%'},
+    {frac:'1/10',dec:'0.1',pct:'10%'},
+    {frac:'3/10',dec:'0.3',pct:'30%'},
+    {frac:'7/10',dec:'0.7',pct:'70%'},
+    {frac:'1/8',dec:'0.125',pct:'12.5%'},
+    {frac:'3/8',dec:'0.375',pct:'37.5%'},
+    {frac:'1/3',dec:'0.333...',pct:'33.3%'}
+  ];
+  var idx=rr(0,items.length-1);
+  var item=items[idx];
+  /* pick format for question and answer */
+  var formats=['frac','dec','pct'];
+  var qFmt=formats[rr(0,2)];
+  var aFmt;
+  do{aFmt=formats[rr(0,2)]}while(aFmt===qFmt);
+  var qVal=item[qFmt];
+  var correct=item[aFmt];
+  var fmtLabel={frac:'שבר',dec:'מספר עשרוני',pct:'אחוזים'};
+  /* build wrong answers from other items */
+  var wrongs=[];
+  for(var i=0;i<items.length&&wrongs.length<3;i++){
+    if(i!==idx&&items[i][aFmt]!==correct) wrongs.push(items[i][aFmt]);
+  }
+  var options=shuffle([correct].concat(wrongs.slice(0,3)));
+  var qLabel=fmtLabel[qFmt];
+  var aLabel=fmtLabel[aFmt];
+  return{type:'choice',qText:'ה'+qLabel+' <strong>'+qVal+'</strong> שווה ל... (כ'+aLabel+')',display:'',answer:correct,options:options,colClass:'cols-4',explain:item.frac+' = '+item.dec+' = '+item.pct};
+}
+
+/* --- Type 4: Fill operator --- */
+function qFillOperator(){
+  var presets=[
+    {stem:'3.75 + __ > 3.75',answer:'מספר חיובי כלשהו',correct:'כל מספר חיובי',opts:['כל מספר חיובי','כל מספר שלילי','רק 0','כל מספר'],explain:'כשמוסיפים מספר חיובי, התוצאה תמיד גדולה מהמספר המקורי'},
+    {stem:'3.75 \u00D7 __ > 3.75',answer:'מספר גדול מ-1',correct:'מספר גדול מ-1',opts:['מספר גדול מ-1','כל מספר חיובי','רק 2','מספר קטן מ-1'],explain:'כפל במספר גדול מ-1 מגדיל את התוצאה'},
+    {stem:'3.75 \u00D7 __ < 3.75',answer:'מספר בין 0 ל-1',correct:'מספר בין 0 ל-1',opts:['מספר בין 0 ל-1','כל מספר שלילי','רק 0','מספר גדול מ-1'],explain:'כפל במספר בין 0 ל-1 מקטין (אבל לא הופך לשלילי)'},
+    {stem:'12 \u00F7 __ > 12',answer:'מספר בין 0 ל-1',correct:'מספר בין 0 ל-1',opts:['מספר בין 0 ל-1','מספר גדול מ-1','רק 1','כל מספר חיובי'],explain:'חילוק במספר בין 0 ל-1 דומה לכפל — מגדיל!'},
+    {stem:'12 \u00F7 __ < 12',answer:'מספר גדול מ-1',correct:'מספר גדול מ-1',opts:['מספר גדול מ-1','כל מספר','מספר בין 0 ל-1','רק 12'],explain:'חילוק במספר גדול מ-1 מקטין את התוצאה'},
+    {stem:'5 \u00D7 __ = 5',answer:'1',correct:'1',opts:['1','0','5','0.5'],explain:'כפל ב-1 משאיר את המספר כמו שהוא'},
+    {stem:'8 + __ = 8',answer:'0',correct:'0',opts:['0','1','8','-8'],explain:'חיבור 0 לא משנה את המספר'},
+    {stem:'6 \u00D7 __ = 0',answer:'0',correct:'0',opts:['0','1','6','-6'],explain:'כל מספר כפול 0 שווה 0'},
+    {stem:'10 \u00F7 __ = 10',answer:'1',correct:'1',opts:['1','0','10','0.1'],explain:'חילוק ב-1 משאיר את המספר כמו שהוא'}
+  ];
+  var p=presets[rr(0,presets.length-1)];
+  var options=shuffle(p.opts.slice());
+  return{type:'choice',qText:'מה צריך להיות במקום ה-__ ?',display:'<div class="num-display"><span class="big-num">'+p.stem+'</span></div>',answer:p.correct,options:options,colClass:'cols-2',explain:p.explain};
+}
+
+/* --- Type 5: Numbers between --- */
+function qNumbersBetween(){
+  var pairs=[
+    {a:'1/3',b:'1/2',aVal:1/3,bVal:1/2,answers:['0.4','2/5','0.35','0.45','0.48'],wrongs:['0.6','0.2','1/4','0.55']},
+    {a:'0.1',b:'0.2',aVal:0.1,bVal:0.2,answers:['0.12','0.15','0.18','0.11','0.19'],wrongs:['0.05','0.25','0.2','0.3']},
+    {a:'1/4',b:'1/2',aVal:0.25,bVal:0.5,answers:['0.3','0.4','1/3','0.35','0.45'],wrongs:['0.1','0.6','0.7','3/4']},
+    {a:'0.5',b:'0.6',aVal:0.5,bVal:0.6,answers:['0.52','0.55','0.58','0.51','0.59'],wrongs:['0.4','0.65','0.7','0.3']},
+    {a:'2/5',b:'3/5',aVal:0.4,bVal:0.6,answers:['0.45','0.5','1/2','0.55','0.42'],wrongs:['0.3','0.7','0.2','3/4']},
+    {a:'0',b:'0.1',aVal:0,bVal:0.1,answers:['0.02','0.05','0.08','0.01','0.09'],wrongs:['0.1','0.15','0.2','-0.1']},
+    {a:'3/4',b:'1',aVal:0.75,bVal:1,answers:['0.8','0.85','0.9','0.95','0.78'],wrongs:['0.5','0.7','1.1','1/2']}
+  ];
+  var p=pairs[rr(0,pairs.length-1)];
+  /* pick one correct and three wrong */
+  var correctAns=p.answers[rr(0,p.answers.length-1)];
+  var options=shuffle([correctAns].concat(p.wrongs.slice(0,3)));
+  return{type:'choice',qText:'איזה מספר נמצא <strong>בין</strong> '+p.a+' ל-'+p.b+'?',display:'',answer:correctAns,options:options,colClass:'cols-4',explain:correctAns+' נמצא בין '+p.a+' ל-'+p.b};
+}
+
+/* --- Type 6: Negative numbers intro --- */
+function qNegativeIntro(){
+  var scenarios=[
+    function(){var night=rr(-10,-1);var day=rr(1,15);var diff=day-night;return{stem:'הטמפרטורה בלילה: '+ltrN(night)+'\u00B0. ביום: '+ltrN('+'+day)+'\u00B0. בכמה עלתה הטמפרטורה?',answer:String(diff)+'\u00B0',wrongs:[String(diff-2)+'\u00B0',String(diff+3)+'\u00B0',String(day)+'\u00B0'],explain:'מ-'+ltrN(night)+' עד '+ltrN('+'+day)+' ההפרש הוא '+diff}},
+    function(){var floor=rr(-3,-1);return{stem:'המעלית נמצאת בקומה '+ltrN(floor)+'. היא עולה '+Math.abs(floor+rr(2,5))+' קומות. באיזו קומה היא עכשיו?',answer:String(floor+Math.abs(floor)+rr(2,5)-rr(2,5)),wrongs:null}},
+    function(){var a=rr(-8,-1);var b=rr(1,10);var sum=a+b;return{stem:'חשבו: '+ltrN(a)+' + '+b+' = ?',answer:String(sum),wrongs:[String(sum+2),String(sum-2),String(-sum)],explain:ltrN(a)+' + '+b+' = '+ltrN(sum)}},
+    function(){var temp1=rr(-5,-1);var temp2=rr(-10,temp1-1);var diff=temp1-temp2;return{stem:'ביום שני: '+ltrN(temp1)+'\u00B0. ביום שלישי: '+ltrN(temp2)+'\u00B0. בכמה מעלות ירדה הטמפרטורה?',answer:String(diff)+'\u00B0',wrongs:[String(diff+2)+'\u00B0',String(diff-1)+'\u00B0',String(Math.abs(temp2))+'\u00B0'],explain:'ההפרש: '+ltrN(temp1)+' - ('+ltrN(temp2)+') = '+diff}},
+    function(){var n=rr(-9,-1);return{stem:'מהו המספר הנגדי של '+ltrN(n)+'?',answer:String(-n),wrongs:[String(n),String(n-1),String(-n-1)],explain:'הנגדי של '+ltrN(n)+' הוא '+(-n)}},
+    function(){var n=rr(1,10);return{stem:'מהו המספר הנגדי של '+n+'?',answer:String(-n),wrongs:[String(n),String(n+1),String(-n-1)],explain:'הנגדי של '+n+' הוא '+ltrN(-n)}},
+    function(){var a=rr(-6,-1);var b=rr(-6,-1);var sum=a+b;return{stem:'חשבו: ('+ltrN(a)+') + ('+ltrN(b)+') = ?',answer:String(sum),wrongs:[String(sum+2),String(-sum),String(sum-3)],explain:'('+ltrN(a)+') + ('+ltrN(b)+') = '+ltrN(sum)}},
+    function(){var pos=rr(1,8);var neg=rr(-8,-1);var nums=[pos,neg,0];var sorted=nums.slice().sort(function(x,y){return x-y});var correct=sorted.join(', ');var wrong1=sorted.slice().reverse().join(', ');var wrong2=[neg,0,pos].join(', ');/* same as sorted but just in case */var wrong3=[0,neg,pos].join(', ');return{stem:'סדרו מהקטן לגדול: '+ltrN(pos)+', '+ltrN(neg)+', 0',answer:correct,wrongs:[wrong1,wrong3,String(neg)+', '+pos+', 0'],explain:'על ציר המספרים: '+ltrN(neg)+' < 0 < '+pos}}
+  ];
+  /* use only well-defined scenarios: 0,2,3,4,5,6,7 (skip 1 — elevator has bug potential) */
+  var safe=[0,2,3,4,5,6,7];
+  var pick=safe[rr(0,safe.length-1)];
+  var s=scenarios[pick]();
+  if(!s.wrongs){
+    /* fallback to simple scenario */
+    s=scenarios[0]();
+  }
+  var options=shuffle([s.answer].concat(s.wrongs.slice(0,3)));
+  return{type:'choice',qText:s.stem,display:'',answer:s.answer,options:options,colClass:'cols-4',explain:s.explain};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'חוק הפילוג',instruction:'פרקו כפל למספרים נוחים!',
+   tip:'חוק הפילוג אומר:\n<span class="math">a \u00D7 (b + c) = a \u00D7 b + a \u00D7 c</span>\nאפשר לפרק מספר לחלקים נוחים ולכפול כל חלק בנפרד.',
+   example:'<span class="math">5 \u00D7 27 = 5 \u00D7 20 + 5 \u00D7 7 = 100 + 35 = 135</span>',
+   gen:function(){return qDistributive()}},
+
+  {title:'חישוב בעל פה',instruction:'שברים, עשרוניים ופעולות — בראש!',
+   tip:'כשמערבבים שברים ועשרוניים, כדאי להמיר לצורה אחידה.\n<span class="math">1/4 = 0.25</span>, <span class="math">1/2 = 0.5</span>, <span class="math">3/4 = 0.75</span>',
+   example:'<span class="math">1/4 + 0.2 + 0.75 = 0.25 + 0.2 + 0.75 = 1.2</span>',
+   gen:function(){return qMentalCalc()}},
+
+  {title:'ייצוגים שונים',instruction:'שבר, עשרוני, אחוז — אותו מספר!',
+   tip:'כל מספר אפשר לכתוב בכמה דרכים:\n<span class="math">1/2 = 0.5 = 50%</span>\nשבר \u2192 עשרוני: מחלקים מונה במכנה\nעשרוני \u2192 אחוז: כופלים ב-100',
+   example:'<span class="math">3/4 = 0.75 = 75%</span>\n<span class="math">1/5 = 0.2 = 20%</span>',
+   gen:function(){return qMatchRepresentation()}},
+
+  {title:'השלמת חסר',instruction:'מה צריך להיות בריק?',
+   tip:'<strong>כפל</strong>: מספר > 1 מגדיל, מספר בין 0 ל-1 מקטין\n<strong>חילוק</strong>: מספר > 1 מקטין, מספר בין 0 ל-1 מגדיל\n<strong>חיבור 0</strong>: לא משנה. <strong>כפל ב-0</strong>: תמיד 0.',
+   example:'<span class="math">3.75 \u00D7 __ > 3.75</span> \u2192 __ חייב להיות גדול מ-1\n<span class="math">3.75 \u00D7 __ < 3.75</span> \u2192 __ חייב להיות בין 0 ל-1',
+   gen:function(){return qFillOperator()}},
+
+  {title:'מספרים בין',instruction:'מצאו מספר בין שני מספרים נתונים',
+   tip:'בין כל שני מספרים יש אינסוף מספרים!\nטריק: המירו למכנה משותף או לעשרוני ומצאו ערכים באמצע.',
+   example:'בין <span class="math">1/4</span> ל-<span class="math">1/2</span>:\n<span class="math">1/4 = 0.25</span>, <span class="math">1/2 = 0.5</span> \u2192 <span class="math">0.3, 0.35, 0.4...</span>',
+   gen:function(){return qNumbersBetween()}},
+
+  {title:'מספרים מכוונים (בסיס)',instruction:'הכירו את המספרים השליליים!',
+   tip:'מספרים שליליים הם מספרים קטנים מאפס.\nעל ציר המספרים הם משמאל לאפס.\nמ-<span class="math">\u200E-3</span> ל-<span class="math">\u200E+5</span> \u2192 הפרש של 8.',
+   example:'טמפרטורה בלילה: <span class="math">\u200E-3\u00B0</span>\nטמפרטורה ביום: <span class="math">\u200E+5\u00B0</span>\nעלייה: <span class="math">8\u00B0</span>',
+   gen:function(){return qNegativeIntro()}},
+
+  {title:'פילוג + חישוב',instruction:'שילוב חוק הפילוג וחישוב בעל פה',
+   tip:'השתמשו בכל הכלים: פילוג, המרות, חישוב מהיר!',
+   example:'כל שאלה היא הפתעה! \uD83C\uDFB2',
+   gen:function(){return[qDistributive,qMentalCalc][rr(0,1)]()}},
+
+  {title:'ייצוגים + השלמה',instruction:'ייצוגים שונים והשלמת פעולות',
+   tip:'זכרו:\n\u2022 <span class="math">1/4 = 0.25 = 25%</span>\n\u2022 כפל ב->1 מגדיל, ב-<1 מקטין',
+   example:'כל שאלה היא הפתעה! \uD83C\uDFB2',
+   gen:function(){return[qMatchRepresentation,qFillOperator][rr(0,1)]()}},
+
+  {title:'מספרים בין + שליליים',instruction:'מספרים בין ומספרים מכוונים',
+   tip:'בין כל שני מספרים יש אינסוף מספרים.\nמספרים שליליים קטנים מאפס.',
+   example:'כל שאלה היא הפתעה! \uD83C\uDFB2',
+   gen:function(){return[qNumbersBetween,qNegativeIntro][rr(0,1)]()}},
+
+  {title:'מעורבב — 3 סוגים',instruction:'פילוג, חישוב וייצוגים!',
+   tip:'שלבו את כל מה שלמדתם עד עכשיו!',
+   example:'\uD83C\uDFC6 בהצלחה!',
+   gen:function(){return[qDistributive,qMentalCalc,qMatchRepresentation][rr(0,2)]()}},
+
+  {title:'מעורבב — 4 סוגים',instruction:'פילוג, חישוב, ייצוגים והשלמה!',
+   tip:'ארבעה סוגי שאלות — היו מוכנים לכל דבר!',
+   example:'\uD83C\uDFC6 בהצלחה!',
+   gen:function(){return[qDistributive,qMentalCalc,qMatchRepresentation,qFillOperator][rr(0,3)]()}},
+
+  {title:'מעורבב — 5 סוגים',instruction:'כל הנושאים חוץ ממכוונים!',
+   tip:'חמישה סוגים: פילוג, חישוב, ייצוגים, השלמה, מספרים-בין.',
+   example:'\uD83D\uDCAA אתם יכולים!',
+   gen:function(){return[qDistributive,qMentalCalc,qMatchRepresentation,qFillOperator,qNumbersBetween][rr(0,4)]()}},
+
+  {title:'מעורבב מלא!',instruction:'כל 6 הסוגים!',
+   tip:'הכל ביחד: פילוג, חישוב בעל פה, ייצוגים, השלמת חסר, מספרים בין, ומספרים מכוונים!',
+   example:'\uD83D\uDCAA \uD83C\uDFC6',
+   gen:function(){return[qDistributive,qMentalCalc,qMatchRepresentation,qFillOperator,qNumbersBetween,qNegativeIntro][rr(0,5)]()}},
+
+  {title:'אתגר!',instruction:'שאלות מאתגרות מכל הסוגים!',
+   tip:'שלבו את כל הכלים שלמדתם! חשבו לפני שעונים.',
+   example:'\uD83C\uDF1F \uD83D\uDCAA \uD83C\uDFC6',
+   gen:function(){return[qDistributive,qMentalCalc,qMatchRepresentation,qFillOperator,qNumbersBetween,qNegativeIntro][rr(0,5)]()}},
+
+  {title:'מאסטר!',instruction:'הרמה הכי קשה — כל הסוגים!',
+   tip:'\uD83C\uDFC6 אין עליכם! שלטתם בכל הנושאים!',
+   example:'\uD83C\uDF1F\uD83C\uDF1F\uD83C\uDF1F',
+   gen:function(){return[qDistributive,qMentalCalc,qMatchRepresentation,qFillOperator,qNumbersBetween,qNegativeIntro][rr(0,5)]()}}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=6;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)"><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

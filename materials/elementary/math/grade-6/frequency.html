@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>שכיחות ושכיחות יחסית — כיתה ו' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#0891b2;--primary-dark:#0e7490;--primary-light:#cffafe;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#0e7490 0%,#0891b2 50%,#06b6d4 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(8,145,178,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.data-table{width:100%;border-collapse:collapse;margin:12px 0;direction:ltr;unicode-bidi:embed}.data-table th,.data-table td{border:2px solid var(--border);padding:8px 12px;text-align:center;font-size:1rem;font-weight:700}.data-table th{background:var(--primary-light);color:var(--primary)}.data-table td{background:var(--card)}
+.chart-container{text-align:center;margin:12px 0;direction:ltr}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">📊</div><div><h1>שכיחות ושכיחות יחסית</h1><div class="subtitle">כיתה ו' — שכיח, ממוצע, ניתוח נתונים</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">שכיחות ושכיחות יחסית — כיתה ו' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>📊 שכיחות ושכיחות יחסית</h2><p><strong>שכיח (מודוס)</strong> — הערך שמופיע הכי הרבה פעמים בקבוצת נתונים.</p><p><strong>ממוצע</strong> — סכום כל הערכים חלקי מספר הערכים.<br>לדוגמה: הממוצע של 4, 6, 8 הוא <span class="math">(4+6+8) &divide; 3 = 6</span></p><p><strong>שכיחות יחסית</strong> — מספר ההופעות חלקי סך כל הנתונים. התוצאה היא מספר בין 0 ל-1 (או באחוזים).<br>לדוגמה: אם מתוך 20 תלמידים, 5 בחרו כדורגל, השכיחות היחסית היא <span class="math">5 &divide; 20 = 0.25</span></p><p><strong>קריאת דיאגרמת עמודות</strong> — גובה כל עמודה מראה את השכיחות (כמה פעמים הערך מופיע).</p><p><strong>מתי שכיח עדיף על ממוצע?</strong><br>🔹 השכיח עדיף כשיש ערכים קיצוניים שמשפיעים על הממוצע<br>🔹 הממוצע עדיף כשהנתונים מפוזרים באופן אחיד</p><p>15 רמות — מהקל אל הקשה! 🚀</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* --- Type 1: Find the mode --- */
+function qFindMode(){
+  var vals=[],pool=[];
+  for(var i=0;i<6;i++) pool.push(rr(1,10));
+  var modeVal=pool[rr(0,pool.length-1)];
+  /* ensure modeVal appears most */
+  var counts={};
+  vals.push(modeVal);vals.push(modeVal);vals.push(modeVal);
+  for(var i=0;i<4;i++){
+    var v=pool[rr(0,pool.length-1)];
+    if(v===modeVal&&rr(0,1)===0) v=pool[rr(0,pool.length-1)];
+    vals.push(v);
+  }
+  shuffle(vals);
+  /* compute actual mode */
+  counts={};
+  for(var i=0;i<vals.length;i++){counts[vals[i]]=(counts[vals[i]]||0)+1}
+  var maxC=0,mode=vals[0];
+  for(var k in counts){if(counts[k]>maxC){maxC=counts[k];mode=Number(k)}}
+  /* build display table */
+  var unique=[];var uSet=new Set();
+  for(var i=0;i<vals.length;i++){if(!uSet.has(vals[i])){uSet.add(vals[i]);unique.push(vals[i])}}
+  unique.sort(function(a,b){return a-b});
+  var tableH='<table class="data-table"><tr><th>ערך</th>';
+  for(var i=0;i<unique.length;i++) tableH+='<td>'+unique[i]+'</td>';
+  tableH+='</tr><tr><th>שכיחות</th>';
+  for(var i=0;i<unique.length;i++) tableH+='<td>'+counts[unique[i]]+'</td>';
+  tableH+='</tr></table>';
+  /* wrong answers */
+  var wrongs=new Set();
+  for(var i=0;i<unique.length;i++){if(unique[i]!==mode) wrongs.add(unique[i])}
+  while(wrongs.size<3){wrongs.add(rr(1,12))}
+  wrongs.delete(mode);
+  var opts=shuffle([String(mode)].concat(Array.from(wrongs).slice(0,3).map(String)));
+  return{type:'choice',qText:'מהו <strong>השכיח</strong> (הערך שמופיע הכי הרבה)?',display:tableH,answer:String(mode),options:opts,colClass:'cols-4',explain:'הערך '+mode+' מופיע '+maxC+' פעמים — הכי הרבה!'};
+}
+
+/* --- Type 2: Find the mean --- */
+function qFindMean(){
+  var len=rr(3,5);
+  var vals=[];var sum=0;
+  /* ensure integer mean */
+  for(var i=0;i<len-1;i++){var v=rr(2,15);vals.push(v);sum+=v}
+  var rem=sum%len;
+  var last=(rem===0)?rr(2,15):rr(2,15);
+  /* adjust to make mean integer */
+  sum+=last;vals.push(last);
+  if(sum%len!==0){
+    var adj=len-(sum%len);
+    vals[vals.length-1]+=adj;
+    sum+=adj;
+  }
+  shuffle(vals);
+  var mean=sum/len;
+  var display='<div style="text-align:center;font-size:1.3rem;font-weight:800;margin:12px 0;direction:ltr;unicode-bidi:embed">'+vals.join(' , ')+'</div>';
+  var wrongs=new Set();
+  wrongs.add(mean+1);wrongs.add(mean-1);wrongs.add(mean+2);wrongs.add(Math.round(sum/(len+1)));
+  wrongs.delete(mean);wrongs.delete(0);
+  var wArr=Array.from(wrongs).filter(function(v){return v>0}).slice(0,3);
+  while(wArr.length<3){var f=rr(1,20);if(f!==mean&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var opts=shuffle([String(mean)].concat(wArr.slice(0,3).map(String)));
+  return{type:'choice',qText:'מהו <strong>הממוצע</strong> של המספרים?',display:display,answer:String(mean),options:opts,colClass:'cols-4',explain:'הסכום הוא '+sum+', חלקי '+len+' = '+mean};
+}
+
+/* --- Type 3: Relative frequency --- */
+function qRelativeFreq(){
+  var totals=[20,25,30,40,50];
+  var total=totals[rr(0,totals.length-1)];
+  var part=rr(2,total-2);
+  /* ensure nice decimal */
+  while((part/total*100)%1!==0){part=rr(2,total-2)}
+  var relFreq=part/total;
+  var relStr=relFreq.toFixed(2).replace(/0+$/,'').replace(/\.$/,'');
+  var pct=Math.round(relFreq*100);
+  var contexts=[
+    {ctx:'מתוך '+total+' תלמידים, '+part+' בחרו כדורגל.',q:'מהי השכיחות היחסית של בחירת כדורגל?'},
+    {ctx:'מתוך '+total+' ימים, ב-'+part+' ירד גשם.',q:'מהי השכיחות היחסית של ימי גשם?'},
+    {ctx:'מתוך '+total+' מכוניות, '+part+' היו אדומות.',q:'מהי השכיחות היחסית של מכוניות אדומות?'},
+    {ctx:'מתוך '+total+' תלמידים, '+part+' הגיעו ברגל.',q:'מהי השכיחות היחסית של הגעה ברגל?'}
+  ];
+  var c=contexts[rr(0,contexts.length-1)];
+  var wrongs=new Set();
+  wrongs.add(((part+2)/total).toFixed(2).replace(/0+$/,'').replace(/\.$/,''));
+  wrongs.add(((part-1)/total).toFixed(2).replace(/0+$/,'').replace(/\.$/,''));
+  wrongs.add((part/(total+10)).toFixed(2).replace(/0+$/,'').replace(/\.$/,''));
+  wrongs.add(((total-part)/total).toFixed(2).replace(/0+$/,'').replace(/\.$/,''));
+  wrongs.delete(relStr);
+  var wArr=Array.from(wrongs).slice(0,3);
+  while(wArr.length<3){var f=(rr(5,95)/100).toFixed(2).replace(/0+$/,'').replace(/\.$/,'');if(f!==relStr&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var opts=shuffle([relStr].concat(wArr.slice(0,3)));
+  return{type:'choice',qText:'<strong>'+c.ctx+'</strong><br>'+c.q,display:'<div style="text-align:center;font-size:1.1rem;margin:10px 0;direction:ltr;unicode-bidi:embed"><strong>'+part+' &divide; '+total+'</strong></div>',answer:relStr,options:opts,colClass:'cols-4',explain:part+' &divide; '+total+' = '+relStr+' ('+pct+'%)'};
+}
+
+/* --- Type 4: Read SVG bar chart --- */
+function qReadChart(){
+  var categories=['🍎','🍌','🍊','🍇','🍓'];
+  var names=['תפוח','בננה','תפוז','ענבים','תות'];
+  var numCats=rr(3,5);
+  var usedCats=categories.slice(0,numCats);
+  var usedNames=names.slice(0,numCats);
+  var values=[];
+  for(var i=0;i<numCats;i++) values.push(rr(2,12));
+  var maxVal=Math.max.apply(null,values);
+  var askIdx=rr(0,numCats-1);
+  var correctVal=values[askIdx];
+  /* Build SVG */
+  var barW=50,gap=20,chartH=140;
+  var svgW=(barW+gap)*numCats+gap;
+  var svg='<svg width="'+svgW+'" height="'+(chartH+50)+'" viewBox="0 0 '+svgW+' '+(chartH+50)+'" xmlns="http://www.w3.org/2000/svg">';
+  /* grid lines */
+  for(var g=0;g<=maxVal;g+=2){
+    var gy=chartH-(g/maxVal)*chartH+10;
+    svg+='<line x1="'+gap+'" y1="'+gy+'" x2="'+(svgW-gap)+'" y2="'+gy+'" stroke="#e2e8f0" stroke-width="1"/>';
+    svg+='<text x="'+(gap-5)+'" y="'+(gy+4)+'" text-anchor="end" font-size="10" fill="#64748b">'+g+'</text>';
+  }
+  var colors=['#0891b2','#f59e0b','#ef4444','#8b5cf6','#10b981'];
+  for(var i=0;i<numCats;i++){
+    var bh=(values[i]/maxVal)*chartH;
+    var bx=gap+(barW+gap)*i;
+    var by=chartH-bh+10;
+    svg+='<rect x="'+bx+'" y="'+by+'" width="'+barW+'" height="'+bh+'" rx="4" fill="'+colors[i%colors.length]+'" opacity="0.85"/>';
+    svg+='<text x="'+(bx+barW/2)+'" y="'+(by-5)+'" text-anchor="middle" font-size="12" font-weight="700" fill="'+colors[i%colors.length]+'">'+values[i]+'</text>';
+    svg+='<text x="'+(bx+barW/2)+'" y="'+(chartH+30)+'" text-anchor="middle" font-size="14">'+usedCats[i]+'</text>';
+  }
+  svg+='</svg>';
+  var display='<div class="chart-container">'+svg+'</div>';
+  /* wrong answers */
+  var wrongs=new Set();
+  for(var i=0;i<numCats;i++){if(i!==askIdx) wrongs.add(values[i])}
+  wrongs.add(correctVal+1);wrongs.add(correctVal-1>0?correctVal-1:correctVal+2);
+  wrongs.delete(correctVal);
+  var wArr=Array.from(wrongs).filter(function(v){return v>0}).slice(0,3);
+  while(wArr.length<3){var f=rr(1,15);if(f!==correctVal&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var opts=shuffle([String(correctVal)].concat(wArr.slice(0,3).map(String)));
+  return{type:'choice',qText:'לפי הדיאגרמה, מהי השכיחות של <strong>'+usedNames[askIdx]+' '+usedCats[askIdx]+'</strong>?',display:display,answer:String(correctVal),options:opts,colClass:'cols-4',explain:'גובה העמודה של '+usedNames[askIdx]+' הוא '+correctVal};
+}
+
+/* --- Type 5: Mode vs Mean --- */
+function qModeVsMean(){
+  var scenarios=[
+    {text:'בכיתה, ציוני המבחן הם: 80, 80, 80, 85, 100. ערך קיצוני אחד (100) מעלה את הממוצע.',q:'מה מייצג יותר את רוב התלמידים?',answer:'השכיח',explain:'השכיח (80) מייצג את רוב התלמידים, הממוצע (85) מושפע מהערך הקיצוני 100.'},
+    {text:'משכורות בחברה: 5000, 5500, 6000, 6500, 50000. למנכ"ל משכורת חריגה.',q:'מה מייצג יותר את רוב העובדים?',answer:'השכיח',explain:'השכיח (כל המשכורות שונות, אבל רובן סביב 5000-6500) מייצג יותר. הממוצע מוטה בגלל 50,000.'},
+    {text:'גבהים של 5 ילדים (בס"מ): 140, 142, 145, 143, 144. הנתונים מפוזרים אחיד.',q:'מה מייצג יותר את הקבוצה?',answer:'הממוצע',explain:'כשהנתונים מפוזרים אחיד ואין ערכים קיצוניים, הממוצע מייצג טוב יותר.'},
+    {text:'ציונים: 70, 70, 70, 72, 73. כמעט כולם דומים.',q:'מה מייצג יותר?',answer:'השכיח',explain:'השכיח (70) הוא הערך הנפוץ ביותר ומייצג את רוב הנתונים.'},
+    {text:'מספר ספרים שקראו 6 תלמידים: 2, 3, 4, 5, 6, 7. כל ערך מופיע פעם אחת.',q:'מה מייצג יותר?',answer:'הממוצע',explain:'כשאין ערך שחוזר (אין שכיח ברור), הממוצע מייצג טוב יותר.'},
+    {text:'גילאים בקבוצת ספורט: 10, 10, 10, 10, 30. מבוגר אחד מעלה את הממוצע.',q:'מה מייצג יותר את רוב הקבוצה?',answer:'השכיח',explain:'השכיח (10) מייצג את רוב חברי הקבוצה. הממוצע (14) מוטה בגלל הגיל 30.'}
+  ];
+  var s=scenarios[rr(0,scenarios.length-1)];
+  var opts=shuffle(['השכיח','הממוצע']);
+  return{type:'choice',qText:'<strong>'+s.text+'</strong><br>'+s.q,display:'',answer:s.answer,options:opts,colClass:'cols-2',explain:s.explain};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'שכיח — מצאו את הערך הנפוץ',instruction:'מצאו את הערך שמופיע הכי הרבה פעמים',
+   tip:'<strong>שכיח (מודוס)</strong> — הערך שמופיע הכי הרבה פעמים.\nמסתכלים בטבלה ומחפשים את השכיחות הגבוהה ביותר.',
+   example:'ערכים: 3, 5, 3, 7, 3, 5\nהערך <span class="math">3</span> מופיע 3 פעמים — הוא השכיח!',
+   gen:function(){return qFindMode()}},
+
+  {title:'ממוצע — חשבו וגלו',instruction:'חשבו את הממוצע של קבוצת מספרים',
+   tip:'<strong>ממוצע</strong> — מחברים את כל המספרים ומחלקים במספר הערכים.\nנוסחה: ממוצע = סכום &divide; כמות',
+   example:'ממוצע של 4, 6, 8:\nסכום = <span class="math">4+6+8 = 18</span>\nכמות = 3\nממוצע = <span class="math">18 &divide; 3 = 6</span>',
+   gen:function(){return qFindMean()}},
+
+  {title:'שכיחות יחסית',instruction:'חשבו את השכיחות היחסית',
+   tip:'<strong>שכיחות יחסית</strong> = מספר ההופעות &divide; סך כל הנתונים.\nהתוצאה תמיד בין 0 ל-1.',
+   example:'מתוך 20 תלמידים, 5 בחרו כדורגל:\n<span class="math">5 &divide; 20 = 0.25</span> (כלומר 25%)',
+   gen:function(){return qRelativeFreq()}},
+
+  {title:'קריאת דיאגרמת עמודות',instruction:'קראו את הנתונים מהדיאגרמה',
+   tip:'בדיאגרמת עמודות, <strong>גובה העמודה</strong> מייצג את השכיחות.\nמסתכלים על הגובה ומשווים לסרגל המספרים בצד.',
+   example:'אם עמודה של "תפוח" מגיעה לגובה 7, זה אומר ש-7 אנשים בחרו תפוח.',
+   gen:function(){return qReadChart()}},
+
+  {title:'שכיח או ממוצע?',instruction:'מתי כדאי להשתמש בשכיח ומתי בממוצע?',
+   tip:'<strong>שכיח עדיף</strong> כשיש ערכים קיצוניים שמושכים את הממוצע.\n<strong>ממוצע עדיף</strong> כשהנתונים מפוזרים אחיד.',
+   example:'משכורות: 5000, 5000, 5000, 100000\nשכיח = 5000 (מייצג!)\nממוצע = 28750 (לא מייצג — המנכ"ל מושך למעלה)',
+   gen:function(){return qModeVsMean()}},
+
+  {title:'שכיח + ממוצע',instruction:'תרגול משולב — שכיח וממוצע',
+   tip:'חזרו על שני הכללים:\n• שכיח = הערך הנפוץ ביותר\n• ממוצע = סכום &divide; כמות',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){return[qFindMode,qFindMean][rr(0,1)]()}},
+
+  {title:'שכיחות יחסית + דיאגרמה',instruction:'תרגול משולב — שכיחות יחסית ודיאגרמות',
+   tip:'• שכיחות יחסית = חלק &divide; כלל\n• דיאגרמה — מסתכלים על גובה העמודה',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){return[qRelativeFreq,qReadChart][rr(0,1)]()}},
+
+  {title:'ערבוב כל הסוגים',instruction:'שאלות מכל הנושאים!',
+   tip:'שכיח, ממוצע, שכיחות יחסית, דיאגרמות — הכל!',
+   example:'🎲 כל שאלה היא הפתעה!',
+   gen:function(){return[qFindMode,qFindMean,qRelativeFreq,qReadChart,qModeVsMean][rr(0,4)]()}},
+
+  {title:'שכיח בנתונים גדולים',instruction:'מצאו את השכיח בקבוצות גדולות יותר',
+   tip:'גם כשיש הרבה ערכים — מחפשים את הערך עם השכיחות הגבוהה ביותר.',
+   example:'ככל שיש יותר נתונים, כך השכיח יותר ברור!',
+   gen:function(){return qFindMode()}},
+
+  {title:'ממוצע מתקדם',instruction:'חישוב ממוצע עם מספרים גדולים יותר',
+   tip:'עדיין אותה נוסחה: סכום &divide; כמות.\nשימו לב לדיוק בחיבור!',
+   example:'💪 חזקים בחשבון!',
+   gen:function(){return qFindMean()}},
+
+  {title:'שכיחות יחסית מתקדם',instruction:'שכיחות יחסית ואחוזים',
+   tip:'שכיחות יחסית × 100 = אחוזים.\nלדוגמה: 0.25 = 25%',
+   example:'🎯 דייקו בחלוקה!',
+   gen:function(){return qRelativeFreq()}},
+
+  {title:'דיאגרמות + שכיחות יחסית',instruction:'קראו דיאגרמה וחשבו שכיחות יחסית',
+   tip:'קודם קוראים את הנתון מהדיאגרמה, ואז מחשבים שכיחות יחסית.',
+   example:'📊 שלב אחרי שלב!',
+   gen:function(){return[qReadChart,qRelativeFreq][rr(0,1)]()}},
+
+  {title:'אתגר — מעורבב!',instruction:'שאלות מגוונות ומאתגרות!',
+   tip:'שלבו את כל מה שלמדתם!',
+   example:'🏆 אתם מומחים!',
+   gen:function(){return[qFindMode,qFindMean,qRelativeFreq,qReadChart,qModeVsMean][rr(0,4)]()}},
+
+  {title:'סופר אתגר!',instruction:'הרמה הכי קשה — כל הסוגים!',
+   tip:'🏆 אתם אלופים בסטטיסטיקה!',
+   example:'🌟 💪 🏆',
+   gen:function(){return[qFindMode,qFindMean,qRelativeFreq,qReadChart,qModeVsMean][rr(0,4)]()}},
+
+  {title:'מאסטר!',instruction:'הרמה האולטימטיבית!',
+   tip:'🏆 אין עליכם! שלטתם בכל הנושאים!',
+   example:'🌟🌟🌟',
+   gen:function(){return[qFindMode,qFindMean,qRelativeFreq,qReadChart,qModeVsMean][rr(0,4)]()}}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)"><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

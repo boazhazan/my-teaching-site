@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>מנסרה ופירמידה — כיתה ו' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#d97706;--primary-dark:#b45309;--primary-light:#fef3c7;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#b45309 0%,#d97706 50%,#f59e0b 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(217,119,6,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:#fff;border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.shape-display{text-align:center;margin:16px 0}
+.shape-display svg{max-width:200px;height:auto;display:inline-block}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.05rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.shape-display svg{max-width:160px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🔺</div><div><h1>מנסרה ופירמידה</h1><div class="subtitle">כיתה ו' — פאות, צלעות, קדקודים ופריסות</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">מנסרה ופירמידה — כיתה ו' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>🔺 מנסרה ופירמידה</h2><p><strong>מנסרה</strong> — גוף תלת-ממדי שיש לו שני בסיסים זהים (מצולעים) ודפנות שהן מלבנים.<br>🔹 מנסרה משולשת: 5 פאות, 9 צלעות, 6 קדקודים<br>🔹 מנסרה מרובעת (תיבה): 6 פאות, 12 צלעות, 8 קדקודים<br>🔹 מנסרה מחומשת: 7 פאות, 15 צלעות, 10 קדקודים</p><p><strong>פירמידה</strong> — גוף עם בסיס אחד (מצולע) וראש חד (קודקוד). הדפנות הן משולשים.<br>🔹 פירמידה משולשת: 4 פאות, 6 צלעות, 4 קדקודים<br>🔹 פירמידה מרובעת: 5 פאות, 8 צלעות, 5 קדקודים<br>🔹 פירמידה מחומשת: 6 פאות, 10 צלעות, 6 קדקודים</p><p><strong>נוסחאות למנסרה עם בסיס בעל n צלעות:</strong><br>פאות = n + 2 | צלעות = 3n | קדקודים = 2n</p><p><strong>נוסחאות לפירמידה עם בסיס בעל n צלעות:</strong><br>פאות = n + 1 | צלעות = 2n | קדקודים = n + 1</p><p><strong>פריסה</strong> — פתיחת הגוף לשטח. לדוגמה: פריסת תיבה = 6 מלבנים.<br><strong>חתך</strong> — חיתוך גוף במישור. למשל: חתך גליל במקביל לבסיס = עיגול.</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function pick(a){return a[rr(0,a.length-1)]}
+
+/* ========== 3D BODY DATA ========== */
+var bodies={
+  'מנסרה משולשת':{type:'prism',base:'משולש',n:3,faces:5,edges:9,vertices:6},
+  'מנסרה מרובעת (תיבה)':{type:'prism',base:'מרובע',n:4,faces:6,edges:12,vertices:8},
+  'מנסרה מחומשת':{type:'prism',base:'מחומש',n:5,faces:7,edges:15,vertices:10},
+  'מנסרה משושה':{type:'prism',base:'משושה',n:6,faces:8,edges:18,vertices:12},
+  'פירמידה משולשת':{type:'pyramid',base:'משולש',n:3,faces:4,edges:6,vertices:4},
+  'פירמידה מרובעת':{type:'pyramid',base:'מרובע',n:4,faces:5,edges:8,vertices:5},
+  'פירמידה מחומשת':{type:'pyramid',base:'מחומש',n:5,faces:6,edges:10,vertices:6},
+  'פירמידה משושה':{type:'pyramid',base:'משושה',n:6,faces:7,edges:12,vertices:7},
+  'גליל':{type:'cylinder',base:'עיגול',n:0,faces:3,edges:2,vertices:0},
+  'חרוט':{type:'cone',base:'עיגול',n:0,faces:2,edges:1,vertices:1}
+};
+var bodyNames=Object.keys(bodies);
+var prismNames=bodyNames.filter(function(n){return bodies[n].type==='prism'});
+var pyramidNames=bodyNames.filter(function(n){return bodies[n].type==='pyramid'});
+var polyNames=prismNames.concat(pyramidNames);
+
+/* ========== SVG GENERATORS ========== */
+function svgPrism3(){ return '<svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg"><polygon points="100,20 40,100 160,100" fill="none" stroke="#b45309" stroke-width="2.5"/><polygon points="120,40 60,120 180,120" fill="var(--primary-light)" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="20" x2="120" y2="40" stroke="#b45309" stroke-width="2"/><line x1="40" y1="100" x2="60" y2="120" stroke="#b45309" stroke-width="2"/><line x1="160" y1="100" x2="180" y2="120" stroke="#b45309" stroke-width="2"/></svg>'}
+function svgPrism4(){ return '<svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg"><polygon points="50,40 150,40 150,120 50,120" fill="none" stroke="#b45309" stroke-width="2.5"/><polygon points="70,20 170,20 170,100 70,100" fill="var(--primary-light)" stroke="#b45309" stroke-width="2.5" opacity=".5"/><line x1="50" y1="40" x2="70" y2="20" stroke="#b45309" stroke-width="2"/><line x1="150" y1="40" x2="170" y2="20" stroke="#b45309" stroke-width="2"/><line x1="150" y1="120" x2="170" y2="100" stroke="#b45309" stroke-width="2"/><line x1="50" y1="120" x2="70" y2="100" stroke="#b45309" stroke-width="2" stroke-dasharray="5,4"/></svg>'}
+function svgPrism5(){ return '<svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg"><polygon points="100,15 45,55 65,120 135,120 155,55" fill="none" stroke="#b45309" stroke-width="2.5"/><polygon points="120,35 65,75 85,140 155,140 175,75" fill="var(--primary-light)" stroke="#b45309" stroke-width="2.5" opacity=".5"/><line x1="100" y1="15" x2="120" y2="35" stroke="#b45309" stroke-width="2"/><line x1="155" y1="55" x2="175" y2="75" stroke="#b45309" stroke-width="2"/><line x1="135" y1="120" x2="155" y2="140" stroke="#b45309" stroke-width="2"/><line x1="65" y1="120" x2="85" y2="140" stroke="#b45309" stroke-width="2"/><line x1="45" y1="55" x2="65" y2="75" stroke="#b45309" stroke-width="2" stroke-dasharray="5,4"/></svg>'}
+function svgPrism6(){ return '<svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg"><polygon points="100,10 50,35 50,85 100,110 150,85 150,35" fill="none" stroke="#b45309" stroke-width="2.5"/><polygon points="115,30 65,55 65,105 115,130 165,105 165,55" fill="var(--primary-light)" stroke="#b45309" stroke-width="2.5" opacity=".5"/><line x1="100" y1="10" x2="115" y2="30" stroke="#b45309" stroke-width="2"/><line x1="150" y1="35" x2="165" y2="55" stroke="#b45309" stroke-width="2"/><line x1="150" y1="85" x2="165" y2="105" stroke="#b45309" stroke-width="2"/><line x1="100" y1="110" x2="115" y2="130" stroke="#b45309" stroke-width="2"/><line x1="50" y1="85" x2="65" y2="105" stroke="#b45309" stroke-width="2" stroke-dasharray="5,4"/><line x1="50" y1="35" x2="65" y2="55" stroke="#b45309" stroke-width="2" stroke-dasharray="5,4"/></svg>'}
+function svgPyramid3(){ return '<svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg"><polygon points="60,150 140,150 170,110" fill="var(--primary-light)" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="20" x2="60" y2="150" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="20" x2="140" y2="150" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="20" x2="170" y2="110" stroke="#b45309" stroke-width="2.5"/><line x1="60" y1="150" x2="170" y2="110" stroke="#b45309" stroke-width="2" stroke-dasharray="5,4"/></svg>'}
+function svgPyramid4(){ return '<svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg"><polygon points="50,140 150,140 170,110 70,110" fill="var(--primary-light)" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="20" x2="50" y2="140" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="20" x2="150" y2="140" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="20" x2="170" y2="110" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="20" x2="70" y2="110" stroke="#b45309" stroke-width="2.5" stroke-dasharray="5,4"/></svg>'}
+function svgPyramid5(){ return '<svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg"><polygon points="60,155 140,155 165,115 120,90 55,110" fill="var(--primary-light)" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="15" x2="60" y2="155" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="15" x2="140" y2="155" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="15" x2="165" y2="115" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="15" x2="120" y2="90" stroke="#b45309" stroke-width="2.5" stroke-dasharray="5,4"/><line x1="100" y1="15" x2="55" y2="110" stroke="#b45309" stroke-width="2.5" stroke-dasharray="5,4"/></svg>'}
+function svgPyramid6(){ return '<svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg"><polygon points="60,150 130,160 170,130 160,95 110,80 55,100" fill="var(--primary-light)" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="15" x2="60" y2="150" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="15" x2="130" y2="160" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="15" x2="170" y2="130" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="15" x2="160" y2="95" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="15" x2="110" y2="80" stroke="#b45309" stroke-width="2.5" stroke-dasharray="5,4"/><line x1="100" y1="15" x2="55" y2="100" stroke="#b45309" stroke-width="2.5" stroke-dasharray="5,4"/></svg>'}
+function svgCylinder(){ return '<svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg"><ellipse cx="100" cy="40" rx="60" ry="20" fill="none" stroke="#b45309" stroke-width="2.5"/><ellipse cx="100" cy="140" rx="60" ry="20" fill="var(--primary-light)" stroke="#b45309" stroke-width="2.5"/><line x1="40" y1="40" x2="40" y2="140" stroke="#b45309" stroke-width="2.5"/><line x1="160" y1="40" x2="160" y2="140" stroke="#b45309" stroke-width="2.5"/></svg>'}
+function svgCone(){ return '<svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg"><ellipse cx="100" cy="150" rx="60" ry="20" fill="var(--primary-light)" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="20" x2="40" y2="150" stroke="#b45309" stroke-width="2.5"/><line x1="100" y1="20" x2="160" y2="150" stroke="#b45309" stroke-width="2.5"/><circle cx="100" cy="20" r="3" fill="#b45309"/></svg>'}
+
+function svgForBody(name){
+  if(name==='מנסרה משולשת') return svgPrism3();
+  if(name==='מנסרה מרובעת (תיבה)') return svgPrism4();
+  if(name==='מנסרה מחומשת') return svgPrism5();
+  if(name==='מנסרה משושה') return svgPrism6();
+  if(name==='פירמידה משולשת') return svgPyramid3();
+  if(name==='פירמידה מרובעת') return svgPyramid4();
+  if(name==='פירמידה מחומשת') return svgPyramid5();
+  if(name==='פירמידה משושה') return svgPyramid6();
+  if(name==='גליל') return svgCylinder();
+  if(name==='חרוט') return svgCone();
+  return '';
+}
+
+/* ========== NET SVG GENERATORS ========== */
+function netPrism3(){ return '<svg viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg"><rect x="40" y="60" width="60" height="80" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><rect x="100" y="60" width="60" height="80" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><rect x="160" y="60" width="60" height="80" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><polygon points="40,60 100,60 70,20" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><polygon points="40,140 100,140 70,180" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/></svg>'}
+function netPrism4(){ return '<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="60" width="60" height="80" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><rect x="80" y="60" width="60" height="80" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><rect x="140" y="60" width="60" height="80" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><rect x="200" y="60" width="60" height="80" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><rect x="80" y="0" width="60" height="60" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><rect x="80" y="140" width="60" height="60" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/></svg>'}
+function netPyramid4(){ return '<svg viewBox="0 0 240 220" xmlns="http://www.w3.org/2000/svg"><rect x="70" y="80" width="100" height="100" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><polygon points="70,80 170,80 120,20" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><polygon points="70,180 170,180 120,220" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><polygon points="70,80 70,180 20,130" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><polygon points="170,80 170,180 220,130" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/></svg>'}
+function netPyramid3(){ return '<svg viewBox="0 0 220 210" xmlns="http://www.w3.org/2000/svg"><polygon points="60,130 160,130 110,60" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><polygon points="60,130 160,130 110,200" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><polygon points="60,130 110,60 15,85" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><polygon points="160,130 110,60 205,85" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/></svg>'}
+function netCylinder(){ return '<svg viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg"><rect x="40" y="40" width="160" height="120" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><ellipse cx="120" cy="25" rx="30" ry="15" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><ellipse cx="120" cy="175" rx="30" ry="15" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/></svg>'}
+function netCone(){ return '<svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg"><path d="M 110 10 A 100 100 0 0 1 200 150 L 110 10 Z" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><path d="M 110 10 A 100 100 0 0 0 20 150 L 110 10 Z" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/><ellipse cx="110" cy="175" rx="30" ry="15" fill="var(--primary-light)" stroke="#b45309" stroke-width="2"/></svg>'}
+
+function netForBody(name){
+  if(name==='מנסרה משולשת') return netPrism3();
+  if(name==='מנסרה מרובעת (תיבה)') return netPrism4();
+  if(name==='פירמידה משולשת') return netPyramid3();
+  if(name==='פירמידה מרובעת') return netPyramid4();
+  if(name==='גליל') return netCylinder();
+  if(name==='חרוט') return netCone();
+  return '';
+}
+var nettableBodies=['מנסרה משולשת','מנסרה מרובעת (תיבה)','פירמידה משולשת','פירמידה מרובעת','גליל','חרוט'];
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: Identify a 3D body from its SVG */
+function qIdentifyBody(){
+  var name=pick(bodyNames);
+  var svg=svgForBody(name);
+  var wrongs=[];var s=new Set();s.add(name);
+  while(wrongs.length<3){var w=pick(bodyNames);if(!s.has(w)){s.add(w);wrongs.push(w)}}
+  var opts=shuffle([name].concat(wrongs));
+  return{type:'choice',qText:'מהו הגוף?',display:'<div class="shape-display">'+svg+'</div>',answer:name,options:opts,colClass:'cols-2',explain:'זהו '+name};
+}
+
+/* Type 2: Count faces/edges/vertices */
+function qCountParts(){
+  var name=pick(polyNames);
+  var b=bodies[name];
+  var partType=pick(['פאות','צלעות','קדקודים']);
+  var correct;
+  if(partType==='פאות') correct=b.faces;
+  else if(partType==='צלעות') correct=b.edges;
+  else correct=b.vertices;
+  var wrongs=new Set();
+  wrongs.add(correct+1);wrongs.add(correct-1);
+  if(correct>2) wrongs.add(correct+2);
+  wrongs.add(correct+3);
+  wrongs.delete(correct);wrongs.delete(0);
+  var wArr=Array.from(wrongs).filter(function(v){return v>0}).slice(0,3);
+  while(wArr.length<3){var f=rr(3,18);if(f!==correct&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var opts=shuffle([String(correct)].concat(wArr.map(String)));
+  return{type:'choice',qText:'כמה <strong>'+partType+'</strong> יש ל'+name+'?',display:'<div class="shape-display">'+svgForBody(name)+'</div>',answer:String(correct),options:opts,colClass:'cols-4',explain:'ל'+name+' יש '+b.faces+' פאות, '+b.edges+' צלעות ו-'+b.vertices+' קדקודים'};
+}
+
+/* Type 3: Match net to body */
+function qMatchNet(){
+  var name=pick(nettableBodies);
+  var svg=netForBody(name);
+  var wrongs=[];var s=new Set();s.add(name);
+  while(wrongs.length<3){var w=pick(nettableBodies);if(!s.has(w)){s.add(w);wrongs.push(w)}}
+  var opts=shuffle([name].concat(wrongs));
+  return{type:'choice',qText:'הפריסה הזו שייכת לאיזה גוף?',display:'<div class="shape-display">'+svg+'</div>',answer:name,options:opts,colClass:'cols-2',explain:'זוהי פריסה של '+name};
+}
+
+/* Type 4: Build from net — "What will be built from this net?" */
+function qBuildFromNet(){
+  var name=pick(nettableBodies);
+  var svg=netForBody(name);
+  var wrongs=[];var s=new Set();s.add(name);
+  while(wrongs.length<3){var w=pick(nettableBodies);if(!s.has(w)){s.add(w);wrongs.push(w)}}
+  var opts=shuffle([name].concat(wrongs));
+  return{type:'choice',qText:'מה ייבנה מהפריסה הזו?',display:'<div class="shape-display">'+svg+'</div>',answer:name,options:opts,colClass:'cols-2',explain:'מהפריסה הזו ייבנה '+name};
+}
+
+/* Type 5: Cross-section */
+function qCrossSection(){
+  var sections=[
+    {body:'גליל',cut:'במקביל לבסיס',answer:'עיגול',explain:'חיתוך גליל במקביל לבסיס יוצר עיגול'},
+    {body:'גליל',cut:'בניצב לבסיס',answer:'מלבן',explain:'חיתוך גליל בניצב לבסיס יוצר מלבן'},
+    {body:'חרוט',cut:'במקביל לבסיס',answer:'עיגול',explain:'חיתוך חרוט במקביל לבסיס יוצר עיגול קטן יותר'},
+    {body:'מנסרה מרובעת (תיבה)',cut:'במקביל לבסיס',answer:'מלבן',explain:'חיתוך תיבה במקביל לבסיס יוצר מלבן'},
+    {body:'מנסרה מרובעת (תיבה)',cut:'בניצב לבסיס',answer:'מלבן',explain:'חיתוך תיבה בניצב לבסיס יוצר מלבן'},
+    {body:'מנסרה משולשת',cut:'במקביל לבסיס',answer:'משולש',explain:'חיתוך מנסרה משולשת במקביל לבסיס יוצר משולש'},
+    {body:'מנסרה משולשת',cut:'בניצב לבסיס',answer:'מלבן',explain:'חיתוך מנסרה משולשת בניצב לבסיס יוצר מלבן'},
+    {body:'פירמידה מרובעת',cut:'במקביל לבסיס',answer:'ריבוע',explain:'חיתוך פירמידה מרובעת במקביל לבסיס יוצר ריבוע קטן יותר'}
+  ];
+  var sec=pick(sections);
+  var allAnswers=['עיגול','מלבן','משולש','ריבוע','מחומש','משושה'];
+  var wrongs=[];var s=new Set();s.add(sec.answer);
+  while(wrongs.length<3){var w=pick(allAnswers);if(!s.has(w)){s.add(w);wrongs.push(w)}}
+  var opts=shuffle([sec.answer].concat(wrongs));
+  return{type:'choice',qText:'חותכים <strong>'+sec.body+'</strong> <strong>'+sec.cut+'</strong>. מה צורת החתך?',display:'<div class="shape-display">'+svgForBody(sec.body)+'</div>',answer:sec.answer,options:opts,colClass:'cols-4',explain:sec.explain};
+}
+
+/* Type 6: Formula — given n-sided base, how many faces/edges/vertices? */
+function qFormula(){
+  var isPrism=rr(0,1)===0;
+  var n=rr(3,8);
+  var partType=pick(['פאות','צלעות','קדקודים']);
+  var bodyType=isPrism?'מנסרה':'פירמידה';
+  var baseName=['','','','משולש','מרובע','מחומש','משושה','משובע','משומן'][n];
+  var correct;
+  if(isPrism){
+    if(partType==='פאות') correct=n+2;
+    else if(partType==='צלעות') correct=3*n;
+    else correct=2*n;
+  }else{
+    if(partType==='פאות') correct=n+1;
+    else if(partType==='צלעות') correct=2*n;
+    else correct=n+1;
+  }
+  var wrongs=new Set();
+  wrongs.add(correct+1);wrongs.add(correct-1);wrongs.add(correct+n);wrongs.add(correct*2);
+  wrongs.delete(correct);wrongs.delete(0);
+  var wArr=Array.from(wrongs).filter(function(v){return v>0}).slice(0,3);
+  while(wArr.length<3){var f=rr(3,30);if(f!==correct&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var opts=shuffle([String(correct)].concat(wArr.map(String)));
+  return{type:'choice',qText:'ל'+bodyType+' עם בסיס '+baseName+' ('+n+' צלעות) — כמה <strong>'+partType+'</strong>?',display:'',answer:String(correct),options:opts,colClass:'cols-4',explain:bodyType+' עם בסיס בעל '+n+' צלעות: פאות='+(isPrism?n+2:n+1)+', צלעות='+(isPrism?3*n:2*n)+', קדקודים='+(isPrism?2*n:n+1)};
+}
+
+/* Type 7: True/False style — "Is this statement true?" */
+function qTrueFalse(){
+  var statements=[
+    {text:'לכל מנסרה יש שני בסיסים זהים',answer:'נכון',explain:'מנסרה מוגדרת על ידי שני בסיסים מקבילים וזהים'},
+    {text:'לפירמידה יש בסיס אחד בלבד',answer:'נכון',explain:'לפירמידה בסיס אחד וקודקוד עליון'},
+    {text:'כל הדפנות של מנסרה הן מלבנים',answer:'נכון',explain:'הדפנות (הפאות הצדדיות) של מנסרה הן מלבנים'},
+    {text:'כל הדפנות של פירמידה הן משולשים',answer:'נכון',explain:'הפאות הצדדיות של פירמידה הן משולשים'},
+    {text:'למנסרה משולשת יש 6 פאות',answer:'לא נכון',explain:'למנסרה משולשת 5 פאות (2 בסיסים + 3 דפנות)'},
+    {text:'לפירמידה מרובעת יש 8 צלעות',answer:'נכון',explain:'לפירמידה מרובעת 8 צלעות (4 בבסיס + 4 צדדיות)'},
+    {text:'לגליל יש 2 פאות שטוחות',answer:'נכון',explain:'לגליל 2 בסיסים עגולים (פאות שטוחות) ופאה עקומה אחת'},
+    {text:'לחרוט יש 2 קודקודים',answer:'לא נכון',explain:'לחרוט קודקוד אחד בלבד (הראש)'},
+    {text:'תיבה היא מנסרה מרובעת',answer:'נכון',explain:'תיבה (קופסה) היא מנסרה שהבסיס שלה מרובע/מלבן'},
+    {text:'פירמידה משולשת נקראת גם "ארבעון"',answer:'נכון',explain:'לפירמידה משולשת 4 פאות משולשות ולכן נקראת ארבעון (טטרהדר)'},
+    {text:'חתך של גליל במקביל לבסיס הוא מלבן',answer:'לא נכון',explain:'חתך גליל במקביל לבסיס הוא עיגול'},
+    {text:'למנסרה מרובעת יש 12 צלעות',answer:'נכון',explain:'מנסרה מרובעת (תיבה): 4 בבסיס עליון + 4 בתחתון + 4 צדדיות = 12'}
+  ];
+  var st=pick(statements);
+  return{type:'choice',qText:'נכון או לא נכון: <strong>"'+st.text+'"</strong>',display:'',answer:st.answer,options:['נכון','לא נכון'],colClass:'cols-2',explain:st.explain};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'זיהוי גופים',instruction:'הסתכלו על הגוף וזהו אותו!',
+   tip:'<strong>מנסרה</strong> — שני בסיסים זהים, דפנות מלבניות.\n<strong>פירמידה</strong> — בסיס אחד, קודקוד עליון, דפנות משולשיות.',
+   example:'🔹 תיבה = מנסרה מרובעת\n🔹 גוף עם ראש חד = פירמידה',
+   gen:function(){return qIdentifyBody()}},
+
+  {title:'ספירת חלקים',instruction:'כמה פאות, צלעות או קדקודים?',
+   tip:'<strong>מנסרה עם בסיס בן n צלעות:</strong>\nפאות = n+2 | צלעות = 3n | קדקודים = 2n\n<strong>פירמידה עם בסיס בן n צלעות:</strong>\nפאות = n+1 | צלעות = 2n | קדקודים = n+1',
+   example:'מנסרה משולשת (n=3):\nפאות=5, צלעות=9, קדקודים=6',
+   gen:function(){return qCountParts()}},
+
+  {title:'פריסה → גוף',instruction:'לאיזה גוף שייכת הפריסה?',
+   tip:'<strong>פריסה</strong> = "פתיחת" הגוף לשטח.\nזהו את הצורות: משולשים, מלבנים, עיגולים — וחשבו איזה גוף הם בונים.',
+   example:'3 מלבנים + 2 משולשים = מנסרה משולשת\n4 מלבנים + 2 מרובעים = תיבה',
+   gen:function(){return qMatchNet()}},
+
+  {title:'בניה מפריסה',instruction:'מה ייבנה מהפריסה?',
+   tip:'דמיינו שאתם מקפלים את הפריסה — איזה גוף תקבלו?\nספרו את הצורות בפריסה כדי להבין.',
+   example:'ריבוע + 4 משולשים = פירמידה מרובעת\nמלבן + 2 עיגולים = גליל',
+   gen:function(){return qBuildFromNet()}},
+
+  {title:'חיתוך במישור',instruction:'מה צורת החתך?',
+   tip:'כשחותכים גוף במישור — מקבלים צורה דו-ממדית.\n• חתך <strong>במקביל לבסיס</strong> — צורה דומה לבסיס\n• חתך <strong>בניצב לבסיס</strong> — צורה אחרת',
+   example:'גליל במקביל לבסיס → עיגול\nגליל בניצב לבסיס → מלבן',
+   gen:function(){return qCrossSection()}},
+
+  {title:'נכון או לא נכון?',instruction:'קבעו אם המשפט נכון!',
+   tip:'חשבו על התכונות של כל גוף:\nמנסרה — 2 בסיסים, דפנות מלבניות\nפירמידה — בסיס אחד, דפנות משולשיות',
+   example:'💡 קראו כל משפט בזהירות!',
+   gen:function(){return qTrueFalse()}},
+
+  {title:'נוסחאות',instruction:'השתמשו בנוסחאות לחישוב!',
+   tip:'<strong>מנסרה (n צלעות בבסיס):</strong>\nפאות = n+2 | צלעות = 3n | קדקודים = 2n\n<strong>פירמידה (n צלעות בבסיס):</strong>\nפאות = n+1 | צלעות = 2n | קדקודים = n+1',
+   example:'מנסרה עם בסיס משושה (n=6):\nפאות=8, צלעות=18, קדקודים=12',
+   gen:function(){return qFormula()}},
+
+  {title:'מעורבב — זיהוי וספירה',instruction:'שאלות מגוונות!',
+   tip:'שלבו את כל מה שלמדתם — זיהוי גופים וספירת חלקים.',
+   example:'🎲 כל שאלה היא הפתעה!',
+   gen:function(){return[qIdentifyBody,qCountParts,qTrueFalse][rr(0,2)]()}},
+
+  {title:'מעורבב — פריסות וחתכים',instruction:'פריסות, בניה וחיתוך!',
+   tip:'זכרו:\n• פריסה = פתיחת הגוף לשטח\n• חתך = חיתוך במישור',
+   example:'🎲 כל שאלה היא הפתעה!',
+   gen:function(){return[qMatchNet,qBuildFromNet,qCrossSection][rr(0,2)]()}},
+
+  {title:'מעורבב — הכל!',instruction:'כל סוגי השאלות ביחד!',
+   tip:'השתמשו בכל הכלים:\n• זיהוי גופים\n• ספירת חלקים ונוסחאות\n• פריסות וחתכים',
+   example:'💪 אתם מוכנים לאתגר!',
+   gen:function(){return[qIdentifyBody,qCountParts,qMatchNet,qBuildFromNet,qCrossSection,qTrueFalse,qFormula][rr(0,6)]()}},
+
+  {title:'אתגר — נוסחאות מתקדמות',instruction:'בסיסים עם הרבה צלעות!',
+   tip:'הנוסחאות עובדות לכל מצולע — גם 7, 8 צלעות ויותר!',
+   example:'פירמידה עם בסיס משובע (n=7):\nפאות=8, צלעות=14, קדקודים=8',
+   gen:function(){return[qFormula,qCountParts][rr(0,1)]()}},
+
+  {title:'אתגר — חתכים וזיהוי',instruction:'שאלות מאתגרות!',
+   tip:'חשבו טוב לפני שבוחרים — יש גופים שנראים דומה!',
+   example:'🏆 בהצלחה!',
+   gen:function(){return[qCrossSection,qIdentifyBody,qTrueFalse][rr(0,2)]()}},
+
+  {title:'סופר מיקס!',instruction:'כל הסוגים — רמה גבוהה!',
+   tip:'🏆 אתם מומחים לגופים תלת-ממדיים!',
+   example:'🌟 💪 🏆',
+   gen:function(){return[qIdentifyBody,qCountParts,qMatchNet,qBuildFromNet,qCrossSection,qTrueFalse,qFormula][rr(0,6)]()}},
+
+  {title:'מאסטר!',instruction:'הרמה הכי קשה — שאלות מכל הסוגים!',
+   tip:'🏆 אין עליכם! שלטתם בכל נושא הגופים!',
+   example:'🌟🌟🌟',
+   gen:function(){return[qIdentifyBody,qCountParts,qMatchNet,qBuildFromNet,qCrossSection,qTrueFalse,qFormula][rr(0,6)]()}},
+
+  {title:'גרנד מאסטר!',instruction:'הרמה האולטימטיבית!',
+   tip:'🏆🏆🏆 כל הכבוד שהגעתם עד לכאן!',
+   example:'🌟🌟🌟🌟🌟',
+   gen:function(){return[qIdentifyBody,qCountParts,qMatchNet,qBuildFromNet,qCrossSection,qTrueFalse,qFormula][rr(0,6)]()}}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

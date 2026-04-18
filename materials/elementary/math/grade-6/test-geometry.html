@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>מבחן — גיאומטריה — כיתה ו' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#d97706;--primary-dark:#b45309;--primary-light:#fef3c7;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#b45309 0%,#d97706 50%,#f59e0b 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(217,119,6,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:2.2rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;direction:ltr;unicode-bidi:embed}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:1.8rem;padding:6px 20px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">📝</div><div><h1>מבחן — גיאומטריה</h1><div class="subtitle">כיתה ו' — גופים, מעגל, נפחים</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">מבחן — גיאומטריה — כיתה ו' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>📝 מבחן — גיאומטריה</h2><p>מבחן סיכום שמכסה את כל נושאי הגיאומטריה של כיתה ו':</p><p>🔹 <strong>גופים תלת-ממדיים</strong> — מנסרה, פירמידה, גליל, חרוט: פאות, קודקודים, מקצועות<br>🔹 <strong>מעגל</strong> — היקף (<span class="math">2 &times; &pi; &times; r</span>) ושטח (<span class="math">&pi; &times; r&sup2;</span>)<br>🔹 <strong>נפחים</strong> — תיבה (<span class="math">a &times; b &times; c</span>) וגליל (<span class="math">&pi; &times; r&sup2; &times; h</span>)<br>🔹 <strong>הסתברות</strong> — מציאת סיכוי של מאורע<br>🔹 <strong>סטטיסטיקה</strong> — ממוצע של קבוצת מספרים</p><p>15 רמות — מהקל אל הקשה! בכל רמה 10 שאלות.</p><p>נשתמש ב-<span class="math">&pi; = 3.14</span></p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+var PI=3.14;
+function rd2(n){return Math.round(n*100)/100}
+
+/* ========== 3D BODY DATA ========== */
+var bodies=[
+  {name:'מנסרה משולשת',faces:5,vertices:6,edges:9},
+  {name:'מנסרה מרובעת (תיבה)',faces:6,vertices:8,edges:12},
+  {name:'מנסרה חמישית',faces:7,vertices:10,edges:15},
+  {name:'מנסרה שישית',faces:8,vertices:12,edges:18},
+  {name:'פירמידה משולשת',faces:4,vertices:4,edges:6},
+  {name:'פירמידה מרובעת',faces:5,vertices:5,edges:8},
+  {name:'פירמידה חמישית',faces:6,vertices:6,edges:10},
+  {name:'פירמידה שישית',faces:7,vertices:7,edges:12},
+  {name:'גליל',faces:3,vertices:0,edges:2},
+  {name:'חרוט',faces:2,vertices:1,edges:1}
+];
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: Body parts — how many faces/vertices/edges? */
+function qBodyParts(){
+  var b=bodies[rr(0,bodies.length-1)];
+  var props=[
+    {heb:'פאות',val:b.faces},
+    {heb:'קודקודים',val:b.vertices},
+    {heb:'מקצועות',val:b.edges}
+  ];
+  var p=props[rr(0,2)];
+  var correct=String(p.val);
+  var wrongs=new Set();
+  wrongs.add(p.val+1);wrongs.add(p.val+2);
+  if(p.val>1) wrongs.add(p.val-1);
+  if(p.val>2) wrongs.add(p.val-2);
+  wrongs.add(p.val+3);
+  wrongs.delete(p.val);
+  var wArr=[];
+  wrongs.forEach(function(v){if(v>=0&&wArr.length<3) wArr.push(v)});
+  while(wArr.length<3){var f=rr(0,20);if(f!==p.val&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var options=shuffle([correct].concat(wArr.map(String)));
+  return{type:'choice',qText:'ל<strong>'+b.name+'</strong> כמה <strong>'+p.heb+'</strong>?',display:'',answer:correct,options:options,colClass:'cols-4',explain:b.name+': '+b.faces+' פאות, '+b.vertices+' קודקודים, '+b.edges+' מקצועות'};
+}
+
+/* Type 2: Circumference of circle */
+function qCircumference(maxR){
+  if(!maxR) maxR=10;
+  var r=rr(1,maxR);
+  var circ=rd2(2*PI*r);
+  var correct=String(circ);
+  var w1=rd2(PI*r);      /* forgot the 2 */
+  var w2=rd2(PI*r*r);    /* area instead */
+  var w3=rd2(2*PI*(r+1));/* off by 1 */
+  var wrongs=[w1,w2,w3].map(String);
+  /* remove duplicates with correct */
+  wrongs=wrongs.filter(function(v){return v!==correct});
+  while(wrongs.length<3){var f=rd2(circ+rr(-5,5));if(String(f)!==correct&&wrongs.indexOf(String(f))===-1&&f>0)wrongs.push(String(f))}
+  wrongs=wrongs.slice(0,3);
+  var options=shuffle([correct].concat(wrongs));
+  return{type:'choice',qText:'רדיוס המעגל הוא <strong>'+r+'</strong>. מהו <strong>היקף המעגל</strong>?',display:'<div class="num-display"><span class="big-num">r = '+r+'</span></div>',answer:correct,options:options,colClass:'cols-4',explain:'היקף = 2 &times; 3.14 &times; '+r+' = '+circ};
+}
+
+/* Type 3: Area of circle */
+function qCircleArea(maxR){
+  if(!maxR) maxR=10;
+  var r=rr(1,maxR);
+  var area=rd2(PI*r*r);
+  var correct=String(area);
+  var w1=rd2(2*PI*r);     /* circumference instead */
+  var w2=rd2(PI*r);       /* forgot squaring */
+  var w3=rd2(PI*(r+1)*(r+1));/* off by 1 */
+  var wrongs=[w1,w2,w3].map(String);
+  wrongs=wrongs.filter(function(v){return v!==correct});
+  while(wrongs.length<3){var f=rd2(area+rr(-8,8));if(String(f)!==correct&&wrongs.indexOf(String(f))===-1&&f>0)wrongs.push(String(f))}
+  wrongs=wrongs.slice(0,3);
+  var options=shuffle([correct].concat(wrongs));
+  return{type:'choice',qText:'רדיוס המעגל הוא <strong>'+r+'</strong>. מהו <strong>שטח המעגל</strong>?',display:'<div class="num-display"><span class="big-num">r = '+r+'</span></div>',answer:correct,options:options,colClass:'cols-4',explain:'שטח = 3.14 &times; '+r+'&sup2; = 3.14 &times; '+(r*r)+' = '+area};
+}
+
+/* Type 4: Volume of box */
+function qVolume(maxDim){
+  if(!maxDim) maxDim=10;
+  var a=rr(2,maxDim),b=rr(2,maxDim),c=rr(2,maxDim);
+  var vol=a*b*c;
+  var correct=String(vol);
+  var w1=String(a*b+b*c+a*c);  /* surface-ish */
+  var w2=String(a*b*c+a);
+  var w3=String(a+b+c);
+  var wrongs=[w1,w2,w3];
+  wrongs=wrongs.filter(function(v){return v!==correct});
+  while(wrongs.length<3){var f=vol+rr(-10,10);if(f>0&&String(f)!==correct&&wrongs.indexOf(String(f))===-1)wrongs.push(String(f))}
+  wrongs=wrongs.slice(0,3);
+  var options=shuffle([correct].concat(wrongs));
+  return{type:'choice',qText:'מהו <strong>נפח תיבה</strong> עם מידות <strong>'+a+' &times; '+b+' &times; '+c+'</strong>?',display:'<div class="num-display"><span class="big-num">'+a+' &times; '+b+' &times; '+c+'</span></div>',answer:correct,options:options,colClass:'cols-4',explain:'נפח = '+a+' &times; '+b+' &times; '+c+' = '+vol};
+}
+
+/* Type 5: Volume of cylinder */
+function qCylinderVol(maxR,maxH){
+  if(!maxR) maxR=7;
+  if(!maxH) maxH=10;
+  var r=rr(1,maxR),h=rr(2,maxH);
+  var vol=rd2(PI*r*r*h);
+  var correct=String(vol);
+  var w1=String(rd2(2*PI*r*h));   /* lateral surface area */
+  var w2=String(rd2(PI*r*h));     /* forgot squaring */
+  var w3=String(rd2(PI*r*r*(h+1)));
+  var wrongs=[w1,w2,w3];
+  wrongs=wrongs.filter(function(v){return v!==correct});
+  while(wrongs.length<3){var f=rd2(vol+rr(-15,15));if(f>0&&String(f)!==correct&&wrongs.indexOf(String(f))===-1)wrongs.push(String(f))}
+  wrongs=wrongs.slice(0,3);
+  var options=shuffle([correct].concat(wrongs));
+  return{type:'choice',qText:'מהו <strong>נפח גליל</strong> עם רדיוס <strong>'+r+'</strong> וגובה <strong>'+h+'</strong>?',display:'<div class="num-display"><span class="big-num">r = '+r+' , h = '+h+'</span></div>',answer:correct,options:options,colClass:'cols-4',explain:'נפח = 3.14 &times; '+r+'&sup2; &times; '+h+' = 3.14 &times; '+(r*r)+' &times; '+h+' = '+vol};
+}
+
+/* Type 6: Probability */
+function qProbability(){
+  var scenarios=[
+    {stem:'מטילים קובייה רגילה (1-6). מה ההסתברות לקבל מספר <strong>זוגי</strong>?',answer:'1/2',explain:'מספרים זוגיים: 2, 4, 6 — שלושה מתוך 6 = 3/6 = 1/2',wrongs:['1/3','1/6','2/3']},
+    {stem:'מטילים קובייה רגילה (1-6). מה ההסתברות לקבל מספר <strong>אי-זוגי</strong>?',answer:'1/2',explain:'מספרים אי-זוגיים: 1, 3, 5 — שלושה מתוך 6 = 3/6 = 1/2',wrongs:['1/3','1/6','2/3']},
+    {stem:'מטילים קובייה רגילה (1-6). מה ההסתברות לקבל <strong>6</strong>?',answer:'1/6',explain:'יש תוצאה אחת מתוך 6 = 1/6',wrongs:['1/2','1/3','5/6']},
+    {stem:'מטילים קובייה רגילה (1-6). מה ההסתברות לקבל מספר <strong>גדול מ-4</strong>?',answer:'1/3',explain:'מספרים גדולים מ-4: רק 5, 6 — שניים מתוך 6 = 2/6 = 1/3',wrongs:['1/2','1/6','2/3']},
+    {stem:'מטילים קובייה רגילה (1-6). מה ההסתברות לקבל מספר <strong>קטן מ-3</strong>?',answer:'1/3',explain:'מספרים קטנים מ-3: רק 1, 2 — שניים מתוך 6 = 2/6 = 1/3',wrongs:['1/2','1/6','2/3']},
+    {stem:'בשקית 3 כדורים אדומים ו-2 כחולים. מה ההסתברות לשלוף <strong>אדום</strong>?',answer:'3/5',explain:'3 אדומים מתוך 5 סה"כ = 3/5',wrongs:['2/5','1/5','2/3']},
+    {stem:'בשקית 3 כדורים אדומים ו-2 כחולים. מה ההסתברות לשלוף <strong>כחול</strong>?',answer:'2/5',explain:'2 כחולים מתוך 5 סה"כ = 2/5',wrongs:['3/5','1/5','1/2']},
+    {stem:'מטילים קובייה רגילה (1-6). מה ההסתברות לקבל מספר <strong>שמתחלק ב-3</strong>?',answer:'1/3',explain:'מתחלקים ב-3: רק 3, 6 — שניים מתוך 6 = 2/6 = 1/3',wrongs:['1/2','1/6','2/3']},
+    {stem:'בורגים ממוספרים 1 עד 10. בוחרים בורג אקראי. מה ההסתברות ל<strong>מספר זוגי</strong>?',answer:'1/2',explain:'זוגיים 2,4,6,8,10 — חמישה מתוך 10 = 5/10 = 1/2',wrongs:['1/5','3/10','2/5']},
+    {stem:'מטילים קובייה רגילה (1-6). מה ההסתברות לקבל מספר <strong>קטן מ-5</strong>?',answer:'2/3',explain:'מספרים קטנים מ-5: 1, 2, 3, 4 — ארבעה מתוך 6 = 4/6 = 2/3',wrongs:['1/2','1/3','5/6']}
+  ];
+  var s=scenarios[rr(0,scenarios.length-1)];
+  var options=shuffle([s.answer].concat(s.wrongs));
+  return{type:'choice',qText:s.stem,display:'',answer:s.answer,options:options,colClass:'cols-4',explain:s.explain};
+}
+
+/* Type 7: Average (mean) */
+function qFrequency(count,maxVal){
+  if(!count) count=4;
+  if(!maxVal) maxVal=10;
+  var nums=[];
+  var sum=0;
+  /* ensure integer average */
+  for(var i=0;i<count-1;i++){var v=rr(1,maxVal);nums.push(v);sum+=v}
+  /* pick last so sum divisible by count */
+  var remainder=sum%count;
+  var last=(remainder===0)?rr(1,maxVal):count-remainder+rr(0,Math.floor(maxVal/count))*count;
+  if(last<1) last+=count;
+  if(last>maxVal+count) last=count-remainder;
+  nums.push(last);sum+=last;
+  var avg=sum/count;
+  if(avg!==Math.floor(avg)){
+    /* fallback — just pick clean values */
+    nums=[];sum=0;
+    var base=rr(2,maxVal-2);
+    for(var j=0;j<count;j++){nums.push(base+rr(-1,1));sum+=nums[j]}
+    avg=rd2(sum/count);
+  }
+  var correct=String(avg);
+  var numsStr=nums.join(', ');
+  var wrongs=new Set();
+  wrongs.add(avg+1);wrongs.add(avg-1);wrongs.add(avg+2);
+  if(avg>2) wrongs.add(avg-2);
+  wrongs.add(sum); /* common mistake: writing sum instead of average */
+  wrongs.delete(avg);
+  var wArr=[];
+  wrongs.forEach(function(v){if(v>0&&wArr.length<3)wArr.push(v)});
+  while(wArr.length<3){var f=avg+rr(-3,3);if(f>0&&f!==avg&&wArr.indexOf(f)===-1)wArr.push(f)}
+  wArr=wArr.slice(0,3);
+  var options=shuffle([correct].concat(wArr.map(String)));
+  return{type:'choice',qText:'מהו <strong>הממוצע</strong> של המספרים: <strong>'+numsStr+'</strong>?',display:'',answer:correct,options:options,colClass:'cols-4',explain:'סכום = '+sum+', מספר ערכים = '+count+', ממוצע = '+sum+' &divide; '+count+' = '+avg};
+}
+
+/* Type: Identify body from description */
+function qIdentifyBody(){
+  var descs=[
+    {desc:'גוף עם 2 בסיסים עגולים ומעטפת מעוגלת',answer:'גליל',wrongs:['חרוט','מנסרה','פירמידה']},
+    {desc:'גוף עם בסיס עגול אחד וקודקוד אחד',answer:'חרוט',wrongs:['גליל','פירמידה','מנסרה']},
+    {desc:'גוף עם 6 פאות מלבניות, 8 קודקודים ו-12 מקצועות',answer:'תיבה (מנסרה מרובעת)',wrongs:['פירמידה מרובעת','מנסרה משולשת','קוביה']},
+    {desc:'גוף שכל פאותיו ריבועים שוות',answer:'קוביה',wrongs:['תיבה','מנסרה','פירמידה']},
+    {desc:'גוף עם בסיס מרובע ו-4 פאות משולשות',answer:'פירמידה מרובעת',wrongs:['מנסרה מרובעת','פירמידה משולשת','חרוט']},
+    {desc:'גוף עם 2 בסיסים משולשים ו-3 פאות מלבניות',answer:'מנסרה משולשת',wrongs:['פירמידה משולשת','תיבה','מנסרה חמישית']},
+    {desc:'גוף עם בסיס משולש ו-3 פאות משולשות נוספות',answer:'פירמידה משולשת',wrongs:['מנסרה משולשת','פירמידה מרובעת','חרוט']}
+  ];
+  var d=descs[rr(0,descs.length-1)];
+  var options=shuffle([d.answer].concat(d.wrongs));
+  return{type:'choice',qText:'איזה <strong>גוף תלת-ממדי</strong> מתואר?<br>'+d.desc,display:'',answer:d.answer,options:options,colClass:'cols-2',explain:'התשובה: '+d.answer};
+}
+
+/* Type: Circumference from diameter */
+function qCircumDiameter(maxD){
+  if(!maxD) maxD=20;
+  var d=rr(2,maxD);
+  var circ=rd2(PI*d);
+  var correct=String(circ);
+  var w1=String(rd2(2*PI*d));  /* used radius formula with d */
+  var w2=String(rd2(PI*d*d/4));/* area instead */
+  var w3=String(rd2(PI*(d+2)));
+  var wrongs=[w1,w2,w3].map(String);
+  wrongs=wrongs.filter(function(v){return v!==correct});
+  while(wrongs.length<3){var f=rd2(circ+rr(-5,5));if(f>0&&String(f)!==correct&&wrongs.indexOf(String(f))===-1)wrongs.push(String(f))}
+  wrongs=wrongs.slice(0,3);
+  var options=shuffle([correct].concat(wrongs));
+  return{type:'choice',qText:'<strong>קוטר</strong> המעגל הוא <strong>'+d+'</strong>. מהו <strong>היקף המעגל</strong>?',display:'<div class="num-display"><span class="big-num">d = '+d+'</span></div>',answer:correct,options:options,colClass:'cols-4',explain:'היקף = &pi; &times; d = 3.14 &times; '+d+' = '+circ};
+}
+
+/* Type: What is the radius given circumference? */
+function qRadiusFromCirc(){
+  var r=rr(1,10);
+  var circ=rd2(2*PI*r);
+  var correct=String(r);
+  var wrongs=new Set();
+  wrongs.add(r+1);wrongs.add(r*2);if(r>1)wrongs.add(r-1);wrongs.add(r+2);
+  wrongs.delete(r);
+  var wArr=[];
+  wrongs.forEach(function(v){if(v>0&&wArr.length<3)wArr.push(v)});
+  while(wArr.length<3){var f=rr(1,15);if(f!==r&&wArr.indexOf(f)===-1)wArr.push(f)}
+  wArr=wArr.slice(0,3);
+  var options=shuffle([correct].concat(wArr.map(String)));
+  return{type:'choice',qText:'היקף המעגל הוא <strong>'+circ+'</strong>. מהו <strong>הרדיוס</strong>?',display:'',answer:correct,options:options,colClass:'cols-4',explain:'r = היקף &divide; (2 &times; 3.14) = '+circ+' &divide; '+rd2(2*PI)+' = '+r};
+}
+
+/* Type: Volume of cube */
+function qCubeVol(maxA){
+  if(!maxA) maxA=10;
+  var a=rr(2,maxA);
+  var vol=a*a*a;
+  var correct=String(vol);
+  var w1=String(a*a);   /* area instead */
+  var w2=String(a*a*a+a);
+  var w3=String(6*a*a); /* surface area */
+  var wrongs=[w1,w2,w3];
+  wrongs=wrongs.filter(function(v){return v!==correct});
+  while(wrongs.length<3){var f=vol+rr(-10,10);if(f>0&&String(f)!==correct&&wrongs.indexOf(String(f))===-1)wrongs.push(String(f))}
+  wrongs=wrongs.slice(0,3);
+  var options=shuffle([correct].concat(wrongs));
+  return{type:'choice',qText:'מהו <strong>נפח קוביה</strong> שאורך צלעה <strong>'+a+'</strong>?',display:'<div class="num-display"><span class="big-num">a = '+a+'</span></div>',answer:correct,options:options,colClass:'cols-4',explain:'נפח = '+a+'&sup3; = '+a+' &times; '+a+' &times; '+a+' = '+vol};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'חלקי גופים — בסיס',instruction:'כמה פאות, קודקודים ומקצועות?',
+   tip:'<strong>מנסרה</strong> — שני בסיסים זהים ופאות מלבניות.\n<strong>פירמידה</strong> — בסיס אחד ופאות משולשות שנפגשות בקודקוד.',
+   example:'מנסרה משולשת: 5 פאות, 6 קודקודים, 9 מקצועות\nפירמידה מרובעת: 5 פאות, 5 קודקודים, 8 מקצועות',
+   gen:function(){return qBodyParts()}},
+
+  {title:'זיהוי גופים',instruction:'זהו את הגוף התלת-ממדי לפי התיאור',
+   tip:'<strong>גליל</strong> — 2 בסיסים עגולים, 3 פאות, 0 קודקודים.\n<strong>חרוט</strong> — בסיס עגול אחד, קודקוד אחד.',
+   example:'גוף עם 6 פאות שוות — קוביה\nגוף עם בסיס עגול וקודקוד — חרוט',
+   gen:function(){return rr(0,1)===0?qBodyParts():qIdentifyBody()}},
+
+  {title:'היקף מעגל — רדיוס',instruction:'חשבו את היקף המעגל לפי הרדיוס',
+   tip:'<strong>היקף מעגל</strong> = <span class="math">2 &times; &pi; &times; r</span>\nנשתמש ב-<span class="math">&pi; = 3.14</span>',
+   example:'רדיוס 5:\nהיקף = 2 &times; 3.14 &times; 5 = <span class="math">31.4</span>',
+   gen:function(){return qCircumference(10)}},
+
+  {title:'היקף מעגל — קוטר',instruction:'חשבו את היקף המעגל לפי הקוטר',
+   tip:'<strong>היקף מעגל</strong> = <span class="math">&pi; &times; d</span>\nזכרו: קוטר = 2 &times; רדיוס',
+   example:'קוטר 10:\nהיקף = 3.14 &times; 10 = <span class="math">31.4</span>',
+   gen:function(){return qCircumDiameter(20)}},
+
+  {title:'שטח מעגל',instruction:'חשבו את שטח המעגל',
+   tip:'<strong>שטח מעגל</strong> = <span class="math">&pi; &times; r&sup2;</span>\nקודם מכפילים r&times;r ואז ב-3.14',
+   example:'רדיוס 3:\nשטח = 3.14 &times; 3&sup2; = 3.14 &times; 9 = <span class="math">28.26</span>',
+   gen:function(){return qCircleArea(10)}},
+
+  {title:'מעגל — מעורבב',instruction:'היקף ושטח של מעגלים',
+   tip:'היקף = <span class="math">2&pi;r</span> או <span class="math">&pi;d</span>\nשטח = <span class="math">&pi;r&sup2;</span>',
+   example:'רדיוס 4:\nהיקף = 2 &times; 3.14 &times; 4 = 25.12\nשטח = 3.14 &times; 16 = 50.24',
+   gen:function(){var t=rr(0,2);return t===0?qCircumference(10):t===1?qCircleArea(10):qCircumDiameter(20)}},
+
+  {title:'נפח תיבה',instruction:'חשבו את נפח התיבה',
+   tip:'<strong>נפח תיבה</strong> = <span class="math">אורך &times; רוחב &times; גובה</span>',
+   example:'תיבה 4 &times; 3 &times; 2:\nנפח = 4 &times; 3 &times; 2 = <span class="math">24</span>',
+   gen:function(){return rr(0,1)===0?qVolume(10):qCubeVol(8)}},
+
+  {title:'נפח גליל',instruction:'חשבו את נפח הגליל',
+   tip:'<strong>נפח גליל</strong> = <span class="math">&pi; &times; r&sup2; &times; h</span>\nכמו שטח מעגל כפול הגובה!',
+   example:'גליל r=3, h=5:\nנפח = 3.14 &times; 9 &times; 5 = <span class="math">141.3</span>',
+   gen:function(){return qCylinderVol(5,10)}},
+
+  {title:'הסתברות',instruction:'מצאו את ההסתברות',
+   tip:'<strong>הסתברות</strong> = מספר התוצאות הרצויות &divide; מספר כל התוצאות האפשריות',
+   example:'הסתברות לזוגי בקובייה:\n3 זוגיים (2,4,6) מתוך 6 = 3/6 = <span class="math">1/2</span>',
+   gen:function(){return qProbability()}},
+
+  {title:'ממוצע',instruction:'חשבו את הממוצע',
+   tip:'<strong>ממוצע</strong> = סכום כל הערכים &divide; מספר הערכים',
+   example:'ממוצע של 4, 6, 8, 2:\nסכום = 20, מספר ערכים = 4\nממוצע = 20 &divide; 4 = <span class="math">5</span>',
+   gen:function(){return qFrequency(4,10)}},
+
+  {title:'גופים + מעגל',instruction:'שאלות מעורבבות — גופים ומעגלים',
+   tip:'חזרו על כל הנוסחאות:\n• היקף = 2&pi;r | שטח = &pi;r&sup2;\n• גופים — פאות, קודקודים, מקצועות',
+   example:'🎲 שאלות מעורבבות!',
+   gen:function(){var t=rr(0,4);return t===0?qBodyParts():t===1?qIdentifyBody():t===2?qCircumference(12):t===3?qCircleArea(12):qCircumDiameter(20)}},
+
+  {title:'נפחים + סטטיסטיקה',instruction:'תיבה, גליל, ממוצע, הסתברות',
+   tip:'נפח תיבה = a&times;b&times;c\nנפח גליל = &pi;r&sup2;h\nממוצע = סכום &divide; מספר',
+   example:'💪 הכל ביחד!',
+   gen:function(){var t=rr(0,3);return t===0?qVolume(10):t===1?qCylinderVol(5,10):t===2?qProbability():qFrequency(4,12)}},
+
+  {title:'מבחן מעורבב א\'',instruction:'כל הנושאים ביחד!',
+   tip:'מבחן סיכום — כל הנוסחאות והנושאים!',
+   example:'📝 בהצלחה!',
+   gen:function(){var t=rr(0,6);return t===0?qBodyParts():t===1?qCircumference(12):t===2?qCircleArea(12):t===3?qVolume(10):t===4?qCylinderVol(5,10):t===5?qProbability():qFrequency(5,12)}},
+
+  {title:'מבחן מעורבב ב\'',instruction:'שאלות קשות יותר!',
+   tip:'🏆 רמת אתגר — מספרים גדולים יותר!',
+   example:'💪 אתם יכולים!',
+   gen:function(){var t=rr(0,8);return t===0?qBodyParts():t===1?qIdentifyBody():t===2?qCircumference(15):t===3?qCircleArea(12):t===4?qCircumDiameter(30):t===5?qVolume(12):t===6?qCylinderVol(7,12):t===7?qProbability():qFrequency(5,15)}},
+
+  {title:'מאסטר גיאומטריה!',instruction:'הרמה הכי קשה — כל הסוגים!',
+   tip:'🏆 אין עליכם! שלטתם בכל הנושאים!',
+   example:'🌟🌟🌟',
+   gen:function(){var t=rr(0,9);return t===0?qBodyParts():t===1?qIdentifyBody():t===2?qCircumference(15):t===3?qCircleArea(15):t===4?qCircumDiameter(30):t===5?qVolume(12):t===6?qCylinderVol(7,12):t===7?qCubeVol(10):t===8?qProbability():qFrequency(6,15)}}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=10;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

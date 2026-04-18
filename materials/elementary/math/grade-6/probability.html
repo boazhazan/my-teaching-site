@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ניתוח סיכויים — כיתה ו' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#7c3aed;--primary-dark:#6d28d9;--primary-light:#ede9fe;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#6d28d9 0%,#7c3aed 50%,#8b5cf6 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(124,58,237,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:3rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.spinner-visual{text-align:center;margin:16px 0}
+.spinner-svg{max-width:220px;height:auto;display:inline-block}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:2.2rem;padding:6px 20px}.spinner-svg{max-width:160px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🎲</div><div><h1>ניתוח סיכויים</h1><div class="subtitle">כיתה ו' — ניסוי הסתברותי, מטבע, קובייה, סביבון</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">ניתוח סיכויים — כיתה ו' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>🎲 ניתוח סיכויים</h2><p><strong>מה זה הסתברות?</strong> הסתברות היא המדד לסיכוי שמשהו יקרה. היא תמיד בין 0 (בלתי אפשרי) ל-1 (ודאי).</p><p>🪙 <strong>מטבע</strong> — שתי אפשרויות: עץ או פלי. הסיכוי לכל אחד הוא <span class="math">1/2</span> (חצי).</p><p>🎲 <strong>קובייה</strong> — שש פאות: 1, 2, 3, 4, 5, 6. הסיכוי לכל מספר הוא <span class="math">1/6</span>.</p><p>🌀 <strong>סביבון/רולטה</strong> — חלקים בגדלים שונים! ככל שהחלק גדול יותר — הסיכוי לנחות עליו גדול יותר.</p><p>📊 <strong>הסתברות ניסויית</strong> — מסתכלים על נתונים אמיתיים. למשל: אם בינואר ירדו 10 ימי גשם מתוך 31, הסיכוי הוא <span class="math">10/31</span>.</p><p>⚖️ <strong>השוואת סיכויים</strong> — משווים שברים כדי לקבוע מה הסיכוי הגבוה יותר.</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+
+/* SVG spinner builder */
+function buildSpinnerSVG(sections){
+  /* sections = [{label,color,fraction},...] */
+  var size=200,cx=100,cy=100,r=90;
+  var svg='<svg class="spinner-svg" viewBox="0 0 '+size+' '+size+'" xmlns="http://www.w3.org/2000/svg">';
+  var startAngle=-90; /* start from top */
+  for(var i=0;i<sections.length;i++){
+    var s=sections[i];
+    var angle=s.fraction*360;
+    var endAngle=startAngle+angle;
+    var x1=cx+r*Math.cos(startAngle*Math.PI/180);
+    var y1=cy+r*Math.sin(startAngle*Math.PI/180);
+    var x2=cx+r*Math.cos(endAngle*Math.PI/180);
+    var y2=cy+r*Math.sin(endAngle*Math.PI/180);
+    var largeArc=angle>180?1:0;
+    var d='M '+cx+' '+cy+' L '+x1.toFixed(2)+' '+y1.toFixed(2)+' A '+r+' '+r+' 0 '+largeArc+' 1 '+x2.toFixed(2)+' '+y2.toFixed(2)+' Z';
+    svg+='<path d="'+d+'" fill="'+s.color+'" stroke="#fff" stroke-width="2"/>';
+    /* label in middle of arc */
+    var midAngle=(startAngle+endAngle)/2;
+    var lr=r*0.6;
+    var lx=cx+lr*Math.cos(midAngle*Math.PI/180);
+    var ly=cy+lr*Math.sin(midAngle*Math.PI/180);
+    svg+='<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="700" fill="#fff" font-family="Heebo,sans-serif">'+s.label+'</text>';
+    startAngle=endAngle;
+  }
+  svg+='<circle cx="'+cx+'" cy="'+cy+'" r="8" fill="#fff" stroke="#333" stroke-width="2"/>';
+  svg+='</svg>';
+  return svg;
+}
+
+/* Fraction display helper */
+function fracStr(num,den){
+  /* simplify */
+  var g=gcd(Math.abs(num),Math.abs(den));
+  num=num/g; den=den/g;
+  if(den===1) return ''+num;
+  return num+'/'+den;
+}
+function gcd(a,b){while(b){var t=b;b=a%b;a=t}return a}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* PLACEHOLDER — generators will be added here */
+
+/* Type 1: Coin flip */
+function qCoinFlip(){
+  var scenarios=[
+    {q:'מהו הסיכוי לקבל <strong>עץ</strong> בהטלת מטבע?',answer:'1/2',explain:'במטבע יש 2 אפשרויות: עץ או פלי. הסיכוי לעץ הוא 1 מתוך 2 = 1/2'},
+    {q:'מהו הסיכוי לקבל <strong>פלי</strong> בהטלת מטבע?',answer:'1/2',explain:'במטבע יש 2 אפשרויות: עץ או פלי. הסיכוי לפלי הוא 1 מתוך 2 = 1/2'},
+    {q:'מהו הסיכוי ש<strong>לא</strong> נקבל עץ בהטלת מטבע?',answer:'1/2',explain:'אם לא עץ, אז פלי — הסיכוי הוא 1/2'},
+    {q:'האם הסיכוי לעץ <strong>שווה</strong> לסיכוי לפלי?',answer:'כן',explain:'שני הצדדים שווים — לכל אחד סיכוי 1/2',opts:['כן','לא']},
+    {q:'הטלנו מטבע 10 פעמים וקיבלנו 7 פעמים עץ. מהו הסיכוי <strong>הניסויי</strong> לעץ?',answer:'7/10',explain:'הסיכוי הניסויי = מספר ההצלחות חלקי מספר הניסיונות = 7/10'},
+    {q:'הטלנו מטבע 20 פעמים וקיבלנו 12 פעמים פלי. מהו הסיכוי <strong>הניסויי</strong> לפלי?',answer:'12/20',explain:'הסיכוי הניסויי = 12 חלקי 20 = 12/20 = 3/5'},
+    {q:'הטלנו מטבע 8 פעמים וקיבלנו 5 פעמים עץ. מהו הסיכוי <strong>הניסויי</strong> לפלי?',answer:'3/8',explain:'קיבלנו עץ 5 מתוך 8, אז פלי = 8 - 5 = 3 מתוך 8 = 3/8'},
+    {q:'מטבע הוגן מוטל פעם אחת. מה הסיכוי לקבל עץ <strong>או</strong> פלי?',answer:'1',explain:'בוודאות נקבל עץ או פלי — הסיכוי הוא 1 (ודאי)'},
+    {q:'מטבע מוטל פעם אחת. מה הסיכוי לקבל <strong>לא עץ ולא פלי</strong>?',answer:'0',explain:'אין אפשרות שלישית — הסיכוי הוא 0 (בלתי אפשרי)'}
+  ];
+  var s=scenarios[rr(0,scenarios.length-1)];
+  var options;
+  if(s.opts){
+    options=s.opts;
+  } else {
+    options=[s.answer];
+    var distractors=['1/2','1/3','1/4','1/6','2/3','3/4','1','0','7/10','3/8','12/20','3/5','2/5'];
+    var pool=[];
+    for(var i=0;i<distractors.length;i++){
+      if(distractors[i]!==s.answer) pool.push(distractors[i]);
+    }
+    shuffle(pool);
+    for(var i=0;i<3&&i<pool.length;i++) options.push(pool[i]);
+    options=shuffle(options);
+  }
+  return{type:'choice',qText:s.q,display:'<div class="num-display"><span class="big-num" style="font-size:2.5rem">🪙</span></div>',answer:s.answer,options:options,colClass:options.length<=2?'cols-2':'cols-4',explain:s.explain};
+}
+
+/* Type 2: Dice roll */
+function qDiceRoll(){
+  var diceEmojis=['','&#9856;','&#9857;','&#9858;','&#9859;','&#9860;','&#9861;'];
+  var scenarios=[
+    {q:'מהו הסיכוי לקבל <strong>4</strong> בהטלת קובייה?',answer:'1/6',explain:'בקובייה יש 6 פאות שוות — הסיכוי לכל מספר הוא 1/6'},
+    {q:'מהו הסיכוי לקבל <strong>מספר זוגי</strong> בהטלת קובייה?',answer:'1/2',explain:'מספרים זוגיים: 2, 4, 6 — זה 3 מתוך 6 = 3/6 = 1/2'},
+    {q:'מהו הסיכוי לקבל <strong>מספר אי-זוגי</strong> בהטלת קובייה?',answer:'1/2',explain:'מספרים אי-זוגיים: 1, 3, 5 — זה 3 מתוך 6 = 3/6 = 1/2'},
+    {q:'מהו הסיכוי לקבל <strong>מספר גדול מ-4</strong> בהטלת קובייה?',answer:'1/3',explain:'מספרים גדולים מ-4: רק 5 ו-6 — זה 2 מתוך 6 = 2/6 = 1/3'},
+    {q:'מהו הסיכוי לקבל <strong>מספר קטן מ-3</strong> בהטלת קובייה?',answer:'1/3',explain:'מספרים קטנים מ-3: רק 1 ו-2 — זה 2 מתוך 6 = 2/6 = 1/3'},
+    {q:'מהו הסיכוי לקבל <strong>6</strong> בהטלת קובייה?',answer:'1/6',explain:'בקובייה יש 6 פאות שוות — הסיכוי ל-6 הוא 1/6'},
+    {q:'מהו הסיכוי לקבל <strong>מספר קטן מ-5</strong> בהטלת קובייה?',answer:'2/3',explain:'מספרים קטנים מ-5: 1, 2, 3, 4 — זה 4 מתוך 6 = 4/6 = 2/3'},
+    {q:'מהו הסיכוי לקבל <strong>1 או 2</strong> בהטלת קובייה?',answer:'1/3',explain:'שתי אפשרויות מתוך 6 = 2/6 = 1/3'},
+    {q:'מהו הסיכוי <strong>לא</strong> לקבל 6 בהטלת קובייה?',answer:'5/6',explain:'כל דבר חוץ מ-6: זה 5 מתוך 6 = 5/6'},
+    {q:'מהו הסיכוי לקבל <strong>מספר גדול מ-2</strong> בהטלת קובייה?',answer:'2/3',explain:'מספרים גדולים מ-2: 3, 4, 5, 6 — זה 4 מתוך 6 = 4/6 = 2/3'},
+    {q:'הטלנו קובייה 30 פעמים וקיבלנו 6 בדיוק 8 פעמים. מהו הסיכוי הניסויי?',answer:'8/30',explain:'הסיכוי הניסויי = 8/30 = 4/15'}
+  ];
+  var s=scenarios[rr(0,scenarios.length-1)];
+  var options=[s.answer];
+  var distractors=['1/6','1/3','1/2','2/3','5/6','1/4','3/4','1','0','2/6','4/6','3/6','8/30','4/15'];
+  var pool=[];
+  for(var i=0;i<distractors.length;i++){
+    if(distractors[i]!==s.answer) pool.push(distractors[i]);
+  }
+  shuffle(pool);
+  for(var i=0;i<3&&i<pool.length;i++) options.push(pool[i]);
+  options=shuffle(options);
+  return{type:'choice',qText:s.q,display:'<div class="num-display"><span class="big-num" style="font-size:2.5rem">🎲</span></div>',answer:s.answer,options:options,colClass:'cols-4',explain:s.explain};
+}
+
+/* Type 3: Spinner */
+function qSpinner(){
+  var spinners=[
+    {sections:[{label:'אדום',color:'#ef4444',fraction:0.5},{label:'כחול',color:'#3b82f6',fraction:0.25},{label:'ירוק',color:'#10b981',fraction:0.25}],
+     questions:[
+       {q:'מהו הסיכוי לנחות על <strong>אדום</strong>?',answer:'1/2',explain:'אדום תופס חצי מהסביבון = 1/2'},
+       {q:'מהו הסיכוי לנחות על <strong>כחול</strong>?',answer:'1/4',explain:'כחול תופס רבע מהסביבון = 1/4'},
+       {q:'על איזה צבע הסיכוי הכי <strong>גבוה</strong> לנחות?',answer:'אדום',explain:'אדום תופס את החלק הגדול ביותר — חצי מהסביבון'}
+     ]},
+    {sections:[{label:'אדום',color:'#ef4444',fraction:1/3},{label:'כחול',color:'#3b82f6',fraction:1/3},{label:'ירוק',color:'#10b981',fraction:1/3}],
+     questions:[
+       {q:'מהו הסיכוי לנחות על <strong>ירוק</strong>?',answer:'1/3',explain:'שלושה חלקים שווים — כל אחד 1/3'},
+       {q:'האם הסיכוי לכחול <strong>שווה</strong> לסיכוי לאדום?',answer:'כן',explain:'שלושת החלקים שווים בגודלם — 1/3 לכל אחד',opts:['כן','לא']},
+       {q:'מהו הסיכוי לנחות על <strong>אדום או כחול</strong>?',answer:'2/3',explain:'אדום + כחול = 1/3 + 1/3 = 2/3'}
+     ]},
+    {sections:[{label:'אדום',color:'#ef4444',fraction:0.5},{label:'כחול',color:'#3b82f6',fraction:0.125},{label:'ירוק',color:'#10b981',fraction:0.125},{label:'צהוב',color:'#eab308',fraction:0.25}],
+     questions:[
+       {q:'מהו הסיכוי לנחות על <strong>אדום</strong>?',answer:'1/2',explain:'אדום תופס חצי מהסביבון = 1/2'},
+       {q:'על איזה צבע הסיכוי הכי <strong>נמוך</strong> לנחות?',answer:'כחול או ירוק',explain:'כחול וירוק תופסים כל אחד 1/8 — הכי קטן'},
+       {q:'מהו הסיכוי לנחות על <strong>צהוב</strong>?',answer:'1/4',explain:'צהוב תופס רבע מהסביבון = 1/4'}
+     ]},
+    {sections:[{label:'אדום',color:'#ef4444',fraction:0.25},{label:'כחול',color:'#3b82f6',fraction:0.25},{label:'ירוק',color:'#10b981',fraction:0.25},{label:'צהוב',color:'#eab308',fraction:0.25}],
+     questions:[
+       {q:'מהו הסיכוי לנחות על <strong>ירוק</strong>?',answer:'1/4',explain:'ארבעה חלקים שווים — כל אחד 1/4'},
+       {q:'מהו הסיכוי <strong>לא</strong> לנחות על אדום?',answer:'3/4',explain:'כל דבר חוץ מאדום: כחול + ירוק + צהוב = 3/4'},
+       {q:'מהו הסיכוי לנחות על <strong>כחול או צהוב</strong>?',answer:'1/2',explain:'כחול + צהוב = 1/4 + 1/4 = 2/4 = 1/2'}
+     ]},
+    {sections:[{label:'אדום',color:'#ef4444',fraction:3/8},{label:'כחול',color:'#3b82f6',fraction:3/8},{label:'ירוק',color:'#10b981',fraction:1/4}],
+     questions:[
+       {q:'מהו הסיכוי לנחות על <strong>ירוק</strong>?',answer:'1/4',explain:'ירוק תופס רבע מהסביבון = 2/8 = 1/4'},
+       {q:'על איזה צבע הסיכוי הכי <strong>גבוה</strong> לנחות?',answer:'אדום או כחול',explain:'אדום וכחול שווים (3/8 כל אחד) — שניהם גדולים מירוק (1/4 = 2/8)'},
+       {q:'מהו הסיכוי <strong>לא</strong> לנחות על ירוק?',answer:'3/4',explain:'אדום + כחול = 3/8 + 3/8 = 6/8 = 3/4'}
+     ]}
+  ];
+  var sp=spinners[rr(0,spinners.length-1)];
+  var qData=sp.questions[rr(0,sp.questions.length-1)];
+  var svgHtml=buildSpinnerSVG(sp.sections);
+  var options;
+  if(qData.opts){
+    options=qData.opts;
+  } else {
+    options=[qData.answer];
+    var colorAnswers=['אדום','כחול','ירוק','צהוב','אדום או כחול','כחול או ירוק'];
+    var fracAnswers=['1/2','1/3','1/4','1/6','1/8','2/3','3/4','3/8','5/8','2/8','1','0'];
+    var isColor=colorAnswers.indexOf(qData.answer)!==-1;
+    var pool=isColor?colorAnswers:fracAnswers;
+    var filtered=[];
+    for(var i=0;i<pool.length;i++){if(pool[i]!==qData.answer) filtered.push(pool[i])}
+    shuffle(filtered);
+    for(var i=0;i<3&&i<filtered.length;i++) options.push(filtered[i]);
+    options=shuffle(options);
+  }
+  return{type:'choice',qText:qData.q,display:'<div class="spinner-visual">'+svgHtml+'</div>',answer:qData.answer,options:options,colClass:options.length<=2?'cols-2':'cols-4',explain:qData.explain};
+}
+
+/* Type 4: Rain / Experimental probability from data */
+function qRainProbability(){
+  var months=['ינואר','פברואר','מרס','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+  var daysInMonth=[31,28,31,30,31,30,31,31,30,31,30,31];
+  var mi=rr(0,11);
+  var total=daysInMonth[mi];
+  var rainy=rr(0,Math.min(total,20));
+  var scenarios=[
+    {q:'בחודש <strong>'+months[mi]+'</strong> היו '+rainy+' ימי גשם מתוך '+total+' ימים. מהו הסיכוי הניסויי לגשם?',
+     answer:fracStr(rainy,total),
+     explain:'הסיכוי הניסויי = ימי גשם / סך הימים = '+rainy+'/'+total+(gcd(rainy,total)>1?' = '+fracStr(rainy,total):'')},
+    {q:'בחודש <strong>'+months[mi]+'</strong> היו '+rainy+' ימי גשם מתוך '+total+'. מהו הסיכוי הניסויי <strong>שלא</strong> ירד גשם?',
+     answer:fracStr(total-rainy,total),
+     explain:'ימים ללא גשם = '+total+' - '+rainy+' = '+(total-rainy)+'. הסיכוי = '+(total-rainy)+'/'+total}
+  ];
+  var s=scenarios[rr(0,1)];
+  var options=[s.answer];
+  /* generate distractors */
+  var distractorSet=new Set();distractorSet.add(s.answer);
+  var attempts=0;
+  while(options.length<4&&attempts<30){
+    attempts++;
+    var dn=rr(0,Math.min(total,20));
+    var df=fracStr(dn,total);
+    if(!distractorSet.has(df)){distractorSet.add(df);options.push(df)}
+  }
+  while(options.length<4){options.push(fracStr(rr(1,10),rr(11,31)))}
+  options=shuffle(options);
+  return{type:'choice',qText:s.q,display:'<div class="num-display"><span class="big-num" style="font-size:1.6rem">🌧️ '+months[mi]+': '+rainy+'/'+total+'</span></div>',answer:s.answer,options:options,colClass:'cols-4',explain:s.explain};
+}
+
+/* Type 5: Compare probability */
+function qCompareProbability(){
+  var names=['מחשב א\'','מחשב ב\'','מחשב ג\''];
+  var totalDays=rr(20,30);
+  /* generate failures for each */
+  var failures=[];
+  for(var i=0;i<3;i++) failures.push(rr(1,Math.floor(totalDays/2)));
+  /* find most reliable = fewest failures */
+  var minF=Math.min(failures[0],failures[1],failures[2]);
+  var maxF=Math.max(failures[0],failures[1],failures[2]);
+  /* ensure unique min */
+  var att=0;
+  while((failures[0]===failures[1]||failures[1]===failures[2]||failures[0]===failures[2])&&att<50){
+    att++;
+    for(var i=0;i<3;i++) failures[i]=rr(1,Math.floor(totalDays/2));
+  }
+  minF=Math.min(failures[0],failures[1],failures[2]);
+  maxF=Math.max(failures[0],failures[1],failures[2]);
+  var bestIdx=-1,worstIdx=-1;
+  for(var i=0;i<3;i++){if(failures[i]===minF)bestIdx=i;if(failures[i]===maxF)worstIdx=i}
+
+  var scenarios=[
+    {q:'3 מחשבים נבדקו '+totalDays+' ימים. מי הכי <strong>אמין</strong> (הכי מעט תקלות)?',
+     answer:names[bestIdx],
+     explain:names[bestIdx]+' עם '+failures[bestIdx]+' תקלות בלבד — הכי מעט'},
+    {q:'3 מחשבים נבדקו '+totalDays+' ימים. למי הסיכוי לתקלה הכי <strong>גבוה</strong>?',
+     answer:names[worstIdx],
+     explain:names[worstIdx]+' עם '+failures[worstIdx]+' תקלות — הכי הרבה'}
+  ];
+  var s=scenarios[rr(0,1)];
+  var tableHtml='<div style="text-align:center;margin:12px 0"><table style="margin:0 auto;border-collapse:collapse;font-size:1rem"><tr style="background:var(--primary-light)"><th style="padding:8px 16px;border:1px solid var(--border)">מחשב</th><th style="padding:8px 16px;border:1px solid var(--border)">ימי תקלה</th></tr>';
+  for(var i=0;i<3;i++){
+    tableHtml+='<tr><td style="padding:8px 16px;border:1px solid var(--border);font-weight:700">'+names[i]+'</td><td style="padding:8px 16px;border:1px solid var(--border)">'+failures[i]+'</td></tr>';
+  }
+  tableHtml+='</table></div>';
+
+  return{type:'choice',qText:s.q,display:tableHtml,answer:s.answer,options:shuffle(names.slice()),colClass:'cols-3',explain:s.explain};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'מטבע — חצי חצי',instruction:'שאלות על הטלת מטבע',
+   tip:'במטבע הוגן יש שתי אפשרויות: <strong>עץ</strong> ו<strong>פלי</strong>.\nהסיכוי לכל אחד הוא <span class="math">1/2</span> (חצי).',
+   example:'מהו הסיכוי לקבל עץ?\nתשובה: <span class="math">1/2</span> — אפשרות אחת מתוך שתיים',
+   gen:function(){return qCoinFlip()}},
+
+  {title:'קובייה',instruction:'שאלות על הטלת קובייה',
+   tip:'בקובייה הוגנת יש 6 פאות: 1, 2, 3, 4, 5, 6.\nהסיכוי לכל מספר ספציפי הוא <span class="math">1/6</span>.\nלמספר זוגי (2,4,6) — <span class="math">3/6 = 1/2</span>.',
+   example:'מהו הסיכוי לקבל 4?\nתשובה: <span class="math">1/6</span> — מספר אחד מתוך שישה',
+   gen:function(){return qDiceRoll()}},
+
+  {title:'רולטה / סביבון',instruction:'סביבון עם חלקים בגדלים שונים',
+   tip:'בסביבון עם חלקים <strong>לא שווים</strong> — ככל שהחלק גדול יותר, הסיכוי לנחות עליו גבוה יותר.\nהסיכוי = גודל החלק חלקי השלם.',
+   example:'אם חצי מהסביבון אדום:\nהסיכוי לאדום = <span class="math">1/2</span>',
+   gen:function(){return qSpinner()}},
+
+  {title:'סיכוי מנתונים',instruction:'חישוב הסתברות ניסויית מנתונים',
+   tip:'<strong>הסתברות ניסויית</strong> = מספר ההצלחות חלקי מספר הניסיונות.\nלמשל: 10 ימי גשם מתוך 31 = <span class="math">10/31</span>.',
+   example:'בינואר ירדו 10 ימי גשם מתוך 31.\nהסיכוי הניסויי = <span class="math">10/31</span>',
+   gen:function(){return qRainProbability()}},
+
+  {title:'השוואת סיכויים',instruction:'מי הכי אמין? השוואת סיכויים',
+   tip:'כדי להשוות סיכויים — משווים את מספר התקלות.\n<strong>פחות תקלות = יותר אמין!</strong>',
+   example:'מחשב א\': 3 תקלות, מחשב ב\': 7 תקלות\nמחשב א\' אמין יותר!',
+   gen:function(){return qCompareProbability()}},
+
+  {title:'מטבע + קובייה',instruction:'מגוון שאלות על מטבע וקובייה',
+   tip:'מטבע: <span class="math">1/2</span> לכל צד.\nקובייה: <span class="math">1/6</span> לכל מספר ספציפי.',
+   example:'🎲🪙 שאלות מעורבבות!',
+   gen:function(){return[qCoinFlip,qDiceRoll][rr(0,1)]()}},
+
+  {title:'סביבון + נתונים',instruction:'שילוב רולטה והסתברות ניסויית',
+   tip:'בסביבון — מסתכלים על גודל החלקים.\nבנתונים — מחשבים הצלחות חלקי ניסיונות.',
+   example:'🌀📊 שילוב של שני סוגים!',
+   gen:function(){return[qSpinner,qRainProbability][rr(0,1)]()}},
+
+  {title:'השוואה + נתונים',instruction:'שאלות השוואה ונתונים',
+   tip:'השוואת סיכויים = מי עם הכי מעט / הכי הרבה.\nנתונים = הצלחות חלקי סך הכל.',
+   example:'⚖️📊 מי הכי אמין? מה הסיכוי?',
+   gen:function(){return[qCompareProbability,qRainProbability][rr(0,1)]()}},
+
+  {title:'מעורבב — 3 סוגים',instruction:'מטבע, קובייה וסביבון',
+   tip:'זכרו:\n• מטבע = 2 אפשרויות\n• קובייה = 6 אפשרויות\n• סביבון = תלוי בגודל החלקים',
+   example:'🎲🪙🌀 כל שאלה היא הפתעה!',
+   gen:function(){return[qCoinFlip,qDiceRoll,qSpinner][rr(0,2)]()}},
+
+  {title:'מעורבב — 4 סוגים',instruction:'מטבע, קובייה, סביבון ונתונים',
+   tip:'לכל סוג שאלה — גישה אחרת:\n• מטבע/קובייה: ספירת אפשרויות\n• סביבון: גודל חלקים\n• נתונים: הצלחות חלקי ניסיונות',
+   example:'🎲🪙🌀🌧️ ארבעה סוגים!',
+   gen:function(){return[qCoinFlip,qDiceRoll,qSpinner,qRainProbability][rr(0,3)]()}},
+
+  {title:'מעורבב — כל הסוגים!',instruction:'כל חמשת סוגי השאלות',
+   tip:'שלבו את כל מה שלמדתם!\n• מטבע — 1/2\n• קובייה — 1/6 לספציפי\n• סביבון — גודל חלקים\n• נתונים — הצלחות/ניסיונות\n• השוואה — מי הכי טוב/גרוע',
+   example:'🎲🪙🌀🌧️⚖️ הכל ביחד!',
+   gen:function(){return[qCoinFlip,qDiceRoll,qSpinner,qRainProbability,qCompareProbability][rr(0,4)]()}},
+
+  {title:'אתגר — מטבע וקובייה',instruction:'שאלות מאתגרות על מטבע וקובייה',
+   tip:'חשבו טוב — לפעמים שואלים על "לא לקבל" או על "ניסויי".\nסיכוי ניסויי יכול להיות שונה מהתיאורטי!',
+   example:'💪 שאלות טריקיות!',
+   gen:function(){return[qCoinFlip,qDiceRoll][rr(0,1)]()}},
+
+  {title:'אתגר — סביבון ונתונים',instruction:'שאלות מאתגרות על סביבון והסתברות ניסויית',
+   tip:'בסביבון — שימו לב לגודל החלקים.\nבנתונים — אל תשכחו לצמצם את השבר!',
+   example:'💪🌀📊 אתגר!',
+   gen:function(){return[qSpinner,qRainProbability,qCompareProbability][rr(0,2)]()}},
+
+  {title:'סופר אתגר!',instruction:'כל הסוגים — שאלות קשות!',
+   tip:'🏆 אתם מומחים להסתברות!',
+   example:'🌟💪🏆',
+   gen:function(){return[qCoinFlip,qDiceRoll,qSpinner,qRainProbability,qCompareProbability][rr(0,4)]()}},
+
+  {title:'מאסטר!',instruction:'הרמה הכי קשה — כל הסוגים!',
+   tip:'🏆 אין עליכם! שלטתם בהסתברות!',
+   example:'🌟🌟🌟',
+   gen:function(){return[qCoinFlip,qDiceRoll,qSpinner,qRainProbability,qCompareProbability][rr(0,4)]()}}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

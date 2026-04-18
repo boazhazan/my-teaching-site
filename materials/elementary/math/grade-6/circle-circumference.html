@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>מעגל ועיגול — היקף | כיתה ו' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#dc2626;--primary-dark:#b91c1c;--primary-light:#fee2e2;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#b91c1c 0%,#dc2626 50%,#ef4444 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(220,38,38,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:3rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:480px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.svg-wrap{text-align:center;margin:12px 0}
+.svg-wrap svg{max-width:220px;width:100%;height:auto}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:2.2rem;padding:6px 20px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">⭕</div><div><h1>מעגל ועיגול — היקף</h1><div class="subtitle">כיתה ו' — רדיוס, קוטר, π והיקף</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">מעגל ועיגול — היקף | כיתה ו' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>⭕ מעגל ועיגול — היקף</h2><p><strong>חלקי המעגל:</strong></p><p>🔹 <strong>רדיוס (r)</strong> — קטע מהמרכז אל המעגל<br>🔹 <strong>קוטר (d)</strong> — קטע שעובר דרך המרכז ומחבר שתי נקודות על המעגל. <span class="math">d = 2r</span><br>🔹 <strong>מיתר</strong> — קטע שמחבר שתי נקודות על המעגל אבל <strong>לא</strong> עובר דרך המרכז</p><p><strong>מה זה π (פאי)?</strong></p><p>אם נחלק את היקף המעגל בקוטר שלו, תמיד נקבל את אותו מספר: <span class="math">π ≈ 3.14</span></p><p><strong>נוסחת ההיקף:</strong></p><p>🔸 <span class="math">C = 2 × π × r</span> (מהרדיוס)<br>🔸 <span class="math">C = π × d</span> (מהקוטר)</p><p>לדוגמה: רדיוס 5 → <span class="math">C = 2 × 3.14 × 5 = 31.4</span></p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+var PI=3.14;
+
+/* Round to N decimal places */
+function rd(v,n){var f=Math.pow(10,n||2);return Math.round(v*f)/f}
+
+/* ========== SVG CIRCLE HELPERS ========== */
+
+/* Draw circle with radius line */
+function svgRadius(r){
+  var cx=110,cy=110,cr=80;
+  return '<svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+cr+'" fill="none" stroke="#dc2626" stroke-width="3"/>'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="4" fill="#dc2626"/>'
+    +'<line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+cr)+'" y2="'+cy+'" stroke="#2563eb" stroke-width="3" stroke-dasharray="6,3"/>'
+    +'<text x="'+(cx+cr/2)+'" y="'+(cy-8)+'" text-anchor="middle" font-size="16" font-weight="700" fill="#2563eb" font-family="Heebo">r = '+r+'</text>'
+    +'<text x="'+cx+'" y="'+(cy+cr+20)+'" text-anchor="middle" font-size="13" fill="#64748b" font-family="Heebo">רדיוס</text>'
+    +'</svg>';
+}
+
+/* Draw circle with diameter line */
+function svgDiameter(d){
+  var cx=110,cy=110,cr=80;
+  return '<svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+cr+'" fill="none" stroke="#dc2626" stroke-width="3"/>'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="4" fill="#dc2626"/>'
+    +'<line x1="'+(cx-cr)+'" y1="'+cy+'" x2="'+(cx+cr)+'" y2="'+cy+'" stroke="#059669" stroke-width="3" stroke-dasharray="6,3"/>'
+    +'<text x="'+cx+'" y="'+(cy-8)+'" text-anchor="middle" font-size="16" font-weight="700" fill="#059669" font-family="Heebo">d = '+d+'</text>'
+    +'<text x="'+cx+'" y="'+(cy+cr+20)+'" text-anchor="middle" font-size="13" fill="#64748b" font-family="Heebo">קוטר</text>'
+    +'</svg>';
+}
+
+/* Draw circle with chord (not through center) */
+function svgChord(){
+  var cx=110,cy=110,cr=80;
+  /* Chord from roughly 45deg to 160deg */
+  var a1=0.6,a2=2.5;
+  var x1=cx+cr*Math.cos(a1),y1=cy-cr*Math.sin(a1);
+  var x2=cx+cr*Math.cos(a2),y2=cy-cr*Math.sin(a2);
+  return '<svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+cr+'" fill="none" stroke="#dc2626" stroke-width="3"/>'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="4" fill="#dc2626"/>'
+    +'<line x1="'+Math.round(x1)+'" y1="'+Math.round(y1)+'" x2="'+Math.round(x2)+'" y2="'+Math.round(y2)+'" stroke="#d97706" stroke-width="3" stroke-dasharray="6,3"/>'
+    +'<text x="'+cx+'" y="'+(cy+cr+20)+'" text-anchor="middle" font-size="13" fill="#64748b" font-family="Heebo">מיתר</text>'
+    +'</svg>';
+}
+
+/* Draw circle with a specific line type for identification questions */
+function svgIdentify(lineType){
+  if(lineType==='radius') return svgIdentifyRadius();
+  if(lineType==='diameter') return svgIdentifyDiameter();
+  return svgIdentifyChord();
+}
+
+function svgIdentifyRadius(){
+  var cx=110,cy=110,cr=80;
+  /* angle ~35deg */
+  var a=0.6;
+  var ex=cx+cr*Math.cos(a),ey=cy-cr*Math.sin(a);
+  return '<svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+cr+'" fill="none" stroke="#dc2626" stroke-width="3"/>'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="5" fill="#dc2626"/>'
+    +'<line x1="'+cx+'" y1="'+cy+'" x2="'+Math.round(ex)+'" y2="'+Math.round(ey)+'" stroke="#1e293b" stroke-width="3.5"/>'
+    +'<circle cx="'+Math.round(ex)+'" cy="'+Math.round(ey)+'" r="4" fill="#1e293b"/>'
+    +'<text x="'+cx+'" y="'+(cy+cr+20)+'" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="Heebo">מהו הקטע המסומן?</text>'
+    +'</svg>';
+}
+
+function svgIdentifyDiameter(){
+  var cx=110,cy=110,cr=80;
+  /* angle ~25deg */
+  var a=0.44;
+  var x1=cx+cr*Math.cos(a),y1=cy-cr*Math.sin(a);
+  var x2=cx-cr*Math.cos(a),y2=cy+cr*Math.sin(a);
+  return '<svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+cr+'" fill="none" stroke="#dc2626" stroke-width="3"/>'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="5" fill="#dc2626"/>'
+    +'<line x1="'+Math.round(x1)+'" y1="'+Math.round(y1)+'" x2="'+Math.round(x2)+'" y2="'+Math.round(y2)+'" stroke="#1e293b" stroke-width="3.5"/>'
+    +'<circle cx="'+Math.round(x1)+'" cy="'+Math.round(y1)+'" r="4" fill="#1e293b"/>'
+    +'<circle cx="'+Math.round(x2)+'" cy="'+Math.round(y2)+'" r="4" fill="#1e293b"/>'
+    +'<text x="'+cx+'" y="'+(cy+cr+20)+'" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="Heebo">מהו הקטע המסומן?</text>'
+    +'</svg>';
+}
+
+function svgIdentifyChord(){
+  var cx=110,cy=110,cr=80;
+  /* two points on circle, NOT through center */
+  var a1=0.3,a2=1.8;
+  var x1=cx+cr*Math.cos(a1),y1=cy-cr*Math.sin(a1);
+  var x2=cx+cr*Math.cos(a2),y2=cy-cr*Math.sin(a2);
+  return '<svg viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="'+cr+'" fill="none" stroke="#dc2626" stroke-width="3"/>'
+    +'<circle cx="'+cx+'" cy="'+cy+'" r="5" fill="#dc2626"/>'
+    +'<line x1="'+Math.round(x1)+'" y1="'+Math.round(y1)+'" x2="'+Math.round(x2)+'" y2="'+Math.round(y2)+'" stroke="#1e293b" stroke-width="3.5"/>'
+    +'<circle cx="'+Math.round(x1)+'" cy="'+Math.round(y1)+'" r="4" fill="#1e293b"/>'
+    +'<circle cx="'+Math.round(x2)+'" cy="'+Math.round(y2)+'" r="4" fill="#1e293b"/>'
+    +'<text x="'+cx+'" y="'+(cy+cr+20)+'" text-anchor="middle" font-size="14" font-weight="700" fill="#1e293b" font-family="Heebo">מהו הקטע המסומן?</text>'
+    +'</svg>';
+}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: Identify parts — radius, diameter, or chord */
+function qIdentifyParts(){
+  var types=['radius','diameter','chord'];
+  var chosen=types[rr(0,2)];
+  var hebrewMap={radius:'רדיוס',diameter:'קוטר',chord:'מיתר'};
+  var correct=hebrewMap[chosen];
+  var options=shuffle(['רדיוס','קוטר','מיתר','היקף']);
+  var explainMap={
+    radius:'הקטע יוצא מהמרכז ומגיע לנקודה אחת על המעגל — זה רדיוס!',
+    diameter:'הקטע עובר דרך המרכז ומחבר שתי נקודות על המעגל — זה קוטר!',
+    chord:'הקטע מחבר שתי נקודות על המעגל אבל לא עובר דרך המרכז — זה מיתר!'
+  };
+  return{type:'choice',qText:'מהו הקטע המסומן במעגל?',display:'<div class="svg-wrap">'+svgIdentify(chosen)+'</div>',answer:correct,options:options,colClass:'cols-4',explain:explainMap[chosen]};
+}
+
+/* Type 2: Calculate circumference from radius */
+function qCalculateCircumference(){
+  var r=rr(1,20);
+  var c=rd(2*PI*r,2);
+  var wrongs=new Set();
+  wrongs.add(rd(PI*r,2));
+  wrongs.add(rd(2*PI*(r+1),2));
+  wrongs.add(rd(2*PI*(r-1>0?r-1:r+2),2));
+  wrongs.add(rd(r*r*PI,2));
+  wrongs.delete(c);
+  var wArr=Array.from(wrongs).slice(0,3);
+  while(wArr.length<3){var f=rd(c+rr(-10,10),2);if(f!==c&&f>0&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var options=shuffle([String(c)].concat(wArr.map(String)));
+  return{type:'choice',qText:'רדיוס המעגל הוא <strong>'+r+'</strong>. מהו ההיקף?',display:'<div class="svg-wrap">'+svgRadius(r)+'</div>',answer:String(c),options:options,colClass:'cols-2',explain:'היקף = <span class="math">2 × 3.14 × '+r+' = '+c+'</span>'};
+}
+
+/* Type 3: Circumference from diameter */
+function qFromDiameter(){
+  var d=rr(2,30);
+  var c=rd(PI*d,2);
+  var wrongs=new Set();
+  wrongs.add(rd(2*PI*d,2));
+  wrongs.add(rd(PI*(d+2),2));
+  wrongs.add(rd(PI*(d-2>0?d-2:d+3),2));
+  wrongs.delete(c);
+  var wArr=Array.from(wrongs).slice(0,3);
+  while(wArr.length<3){var f=rd(c+rr(-8,8),2);if(f!==c&&f>0&&wArr.indexOf(f)===-1)wArr.push(f)}
+  var options=shuffle([String(c)].concat(wArr.map(String)));
+  return{type:'choice',qText:'קוטר המעגל הוא <strong>'+d+'</strong>. מהו ההיקף?',display:'<div class="svg-wrap">'+svgDiameter(d)+'</div>',answer:String(c),options:options,colClass:'cols-2',explain:'היקף = <span class="math">3.14 × '+d+' = '+c+'</span>'};
+}
+
+/* Type 4: Pi ratio — given circumference and diameter */
+function qPiRatio(){
+  var d=rr(3,20);
+  var c=rd(PI*d,2);
+  var ratio=rd(c/d,2);
+  var correct='3.14';
+  var options=shuffle(['3.14','3.41','2.14','3.44']);
+  return{type:'choice',qText:'מדדנו מעגל: ההיקף <strong>'+c+'</strong> והקוטר <strong>'+d+'</strong>. מה היחס בין ההיקף לקוטר?',display:'',answer:correct,options:options,colClass:'cols-4',explain:'<span class="math">'+c+' ÷ '+d+' = '+ratio+'</span> — זה π (פאי)! היחס הקבוע בין היקף לקוטר.'};
+}
+
+/* Type 5: Radius from circumference */
+function qRadiusFromCircumference(){
+  var r=rr(2,20);
+  var c=rd(2*PI*r,2);
+  var correct=String(r);
+  var wrongs=new Set();
+  wrongs.add(String(r*2));
+  wrongs.add(String(r+2));
+  wrongs.add(String(r>2?r-1:r+3));
+  wrongs.delete(correct);
+  var wArr=Array.from(wrongs).slice(0,3);
+  while(wArr.length<3){var f=rr(1,30);if(String(f)!==correct&&wArr.indexOf(String(f))===-1)wArr.push(String(f))}
+  var options=shuffle([correct].concat(wArr));
+  return{type:'choice',qText:'היקף המעגל הוא <strong>'+c+'</strong>. מהו הרדיוס?',display:'',answer:correct,options:options,colClass:'cols-4',explain:'רדיוס = <span class="math">'+c+' ÷ (2 × 3.14) = '+c+' ÷ 6.28 = '+r+'</span>'};
+}
+
+/* Type 6: Earth radius question */
+function qEarthRadius(){
+  /* Earth circumference ~40,000 km, radius ~6,370 km */
+  var circumferences=[40000,25000,30000,50000];
+  var idx=rr(0,3);
+  var c=circumferences[idx];
+  var rVal=Math.round(c/(2*PI));
+  var correct=rVal.toLocaleString('he-IL');
+  var wrongs=new Set();
+  wrongs.add(Math.round(c/PI).toLocaleString('he-IL'));
+  wrongs.add(Math.round(c/6).toLocaleString('he-IL'));
+  wrongs.add(Math.round(c/4).toLocaleString('he-IL'));
+  wrongs.delete(correct);
+  var wArr=Array.from(wrongs).slice(0,3);
+  while(wArr.length<3){var f=Math.round(rVal*(1+rr(-3,3)*0.1));if(f>0){var fs=f.toLocaleString('he-IL');if(fs!==correct&&wArr.indexOf(fs)===-1)wArr.push(fs)}}
+  var options=shuffle([correct].concat(wArr));
+  var cFmt=c.toLocaleString('he-IL');
+  return{type:'choice',qText:'אורך קו המשווה של כוכב לכת הוא <strong>'+cFmt+' ק"מ</strong>. מהו הרדיוס בקירוב?',display:'',answer:correct,options:options,colClass:'cols-2',explain:'רדיוס = <span class="math">'+cFmt+' ÷ 6.28 ≈ '+correct+'</span> ק"מ'};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'רדיוס, קוטר, מיתר',instruction:'זהו את חלקי המעגל!',
+   tip:'<strong>רדיוס</strong> — מהמרכז אל המעגל.\n<strong>קוטר</strong> — עובר דרך המרכז, מחבר 2 נקודות על המעגל.\n<strong>מיתר</strong> — מחבר 2 נקודות על המעגל, <strong>לא</strong> עובר דרך המרכז.',
+   example:'הקוטר תמיד שווה ל-<span class="math">2 × רדיוס</span>.\nכל קוטר הוא מיתר, אבל לא כל מיתר הוא קוטר!',
+   gen:function(){return qIdentifyParts()}},
+
+  {title:'π — היחס הקבוע',instruction:'גלו את הקשר בין היקף לקוטר!',
+   tip:'אם נמדוד היקף של כל מעגל ונחלק בקוטר, תמיד נקבל <strong>אותו מספר</strong>: <span class="math">π ≈ 3.14</span>.\nזה עובד לכל מעגל בעולם!',
+   example:'מעגל עם קוטר 10 → היקף 31.4\n<span class="math">31.4 ÷ 10 = 3.14 = π</span>',
+   gen:function(){return qPiRatio()}},
+
+  {title:'היקף מרדיוס',instruction:'חשבו את ההיקף כשנתון הרדיוס!',
+   tip:'נוסחת ההיקף מרדיוס:\n<span class="math">C = 2 × π × r = 2 × 3.14 × r</span>\nכפלו את הרדיוס ב-2 ואז ב-3.14.',
+   example:'רדיוס 5:\n<span class="math">C = 2 × 3.14 × 5 = 31.4</span>',
+   gen:function(){return qCalculateCircumference()}},
+
+  {title:'היקף מקוטר',instruction:'חשבו את ההיקף כשנתון הקוטר!',
+   tip:'נוסחת ההיקף מקוטר:\n<span class="math">C = π × d = 3.14 × d</span>\nפשוט כפלו את הקוטר ב-3.14!',
+   example:'קוטר 10:\n<span class="math">C = 3.14 × 10 = 31.4</span>',
+   gen:function(){return qFromDiameter()}},
+
+  {title:'רדיוס מהיקף',instruction:'מצאו את הרדיוס כשנתון ההיקף!',
+   tip:'אם <span class="math">C = 2 × 3.14 × r</span> אז:\n<span class="math">r = C ÷ 6.28</span>\nחלקו את ההיקף ב-6.28!',
+   example:'היקף 62.8:\n<span class="math">r = 62.8 ÷ 6.28 = 10</span>',
+   gen:function(){return qRadiusFromCircumference()}},
+
+  {title:'כדור הארץ!',instruction:'חשבו רדיוס של כוכבי לכת!',
+   tip:'קו המשווה הוא מעגל! אפשר לחשב את הרדיוס:\n<span class="math">r = היקף ÷ 6.28</span>',
+   example:'קו המשווה של כדוה"א: ~40,000 ק"מ\n<span class="math">r ≈ 40,000 ÷ 6.28 ≈ 6,370</span> ק"מ',
+   gen:function(){return qEarthRadius()}},
+
+  {title:'מעורבב — חלקים ונוסחאות',instruction:'זיהוי חלקים וחישובי היקף!',
+   tip:'שלבו בין זיהוי חלקי המעגל לחישוב היקף!\nזכרו: <span class="math">C = 2πr = πd</span>',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[qIdentifyParts,qCalculateCircumference,qFromDiameter,qPiRatio];
+     return types[rr(0,3)]();
+   }},
+
+  {title:'היקף — רדיוס וקוטר',instruction:'חשבו היקף מרדיוס ומקוטר!',
+   tip:'<span class="math">C = 2 × 3.14 × r</span> (מרדיוס)\n<span class="math">C = 3.14 × d</span> (מקוטר)\nשימו לב מה נתון — רדיוס או קוטר!',
+   example:'רדיוס 7 → <span class="math">C = 2 × 3.14 × 7 = 43.96</span>\nקוטר 14 → <span class="math">C = 3.14 × 14 = 43.96</span>\nאותו מעגל! 😉',
+   gen:function(){
+     return rr(0,1)===0?qCalculateCircumference():qFromDiameter();
+   }},
+
+  {title:'מצאו רדיוס וקוטר',instruction:'הפוך! מההיקף חזרה לרדיוס.',
+   tip:'<span class="math">r = C ÷ 6.28</span>\n<span class="math">d = C ÷ 3.14</span>\nחלקו את ההיקף ב-6.28 לרדיוס, או ב-3.14 לקוטר.',
+   example:'היקף 31.4 → <span class="math">r = 31.4 ÷ 6.28 = 5</span>',
+   gen:function(){return qRadiusFromCircumference()}},
+
+  {title:'אתגר — מעורבב!',instruction:'כל סוגי השאלות!',
+   tip:'זכרו את כל הנוסחאות:\n<span class="math">C = 2πr = πd</span>\n<span class="math">r = C ÷ 6.28</span>\n<span class="math">d = 2r</span>',
+   example:'💪 בהצלחה!',
+   gen:function(){
+     var types=[qIdentifyParts,qCalculateCircumference,qFromDiameter,qRadiusFromCircumference,qPiRatio];
+     return types[rr(0,4)]();
+   }},
+
+  {title:'כוכבי לכת ומעגלים',instruction:'חישובים עם מספרים גדולים!',
+   tip:'אותן נוסחאות — גם עם מספרים גדולים!\n<span class="math">r = C ÷ 6.28</span>',
+   example:'🌍 מעגלים בחלל!',
+   gen:function(){
+     return rr(0,1)===0?qEarthRadius():qRadiusFromCircumference();
+   }},
+
+  {title:'מומחה חלקים!',instruction:'זהו חלקים וחשבו!',
+   tip:'רדיוס, קוטר, מיתר — כל אחד מהם שונה!\nוהיקף = <span class="math">2πr</span>.',
+   example:'🏆 אתם מומחים!',
+   gen:function(){
+     var types=[qIdentifyParts,qCalculateCircumference,qFromDiameter];
+     return types[rr(0,2)]();
+   }},
+
+  {title:'סופר אתגר!',instruction:'כל הסוגים — שאלות מאתגרות!',
+   tip:'🏆 שלבו את כל הידע שצברתם!',
+   example:'🌟 💪 🏆',
+   gen:function(){
+     var types=[qIdentifyParts,qCalculateCircumference,qFromDiameter,qPiRatio,qRadiusFromCircumference,qEarthRadius];
+     return types[rr(0,5)]();
+   }},
+
+  {title:'אלוף ההיקפים!',instruction:'הרמה הכי קשה — מוכנים?',
+   tip:'🏆 אין עליכם! שלטתם בנוסחאות ההיקף!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[qIdentifyParts,qCalculateCircumference,qFromDiameter,qPiRatio,qRadiusFromCircumference,qEarthRadius];
+     return types[rr(0,5)]();
+   }},
+
+  {title:'מאסטר!',instruction:'כל מה שלמדתם — ברמה הגבוהה ביותר!',
+   tip:'🏆 הגעתם לפסגה! כל הנושאים, כל הנוסחאות!',
+   example:'🌟🌟🌟 🏆',
+   gen:function(){
+     var types=[qIdentifyParts,qCalculateCircumference,qFromDiameter,qPiRatio,qRadiusFromCircumference,qEarthRadius];
+     return types[rr(0,5)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)"><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

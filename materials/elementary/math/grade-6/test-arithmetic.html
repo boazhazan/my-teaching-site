@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>מבחן — חשבון ושאלות | כיתה ו' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#16a34a;--primary-dark:#15803d;--primary-light:#dcfce7;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#15803d 0%,#16a34a 50%,#22c55e 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(22,163,74,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:2.2rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;direction:ltr;unicode-bidi:embed}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:1.8rem;padding:6px 20px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">📝</div><div><h1>מבחן — חשבון ושאלות</h1><div class="subtitle">כיתה ו' — מידות, קנה מידה, שאלות כוללות, תנועה</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">מבחן — חשבון ושאלות — כיתה ו' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>📝 מבחן — חשבון ושאלות</h2><p>מבחן סיכום המכסה נושאים מרכזיים מכיתה ו':</p><p>🔹 <strong>המרת יחידות מידה</strong> — מ"מ, ס"מ, מ', ק"מ, גרם, ק"ג, מ"ל, ליטר<br>🔹 <strong>קנה מידה</strong> — חישוב מרחקים אמיתיים לפי קנה מידה<br>🔹 <strong>שאלות דו-שלביות</strong> — בעיות מילוליות עם מספר צעדים<br>🔹 <strong>מהירות, דרך, זמן</strong> — נוסחת התנועה<br>🔹 <strong>תפוקה</strong> — חישוב זמן/כמות עבודה<br>🔹 <strong>השוואה</strong> — מי יותר מהיר? מי יותר יעיל?</p><p>15 רמות — 10 שאלות בכל רמה. בהצלחה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function fmtNum(n){return n.toLocaleString('he-IL')}
+
+/* Generate wrong options that are distinct and != correct */
+function wrongs(correct,count,minD,maxD){
+  var s=new Set();s.add(correct);
+  var tries=0;
+  while(s.size<count+1&&tries<200){
+    var d=rr(minD,maxD);if(d===0){tries++;continue}
+    var w=correct+(rr(0,1)?d:-d);
+    if(w>0&&!s.has(w)){s.add(w)}
+    tries++;
+  }
+  s.delete(correct);
+  var arr=Array.from(s).slice(0,count);
+  /* fill if not enough */
+  while(arr.length<count){var f=correct+rr(1,maxD*2);if(f!==correct&&arr.indexOf(f)===-1)arr.push(f)}
+  return arr;
+}
+
+function makeOpts4(correct,minD,maxD){
+  var w=wrongs(correct,3,minD,maxD);
+  return shuffle([String(correct)].concat(w.map(String)));
+}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* --- Unit conversion tables --- */
+var unitPairs=[
+  {from:'מ"מ',to:'ס"מ',factor:0.1,inv:10,label:'מילימטר לסנטימטר'},
+  {from:'ס"מ',to:'מ\'',factor:0.01,inv:100,label:'סנטימטר למטר'},
+  {from:'מ\'',to:'ק"מ',factor:0.001,inv:1000,label:'מטר לקילומטר'},
+  {from:'ס"מ',to:'מ"מ',factor:10,inv:0.1,label:'סנטימטר למילימטר'},
+  {from:'מ\'',to:'ס"מ',factor:100,inv:0.01,label:'מטר לסנטימטר'},
+  {from:'ק"מ',to:'מ\'',factor:1000,inv:0.001,label:'קילומטר למטר'},
+  {from:'גרם',to:'ק"ג',factor:0.001,inv:1000,label:'גרם לקילוגרם'},
+  {from:'ק"ג',to:'גרם',factor:1000,inv:0.001,label:'קילוגרם לגרם'},
+  {from:'מ"ל',to:'ליטר',factor:0.001,inv:1000,label:'מיליליטר לליטר'},
+  {from:'ליטר',to:'מ"ל',factor:1000,inv:0.001,label:'ליטר למיליליטר'}
+];
+
+/* Type 1: Unit conversion */
+function qUnitConvert(difficulty){
+  var pairs;
+  if(difficulty<=1) pairs=[unitPairs[4],unitPairs[5],unitPairs[3],unitPairs[7]]; /* simple whole-number results */
+  else if(difficulty<=2) pairs=[unitPairs[0],unitPairs[1],unitPairs[2],unitPairs[6],unitPairs[8]];
+  else pairs=unitPairs;
+  var p=pairs[rr(0,pairs.length-1)];
+  var amount,correct;
+  if(p.factor>=1){
+    amount=rr(1,20)*(difficulty<=1?1:rr(1,5));
+    correct=amount*p.factor;
+  } else {
+    /* ensure whole result */
+    var mult=Math.round(1/p.factor);
+    amount=rr(1,10*(difficulty+1))*mult;
+    correct=amount*p.factor;
+  }
+  correct=Math.round(correct*1000)/1000; /* fix floating */
+  var cStr=correct%1===0?String(correct):correct.toFixed(correct<1?3:1);
+  var aStr=amount%1===0?fmtNum(amount):amount.toFixed(1);
+  var explain=aStr+' '+p.from+' = '+cStr+' '+p.to;
+  var w=wrongs(correct,3,Math.max(1,Math.round(correct*0.2)),Math.max(2,Math.round(correct*0.5)));
+  var opts=shuffle([cStr].concat(w.map(function(v){return v%1===0?String(v):v.toFixed(correct<1?3:1)})));
+  return{type:'choice',qText:aStr+' '+p.from+' = ? '+p.to,display:'',answer:cStr,options:opts,colClass:'cols-4',explain:explain};
+}
+
+/* Type 2: Scale */
+function qScale(difficulty){
+  var scales=[1000,5000,10000,50000,100000,200000,250000,500000];
+  var si=difficulty<=1?rr(0,2):difficulty<=2?rr(1,4):rr(3,7);
+  var scale=scales[si];
+  var mapCm=rr(1,20)*(difficulty<=1?1:rr(1,3));
+  /* real distance */
+  var realCm=mapCm*scale;
+  var realKm=realCm/100000;
+  var realM=realCm/100;
+  var useKm=realKm>=1&&realKm===Math.round(realKm);
+  var correct,unit;
+  if(useKm){correct=realKm;unit='ק"מ'}
+  else{correct=realM;unit='מ\''}
+  var scaleStr;
+  if(scale>=1000) scaleStr=fmtNum(scale);
+  else scaleStr=String(scale);
+  var explain='קנה מידה 1:'+scaleStr+' — כל ס"מ במפה = '+fmtNum(scale)+' ס"מ במציאות. '+mapCm+' ס"מ = '+fmtNum(correct)+' '+unit;
+  var opts=makeOpts4(correct,Math.max(1,Math.round(correct*0.3)),Math.max(2,Math.round(correct*0.5)));
+  return{type:'choice',qText:'קנה מידה 1:'+scaleStr+'. '+mapCm+' ס"מ במפה = ? '+unit+' במציאות',display:'',answer:String(correct),options:opts,colClass:'cols-4',explain:explain};
+}
+
+/* Type 3: Two-step word problems */
+function qTwoStep(difficulty){
+  var templates=[
+    function(){
+      var price=rr(5,30)*(difficulty<=1?1:rr(1,3));
+      var count=rr(2,8);
+      var discount=rr(1,Math.min(price-1,20));
+      var total=count*price-discount;
+      return{stem:'מחיר מחברת: '+fmtNum(price)+' ש"ח. קנו '+count+' מחברות וקיבלו הנחה של '+discount+' ש"ח. כמה שילמו?',answer:total,explain:count+' × '+price+' = '+fmtNum(count*price)+', פחות '+discount+' = '+fmtNum(total)+' ש"ח'};
+    },
+    function(){
+      var perBox=rr(6,24);
+      var boxes=rr(3,10);
+      var gave=rr(5,perBox*boxes-10);
+      var left=perBox*boxes-gave;
+      return{stem:'בכל קופסה '+perBox+' עוגיות. יש '+boxes+' קופסאות. חילקו '+gave+' עוגיות. כמה נשאר?',answer:left,explain:boxes+' × '+perBox+' = '+fmtNum(perBox*boxes)+', פחות '+gave+' = '+fmtNum(left)};
+    },
+    function(){
+      var init=rr(50,200)*5;
+      var spent=rr(10,Math.floor(init/2));
+      var earned=rr(10,100);
+      var result=init-spent+earned;
+      return{stem:'לדני היו '+fmtNum(init)+' ש"ח. הוציא '+fmtNum(spent)+' ש"ח וקיבל '+fmtNum(earned)+' ש"ח. כמה יש לו?',answer:result,explain:fmtNum(init)+' - '+fmtNum(spent)+' + '+fmtNum(earned)+' = '+fmtNum(result)+' ש"ח'};
+    },
+    function(){
+      var total=rr(5,15)*12;
+      var groups=rr(3,6);
+      var perGroup=total/groups;
+      var extra=rr(2,10);
+      var answer=perGroup+extra;
+      return{stem:'חילקו '+fmtNum(total)+' סוכריות ל-'+groups+' ילדים בשווה, ואז כל ילד קיבל עוד '+extra+'. כמה לכל ילד?',answer:answer,explain:fmtNum(total)+' ÷ '+groups+' = '+fmtNum(perGroup)+', ועוד '+extra+' = '+fmtNum(answer)};
+    },
+    function(){
+      var pages=rr(100,400);
+      var perDay=rr(10,40);
+      var days=rr(3,7);
+      var read=perDay*days;
+      var left=pages-read;
+      return{stem:'בספר '+fmtNum(pages)+' עמודים. נעמה קוראת '+perDay+' עמודים ביום. אחרי '+days+' ימים — כמה עמודים נשארו?',answer:left>0?left:0,explain:days+' × '+perDay+' = '+fmtNum(read)+', נשאר '+fmtNum(pages)+' - '+fmtNum(read)+' = '+fmtNum(Math.max(0,left))};
+    }
+  ];
+  var t=templates[rr(0,templates.length-1)]();
+  var opts=makeOpts4(t.answer,Math.max(1,Math.round(t.answer*0.1)),Math.max(5,Math.round(t.answer*0.3)));
+  return{type:'choice',qText:t.stem,display:'',answer:String(t.answer),options:opts,colClass:'cols-4',explain:t.explain};
+}
+
+/* Type 4: Speed/distance/time */
+function qSpeed(difficulty){
+  var variant=rr(0,2);
+  var speed,time,dist;
+  if(variant===0){
+    /* find distance */
+    speed=rr(3,20)*(difficulty<=1?10:5);
+    time=rr(2,6);
+    dist=speed*time;
+    var opts=makeOpts4(dist,Math.max(5,Math.round(dist*0.15)),Math.max(10,Math.round(dist*0.3)));
+    return{type:'choice',qText:'מכונית נוסעת במהירות '+speed+' קמ"ש במשך '+time+' שעות. כמה ק"מ עברה?',display:'',answer:String(dist),options:opts,colClass:'cols-4',explain:'מרחק = מהירות × זמן = '+speed+' × '+time+' = '+fmtNum(dist)+' ק"מ'};
+  } else if(variant===1){
+    /* find time */
+    speed=rr(3,15)*(difficulty<=1?10:5);
+    time=rr(2,8);
+    dist=speed*time;
+    var opts2=makeOpts4(time,1,3);
+    return{type:'choice',qText:'אופניים עוברים '+fmtNum(dist)+' ק"מ במהירות '+speed+' קמ"ש. כמה שעות הנסיעה?',display:'',answer:String(time),options:opts2,colClass:'cols-4',explain:'זמן = מרחק ÷ מהירות = '+fmtNum(dist)+' ÷ '+speed+' = '+time+' שעות'};
+  } else {
+    /* find speed */
+    speed=rr(4,20)*(difficulty<=1?5:5);
+    time=rr(2,6);
+    dist=speed*time;
+    var opts3=makeOpts4(speed,5,15);
+    return{type:'choice',qText:'רכבת עברה '+fmtNum(dist)+' ק"מ ב-'+time+' שעות. מהי המהירות?',display:'',answer:String(speed),options:opts3,colClass:'cols-4',explain:'מהירות = מרחק ÷ זמן = '+fmtNum(dist)+' ÷ '+time+' = '+speed+' קמ"ש'};
+  }
+}
+
+/* Type 5: Productivity (inverse proportion) */
+function qProductivity(difficulty){
+  var variant=rr(0,1);
+  if(variant===0){
+    /* workers × days constant */
+    var w1=rr(2,6);
+    var d1=rr(2,8);
+    var total=w1*d1;
+    var w2;
+    do{w2=rr(2,10)}while(total%w2!==0||w2===w1);
+    var d2=total/w2;
+    var opts=makeOpts4(d2,1,3);
+    return{type:'choice',qText:w1+' פועלים מסיימים עבודה ב-'+d1+' ימים. '+w2+' פועלים יסיימו ב-? ימים',display:'',answer:String(d2),options:opts,colClass:'cols-4',explain:'סה"כ ימי-עבודה: '+w1+' × '+d1+' = '+total+'. ב-'+w2+' פועלים: '+total+' ÷ '+w2+' = '+d2+' ימים'};
+  } else {
+    /* machines: how many needed */
+    var m1=rr(2,5);
+    var h1=rr(3,12);
+    var totalW=m1*h1;
+    var h2;
+    do{h2=rr(2,8)}while(totalW%h2!==0||h2===h1);
+    var m2=totalW/h2;
+    var opts2=makeOpts4(m2,1,3);
+    return{type:'choice',qText:m1+' מכונות מייצרות הזמנה ב-'+h1+' שעות. כמה מכונות צריך כדי לסיים ב-'+h2+' שעות?',display:'',answer:String(m2),options:opts2,colClass:'cols-4',explain:'סה"כ שעות-מכונה: '+m1+' × '+h1+' = '+totalW+'. ב-'+h2+' שעות: '+totalW+' ÷ '+h2+' = '+m2+' מכונות'};
+  }
+}
+
+/* Type 6: Comparison */
+function qCompare(difficulty){
+  var variant=rr(0,2);
+  if(variant===0){
+    /* who is faster */
+    var s1=rr(30,100);var t1=rr(2,5);var d1=s1*t1;
+    var s2;do{s2=rr(30,100)}while(s2===s1);
+    var t2=rr(2,5);var d2=s2*t2;
+    var names=[['דני','יוסי'],['מיכל','שרה'],['אבי','רועי']];
+    var ns=names[rr(0,names.length-1)];
+    var faster=s1>s2?ns[0]:ns[1];
+    var opts=shuffle([ns[0],ns[1],'שניהם שווים','אי אפשר לדעת']);
+    return{type:'choice',qText:ns[0]+' נוסע '+fmtNum(d1)+' ק"מ ב-'+t1+' שעות. '+ns[1]+' נוסע '+fmtNum(d2)+' ק"מ ב-'+t2+' שעות. מי יותר מהיר?',display:'',answer:faster,options:opts,colClass:'cols-2',explain:ns[0]+': '+fmtNum(d1)+' ÷ '+t1+' = '+s1+' קמ"ש. '+ns[1]+': '+fmtNum(d2)+' ÷ '+t2+' = '+s2+' קמ"ש. '+faster+' מהיר יותר!'};
+  } else if(variant===1){
+    /* cheaper per unit */
+    var q1=rr(3,10);var p1=q1*rr(2,8);
+    var q2;do{q2=rr(3,10)}while(q2===q1);
+    var p2=q2*rr(2,8);
+    var ppu1=p1/q1;var ppu2=p2/q2;
+    var items=['חבילות','שקיות','קופסאות'];
+    var item=items[rr(0,items.length-1)];
+    var cheaper,opts2;
+    if(ppu1<ppu2){cheaper='חנות א\'';opts2=shuffle(['חנות א\'','חנות ב\'','אותו מחיר','חסר מידע'])}
+    else if(ppu2<ppu1){cheaper='חנות ב\'';opts2=shuffle(['חנות א\'','חנות ב\'','אותו מחיר','חסר מידע'])}
+    else{cheaper='אותו מחיר';opts2=shuffle(['חנות א\'','חנות ב\'','אותו מחיר','חסר מידע'])}
+    return{type:'choice',qText:'חנות א\': '+q1+' '+item+' ב-'+p1+' ש"ח. חנות ב\': '+q2+' '+item+' ב-'+p2+' ש"ח. איפה יותר זול ליחידה?',display:'',answer:cheaper,options:opts2,colClass:'cols-2',explain:'חנות א\': '+p1+' ÷ '+q1+' = '+(p1/q1).toFixed(1)+' ש"ח ליחידה. חנות ב\': '+p2+' ÷ '+q2+' = '+(p2/q2).toFixed(1)+' ש"ח ליחידה.'};
+  } else {
+    /* which is more: convert and compare */
+    var a=rr(1,5)*1000;/* grams */
+    var b=rr(1,8);/* kg */
+    var akg=a/1000;
+    var heavier=akg>b?fmtNum(a)+' גרם':akg<b?b+' ק"ג':'שניהם שווים';
+    var opts3=shuffle([fmtNum(a)+' גרם',b+' ק"ג','שניהם שווים','אי אפשר לדעת']);
+    return{type:'choice',qText:'מה שוקל יותר: '+fmtNum(a)+' גרם או '+b+' ק"ג?',display:'',answer:heavier,options:opts3,colClass:'cols-2',explain:fmtNum(a)+' גרם = '+akg+' ק"ג. '+b+' ק"ג = '+fmtNum(b*1000)+' גרם.'};
+  }
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'המרת יחידות אורך',instruction:'המירו בין מ"מ, ס"מ, מ\' וק"מ',
+   tip:'יחידות אורך:\n<strong>1 ק"מ = 1,000 מ\' = 100,000 ס"מ</strong>\n<strong>1 מ\' = 100 ס"מ = 1,000 מ"מ</strong>',
+   example:'<span class="math">3 מ\' = 300 ס"מ</span>\n<span class="math">5 ק"מ = 5,000 מ\'</span>',
+   gen:function(){return qUnitConvert(1)}},
+
+  {title:'המרת יחידות משקל ונפח',instruction:'המירו בין גרם, ק"ג, מ"ל וליטר',
+   tip:'משקל: <strong>1 ק"ג = 1,000 גרם</strong>\nנפח: <strong>1 ליטר = 1,000 מ"ל</strong>',
+   example:'<span class="math">2 ק"ג = 2,000 גרם</span>\n<span class="math">500 מ"ל = 0.5 ליטר</span>',
+   gen:function(){return qUnitConvert(2)}},
+
+  {title:'קנה מידה — פשוט',instruction:'חשבו מרחקים לפי קנה מידה',
+   tip:'קנה מידה 1:X אומר: כל 1 ס"מ במפה = X ס"מ במציאות.\nלמצוא את המרחק האמיתי — <strong>כופלים</strong> את הס"מ במפה ב-X.',
+   example:'קנה מידה 1:1,000. 5 ס"מ במפה:\n<span class="math">5 × 1,000 = 5,000 ס"מ = 50 מ\'</span>',
+   gen:function(){return qScale(1)}},
+
+  {title:'קנה מידה — מתקדם',instruction:'קנה מידה גדול יותר!',
+   tip:'קנה מידה 1:100,000 → כל ס"מ = 100,000 ס"מ = <strong>1 ק"מ</strong>.\nקנה מידה 1:50,000 → כל ס"מ = 50,000 ס"מ = <strong>0.5 ק"מ</strong>.',
+   example:'קנה מידה 1:100,000. 4 ס"מ במפה:\n<span class="math">4 × 100,000 = 400,000 ס"מ = 4 ק"מ</span>',
+   gen:function(){return qScale(2)}},
+
+  {title:'שאלות דו-שלביות',instruction:'קראו בעיון ופתרו שלב אחר שלב',
+   tip:'בשאלה דו-שלבית:\n1. חשבו את השלב הראשון\n2. השתמשו בתוצאה לשלב השני',
+   example:'קנו 4 מחברות ב-8 ש"ח כל אחת, וקיבלו 5 ש"ח הנחה:\n<span class="math">4 × 8 = 32</span>, ואז <span class="math">32 - 5 = 27 ש"ח</span>',
+   gen:function(){return qTwoStep(1)}},
+
+  {title:'שאלות דו-שלביות — קשה',instruction:'שאלות מורכבות יותר!',
+   tip:'עצרו וחשבו — מה צריך לחשב קודם?\nלפעמים צריך חילוק ואז חיבור, או כפל ואז חיסור.',
+   example:'חילקו 60 סוכריות ל-5 ילדים, וכל ילד קיבל עוד 3:\n<span class="math">60 ÷ 5 = 12</span>, ואז <span class="math">12 + 3 = 15</span>',
+   gen:function(){return qTwoStep(2)}},
+
+  {title:'מהירות, דרך, זמן',instruction:'חשבו מרחק, מהירות או זמן',
+   tip:'שלוש הנוסחאות:\n<strong>מרחק = מהירות × זמן</strong>\n<strong>מהירות = מרחק ÷ זמן</strong>\n<strong>זמן = מרחק ÷ מהירות</strong>',
+   example:'מכונית ב-80 קמ"ש במשך 3 שעות:\n<span class="math">80 × 3 = 240 ק"מ</span>',
+   gen:function(){return qSpeed(1)}},
+
+  {title:'מהירות — מתקדם',instruction:'שאלות תנועה מאתגרות!',
+   tip:'זכרו: הנוסחאות עובדות בכל כיוון!\nמרחק = מהירות × זמן\nאם יודעים שניים — מחשבים את השלישי.',
+   example:'אופניים עברו 60 ק"מ ב-4 שעות:\n<span class="math">60 ÷ 4 = 15 קמ"ש</span>',
+   gen:function(){return qSpeed(2)}},
+
+  {title:'תפוקה ויחס הפוך',instruction:'פועלים, מכונות — יחס הפוך!',
+   tip:'<strong>יחס הפוך:</strong> יותר פועלים → פחות זמן.\nנוסחה: פועלים₁ × ימים₁ = פועלים₂ × ימים₂',
+   example:'3 פועלים × 6 ימים = 18 ימי-עבודה.\n9 פועלים: <span class="math">18 ÷ 9 = 2 ימים</span>',
+   gen:function(){return qProductivity(1)}},
+
+  {title:'השוואה — מי מהיר יותר?',instruction:'השוו מהירויות, מחירים ומשקלים',
+   tip:'כדי להשוות — הביאו לאותן יחידות!\n• מהירות: מרחק ÷ זמן\n• מחיר ליחידה: מחיר ÷ כמות',
+   example:'דני: 120 ק"מ ב-2 שעות = 60 קמ"ש\nיוסי: 150 ק"מ ב-3 שעות = 50 קמ"ש\nדני מהיר יותר!',
+   gen:function(){return qCompare(1)}},
+
+  {title:'מעורבב — יחידות + קנ"מ',instruction:'שאלות מכל הנושאים!',
+   tip:'זכרו את כל ההמרות:\n1 ק"מ = 1,000 מ\', 1 מ\' = 100 ס"מ\nקנה מידה: כופלים ס"מ במפה × קנה המידה',
+   example:'שאלות מגוונות — בהצלחה! 🎯',
+   gen:function(){var types=[qUnitConvert,qScale];return types[rr(0,1)](2)}},
+
+  {title:'מעורבב — שאלות ותנועה',instruction:'דו-שלביות + מהירות + תפוקה',
+   tip:'קראו כל שאלה בעיון.\nזהו מה הנתונים ומה מבקשים למצוא.',
+   example:'שאלות מגוונות — בהצלחה! 🎯',
+   gen:function(){var types=[qTwoStep,qSpeed,qProductivity];return types[rr(0,2)](2)}},
+
+  {title:'מבחן מעורבב — כל הנושאים',instruction:'שאלות מכל הסוגים!',
+   tip:'כל שאלה יכולה להיות מכל נושא.\nקראו בעיון, זהו את סוג השאלה, ופתרו!',
+   example:'🏆 אתם מוכנים!',
+   gen:function(){var types=[qUnitConvert,qScale,qTwoStep,qSpeed,qProductivity,qCompare];return types[rr(0,5)](2)}},
+
+  {title:'אתגר סופי — חלק א\'',instruction:'שאלות קשות מכל הנושאים!',
+   tip:'💪 שאלות ברמה גבוהה — קחו זמן!',
+   example:'🌟 אתם יכולים!',
+   gen:function(){var types=[qUnitConvert,qScale,qTwoStep,qSpeed,qProductivity,qCompare];return types[rr(0,5)](3)}},
+
+  {title:'אתגר סופי — חלק ב\'',instruction:'הרמה הגבוהה ביותר!',
+   tip:'🏆 מאסטר חשבון — כל הכבוד שהגעתם לפה!',
+   example:'🌟🌟🌟',
+   gen:function(){var types=[qUnitConvert,qScale,qTwoStep,qSpeed,qProductivity,qCompare];return types[rr(0,5)](3)}}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=10;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='\u05E8\u05DE\u05D4 '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='\u05E8\u05DE\u05D4 '+(currentLevel+1)+' \u05DE\u05EA\u05D5\u05DA '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='\u25B2 \u05D4\u05E1\u05EA\u05E8';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q)));seen.add(JSON.stringify(q));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)"><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['\u05DE\u05E6\u05D5\u05D9\u05DF! \u2B50','\u05E0\u05DB\u05D5\u05DF! \uD83C\uDFAF','\u05D9\u05D5\u05E4\u05D9! \u2728','\u05DE\u05D3\u05D4\u05D9\u05DD! \uD83C\uDF1F'][rr(0,3)];
+    if(q.explain) praise+=' \u2014 '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='\u05DC\u05D0 \u05E0\u05DB\u05D5\u05DF, \u05E0\u05E1\u05D5 \u05E9\u05D5\u05D1! \uD83D\uDCAA';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='\uD83C\uDFC6';document.getElementById('lcTitle').textContent='\u05DE\u05D5\u05E9\u05DC\u05DD!';document.getElementById('lcSub').textContent='\u05DB\u05DC \u05D4\u05EA\u05E9\u05D5\u05D1\u05D5\u05EA \u05E0\u05DB\u05D5\u05E0\u05D5\u05EA!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='\uD83C\uDF89';document.getElementById('lcTitle').textContent='\u05DB\u05DC \u05D4\u05DB\u05D1\u05D5\u05D3!';document.getElementById('lcSub').textContent='\u05DB\u05DE\u05E2\u05D8 \u05DE\u05D5\u05E9\u05DC\u05DD!'}
+  else{document.getElementById('lcEmoji').textContent='\uD83D\uDCAA';document.getElementById('lcTitle').textContent='\u05E1\u05D9\u05D9\u05DE\u05EA\u05DD!';document.getElementById('lcSub').textContent='\u05DB\u05D3\u05D0\u05D9 \u05DC\u05E0\u05E1\u05D5\u05EA \u05E9\u05D5\u05D1'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'\u25BC \u05D4\u05E6\u05D2 \u05D8\u05D9\u05E4':'\u25B2 \u05D4\u05E1\u05EA\u05E8'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

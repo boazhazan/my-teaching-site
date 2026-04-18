@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>אחוזים — כיתה ו' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#e11d48;--primary-dark:#be123c;--primary-light:#ffe4e6;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#be123c 0%,#e11d48 50%,#f43f5e 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(225,29,72,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.visual-display{text-align:center;margin:16px 0}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">💯</div><div><h1>אחוזים</h1><div class="subtitle">כיתה ו' — אחוז כמאית</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">אחוזים — כיתה ו' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>💯 אחוזים</h2><p><strong>מהו אחוז?</strong> אחוז הוא חלק מתוך 100. הסימן <strong>%</strong> פירושו "מתוך 100".</p><p>🔹 <strong>50%</strong> = 50 מתוך 100 = חצי = <span class="math">1/2</span><br>🔹 <strong>25%</strong> = 25 מתוך 100 = רבע = <span class="math">1/4</span><br>🔹 <strong>75%</strong> = 75 מתוך 100 = שלושה רבעים = <span class="math">3/4</span><br>🔹 <strong>10%</strong> = 10 מתוך 100 = עשירית = <span class="math">1/10</span><br>🔹 <strong>100%</strong> = הכל!</p><p>🔸 בחיי היום-יום:<br>• "הנחה של 50%" = חצי מהמחיר<br>• "גבינה 5%" = 5 גרם שומן בכל 100 גרם<br>• "סוללה ב-75%" = שלושה רבעים מלאה</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+/* Fraction HTML helper */
+function fracHTML(n,d){
+  return '<span style="display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.1;font-weight:700;font-size:.95em;direction:ltr;unicode-bidi:embed"><span style="border-bottom:2px solid var(--text);padding:0 4px">'+n+'</span><span style="padding:0 4px">'+d+'</span></span>';
+}
+
+/* SVG percent grid — 10x10 square with colored cells */
+function percentSVG(pct,size){
+  size=size||160;
+  var cell=size/10;
+  var svg='<svg width="'+size+'" height="'+size+'" viewBox="0 0 '+size+' '+size+'" style="display:block;margin:0 auto;border:2px solid var(--primary);border-radius:8px">';
+  for(var r=0;r<10;r++){
+    for(var c=0;c<10;c++){
+      var idx=r*10+c;
+      var fill=idx<pct?'var(--primary)':'#f1f5f9';
+      var stroke=idx<pct?'var(--primary-dark)':'#e2e8f0';
+      svg+='<rect x="'+(c*cell)+'" y="'+(r*cell)+'" width="'+cell+'" height="'+cell+'" fill="'+fill+'" stroke="'+stroke+'" stroke-width="0.5"/>';
+    }
+  }
+  svg+='</svg>';
+  return svg;
+}
+
+/* ========== KNOWN PERCENTS DATA ========== */
+var knownPairs=[
+  {pct:50,frac:'1/2',fracH:fracHTML(1,2),word:'חצי'},
+  {pct:25,frac:'1/4',fracH:fracHTML(1,4),word:'רבע'},
+  {pct:75,frac:'3/4',fracH:fracHTML(3,4),word:'שלושה רבעים'},
+  {pct:10,frac:'1/10',fracH:fracHTML(1,10),word:'עשירית'},
+  {pct:20,frac:'1/5',fracH:fracHTML(1,5),word:'חמישית'},
+  {pct:100,frac:'1/1',fracH:'1 שלם',word:'שלם'},
+  {pct:0,frac:'0',fracH:'0',word:'אפס'}
+];
+
+var corePairs=[
+  {pct:50,frac:'1/2',fracH:fracHTML(1,2),word:'חצי'},
+  {pct:25,frac:'1/4',fracH:fracHTML(1,4),word:'רבע'},
+  {pct:75,frac:'3/4',fracH:fracHTML(3,4),word:'שלושה רבעים'},
+  {pct:10,frac:'1/10',fracH:fracHTML(1,10),word:'עשירית'},
+  {pct:20,frac:'1/5',fracH:fracHTML(1,5),word:'חמישית'}
+];
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: qPercentToFraction — "50% = ?" -> 1/2 */
+function qPercentToFraction(){
+  var pair=corePairs[rr(0,corePairs.length-1)];
+  var correct=pair.frac;
+  var wrongs=[];
+  for(var i=0;i<corePairs.length;i++){
+    if(corePairs[i].frac!==correct) wrongs.push(corePairs[i].frac);
+  }
+  wrongs=shuffle(wrongs).slice(0,3);
+  var options=shuffle([correct].concat(wrongs));
+  var display='<div class="visual-display">'+percentSVG(pair.pct,140)+'</div>';
+  return{type:'choice',qText:'<strong>'+pair.pct+'%</strong> שווה לאיזה שבר?',display:display,answer:correct,options:options,colClass:'cols-4',explain:pair.pct+'% = '+pair.pct+' מתוך 100 = '+pair.frac+' ('+pair.word+')'};
+}
+
+/* Type 2: qFractionToPercent — "1/4 = כמה אחוז?" -> 25% */
+function qFractionToPercent(){
+  var pair=corePairs[rr(0,corePairs.length-1)];
+  var correct=pair.pct+'%';
+  var wrongs=[];
+  for(var i=0;i<corePairs.length;i++){
+    if(corePairs[i].pct!==pair.pct) wrongs.push(corePairs[i].pct+'%');
+  }
+  wrongs=shuffle(wrongs).slice(0,3);
+  var options=shuffle([correct].concat(wrongs));
+  return{type:'choice',qText:'השבר '+pair.fracH+' שווה לכמה אחוז?',display:'',answer:correct,options:options,colClass:'cols-4',explain:pair.frac+' = '+pair.pct+' מתוך 100 = '+pair.pct+'%'};
+}
+
+/* Type 3: qVisualPercent — SVG grid with colored part, "מהו האחוז?" */
+function qVisualPercent(){
+  var vals=[5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100];
+  var pct=vals[rr(0,vals.length-1)];
+  var correct=pct+'%';
+  var wrongs=new Set();
+  while(wrongs.size<3){
+    var w=vals[rr(0,vals.length-1)];
+    if(w!==pct) wrongs.add(w+'%');
+  }
+  var options=shuffle([correct].concat(Array.from(wrongs)));
+  var display='<div class="visual-display">'+percentSVG(pct,160)+'</div>';
+  return{type:'choice',qText:'כמה אחוז <strong>צבוע</strong> בריבוע?',display:display,answer:correct,options:options,colClass:'cols-4',explain:'צבועים '+pct+' משבצות מתוך 100 = '+pct+'%'};
+}
+
+/* Type 4: qDailyLife — real life percent questions */
+function qDailyLife(){
+  var items=[
+    {q:'מה הכוונה ב"הנחה של 50%"?',a:'חצי מהמחיר',w:['רבע מהמחיר','שלושה רבעים מהמחיר','המחיר המלא'],ex:'50% = חצי, אז משלמים רק חצי מהמחיר'},
+    {q:'מה הכוונה ב"גבינה 5%"?',a:'5 גרם שומן בכל 100 גרם',w:['5% מהגבינה היא חלב','יש 5 חתיכות','הגבינה שוקלת 5 גרם'],ex:'5% = 5 מתוך 100 גרם שומן'},
+    {q:'סוללה ב-25% — כמה נשאר?',a:'רבע',w:['חצי','שלושה רבעים','כמעט ריקה'],ex:'25% = רבע = 1/4'},
+    {q:'ציון 100% במבחן — מה זה אומר?',a:'הכל נכון',w:['חצי נכון','רק רבע','רוב התשובות'],ex:'100% = הכל = כל התשובות נכונות'},
+    {q:'מה הכוונה ב"75% מהכיתה נוכחים"?',a:'שלושה רבעים נוכחים',w:['חצי נוכחים','רבע נוכחים','כולם נוכחים'],ex:'75% = 3/4 = שלושה רבעים'},
+    {q:'מה הכוונה ב"10% הנחה"?',a:'עשירית מהמחיר הורידו',w:['חצי מהמחיר','רבע מהמחיר','כל המחיר'],ex:'10% = עשירית = 1/10 מהמחיר'},
+    {q:'בחנות כתוב "50% + 50% הנחה". זה אומר חינם?',a:'לא, 50% מהמחיר החדש',w:['כן, הכל חינם','משלמים רבע','משלמים 10%'],ex:'50% מתוך 50% = 25% מהמחיר המקורי, לא 0%'},
+    {q:'מילאנו 50% מהבריכה — כמה צריך עוד?',a:'עוד חצי',w:['עוד רבע','עוד שלושה רבעים','הבריכה מלאה'],ex:'50% = חצי, אז חסר עוד חצי'}
+  ];
+  var item=items[rr(0,items.length-1)];
+  var options=shuffle([item.a].concat(item.w));
+  return{type:'choice',qText:item.q,display:'',answer:item.a,options:options,colClass:'cols-2',explain:item.ex};
+}
+
+/* Type 5: qKnownValues — quick drill on known percent-fraction pairs */
+function qKnownValues(){
+  var extended=[
+    {pct:50,frac:'1/2',fracH:fracHTML(1,2)},
+    {pct:25,frac:'1/4',fracH:fracHTML(1,4)},
+    {pct:75,frac:'3/4',fracH:fracHTML(3,4)},
+    {pct:10,frac:'1/10',fracH:fracHTML(1,10)},
+    {pct:20,frac:'1/5',fracH:fracHTML(1,5)},
+    {pct:100,frac:'1 שלם',fracH:'1 שלם'}
+  ];
+  var mode=rr(0,1);
+  var pair=extended[rr(0,extended.length-1)];
+  if(mode===0){
+    /* pct -> frac */
+    var correct=pair.frac;
+    var wrongs=[];
+    for(var i=0;i<extended.length;i++){
+      if(extended[i].frac!==correct) wrongs.push(extended[i].frac);
+    }
+    wrongs=shuffle(wrongs).slice(0,3);
+    var options=shuffle([correct].concat(wrongs));
+    return{type:'choice',qText:'<strong>'+pair.pct+'%</strong> = ?',display:'',answer:correct,options:options,colClass:'cols-4',explain:pair.pct+'% = '+pair.frac};
+  }else{
+    /* frac -> pct */
+    var correct=pair.pct+'%';
+    var wrongs=[];
+    for(var i=0;i<extended.length;i++){
+      if(extended[i].pct!==pair.pct) wrongs.push(extended[i].pct+'%');
+    }
+    wrongs=shuffle(wrongs).slice(0,3);
+    var options=shuffle([correct].concat(wrongs));
+    return{type:'choice',qText:pair.fracH+' = כמה אחוז?',display:'',answer:correct,options:options,colClass:'cols-4',explain:pair.frac+' = '+pair.pct+'%'};
+  }
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'אחוז = מאית (ויזואל)',instruction:'ספרו כמה משבצות צבועות מתוך 100',
+   tip:'<strong>אחוז</strong> = חלק מתוך 100.\nריבוע מחולק ל-100 משבצות. ספרו כמה צבועות!',
+   example:'30 משבצות צבועות מתוך 100 = <span class="math">30%</span>',
+   gen:function(){return qVisualPercent()}},
+
+  {title:'אחוז → שבר',instruction:'המירו אחוזים לשברים!',
+   tip:'<strong>50%</strong> = חצי = '+fracHTML(1,2)+'\n<strong>25%</strong> = רבע = '+fracHTML(1,4)+'\n<strong>10%</strong> = עשירית = '+fracHTML(1,10),
+   example:'<span class="math">50%</span> = '+fracHTML(1,2)+' (חצי)\n<span class="math">25%</span> = '+fracHTML(1,4)+' (רבע)',
+   gen:function(){return qPercentToFraction()}},
+
+  {title:'שבר → אחוז',instruction:'המירו שברים לאחוזים!',
+   tip:fracHTML(1,2)+' = <strong>50%</strong>\n'+fracHTML(1,4)+' = <strong>25%</strong>\n'+fracHTML(3,4)+' = <strong>75%</strong>',
+   example:fracHTML(1,10)+' = <span class="math">10%</span>\n'+fracHTML(1,5)+' = <span class="math">20%</span>',
+   gen:function(){return qFractionToPercent()}},
+
+  {title:'ערכים בעל פה',instruction:'תרגול מהיר — אחוזים ושברים!',
+   tip:'שננו את הזוגות:\n50% = '+fracHTML(1,2)+' | 25% = '+fracHTML(1,4)+' | 75% = '+fracHTML(3,4)+'\n10% = '+fracHTML(1,10)+' | 20% = '+fracHTML(1,5)+' | 100% = שלם',
+   example:'<span class="math">75%</span> = '+fracHTML(3,4)+' (שלושה רבעים)',
+   gen:function(){return qKnownValues()}},
+
+  {title:'אחוזים בחיים',instruction:'אחוזים בחיי היום-יום!',
+   tip:'אחוזים מופיעים בכל מקום:\n• הנחות בחנויות\n• אחוז שומן במזון\n• סוללה בטלפון\n• ציונים במבחנים',
+   example:'הנחה 50% = משלמים רק חצי מהמחיר\nגבינה 5% = 5 גרם שומן בכל 100 גרם',
+   gen:function(){return qDailyLife()}},
+
+  {title:'מעורבב — כל הסוגים!',instruction:'שאלות מגוונות על אחוזים!',
+   tip:'שלבו את כל מה שלמדתם:\n• אחוז = חלק מתוך 100\n• 50%='+fracHTML(1,2)+' | 25%='+fracHTML(1,4)+' | 75%='+fracHTML(3,4),
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[qVisualPercent,qPercentToFraction,qFractionToPercent,qKnownValues,qDailyLife];
+     return types[rr(0,4)]();
+   }},
+
+  {title:'תרגול — המרות',instruction:'חזרו על המרות אחוז-שבר!',
+   tip:'המרה = מעבר בין צורות:\n50% ↔ '+fracHTML(1,2)+' ↔ חצי',
+   example:'<span class="math">20%</span> = '+fracHTML(1,5)+' (חמישית)',
+   gen:function(){
+     var types=[qPercentToFraction,qFractionToPercent,qKnownValues];
+     return types[rr(0,2)]();
+   }},
+
+  {title:'תרגול — ויזואל',instruction:'זהו אחוזים מהריבוע!',
+   tip:'ספרו את המשבצות הצבועות.\nכל שורה = 10 משבצות = 10%',
+   example:'5 שורות צבועות = 50 משבצות = <span class="math">50%</span>',
+   gen:function(){return qVisualPercent()}},
+
+  {title:'אתגר — מעורבב',instruction:'שאלות מגוונות ומאתגרות!',
+   tip:'השתמשו בכל הכלים שלמדתם!',
+   example:'💪 אתם יכולים!',
+   gen:function(){
+     var types=[qVisualPercent,qPercentToFraction,qFractionToPercent,qKnownValues,qDailyLife];
+     return types[rr(0,4)]();
+   }},
+
+  {title:'מכל הסוגים',instruction:'חזרה כללית!',
+   tip:'כל שאלה מסוג אחר — היו מוכנים!',
+   example:'🎲 הפתעה בכל שאלה!',
+   gen:function(){
+     var types=[qVisualPercent,qPercentToFraction,qFractionToPercent,qKnownValues,qDailyLife];
+     return types[rr(0,4)]();
+   }},
+
+  {title:'חיזוק — ויזואל + המרות',instruction:'שילוב ריבועים והמרות!',
+   tip:'ספרו משבצות והמירו לשברים!',
+   example:'40 משבצות = 40% = '+fracHTML(2,5),
+   gen:function(){
+     var types=[qVisualPercent,qPercentToFraction,qFractionToPercent];
+     return types[rr(0,2)]();
+   }},
+
+  {title:'חיזוק — חיי יום-יום',instruction:'אחוזים מהחיים האמיתיים!',
+   tip:'אחוזים בכל מקום — הנחות, אוכל, סוללות!',
+   example:'🛒 50% הנחה = חצי מחיר!',
+   gen:function(){
+     var types=[qDailyLife,qKnownValues];
+     return types[rr(0,1)]();
+   }},
+
+  {title:'אתגר מתקדם',instruction:'שאלות ברמה גבוהה!',
+   tip:'שלבו הכל — ויזואל, המרות, חיי יום-יום!',
+   example:'🏆 בהצלחה!',
+   gen:function(){
+     var types=[qVisualPercent,qPercentToFraction,qFractionToPercent,qKnownValues,qDailyLife];
+     return types[rr(0,4)]();
+   }},
+
+  {title:'סופר אתגר!',instruction:'הרמה הכי קשה!',
+   tip:'🏆 אתם מומחים לאחוזים!',
+   example:'🌟 💪 🏆',
+   gen:function(){
+     var types=[qVisualPercent,qPercentToFraction,qFractionToPercent,qKnownValues,qDailyLife];
+     return types[rr(0,4)]();
+   }},
+
+  {title:'מאסטר!',instruction:'הרמה האחרונה — כל הסוגים!',
+   tip:'🏆 אין עליכם! שלטתם באחוזים!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[qVisualPercent,qPercentToFraction,qFractionToPercent,qKnownValues,qDailyLife];
+     return types[rr(0,4)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)"><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>קנה מידה — כיתה ו' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#16a34a;--primary-dark:#15803d;--primary-light:#dcfce7;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#15803d 0%,#16a34a 50%,#22c55e 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(22,163,74,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:2.2rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center;direction:ltr;unicode-bidi:embed}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:1.8rem;padding:6px 20px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🗺️</div><div><h1>קנה מידה</h1><div class="subtitle">כיתה ו' — מפות, תרשימים והגדלה/הקטנה</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">קנה מידה — כיתה ו' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>🗺️ קנה מידה</h2><p><strong>מהו קנה מידה?</strong> קנה מידה הוא היחס בין המרחק במפה (או בתרשים) לבין המרחק האמיתי במציאות.</p><p>🔹 <strong>קנה מידה מקטין</strong> (לדוגמה <span class="math">1:100,000</span>) — 1 ס"מ במפה = 100,000 ס"מ = 1 ק"מ במציאות<br>🔹 <strong>קנה מידה מגדיל</strong> (לדוגמה <span class="math">3:1</span>) — עצם של 1 ס"מ מצויר כ-3 ס"מ בתרשים</p><p>🔹 <strong>שטח וקנה מידה</strong> — אם קנה מידה הוא <span class="math">1:k</span>, אז שטח אמיתי = שטח במפה כפול <span class="math">k<sup>2</sup></span></p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function fmtNum(n){return n.toLocaleString('he-IL')}
+
+/* ========== SCALE HELPERS ========== */
+/* Common scales: value is cm-per-cm (e.g. 1:100,000 means 100000) */
+var mapScales=[
+  {label:'1:10,000', factor:10000, kmFactor:0.1},
+  {label:'1:25,000', factor:25000, kmFactor:0.25},
+  {label:'1:50,000', factor:50000, kmFactor:0.5},
+  {label:'1:100,000', factor:100000, kmFactor:1},
+  {label:'1:200,000', factor:200000, kmFactor:2},
+  {label:'1:250,000', factor:250000, kmFactor:2.5},
+  {label:'1:500,000', factor:500000, kmFactor:5}
+];
+
+/* Enlargement scales */
+var enlargeScales=[2,3,4,5,6,8,10];
+
+/* Area scales (simpler ones for elementary) */
+var areaScaleFactors=[
+  {label:'1:10', factor:10, sqFactor:100},
+  {label:'1:100', factor:100, sqFactor:10000},
+  {label:'1:20', factor:20, sqFactor:400},
+  {label:'1:50', factor:50, sqFactor:2500},
+  {label:'1:5', factor:5, sqFactor:25}
+];
+
+/* Generate wrong options for numeric answers (avoid duplicates, avoid correct) */
+function makeWrongs(correct, count, minVal, maxVal){
+  var wrongs=new Set();
+  /* strategic wrongs */
+  if(correct*2<=maxVal) wrongs.add(correct*2);
+  if(correct/2>=minVal && correct/2===Math.floor(correct/2)) wrongs.add(correct/2);
+  if(correct+1<=maxVal) wrongs.add(correct+1);
+  if(correct-1>=minVal) wrongs.add(correct-1);
+  if(correct+2<=maxVal) wrongs.add(correct+2);
+  if(correct*10<=maxVal) wrongs.add(correct*10);
+  if(correct/10>=minVal && correct/10===Math.floor(correct/10)) wrongs.add(correct/10);
+  wrongs.delete(correct);
+  wrongs.delete(0);
+  var arr=Array.from(wrongs).filter(function(v){return v>=minVal&&v<=maxVal});
+  shuffle(arr);
+  arr=arr.slice(0,count);
+  while(arr.length<count){
+    var v=rr(Math.max(1,minVal),maxVal);
+    if(v!==correct&&arr.indexOf(v)===-1) arr.push(v);
+  }
+  return arr;
+}
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: Map distance → Real distance */
+function qMapDistance(){
+  var sc=mapScales[rr(0,mapScales.length-1)];
+  var mapCm=rr(1,12);
+  var realKm=mapCm*sc.kmFactor;
+  /* format answer */
+  var correctStr;
+  if(realKm===Math.floor(realKm)) correctStr=fmtNum(realKm)+' ק"מ';
+  else correctStr=realKm.toFixed(1).replace(/\.0$/,'')+' ק"מ';
+  /* wrongs */
+  var wrongVals=makeWrongs(realKm,3,0.1,realKm*5);
+  var options=[correctStr];
+  for(var i=0;i<3;i++){
+    var wv=wrongVals[i];
+    var ws;
+    if(wv===Math.floor(wv)) ws=fmtNum(wv)+' ק"מ';
+    else ws=wv.toFixed(1)+' ק"מ';
+    if(ws!==correctStr) options.push(ws);
+  }
+  while(options.length<4){
+    var rv=rr(1,Math.max(20,Math.ceil(realKm*3)));
+    var rs=fmtNum(rv)+' ק"מ';
+    if(options.indexOf(rs)===-1) options.push(rs);
+  }
+  options=shuffle(options);
+  return{type:'choice',
+    qText:'קנה מידה <span class="math">'+sc.label+'</span>. מרחק במפה: <strong>'+mapCm+' ס"מ</strong>. מהו המרחק האמיתי?',
+    display:'<div class="num-display"><span class="big-num">'+mapCm+' ס"מ → ? ק"מ</span></div>',
+    answer:correctStr,options:options,colClass:'cols-2',
+    explain:mapCm+' ס"מ × '+fmtNum(sc.factor)+' = '+fmtNum(mapCm*sc.factor)+' ס"מ = '+correctStr};
+}
+
+/* Type 2: Real distance → Map distance */
+function qRealToMap(){
+  var sc=mapScales[rr(0,mapScales.length-1)];
+  var mapCm=rr(1,15);
+  var realKm=mapCm*sc.kmFactor;
+  var correctStr=mapCm+' ס"מ';
+  var wrongVals=makeWrongs(mapCm,3,1,mapCm*5);
+  var options=[correctStr];
+  for(var i=0;i<wrongVals.length&&options.length<4;i++){
+    var ws=wrongVals[i]+' ס"מ';
+    if(options.indexOf(ws)===-1) options.push(ws);
+  }
+  while(options.length<4){
+    var rv=rr(1,Math.max(20,mapCm*3));
+    var rs=rv+' ס"מ';
+    if(options.indexOf(rs)===-1) options.push(rs);
+  }
+  options=shuffle(options);
+  var realStr;
+  if(realKm===Math.floor(realKm)) realStr=fmtNum(realKm)+' ק"מ';
+  else realStr=realKm.toFixed(1)+' ק"מ';
+  return{type:'choice',
+    qText:'מרחק אמיתי: <strong>'+realStr+'</strong>. קנה מידה <span class="math">'+sc.label+'</span>. כמה ס"מ במפה?',
+    display:'<div class="num-display"><span class="big-num">'+realStr+' → ? ס"מ</span></div>',
+    answer:correctStr,options:options,colClass:'cols-2',
+    explain:realStr+' = '+fmtNum(realKm*100000)+' ס"מ. חלקי '+fmtNum(sc.factor)+' = '+correctStr};
+}
+
+/* Type 3: Enlargement scale */
+function qEnlargement(){
+  var ratio=enlargeScales[rr(0,enlargeScales.length-1)];
+  var realCm=rr(1,10);
+  var drawCm=realCm*ratio;
+  var correctStr=fmtNum(drawCm)+' ס"מ';
+  var wrongVals=makeWrongs(drawCm,3,1,drawCm*3);
+  var options=[correctStr];
+  for(var i=0;i<wrongVals.length&&options.length<4;i++){
+    var ws=fmtNum(wrongVals[i])+' ס"מ';
+    if(options.indexOf(ws)===-1) options.push(ws);
+  }
+  while(options.length<4){
+    var rv=rr(1,Math.max(30,drawCm*2));
+    var rs=fmtNum(rv)+' ס"מ';
+    if(options.indexOf(rs)===-1) options.push(rs);
+  }
+  options=shuffle(options);
+  return{type:'choice',
+    qText:'תרשים מגדיל <span class="math">'+ratio+':1</span>. גודל אמיתי: <strong>'+realCm+' ס"מ</strong>. כמה בתרשים?',
+    display:'<div class="num-display"><span class="big-num">'+realCm+' ס"מ × '+ratio+' = ?</span></div>',
+    answer:correctStr,options:options,colClass:'cols-2',
+    explain:realCm+' × '+ratio+' = '+correctStr};
+}
+
+/* Type 4: Area and scale */
+function qAreaScale(){
+  var sc=areaScaleFactors[rr(0,areaScaleFactors.length-1)];
+  var mapArea=rr(1,5);
+  var realArea=mapArea*sc.sqFactor;
+  var correctStr=fmtNum(realArea)+' סמ"ר';
+  var wrongVals=makeWrongs(realArea,3,1,realArea*5);
+  var options=[correctStr];
+  for(var i=0;i<wrongVals.length&&options.length<4;i++){
+    var ws=fmtNum(wrongVals[i])+' סמ"ר';
+    if(options.indexOf(ws)===-1) options.push(ws);
+  }
+  while(options.length<4){
+    var rv=rr(Math.max(1,Math.floor(realArea/5)),realArea*3);
+    var rs=fmtNum(rv)+' סמ"ר';
+    if(options.indexOf(rs)===-1) options.push(rs);
+  }
+  options=shuffle(options);
+  return{type:'choice',
+    qText:'קנה מידה <span class="math">'+sc.label+'</span>. שטח במפה: <strong>'+mapArea+' סמ"ר</strong>. מהו השטח האמיתי?',
+    display:'<div class="num-display"><span class="big-num">'+mapArea+' סמ"ר → ? סמ"ר</span></div>',
+    answer:correctStr,options:options,colClass:'cols-2',
+    explain:'יחס שטחים = '+fmtNum(sc.factor)+'<sup>2</sup> = '+fmtNum(sc.sqFactor)+'. אז '+mapArea+' × '+fmtNum(sc.sqFactor)+' = '+correctStr};
+}
+
+/* Type 5: Write the scale */
+function qWriteScale(){
+  var factors=[1000,5000,10000,25000,50000,100000,200000,250000,500000];
+  var f=factors[rr(0,factors.length-1)];
+  var correctStr='1:'+fmtNum(f);
+  /* Generate wrong scales */
+  var wrongFactors=new Set();
+  wrongFactors.add(f*10);wrongFactors.add(f/10);wrongFactors.add(f*2);wrongFactors.add(f/2);
+  wrongFactors.delete(f);wrongFactors.delete(0);
+  var wArr=Array.from(wrongFactors).filter(function(v){return v>=100&&v===Math.floor(v)}).slice(0,3);
+  var options=[correctStr];
+  for(var i=0;i<wArr.length&&options.length<4;i++){
+    var ws='1:'+fmtNum(wArr[i]);
+    if(options.indexOf(ws)===-1) options.push(ws);
+  }
+  while(options.length<4){
+    var rf=factors[rr(0,factors.length-1)];
+    var rs='1:'+fmtNum(rf);
+    if(options.indexOf(rs)===-1) options.push(rs);
+  }
+  options=shuffle(options);
+  return{type:'choice',
+    qText:'1 ס"מ במפה = <strong>'+fmtNum(f)+' ס"מ</strong> במציאות. מהו קנה המידה?',
+    display:'<div class="num-display"><span class="big-num">1 ס"מ = '+fmtNum(f)+' ס"מ</span></div>',
+    answer:correctStr,options:options,colClass:'cols-2',
+    explain:'1 ס"מ מייצג '+fmtNum(f)+' ס"מ, אז קנה המידה הוא '+correctStr};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'מפה → מציאות',instruction:'חשבו את המרחק האמיתי לפי קנה המידה',
+   tip:'בקנה מידה <strong>1:100,000</strong> כל ס"מ במפה שווה ל-100,000 ס"מ = <strong>1 ק"מ</strong> במציאות.\nכדי למצוא את המרחק האמיתי — כופלים את המרחק במפה בגורם קנה המידה.',
+   example:'קנה מידה <span class="math">1:100,000</span>, מרחק במפה 4 ס"מ\n4 × 100,000 = 400,000 ס"מ = <strong>4 ק"מ</strong>',
+   gen:function(){return qMapDistance()}},
+
+  {title:'מציאות → מפה',instruction:'חשבו כמה ס"מ במפה',
+   tip:'כדי למצוא את המרחק במפה — <strong>מחלקים</strong> את המרחק האמיתי בגורם קנה המידה.\nזכרו: 1 ק"מ = 100,000 ס"מ.',
+   example:'מרחק אמיתי 7 ק"מ, קנה מידה <span class="math">1:100,000</span>\n7 ק"מ = 700,000 ס"מ. חלקי 100,000 = <strong>7 ס"מ</strong>',
+   gen:function(){return qRealToMap()}},
+
+  {title:'תרשים מגדיל',instruction:'חשבו את הגודל בתרשים מגדיל',
+   tip:'בתרשים מגדיל <strong>3:1</strong> כל ס"מ אמיתי מצויר כ-3 ס"מ.\nכופלים את הגודל האמיתי ביחס ההגדלה.',
+   example:'תרשים <span class="math">3:1</span>, עצם 2 ס"מ\n2 × 3 = <strong>6 ס"מ</strong> בתרשים',
+   gen:function(){return qEnlargement()}},
+
+  {title:'שטח ויחס',instruction:'חשבו שטח אמיתי לפי שטח במפה',
+   tip:'אם קנה המידה הוא <strong>1:k</strong>, אז יחס השטחים הוא <strong>1:k²</strong>.\nלדוגמה: קנה מידה 1:10 → יחס שטחים 1:100.',
+   example:'קנה מידה <span class="math">1:100</span>, שטח במפה 1 סמ"ר\nיחס שטחים: 100² = 10,000\n1 × 10,000 = <strong>10,000 סמ"ר</strong>',
+   gen:function(){return qAreaScale()}},
+
+  {title:'כתיבת קנה מידה',instruction:'כתבו את קנה המידה מתוך הנתונים',
+   tip:'קנה מידה נכתב כיחס <strong>1:מספר</strong>.\nהמספר אומר כמה ס"מ במציאות מייצג 1 ס"מ במפה.',
+   example:'1 ס"מ במפה = 50,000 ס"מ במציאות\nקנה המידה: <span class="math">1:50,000</span>',
+   gen:function(){return qWriteScale()}},
+
+  {title:'מפה ומציאות — מעורבב',instruction:'שאלות מגוונות על מפה ← → מציאות',
+   tip:'זכרו:\n• מפה → מציאות: <strong>כופלים</strong> בגורם קנה המידה\n• מציאות → מפה: <strong>מחלקים</strong> בגורם קנה המידה',
+   example:'תרגלו את שני הכיוונים! 🗺️',
+   gen:function(){return[qMapDistance,qRealToMap][rr(0,1)]()}},
+
+  {title:'הגדלה וכתיבה — מעורבב',instruction:'תרשימים מגדילים וכתיבת קנה מידה',
+   tip:'• תרשים מגדיל k:1 → כופלים ב-k\n• קנה מידה = 1 : (ס"מ אמיתי לכל ס"מ במפה)',
+   example:'שלבו בין הגדלה לכתיבת קנה מידה! 📐',
+   gen:function(){return[qEnlargement,qWriteScale][rr(0,1)]()}},
+
+  {title:'שטח + מציאות',instruction:'שאלות שטח ומרחקים',
+   tip:'שטח = יחס בריבוע!\nמרחק = יחס פשוט.',
+   example:'שימו לב: שטח × k², מרחק × k',
+   gen:function(){return[qAreaScale,qMapDistance,qRealToMap][rr(0,2)]()}},
+
+  {title:'כל הסוגים!',instruction:'שאלות מכל הסוגים — הכנה לאתגר!',
+   tip:'שלבו את כל הכלים:\n• מפה ← → מציאות\n• הגדלה\n• שטח\n• כתיבת קנה מידה',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){return[qMapDistance,qRealToMap,qEnlargement,qAreaScale,qWriteScale][rr(0,4)]()}},
+
+  {title:'אתגר — מרחקים',instruction:'שאלות מרחק מאתגרות!',
+   tip:'שימו לב לקנה מידה — הגורם משתנה בכל שאלה!',
+   example:'💪 בהצלחה!',
+   gen:function(){return[qMapDistance,qRealToMap][rr(0,1)]()}},
+
+  {title:'אתגר — שטחים',instruction:'חישובי שטח עם יחסים שונים!',
+   tip:'זכרו: שטח = יחס בריבוע!\n1:10 → 1:100\n1:100 → 1:10,000',
+   example:'💪 אתם יכולים!',
+   gen:function(){return qAreaScale()}},
+
+  {title:'אתגר — הגדלות',instruction:'תרשימים מגדילים עם יחסים שונים!',
+   tip:'כפלו את הגודל האמיתי ביחס ההגדלה.',
+   example:'📐 קדימה!',
+   gen:function(){return qEnlargement()}},
+
+  {title:'אתגר — מעורבב!',instruction:'כל הסוגים — רמה מאתגרת!',
+   tip:'שלבו את כל הידע שלכם!',
+   example:'🏆 כמעט סיימתם!',
+   gen:function(){return[qMapDistance,qRealToMap,qEnlargement,qAreaScale,qWriteScale][rr(0,4)]()}},
+
+  {title:'סופר אתגר!',instruction:'שאלות ברמה הכי גבוהה!',
+   tip:'🏆 אתם מומחים לקנה מידה!',
+   example:'🌟 💪 🏆',
+   gen:function(){return[qMapDistance,qRealToMap,qEnlargement,qAreaScale,qWriteScale][rr(0,4)]()}},
+
+  {title:'מאסטר!',instruction:'הרמה האחרונה — אלופי קנה מידה!',
+   tip:'🏆 אין עליכם! שלטתם בקנה מידה!',
+   example:'🌟🌟🌟',
+   gen:function(){return[qMapDistance,qRealToMap,qEnlargement,qAreaScale,qWriteScale][rr(0,4)]()}}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)"><span dir="ltr" style="unicode-bidi:embed">'+opt+'</span></button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>

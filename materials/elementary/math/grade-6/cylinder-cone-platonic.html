@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>גליל, חרוט וגופים משוכללים — כיתה ו' | בועז חזן</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap');
+:root{--primary:#059669;--primary-dark:#047857;--primary-light:#d1fae5;--accent:#f59e0b;--accent-dark:#d97706;--success:#10b981;--success-light:#d1fae5;--error:#ef4444;--error-light:#fee2e2;--text:#1e293b;--text-light:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0;--radius:16px;--radius-sm:10px;--shadow:0 2px 8px rgba(0,0,0,.08);--shadow-lg:0 8px 24px rgba(0,0,0,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Heebo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;-webkit-font-smoothing:antialiased}
+.app-header{background:linear-gradient(135deg,#047857 0%,#059669 50%,#10b981 100%);color:#fff;padding:20px 24px 16px;position:sticky;top:0;z-index:100;box-shadow:0 4px 16px rgba(5,150,105,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.header-title{display:flex;align-items:center;gap:10px}.header-icon{width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}.header-title h1{font-size:1.3rem;font-weight:800}.header-title .subtitle{font-size:.8rem;opacity:.85}.header-actions{display:flex;gap:8px}.header-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}.header-btn:hover{background:rgba(255,255,255,.3)}
+.progress-bar{background:rgba(255,255,255,.2);height:6px;border-radius:3px;overflow:hidden}.progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s;width:0}.progress-stats{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;opacity:.85}
+.tabs-container{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;overflow-x:auto;scrollbar-width:none}.tabs-container::-webkit-scrollbar{display:none}.tabs-row{display:flex;gap:6px;min-width:max-content}.tab{min-width:40px;height:36px;border-radius:8px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:.85rem;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0 4px}.tab:hover{border-color:var(--primary);color:var(--primary)}.tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab.done{background:var(--success-light);color:var(--success);border-color:var(--success)}.tab.done.perfect::after{content:'⭐';font-size:.6rem;margin-right:2px}
+.main-content{max-width:700px;margin:0 auto;padding:20px 16px 100px}.level-info{text-align:center;margin-bottom:16px}.level-badge{display:inline-block;background:var(--primary-light);color:var(--primary);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;margin-bottom:8px}.level-title{font-size:1.3rem;font-weight:800;margin-bottom:4px}.level-instruction{font-size:.9rem;color:var(--text-light)}
+.level-tip{background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #fcd34d;border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;cursor:pointer}.level-tip.collapsed .tip-body{display:none}.tip-header{display:flex;align-items:center;justify-content:space-between;font-size:.9rem;font-weight:700;color:var(--accent-dark)}.tip-toggle{font-size:.75rem;color:var(--text-light);font-weight:500}.tip-body{margin-top:8px}.tip-text{font-size:.88rem;color:var(--text);line-height:1.7;margin-bottom:6px}.tip-example{background:rgba(255,255,255,.7);border-radius:6px;padding:10px 14px;font-size:.88rem;color:var(--text-light);line-height:1.7;white-space:pre-line}.math{direction:ltr;display:inline;unicode-bidi:embed;font-weight:700;color:var(--text)}
+.questions-list{display:flex;flex-direction:column;gap:16px}
+.question-card{background:var(--card);border-radius:var(--radius);border:2px solid var(--border);padding:24px;box-shadow:var(--shadow);transition:all .3s;position:relative}.question-card.correct{border-color:var(--success);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.question-card.wrong{border-color:var(--error);animation:shake .4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.question-number{position:absolute;top:12px;left:12px;width:28px;height:28px;background:var(--primary-light);color:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}.question-card.correct .question-number{background:var(--success);color:#fff}
+.q-text{font-size:1.05rem;font-weight:700;text-align:center;margin-bottom:16px;color:var(--primary)}
+.num-display{text-align:center;margin:16px 0}
+.big-num{font-size:3rem;font-weight:900;color:var(--text);display:inline-block;background:var(--primary-light);border-radius:16px;padding:8px 28px;min-width:80px;border:3px solid var(--primary);direction:ltr;unicode-bidi:embed}
+.big-num .hl{color:var(--error);text-decoration:underline;text-underline-offset:6px}
+.answer-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.answer-options.cols-4{grid-template-columns:repeat(4,1fr)}
+.answer-options.cols-3{grid-template-columns:repeat(3,1fr)}
+.answer-btn{padding:14px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card);font-family:inherit;font-size:1.15rem;font-weight:700;color:var(--text);cursor:pointer;transition:all .2s;text-align:center}.answer-btn:hover:not(.disabled){border-color:var(--primary);background:var(--primary-light);transform:scale(1.02)}.answer-btn:active:not(.disabled){transform:scale(.97)}.answer-btn.correct-choice{background:var(--success);color:#fff;border-color:var(--success)}.answer-btn.wrong-choice{background:var(--error-light);color:var(--error);border-color:var(--error)}.answer-btn.disabled{opacity:.5;cursor:default}
+.feedback{text-align:center;margin-top:10px;font-size:1rem;font-weight:700;opacity:0;transition:opacity .3s}.feedback.show{opacity:1}.feedback.correct-fb{color:var(--success)}.feedback.wrong-fb{color:var(--error)}
+.level-complete{background:var(--card);border-radius:var(--radius);border:2px solid var(--success);padding:32px 24px;text-align:center;box-shadow:var(--shadow-lg);display:none}.level-complete.show{display:block;animation:popIn .4s}@keyframes popIn{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}.lc-emoji{font-size:3.5rem;margin-bottom:12px}.lc-title{font-size:1.5rem;font-weight:800;margin-bottom:4px}.lc-sub{color:var(--text-light);margin-bottom:8px}.lc-score{display:flex;justify-content:center;gap:24px;margin:16px 0}.lc-score-item{text-align:center}.lc-score-num{font-size:2rem;font-weight:900}.lc-score-label{font-size:.8rem;color:var(--text-light)}.lc-buttons{display:flex;gap:12px;justify-content:center;margin-top:20px}.lc-btn{padding:12px 28px;border-radius:10px;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer}.lc-btn-primary{background:var(--primary);color:#fff}.lc-btn-primary:hover{background:var(--primary-dark)}.lc-btn-outline{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}.modal-overlay.show{display:flex}.modal{background:var(--card);border-radius:var(--radius);padding:28px 24px;max-width:420px;width:100%;max-height:80vh;overflow-y:auto;animation:popIn .3s}.modal h2{font-size:1.3rem;font-weight:800;margin-bottom:16px}.modal p{color:var(--text-light);margin-bottom:12px;line-height:1.7;font-size:.95rem}.modal-close{width:100%;padding:12px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;margin-top:12px}
+.print-overlay{display:none}@media print{.app-header,.tabs-container,.level-tip,.level-complete,.modal-overlay{display:none!important}.main-content{padding:0;max-width:100%}.print-overlay{display:block!important;text-align:center;padding:20px 0;font-size:1.3rem;font-weight:800;border-bottom:2px solid #000;margin-bottom:20px}.question-card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}body{background:#fff}}
+@media(max-width:480px){.answer-options{grid-template-columns:repeat(2,1fr)!important}.answer-btn{font-size:1rem;padding:12px}.question-card{padding:18px 16px}.header-title h1{font-size:1.1rem}.big-num{font-size:2.2rem;padding:6px 20px}}
+</style>
+</head>
+<body>
+<div class="app-header"><div class="header-top"><div class="header-title"><div class="header-icon">🔵</div><div><h1>גליל, חרוט וגופים משוכללים</h1><div class="subtitle">כיתה ו' — פריסות, חיתוכים ו-5 גופים משוכללים</div></div></div><div class="header-actions"><button class="header-btn" onclick="showHelp()">❓</button><button class="header-btn" onclick="window.print()">🖨️</button></div></div><div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div><div class="progress-stats"><span>✅ <span id="totalCorrect">0</span></span><span>❌ <span id="totalWrong">0</span></span><span id="progressText">רמה 1 מתוך 15</span></div></div>
+<div class="tabs-container"><div class="tabs-row" id="tabsRow"></div></div>
+<div class="main-content">
+<div class="print-overlay">גליל, חרוט וגופים משוכללים — כיתה ו' | בועז חזן</div>
+<div class="level-info"><span class="level-badge" id="levelBadge">רמה 1</span><h2 class="level-title" id="levelTitle"></h2><p class="level-instruction" id="levelInstruction"></p></div>
+<div class="level-tip" id="levelTip" onclick="toggleTip()"><div class="tip-header"><span>💡 טיפ</span><span class="tip-toggle" id="tipToggle">▲ הסתר</span></div><div class="tip-body"><p class="tip-text" id="tipText"></p><div class="tip-example" id="tipExample"></div></div></div>
+<div class="questions-list" id="questionsList"></div>
+<div class="level-complete" id="levelComplete"><div class="lc-emoji" id="lcEmoji">🎉</div><div class="lc-title" id="lcTitle"></div><div class="lc-sub" id="lcSub"></div><div class="lc-score"><div class="lc-score-item"><div class="lc-score-num" id="lcCorrect" style="color:var(--success)">0</div><div class="lc-score-label">נכון</div></div><div class="lc-score-item"><div class="lc-score-num" id="lcWrong" style="color:var(--error)">0</div><div class="lc-score-label">שגוי</div></div></div><div class="lc-buttons"><button class="lc-btn lc-btn-primary" onclick="nextLevel()">הרמה הבאה ←</button><button class="lc-btn lc-btn-outline" onclick="retry()">נסו שוב</button></div></div>
+</div>
+<div class="modal-overlay" id="helpModal" onclick="closeHelp(event)"><div class="modal" onclick="event.stopPropagation()"><h2>🔵 גליל, חרוט וגופים משוכללים</h2><p><strong>גליל (צילינדר)</strong> — גוף עגול עם 2 בסיסים עגולים (מעגלים) ומעטפת מלבנית. פריסת גליל: מלבן + 2 עיגולים. לגליל אין קדקודים ואין קשתות (מקצועות ישרות).</p><p><strong>חרוט (קונוס)</strong> — גוף עגול עם בסיס עגול אחד וקודקוד אחד בראש. פריסת חרוט: גזרת מעגל (סקטור) + עיגול. לחרוט קודקוד אחד, אין קשתות ישרות.</p><p><strong>5 גופים משוכללים (מוצקי אפלטון)</strong> — גופים שכל הפאות שלהם מצולעים משוכללים (מצולעים שווי-צלעות ושווי-זוויות) זהים:</p><p>🔸 <strong>ארבעון (טטרהדרון)</strong> — 4 פאות משולש שווה-צלעות, 4 קודקודים, 6 צלעות<br>🔸 <strong>קובייה (הקסהדרון)</strong> — 6 פאות ריבועיות, 8 קודקודים, 12 צלעות<br>🔸 <strong>תמניון (אוקטהדרון)</strong> — 8 פאות משולש שווה-צלעות, 6 קודקודים, 12 צלעות<br>🔸 <strong>תריסריון (דודקהדרון)</strong> — 12 פאות מחומש משוכלל, 20 קודקודים, 30 צלעות<br>🔸 <strong>עשריון (איקוסהדרון)</strong> — 20 פאות משולש שווה-צלעות, 12 קודקודים, 30 צלעות</p><p>15 רמות — מהקל אל הקשה!</p><button class="modal-close" onclick="document.getElementById('helpModal').classList.remove('show')">הבנתי!</button></div></div>
+
+<script>
+/* ========== UTILITIES ========== */
+function rr(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+
+/* ========== DATA ========== */
+var platonic=[
+  {name:'ארבעון (טטרהדרון)',faces:4,vertices:4,edges:6,faceShape:'משולש שווה-צלעות',faceShort:'משולשות'},
+  {name:'קובייה (הקסהדרון)',faces:6,vertices:8,edges:12,faceShape:'ריבוע',faceShort:'ריבועיות'},
+  {name:'תמניון (אוקטהדרון)',faces:8,vertices:6,edges:12,faceShape:'משולש שווה-צלעות',faceShort:'משולשות'},
+  {name:'תריסריון (דודקהדרון)',faces:12,vertices:20,edges:30,faceShape:'מחומש משוכלל',faceShort:'מחומשות'},
+  {name:'עשריון (איקוסהדרון)',faces:20,vertices:12,edges:30,faceShape:'משולש שווה-צלעות',faceShort:'משולשות'}
+];
+
+var bodyEmojis={
+  'ארבעון (טטרהדרון)':'🔺',
+  'קובייה (הקסהדרון)':'🟦',
+  'תמניון (אוקטהדרון)':'🔷',
+  'תריסריון (דודקהדרון)':'⬠',
+  'עשריון (איקוסהדרון)':'🔻'
+};
+
+/* ========== QUESTION GENERATORS ========== */
+
+/* Type 1: Cylinder net */
+function qCylinderNet(){
+  var correct='מלבן + 2 עיגולים';
+  var options=shuffle([correct,'2 מלבנים + עיגול','3 עיגולים','מלבן + עיגול אחד']);
+  return{type:'choice',qText:'מהי <strong>פריסת גליל</strong>?',display:'<div class="num-display"><span class="big-num" style="font-size:2.5rem">🔵 גליל</span></div>',answer:correct,options:options,colClass:'cols-2',explain:'פריסת גליל מורכבת ממלבן (המעטפת) ו-2 עיגולים (הבסיסים)'};
+}
+
+/* Type 2: Cone net */
+function qConeNet(){
+  var correct='גזרת מעגל + עיגול';
+  var options=shuffle([correct,'מלבן + עיגול','2 עיגולים','משולש + עיגול']);
+  return{type:'choice',qText:'מהי <strong>פריסת חרוט</strong>?',display:'<div class="num-display"><span class="big-num" style="font-size:2.5rem">🔺 חרוט</span></div>',answer:correct,options:options,colClass:'cols-2',explain:'פריסת חרוט מורכבת מגזרת מעגל (סקטור — המעטפת) ועיגול (הבסיס)'};
+}
+
+/* Type 3: Body properties (cylinder/cone) */
+function qBodyProperties(){
+  var questions=[
+    {q:'כמה <strong>בסיסים</strong> לגליל?',ans:'2',opts:['1','2','3','0'],explain:'לגליל 2 בסיסים עגולים (למעלה ולמטה)'},
+    {q:'כמה <strong>קודקודים</strong> לגליל?',ans:'0',opts:['0','2','4','1'],explain:'לגליל אין קודקודים — הוא עגול לחלוטין'},
+    {q:'כמה <strong>בסיסים</strong> לחרוט?',ans:'1',opts:['1','2','0','3'],explain:'לחרוט בסיס עגול אחד בתחתית'},
+    {q:'כמה <strong>קודקודים</strong> לחרוט?',ans:'1',opts:['0','1','2','3'],explain:'לחרוט קודקוד אחד בראש'},
+    {q:'האם לגליל יש <strong>צלעות ישרות</strong>?',ans:'לא',opts:['כן','לא'],explain:'לגליל אין צלעות ישרות — רק שפות עגולות'},
+    {q:'מהו הצורה של <strong>בסיס הגליל</strong>?',ans:'עיגול',opts:['עיגול','ריבוע','משולש','מלבן'],explain:'בסיס הגליל הוא עיגול'},
+    {q:'מהו הצורה של <strong>בסיס החרוט</strong>?',ans:'עיגול',opts:['עיגול','ריבוע','משולש','אליפסה'],explain:'בסיס החרוט הוא עיגול'},
+    {q:'מהו הצורה של <strong>מעטפת הגליל</strong> בפריסה?',ans:'מלבן',opts:['מלבן','עיגול','משולש','טרפז'],explain:'כשפורסים את מעטפת הגליל מקבלים מלבן'}
+  ];
+  var pick=questions[rr(0,questions.length-1)];
+  return{type:'choice',qText:pick.q,display:'',answer:pick.ans,options:shuffle(pick.opts.slice()),colClass:pick.opts.length===2?'cols-2':'cols-4',explain:pick.explain};
+}
+
+/* Type 4: How many Platonic solids */
+function qPlatonicSolids(){
+  var questions=[
+    {q:'כמה <strong>גופים משוכללים</strong> קיימים?',ans:'5',opts:['3','4','5','6'],explain:'קיימים בדיוק 5 גופים משוכללים (מוצקי אפלטון)'},
+    {q:'לאיזה גוף משוכלל יש <strong>פאות ריבועיות</strong>?',ans:'קובייה',opts:['קובייה','ארבעון','תמניון','עשריון'],explain:'הקובייה היא הגוף המשוכלל היחיד עם פאות ריבועיות'},
+    {q:'לאיזה גוף משוכלל יש <strong>פאות מחומשות</strong>?',ans:'תריסריון',opts:['תריסריון','עשריון','קובייה','תמניון'],explain:'התריסריון (דודקהדרון) הוא הגוף המשוכלל היחיד עם פאות מחומשות'},
+    {q:'מהו גוף משוכלל שכל פאותיו <strong>משולשים שווי-צלעות</strong> ויש לו <strong>4 פאות</strong>?',ans:'ארבעון',opts:['ארבעון','תמניון','עשריון','קובייה'],explain:'ארבעון (טטרהדרון) — 4 פאות משולש שווה-צלעות'},
+    {q:'איזה גוף משוכלל הוא <strong>הפשוט ביותר</strong> (מספר פאות מינימלי)?',ans:'ארבעון',opts:['ארבעון','קובייה','תמניון','תריסריון'],explain:'הארבעון הוא הגוף המשוכלל עם מספר הפאות הקטן ביותר — 4 פאות'},
+    {q:'לאיזה גוף משוכלל יש <strong>הכי הרבה פאות</strong>?',ans:'עשריון',opts:['עשריון','תריסריון','תמניון','קובייה'],explain:'לעשריון (איקוסהדרון) 20 פאות — הכי הרבה מבין הגופים המשוכללים'}
+  ];
+  var pick=questions[rr(0,questions.length-1)];
+  return{type:'choice',qText:pick.q,display:'',answer:pick.ans,options:shuffle(pick.opts.slice()),colClass:pick.opts.length===2?'cols-2':'cols-4',explain:pick.explain};
+}
+
+/* Type 5: Identify Platonic solid by properties */
+function qIdentifyPlatonic(){
+  var solid=platonic[rr(0,4)];
+  var variants=[
+    {q:'איזה גוף משוכלל בעל <strong>'+solid.faces+' פאות</strong> ו-<strong>'+solid.vertices+' קודקודים</strong>?',prop:'faces+vertices'},
+    {q:'איזה גוף משוכלל בעל <strong>'+solid.edges+' צלעות</strong> ו-<strong>'+solid.faces+' פאות</strong>?',prop:'edges+faces'},
+    {q:'איזה גוף משוכלל בעל <strong>'+solid.faces+' פאות '+solid.faceShort+'</strong>?',prop:'faces+shape'}
+  ];
+  var v=variants[rr(0,2)];
+  var correct=solid.name;
+  var wrongs=[];
+  for(var i=0;i<platonic.length;i++){
+    if(platonic[i].name!==correct) wrongs.push(platonic[i].name);
+  }
+  shuffle(wrongs);
+  var options=shuffle([correct,wrongs[0],wrongs[1],wrongs[2]]);
+  return{type:'choice',qText:v.q,display:'',answer:correct,options:options,colClass:'cols-2',explain:correct+' — '+solid.faces+' פאות, '+solid.vertices+' קודקודים, '+solid.edges+' צלעות'};
+}
+
+/* Type 6: How many faces/vertices/edges */
+function qCountProperty(){
+  var solid=platonic[rr(0,4)];
+  var props=[
+    {q:'כמה <strong>פאות</strong> ל'+solid.name+'?',ans:String(solid.faces),gen:function(){return rr(3,20)}},
+    {q:'כמה <strong>קודקודים</strong> ל'+solid.name+'?',ans:String(solid.vertices),gen:function(){return rr(3,20)}},
+    {q:'כמה <strong>צלעות</strong> ל'+solid.name+'?',ans:String(solid.edges),gen:function(){return rr(4,30)}}
+  ];
+  var p=props[rr(0,2)];
+  var correct=p.ans;
+  var wrongs=new Set();
+  while(wrongs.size<3){
+    var w=p.gen();
+    if(String(w)!==correct) wrongs.add(String(w));
+  }
+  var options=shuffle([correct].concat(Array.from(wrongs)));
+  return{type:'choice',qText:p.q,display:'<div class="num-display"><span class="big-num" style="font-size:2rem">'+(bodyEmojis[solid.name]||'🔷')+' '+solid.name.split('(')[0].trim()+'</span></div>',answer:correct,options:options,colClass:'cols-4',explain:solid.name+' — '+solid.faces+' פאות, '+solid.vertices+' קודקודים, '+solid.edges+' צלעות'};
+}
+
+/* Type 7: Euler formula V-E+F=2 */
+function qEuler(){
+  var solid=platonic[rr(0,4)];
+  var variants=[
+    {q:'לפי נוסחת אויילר: קודקודים - צלעות + פאות = ?<br>בדקו עבור <strong>'+solid.name.split('(')[0].trim()+'</strong>',ans:'2',opts:['0','1','2','3'],explain:solid.vertices+' - '+solid.edges+' + '+solid.faces+' = 2 (נוסחת אויילר תמיד נותנת 2)'},
+    {q:'ל'+solid.name.split('(')[0].trim()+' יש '+solid.vertices+' קודקודים ו-'+solid.faces+' פאות. כמה <strong>צלעות</strong>?<br>(רמז: V - E + F = 2)',ans:String(solid.edges),opts:shuffle([String(solid.edges),String(solid.edges+2),String(solid.edges-2),String(solid.edges+4)]),explain:'V - E + F = 2 → '+solid.vertices+' - E + '+solid.faces+' = 2 → E = '+solid.edges}
+  ];
+  var v=variants[rr(0,1)];
+  return{type:'choice',qText:v.q,display:'',answer:v.ans,options:shuffle(v.opts.slice()),colClass:'cols-4',explain:v.explain};
+}
+
+/* Type 8: True/False about solids */
+function qTrueFalse(){
+  var statements=[
+    {s:'לגליל יש 2 בסיסים עגולים',ans:'נכון',explain:'לגליל אכן 2 בסיסים עגולים — למעלה ולמטה'},
+    {s:'לחרוט יש 2 קודקודים',ans:'לא נכון',explain:'לחרוט קודקוד אחד בלבד — בראש'},
+    {s:'פריסת גליל כוללת 2 עיגולים ומלבן',ans:'נכון',explain:'פריסת גליל: מלבן (מעטפת) + 2 עיגולים (בסיסים)'},
+    {s:'פריסת חרוט כוללת משולש ועיגול',ans:'לא נכון',explain:'פריסת חרוט כוללת גזרת מעגל (סקטור) ועיגול — לא משולש!'},
+    {s:'קיימים בדיוק 5 גופים משוכללים',ans:'נכון',explain:'אכן קיימים בדיוק 5 גופים משוכללים — ארבעון, קובייה, תמניון, תריסריון ועשריון'},
+    {s:'לקובייה 6 פאות משולשות',ans:'לא נכון',explain:'לקובייה 6 פאות ריבועיות — לא משולשות'},
+    {s:'לתמניון 8 פאות משולשות',ans:'נכון',explain:'לתמניון (אוקטהדרון) אכן 8 פאות משולש שווה-צלעות'},
+    {s:'לעשריון 20 פאות',ans:'נכון',explain:'לעשריון (איקוסהדרון) אכן 20 פאות משולש שווה-צלעות'},
+    {s:'לתריסריון 12 פאות מחומשות',ans:'נכון',explain:'לתריסריון (דודקהדרון) אכן 12 פאות מחומש משוכלל'},
+    {s:'כל הגופים המשוכללים בנויים ממשולשים',ans:'לא נכון',explain:'לא — הקובייה בנויה מריבועים והתריסריון בנוי ממחומשים'},
+    {s:'לארבעון 4 פאות ו-4 קודקודים',ans:'נכון',explain:'לארבעון (טטרהדרון) אכן 4 פאות ו-4 קודקודים'},
+    {s:'לגליל יש קודקודים',ans:'לא נכון',explain:'לגליל אין קודקודים כלל — הוא עגול'},
+    {s:'המעטפת של הגליל בפריסה היא עיגול',ans:'לא נכון',explain:'המעטפת של הגליל בפריסה היא מלבן — לא עיגול'}
+  ];
+  var pick=statements[rr(0,statements.length-1)];
+  return{type:'choice',qText:'נכון או לא נכון: <strong>'+pick.s+'</strong>',display:'',answer:pick.ans,options:['נכון','לא נכון'],colClass:'cols-2',explain:pick.explain};
+}
+
+/* Type 9: Face shape of platonic solid */
+function qFaceShape(){
+  var solid=platonic[rr(0,4)];
+  var correct=solid.faceShape;
+  var allShapes=['משולש שווה-צלעות','ריבוע','מחומש משוכלל','משושה משוכלל'];
+  var options=[correct];
+  for(var i=0;i<allShapes.length;i++){
+    if(allShapes[i]!==correct&&options.length<4) options.push(allShapes[i]);
+  }
+  options=shuffle(options);
+  return{type:'choice',qText:'מהי צורת <strong>הפאות</strong> של '+solid.name.split('(')[0].trim()+'?',display:'<div class="num-display"><span class="big-num" style="font-size:2rem">'+(bodyEmojis[solid.name]||'🔷')+' '+solid.name.split('(')[0].trim()+'</span></div>',answer:correct,options:options,colClass:'cols-2',explain:solid.name+' — פאות מצורת '+correct};
+}
+
+/* ========== LEVELS ========== */
+var levels=[
+  {title:'פריסת גליל',instruction:'מהי הפריסה של גליל?',
+   tip:'<strong>גליל (צילינדר)</strong> הוא גוף עגול עם 2 בסיסים עגולים.\nכשפורסים אותו מקבלים: <strong>מלבן</strong> (המעטפת) + <strong>2 עיגולים</strong> (הבסיסים).',
+   example:'דמיינו שחותכים צינור נייר טואלט לאורכו ופותחים — מקבלים מלבן!\nהמכסים הם 2 עיגולים 🔵🔵',
+   gen:function(){return qCylinderNet()}},
+
+  {title:'פריסת חרוט',instruction:'מהי הפריסה של חרוט?',
+   tip:'<strong>חרוט (קונוס)</strong> הוא גוף עגול עם בסיס עגול אחד וקודקוד בראש.\nפריסה: <strong>גזרת מעגל</strong> (סקטור — המעטפת) + <strong>עיגול</strong> (הבסיס).',
+   example:'דמיינו כובע ליצן — כשפותחים אותו מקבלים סקטור (חלק מעיגול)!\nהבסיס הוא עיגול אחד 🔵',
+   gen:function(){return qConeNet()}},
+
+  {title:'תכונות גליל וחרוט',instruction:'כמה קודקודים? בסיסים? צלעות?',
+   tip:'<strong>גליל:</strong> 0 קודקודים, 2 בסיסים עגולים, אין צלעות ישרות.\n<strong>חרוט:</strong> 1 קודקוד (בראש), 1 בסיס עגול, אין צלעות ישרות.',
+   example:'גליל = פחית שימורים 🥫 — חלק לגמרי, בלי פינות\nחרוט = גלידה 🍦 — נקודה אחת בקצה',
+   gen:function(){return qBodyProperties()}},
+
+  {title:'גופים משוכללים',instruction:'הכירו את 5 הגופים המשוכללים!',
+   tip:'קיימים בדיוק <strong>5 גופים משוכללים</strong> — כל פאותיהם מצולעים משוכללים זהים:\n• ארבעון — 4 משולשים\n• קובייה — 6 ריבועים\n• תמניון — 8 משולשים\n• תריסריון — 12 מחומשים\n• עשריון — 20 משולשים',
+   example:'שלושה מהם בנויים ממשולשים (ארבעון, תמניון, עשריון)\nאחד מריבועים (קובייה)\nאחד ממחומשים (תריסריון)',
+   gen:function(){return qPlatonicSolids()}},
+
+  {title:'זיהוי גופים משוכללים',instruction:'זהו את הגוף לפי התכונות!',
+   tip:'רמז: שימו לב למספר הפאות ולצורה שלהן:\n• 4 פאות → ארבעון\n• 6 פאות ריבועיות → קובייה\n• 8 פאות → תמניון\n• 12 פאות מחומשות → תריסריון\n• 20 פאות → עשריון',
+   example:'"גוף עם 8 פאות משולשות" → תמניון!\n"גוף עם 12 פאות מחומשות" → תריסריון!',
+   gen:function(){return qIdentifyPlatonic()}},
+
+  {title:'צורת הפאות',instruction:'מאיזה מצולע בנוי כל גוף?',
+   tip:'שלוש צורות פאות אפשריות בגופים משוכללים:\n• <strong>משולש שווה-צלעות</strong> — ארבעון, תמניון, עשריון\n• <strong>ריבוע</strong> — קובייה\n• <strong>מחומש משוכלל</strong> — תריסריון',
+   example:'רק 3 מצולעים יכולים לבנות גוף משוכלל:\n△ משולש, □ ריבוע, ⬠ מחומש',
+   gen:function(){return qFaceShape()}},
+
+  {title:'ספירת תכונות',instruction:'כמה פאות, קודקודים וצלעות?',
+   tip:'<strong>שינון:</strong>\n• ארבעון: 4, 4, 6\n• קובייה: 6, 8, 12\n• תמניון: 8, 6, 12\n• תריסריון: 12, 20, 30\n• עשריון: 20, 12, 30',
+   example:'הסדר: פאות, קודקודים, צלעות\nשימו לב: תמניון וקובייה — 12 צלעות לשניהם!',
+   gen:function(){return qCountProperty()}},
+
+  {title:'נכון או לא נכון?',instruction:'בדקו אם הטענה נכונה!',
+   tip:'קראו את הטענה בעיון וחשבו — האם זה מתאים למה שלמדתם על גלילים, חרוטים וגופים משוכללים?',
+   example:'דוגמה: "לגליל יש 2 קודקודים" → לא נכון!\nלגליל אין קודקודים כלל.',
+   gen:function(){return qTrueFalse()}},
+
+  {title:'נוסחת אויילר',instruction:'V - E + F = 2 — תמיד!',
+   tip:'<strong>נוסחת אויילר:</strong> קודקודים - צלעות + פאות = 2\nזה עובד לכל גוף משוכלל (ולכל פאון קמור)!\nלדוגמה: קובייה → 8 - 12 + 6 = 2 ✅',
+   example:'ארבעון: 4 - 6 + 4 = 2 ✅\nקובייה: 8 - 12 + 6 = 2 ✅\nעשריון: 12 - 30 + 20 = 2 ✅',
+   gen:function(){return qEuler()}},
+
+  {title:'מעורבב — גליל וחרוט',instruction:'שאלות מגוונות על גליל וחרוט!',
+   tip:'זכרו:\n• גליל: 2 בסיסים, 0 קודקודים, פריסה = מלבן + 2 עיגולים\n• חרוט: 1 בסיס, 1 קודקוד, פריסה = סקטור + עיגול',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[qCylinderNet,qConeNet,qBodyProperties];
+     return types[rr(0,2)]();
+   }},
+
+  {title:'מעורבב — גופים משוכללים',instruction:'שאלות מגוונות על 5 הגופים!',
+   tip:'5 גופים משוכללים — שלטו בכולם!\nארבעון, קובייה, תמניון, תריסריון, עשריון.',
+   example:'כל שאלה היא הפתעה! 🎲',
+   gen:function(){
+     var types=[qPlatonicSolids,qIdentifyPlatonic,qCountProperty,qFaceShape];
+     return types[rr(0,3)]();
+   }},
+
+  {title:'מעורבב — הכל!',instruction:'גליל, חרוט וגופים משוכללים!',
+   tip:'כל הנושאים ביחד — גלילים, חרוטים, ו-5 הגופים המשוכללים.',
+   example:'🏆 בהצלחה!',
+   gen:function(){
+     var types=[qCylinderNet,qConeNet,qBodyProperties,qPlatonicSolids,qIdentifyPlatonic,qCountProperty,qFaceShape,qTrueFalse];
+     return types[rr(0,7)]();
+   }},
+
+  {title:'אתגר — אויילר ותכונות',instruction:'נוסחת אויילר + שאלות מתקדמות!',
+   tip:'V - E + F = 2\nאם ידועים לכם 2 מתוך 3 (קודקודים, צלעות, פאות) — תמצאו את השלישי!',
+   example:'💪 אתם יכולים!',
+   gen:function(){
+     var types=[qEuler,qCountProperty,qIdentifyPlatonic,qTrueFalse,qFaceShape];
+     return types[rr(0,4)]();
+   }},
+
+  {title:'סופר אתגר!',instruction:'כל הסוגים — שאלות מגוונות!',
+   tip:'🏆 אתם מומחים לגופים תלת-ממדיים!',
+   example:'🌟 💪 🏆',
+   gen:function(){
+     var types=[qCylinderNet,qConeNet,qBodyProperties,qPlatonicSolids,qIdentifyPlatonic,qCountProperty,qFaceShape,qTrueFalse,qEuler];
+     return types[rr(0,8)]();
+   }},
+
+  {title:'מאסטר!',instruction:'הרמה הכי קשה!',
+   tip:'🏆 אין עליכם! שלטתם בכל הגופים!',
+   example:'🌟🌟🌟',
+   gen:function(){
+     var types=[qCylinderNet,qConeNet,qBodyProperties,qPlatonicSolids,qIdentifyPlatonic,qCountProperty,qFaceShape,qTrueFalse,qEuler];
+     return types[rr(0,8)]();
+   }}
+];
+
+/* ========== GAME STATE ========== */
+var currentLevel=0,totalCorrect=0,totalWrong=0,levelResults={},currentQuestions=[],answeredCount=0,levelCorrect=0,levelWrong=0;
+var QPL=5;
+
+function renderTabs(){
+  var lk=(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn());
+  var row=document.getElementById('tabsRow');row.innerHTML='';
+  levels.forEach(function(_,i){
+    var t=document.createElement('button');t.className='tab';
+    t.textContent=(i+1)+(lk&&i>0?' 🔒':'');
+    if(i===currentLevel)t.classList.add('active');
+    if(levelResults[i]!==undefined){t.classList.add('done');if(levelResults[i]===0)t.classList.add('perfect')}
+    t.onclick=function(){goLevel(i)};row.appendChild(t);
+  });
+  var at=row.querySelector('.active');
+  if(at)at.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+
+function renderLevel(){
+  document.getElementById('levelComplete').classList.remove('show');
+  document.getElementById('levelBadge').textContent='רמה '+(currentLevel+1);
+  document.getElementById('levelTitle').textContent=levels[currentLevel].title;
+  document.getElementById('levelInstruction').textContent=levels[currentLevel].instruction;
+  document.getElementById('progressText').textContent='רמה '+(currentLevel+1)+' מתוך '+levels.length;
+  var lvl=levels[currentLevel];
+  document.getElementById('tipText').innerHTML=lvl.tip;
+  document.getElementById('tipExample').innerHTML=lvl.example;
+  document.getElementById('levelTip').classList.remove('collapsed');
+  document.getElementById('tipToggle').textContent='▲ הסתר';
+  currentQuestions=[];answeredCount=0;levelCorrect=0;levelWrong=0;
+  var seen=new Set();
+  for(var i=0;i<QPL;i++){var q,att=0;do{q=lvl.gen();att++}while(att<50&&seen.has(JSON.stringify(q.answer)));seen.add(JSON.stringify(q.answer));currentQuestions.push(q)}
+  renderQuestions();updateProgress();renderTabs();
+}
+
+function renderQuestions(){
+  var list=document.getElementById('questionsList');list.innerHTML='';
+  currentQuestions.forEach(function(q,idx){
+    var card=document.createElement('div');card.className='question-card';card.id='q-'+idx;
+    var h='<div class="question-number">'+(idx+1)+'</div>';
+    h+='<div class="q-text">'+q.qText+'</div>';
+    if(q.display)h+=q.display;
+    if(q.type==='choice'){
+      h+='<div class="answer-options '+(q.colClass||'')+'" id="opts-'+idx+'">';
+      q.options.forEach(function(opt){
+        var escaped=String(opt).replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        h+='<button class="answer-btn" onclick="checkChoice('+idx+',\''+escaped+'\',this)">'+opt+'</button>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="feedback" id="fb-'+idx+'"></div>';
+    card.innerHTML=h;list.appendChild(card);
+  });
+}
+
+function checkChoice(idx,chosen,btn){
+  var q=currentQuestions[idx];var card=document.getElementById('q-'+idx);var fb=document.getElementById('fb-'+idx);
+  if(card.classList.contains('correct'))return;
+  if(chosen===q.answer){
+    card.classList.add('correct');btn.classList.add('correct-choice');
+    document.getElementById('opts-'+idx).querySelectorAll('.answer-btn').forEach(function(b){b.classList.add('disabled')});
+    var praise=['מצוין! ⭐','נכון! 🎯','יופי! ✨','מדהים! 🌟'][rr(0,3)];
+    if(q.explain) praise+=' — '+q.explain;
+    fb.innerHTML=praise;fb.className='feedback show correct-fb';
+    levelCorrect++;totalCorrect++;answeredCount++;
+  }else{
+    btn.classList.add('wrong-choice');fb.textContent='לא נכון, נסו שוב! 💪';fb.className='feedback show wrong-fb';
+    levelWrong++;totalWrong++;
+    setTimeout(function(){btn.classList.remove('wrong-choice');fb.classList.remove('show')},1000);
+  }
+  updateProgress();if(answeredCount===QPL)setTimeout(showLC,800);
+}
+
+function showLC(){
+  levelResults[currentLevel]=levelWrong;
+  document.getElementById('lcCorrect').textContent=levelCorrect;document.getElementById('lcWrong').textContent=levelWrong;
+  if(levelWrong===0){document.getElementById('lcEmoji').textContent='🏆';document.getElementById('lcTitle').textContent='מושלם!';document.getElementById('lcSub').textContent='כל התשובות נכונות!'}
+  else if(levelWrong<=2){document.getElementById('lcEmoji').textContent='🎉';document.getElementById('lcTitle').textContent='כל הכבוד!';document.getElementById('lcSub').textContent='כמעט מושלם!'}
+  else{document.getElementById('lcEmoji').textContent='💪';document.getElementById('lcTitle').textContent='סיימתם!';document.getElementById('lcSub').textContent='כדאי לנסות שוב'}
+  var lc=document.getElementById('levelComplete');lc.classList.add('show');lc.scrollIntoView({behavior:'smooth',block:'center'});renderTabs();
+}
+
+function goLevel(i){
+  if(i>0&&typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  currentLevel=i;renderLevel();window.scrollTo({top:0,behavior:'smooth'});
+}
+function nextLevel(){
+  if(typeof AuthState!=='undefined'&&!AuthState.isLoggedIn()){
+    if(typeof showAuthModal==='function') showAuthModal(); return;
+  }
+  if(currentLevel<levels.length-1){currentLevel++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+}
+function retry(){renderLevel();window.scrollTo({top:0,behavior:'smooth'})}
+function updateProgress(){document.getElementById('progressFill').style.width=Math.round((Object.keys(levelResults).length/levels.length)*100)+'%';document.getElementById('totalCorrect').textContent=totalCorrect;document.getElementById('totalWrong').textContent=totalWrong}
+function showHelp(){document.getElementById('helpModal').classList.add('show')}
+function closeHelp(e){if(e.target===document.getElementById('helpModal'))document.getElementById('helpModal').classList.remove('show')}
+function toggleTip(){var t=document.getElementById('levelTip');t.classList.toggle('collapsed');document.getElementById('tipToggle').textContent=t.classList.contains('collapsed')?'▼ הצג טיפ':'▲ הסתר'}
+
+renderLevel();
+document.addEventListener('DOMContentLoaded',function(){renderTabs()});
+</script>
+<script src="../../../../js/auth-gate.js"></script>
+<script src="../../../../js/ask-teacher-btn.js"></script>
+</body>
+</html>
